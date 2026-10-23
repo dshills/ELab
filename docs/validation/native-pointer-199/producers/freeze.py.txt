@@ -1,0 +1,59 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess,sys
+R=Path('/Users/dshills/Development/projects/ELab');S=Path(__file__).resolve().parent;O=Path('/private/tmp/elab-pointer-199-review');D=R/'docs/validation/native-pointer-199';D.mkdir(parents=True)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+b=json.loads((S/'build-result-signed.json').read_text());session=json.loads((O/'session.json').read_text());package=json.loads(Path('/private/tmp/elab-pointer-199-zip/report.json').read_text());work=json.loads((O/'partial-workflow-report.json').read_text());pin=json.loads((R/'third_party/vellum/sdk.lock.json').read_text())
+assert session['status']=='closed' and session['owned_process_absent'] and session['endpoint_removed']
+assert session['source_commit']==b['source_commit'];assert package['strict_ad_hoc_signature_valid']
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=R).strip()
+names=subprocess.check_output(['git','ls-files','-z','*.go'],cwd=R).decode().strip('\0').split('\0')
+inputs={n:sha(R/n) for n in names};assert len(inputs)==676
+for n in ['desktop/go.mod','desktop/go.sum','third_party/vellum/sdk.lock.json','research/13-native-command-inventory.json']:inputs[n]=sha(R/n)
+quality=dict(passed=True,command='./scripts/check.sh',exit_code=0,source_commit=b['source_commit'],go_source_count=676,inputs=inputs,scope='PRD audit, goimports/staticcheck, 67 Python tests, root/desktop race tests and vet, mounted offscreen race suite and vet; source code unchanged after checks')
+(D/'quality-report.json').write_text(json.dumps(quality,indent=2)+'\n')
+for name,target in [('quality-reviewed.txt','quality.txt'),('cursor-tests-final.txt','cursor-pointer-race.txt'),('prepare-sdk.txt','prepare-sdk.txt'),('export-sdk-2.txt','export-sdk.txt'),('build-result-signed.json','build-result.json'),('signature-signed-verify.txt','candidate-signature.txt')]:shutil.copyfile(S/name,D/target)
+for name in ['session.json','partial-workflow-report.json','reference-workflows.txt','reference-workflows-retry.txt']:shutil.copyfile(O/name,D/name)
+shutil.copytree(O/'screenshots',D/'screenshots')
+for name in ('led','rc'):
+ for mode in ('headless','native'):
+  target=D/'workflows';target.mkdir(exist_ok=True);shutil.copyfile(O/'workflows-retry'/(name+'-'+mode+'.json'),target/(name+'-'+mode+'.json'))
+shutil.copyfile('/private/tmp/elab-pointer-199-zip/report.json',D/'package-report.json');shutil.copyfile('/private/tmp/elab-pointer-199-zip/signature.txt',D/'extracted-signature.txt')
+shutil.copytree(S/'build',D/'build-info',ignore=shutil.ignore_patterns('elab','elab-agent','elab-conformance'))
+p=D/'producers';p.mkdir()
+for name in ('build_release.py','native_session.py','reference_workflows.py','reference_workflows_retry.py','package.py','refresh_stage.py','freeze.py'):(p/(name+'.txt')).write_bytes((S/name).read_bytes())
+report=dict(kind='macos-window-and-pointer-bugfix',version=b['version'],build=b['build'],source_commit=b['source_commit'],clean_build_vcs=True,source_quality_passed=True,cursor_pointer_race_passed=True,sdk_source_commit=pin['source_commit'],sdk_archive_sha256=pin['sha256'],native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],release=package['release'],archive=package['archive'],archive_sha256=package['archive_sha256'],native_endpoint_cases=work['passed_cases'],native_titlebar_exposed_in_accessibility=True,native_search_input_observed=True,physical_titlebar_displacement_verified=False,pointer_appearance_visually_verified=False,native_visual_status='partial: CUA blank Metal captures; titlebar drag/double-click attempted without observable displacement',flasher_timing=work['flasher'],package=dict(verified_members=package['files_verified'],zip_extraction_bytes_and_modes_match=True,strict_ad_hoc_signature_valid=True),owned_native_shutdown=session['shutdown'],previous_release_unchanged=True,owner_app_closed_or_replaced=False,published=False,developer_id_signed=False,notarized=False,limitations=['Native titlebar displacement and cursor appearance are not visually confirmed','CUA first attachment to launcher path timed out; direct executable bundle attachment worked','Flasher reference exceeded existing 100 ms integration work limit twice; no solver changes','Clean-account startup, full PRD, VoiceOver and IME acceptance remain outside this repair'])
+(D/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+(D/'README.md').write_text('''# Native window and pointer repair /199
+
+ELab 0.180.1, October 23, 2026. [Receipt](report.json),
+[source/build inputs](quality-report.json), [package verification](package-report.json),
+[design and cause](../../../research/74-titlebar-pointer-repair.md).
+
+The standard macOS title bar replaces the unified full-content style; the editor
+inset is removed. Common pointers now use standard OS artwork through a pinned
+Vellum compatibility patch. Custom shapes retain the raster fallback. No shared
+commands or electronics features change.
+
+Full source checks and focused framework cursor/pointer race tests passed. The
+initial quality run stopped at an intentionally strict stale source inventory;
+review confirmed only hashes/locations changed, then the complete check passed.
+An initial software-only cursor fixture needed both native backends replaced;
+that fixture was corrected before the passing final framework suite.
+
+The isolated native app exposed title-bar controls and accepted native Search
+input. CUA screenshot captures returned blank Metal content; drag and double-click
+were attempted, but window displacement and native cursor appearance are **not
+visually verified**. The first launcher-path attachment timed out; direct bundle
+attachment worked. The screenshot is retained as evidence of this limitation.
+
+LED and RC native endpoint results matched the exact packaged agent and historical
+references. Flasher timing hit the existing bounded solver's 100 ms work budget
+twice; that case is not qualified here. Both raw failures are retained. This repair
+does not modify the solver or relax its limits.
+
+The ZIP extracted into a Unicode/spaces path with all 127 members and modes intact;
+its strict ad-hoc seal verified. The isolated app shut down with workers joined
+and endpoint removed. The preceding /198 package and running owner application
+were preserved. No public upload, installation or owner acceptance is asserted.
+''')
+manifest={str(p.relative_to(D)):dict(sha256=sha(p),bytes=p.stat().st_size) for p in sorted(D.rglob('*')) if p.is_file()};(D/'MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps(dict(evidence_files=len(manifest),archive_sha256=package['archive_sha256'],source_checks_passed=True,native_visual_verification='partial')))

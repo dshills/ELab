@@ -1,0 +1,648 @@
+{
+  "inspector_section": "component",
+  "workspace_layout": {
+    "schematic_fraction": 0.65
+  },
+  "viewport": {
+    "width_px": 490,
+    "height_px": 297,
+    "registered": true,
+    "following": false
+  },
+  "pulse_timings": [],
+  "verification_input_modes": [
+    "auto"
+  ],
+  "live_input_modes": [],
+  "dc_sweep": {
+    "settings": {
+      "component_id": "V2",
+      "parameter": "voltage",
+      "start": "0 V",
+      "stop": "5 V",
+      "points": 51
+    },
+    "targets": [
+      {
+        "component_id": "V2",
+        "parameter": "voltage",
+        "label": "V2 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      {
+        "component_id": "R2",
+        "parameter": "resistance",
+        "label": "R2 \u00b7 Resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000
+      }
+    ],
+    "available_probes": [
+      {
+        "id": "v:V2.positive",
+        "label": "V2.positive / ground",
+        "unit": "V",
+        "positive": "V2.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V2.negative",
+        "label": "V2.negative / ground",
+        "unit": "V",
+        "positive": "V2.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V2",
+        "label": "V2 voltage",
+        "unit": "V",
+        "positive": "V2.positive",
+        "reference": "V2.negative"
+      },
+      {
+        "id": "i:V2",
+        "label": "V2 delivered current",
+        "unit": "A",
+        "positive": "V2.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:R2.1",
+        "label": "R2.1 / ground",
+        "unit": "V",
+        "positive": "R2.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R2.2",
+        "label": "R2.2 / ground",
+        "unit": "V",
+        "positive": "R2.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R2",
+        "label": "R2 voltage",
+        "unit": "V",
+        "positive": "R2.1",
+        "reference": "R2.2"
+      },
+      {
+        "id": "i:R2",
+        "label": "R2 current",
+        "unit": "A",
+        "positive": "R2.1",
+        "reference": "R2.2"
+      },
+      {
+        "id": "v:D2.anode",
+        "label": "D2.anode / ground",
+        "unit": "V",
+        "positive": "D2.anode",
+        "reference": "ground"
+      },
+      {
+        "id": "v:D2.cathode",
+        "label": "D2.cathode / ground",
+        "unit": "V",
+        "positive": "D2.cathode",
+        "reference": "ground"
+      },
+      {
+        "id": "v:D2",
+        "label": "D2 voltage",
+        "unit": "V",
+        "positive": "D2.anode",
+        "reference": "D2.cathode"
+      },
+      {
+        "id": "i:D2",
+        "label": "D2 current",
+        "unit": "A",
+        "positive": "D2.anode",
+        "reference": "D2.cathode"
+      },
+      {
+        "id": "v:GND2.reference",
+        "label": "GND2.reference / ground",
+        "unit": "V",
+        "positive": "GND2.reference",
+        "reference": "ground"
+      }
+    ],
+    "operations": [],
+    "selected_operation": "",
+    "visible": false,
+    "trace_id": ""
+  },
+  "source_annotations": [],
+  "project_work": {
+    "cancelable": false,
+    "id": "project-6",
+    "command": "project.load",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "path": "/private/tmp/elab-pointer-199-review/workflows-retry/led.elab",
+    "input_revision": 44,
+    "command_revision": 13,
+    "document_generation": 4,
+    "bytes": 2536,
+    "result_document_generation": 5,
+    "result_run_id": 5
+  },
+  "diagnostic_presentation": {
+    "details_visible": false,
+    "items": [
+      {
+        "source": "step",
+        "code": "integration-time-limit",
+        "severity": "error",
+        "summary": "A previous manual step failed; its committed state was preserved.",
+        "action": "Reduce the output sample interval or retry when the computer is less busy. Restart a stopped live run; committed time and charge were preserved.",
+        "details": "mixed integration exceeded its work budget: elapsed-time limit (16 attempted, maximum 512; 100.231 ms elapsed, maximum 100 ms); reduce sample step at 0.561679688 s, step 3.91e-05: ratio +Inf, errors mixed integration exceeded its work budget: elapsed-time limit (15 attempted, maximum 512; 100.207 ms elapsed, maximum 100 ms); reduce sample step / mixed integration exceeded its work budget: elapsed-time limit (15 attempted, maximum 512; 100.207 ms elapsed, maximum 100 ms); reduce sample step / <nil>",
+        "object_ids": [],
+        "terminal_refs": [],
+        "wire_ids": []
+      }
+    ]
+  },
+  "display": {
+    "preferences": {
+      "voltage_color": false,
+      "voltage_range_v": 5,
+      "current_cues": false,
+      "current_motion": false,
+      "reduced_motion": false,
+      "direction": "conventional"
+    },
+    "run_id": 5,
+    "electrical_revision": 5,
+    "time_s": 0,
+    "animate": false,
+    "wires": [
+      {
+        "id": "W12",
+        "from": "V2.positive",
+        "to": "R2.1",
+        "voltage_v": 5,
+        "current_a": 0.001476723549138745,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W13",
+        "from": "R2.2",
+        "to": "D2.anode",
+        "voltage_v": 2.04655290172251,
+        "current_a": 0.001476723549138745,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W14",
+        "from": "D2.cathode",
+        "to": "GND2.reference",
+        "voltage_v": 0,
+        "current_a": 0.001476723549138745,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W15",
+        "from": "GND2.reference",
+        "to": "V2.negative",
+        "voltage_v": 0,
+        "current_a": 0.001476723549138745,
+        "state": "live",
+        "color": "#387d93"
+      }
+    ]
+  },
+  "measurement_inspection": {
+    "result_kind": "none",
+    "available": false,
+    "object_ids": [],
+    "terminal_refs": [],
+    "wire_ids": [],
+    "nets": [],
+    "readings": []
+  },
+  "pinned_readings": [],
+  "limits": {
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 2,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "simulated_component_count": 3,
+  "step_work": {
+    "id": "step-2",
+    "status": "failed",
+    "actor": "agent.socket",
+    "run_id": 4,
+    "electrical_revision": 4,
+    "actuation_revision": 0,
+    "command_revision": 11,
+    "start_time_s": 0,
+    "duration_s": 1,
+    "completed_samples": 112,
+    "total_samples": 200,
+    "progress": 0.56,
+    "error": {
+      "code": "integration-time-limit",
+      "message": "mixed integration exceeded its work budget: elapsed-time limit (16 attempted, maximum 512; 100.231 ms elapsed, maximum 100 ms); reduce sample step at 0.561679688 s, step 3.91e-05: ratio +Inf, errors mixed integration exceeded its work budget: elapsed-time limit (15 attempted, maximum 512; 100.207 ms elapsed, maximum 100 ms); reduce sample step / mixed integration exceeded its work budget: elapsed-time limit (15 attempted, maximum 512; 100.207 ms elapsed, maximum 100 ms); reduce sample step / <nil>"
+    }
+  },
+  "undo_entry": {
+    "name": "Open schematic",
+    "actor": "agent.socket",
+    "command_revision": 13
+  },
+  "actuation_revision": 0,
+  "recovery": {
+    "enabled": false,
+    "interval_s": 2,
+    "selected": "",
+    "candidates": [],
+    "problems": []
+  },
+  "verification_settings": {
+    "duration_s": 0.1,
+    "sample_step_s": 0,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "operations": [],
+  "selected_operation": "",
+  "schematic_page": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 10
+  },
+  "part_search": "LED",
+  "theme": "light",
+  "appearance": {
+    "path": "",
+    "status": "disabled"
+  },
+  "matching_parts": [
+    {
+      "value_type": "none",
+      "aliases": [
+        "LED",
+        "light emitting diode",
+        "indicator"
+      ],
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness.",
+      "kind": "led",
+      "name": "Red LED",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "model": "elab.generic-red-led.v1"
+    }
+  ],
+  "undo_name": "Open schematic",
+  "redo_name": "",
+  "scope": {
+    "window": {
+      "mode": "",
+      "start_s": 0,
+      "end_s": 0
+    },
+    "window_valid": false,
+    "statistics": [],
+    "available": [
+      {
+        "id": "v:V2.positive",
+        "label": "V2.positive / ground",
+        "unit": "V",
+        "positive": "V2.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V2.negative",
+        "label": "V2.negative / ground",
+        "unit": "V",
+        "positive": "V2.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V2",
+        "label": "V2 voltage",
+        "unit": "V",
+        "positive": "V2.positive",
+        "reference": "V2.negative"
+      },
+      {
+        "id": "i:V2",
+        "label": "V2 delivered current",
+        "unit": "A",
+        "positive": "V2.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:R2.1",
+        "label": "R2.1 / ground",
+        "unit": "V",
+        "positive": "R2.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R2.2",
+        "label": "R2.2 / ground",
+        "unit": "V",
+        "positive": "R2.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R2",
+        "label": "R2 voltage",
+        "unit": "V",
+        "positive": "R2.1",
+        "reference": "R2.2"
+      },
+      {
+        "id": "i:R2",
+        "label": "R2 current",
+        "unit": "A",
+        "positive": "R2.1",
+        "reference": "R2.2"
+      },
+      {
+        "id": "v:D2.anode",
+        "label": "D2.anode / ground",
+        "unit": "V",
+        "positive": "D2.anode",
+        "reference": "ground"
+      },
+      {
+        "id": "v:D2.cathode",
+        "label": "D2.cathode / ground",
+        "unit": "V",
+        "positive": "D2.cathode",
+        "reference": "ground"
+      },
+      {
+        "id": "v:D2",
+        "label": "D2 voltage",
+        "unit": "V",
+        "positive": "D2.anode",
+        "reference": "D2.cathode"
+      },
+      {
+        "id": "i:D2",
+        "label": "D2 current",
+        "unit": "A",
+        "positive": "D2.anode",
+        "reference": "D2.cathode"
+      },
+      {
+        "id": "v:GND2.reference",
+        "label": "GND2.reference / ground",
+        "unit": "V",
+        "positive": "GND2.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [],
+    "traces": [],
+    "run_id": 5,
+    "stale": false,
+    "active_cursor": "a",
+    "readings": []
+  },
+  "scope_visible": true,
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  },
+  "document": {
+    "preferences_dirty": false,
+    "schematic_dirty": false,
+    "recordings_dirty": false,
+    "recording_count": 0,
+    "path": "/private/tmp/elab-pointer-199-review/workflows-retry/led.elab",
+    "dirty": false,
+    "format_version": 4,
+    "generation": 5
+  },
+  "command_revision": 13,
+  "revision": 49,
+  "electrical_revision": 5,
+  "circuit": {
+    "voltage_v": 5,
+    "resistance_ohm": 2000,
+    "connected": true
+  },
+  "components": [
+    {
+      "id": "V2",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "value": 5,
+      "unit": "V",
+      "model": "ideal-dc.v1",
+      "rotation": 0
+    },
+    {
+      "id": "R2",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 0,
+        "y": -120
+      },
+      "value": 2000,
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "D2",
+      "kind": "led",
+      "name": "Red LED",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "value": 0,
+      "model": "elab.generic-red-led.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GND2",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": -200,
+        "y": 120
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "wires": [
+    {
+      "id": "W12",
+      "from": "V2.positive",
+      "to": "R2.1",
+      "connected": true
+    },
+    {
+      "id": "W13",
+      "from": "R2.2",
+      "to": "D2.anode",
+      "connected": true
+    },
+    {
+      "id": "W14",
+      "from": "D2.cathode",
+      "to": "GND2.reference",
+      "connected": true
+    },
+    {
+      "id": "W15",
+      "from": "GND2.reference",
+      "to": "V2.negative",
+      "connected": true
+    }
+  ],
+  "nets": [
+    {
+      "id": "net:D2.anode",
+      "terminals": [
+        "D2.anode",
+        "R2.2"
+      ]
+    },
+    {
+      "id": "net:D2.cathode",
+      "terminals": [
+        "D2.cathode",
+        "GND2.reference",
+        "V2.negative"
+      ]
+    },
+    {
+      "id": "net:R2.1",
+      "terminals": [
+        "R2.1",
+        "V2.positive"
+      ]
+    }
+  ],
+  "drawing": {
+    "tool": "select",
+    "kind": "dc-source",
+    "position": {
+      "x": -200,
+      "y": 0
+    },
+    "wire_start": "",
+    "from": "",
+    "to": "",
+    "value": ""
+  },
+  "model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "selected": "",
+  "view": {
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "zoom": 1
+  },
+  "status": "paused",
+  "analysis": "DC operating point",
+  "paused": true,
+  "run_id": 5,
+  "result": {
+    "run_id": 5,
+    "electrical_revision": 5,
+    "engine": "elab.series-led-dc.v1",
+    "model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "current_a": 0.001476723549138745,
+    "led_voltage_v": 2.04655290172251,
+    "resistor_voltage_v": 2.95344709827749,
+    "led_power_w": 0.0030221928645318623,
+    "resistor_power_w": 0.004361424881161862,
+    "kvl_residual_v": -1.249000902703301e-16,
+    "node_voltage_v": {
+      "ground": 0,
+      "led-anode": 2.04655290172251,
+      "net:D2.anode": 2.04655290172251,
+      "net:D2.cathode": 0,
+      "net:R2.1": 5,
+      "supply": 5
+    },
+    "stale": false,
+    "source_id": "V2",
+    "resistor_id": "R2",
+    "led_id": "D2"
+  },
+  "diagnostics": [],
+  "can_undo": true,
+  "can_redo": false,
+  "last_actor": "agent.socket",
+  "closed": false
+}

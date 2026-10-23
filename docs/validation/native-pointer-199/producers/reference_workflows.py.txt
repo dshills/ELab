@@ -1,0 +1,28 @@
+from pathlib import Path
+import importlib.util,json,sys,subprocess
+R=Path('/Users/dshills/Development/projects/ELab');O=Path('/private/tmp/elab-pointer-199-review');RUN=Path('/private/tmp/elab-pointer-199-runtime');OUT=O/'workflows';OUT.mkdir()
+sys.path.insert(0,str(R/'scripts'));spec=importlib.util.spec_from_file_location('reference195',R/'scripts/first-version-parity.py');ref=importlib.util.module_from_spec(spec);spec.loader.exec_module(ref)
+report=json.loads((O/'session.json').read_text());assert subprocess.check_output(['/bin/ps','-p',str(report['owned_pid']),'-o','command='],text=True).strip()==report['observed_command']
+Client=ref.helper.Client;native=Client(str(O/'endpoint.json'),command_preconditions=True,agent_binary=RUN/'agent');checks=[];jobs=[]
+try:
+ assert not native.ask('project.inspect')['document']['dirty']
+ for name,filename in [('led','keyboard-led-ui.elab'),('rc','rc-built-ui.elab'),('flasher','flasher-timing.elab')]:
+  head=Client(command_preconditions=True,agent_binary=RUN/'agent')
+  try:
+   document=json.loads((ref.FIXTURES/filename).read_text());built=ref.construct(head,document);assert built['components']==document['graph']['components'] and built['wires']==document['graph']['wires']
+   project=OUT/(name+'.elab');head.ask('project.save',{'path':str(project)},True);observed=ref.observe(head,name)
+   if name=='led':expected=json.loads((ref.FIXTURES/'workflow-checkpoint.json').read_text())['native_edited_result'];ref.compare(expected,observed['result'])
+   elif name=='rc':expected=json.loads((ref.FIXTURES/'rc-observed.json').read_text())['transient']['sample'];ref.compare(expected,observed['transient']['sample'])
+   else:
+    expected=json.loads((ref.FIXTURES/'flasher-observed-reference.json').read_text());ref.compare(expected['mixed'],observed['mixed']);ref.compare(expected['transient']['sample'],observed['transient']['sample'])
+   previous=native.ask('project.inspect')
+   if previous['document']['dirty']:native.ask('project.save',{'path':str(OUT/('before-'+name+'.elab'))},True)
+   native.ask('project.load',{'path':str(project)},True);native.ask('simulation.wait');actual=ref.observe(native,name)
+   assert actual['components']==observed['components'] and actual['wires']==observed['wires'];ref.compare(ref.numerical(observed),ref.numerical(actual))
+   native.ask('project.save',{'path':str(OUT/(name+'-native.elab'))},True)
+   (OUT/(name+'-native.json')).write_text(json.dumps(actual,indent=2));(OUT/(name+'-headless.json')).write_text(json.dumps(observed,indent=2))
+   checks.append(dict(name=name,constructed_graph_exact=True,matches_historical_native_numerical_reference=True,native_endpoint_matches_exact_packaged_agent=True))
+   job=head.ask('app.close',{'discard_changes':False},True)['shutdown'];job=head.wait_for_shutdown_outcome(job);assert job['status']=='completed' and all(job[k] for k in ('workers_joined','recovery_finalized','exit_ready'));jobs.append(job)
+  finally:head.close()
+finally:native.close()
+report=dict(status='passed',cases=checks,headless_shutdowns=jobs,scope='Public command reconstruction plus native endpoint numerical parity; no physical native drawing/wiring or owner first-use acceptance');(OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

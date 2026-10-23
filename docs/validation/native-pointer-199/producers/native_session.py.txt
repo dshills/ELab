@@ -1,0 +1,39 @@
+from pathlib import Path
+import hashlib,importlib.util,json,os,plistlib,shutil,subprocess,time,traceback,shlex
+ROOT=Path('/Users/dshills/Development/projects/ELab');STAGE=Path(__file__).resolve().parent
+OUT=Path('/private/tmp/elab-pointer-199-review');RUN=Path('/private/tmp/elab-pointer-199-runtime');APP=OUT/'ELab-owned-pointer-review-199.app';END=OUT/'endpoint.json';BIN=Path('/private/tmp/elab-pointer-199-package/ELab-0.180.1-macos-arm64/ELab.app/Contents/MacOS/ELab')
+assert not (OUT/"launcher.pid").exists() and not END.exists()
+OUT.mkdir(mode=0o700,exist_ok=True);RUN.mkdir(mode=0o700,exist_ok=True)
+review=BIN.parents[3];built=json.loads((STAGE/'build-result-signed.json').read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(BIN)==built['native_sha256'] and sha(review/'elab-agent')==built['agent_sha256']
+shutil.copyfile('/private/tmp/elab-first-version-188-signed-runtime/runtime.sb',RUN/'runtime.sb')
+(RUN/'agent').write_text('#!/bin/sh\nexec /usr/bin/sandbox-exec -f '+str(RUN/'runtime.sb')+' '+shlex.quote(str(review/'elab-agent'))+' "$@"\n');(RUN/'agent').chmod(0o755)
+source=(ROOT/'docs/validation/latency-launch-preflight-170/launcher.swift.txt').read_text().replace('/private/tmp/elab-latency-launch-preflight-170',str(OUT)).replace('/private/tmp/elab-first-version-170-runtime',str(RUN))
+source=source.replace(str(RUN/'ELab.app/Contents/MacOS/ELab'),str(BIN))
+source=source.replace('import Darwin\n','import Darwin\nif "'+str(OUT/'stop.request')+'".withCString({ access($0, F_OK) }) == 0 { exit(75) }\n')
+(STAGE/'release-launcher.swift').write_text(source);(APP/'Contents/MacOS').mkdir(parents=True,exist_ok=True)
+with (APP/'Contents/Info.plist').open('wb') as f:plistlib.dump(dict(CFBundleExecutable='ELabOwnedLauncher',CFBundleIdentifier='com.dshills.elab.pointer.review199',CFBundleName='ELab /199 pointer review',CFBundlePackageType='APPL',CFBundleVersion='199',CFBundleShortVersionString='0.180.1',NSHighResolutionCapable=True),f)
+r=subprocess.run(['/usr/bin/xcrun','swiftc','-module-cache-path',str(OUT/'swift-cache'),str(STAGE/'release-launcher.swift'),'-o',str(APP/'Contents/MacOS/ELabOwnedLauncher')],capture_output=True,text=True,timeout=60);(OUT/'launcher-build.txt').write_text(r.stdout+r.stderr);r.check_returncode()
+spec=importlib.util.spec_from_file_location('client195',ROOT/'scripts/persistence-demo.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+report=dict(status='starting',source_commit=built['source_commit'],native_sha256=sha(BIN),agent_sha256=sha(review/'elab-agent'),runtime=str(RUN),endpoint=str(END),owner_apps_untouched=True)
+def save(): (OUT/'session.json').write_text(json.dumps(report,indent=2)+'\n')
+def command(pid):
+ p=subprocess.run(['/bin/ps','-p',str(pid),'-o','command='],capture_output=True,text=True,timeout=5);return p.stdout.strip() if p.returncode==0 else None
+with (OUT/'open-output.txt').open('x') as f:launch=subprocess.Popen(['/usr/bin/open','-n','-W','-g','-a',str(APP),'--stdout',str(OUT/'native-stdout.txt'),'--stderr',str(OUT/'native-stderr.txt')],stdout=f,stderr=subprocess.STDOUT)
+report['open_pid']=launch.pid;save();deadline=time.monotonic()+30
+while not ((OUT/'launcher.pid').exists() and END.exists()):
+ assert launch.poll() is None and time.monotonic()<deadline,'readiness';time.sleep(.05)
+pid=int((OUT/'launcher.pid').read_text());observed=command(pid);assert observed and observed.startswith(str(BIN)+' ') and str(END) in observed
+report.update(status='ready_for_cua',owned_pid=pid,observed_command=observed);save()
+c=helper.Client(str(END),command_preconditions=True,agent_binary=RUN/'agent');initial=c.ask('project.inspect');assert not initial['components'] and not initial['wires'];(OUT/'initial.json').write_text(json.dumps(initial,indent=2));c.close()
+print(json.dumps(dict(status=report['status'],pid=pid,app=str(RUN/'ELab.app'))),flush=True)
+while not (OUT/'stop.request').exists():
+ assert command(pid)==observed,'owned identity changed';time.sleep(.25)
+c=helper.Client(str(END),command_preconditions=True,agent_binary=RUN/'agent');state=c.ask('project.inspect');(OUT/'before-close.json').write_text(json.dumps(state,indent=2))
+assert not state['document']['dirty'],'Save owned test work before cleanup'
+assert not state['document'].get('path') or str(state['document']['path']).startswith(str(OUT)+'/'),'unexpected owner path'
+closed=c.ask('app.close',dict(discard_changes=False),True);job=c.wait_for_shutdown_outcome(closed['shutdown']);assert job['status']=='completed' and all(job[k] for k in ('workers_joined','recovery_finalized','exit_ready'));c.close();report['shutdown']=job
+report['open_exit_code']=launch.wait(timeout=20);deadline=time.monotonic()+10
+while command(pid) and time.monotonic()<deadline:time.sleep(.05)
+assert command(pid) is None and not END.exists();report.update(status='closed',owned_process_absent=True,endpoint_removed=True,candidate_native_unchanged=sha(review/'ELab.app/Contents/MacOS/ELab')==report['native_sha256'],runtime_native_unchanged=sha(BIN)==report['native_sha256']);save();(APP/'Contents/MacOS/ELabOwnedLauncher').chmod(0o644)
+print(json.dumps(dict(status='closed',open_exit_code=report['open_exit_code'])),flush=True)

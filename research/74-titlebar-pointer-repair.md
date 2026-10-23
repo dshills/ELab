@@ -38,5 +38,16 @@ pointer race suite passed. SDK export initially lacked network access to verify
 its dependency/license graph; the exporter completed with the normal pinned
 registry access.
 
-Current source and package validation will be recorded in
-`docs/validation/native-pointer-199/` after the native acceptance run.
+ELab 0.180.1 /199 source and package validation is recorded in
+[the validation receipt](../docs/validation/native-pointer-199/README.md). Full
+source checks, cursor/pointer race tests, native/agent LED/RC parity and ZIP
+extraction passed. The isolated app exposed title-bar controls and accepted Search
+input. CUA captures returned blank Metal content, so attempted title-bar drags
+and native pointer appearance remain visually unverified. Flasher timing hit the
+existing 100 ms integration work limit on two attempts; no solver limits or
+electronics code changed. The isolated test session shut down cleanly.
+
+The separately launched normal /199 app subsequently rendered the canvas,
+library and inspector correctly in a read-only CUA screenshot. It remains open
+with a blank document. The /198 owner instance was preserved. Native pointer
+appearance and actual drag displacement still need direct confirmation.

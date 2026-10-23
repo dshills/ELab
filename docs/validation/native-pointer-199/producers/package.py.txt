@@ -1,0 +1,61 @@
+from pathlib import Path
+import hashlib,json,shutil,stat,subprocess,sys,zipfile
+R=Path('/Users/dshills/Development/projects/ELab');S=Path(__file__).resolve().parent;O=Path('/private/tmp/elab-pointer-199-zip');O.mkdir(mode=0o700)
+sys.path.insert(0,str(R/'scripts'))
+from package_review import members,verify_archive
+b=json.loads((S/'build-result-signed.json').read_text());candidate=Path(b['review']);previous=R/'build/releases/ELab-0.180.0-macos-arm64';preserved=members(previous)
+p=R/'build/releases/ELab-0.180.1-macos-arm64';assert not p.exists();p.mkdir()
+shutil.copytree(candidate/'ELab.app',p/'ELab.app');shutil.copy2(candidate/'elab-agent',p/'elab-agent');shutil.copytree(previous/'Examples',p/'Examples')
+sdk=R/json.loads((R/'third_party/vellum/sdk.lock.json').read_text())['cache'];licenses=p/'Licenses/Vellum';licenses.mkdir(parents=True)
+for name in ('LICENSE','PRIVATE_BUILD.txt','THIRD_PARTY_INVENTORY.json'):shutil.copy2(sdk/name,licenses/name)
+shutil.copytree(sdk/'THIRD_PARTY_NOTICES',licenses/'THIRD_PARTY_NOTICES');shutil.copy2(R/'third_party/vellum/sdk.lock.json',licenses/'sdk.lock.json')
+for name in ('AGENT_PROTOCOL.md','ROLLBACK.md'):shutil.copy2(previous/name,p/name)
+readme=(previous/'README.md').read_text().replace('ELab 0.180.0','ELab 0.180.1')
+readme=readme.replace('## Document workspace','''## Window and pointer repair
+
+The standard macOS title bar is restored. Move the window by left-dragging the
+title bar above the editor toolbar. Common pointers now use native macOS artwork
+and follow macOS accessibility sizing. The existing document workspace remains.
+
+## Document workspace''')
+(p/'README.md').write_text(readme)
+(p/'RELEASE_NOTES.md').write_text(f'''# ELab 0.180.1 /199 — October 23, 2026
+
+Fix the owner's report that the window could not be moved from the top bar and
+that the pointer looked oversized. The editor now uses the standard macOS title
+bar, without a full-window unified header or artificial top inset. Common arrow,
+text, hand, crosshair and horizontal/vertical resize cursors use native artwork.
+Custom shapes retain the framework raster fallback. No electronics, document
+format or user/agent command changes.
+
+Clean application source: {b['source_commit']}. The included SDK lock identifies
+the public Vellum base and the separately recorded compatibility patch. The
+preceding /198 release and running owner app are preserved.
+
+Full source quality checks and cursor/pointer race regressions passed. Native
+app endpoint LED/RC results matched the agent and historical references. Two
+flasher timing attempts hit the existing 100 ms integration work limit; flasher
+timing is not qualified by this run. The solver code is unchanged. The restored native title bar and responsive Search are
+exposed through accessibility. CUA captures returned a blank Metal surface, and
+physical title-bar displacement and pointer appearance remain visually unverified.
+See docs/validation/native-pointer-199 in the source repository for exact scope.
+
+Apple Silicon, minimum macOS 26.0; tested on 26.6.2. Ad-hoc integrity seal,
+without Developer ID or notarization, as selected by the owner. Clean-account
+installation and complete PRD/VoiceOver/IME acceptance remain deferred. Educational
+models are not general SPICE support or physical component-rating certification.
+''')
+status=dict(kind='unsigned-macos-arm64-bugfix',version=b['version'],build=b['build'],source_commit=b['source_commit'],native_sha256=b['native_sha256'],agent_sha256=b['agent_sha256'],architecture='arm64',binary_minimum_macos='26.0',tested_macos='26.6.2',developer_id_signed=False,ad_hoc_integrity_seal=True,notarized=False,validation_receipt='docs/validation/native-pointer-199/report.json',native_drag_and_pointer_visual_confirmation='unverified; CUA blank surface and no displacement observable',clean_account_installation='deferred',published=False)
+(p/'RELEASE_STATUS.json').write_text(json.dumps(status,indent=2)+'\n');(p/'RELEASE_MANIFEST.json').write_text(json.dumps(dict(status=status,files=members(p)),indent=2)+'\n')
+expected=members(p);archive=p.parent/(p.name+'.zip');assert not archive.exists()
+with archive.open('xb') as f:
+ archive.chmod(0o644)
+ with zipfile.ZipFile(f,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,v in expected.items():
+   e=zipfile.ZipInfo(p.name+'/'+name,date_time=(1980,1,1,0,0,0));e.create_system=3;e.external_attr=(stat.S_IFREG|int(v['mode'],8))<<16;e.compress_type=zipfile.ZIP_DEFLATED;z.writestr(e,(p/name).read_bytes(),compresslevel=9)
+verify_archive(archive,p.name,expected);extract=O/'Extracted download µ with spaces';r=subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(extract)],capture_output=True,timeout=120);(O/'ditto.txt').write_bytes(r.stdout+r.stderr);r.check_returncode();extracted=extract/p.name;assert members(extracted)==expected and members(previous)==preserved
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(extracted/'ELab.app/Contents/MacOS/ELab')==b['native_sha256'] and sha(extracted/'elab-agent')==b['agent_sha256']
+r=subprocess.run(['/usr/bin/codesign','--verify','--deep','--strict','--verbose=2',str(extracted/'ELab.app')],capture_output=True,timeout=30);(O/'signature.txt').write_bytes(r.stdout+r.stderr);r.check_returncode()
+report=dict(release=str(p),archive=str(archive),archive_sha256=sha(archive),extracted=str(extracted),files_verified=len(expected),bytes_and_modes_match=True,app_agent_bytes_match_clean_candidate=True,strict_ad_hoc_signature_valid=True,previous_release_unchanged=True)
+(O/'report.json').write_text(json.dumps(report,indent=2)+'\n');Path(str(archive)+'.sha256').write_text(sha(archive)+'  '+archive.name+'\n');print(json.dumps(report,indent=2))

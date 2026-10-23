@@ -1,0 +1,12 @@
+from pathlib import Path
+import difflib,hashlib,json
+r=Path('/Users/dshills/Development/projects/ELab/build/vellum-public-e58d405/drivers/cogent');u=r/'build/upstream';b=Path('/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab1/drivers/cogent/build/upstream');p=r/'native/patches/systemcursors'
+names=['system/driver/desktop/'+n for n in ['cursor.go','cursor_fastpath_vellum_test.go','cursor_system_vellum.go','cursor_system_vellum_test.go']]
+i={};o={};diff=[]
+for name in names:
+ before=(b/name).read_text() if (b/name).exists() else '';after=(u/name).read_text()
+ i[name]=hashlib.sha256(before.encode()).hexdigest() if before else None;o[name]=hashlib.sha256(after.encode()).hexdigest()
+ diff.extend(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='a/'+name if before else '/dev/null',tofile='b/'+name))
+f=p/'0106-macos-system-cursors.patch';f.write_text(''.join(diff))
+for name,d in [('original-hashes.json',i),('output-hashes.json',o)]:(p/name).write_text(json.dumps(d,indent=2)+'\n')
+m=r/'native/dependencies.json';d=json.loads(m.read_text());d['dependencies'][0]['stages'][-1]['patches'][0]['sha256']=hashlib.sha256(f.read_bytes()).hexdigest();m.write_text(json.dumps(d,indent=2)+'\n')

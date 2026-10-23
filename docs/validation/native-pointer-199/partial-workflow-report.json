@@ -1,0 +1,20 @@
+{
+  "passed_cases": [
+    {
+      "name": "led",
+      "graph_exact": true,
+      "numerical_match": true
+    },
+    {
+      "name": "rc",
+      "graph_exact": true,
+      "numerical_match": true
+    }
+  ],
+  "flasher": {
+    "status": "not-qualified",
+    "attempts": 2,
+    "reason": "native simulation.step exceeded existing 100 ms integration work budget; no solver changes"
+  },
+  "scope": "Native endpoint versus exact packaged agent and historical LED/RC references; no physical drawing/drag acceptance"
+}

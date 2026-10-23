@@ -1,0 +1,74 @@
+{
+  "kind": "macos-window-and-pointer-bugfix",
+  "version": "0.180.1",
+  "build": "199",
+  "source_commit": "cfd8d303b2b2e6607620ff64ce558bdbed44753f",
+  "clean_build_vcs": true,
+  "source_quality_passed": true,
+  "cursor_pointer_race_passed": true,
+  "sdk_source_commit": "6ebc97bff24817b63586c920d42700c0761db304",
+  "sdk_archive_sha256": "103603dbc6f56cba82e3564d808e010ffc226c3315d18be178e0e34e3ed8ae38",
+  "native_sha256": "fc2c794b27b0e2a54710f629caf63a5970a2e61a3229aff904e43178bfe930dc",
+  "agent_sha256": "81e16355299eae7a85d6bb1620762b60fcf8429d4872bbd6e19bb5ae38e4d6dc",
+  "release": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.180.1-macos-arm64",
+  "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.180.1-macos-arm64.zip",
+  "archive_sha256": "c190f0edb0b764ae20cbdc11700daa8b4699e76f6cce26668e2ae412231e6be1",
+  "native_endpoint_cases": [
+    {
+      "name": "led",
+      "graph_exact": true,
+      "numerical_match": true
+    },
+    {
+      "name": "rc",
+      "graph_exact": true,
+      "numerical_match": true
+    }
+  ],
+  "native_titlebar_exposed_in_accessibility": true,
+  "native_search_input_observed": true,
+  "physical_titlebar_displacement_verified": false,
+  "pointer_appearance_visually_verified": false,
+  "native_visual_status": "Normal app launch showed canvas/library/inspector and restored native title bar; isolated captures were blank. Drag displacement and pointer appearance remain unverified.",
+  "flasher_timing": {
+    "status": "not-qualified",
+    "attempts": 2,
+    "reason": "native simulation.step exceeded existing 100 ms integration work budget; no solver changes"
+  },
+  "package": {
+    "verified_members": 127,
+    "zip_extraction_bytes_and_modes_match": true,
+    "strict_ad_hoc_signature_valid": true
+  },
+  "owned_native_shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "input_revision": 84,
+    "command_revision": 23,
+    "document_generation": 7,
+    "discard_recovery": false,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "previous_release_unchanged": true,
+  "owner_app_closed_or_replaced": false,
+  "published": false,
+  "developer_id_signed": false,
+  "notarized": false,
+  "limitations": [
+    "Native titlebar displacement and cursor appearance are not visually confirmed",
+    "CUA first attachment to launcher path timed out; direct executable bundle attachment worked",
+    "Flasher reference exceeded existing 100 ms integration work limit twice; no solver changes",
+    "Clean-account startup, full PRD, VoiceOver and IME acceptance remain outside this repair",
+    "Raise action on the normal app later timed out; no further UI actions attempted."
+  ],
+  "normal_release_launch_observed": true,
+  "normal_release_workspace_visually_verified": true,
+  "normal_launch_document": "Untitled; zero components/wires; observed only",
+  "normal_launch_path": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.180.1-macos-arm64/ELab.app"
+}
