@@ -28,3 +28,12 @@ gate passes. The matching agent producer checks refusal/correction, unchanged
 physics, stale ownership and structured help. Its binary hash guard must match
 the candidate receipt. Both producers retain workspace/stage paths and need
 explicit reviewed relocation elsewhere. No graphical launch is part of either.
+
+The [clean 0.181.6 /207 candidate](candidate-report.json) now builds from
+`99564f532b9412bc4e986be4248ea3848b0d1068`, verifies its strict ad-hoc signature,
+and passes the matching headless agent protocol with completed joined shutdown.
+All 865 captured source/check input hashes still match. Build logs retain
+harmless denied Go module-stat cache writes; the build succeeds with clean VCS
+identity. [Required native checks](native-acceptance-pending.json) remain pending,
+so this candidate is held and the /205 download remains unchanged. No graphical
+app was launched to obtain this receipt, and owner review is not a prerequisite.

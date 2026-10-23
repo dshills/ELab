@@ -72,3 +72,10 @@ independent socket probe reproduces `EPERM`. The passing rerun uses automaticall
 reviewed local socket access. Both outcomes are preserved. Fresh native checks of
 the changed guidance layout and editing keys remain required before promoting
 the next maintenance candidate; existing /206 images cannot establish them.
+
+The clean [0.181.6 /207 candidate](../docs/validation/inspector-guidance-207/candidate-report.json)
+builds from `99564f53`, verifies its strict ad-hoc signature and passes the
+matching headless cursor protocol. Both live/recorded modes preserve state on
+refusal, accept correction and reject stale ownership; shutdown completes with
+workers joined. All 865 captured source/check input hashes still match. The
+candidate remains held for those native checks; /205 remains the download.
