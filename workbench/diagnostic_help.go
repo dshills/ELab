@@ -191,6 +191,9 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	}
 	c, _, _ := s.graph.Compile()
 	help := makeDiagnosticHelp(s.graph, c, Diagnostic{Code: code, Message: message}, "request", refs)
+	if code == "invalid-params" && r.Command == "component.set" {
+		componentValueRequestHelp(s.graph, r.Params, &help)
+	}
 	if code == "invalid-params" && r.Command == "recording.seek" {
 		if record, err := s.selectedRecordLocked(); err == nil {
 			help.Summary = "Choose a valid position in the recording."

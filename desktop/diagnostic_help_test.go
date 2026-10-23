@@ -101,3 +101,58 @@ func TestNativeFailedValueKeepsSharedRequestHelpThroughDisclosure(t *testing.T) 
 		t.Fatal("successful correction retains a ghost request marker")
 	}
 }
+
+func TestNativeValueRefusalSharesDomainHelpAndFirstApplyRecovery(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, s, "example.reset", nil)
+	uiAction(t, s, "simulation.pause", nil)
+	uiAction(t, s, "selection", &ui.ChangeEvent{SelectedID: "R1"})
+	uiAction(t, s, "value-entry", &ui.ChangeEvent{Text: "0"})
+	before := s.service.Snapshot()
+	s.app.Do(func() {
+		apply, ok := findAction(s.view(), "apply-value")
+		if !ok {
+			t.Fatal("missing value action")
+		}
+		apply.Activate() // This deliberately rejected input must keep its error.
+	})
+	if s.requestHelp == nil || !strings.Contains(s.requestHelp.Summary, "R1 needs a valid resistance") || !strings.Contains(s.requestHelp.Action, "10–100000 Ω") || !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("native refusal lost domain guidance or changed accepted state", s.requestHelp)
+	}
+	agent := workbench.NewExample()
+	defer agent.Close()
+	agentAction(t, agent, "simulation.pause", struct{}{})
+	raw, _ := json.Marshal(workbench.ValueParams{ID: "R1", Value: "0"})
+	rev := agent.Snapshot().CommandRevision
+	response := agent.Dispatch(context.Background(), workbench.Request{Version: 1, ID: "agent-bad", Key: "agent-bad", Command: "component.set", Params: raw, ExpectedCommandRevision: &rev}, "agent.test")
+	if !reflect.DeepEqual(s.requestHelp, response.Help) {
+		t.Fatal("UI and agent do not receive identical value guidance", s.requestHelp, response.Help)
+	}
+	s.app.Do(func() {
+		root := s.view()
+		message, _ := findNode(root, "messages")
+		action, _ := findNode(root, "diagnostic-0-action")
+		if message.Text != response.Help.Summary || action.Text != response.Help.Action {
+			t.Fatal("visible help does not use shared response", message.Text, action.Text)
+		}
+	})
+	s.app.Do(func() {
+		field, ok := findNode(s.view(), "value-entry")
+		if !ok {
+			t.Fatal("missing value field")
+		}
+		field.Change(ui.ChangeEvent{Text: "2k"})
+	})
+	uiAction(t, s, "apply-value", nil)
+	after := s.service.Snapshot()
+	part, _ := (workbench.Graph{Components: after.Components}).Component("R1")
+	if part.Value != 2000 || s.requestHelp != nil || s.errorMessage != "" {
+		t.Fatal("corrected value did not apply on first action", part, s.errorMessage)
+	}
+	uiAction(t, s, "edit.undo", nil)
+	part, _ = (workbench.Graph{Components: s.service.Snapshot().Components}).Component("R1")
+	if part.Value != 1000 {
+		t.Fatal("correction is not one undoable edit", part)
+	}
+}
