@@ -42,3 +42,10 @@ menus and /208 disclosure changes remains pending. No candidate is promoted by
 this source record. The current download remains /205. Standing launch and
 desktop authorization is saved in `AGENTS.md`; no further owner review is
 required and no new launch approval prompt is left waiting.
+
+The [clean 0.181.8 /209 candidate](candidate-report.json) builds from
+`2975c3ecb5c3cfc5d80f148e2d284519c4d83fdf`, verifies its strict ad-hoc bundle signature
+and passes the matching headless cursor/RC protocol with completed joined
+shutdown. All 868 source/check inputs still match. It remains held for
+[fresh native acceptance](native-acceptance-pending.json); no graphical launch
+or new approval request was used. The /205 download is unchanged.

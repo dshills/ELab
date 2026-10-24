@@ -1,0 +1,49 @@
+{
+  "source_commit": "2975c3ecb5c3cfc5d80f148e2d284519c4d83fdf",
+  "agent_sha256": "eade12055cacc364c603b2ad2a7df2044ec65239513a5e66261bf0c9745fbb7c",
+  "agent_binary": "/Users/dshills/Development/projects/ELab/build/ELab-0.181.8-209-candidate/elab-agent",
+  "transport": "headless-stdio",
+  "checks": [
+    {
+      "mode": "live",
+      "cursors": [
+        "a",
+        "b"
+      ],
+      "bad_values_per_cursor": 6,
+      "refused_state_preserved": true,
+      "unit_correction": true,
+      "delta_s": 0.012,
+      "stale_requests_cannot_borrow_guidance": true
+    },
+    {
+      "mode": "recorded",
+      "cursors": [
+        "a",
+        "b"
+      ],
+      "bad_values_per_cursor": 6,
+      "refused_state_preserved": true,
+      "unit_correction": true,
+      "delta_s": 0.012,
+      "stale_requests_cannot_borrow_guidance": true
+    }
+  ],
+  "passed": true,
+  "kept_running": false,
+  "shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "input_revision": 19,
+    "command_revision": 14,
+    "document_generation": 2,
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  }
+}

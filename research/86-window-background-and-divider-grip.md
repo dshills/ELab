@@ -87,3 +87,8 @@ owned /206 session remains available; no unattended fresh-launch prompt is
 queued and no further owner permission or review is requested. Preserve the
 qualified /205 download until those changed native paths pass. No component,
 model, command or format is added by this work.
+
+The clean 0.181.8 /209 candidate builds from `2975c3ec`, passes
+strict ad-hoc bundle verification and the matching headless RC/cursor protocol
+with normal joined shutdown. All 868 captured source/check inputs remain exact.
+The candidate stays held for fresh native acceptance; /205 remains the download.
