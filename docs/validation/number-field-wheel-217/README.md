@@ -39,3 +39,8 @@ snapshot field and both viewport positions are preserved. This is a scoped
 restoration, not exact equality. New candidate native acceptance is still
 separate. /205, /216, user projects and the existing owned session are preserved;
 no graphical launch or unattended launch-approval prompt is queued.
+
+The [clean /217 candidate and matching agent](candidate-report.json) pass
+packaging integrity, circuit Undo/Redo, 42 independent RC readings, saved-capture
+reopen, dirty-work refusal and normal headless cleanup. The candidate is held
+for [fresh native acceptance](native-acceptance-pending.json); /205 remains current.

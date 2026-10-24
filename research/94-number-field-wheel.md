@@ -37,7 +37,9 @@ edited. The [full framework and application gates pass](../docs/validation/numbe
 The elab10 export changes three members and preserves all upstream dependency
 bytes. Final pinned keyboard/wheel checks pass in 5.984 s. Desktop race takes
 189.581 s; mounted race 168.282 s. All 888 source/check inputs match.
-Clean packaging is next.
+The clean /217 package and matching agent also pass circuit Undo/Redo, 42
+independent RC readings, saved-capture reopen, dirty-work refusal and normal
+headless cleanup. The candidate is held for fresh native acceptance.
 
 The first full framework gate passed its normal/offscreen main driver tests,
 but the workbench example could not bind local Unix sockets under the test
