@@ -44,6 +44,12 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+			for _, pin := range p.Terminals {
+				if pin != "gnd" {
+					join(p, pin, "gnd")
+				}
+			}
 		case "timer555":
 			for _, pin := range timer555Pins[1:] {
 				join(p, pin, "gnd")

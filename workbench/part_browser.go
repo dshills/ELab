@@ -15,7 +15,7 @@ type PartCategoryParams struct {
 }
 
 func PartCategories() []PartCategory {
-	groups := []PartCategory{{ID: "common", Name: "Common"}, {ID: "all", Name: "All components"}, {ID: "sources", Name: "Sources"}, {ID: "passives", Name: "Passives"}, {ID: "semiconductors", Name: "Semiconductors"}, {ID: "amplifiers", Name: "Amplifiers / ICs"}, {ID: "switches", Name: "Switches"}, {ID: "connections", Name: "Connections"}}
+	groups := []PartCategory{{ID: "common", Name: "Common"}, {ID: "all", Name: "All components"}, {ID: "sources", Name: "Sources"}, {ID: "passives", Name: "Passives"}, {ID: "semiconductors", Name: "Semiconductors"}, {ID: "amplifiers", Name: "Amplifiers / ICs"}, {ID: "logic", Name: "Logic"}, {ID: "switches", Name: "Switches"}, {ID: "connections", Name: "Connections"}}
 	for _, part := range libraryParts() {
 		category, common := partGroup(part.Kind)
 		for i := range groups {
@@ -36,6 +36,8 @@ func browserCategory(category string) string {
 
 func partGroup(kind string) (category string, common bool) {
 	switch kind {
+	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+		category = "logic"
 	case "dc-source", "sine-source", "finite-pulse-source", "pulse-source":
 		category = "sources"
 	case "resistor", "capacitor", "inductor", "potentiometer":

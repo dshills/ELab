@@ -242,6 +242,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	metadata.PNPModel = pnpModelForGraph(graph)
 	metadata.OpAmpModel = opAmpModelForGraph(graph)
 	metadata.Timer555Model = timer555ModelForGraph(graph)
+	metadata.LogicModel = logicModelForGraph(graph)
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
 	input := verificationInput{compiled: compiled, settings: cfg, mode: settings.InputMode, probes: probes, duration: settings.Duration, steps: steps, serial: s.operationSerial, metadata: metadata}
@@ -374,6 +375,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	if in.Timer555Model != nil {
 		m := *in.Timer555Model
 		out.Timer555Model = &m
+	}
+	if in.LogicModel != nil {
+		m := *in.LogicModel
+		out.LogicModel = &m
 	}
 	if in.OpAmpModel != nil {
 		model := *in.OpAmpModel

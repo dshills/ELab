@@ -2,6 +2,10 @@ package workbench
 
 func partAliases(kind string) []string {
 	switch kind {
+	case "logic-not":
+		return []string{"logic", "digital", "CMOS", "boolean", "inverter", "inverting gate"}
+	case "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+		return []string{"logic", "digital", "CMOS", "boolean", "gate"}
 	case "dc-source":
 		return []string{"battery", "power supply", "voltage supply"}
 	case "resistor":
@@ -51,6 +55,8 @@ func partAliases(kind string) []string {
 }
 func partLimitations(kind string) string {
 	switch kind {
+	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+		return LogicDeviceModel().Limitations
 	case "dc-source":
 		return "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity."
 	case "resistor":

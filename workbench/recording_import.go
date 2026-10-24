@@ -59,6 +59,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.Timer555Model != nil {
 		envelope["timer555_model"] = m.Timer555Model
 	}
+	if m.LogicModel != nil {
+		envelope["logic_model"] = m.LogicModel
+	}
 	if m.OpAmpModel != nil {
 		envelope["opamp_model"] = m.OpAmpModel
 	}
@@ -241,6 +244,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return fmt.Errorf("invalid recorded numerical damping for integration method")
 		}
 		if _, _, err := recordedDeviceNodes(c, r); err != nil {
+			return err
+		}
+		if err := validateRecordedLogic(c, m.Graph, r); err != nil {
 			return err
 		}
 		if err := validateRecordedTimers555(c, m.Graph, r); err != nil {

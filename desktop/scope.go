@@ -238,6 +238,9 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if t != nil && t.Engine == workbench.Timer555EngineID {
 		titleText = "Live 555 scope"
 	}
+	if state.LogicModel != nil {
+		titleText = "Live logic scope"
+	}
 	title := section("scope-title", titleText)
 	title.MinWidth = 110
 	captionNode := quiet("scope-caption", caption)
@@ -328,6 +331,10 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 	if state.Analysis == workbench.Timer555Analysis {
 		title = "555 experiment"
 		help = "External timing storage controls the latch. Restart restores capacitor startup and clears the latch before settling its inputs."
+	}
+	if state.LogicModel != nil {
+		title = "Logic experiment"
+		help = "Combinational gates have no internal delay. Intermediate input voltages are analog transitions; external capacitors retain circuit timing."
 	}
 	nodes := []ui.Node{section("transient-title", title), quiet("transient-help", help)}
 	if state.StepWork != nil && state.StepWork.Error != nil {

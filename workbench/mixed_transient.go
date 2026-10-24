@@ -65,6 +65,19 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		}
 	}
 	currents := map[string]float64{}
+	for _, u := range r.LogicGates {
+		for k, pin := range logicPinOrder {
+			if pin == "b" && u.Kind == "logic-not" {
+				continue
+			}
+			i := u.PinCurrents[k]
+			if pin == "out" {
+				i = -i
+			}
+			currents[u.ID+"."+pin] = i
+		}
+		currents[u.ID] = -u.PinCurrents[2]
+	}
 	for _, u := range r.Timers555 {
 		for k, pin := range timer555Pins {
 			i := u.PinCurrents[k]

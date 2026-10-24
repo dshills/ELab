@@ -324,3 +324,12 @@ Six [recovery configuration/work/selection commands](project-recovery-work.md#di
 Six [recovery choice/query commands](recovery-choice-contracts.md) add `recovery-choice-and-query` contracts. That checkpoint reached **135 of 162 IDs /27 without one**. They expose pure-read defaults/error precedence, copy restoration under active/unknown ownership, protected dismissal, confirmed removal versus catalog refresh, and deferred file work versus admission guards. The prior six configuration/work/selection schemas and ordinary discovery/output definitions are unchanged. Annotation coverage alone does not prove exhaustive behavior or native accessibility.
 
 Three [atomic batch/history commands](edit-history-contracts.md) add `atomic-edits-and-history` contracts, bringing current coverage to **138 of 162 IDs /24 without one**. Discovery and staging share the exact 17-command allowlist. Final staged references now normalize even when final graph/settings are unchanged, repairing deleted-component selection without adding history or changing physics. Prior recovery-choice schemas and ordinary discovery/output definitions remain unchanged. The same checkpoint adopts the [current Vellum SDK](vellum-refresh.md).
+
+## Basic logic gates
+
+The seven `logic-*` kinds use ordinary placement, named wiring, rotation,
+switch, simulation, scope and project commands. Examples are `logic-inverter`,
+`logic-switches` and `logic-half-adder` through `example.load`. Snapshots expose
+`logic_model` and `mixed.logic_gates`; pin currents enter the device, except
+output current probes report delivered current. See [the complete electrical
+and agent contract](logic-gates.md).

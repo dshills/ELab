@@ -17,7 +17,7 @@ type menuChoices struct {
 
 var applicationMenus = []app.MenuGroup{
 	{Label: "File", Commands: []string{"project.clear", "file.open", "file.save", "file.save-as", "app.close"}},
-	{Label: "Examples", Commands: []string{"example.reset", "example.split-supply", "example.rc", "example.rc-high-pass", "example.rl", "example.rlc", "example.flyback", "example.npn", "example.pnp", "example.emitter-follower", "example.bipolar-push-pull", "example.switch-npn", "example.npn-pulse", "example.flasher", "example.led-fade", "example.nmos", "example.pmos", "example.cmos", "example.opamp-follower", "example.opamp-inverting", "example.rectifier", "example.zener", "example.schottky", "example.555-flasher", "example.555-oscillator", "example.555-one-shot"}},
+	{Label: "Examples", Commands: []string{"example.reset", "example.split-supply", "example.rc", "example.rc-high-pass", "example.rl", "example.rlc", "example.flyback", "example.npn", "example.pnp", "example.emitter-follower", "example.bipolar-push-pull", "example.switch-npn", "example.npn-pulse", "example.flasher", "example.led-fade", "example.nmos", "example.pmos", "example.cmos", "example.opamp-follower", "example.opamp-inverting", "example.rectifier", "example.zener", "example.schottky", "example.logic-inverter", "example.logic-switches", "example.logic-half-adder", "example.555-flasher", "example.555-oscillator", "example.555-one-shot"}},
 	{Label: "Appearance", Commands: []string{"appearance.light", "appearance.dark", "appearance.system", "appearance.apollo"}},
 }
 

@@ -305,3 +305,7 @@ Recovery snapshots now distinguish [active, inactive and unverified owners](docs
 [Automatic storage errors and retry results](docs/recovery-failure.md) now remain observable while you edit. Restoring available storage saves a complete recovery copy automatically, while later dirty edits, manual saves and newer recovery work keep their own state.
 
 You can [disable autosave even while its current recovery folder is unavailable](docs/recovery-disable.md). The last error/list stay visible, and restoring storage leaves autosave off until you enable it again. Users and agents use the same commands.
+
+Basic powered NOT, AND, OR, NAND, NOR, XOR and XNOR gates are in the Logic
+category. Try the inverter LED, switch-controlled AND and half-adder examples;
+see [logic gates](docs/logic-gates.md) for wiring, commands and model bounds.

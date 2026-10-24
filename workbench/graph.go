@@ -160,6 +160,13 @@ func libraryParts() []Part {
 		{Kind: "nmos", Name: "N-channel MOSFET", Terminals: []string{"gate", "drain", "source"}, Model: NMOSModelID},
 		{Kind: "npn", Name: "NPN transistor", Terminals: []string{"base", "collector", "emitter"}, DefaultValue: "", Unit: "", Model: NPNModelID},
 		{Kind: "pnp", Name: "PNP transistor", Terminals: []string{"base", "collector", "emitter"}, Model: PNPModelID},
+		{Kind: "logic-not", Name: "NOT gate", Terminals: logicPins("logic-not"), Model: LogicModelID},
+		{Kind: "logic-and", Name: "AND gate", Terminals: logicPins("logic-and"), Model: LogicModelID},
+		{Kind: "logic-or", Name: "OR gate", Terminals: logicPins("logic-or"), Model: LogicModelID},
+		{Kind: "logic-nand", Name: "NAND gate", Terminals: logicPins("logic-nand"), Model: LogicModelID},
+		{Kind: "logic-nor", Name: "NOR gate", Terminals: logicPins("logic-nor"), Model: LogicModelID},
+		{Kind: "logic-xor", Name: "XOR gate", Terminals: logicPins("logic-xor"), Model: LogicModelID},
+		{Kind: "logic-xnor", Name: "XNOR gate", Terminals: logicPins("logic-xnor"), Model: LogicModelID},
 		{Kind: "opamp", Name: "Powered op-amp", Terminals: []string{"noninverting", "inverting", "out", "vplus", "vminus"}, Model: OpAmpModelID},
 		{Kind: "ground", Name: "Ground", Terminals: []string{"reference"}, DefaultValue: "", Unit: "", Model: "ground.v1"},
 		{Kind: "junction", Name: "Junction", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "junction.v1"},
@@ -301,6 +308,8 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
+	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+		p, found = LogicTerminalLocal(c.Kind, name)
 	case "timer555":
 		p, found = Timer555TerminalLocal(name)
 	case "capacitor":
@@ -460,7 +469,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		switch c.Kind {
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, c)
-		case "timer555", "switch":
+		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true

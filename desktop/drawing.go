@@ -158,6 +158,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		}
 		drawComponentSymbol(b, state, part, ink, muted, accent, wireColor, connectionCount[part.ID+".node"] > 0)
 		outlineW, outlineH := 64., 46.
+		if workbench.IsLogicKind(part.Kind) {
+			outlineW, outlineH = 72, 72
+		}
 		if part.Kind == "timer555" {
 			outlineW, outlineH = 108, 118
 		}
@@ -364,6 +367,25 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		for _, y := range []float64{-15, 5} {
 			stroke(led, 2, canvas.Point{X: 30, Y: y}, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 44, Y: y - 20})
 			stroke(led, 2, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 50, Y: y - 14})
+		}
+	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+		for _, path := range workbench.LogicSymbolPaths(part.Kind) {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		for _, label := range workbench.LogicSymbolLabels(part) {
+			first := len(b.vertices)
+			b.text(label.At.X, label.At.Y, label.Text, muted)
+			// Pin text rotates with this dense IC symbol so adjacent pin
+			// captions retain their spacing at every component orientation.
+			for i := first; i < len(b.vertices); i++ {
+				at := b.vertices[i].Position
+				d := workbench.RotateLocal(workbench.Point{X: at.X - label.At.X, Y: at.Y - label.At.Y}, part.Rotation)
+				b.vertices[i].Position = canvas.Point{X: label.At.X + d.X, Y: label.At.Y + d.Y}
+			}
 		}
 	case "timer555":
 		for _, path := range workbench.Timer555SymbolPaths() {

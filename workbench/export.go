@@ -198,6 +198,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	if model := timer555ModelForGraph(g); model != nil {
 		metadataFields["timer555_model"] = model
 	}
+	if model := logicModelForGraph(g); model != nil {
+		metadataFields["logic_model"] = model
+	}
 	if model := opAmpModelForGraph(g); model != nil {
 		metadataFields["opamp_model"] = model
 	}
@@ -259,6 +262,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			b.WriteString(`"/>`)
 		case "capacitor":
 			b.WriteString(`<path d="M0 -32 V-7 M-23 -7 H23 M-23 7 H23 M0 7 V32"/>`)
+		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+			for _, path := range LogicSymbolPaths(p.Kind) {
+				b.WriteString(`<polyline points="`)
+				for _, point := range path {
+					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "timer555":
 			for _, path := range Timer555SymbolPaths() {
 				b.WriteString(`<polyline points="`)
@@ -335,14 +346,19 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
 
 	for _, p := range g.Components {
+		if IsLogicKind(p.Kind) {
+			for _, label := range LogicSymbolLabels(p) {
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
+			}
+		}
 		if p.Kind == "timer555" {
 			for _, label := range Timer555SymbolLabels(p) {
-				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, label.Text)
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
 			}
 		}
 		if p.Kind == "opamp" {
 			for _, label := range OpAmpSupplyLabels(p) {
-				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, label.At.X, label.At.Y, label.Text)
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, label.At.X, label.At.Y, html.EscapeString(label.Text))
 			}
 		}
 		if annotated[p.ID] {
@@ -434,6 +450,10 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
+	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+		text += " · " + strings.ToUpper(strings.TrimPrefix(p.Kind, "logic-"))
+		at := LogicLabelPosition(p)
+		x, y = at.X, at.Y
 	case "timer555":
 		text += " · 555"
 		at := Timer555LabelPosition(p)

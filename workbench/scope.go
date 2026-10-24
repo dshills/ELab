@@ -109,7 +109,7 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
 			}
-		case "timer555":
+		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " output / local ground", "V", p.ID + ".out", p.ID + ".gnd"}, Probe{"i:" + p.ID, p.ID + " delivered output current", "A", p.ID + ".out", "out of device"})
 			for _, pin := range p.Terminals {
 				ref := p.ID + "." + pin
@@ -182,6 +182,9 @@ func defaultProbes(c Compiled) []string {
 	if IsNetworkAnalysis(c.Analysis) {
 		out := []string{}
 		for _, p := range c.MixedGraph.Components {
+			if IsLogicKind(p.Kind) {
+				out = append(out, "v:"+p.ID+".a", "v:"+p.ID, "i:"+p.ID)
+			}
 			if p.Kind == "timer555" {
 				out = append(out, "v:"+p.ID, "v:"+p.ID+".threshold", "i:"+p.ID)
 			}

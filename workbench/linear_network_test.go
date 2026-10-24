@@ -75,7 +75,7 @@ func TestLinearNegativeRailAndCapacitorStep(t *testing.T) {
 }
 
 func TestNetworkLinearityIsConservativeForEveryPart(t *testing.T) {
-	nonlinear := map[string]bool{"led": true, "diode": true, "zener": true, "schottky": true, "npn": true, "pnp": true, "nmos": true, "pmos": true, "opamp": true, "timer555": true}
+	nonlinear := map[string]bool{"led": true, "diode": true, "zener": true, "schottky": true, "npn": true, "pnp": true, "nmos": true, "pmos": true, "opamp": true, "timer555": true, "logic-not": true, "logic-and": true, "logic-or": true, "logic-nand": true, "logic-nor": true, "logic-xor": true, "logic-xnor": true}
 	for _, part := range Library() {
 		n := newMixedNetwork(Compiled{MixedGraph: Graph{Components: []Component{{Kind: part.Kind}}}})
 		if n.nonlinear != nonlinear[part.Kind] {

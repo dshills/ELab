@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	LogicGates         []LogicResult         `json:"logic_gates,omitempty"`
 	OpAmps             []OpAmpResult         `json:"opamps,omitempty"`
 	Inductors          []InductorResult      `json:"inductors,omitempty"`
 	MOSFETs            []MOSFETResult        `json:"mosfets,omitempty"`
@@ -68,6 +69,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.LogicGates = append([]LogicResult(nil), r.LogicGates...)
 	o.Timers555 = append([]Timer555Result(nil), r.Timers555...)
 	o.OpAmps = append([]OpAmpResult(nil), r.OpAmps...)
 	o.Inductors = append([]InductorResult(nil), r.Inductors...)
@@ -98,6 +100,7 @@ type mixedNetwork struct {
 	index             map[string]int
 	sources, caps     []Component
 	inductors         []Component
+	logic             []Component
 	opamps            []Component
 	timers            []Component
 	timerMemory       []timer555Memory
@@ -141,6 +144,9 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		if p.Kind == "timer555" {
 			n.timers = append(n.timers, p)
 			n.timerMemory = append(n.timerMemory, timer555Memory{})
+		}
+		if IsLogicKind(p.Kind) {
+			n.logic = append(n.logic, p)
 		}
 		if p.Kind == "opamp" {
 			n.opamps = append(n.opamps, p)
@@ -270,6 +276,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
+		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+			n.stampLogic(p, x, add, f)
 		case "timer555":
 			n.stampTimer555(p, x, add, f)
 		case "potentiometer":
@@ -519,7 +527,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0) {
+		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -638,6 +646,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
+		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+			device := n.logicResult(p, x)
+			r.LogicGates = append(r.LogicGates, device)
+			powers += device.Power
 		case "timer555":
 			device := n.timer555Result(p, x)
 			r.Timers555 = append(r.Timers555, device)

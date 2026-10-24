@@ -17,6 +17,9 @@ func MixedRegion(result *MixedResult) (deviceID, state string) {
 		if len(result.Timers555) > 0 {
 			return result.Timers555[0].ID, result.Timers555[0].State
 		}
+		if len(result.LogicGates) > 0 {
+			return result.LogicGates[0].ID, result.LogicGates[0].State
+		}
 		if len(result.OpAmps) > 0 {
 			return result.OpAmps[0].ID, result.OpAmps[0].State
 		}

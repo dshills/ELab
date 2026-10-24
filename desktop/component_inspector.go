@@ -47,6 +47,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if workbench.IsLogicKind(part.Kind) && state.Mixed != nil {
+		for _, gate := range state.Mixed.LogicGates {
+			if gate.ID == part.ID {
+				status := "Live"
+				if state.Mixed.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("logic-selected-reading", fmt.Sprintf("%s · output %s\nA %s · B %s\nOut %.5g V · delivered %.5g mA\nSupply %.5g V · power %.5g mW", status, gate.State, gate.InputA, gate.InputB, gate.OutputVoltage, -gate.PinCurrents[2]*1000, gate.SupplyVoltage, gate.Power*1000)))
+			}
+		}
+	}
 	if part.Kind == "timer555" && state.Mixed != nil {
 		for _, timer := range state.Mixed.Timers555 {
 			if timer.ID == part.ID {

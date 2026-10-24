@@ -48,6 +48,9 @@ func (l CanvasAnnotationLayout) Position(text string, index int) Point {
 // drawing and Fit use CanvasPartLabelPositionAtZoom when enlarging captions.
 func CanvasPartLabel(part Component) (Point, string) {
 	title := part.ID
+	if IsLogicKind(part.Kind) {
+		title += " " + strings.ToUpper(strings.TrimPrefix(part.Kind, "logic-"))
+	}
 	if part.Kind == "timer555" {
 		title += " 555"
 	}
@@ -91,6 +94,8 @@ func CanvasPartLabelPositionAtZoom(part Component, title string, zoom float64) P
 
 func CanvasPartLabelPosition(part Component, title string) Point {
 	switch part.Kind {
+	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+		return LogicLabelPosition(part)
 	case "timer555":
 		return Timer555LabelPosition(part)
 	case "opamp":

@@ -82,6 +82,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
 	{reflect.TypeOf(ZenerModel{}), "urn:elab:zener-model:1"},
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
+	{reflect.TypeOf(LogicModel{}), "urn:elab:logic-model:1"},
+	{reflect.TypeOf(LogicResult{}), "urn:elab:logic-result:1"},
 	{reflect.TypeOf(Timer555Model{}), "urn:elab:timer555-model:1"},
 	{reflect.TypeOf(Timer555Result{}), "urn:elab:timer555-result:1"},
 	{reflect.TypeOf(OpAmpModel{}), "urn:elab:opamp-model:1"},

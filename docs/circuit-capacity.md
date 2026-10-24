@@ -41,3 +41,7 @@ The optional `elab-conformance --capacity-suite` adds all four adapters, complet
 The [555 extension](timer555.md) admits two stateful timers without expanding existing node/storage/work limits. Historical capacity fixtures do not qualify timer capacity; exact pre-timer envelopes remain accepted for those passive/RC/MOSFET fixtures.
 
 The [bipolar extension](bipolar-transistors.md) admits PNPs and ungrounded emitters within the combined two-transistor bound. The original capacity fixtures below remain passive/RC/MOSFET evidence; their exact historical limit envelope does not claim PNP capacity qualification.
+
+Basic logic gates count toward the existing 64 simulated-part and 100-node
+envelope. No separate gate-count limit is introduced. Each single gate has
+four (NOT) or five named terminals; supply, input and output nets count normally.
