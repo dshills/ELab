@@ -206,6 +206,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	if model := logicModelForGraph(g); model != nil {
 		metadataFields["logic_model"] = model
 	}
+	if model := controlModelForGraph(g); model != nil {
+		metadataFields["control_model"] = model
+	}
 	if model := displayModelForGraph(g); model != nil {
 		metadataFields["display_model"] = model
 	}
@@ -253,6 +256,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	for _, p := range g.Components {
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
 		switch p.Kind {
+		case "pushbutton", "bouncing-pushbutton":
+			for _, path := range ControlSymbolPaths(p.Kind, ControlMemory{}) {
+				b.WriteString(`<polyline points="`)
+				for _, point := range path {
+					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "switch":
 			endY := -22.
 			if p.SwitchClosed != nil && *p.SwitchClosed {

@@ -347,3 +347,8 @@ reset/enable, startup and current-probe contracts.
 Load `display-counter` for a real 555-driven decimal digit; inspect
 `display_model` and `mixed.displays`, including each segment's voltage, current
 and current-derived illumination. See [digital displays](digital-display.md).
+
+`button.set` and `button.click` operate clean/bouncing momentary contacts through
+staged `input_work`. Native controls use the same commands; await completion
+before stepping. Runtime button history is separate from saved startup edits.
+See [button timing and contracts](momentary-buttons.md).

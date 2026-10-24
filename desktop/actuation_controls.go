@@ -74,3 +74,28 @@ func (s *screen) switchControls(state workbench.Snapshot, part workbench.Compone
 	}
 	return nodes
 }
+
+func (s *screen) buttonControls(state workbench.Snapshot, part workbench.Component) []ui.Node {
+	pressed := false
+	status := "Released"
+	if state.Mixed != nil {
+		for _, c := range state.Mixed.Controls {
+			if c.ID == part.ID {
+				pressed = c.Memory.Pressed
+				status = c.State
+				if state.Mixed.Stale {
+					status = "Stale · " + status
+				}
+			}
+		}
+	}
+	label := "Press and hold"
+	if pressed {
+		label = "Release button"
+	}
+	click := s.action("button-click", "Click button · 50 ms", "button.click", workbench.IDParams{ID: part.ID})
+	hold := s.action("button-hold", label, "button.set", workbench.ButtonParams{ID: part.ID, Pressed: !pressed})
+	click.Disabled = pressed || activeInputWork(state) || state.Mixed == nil || state.Mixed.Stale
+	hold.Disabled = activeInputWork(state) || state.Mixed == nil || state.Mixed.Stale
+	return []ui.Node{section("button-title", "Momentary pushbutton"), quiet("button-state", status), click, hold, quiet("button-help", "Click presses for 50 ms of simulation time and releases automatically. Press and hold requires an explicit Release. Paused contacts settle now; Step or Resume advances bounce and the click duration. Restart releases every button."), quiet("button-model", "Normally open · 1 Ω closed /1 GΩ open. Bouncing variant alternates four times at 1 ms spacing after each press and release. Runtime operation does not dirty the schematic.")}
+}

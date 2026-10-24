@@ -46,7 +46,7 @@ func commandEventTopics(command string, documentChanged bool) []string {
 		topics = append(topics, "editor")
 	case strings.HasPrefix(command, "view."):
 		topics = append(topics, "view")
-	case strings.HasPrefix(command, "simulation."):
+	case strings.HasPrefix(command, "button."), strings.HasPrefix(command, "simulation."):
 		topics = append(topics, "simulation", "jobs")
 	case command == "scope.visibility.set", command == "workspace.layout.set", command == "workspace.inspector.set":
 		topics = append(topics, "view", "preferences")

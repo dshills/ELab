@@ -102,6 +102,7 @@ type DocumentInspection struct {
 	LogicModel         *LogicModel            `json:"logic_model,omitempty"`
 	SequentialModel    *SequentialModel       `json:"sequential_model,omitempty"`
 	DisplayModel       *DisplayModel          `json:"display_model,omitempty"`
+	ControlModel       *ControlModel          `json:"control_model,omitempty"`
 	Format             string                 `json:"format"`
 	Version            int                    `json:"version"`
 	Graph              Graph                  `json:"graph"`

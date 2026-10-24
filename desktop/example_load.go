@@ -25,6 +25,8 @@ func (s *screen) registerExampleLoadCommands() {
 		{"example.emitter-follower", "Load NPN emitter follower", "emitter-follower"},
 		{"example.bipolar-push-pull", "Load complementary transistor buffer", "bipolar-push-pull"},
 		{"example.cmos", "Load complementary MOSFET inverter", "cmos"},
+		{"example.button-counter", "Load pushbutton decimal counter", "button-counter"},
+		{"example.button-debounce", "Load contact bounce and RC debounce", "button-debounce"},
 		{"example.display-counter", "Load 555-driven digit counter", "display-counter"},
 		{"example.d-flipflop", "Load D flip-flop sampler", "d-flipflop"},
 		{"example.jk-flipflop", "Load JK flip-flop divider", "jk-flipflop"},

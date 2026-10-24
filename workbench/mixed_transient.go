@@ -7,10 +7,10 @@ import (
 )
 
 func IsNPNTransientAnalysis(a string) bool {
-	return a == SequentialAnalysis || a == Timer555Analysis || a == InductorAnalysis || a == WaveformAnalysis || a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
+	return a == ControlAnalysis || a == SequentialAnalysis || a == Timer555Analysis || a == InductorAnalysis || a == WaveformAnalysis || a == NPNTransientAnalysis || a == MixedAnalysis || a == NetworkTransientAnalysis
 }
 func IsNPNTransientEngine(e string) bool {
-	return e == SequentialEngineID || e == Timer555EngineID || e == InductorEngineID || e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID || e == "elab.network-waveforms-mna-be.v1" || e == "elab.mixed-mna-be.v1" || e == "elab.network-mna-be.v1"
+	return e == ControlEngineID || e == SequentialEngineID || e == Timer555EngineID || e == InductorEngineID || e == WaveformEngineID || e == NPNTransientEngineID || e == MixedEngineID || e == NetworkEngineID || e == "elab.network-waveforms-mna-be.v1" || e == "elab.mixed-mna-be.v1" || e == "elab.network-mna-be.v1"
 }
 
 // Use the solved source difference, including the accepted side of an edge.
@@ -65,6 +65,17 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		}
 	}
 	currents := map[string]float64{}
+	for _, u := range r.Controls {
+		p, _ := compiled.MixedGraph.Component(u.ID)
+		for k, pin := range p.Terminals {
+			i := u.PinCurrents[k]
+			if p.Kind == "comparator" && pin == "out" {
+				i = -i
+			}
+			currents[p.ID+"."+pin] = i
+		}
+		currents[p.ID] = u.Current
+	}
 	for _, u := range r.Displays {
 		p, _ := compiled.MixedGraph.Component(u.ID)
 		for k, i := range u.PinCurrents {

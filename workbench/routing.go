@@ -70,7 +70,7 @@ func routeBody(p Component) routeRect {
 		w, h = 72, 92
 	case "potentiometer":
 		w, h = 58, 38
-	case "resistor", "inductor", "switch":
+	case "pushbutton", "bouncing-pushbutton", "resistor", "inductor", "switch":
 		w, h = 58, 24
 	case "led", "diode", "zener", "schottky":
 		w = 56

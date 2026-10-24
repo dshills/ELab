@@ -310,6 +310,22 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		stroke(ink, 3, canvas.Point{X: -24, Y: 9}, canvas.Point{X: 24, Y: 9})
 		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -9})
 		stroke(wireColor, 2.5, canvas.Point{Y: 9}, canvas.Point{Y: 32})
+	case "pushbutton", "bouncing-pushbutton":
+		memory := workbench.ControlMemory{}
+		if state.Mixed != nil && !state.Mixed.Stale {
+			for _, c := range state.Mixed.Controls {
+				if c.ID == part.ID {
+					memory = c.Memory
+				}
+			}
+		}
+		for _, path := range workbench.ControlSymbolPaths(part.Kind, memory) {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
 	case "switch":
 		stroke(wireColor, 2.5, canvas.Point{X: -55}, canvas.Point{X: -25})
 		stroke(wireColor, 2.5, canvas.Point{X: 25}, canvas.Point{X: 55})

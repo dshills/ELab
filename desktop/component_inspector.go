@@ -94,6 +94,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	if part.Kind == "potentiometer" {
 		inspector = append(inspector, s.potentiometerControls(state, part)...)
 	}
+	if workbench.IsButtonKind(part.Kind) {
+		inspector = append(inspector, s.buttonControls(state, part)...)
+	}
 	if part.Kind == "switch" {
 		inspector = append(inspector, s.switchControls(state, part)...)
 	}

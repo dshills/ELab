@@ -232,7 +232,7 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if npn {
 		titleText = "Live NPN scope"
 	}
-	if t != nil && (t.Engine == workbench.MixedEngineID || t.Engine == workbench.NetworkEngineID || t.Engine == workbench.WaveformEngineID || t.Engine == workbench.InductorEngineID || t.Engine == workbench.Timer555EngineID || t.Engine == workbench.SequentialEngineID) {
+	if t != nil && (t.Engine == workbench.MixedEngineID || t.Engine == workbench.NetworkEngineID || t.Engine == workbench.WaveformEngineID || t.Engine == workbench.InductorEngineID || t.Engine == workbench.Timer555EngineID || t.Engine == workbench.SequentialEngineID || t.Engine == workbench.ControlEngineID) {
 		titleText = "Live circuit network"
 	}
 	if t != nil && t.Engine == workbench.Timer555EngineID {
@@ -243,6 +243,9 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	}
 	if state.SequentialModel != nil {
 		titleText = "Live sequential scope"
+	}
+	if state.ControlModel != nil {
+		titleText = "Live control scope"
 	}
 	title := section("scope-title", titleText)
 	title.MinWidth = 110
@@ -322,7 +325,7 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 		title = "Pulse experiment"
 		help = "Instantaneous NPN response. Settings restart time; no device delay or storage."
 	}
-	mixed := workbench.IsNetworkAnalysis(state.Analysis) || state.Transient != nil && (state.Transient.Engine == workbench.NetworkEngineID || state.Transient.Engine == workbench.WaveformEngineID || state.Transient.Engine == workbench.InductorEngineID || state.Transient.Engine == workbench.Timer555EngineID || state.Transient.Engine == workbench.SequentialEngineID)
+	mixed := workbench.IsNetworkAnalysis(state.Analysis) || state.Transient != nil && (state.Transient.Engine == workbench.NetworkEngineID || state.Transient.Engine == workbench.WaveformEngineID || state.Transient.Engine == workbench.InductorEngineID || state.Transient.Engine == workbench.Timer555EngineID || state.Transient.Engine == workbench.SequentialEngineID || state.Transient.Engine == workbench.ControlEngineID)
 	if mixed {
 		title = "Network experiment"
 		help = "Capacitor state evolves with the coupled circuit. Select each C to set signed startup voltage."
@@ -342,6 +345,10 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 	if state.SequentialModel != nil {
 		title = "Sequential experiment"
 		help = "Rising clock edges sample valid inputs. Reset is asynchronous and active high. Restart clears memory; power-up establishes clock without an edge."
+	}
+	if state.ControlModel != nil {
+		title = "Controlled experiment"
+		help = "Buttons press/release at the accepted time; simulation time advances bounce and automatic release. Clock/reset states preserve capacitor and coil energy. Restart clears runtime controls."
 	}
 	nodes := []ui.Node{section("transient-title", title), quiet("transient-help", help)}
 	if state.StepWork != nil && state.StepWork.Error != nil {

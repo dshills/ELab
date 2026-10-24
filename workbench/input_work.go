@@ -3,21 +3,24 @@ package workbench
 import (
 	"context"
 	"fmt"
+	"strings"
 )
 
 type InputWork struct {
-	ID                 string       `json:"id"`
-	Command            string       `json:"command"`
-	Status             string       `json:"status"`
-	Actor              string       `json:"actor"`
-	RunID              uint64       `json:"run_id"`
-	ElectricalRevision uint64       `json:"electrical_revision"`
-	ActuationRevision  uint64       `json:"actuation_revision"`
-	CommandRevision    uint64       `json:"command_revision"`
-	Time               float64      `json:"time_s"`
-	Mode               string       `json:"requested_mode,omitempty"`
-	Wiper              *WiperParams `json:"requested_wiper,omitempty"`
-	Error              *Failure     `json:"error,omitempty"`
+	Button             *ButtonParams `json:"requested_button,omitempty"`
+	Click              bool          `json:"button_click,omitempty"`
+	ID                 string        `json:"id"`
+	Command            string        `json:"command"`
+	Status             string        `json:"status"`
+	Actor              string        `json:"actor"`
+	RunID              uint64        `json:"run_id"`
+	ElectricalRevision uint64        `json:"electrical_revision"`
+	ActuationRevision  uint64        `json:"actuation_revision"`
+	CommandRevision    uint64        `json:"command_revision"`
+	Time               float64       `json:"time_s"`
+	Mode               string        `json:"requested_mode,omitempty"`
+	Wiper              *WiperParams  `json:"requested_wiper,omitempty"`
+	Error              *Failure      `json:"error,omitempty"`
 }
 
 func cloneInputWork(in *InputWork) *InputWork {
@@ -25,6 +28,10 @@ func cloneInputWork(in *InputWork) *InputWork {
 		return nil
 	}
 	out := *in
+	if in.Button != nil {
+		v := *in.Button
+		out.Button = &v
+	}
 	if in.Wiper != nil {
 		v := *in.Wiper
 		out.Wiper = &v
@@ -63,6 +70,12 @@ func solveInputWork(ctx context.Context, state *mixedState, trace *Transient, gr
 	net := newMixedNetwork(c)
 	net.inheritTimers555(state.net)
 	net.inheritSequential(state.net)
+	net.inheritControls(state.net)
+	if strings.HasPrefix(event, "button:") {
+		if err := net.stageButton(event, trace.Sample.Time); err != nil {
+			return nil, nil, err
+		}
+	}
 	next, err := net.solveContext(ctx, state.x, state.capV, 0, trace, trace.Sample.Time)
 	if err != nil {
 		return nil, nil, err
@@ -86,10 +99,18 @@ func (s *Service) startInputWorkLocked(mode string, wiper *WiperParams, graph Gr
 	s.inputSerial++
 	ctx, cancel := context.WithTimeout(context.Background(), InputWorkDeadline)
 	command := "simulation.input.set"
+	if strings.HasPrefix(event, "button:") {
+		command = "button.set"
+		if strings.HasSuffix(event, ":click") {
+			command = "button.click"
+		}
+	}
 	if wiper != nil {
 		command = "potentiometer.wiper.set"
 	}
 	job := &inputJob{work: InputWork{ID: fmt.Sprintf("input-%d", s.inputSerial), Command: command, Status: "queued", RunID: s.run, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, CommandRevision: s.commandRevision + 1, Time: s.transient.Sample.Time, Mode: mode, Wiper: wiper}, ctx: ctx, cancel: cancel, state: cloneMixedState(s.mixedState), trace: cloneTransient(s.transient), originalState: s.mixedState, originalTrace: s.transient, graph: graph.Clone(), event: event, mode: s.transient.Mode, pending: s.transient.PendingMode}
+	job.work.Button = buttonEventTarget(event)
+	job.work.Click = command == "button.click"
 	s.inputJob = job
 	solve := s.inputSolve
 	s.liveWorkers.Add(1)

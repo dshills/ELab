@@ -14,6 +14,9 @@ func PartActuationHint(kind string) string {
 }
 
 func addActuationCapabilityDetails(id string, schema map[string]any) bool {
+	if id == "button.set" || id == "button.click" {
+		return addButtonCapabilityDetails(id, schema)
+	}
 	kind := ""
 	switch id {
 	case "switch.set":
@@ -63,5 +66,15 @@ func addActuationCapabilityDetails(id string, schema map[string]any) bool {
 		schema["examples"] = []any{WiperParams{ID: "P1", Position: .5}}
 	}
 	schema["x-command-contract"] = contract
+	return true
+}
+
+func addButtonCapabilityDetails(id string, schema map[string]any) bool {
+	target := inputProperty(schema, "id")
+	target["minLength"], target["maxLength"] = 1, 64
+	target["pattern"] = "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+	schema["x-target-inventory"] = "snapshot.components filtered by pushbutton or bouncing-pushbutton"
+	schema["x-model-id"] = ControlModelID
+	schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "momentary-button-actuation", Preconditions: []string{"Existing momentary button, fresh initialized network transient, running or paused", "No active input work; click additionally requires a released button whose bounce has finished"}, Effects: []string{"Admit staged input_work; observe requested_button and button_click together with work ID/command", "Press/release commits at the accepted simulation time, preserving capacitor voltage, coil current, run, document dirtiness and undo history", "button.click schedules automatic release after 50 ms of simulation time; button.set holds until explicitly released", "The bouncing kind toggles four times at 1 ms intervals after press and release; clean buttons do not bounce", "Step or Resume advances timed contact events; Restart/reopen clears runtime button history. Verify starts an independent released circuit", "Ordinary revision/document/retry guards apply; runtime actuation is excluded from edit.batch"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing/wrong-kind ID or invalid pressed boolean"}, {"unavailable", "admission", "Stale/incomplete circuit, active input work, or click while pressed/bouncing"}, {"solve-failed", "input_work", "Event solve fails or cooperative work deadline expires; committed runtime state is preserved"}, {"canceled", "input_work", "Explicit work cancellation or Pause before publication"}, {"superseded", "input_work", "A newer run/document/input invalidates this staged solve"}}, Completion: &commandCompletionDetail{Mode: "Immediate admission, asynchronous atomic input_work completion; unchanged already-held/released set is a no-op", Observe: []string{"snapshot.input_work", "simulation.wait", "events.poll", "snapshot.mixed.controls"}, Cancel: "simulation.work.cancel", CooperativeDeadlineSeconds: int(InputWorkDeadline.Seconds())}}
 	return true
 }

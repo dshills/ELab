@@ -151,6 +151,18 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.setWiperLocked(p)
+	case "button.set":
+		var p ButtonParams
+		if err := params(raw, &p, "id", "pressed"); err != nil {
+			return err
+		}
+		return s.buttonLocked(p.ID, p.Pressed, false)
+	case "button.click":
+		var p IDParams
+		if err := params(raw, &p, "id"); err != nil {
+			return err
+		}
+		return s.buttonLocked(p.ID, true, true)
 	case "switch.set":
 		var p SwitchParams
 		if err := params(raw, &p, "id", "closed"); err != nil {
@@ -623,7 +635,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

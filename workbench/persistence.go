@@ -35,6 +35,7 @@ type Document struct {
 	LogicModel         *LogicModel         `json:"logic_model,omitempty"`
 	SequentialModel    *SequentialModel    `json:"sequential_model,omitempty"`
 	DisplayModel       *DisplayModel       `json:"display_model,omitempty"`
+	ControlModel       *ControlModel       `json:"control_model,omitempty"`
 	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
 	Paused             *bool               `json:"paused,omitempty"`
 	ScopeProbes        *ProbeParams        `json:"scope_probes,omitempty"`
@@ -368,6 +369,9 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 	}
 
+	if err := validateControlModel(d.Graph, d.ControlModel); err != nil {
+		return Document{}, err
+	}
 	if err := validateDisplayModel(d.Graph, d.DisplayModel); err != nil {
 		return Document{}, err
 	}
@@ -626,6 +630,7 @@ func (s *Service) documentLocked() Document {
 	d.LogicModel = logicModelForGraph(s.graph)
 	d.SequentialModel = sequentialModelForGraph(s.graph)
 	d.DisplayModel = displayModelForGraph(s.graph)
+	d.ControlModel = controlModelForGraph(s.graph)
 	return d
 }
 

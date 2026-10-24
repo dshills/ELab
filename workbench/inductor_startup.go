@@ -70,7 +70,7 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 			for _, pin := range timer555Pins[1:] {
 				join(p, pin, "gnd")
 			}
-		case "resistor", "switch", "capacitor":
+		case "pushbutton", "bouncing-pushbutton", "resistor", "switch", "capacitor":
 			join(p, "1", "2")
 		case "potentiometer":
 			join(p, "1", "wiper")

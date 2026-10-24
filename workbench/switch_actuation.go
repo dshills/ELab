@@ -85,6 +85,7 @@ func advanceLiveNetwork(state *mixedState, t *Transient, end float64, desired Gr
 	net := newMixedNetwork(compiled)
 	net.inheritTimers555(next.net)
 	net.inheritSequential(next.net)
+	net.inheritControls(next.net)
 	if err := budget.take(); err != nil {
 		return nil, nil, err
 	}

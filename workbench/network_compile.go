@@ -11,6 +11,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	timers := []Component{}
 	logic := []Component{}
 	displays := []Component{}
+	controls := []Component{}
 	sequential := []Component{}
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
@@ -23,6 +24,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			inductors = append(inductors, p)
 		case "nmos", "pmos":
 			mos = append(mos, p)
+		case "pushbutton", "bouncing-pushbutton":
+			controls = append(controls, p)
 		case "bcd-decoder", "seven-segment":
 			displays = append(displays, p)
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
@@ -87,6 +90,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(sequential) > 0 {
 		out.Analysis = SequentialAnalysis
 	}
+	if len(controls) > 0 {
+		out.Analysis = ControlAnalysis
+	}
 	if len(timers) > MaxNetworkTimers555 {
 		return fail("unsupported", "mixed-limit", "Network simulation supports at most two 555 timers.", "")
 	}
@@ -96,7 +102,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays) == 0 {
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls) == 0 {
 		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }

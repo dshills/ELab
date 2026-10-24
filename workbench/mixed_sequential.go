@@ -107,13 +107,36 @@ func (s *mixedState) sequentialChangesWithBaseline(sample bool, baseline []bool)
 	}
 	return next, changed, nil
 }
-func (s *mixedState) hybridGuardChanged() (bool, error) {
-	_, t, err := s.timer555Changes()
+func (s *mixedState) hybridAnalogGuardChanged() (bool, error) {
+	_, timer, err := s.timer555Changes()
 	if err != nil {
 		return false, err
 	}
-	_, q, err := s.sequentialChanges(false)
-	return t || q, err
+	_, sequence, err := s.sequentialChanges(false)
+	if err != nil {
+		return false, err
+	}
+	for k, p := range s.net.controls {
+		if IsButtonKind(p.Kind) {
+			continue
+		}
+		next, err := controlDecision(p, s.net.controlVoltages(p, s.x), s.net.controlMemory[k], s.result.Time, 0)
+		if err != nil {
+			return false, err
+		}
+		if next != s.net.controlMemory[k] {
+			return true, nil
+		}
+	}
+	return timer || sequence, nil
+}
+func (s *mixedState) hybridGuardChanged() (bool, error) {
+	changed, err := s.hybridAnalogGuardChanged()
+	if err != nil {
+		return false, err
+	}
+	_, control, err := s.controlChanges()
+	return changed || control, err
 }
 
 // Sample every device from the pre-update analog solution, then publish every
@@ -140,12 +163,17 @@ func (s *mixedState) resolveSequential(ctx context.Context, t *Transient) (*mixe
 		if err != nil {
 			return nil, err
 		}
-		if !tc && !sc {
+		cm, cc, err := cur.controlChanges()
+		if err != nil {
+			return nil, err
+		}
+		if !tc && !sc && !cc {
 			return cur, nil
 		}
 		net := *cur.net
 		net.timerMemory = tm
 		net.sequenceMemory = sm
+		net.controlMemory = cm
 		cur, err = net.solveAnalogContext(ctx, cur.x, cur.capV, 0, t, cur.result.Time)
 		if err != nil {
 			return nil, err
@@ -170,7 +198,7 @@ func (s *mixedState) advanceSequential(t *Transient, end float64, budget *integr
 		if len(cur.net.caps) == 0 && len(cur.net.inductors) == 0 {
 			scan = math.Min(scan, .001)
 		}
-		stop := math.Min(end, at+scan)
+		stop := math.Min(math.Min(end, at+scan), cur.net.nextControlEvent(at))
 		if sameSampleTime(stop, end) {
 			stop = end
 		}
@@ -201,9 +229,24 @@ func (s *mixedState) advanceSequential(t *Transient, end float64, budget *integr
 			continue
 		}
 		lo, hi := at, stop
-		for hi-lo > math.Max(1e-9, 8*math.Abs(math.Nextafter(hi, math.Inf(1))-hi)) {
+		lower := cur
+		// A scheduled contact change already has an exact timestamp. Localize
+		// only if an analog guard changed before its frozen-contact left side.
+		exactTimed := controlTimeReached(stop, cur.net.nextControlEvent(at))
+		if exactTimed {
+			analog, err := trial.hybridAnalogGuardChanged()
+			if err != nil {
+				return nil, err
+			}
+			exactTimed = !analog
+		}
+		for !exactTimed && hi-lo > math.Max(1e-9, 8*math.Abs(math.Nextafter(hi, math.Inf(1))-hi)) {
 			when := lo + (hi-lo)/2
-			candidate, err := cur.advanceAnalogBudget(t, when, budget)
+			from := cur
+			if len(cur.net.controls) > 0 {
+				from = lower
+			}
+			candidate, err := from.advanceAnalogBudget(t, when, budget)
 			if err != nil {
 				return nil, err
 			}
@@ -214,7 +257,8 @@ func (s *mixedState) advanceSequential(t *Transient, end float64, budget *integr
 			if different {
 				hi, trial = candidate.result.Time, candidate
 			} else {
-				lo = when
+				lo = candidate.result.Time
+				lower = candidate
 			}
 		}
 		appendNetworkTrace(t, mixedSample(cur.net.c, trial.result, mixedSourceVoltage(cur.net.c, trial.result)))

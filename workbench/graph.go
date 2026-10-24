@@ -183,6 +183,8 @@ func libraryParts() []Part {
 		{Kind: "zener", Name: "Zener diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "5.1", Unit: "V", Model: ZenerModelID},
 		{Kind: "schottky", Name: "Schottky diode", Terminals: []string{"anode", "cathode"}, Model: SchottkyModelID},
 		{Kind: "diode", Name: "Silicon diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: DiodeModelID},
+		{Kind: "pushbutton", Name: "Momentary pushbutton", Terminals: controlPins("pushbutton"), Model: ControlModelID},
+		{Kind: "bouncing-pushbutton", Name: "Bouncing pushbutton", Terminals: controlPins("bouncing-pushbutton"), Model: ControlModelID},
 		{Kind: "switch", Name: "SPST switch", Terminals: []string{"1", "2"}, DefaultValue: "", Unit: "", Model: SwitchModelID},
 	}
 }
@@ -343,7 +345,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "switch", "resistor", "inductor":
+	case "pushbutton", "bouncing-pushbutton", "switch", "resistor", "inductor":
 		switch name {
 		case "1":
 			p = Point{-55, 0}
@@ -480,7 +482,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		switch c.Kind {
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, c)
-		case "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
+		case "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true

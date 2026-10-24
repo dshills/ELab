@@ -322,3 +322,6 @@ for pins, startup behavior, electrical limits and verification.
 The [seven-segment display and BCD decoder](docs/digital-display.md) add a
 555-driven decimal counter example, individual simulated segment currents and
 shared native/agent controls.
+
+[Momentary buttons](docs/momentary-buttons.md) support press/release, automatic
+clicks, contact bounce, manual decimal counting and an RC debounce comparison.

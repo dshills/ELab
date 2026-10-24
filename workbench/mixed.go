@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Controls           []ControlResult       `json:"controls,omitempty"`
 	Displays           []DisplayResult       `json:"displays,omitempty"`
 	Sequential         []SequentialResult    `json:"sequential,omitempty"`
 	LogicGates         []LogicResult         `json:"logic_gates,omitempty"`
@@ -71,6 +72,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Controls = append([]ControlResult(nil), r.Controls...)
 	o.Displays = append([]DisplayResult(nil), r.Displays...)
 	o.Sequential = append([]SequentialResult(nil), r.Sequential...)
 	o.LogicGates = append([]LogicResult(nil), r.LogicGates...)
@@ -104,6 +106,8 @@ type mixedNetwork struct {
 	index             map[string]int
 	sources, caps     []Component
 	inductors         []Component
+	controls          []Component
+	controlMemory     []ControlMemory
 	displays          []Component
 	logic             []Component
 	opamps            []Component
@@ -155,6 +159,10 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		if IsSequentialKind(p.Kind) {
 			n.sequential = append(n.sequential, p)
 			n.sequenceMemory = append(n.sequenceMemory, SequentialMemory{})
+		}
+		if IsControlKind(p.Kind) {
+			n.controls = append(n.controls, p)
+			n.controlMemory = append(n.controlMemory, ControlMemory{})
 		}
 		if IsDisplayKind(p.Kind) {
 			n.displays = append(n.displays, p)
@@ -290,6 +298,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
+		case "pushbutton", "bouncing-pushbutton":
+			n.stampControl(p, x, add, f)
 		case "bcd-decoder", "seven-segment":
 			n.stampDisplay(p, x, add, f)
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
@@ -440,10 +450,10 @@ func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at 
 }
 func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
 	result, err := n.solveAnalogContext(ctx, guess, old, dt, t, at)
-	if err != nil || len(n.timers)+len(n.sequential) == 0 || dt > 0 {
+	if err != nil || len(n.timers)+len(n.sequential)+len(n.controls) == 0 || dt > 0 {
 		return result, err
 	}
-	if len(n.sequential) > 0 {
+	if len(n.sequential)+len(n.controls) > 0 {
 		return result.resolveSequential(ctx, t)
 	}
 	return result.resolveTimers555(ctx, t)
@@ -548,7 +558,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0) {
+		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -667,6 +677,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
+		case "pushbutton", "bouncing-pushbutton":
+			device := n.controlResult(p, x)
+			r.Controls = append(r.Controls, device)
+			powers += device.Power
 		case "bcd-decoder", "seven-segment":
 			device := n.displayResult(p, x)
 			r.Displays = append(r.Displays, device)
@@ -746,7 +760,7 @@ func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error)
 	return state.advanceBudget(t, end, newIntegrationBudget())
 }
 func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
-	if len(state.net.sequential) > 0 {
+	if len(state.net.sequential)+len(state.net.controls) > 0 {
 		return state.advanceSequential(t, end, budget)
 	}
 	if len(state.net.timers) > 0 {
@@ -823,7 +837,7 @@ func (state *mixedState) advanceAnalogBudget(t *Transient, end float64, budget *
 		}
 		failure = fmt.Sprintf("ratio %.3g, errors %v / %v / %v", errRatio, e1, e2, e3)
 		if errRatio <= 1 {
-			if len(cur.net.timers)+len(cur.net.sequential) > 0 {
+			if len(cur.net.timers)+len(cur.net.sequential)+len(cur.net.controls) > 0 {
 				for _, candidate := range []*mixedState{half, refined} {
 					changed, err := candidate.hybridGuardChanged()
 					if err != nil {

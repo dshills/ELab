@@ -126,6 +126,9 @@ func newSweepPlan(g Graph, settings SweepSettings) (sweepPlan, error) {
 }
 func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (sweepPlan, error) {
 	plan := sweepPlan{graph: g.Clone(), settings: settings}
+	if controlModelForGraph(g) != nil {
+		return sweepPlan{}, fmt.Errorf("controlled circuits require event history and cannot use a DC sweep")
+	}
 	if sequentialModelForGraph(g) != nil {
 		return sweepPlan{}, fmt.Errorf("sequential circuits require clock history and cannot use a DC sweep")
 	}

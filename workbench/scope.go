@@ -89,7 +89,7 @@ func probeInventory(g Graph) []Probe {
 			out = append(out, Probe{"v:" + p.ID, p.ID + " voltage", "V", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]})
 		}
 		switch p.Kind {
-		case "resistor", "capacitor", "inductor", "led", "switch", "diode", "zener", "schottky":
+		case "pushbutton", "bouncing-pushbutton", "resistor", "capacitor", "inductor", "led", "switch", "diode", "zener", "schottky":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " current", "A", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]})
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " delivered current", "A", p.ID + ".positive", "out of positive"})
