@@ -2,6 +2,11 @@
 
 [Electrical, wiring and agent contract](../../sequential-logic.md).
 
+**Desktop follow-up completed:** the [complete offscreen desktop race suite](../desktop-suite/README.md)
+subsequently passed all 423 top-level tests in 651.999 seconds with a 30-minute
+runner timeout. This resolves the incomplete broad desktop check recorded
+below. Simulation limits and application code were unchanged.
+
 The feature adds D/JK/T flip-flops and synchronous binary/decade counters,
 five examples, shared native/agent controls, stateful transient integration,
 scope probes, recording validation, persistence and schematic symbols/exports.

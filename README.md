@@ -170,6 +170,10 @@ The [formative-study packet](research/first-use-study/README.md) prepares the PR
 
 The checks require Python 3 and first run pinned project-local Staticcheck and goimports for both modules, then the Python demo-safety tests and Go vet/race tests. The portable core retains standard-library-only runtime dependencies; lint tools live in their own module. The checks include electrical reference/conservation, invalid values, stale solve rejection, pause/edit/resume, undo/recovery, revision conflicts, retry deduplication, local socket access, and UI/agent equivalence. The native smoke verifies GPU schematic pixels, LED value editing, RC scope stepping, and NPN DC/pulse switching, the autonomous RC/NPN flasher, and selectable probes, timing cursors, and scope pixels through actual UI callbacks. Socket tests need permission to bind a local Unix socket; they cannot run inside a sandbox that forbids binding.
 
+Both desktop race suites use a 30-minute test-runner timeout. The offscreen run
+includes the complete desktop suite and all mounted-control tests. This deadline
+does not change simulation integration, accuracy or work limits.
+
 Connected standalone demos require a fresh owned blank document; they refuse existing work without closing its host. General agent clients remain unrestricted. See [demo session admission and validation](docs/demo-sessions.md).
 
 Run `python3 scripts/drawing-demo.py` for a headless workflow or add `--connect build/session.endpoint.json` to exercise a running desktop session. The [persistence implementation record](docs/persistence.md) describes validation and remaining MVP work.

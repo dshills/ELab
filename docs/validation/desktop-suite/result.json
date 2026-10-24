@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "source_commit": "f76c1e536c6dd4a5b3d53e65f33bfcc01d7c701b",
+  "command": "go test -race -tags=offscreen -timeout=30m -count=1 -json ./...",
+  "working_directory": "desktop",
+  "environment": {
+    "GOWORK": "off",
+    "GOPROXY": "off",
+    "GOTOOLCHAIN": "local",
+    "GOFLAGS": "-p=1 -mod=readonly",
+    "GOCACHE": "build/go-cache",
+    "CGO_LDFLAGS_ALLOW": "-Wl,-rpath,@executable_path/native"
+  },
+  "scope": "Complete desktop module, including every offscreen mounted-control test; uncached test execution.",
+  "started_at": "2026-10-24T13:54:41.198852-05:00",
+  "finished_at": "2026-10-24T14:05:33.246346-05:00",
+  "elapsed_seconds": 651.999,
+  "top_level_passed": 423,
+  "passed_including_subtests": 1262,
+  "failed": 0,
+  "skipped": 0,
+  "race_reports": 0,
+  "application_fixes_required": false,
+  "simulation_limits": {
+    "integration_attempts": 512,
+    "integration_wall_time_ms": 100,
+    "production_code_changed": false,
+    "bounds_regression_passed": true
+  },
+  "runner_change": "30-minute desktop suite deadline; scripts/check.sh now runs all offscreen tests instead of a selected name pattern.",
+  "note": "Tested application source is unchanged from the sequential feature; only README/check.sh edits were present during this run.",
+  "slowest_top_level_tests": [
+    {
+      "name": "TestMountedRecordingTimingCorrectionAfterRefusal",
+      "seconds": 46.08
+    },
+    {
+      "name": "TestSequentialNativeExamplesAndProtection",
+      "seconds": 44.28
+    },
+    {
+      "name": "TestPMOSExampleSharedLoadPulseAndProtection",
+      "seconds": 21.52
+    },
+    {
+      "name": "TestBipolarNativeExamplesShareProtectedLoadAndLiveStep",
+      "seconds": 20.89
+    },
+    {
+      "name": "TestMountedInspectorValidationKeepsTheFocusedIntervalVisible",
+      "seconds": 20.85
+    },
+    {
+      "name": "TestNMOSExampleSharedLoadPulseAndProtection",
+      "seconds": 20.33
+    },
+    {
+      "name": "TestMountedVerificationCorrectionToAcceptedTime",
+      "seconds": 19.46
+    },
+    {
+      "name": "TestTimer555NativeExamplesSharedControlsAndProtection",
+      "seconds": 18.55
+    },
+    {
+      "name": "TestMountedRecordingTimingCoupledCorrectionMatchesAgent",
+      "seconds": 17.28
+    },
+    {
+      "name": "TestSequentialBlankDrawingAndAgentParity",
+      "seconds": 15.8
+    }
+  ],
+  "raw_jsonl_sha256": "ed53c2e9f52f31284a74a599718b609876c69d543f2259ec0aedbbb4913befa9"
+}
