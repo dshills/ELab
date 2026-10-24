@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "app_version": "0.189.0",
+  "build_number": 246,
+  "source_commit": "5b0b903adcab5f540c5d2aa13df06d1458eb9009",
+  "test_checkout": "99d506fb5c5500e7108bdf24a9b39165fdb3ccbe",
+  "tracked_changes_since_app_build": [
+    "desktop/component_browser_offscreen_test.go"
+  ],
+  "root_race_log": "root-race-bounded.txt",
+  "desktop_standard": {
+    "log": "desktop-race-final.jsonl",
+    "passed": true,
+    "top_level_passed": 315,
+    "passed_including_subtests": 736,
+    "failed": [],
+    "skipped": [],
+    "packages": [
+      {
+        "package": "github.com/dshills/elab/desktop",
+        "result": "pass",
+        "elapsed": 541.659
+      }
+    ]
+  },
+  "desktop_mounted": {
+    "log": "desktop-offscreen-race-final.jsonl",
+    "passed": true,
+    "top_level_passed": 431,
+    "passed_including_subtests": 1280,
+    "failed": [],
+    "skipped": [],
+    "packages": [
+      {
+        "package": "github.com/dshills/elab/desktop",
+        "result": "pass",
+        "elapsed": 811.74
+      }
+    ]
+  },
+  "test_process_GOMAXPROCS": 2,
+  "desktop_runner_timeout": "30m",
+  "production_limits_unchanged": true,
+  "focused_electrical": "electrical-polish-race.txt",
+  "native_callbacks": "native-polish-race.txt",
+  "native_pointer_keyboard": "native-checks.json",
+  "packaged_agent": "final-stdio.json",
+  "goimports_staticcheck": true,
+  "root_and_both_desktop_vets": true,
+  "python_unit_tests": 67,
+  "prd_requirements": 27,
+  "native_source_inventory": {
+    "public_commands": 170,
+    "sites": 410,
+    "literal_routes": 138,
+    "production_sources": 83
+  },
+  "preserved_alpha_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "known_limitations": [
+    "Generic externally prescribed temperature/light models; no self-heating or room/heater feedback",
+    "Race-instrumented default-concurrency flasher samples intermittently exceeded unchanged 100 ms guard; final root/full desktop test runs use bounded test-process concurrency",
+    "Initial mounted browser test expected four rather than six Passives; test-only correction passes repeated focused and full reruns"
+  ]
+}

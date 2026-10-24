@@ -1,0 +1,13 @@
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	3.444s
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	123.011s
+ok  	github.com/dshills/elab/internal/printspool	1.275s
+ok  	github.com/dshills/elab/internal/schematicpdf	1.244s
+ok  	github.com/dshills/elab/internal/uiaudit	1.533s
+ok  	github.com/dshills/elab/transport	1.393s
+--- FAIL: TestMixedCapacitanceSetsFlasherPeriod (1.87s)
+    mixed_test.go:91: mixed integration exceeded its work budget: elapsed-time limit (23 attempted, maximum 512; 100.042 ms elapsed, maximum 100 ms); reduce sample step at 4.05142578 s, step 0.000156: ratio +Inf, errors <nil> / mixed integration exceeded its work budget: elapsed-time limit (22 attempted, maximum 512; 100.024 ms elapsed, maximum 100 ms); reduce sample step / <nil>
+FAIL
+FAIL	github.com/dshills/elab/workbench	153.192s
+FAIL

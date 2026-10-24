@@ -30,7 +30,8 @@ limits; no simulation guard or accuracy tolerance is increased.
 
 Selecting a sensor shows a temperature or light slider, an exact numeric field,
 and accepted environment, resistance, voltage, current and power. Temperature
-uses a linear scale; light uses log(1+lux), with darkness at zero, so dim-light
+uses a linear scale with half-degree drag steps; light uses log(1+lux), with
+darkness at zero, so dim-light
 thresholds are accessible. Slider and numeric controls invoke the same commands
 as external agents:
 

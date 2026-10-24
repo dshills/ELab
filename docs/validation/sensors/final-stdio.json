@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "examples": [
+    {
+      "example": "night-light",
+      "states": [
+        {
+          "environment": 1,
+          "resistance_ohm": 50118.72336272722,
+          "output_on": true
+        },
+        {
+          "environment": 10,
+          "resistance_ohm": 10000.0,
+          "output_on": true
+        },
+        {
+          "environment": 100,
+          "resistance_ohm": 1995.2623149688798,
+          "output_on": false
+        },
+        {
+          "environment": 10,
+          "resistance_ohm": 10000.0,
+          "output_on": false
+        },
+        {
+          "environment": 0,
+          "resistance_ohm": 1000000.0,
+          "output_on": true
+        },
+        {
+          "environment": 10000,
+          "resistance_ohm": 100,
+          "output_on": false
+        }
+      ],
+      "continuity_preserved": true,
+      "exports": {
+        "svg": "cc15361c27384509445e83803eeaa1fe09491a1c04734cb10c1be8852e6e325d",
+        "png": "df49e192eac057a96eb2bd8c8893ddbd7b717f5b9c39da1ed9ad7253225d7308",
+        "pdf": "c73ed8d2c723cf01b4cfca74dbae502c65e05104a47902a7868e94d0305c5a8e"
+      }
+    },
+    {
+      "example": "thermostat",
+      "states": [
+        {
+          "environment": 30,
+          "resistance_ohm": 8037.140686973137,
+          "output_on": false
+        },
+        {
+          "environment": 25,
+          "resistance_ohm": 10000.0,
+          "output_on": false
+        },
+        {
+          "environment": 20,
+          "resistance_ohm": 12535.32581266281,
+          "output_on": true
+        },
+        {
+          "environment": 25,
+          "resistance_ohm": 10000.0,
+          "output_on": true
+        }
+      ],
+      "continuity_preserved": true,
+      "exports": {
+        "svg": "0485f10c0ef29d2a1e918469ea415e2fa84cdf4c05481a04288bbfbcc48f5506",
+        "png": "9f3d52c707f4880dbd4eade0559140bb9a3ea91d3a8b5593520a5f8cde5eac2e",
+        "pdf": "e3f49bc03356a4b0598b9e3fc3b07501d2af835fb8b247e4037f7b3aefae485b"
+      }
+    }
+  ]
+}

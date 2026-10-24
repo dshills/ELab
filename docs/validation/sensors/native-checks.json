@@ -1,0 +1,40 @@
+{
+  "app": "ELab 0.189.0 /246",
+  "method": "CUA native pointer drag and keyboard numeric entry; screenshots and accessibility observations",
+  "theme": "Apollo",
+  "fixtures_disposable": true,
+  "closed_normally": true,
+  "observations": [
+    {
+      "file": "ui/night-light-bright-ax.txt",
+      "environment": "74 text (settable) 10000 lux, ID: node:c2Vuc29yLWVudmlyb25tZW50",
+      "resistance": "79 text (settable) Resistance \u00b7 100 \u03a9, ID: node:c2Vuc29yLXJlc2lzdGFuY2U",
+      "led_current": "161 text (settable) 0.000 mA, ID: node:Y3VycmVudC12YWx1ZQ"
+    },
+    {
+      "file": "ui/night-light-dark-ax.txt",
+      "environment": "74 text (settable) 0 lux, ID: node:c2Vuc29yLWVudmlyb25tZW50",
+      "resistance": "79 text (settable) Resistance \u00b7 1e+06 \u03a9, ID: node:c2Vuc29yLXJlc2lzdGFuY2U",
+      "led_current": "161 text (settable) 2.780 mA, ID: node:Y3VycmVudC12YWx1ZQ"
+    },
+    {
+      "file": "ui/night-light-exact-ax.txt",
+      "environment": "74 text (settable) 1 lux, ID: node:c2Vuc29yLWVudmlyb25tZW50",
+      "resistance": "79 text (settable) Resistance \u00b7 50118.7 \u03a9, ID: node:c2Vuc29yLXJlc2lzdGFuY2U",
+      "led_current": "161 text (settable) 2.780 mA, ID: node:Y3VycmVudC12YWx1ZQ"
+    },
+    {
+      "file": "ui/thermostat-cold-ax.txt",
+      "environment": "74 text (settable) 20 \u00b0C, ID: node:c2Vuc29yLWVudmlyb25tZW50",
+      "resistance": "79 text (settable) Resistance \u00b7 12535.3 \u03a9, ID: node:c2Vuc29yLXJlc2lzdGFuY2U",
+      "led_current": "158 text (settable) 6.862 mA, ID: node:Y3VycmVudC12YWx1ZQ"
+    },
+    {
+      "file": "ui/thermostat-warm-ax.txt",
+      "environment": "74 text (settable) 30 \u00b0C, ID: node:c2Vuc29yLWVudmlyb25tZW50",
+      "resistance": "79 text (settable) Resistance \u00b7 8037.14 \u03a9, ID: node:c2Vuc29yLXJlc2lzdGFuY2U",
+      "led_current": "161 text (settable) 0.000 mA, ID: node:Y3VycmVudC12YWx1ZQ"
+    }
+  ],
+  "scope": "Physical checks of both sensor controls, LED states and final schematic/panel layout; automated native callbacks establish shared service parity separately."
+}
