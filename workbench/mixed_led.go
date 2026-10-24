@@ -8,7 +8,7 @@ import "math"
 // coil can initialize on that boundary. Current remains exactly zero; this
 // neither adds reverse leakage nor changes the device equation.
 func (n *mixedNetwork) ledCurrent(v float64) (i, g float64) {
-	if len(n.inductors) == 0 && len(n.opamps) == 0 && !n.hasMOSFET && !n.hasGeneralBipolar {
+	if len(n.inductors) == 0 && len(n.opamps) == 0 && !n.hasMOSFET && !n.hasGeneralBipolar && len(n.timers) == 0 {
 		return diodeCurrent(v)
 	}
 	if v < 0 {

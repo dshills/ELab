@@ -56,6 +56,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.DiodeModel != nil {
 		envelope["diode_model"] = m.DiodeModel
 	}
+	if m.Timer555Model != nil {
+		envelope["timer555_model"] = m.Timer555Model
+	}
 	if m.OpAmpModel != nil {
 		envelope["opamp_model"] = m.OpAmpModel
 	}
@@ -229,7 +232,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || !supportedNPNModel(r.Model) || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID || r.BaseResistorID != c.BaseResistor.ID || r.LoadResistorID != c.Resistor.ID || r.LEDID != c.LED.ID {
 			return fmt.Errorf("invalid recorded NPN final result")
 		}
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis, Timer555Analysis:
 		r := m.Mixed
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != m.Engine || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
@@ -238,6 +241,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return fmt.Errorf("invalid recorded numerical damping for integration method")
 		}
 		if _, _, err := recordedDeviceNodes(c, r); err != nil {
+			return err
+		}
+		if err := validateRecordedTimers555(c, m.Graph, r); err != nil {
 			return err
 		}
 		if err := validateRecordedOpAmps(c, m.Graph, r); err != nil {
@@ -362,10 +368,13 @@ func recordingFields(raw json.RawMessage, t reflect.Type) error {
 				return err
 			}
 		}
-	case reflect.Slice:
+	case reflect.Array, reflect.Slice:
 		var rows []json.RawMessage
 		if err := json.Unmarshal(raw, &rows); err != nil || rows == nil {
 			return fmt.Errorf("recording requires an array")
+		}
+		if t.Kind() == reflect.Array && len(rows) != t.Len() {
+			return fmt.Errorf("recorded array requires exactly %d elements", t.Len())
 		}
 		for _, row := range rows {
 			if err := recordingFields(row, t.Elem()); err != nil {

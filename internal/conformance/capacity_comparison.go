@@ -127,6 +127,10 @@ func capacityLimitsCompatible(actual workbench.CircuitLimits) bool {
 	if actual == current {
 		return true
 	}
+	current.Timers555 = 0
+	if actual == current {
+		return true
+	}
 	current.PNP, current.CombinedBipolar = 0, 0
 	return actual == current
 }

@@ -45,6 +45,8 @@ func recordingModelHashes(m VerificationMetadata) map[string]string {
 			data, _ = json.Marshal(m.DiodeModel)
 		case SwitchModelID:
 			data, _ = json.Marshal(m.SwitchModel)
+		case Timer555ModelID:
+			data, _ = json.Marshal(m.Timer555Model)
 		case OpAmpModelID:
 			data, _ = json.Marshal(m.OpAmpModel)
 		case PMOSModelID:

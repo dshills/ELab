@@ -63,6 +63,21 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 			h /= 2
 			continue
 		}
+		if len(n.timers) > 0 {
+			for _, point := range []struct {
+				state  *inductorStage
+				at, dt float64
+			}{{half, at + h/2, h / 2}, {refined, at + h, h / 2}} {
+				candidate := n.result(point.state.x, nil, point.dt, trace, point.at)
+				_, changed, err := candidate.timer555Changes()
+				if err != nil {
+					return nil, err
+				}
+				if changed {
+					return candidate, nil
+				}
+			}
+		}
 		current = refined
 		roundoffRetried = false
 		at += h

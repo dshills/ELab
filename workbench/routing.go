@@ -62,6 +62,8 @@ type routeRect struct{ left, right, top, bottom float64 }
 func routeBody(p Component) routeRect {
 	w, h := 42., 42.
 	switch p.Kind {
+	case "timer555":
+		w, h = 72, 92
 	case "potentiometer":
 		w, h = 58, 38
 	case "resistor", "inductor", "switch":

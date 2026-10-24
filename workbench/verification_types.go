@@ -81,6 +81,7 @@ type VerificationMetadata struct {
 	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
 	PNPModel           *PNPModel           `json:"pnp_model,omitempty"`
 	OpAmpModel         *OpAmpModel         `json:"opamp_model,omitempty"`
+	Timer555Model      *Timer555Model      `json:"timer555_model,omitempty"`
 	Format             string              `json:"format"`
 	Version            int                 `json:"version"`
 	OperationID        string              `json:"operation_id"`

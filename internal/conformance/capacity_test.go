@@ -22,11 +22,18 @@ func TestCapacityLimitEnvelopeAcceptsOnlyExactHistoricalOrCurrentFields(t *testi
 		t.Fatal("current limits refused")
 	}
 	legacy := current
+	legacy.Timers555 = 0
 	legacy.PNP, legacy.CombinedBipolar = 0, 0
 	if !capacityLimitsCompatible(legacy) {
 		t.Fatal("historical limits refused")
 	}
+	previous := current
+	previous.Timers555 = 0
+	if !capacityLimitsCompatible(previous) {
+		t.Fatal("pre-timer limits refused")
+	}
 	for _, mutate := range []func(*workbench.CircuitLimits){
+		func(l *workbench.CircuitLimits) { l.Timers555 = 99 },
 		func(l *workbench.CircuitLimits) { l.PNP = 99 },
 		func(l *workbench.CircuitLimits) { l.CombinedBipolar = 99 },
 		func(l *workbench.CircuitLimits) { l.ElectricalNodes = 99 },

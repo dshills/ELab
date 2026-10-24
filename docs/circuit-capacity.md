@@ -17,6 +17,7 @@ The tested envelope admits **64 simulated parts and 100 electrical nodes includi
 | Inductors | 4 |
 | MOSFETs, NMOS/PMOS combined | 2 |
 | Powered op-amps | 2 |
+| 555 timers | 2 |
 | Bipolar transistors, NPN/PNP combined | 2 |
 | Resistors / potentiometers | 64 each, subject to combined part/node bounds |
 | SPST switches / silicon, Schottky and Zener diodes combined | 8 switches; 8 total diodes |
@@ -36,5 +37,7 @@ Core/native race tests, lint and vet cover the changes. Native construction uses
 The existing `.elab` format remains version 4; model parameters and dependency hashes are unchanged. Current readers use the expanded drawing bounds, while legacy file byte limits remain unchanged. Older application versions with smaller numerical/drawing limits may refuse the newly larger projects.
 
 The optional `elab-conformance --capacity-suite` adds all four adapters, complete 200 ms captures for these two pulse fixtures and a 64-part four-stage RC/NMOS LED circuit, half-step refinement, exact recording reopen and editable/savable boundary refusals. It recomputes 4,900 numerical references per adapter. See [capacitor integration and public capacity workflows](capacitor-integration.md). The initial checkpoint left repeated timing open; the [capacity timing protocol](capacity-performance.md) measures the three named boundary fixtures separately.
+
+The [555 extension](timer555.md) admits two stateful timers without expanding existing node/storage/work limits. Historical capacity fixtures do not qualify timer capacity; exact pre-timer envelopes remain accepted for those passive/RC/MOSFET fixtures.
 
 The [bipolar extension](bipolar-transistors.md) admits PNPs and ungrounded emitters within the combined two-transistor bound. The original capacity fixtures below remain passive/RC/MOSFET evidence; their exact historical limit envelope does not claim PNP capacity qualification.

@@ -138,3 +138,48 @@ func validateRecordedDiodes(c Compiled, graph Graph, result *MixedResult) error 
 	}
 	return nil
 }
+
+func validateRecordedTimers555(c Compiled, g Graph, result *MixedResult) error {
+	ids := []string{}
+	for _, u := range result.Timers555 {
+		ids = append(ids, u.ID)
+	}
+	if err := recordedObjectIDs(g, "timer555", ids); err != nil {
+		return err
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	n, x, err := recordedDeviceNodes(c, result)
+	if err != nil {
+		return err
+	}
+	for _, actual := range result.Timers555 {
+		p, _ := g.Component(actual.ID)
+		memory := timer555Memory{High: actual.High, Powered: actual.Powered}
+		next, err := timer555Decision(n.timer555Voltages(p, x), memory)
+		if err != nil || next != memory || (!actual.Powered && actual.High) {
+			return fmt.Errorf("recorded 555 latch disagrees with its inputs")
+		}
+		for k, part := range n.timers {
+			if part.ID == p.ID {
+				n.timerMemory[k] = memory
+			}
+		}
+		expected := n.timer555Result(p, x)
+		if actual.Model != expected.Model || actual.State != expected.State {
+			return fmt.Errorf("invalid recorded 555 model or state")
+		}
+		for _, pair := range [][2]float64{{actual.SupplyVoltage, expected.SupplyVoltage}, {actual.OutputVoltage, expected.OutputVoltage}, {actual.TriggerLevel, expected.TriggerLevel}, {actual.ThresholdLevel, expected.ThresholdLevel}, {actual.Power, expected.Power}} {
+			if !recordingNear(pair[0], pair[1]) {
+				return fmt.Errorf("recorded 555 readings disagree with terminal voltages")
+			}
+		}
+		for k, i := range actual.PinCurrents {
+			if !recordingNear(i, expected.PinCurrents[k]) {
+				return fmt.Errorf("recorded 555 terminal current disagrees with terminal voltages")
+			}
+		}
+	}
+	return nil
+}

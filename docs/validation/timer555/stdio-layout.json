@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "examples": [
+    {
+      "example": "555-flasher",
+      "frames": 327,
+      "falling_edges_s": [
+        0.6262774026393889,
+        1.3479546058177951
+      ],
+      "maximum_rc_reference_error_s": 1.1588414319252394e-06,
+      "exports": {
+        "svg": "cdcecfaa3ab7729fc7b4b568630b4ff9a4f94e256484dc24e1ba9c4059f47f12",
+        "png": "b7495650d378beba9e1dd454dfe324f4973d2b6541b4029a19d90b5fa8735bf9",
+        "pdf": "7a2918f6b6ab10a395e1a9aa4320db82013ffc44dda6416ae46247d1aa40634c"
+      }
+    },
+    {
+      "example": "555-oscillator",
+      "frames": 327,
+      "falling_edges_s": [
+        0.6592427247762679,
+        1.4225559139251704
+      ],
+      "maximum_rc_reference_error_s": 1.0997495750730835e-06,
+      "exports": {
+        "svg": "a9b9d522f8d67b233cc2d78afae38b83f467d7ff08d9472cd4cae70619a82673",
+        "png": "8f39085fd37a41a054733da737f2635d32c25fcdcea1833f22a3cf85017d3633",
+        "pdf": "3ccd974d14f68057a2d6a6ec56fa5790cb43e100c0046b5f01dd913f00a7487f"
+      }
+    },
+    {
+      "example": "555-one-shot",
+      "frames": 323,
+      "falling_edges_s": [
+        0.5163870197534561
+      ],
+      "maximum_rc_reference_error_s": 5.837927032903423e-07,
+      "exports": {
+        "svg": "c564e6b7d2a2df83eaa8f3bf516e46e140d372abb15f86eb6047a64e2e2e99f2",
+        "png": "9cfec321db39b9d2b7a3166da9fce4c83ee57226ffd2342dc41a87f210e6bcd7",
+        "pdf": "7aa4c8a96563c958f2e52036628a95bdc7f0dd3458ef13ec7bea0aa0a9a5ae23"
+      }
+    }
+  ],
+  "scope": "Discovery, native-shared commands, live step, retained timer edge captures, independent RC timing, live wiper charge/latch preservation, saved recordings and schematic exports.",
+  "limitations": [
+    "Generic educational model; no fitted TLC555, measured hardware or independent SPICE execution.",
+    "Native pointer and keyboard observations are separate."
+  ]
+}

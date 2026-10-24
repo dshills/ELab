@@ -157,15 +157,19 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 			b.stroke(c, width, transformed...)
 		}
 		drawComponentSymbol(b, state, part, ink, muted, accent, wireColor, connectionCount[part.ID+".node"] > 0)
+		outlineW, outlineH := 64., 46.
+		if part.Kind == "timer555" {
+			outlineW, outlineH = 108, 118
+		}
 		if diagnosticObjects[part.ID] {
-			stroke(diagnosticColor, 2.5, canvas.Point{X: -76, Y: -58}, canvas.Point{X: 76, Y: -58}, canvas.Point{X: 76, Y: 58}, canvas.Point{X: -76, Y: 58}, canvas.Point{X: -76, Y: -58})
+			stroke(diagnosticColor, 2.5, canvas.Point{X: -outlineW - 12, Y: -outlineH - 12}, canvas.Point{X: outlineW + 12, Y: -outlineH - 12}, canvas.Point{X: outlineW + 12, Y: outlineH + 12}, canvas.Point{X: -outlineW - 12, Y: outlineH + 12}, canvas.Point{X: -outlineW - 12, Y: -outlineH - 12})
 			b.text(part.Position.X+82, part.Position.Y-50, "!", diagnosticColor)
 		}
 		if focusObjects[part.ID] {
-			stroke(focusColor, 3, canvas.Point{X: -70, Y: -52}, canvas.Point{X: 70, Y: -52}, canvas.Point{X: 70, Y: 52}, canvas.Point{X: -70, Y: 52}, canvas.Point{X: -70, Y: -52})
+			stroke(focusColor, 3, canvas.Point{X: -outlineW - 6, Y: -outlineH - 6}, canvas.Point{X: outlineW + 6, Y: -outlineH - 6}, canvas.Point{X: outlineW + 6, Y: outlineH + 6}, canvas.Point{X: -outlineW - 6, Y: outlineH + 6}, canvas.Point{X: -outlineW - 6, Y: -outlineH - 6})
 		}
 		if part.ID == state.Selected {
-			stroke(selectedColor, 1.8, canvas.Point{X: -64, Y: -46}, canvas.Point{X: 64, Y: -46}, canvas.Point{X: 64, Y: 46}, canvas.Point{X: -64, Y: 46}, canvas.Point{X: -64, Y: -46})
+			stroke(selectedColor, 1.8, canvas.Point{X: -outlineW, Y: -outlineH}, canvas.Point{X: outlineW, Y: -outlineH}, canvas.Point{X: outlineW, Y: outlineH}, canvas.Point{X: -outlineW, Y: outlineH}, canvas.Point{X: -outlineW, Y: -outlineH})
 		}
 		for _, terminal := range part.Terminals {
 			ref := part.ID + "." + terminal
@@ -360,6 +364,25 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		for _, y := range []float64{-15, 5} {
 			stroke(led, 2, canvas.Point{X: 30, Y: y}, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 44, Y: y - 20})
 			stroke(led, 2, canvas.Point{X: 50, Y: y - 20}, canvas.Point{X: 50, Y: y - 14})
+		}
+	case "timer555":
+		for _, path := range workbench.Timer555SymbolPaths() {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		for _, label := range workbench.Timer555SymbolLabels(part) {
+			first := len(b.vertices)
+			b.text(label.At.X, label.At.Y, label.Text, muted)
+			// Pin text rotates with this dense IC symbol so adjacent pin
+			// captions retain their spacing at every component orientation.
+			for i := first; i < len(b.vertices); i++ {
+				at := b.vertices[i].Position
+				d := workbench.RotateLocal(workbench.Point{X: at.X - label.At.X, Y: at.Y - label.At.Y}, part.Rotation)
+				b.vertices[i].Position = canvas.Point{X: label.At.X + d.X, Y: label.At.Y + d.Y}
+			}
 		}
 	case "opamp":
 		for _, path := range workbench.OpAmpSymbolPaths() {

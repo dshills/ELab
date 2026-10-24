@@ -1,0 +1,18 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestComponentBrowserUIAgentParity
+--- PASS: TestComponentBrowserUIAgentParity (0.09s)
+=== RUN   TestTimer555BlankDrawingAndAgentParity
+--- PASS: TestTimer555BlankDrawingAndAgentParity (6.79s)
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection/555-flasher
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection/555-oscillator
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection/555-one-shot
+--- PASS: TestTimer555NativeExamplesSharedControlsAndProtection (15.28s)
+    --- PASS: TestTimer555NativeExamplesSharedControlsAndProtection/555-flasher (4.83s)
+    --- PASS: TestTimer555NativeExamplesSharedControlsAndProtection/555-oscillator (5.25s)
+    --- PASS: TestTimer555NativeExamplesSharedControlsAndProtection/555-one-shot (5.20s)
+=== RUN   TestTimer555SymbolAndPinTextRotateTogether
+--- PASS: TestTimer555SymbolAndPinTextRotateTogether (0.00s)
+PASS
+ok  	github.com/dshills/elab/desktop	23.793s

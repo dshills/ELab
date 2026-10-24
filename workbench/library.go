@@ -26,6 +26,8 @@ func partAliases(kind string) []string {
 		return []string{"bipolar transistor", "BJT", "transistor", "emitter follower"}
 	case "pnp":
 		return []string{"bipolar transistor", "BJT", "transistor", "high-side switch", "complementary"}
+	case "timer555":
+		return []string{"555", "CMOS timer", "TLC555", "NE555", "oscillator", "one-shot", "monostable", "astable"}
 	case "opamp":
 		return []string{"op-amp", "operational amplifier", "buffer", "voltage follower", "amplifier"}
 	case "ground":
@@ -73,6 +75,8 @@ func partLimitations(kind string) string {
 		return TransistorModel().Limitations
 	case "pnp":
 		return PNPDeviceModel().Limitations
+	case "timer555":
+		return Timer555DeviceModel().Limitations
 	case "opamp":
 		return OpAmpDeviceModel().Limitations
 	case "zener":

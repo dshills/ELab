@@ -14,6 +14,9 @@ import (
 func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Graph, part workbench.Component) []ui.Node {
 	inspector := []ui.Node{}
 	terminals := "Terminals: " + strings.Join(part.Terminals, ", ")
+	if part.Kind == "timer555" {
+		terminals = "2 TRIG · 6 THR · 7 DISCH · 3 OUT\n4 RESET · 5 CTRL · 8 VCC · 1 GND"
+	}
 	if part.Kind == "opamp" {
 		terminals = "Inputs + / - · out · power V+ / V-"
 	}
@@ -41,6 +44,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 					status = "Stale"
 				}
 				inspector = append(inspector, quiet("bipolar-selected-reading", fmt.Sprintf("%s · %s\nVBE %.6g V · VCE %.6g V\nIB %.6g µA · IC %.6g mA\nIE %.6g mA · power %.6g mW", status, q.State, q.VBE, q.VCE, q.BaseCurrent*1e6, q.CollectorCurrent*1000, q.EmitterCurrent*1000, q.TransistorPower*1000)), quiet("bipolar-current-signs", "IB / IC enter base / collector; IE leaves emitter. PNP readings normally have negative signs."))
+			}
+		}
+	}
+	if part.Kind == "timer555" && state.Mixed != nil {
+		for _, timer := range state.Mixed.Timers555 {
+			if timer.ID == part.ID {
+				status := "Live"
+				if state.Mixed.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("timer555-selected-reading", fmt.Sprintf("%s · output %s\nOut %.5g V · delivered %.5g mA\nTrigger level %.5g V · threshold %.5g V\nSupply %.5g V · power %.5g mW", status, timer.State, timer.OutputVoltage, -timer.PinCurrents[2]*1000, timer.TriggerLevel, timer.ThresholdLevel, timer.SupplyVoltage, timer.Power*1000)))
 			}
 		}
 	}

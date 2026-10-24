@@ -103,6 +103,9 @@ func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 		part := state.Components[i]
 		local := workbench.RotateLocal(workbench.Point{X: p.X - part.Position.X, Y: p.Y - part.Position.Y}, (360-part.Rotation)%360)
 		width, height := 42., 42.
+		if part.Kind == "timer555" {
+			width, height = 72, 92
+		}
 		if part.Kind == "potentiometer" {
 			width, height = 65, 50
 		}

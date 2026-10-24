@@ -34,6 +34,10 @@ func encodeVerificationExport(record *verificationRecord, format string) ([]byte
 		header := []string{"operation_id", "input_revision", "electrical_revision", "engine", "led_model", "npn_model"}
 		m := record.metadata
 		modelIDs := []string{}
+		if m.Timer555Model != nil {
+			header = append(header, "timer555_model")
+			modelIDs = append(modelIDs, m.Timer555Model.ID)
+		}
 		if m.OpAmpModel != nil {
 			header = append(header, "opamp_model")
 			modelIDs = append(modelIDs, m.OpAmpModel.ID)

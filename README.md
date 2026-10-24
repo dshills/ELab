@@ -100,6 +100,8 @@ Choose **PNP high-side LED**, **NPN emitter follower**, or **Complementary trans
 
 Choose **Zener voltage regulator** or **Schottky rectifier** from Examples to explore reverse breakdown and lower forward loss. Both parts support drawing, live simulation, signed probes, saving/exports and the same agent commands. [Models, examples and electrical checks](docs/special-diodes.md).
 
+Choose **555 LED flasher**, **Adjustable 555 oscillator**, or **555 one-shot timer** to watch capacitor charge control a timer latch and LED. The eight-pin component supports live simulation, external control/reset, shared user/agent commands, captures and exports. [555 model and examples](docs/timer555.md).
+
 ## Inspect both sides and measure timing
 
 The right inspector's **Scope probes** selectors choose up to six terminal voltages or branch currents, including both flasher collectors, both LEDs, and each capacitor. Newly selected traces include already retained history without restarting the circuit. Voltage/current axes show signed values in V/mA.

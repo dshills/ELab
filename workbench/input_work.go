@@ -61,13 +61,14 @@ func solveInputWork(ctx context.Context, state *mixedState, trace *Transient, gr
 		return nil, nil, fmt.Errorf("%s", d.Message)
 	}
 	net := newMixedNetwork(c)
+	net.inheritTimers555(state.net)
 	next, err := net.solveContext(ctx, state.x, state.capV, 0, trace, trace.Sample.Time)
 	if err != nil {
 		return nil, nil, err
 	}
-	appendTrace(trace, trace.Sample)
+	appendNetworkTrace(trace, trace.Sample)
 	trace.Sample = mixedSample(c, next.result, net.sourceVoltage(c.Source, trace, trace.Sample.Time))
-	appendTrace(trace, trace.Sample)
+	appendNetworkTrace(trace, trace.Sample)
 	appendInputEvent(trace, InputEvent{Time: trace.Sample.Time, Mode: event})
 	return next, trace, nil
 }

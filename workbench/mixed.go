@@ -44,6 +44,7 @@ type MixedResult struct {
 	Inductors          []InductorResult      `json:"inductors,omitempty"`
 	MOSFETs            []MOSFETResult        `json:"mosfets,omitempty"`
 	Potentiometers     []PotentiometerResult `json:"potentiometers,omitempty"`
+	Timers555          []Timer555Result      `json:"timers555,omitempty"`
 	Diodes             []BranchResult        `json:"diodes,omitempty"`
 	Switches           []BranchResult        `json:"switches,omitempty"`
 	Engine             string                `json:"engine"`
@@ -67,6 +68,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Timers555 = append([]Timer555Result(nil), r.Timers555...)
 	o.OpAmps = append([]OpAmpResult(nil), r.OpAmps...)
 	o.Inductors = append([]InductorResult(nil), r.Inductors...)
 	o.Nodes = map[string]float64{}
@@ -97,6 +99,8 @@ type mixedNetwork struct {
 	sources, caps     []Component
 	inductors         []Component
 	opamps            []Component
+	timers            []Component
+	timerMemory       []timer555Memory
 	inductorCuts      []inductorCut
 	inductorPins      map[string]int
 }
@@ -133,6 +137,10 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 		if p.Kind == "inductor" {
 			n.inductors = append(n.inductors, p)
+		}
+		if p.Kind == "timer555" {
+			n.timers = append(n.timers, p)
+			n.timerMemory = append(n.timerMemory, timer555Memory{})
 		}
 		if p.Kind == "opamp" {
 			n.opamps = append(n.opamps, p)
@@ -262,6 +270,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
+		case "timer555":
+			n.stampTimer555(p, x, add, f)
 		case "potentiometer":
 			upper, lower := potentiometerSegments(p)
 			one, two, w := n.pin(p, "1"), n.pin(p, "2"), n.pin(p, "wiper")
@@ -403,6 +413,13 @@ func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at 
 	return n.solveContext(context.Background(), guess, old, dt, t, at)
 }
 func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
+	result, err := n.solveAnalogContext(ctx, guess, old, dt, t, at)
+	if err != nil || len(n.timers) == 0 || dt > 0 {
+		return result, err
+	}
+	return result.resolveTimers555(ctx, t)
+}
+func (n *mixedNetwork) solveAnalogContext(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -502,7 +519,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar) {
+		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -621,6 +638,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
+		case "timer555":
+			device := n.timer555Result(p, x)
+			r.Timers555 = append(r.Timers555, device)
+			powers += device.Power
 		case "potentiometer":
 			upper, lower := potentiometerSegments(p)
 			v1, v2, vw := voltage(x, n.pin(p, "1")), voltage(x, n.pin(p, "2")), voltage(x, n.pin(p, "wiper"))
@@ -684,6 +705,12 @@ func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error)
 	return state.advanceBudget(t, end, newIntegrationBudget())
 }
 func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
+	if len(state.net.timers) > 0 {
+		return state.advanceTimers555(t, end, budget)
+	}
+	return state.advanceAnalogBudget(t, end, budget)
+}
+func (state *mixedState) advanceAnalogBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
 	if len(state.net.inductors) > 0 {
 		return state.advanceInductorBudget(t, end, budget)
 	}
@@ -752,6 +779,17 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 		}
 		failure = fmt.Sprintf("ratio %.3g, errors %v / %v / %v", errRatio, e1, e2, e3)
 		if errRatio <= 1 {
+			if len(cur.net.timers) > 0 {
+				for _, candidate := range []*mixedState{half, refined} {
+					_, changed, err := candidate.timer555Changes()
+					if err != nil {
+						return nil, err
+					}
+					if changed {
+						return candidate, nil
+					}
+				}
+			}
 			cur = refined
 			at += h
 			if end-at < 1e-13 {

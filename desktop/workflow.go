@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"strings"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
@@ -26,11 +27,21 @@ func withProbe(ids []string, id string) []string {
 func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Component) []ui.Node {
 	nodes := []ui.Node{}
 	for _, probe := range state.Scope.Available {
-		match := p.Kind == "opamp" && (probe.ID == "v:"+p.ID+".input-difference" || probe.ID == "v:"+p.ID+".supply") || workbench.IsMOSFETKind(p.Kind) && (probe.ID == "v:"+p.ID+".gate-source" || probe.ID == "i:"+p.ID+".drain") || p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || workbench.IsBipolarKind(p.Kind) && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "v:"+p.ID+".base-emitter" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
+		match := p.Kind == "timer555" && (probe.ID == "v:"+p.ID+".threshold" || probe.ID == "v:"+p.ID+".trigger" || probe.ID == "v:"+p.ID+".control") || p.Kind == "opamp" && (probe.ID == "v:"+p.ID+".input-difference" || probe.ID == "v:"+p.ID+".supply") || workbench.IsMOSFETKind(p.Kind) && (probe.ID == "v:"+p.ID+".gate-source" || probe.ID == "i:"+p.ID+".drain") || p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || workbench.IsBipolarKind(p.Kind) && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "v:"+p.ID+".base-emitter" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
 		if match {
 			text := "Plot voltage"
 			if probe.Unit == "A" {
 				text = "Plot current"
+			}
+			if p.Kind == "timer555" {
+				switch probe.ID {
+				case "v:" + p.ID:
+					text = "Plot output voltage"
+				case "i:" + p.ID:
+					text = "Plot delivered output current"
+				default:
+					text = "Plot " + strings.TrimPrefix(probe.ID, "v:"+p.ID+".") + " voltage"
+				}
 			}
 			if p.Kind == "opamp" {
 				switch probe.ID {

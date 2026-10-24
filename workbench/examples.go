@@ -69,6 +69,9 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "555-flasher", Title: "555 LED flasher", Question: "How does a timing capacitor make a timer switch repeatedly?", Expected: "C1 charges toward 5 V until about 3.33 V, then discharges toward ground until about 1.67 V. The latch, output and LED switch at those levels. The first charge from zero is longer than later cycles.", Try: "Compare C1 voltage, U1 output and D1 current. Double C1 or RB to slow the flashing; pause and step across a threshold.", Limitation: Timer555DeviceModel().Limitations},
+		{ID: "555-oscillator", Title: "Adjustable 555 oscillator", Question: "Can a knob change oscillator timing while charge stays continuous?", Expected: "P1 varies the discharge/charge resistance and output frequency. C1 retains its voltage when you move the wiper; the next threshold changes the latch.", Try: "Select P1 and move its wiper while running, or pause and move it before stepping. Position 1 is the fastest; position 0 is the slowest. Compare output periods using scope cursors.", Limitation: Timer555DeviceModel().Limitations},
+		{ID: "555-one-shot", Title: "555 one-shot timer", Question: "Why does a short trigger make a longer output pulse?", Expected: "A brief low trigger starts about a 0.516 s output pulse while C1 charges. At the upper threshold the output drops and the discharge pin empties C1. The trigger repeats every 2 s; holding trigger low keeps the output high.", Try: "Compare trigger, C1 and U1 output. Change R1 or C1 to change pulse length; a low Reset overrides the trigger and holds output low.", Limitation: Timer555DeviceModel().Limitations},
 		{ID: "zener", Title: "Zener voltage regulator", Question: "How does reverse breakdown hold a voltage steady?", Expected: "An 8–12 V input produces about 5.2 V across RL while the reverse-biased Zener sinks the remaining current. Diode voltage and current are negative; absorbed power is positive.", Try: "Compare input, output and D1 current. Change D1 to 3.3 V, or increase R1 until regulation is lost.", Limitation: ZenerDeviceModel().Limitations},
 		{ID: "schottky", Title: "Schottky low-voltage rectifier", Question: "How much of a small AC signal survives rectification?", Expected: "The Schottky branch charges C1 higher than the silicon branch charges C2 from the same 1 V peak input. Both capacitors discharge through identical loads between peaks.", Try: "Compare C1 and C2 voltage and signed diode currents. Increase the capacitors equally and compare ripple; reverse leakage is larger in the Schottky model.", Limitation: SchottkyDeviceModel().Limitations},
 		{ID: "rectifier", Title: "Diode rectifier and smoothing", Question: "How does a diode and capacitor turn AC into a rippling DC voltage?", Expected: "D1 charges C1 during positive peaks. Between peaks the diode blocks and RL drains C1; a larger capacitor reduces ripple.", Try: "Compare input and C1 voltage on the scope. Change C1 from 10 µF to 47 µF, then compare settled ripple after 2 simulated seconds.", Limitation: "A 5 V peak, 10 Hz educational source; no mains, transformer or physical power-supply ratings. Ideal capacitor and generic diode omit ESR, breakdown, reverse recovery and heating."},
@@ -98,6 +101,23 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "555-flasher", "555-oscillator", "555-one-shot":
+		d.graph = Timer555FlasherExampleGraph()
+		if id == "555-oscillator" {
+			d.graph = Timer555OscillatorExampleGraph()
+		}
+		if id == "555-one-shot" {
+			d.graph = Timer555OneShotExampleGraph()
+		}
+		d.selected = "U1"
+		d.settings.PlaybackSpeed = .5
+		d.settings.StepSeconds = .005
+		d.probes = []string{"v:C1", "v:U1", "i:D1"}
+		if id == "555-one-shot" {
+			d.settings.StepSeconds = .001
+			d.probes = []string{"v:VIN.positive", "v:C1", "v:U1", "i:D1"}
+		}
+		d.view = View{Center: Point{X: -20, Y: 40}, Zoom: .6}
 	case "zener":
 		d.graph = ZenerExampleGraph()
 		d.selected = "D1"

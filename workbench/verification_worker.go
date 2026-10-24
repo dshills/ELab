@@ -87,8 +87,8 @@ func computeVerification(ctx context.Context, input verificationInput, progress 
 			if err := kernel.advance(ctx, end); err != nil {
 				return nil, err
 			}
-			// A step spans at most one pulse edge because high/low >= sample step.
-			// Preserve both edge sides and duplicate timestamps, not interpolated values.
+			// Retain accepted internal timer events and both sides of source edges,
+			// including duplicate timestamps. Do not interpolate event frames.
 			for _, sample := range kernel.trace.Samples {
 				if sample.Time > previous {
 					row, err := verificationRow(sample, input.probes)

@@ -241,6 +241,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	}
 	metadata.PNPModel = pnpModelForGraph(graph)
 	metadata.OpAmpModel = opAmpModelForGraph(graph)
+	metadata.Timer555Model = timer555ModelForGraph(graph)
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
 	input := verificationInput{compiled: compiled, settings: cfg, mode: settings.InputMode, probes: probes, duration: settings.Duration, steps: steps, serial: s.operationSerial, metadata: metadata}
@@ -370,6 +371,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 		model := *in.NMOSModel
 		out.NMOSModel = &model
 	}
+	if in.Timer555Model != nil {
+		m := *in.Timer555Model
+		out.Timer555Model = &m
+	}
 	if in.OpAmpModel != nil {
 		model := *in.OpAmpModel
 		out.OpAmpModel = &model
@@ -427,7 +432,7 @@ func validateCapacitorInitialFields(raw json.RawMessage) error {
 
 func verificationEngineID(analysis string) string {
 	switch analysis {
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis, Timer555Analysis:
 		return networkEngine(analysis)
 	case "RC transient":
 		return RCEngineID

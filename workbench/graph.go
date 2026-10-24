@@ -165,6 +165,7 @@ func libraryParts() []Part {
 		{Kind: "junction", Name: "Junction", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "junction.v1"},
 		{Kind: "net-label", Name: "Net label", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "net-label.v1"},
 		{Kind: "potentiometer", Name: "Potentiometer", Terminals: []string{"1", "2", "wiper"}, DefaultValue: "10k Ω", Unit: "Ω", Model: PotentiometerModelID},
+		{Kind: "timer555", Name: "555 timer", Terminals: append([]string{}, timer555Pins[:]...), Model: Timer555ModelID},
 		{Kind: "zener", Name: "Zener diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "5.1", Unit: "V", Model: ZenerModelID},
 		{Kind: "schottky", Name: "Schottky diode", Terminals: []string{"anode", "cathode"}, Model: SchottkyModelID},
 		{Kind: "diode", Name: "Silicon diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: DiodeModelID},
@@ -300,6 +301,8 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
+	case "timer555":
+		p, found = Timer555TerminalLocal(name)
 	case "capacitor":
 		switch name {
 		case "1":
@@ -457,7 +460,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		switch c.Kind {
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, c)
-		case "switch":
+		case "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true

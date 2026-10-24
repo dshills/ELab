@@ -83,6 +83,7 @@ func advanceLiveNetwork(state *mixedState, t *Transient, end float64, desired Gr
 		return nil, nil, fmt.Errorf("pending switch circuit: %s", diagnostic.Message)
 	}
 	net := newMixedNetwork(compiled)
+	net.inheritTimers555(next.net)
 	if err := budget.take(); err != nil {
 		return nil, nil, err
 	}
@@ -92,7 +93,7 @@ func advanceLiveNetwork(state *mixedState, t *Transient, end float64, desired Gr
 	}
 	// advanceMixed already retained the left-hand output at end.
 	trace.Sample = mixedSample(compiled, right.result, mixedSourceVoltage(compiled, right.result))
-	appendTrace(trace, trace.Sample)
+	appendNetworkTrace(trace, trace.Sample)
 	for _, part := range changes {
 		mode := "open"
 		if *part.SwitchClosed {

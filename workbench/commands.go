@@ -82,6 +82,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
 	{reflect.TypeOf(ZenerModel{}), "urn:elab:zener-model:1"},
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
+	{reflect.TypeOf(Timer555Model{}), "urn:elab:timer555-model:1"},
+	{reflect.TypeOf(Timer555Result{}), "urn:elab:timer555-result:1"},
 	{reflect.TypeOf(OpAmpModel{}), "urn:elab:opamp-model:1"},
 	{reflect.TypeOf(OpAmpResult{}), "urn:elab:opamp-result:1"},
 	{reflect.TypeOf(DocumentInspection{}), "urn:elab:document-inspection:1"},
@@ -252,6 +254,8 @@ func typeSchema(t reflect.Type) map[string]any {
 	switch t.Kind() {
 	case reflect.Struct:
 		return structSchema(t)
+	case reflect.Array:
+		return map[string]any{"type": "array", "items": typeSchema(t.Elem()), "minItems": t.Len(), "maxItems": t.Len()}
 	case reflect.Slice:
 		return map[string]any{"type": "array", "items": typeSchema(t.Elem())}
 	case reflect.Map:
@@ -532,7 +536,7 @@ func exactFields(data []byte, t reflect.Type) error {
 	for t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
-	if t.Kind() == reflect.Slice {
+	if t.Kind() == reflect.Slice || t.Kind() == reflect.Array {
 		var values []json.RawMessage
 		if err := json.Unmarshal(data, &values); err != nil {
 			return err
