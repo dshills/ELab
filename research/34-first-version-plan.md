@@ -9,11 +9,11 @@ PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
 **Current maintenance work:** /223's decimal-step repair and the
-[latest native captured-measurement checks](107-native-captured-measurements.md)
-pass within scope. Eleven of eighteen original native items now have evidence;
-seven remain: 3, 6, 9, 11, 13, 14 and 15. Item 9 remains partial; bounded races do
-not establish exact native callback queue origin. Imported measurement defaults,
-cached-result recovery and measured-channel draft ownership are now qualified.
+[latest native captured-comparison checks](108-native-captured-comparison.md)
+pass within scope. Twelve of eighteen original native items now have evidence;
+six remain: 3, 6, 9, 11, 14 and 15. Item 9 remains partial; bounded races do not
+establish exact native callback queue origin. Captured measurement/default and
+comparison recovery, independent preferences and draft ownership are qualified.
 
 Earlier validation-scroll, private-draft, footer/theme, manual-step, slider,
 Verify endpoint and numeric-wheel repairs remain included. [Electronics reference

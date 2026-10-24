@@ -290,3 +290,15 @@ complete and seven remain. All source, electrical references, rows, fixtures,
 signatures and /205 are preserved. Next captured comparison and independent
 preferences, then remaining forms and keyboard routes. Reuse the owned session
 under saved authorization; no owner-review or permission wait.
+
+
+## Checkpoint: native captured comparison acceptance
+
+[Native item 13](108-native-captured-comparison.md) passes with native menu and
+checkboxes, current refusal/correction, agent preferences/draft retention,
+reference-scoped private/rejected text and explicit same-reference reset. Six
+native cached/public results and 138 independent electrical/statistical references
+pass; all rows, metadata, source, signatures, saved fixture and /205 stay exact.
+Twelve original native items are complete; six remain. Next local text Undo/Redo
+and application history, then remaining form/input ownership. Reuse the owned
+session under saved authorization; no owner-review or permission wait.

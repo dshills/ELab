@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "native_check_completed": 13,
+  "current_first_corrections": 3,
+  "agent_preferences_and_draft_preserved_on_correction": true,
+  "private_and_rejected_time_clear_on_reference_change": true,
+  "private_return_noop_exact": true,
+  "same_reference_zero_reset_passed": true,
+  "fresh_native_edits_one_command": 3,
+  "native_queries_equal_pure_public_queries": 6,
+  "queries": [
+    {
+      "native_state": "native-baseline",
+      "requested_s": 0,
+      "actual_saved_times_s": {
+        "a": 0,
+        "b": 0
+      }
+    },
+    {
+      "native_state": "preferences-corrected",
+      "requested_s": 0,
+      "actual_saved_times_s": {
+        "a": 0,
+        "b": 0
+      }
+    },
+    {
+      "native_state": "different-rate-time",
+      "requested_s": 0.009,
+      "actual_saved_times_s": {
+        "a": 0.009000000000000001,
+        "b": 0.008
+      }
+    },
+    {
+      "native_state": "fresh-short-reference",
+      "requested_s": 0.002,
+      "actual_saved_times_s": {
+        "a": 0.002,
+        "b": 0.002
+      }
+    },
+    {
+      "native_state": "same-reference-reset",
+      "requested_s": 0,
+      "actual_saved_times_s": {
+        "a": 0,
+        "b": 0
+      }
+    },
+    {
+      "native_state": "fresh-changed-reference",
+      "requested_s": 0.002,
+      "actual_saved_times_s": {
+        "a": 0.002,
+        "b": 0.002
+      }
+    }
+  ],
+  "comparison_scalar_references": 36,
+  "whole_run_scalar_statistics": 16,
+  "captured_rows_exact": 43,
+  "total_scalar_references": 138,
+  "max_voltage_error_v": 8.881784197001252e-16,
+  "max_current_error_a": 8.131516293641283e-20,
+  "captured_metadata_unchanged_after_live_30k_edit": true,
+  "scope_window_and_cursors_preserved": true,
+  "source_inputs_unchanged": 897,
+  "saved_fixture_unchanged": true,
+  "installed_signature_valid": true,
+  "original_candidate_unchanged": true,
+  "preserved_205_unchanged": true,
+  "final_clean_paused_at_zero": true,
+  "production_changes": 0,
+  "full_source_suites_repeated": false,
+  "remaining_original_native_checks": 6,
+  "source_commit": "4356b8fb9e721e71ca327159d37b36c2d0675530",
+  "native_sha256": "e957008f182845572fe39158f4819e5601e28a79ac803e3446071ff9cd56f82d",
+  "observed_utc": "2026-10-24T10:47:19.144256+00:00",
+  "raw_members": 70,
+  "raw_archive_sha256": "bdf57486925489ebb47dc3776af3a56bed527739ad3d8c2cef55c1ec2a82584e"
+}
