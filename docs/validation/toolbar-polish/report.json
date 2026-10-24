@@ -1,0 +1,21 @@
+{
+  "source_commit": "ab00881ac533bc8e4beba9043a760756591d4277",
+  "candidate": "ELab 0.182.5 /229",
+  "full_desktop_race_offscreen": "passed in 371.814s",
+  "full_run_scope": "Compiled before the final retention of legacy minimum input widths and the added selection/transport transition assertions. Those final adjustments pass the focused race suite.",
+  "final_focused_race": "passed in 44.635s",
+  "lint_and_vet": "passed",
+  "command_inventory": "verified; 166 public commands and all 404 native source sites unchanged except line numbers",
+  "native_checks": {
+    "themes": [
+      "Apollo",
+      "Light",
+      "Dark",
+      "System (resolved Light)"
+    ],
+    "observed": "Document, drawing and live RC scope buttons share consistent size, spacing and selected outlines. Native example menu and Pause work. All control outlines and inspector underline visible.",
+    "left_open": "Paused RC example, Apollo, in /229. Older sessions and projects preserved.",
+    "limits": "Light, Dark and System captures include a component-library tooltip outside the toolbar area. Native keyboard focus retains its platform accent. This does not claim comprehensive native or distribution acceptance."
+  },
+  "preserved_release_unchanged": true
+}

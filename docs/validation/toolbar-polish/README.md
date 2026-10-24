@@ -32,8 +32,29 @@ Apollo during the initial test and was corrected.
   sites, public commands, aliases and route coverage remain unchanged apart
   from source line numbers. The inventory adds one presentation source file.
 
-The final focused checks additionally exercise physical and agent cursor
-selection, verify the selected outline in captured pixels, and measure the
-Pause/Resume transition for equal target size. Native package checks and the
-broader regression result are recorded after completion. These checks do not
-establish full distribution or accessibility acceptance.
+`focused.txt` passes the final four-theme toolbar, existing tabs, live cursor,
+recorded numeric-control, footer and theme checks with the race detector. It
+additionally exercises physical and agent cursor selection, verifies the
+selected outline in captured pixels, and measures equal Pause/Resume targets.
+`lint.txt` and `vet.txt` pass. `desktop-race.txt` records the full desktop suite,
+including offscreen tests, passing in 371.814 seconds. That run compiled before
+the final retention of legacy minimum input widths and added transition
+assertions; those adjustments are covered by the final focused run.
+
+## Native app
+
+Clean-source **0.182.5 /229**, built from `ab00881a`, is open at
+`build/ELab-0.182.5-229-Toolbar/ELab.app`, with a paused RC example and Apollo
+selected. `build-result.json` records clean executable provenance and strict
+ad hoc signature verification; the preserved /205 archive is unchanged. Its
+build-time launch flag predates these native checks.
+
+`native-apollo.jpg`, `native-light.jpg`, `native-dark.jpg` and
+`native-system.jpg` show the actual document, drawing and live scope toolbars.
+The native example menu and Pause action work, with full control outlines and
+the existing inspector underline visible. System resolves to Light. A component
+library tooltip appears outside the toolbar area in the Light/Dark/System
+captures. Vellum retains the platform keyboard-focus accent independently of
+the app's selected-mode styling. Older sessions and user projects are preserved.
+
+These checks do not establish full distribution or accessibility acceptance.
