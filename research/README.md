@@ -103,3 +103,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Validation layout and numeric drafts](103-validation-scroll-and-drafts.md): focused interval visibility and retained unfinished values across layout, with unchanged electrical commands and full source checks.
 
 - [Decimal number steps](104-decimal-number-steps.md): keep stepped values and displayed decimals consistent, with bounded arithmetic and unchanged public command types.
+
+- [Native interval reset and exit classification](105-native-reset-and-exit-classification.md): both fields/views, timed agent interventions, immutable captures, and the AppKit Quit-menu evidence for the earlier exit.

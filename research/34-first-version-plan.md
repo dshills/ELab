@@ -8,19 +8,19 @@ review and clean-account installation retain their explicit deferrals; complete
 PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
-**Current maintenance work:** /223 repairs repeated decimal numeric steps;
-[implementation and affected native checks](104-decimal-number-steps.md) pass.
-The /222 validation-scroll/private-draft repair remains included. Eight original
-native checklist items retain scoped evidence and ten remain open. One additional
-unexplained native exit after restoration is recorded; two repeats did not
-reproduce it. Its cause/lifecycle acceptance stays open, so /223 remains held.
+**Current maintenance work:** /223's decimal-step repair and the
+[latest native interval-reset checks](105-native-reset-and-exit-classification.md)
+pass within scope. Nine of eighteen original native items now have evidence;
+nine remain. The earlier exit is classified as a native Quit-menu request from
+AppKit logs; its initiator is unknown, and no spontaneous crash or restoration
+defect is demonstrated. General lifecycle acceptance is not inferred.
 
-Earlier footer/theme, manual-step, slider, Verify endpoint and numeric-wheel
-repairs remain included. [Electronics reference checks](95-gate-common-mode.md)
-cover seven RC-driven MOSFET circuits and active-work preservation. The held
-/207–/223 changes do not replace /205. Owner review remains deferred. Standing
-run/desktop authorization is saved in `AGENTS.md`; ordinary updates and reopens
-proceeded without another owner permission question.
+Earlier validation-scroll, private-draft, footer/theme, manual-step, slider,
+Verify endpoint and numeric-wheel repairs remain included. [Electronics reference
+checks](95-gate-common-mode.md) cover seven RC-driven MOSFET circuits and active
+work preservation. /207–/223 stay held for remaining native acceptance and do not
+replace /205. Owner review remains deferred. Standing run/desktop authorization
+is saved in `AGENTS.md` and must not be requested again.
 
 ## Historical plan and broader acceptance checklist
 

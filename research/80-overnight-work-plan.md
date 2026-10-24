@@ -254,3 +254,16 @@ lifecycle observation, then continue the ten remaining original native checks.
 Do not ask for launch/desktop authorization again or repeat unrelated successful
 source gates for this evidence-only update. The arithmetic repair is qualified
 within scope; /223 is held and broader release acceptance remains separate.
+
+
+## Checkpoint: native interval reset and exit classification
+
+[Native item 8](105-native-reset-and-exit-classification.md) is complete: eight
+start/end/view/private-entry resets, both timed agent interventions and immediate
+fresh retries pass with preserved physics/captures. Nine original checks remain.
+The earlier process exit follows a native Quit-menu action in AppKit logs; the
+initiator is unknown, but no spontaneous crash or restoration defect is shown.
+No speculative source fix or general lifecycle pass. Next continue item 9's
+recorded-position correction and pre-agent parser ownership, then captured
+measurement defaults/presentation. /205 stays preserved; no owner-review or
+launch-permission wait and no unrelated source-gate repetition.

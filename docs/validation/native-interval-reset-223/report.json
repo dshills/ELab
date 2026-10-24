@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "source_commit": "4356b8fb9e721e71ca327159d37b36c2d0675530",
+  "build": "0.181.22 /223",
+  "native_sha256": "e957008f182845572fe39158f4819e5601e28a79ac803e3446071ff9cd56f82d",
+  "native_check_completed": 8,
+  "first_click_cases": 8,
+  "both_fields_and_both_views": true,
+  "private_snapshot_equalities": 8,
+  "held_agent_trials": 2,
+  "held_agent_state_preserved_exactly": true,
+  "fresh_retries_passed": 2,
+  "hold_overlap": {
+    "live": {
+      "guaranteed_hold_start_wall_ms": 1792834844084,
+      "guaranteed_hold_end_wall_ms": 1792834846767,
+      "call_duration_ms": 3317,
+      "request_start_margin_ms": 701.928955078125,
+      "request_end_margin_ms": 1978.877197265625
+    },
+    "recorded": {
+      "guaranteed_hold_start_wall_ms": 1792835137280,
+      "guaranteed_hold_end_wall_ms": 1792835139982,
+      "call_duration_ms": 3298,
+      "request_start_margin_ms": 723.134033203125,
+      "request_end_margin_ms": 1976.361083984375
+    }
+  },
+  "hold_proof_scope": "Documented CUA hold duration and enclosing call bracket; not hardware event latency",
+  "physical_snapshot_keys_preserved": "Every root field except scope, recording, command_revision, revision and last_actor; viewport is exact too",
+  "stored_rows_exact": 1001,
+  "independent_voltage_references": 2044,
+  "max_absolute_error_v": 4.996003610813204e-16,
+  "source_inputs_unchanged": 897,
+  "strict_signature_valid": true,
+  "original_candidate_unchanged": true,
+  "preserved_205_unchanged": true,
+  "saved_project_unchanged": true,
+  "final_clean_paused_at_zero": true,
+  "same_recorded_pid_live": 24972,
+  "other_native_checks_not_retested": true,
+  "no_new_owner_permission_question": true,
+  "production_source_changes": 0,
+  "full_source_suites_repeated": false,
+  "lifecycle_classification": "Native Quit-menu request preceded the earlier exit; initiator unknown; no spontaneous crash demonstrated; no general lifecycle pass claimed",
+  "remaining_original_native_checks": 9,
+  "release_ready": false,
+  "observed_utc": "2026-10-24T09:57:11.724665+00:00",
+  "raw_archive_sha256": "838514fad0eea6a1fad72433d4efb8d51f729584d5b8bcbd8cf775ab42ed6bf9",
+  "raw_members": 111
+}
