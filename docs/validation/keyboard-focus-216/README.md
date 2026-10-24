@@ -39,3 +39,8 @@ unchanged. [Raw evidence](raw.tar.gz), [member hashes](raw-manifest.json).
 Fresh changed-candidate native acceptance remains separate. The qualified /205
 download, previous /215 package, user projects and the existing owned test app
 are preserved. No graphical launch or unattended launch approval is queued.
+
+The [clean /216 candidate and matching agent](candidate-report.json) pass
+packaging integrity, circuit Undo/Redo, 42 independent RC readings, saved-capture
+reopen, dirty-work refusal and normal headless cleanup. The candidate is held
+for [fresh native acceptance](native-acceptance-pending.json); /205 remains current.

@@ -62,6 +62,8 @@ never edited for this repair.
 The [full application gate passes](../docs/validation/keyboard-focus-216/README.md),
 including desktop race (187.460 s), mounted race (166.236 s), lint, vet and
 67 Python tests. All 887 source/check inputs match. The final routed keyboard
-checks pass in 4.908 s. Clean packaging is next. The qualified /205 download and
+checks pass in 4.908 s. The clean /216 package and matching agent also pass circuit Undo/Redo, 42
+independent RC readings, saved-capture reopen, dirty-work refusal and normal
+headless cleanup. The candidate is held for fresh native acceptance. The qualified /205 download and
 the running owned /206 test session remain preserved. New native acceptance is
 separate from dependency, application source and retained-widget evidence.
