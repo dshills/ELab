@@ -26,3 +26,17 @@ download remain unchanged. Source/headless checks do not qualify native
 acceptance of the changed measurement default or accumulated UI fixes.
 Standing desktop/app authorization is saved in AGENTS.md; no new permission
 or owner review is requested, and no unattended launch prompt is queued.
+
+
+The [clean /212 candidate receipt](candidate-report.json) identifies source
+`7be54298ee72d69901246ddd81c7ce50359ac251` and both exact binary hashes. All three Go binaries
+report that revision with `vcs.modified=false`; strict ad-hoc bundle validation
+passes. Its matching packaged agent refuses eight unsupported query/set cases,
+passes four covered constant-source measurements (including a one-step-wide
+interval), discovers the endpoint through public row reads, and preserves rows
+and metadata through export/reimport. The agent closes normally with joined
+workers and exit code 0. The signed bundle is unchanged by these checks.
+
+The candidate is held for [native acceptance](native-acceptance-pending.json).
+No graphical launch, download replacement, release promotion or publication
+occurred. Previous /211 binaries and the /205 ZIP remain exact.

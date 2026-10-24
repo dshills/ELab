@@ -53,3 +53,11 @@ callback, offscreen and headless-agent evidence. The standing authorization to
 run ELab and use the desktop is saved in `AGENTS.md`; no additional permission
 or owner review is needed. No new graphical launch prompt is queued. The /205
 download and previous candidates are preserved.
+
+
+The [clean /212 matching packaged agent](../docs/validation/statistics-coverage-212/candidate-report.json)
+passes eight unsupported query/set cases and four covered measurements. Exact
+saved rows and metadata survive export/reimport; public sample reads discover
+the usable endpoint. Normal shutdown joins workers and exits 0. All captured
+source inputs and the signed bundle remain exact. This is a held candidate,
+with native acceptance pending and /205 still the current download.
