@@ -114,9 +114,6 @@ func TestApolloThemeMatchesUserAndAgentAndRestoresOtherThemes(t *testing.T) {
 		for _, id := range []string{"part-search", "selection", "schematic", "inspector-navigation"} {
 			node, ok := findNode(root, id)
 			foreground := palette.Ink
-			if id == "selection" && mode == "apollo" {
-				foreground = palette.Accent
-			}
 			if !ok || node.Style.Foreground.Value != foreground || !node.Style.Background.Set {
 				t.Fatal("theme did not reach the application control", mode, id)
 			}

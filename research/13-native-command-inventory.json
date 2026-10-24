@@ -27,6 +27,7 @@
     "desktop/files.go": "4178087b68c2e204598c18243ec26b067c1ad770f8293013cafe2f4862ec2058",
     "desktop/inductor_controls.go": "326e6590bf52d5e7aa256d508f1a73c8dcb164b48692d2012e5706104d50c5c0",
     "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
+    "desktop/inspector_style.go": "e4b75a01d33cedf3afcf8f930f000076f482a7f6688877742603bba9681f2bec",
     "desktop/keyboard_workflow.go": "b191362c5d182dac02e265925c30bdfcaf5db3bf6a9ef0a189d0e264917c7349",
     "desktop/layout.go": "6205450e4903aced5f530f2832457a62bbf52c6f534134289fd916af25f2f427",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
@@ -42,7 +43,7 @@
     "desktop/placement_actions.go": "312deb732a7f065a31cf45d094daf201d637dc92398eaf3660e2fc558786f63e",
     "desktop/pointer_darwin.go": "09175294279643312573835e431bf0c391cd559d7cf193afc101ab7f8267ff3a",
     "desktop/pointer_other.go": "7c451ae4f8235e78e3e2803086c738488ee5463e878b003a203b9929497461c1",
-    "desktop/print_page.go": "9eda4922d28184f3aeaf4c7a32a14b0e4dadedb4e8ef489f21565b6e670879fe",
+    "desktop/print_page.go": "76e88a8fa60a99d9465f31782fc19905e2c82c725d5cc32ad43d8f047d3a12bf",
     "desktop/print_preview.go": "56b3ac5c0c25bbfd5603921a3600dff6a23671defbcd94d9b99c61794f18f158",
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "44cf20fe63d68fafdd991d6f0aa4afbc0cf51a452c1ee2892a82bcadff1defe6",
@@ -73,7 +74,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "a831ba7a793d30673cb9c19939b3f7051709b3f07d34fefc02f763310cc121a5",
+    "desktop/view.go": "dbde988bf05219a82ce68a71a8bd5674e4dcebabf2d45cfab961435f02e83034",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -2320,7 +2321,7 @@
     },
     {
       "file": "desktop/print_page.go",
-      "line": 21,
+      "line": 22,
       "function": "*screen.schematicPageControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif choice.id == \"paper\" {\n\t\tnext.Paper = e.SelectedID\n\t} else {\n\t\tnext.Orientation = e.SelectedID\n\t}\n\ts.changeOutputPage(next)\n}",
@@ -2328,7 +2329,7 @@
     },
     {
       "file": "desktop/print_page.go",
-      "line": 31,
+      "line": 32,
       "function": "*screen.schematicPageControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.MarginMM = \u0026v\n\ts.changeOutputPage(next)\n}",
@@ -2336,7 +2337,7 @@
     },
     {
       "file": "desktop/print_page.go",
-      "line": 43,
+      "line": 44,
       "function": "*screen.schematicPageControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number) / 100\n\tnext.Scale = \u0026v\n\ts.changeOutputPage(next)\n}",
@@ -2344,7 +2345,7 @@
     },
     {
       "file": "desktop/print_page.go",
-      "line": 49,
+      "line": 50,
       "function": "*screen.schematicPageControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tnext.Tile = e.Checked\n\tif next.Tile \u0026\u0026 next.Scale == nil {\n\t\tv := 1.\n\t\tnext.Scale = \u0026v\n\t}\n\tif !next.Tile {\n\t\tnext.OverlapMM = nil\n\t}\n\ts.changeOutputPage(next)\n}",
@@ -2352,7 +2353,7 @@
     },
     {
       "file": "desktop/print_page.go",
-      "line": 62,
+      "line": 63,
       "function": "*screen.schematicPageControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tv := float64(e.Number)\n\tnext.OverlapMM = \u0026v\n\ts.changeOutputPage(next)\n}",
@@ -2360,7 +2361,7 @@
     },
     {
       "file": "desktop/print_page.go",
-      "line": 78,
+      "line": 79,
       "function": "*screen.schematicPageControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := page\n\tif toggle.id == \"color\" {\n\t\tnext.Color = e.Checked\n\t} else {\n\t\tnext.Measurements = e.Checked\n\t}\n\ts.changeOutputPage(next)\n}",
@@ -4078,7 +4079,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 539,
+      "line": 540,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -4086,7 +4087,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 552,
+      "line": 553,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

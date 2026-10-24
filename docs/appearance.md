@@ -14,6 +14,8 @@ Select, Wire and Pan share a segmented drawing-mode control. Inspect, Simulate a
 
 The remaining toolbars share 30-point button targets, eight-point gaps, square icon actions, and neutral outlined faces. Active Fit, input modes and scope cursors use an accent outline and label on a subtle surface. Disabled actions stay muted, and Vellum's keyboard-focus indication remains intact. Document actions have quiet separators between file, examples, history and appearance groups. Pause and Resume occupy the same width. Toolbar rows reserve room for focus and horizontal overflow; numeric and time inputs retain their existing minimum widths and editing behavior. This applies to live and recorded scope controls, sweep and print-preview actions as well as the document header.
 
+Inspector forms use aligned 34-point fields and actions, four-point label-to-field spacing, eight-point spacing within sections, and twenty-point separation between sections. Section headings use a consistent semibold treatment; field captions remain distinct from muted help text. Editors and selectors use the theme's surface color, while actions follow the toolbar outline treatment. Paper and Orientation now have visible captions. Native filled-editor underlines, keyboard focus, warning/destructive colors, field identities and shared command bindings are retained. Each inspector page continues to scroll independently.
+
 See [the UI audit and screenshots](../research/ui-audit/README.md) for observed results and remaining limits. This does not establish full keyboard, IME, screen-reader, or clean-distribution qualification.
 
 ## Persistent preferences

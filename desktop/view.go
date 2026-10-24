@@ -526,6 +526,7 @@ func (s *screen) view() ui.Node {
 		palette = s.sweepInspector(state)
 	}
 	palette, inspector = s.organizeWorkspace(palette, inspector, state)
+	prepareInspectorGroups(inspector)
 	constrainRail(palette, 176)
 	constrainRail(inspector, inspectorContentWidth)
 	filename := documentName(state)
@@ -590,6 +591,7 @@ func (s *screen) view() ui.Node {
 	s.platformSelectors(&root, state.CommandRevision)
 	applyPalette(&root, colors)
 	polishToolbars(&root, colors, false)
+	polishInspector(&root, colors, false)
 	return root
 }
 

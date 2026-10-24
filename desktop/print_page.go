@@ -18,6 +18,7 @@ func (s *screen) schematicPageControls(state workbench.Snapshot) []ui.Node {
 		{"orientation", "Orientation", page.Orientation, []ui.Option{{ID: "landscape", Label: "Landscape"}, {ID: "portrait", Label: "Portrait"}}},
 	} {
 		choice := choice
+		nodes = append(nodes, quiet("pdf-"+choice.id+"-label", choice.label))
 		nodes = append(nodes, ui.Node{ID: "pdf-" + choice.id, Kind: ui.Selector, Options: choice.options, SelectedID: choice.value, Accessibility: ui.Accessibility{Name: "Output " + choice.label}, Change: func(e ui.ChangeEvent) {
 			next := page
 			if choice.id == "paper" {
