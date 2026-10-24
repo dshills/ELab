@@ -1,0 +1,60 @@
+{
+  "status": "partial native acceptance; candidate held",
+  "date": "2026-10-24",
+  "source_commit": "aabc2c7bb579c7d817e18e68fe2f8d0bef994326",
+  "version": "0.181.19",
+  "build": "220",
+  "installed_native_sha256": "a7c1d90759d85af4011b0c7984053f96866f40897c6efbe7dc49adfac25e110c",
+  "original_candidate_native_sha256": "1baa4fa7dcc563a0c90b4c0f01a641749cc1673aa80cc2d6a6c7b0c135aca7be",
+  "agent_sha256": "42397e72d5d4653c996b5f912a480a594216313e2659dcf9e42a2687365339d3",
+  "code_sections_match_qualified_candidate": true,
+  "original_candidate_bundle_launched": false,
+  "normal_cua_update_and_launch": {
+    "app_launched": true,
+    "method": "normal cua.getApp of existing owned installation",
+    "existing_app_path": "/private/tmp/elab-cursor-guidance-206/ELab Cursor Recovery.app",
+    "bundle_identifier": "com.dshills.elab.cursor-guidance206",
+    "version": "0.181.19",
+    "build": "220",
+    "source_commit": "aabc2c7bb579c7d817e18e68fe2f8d0bef994326",
+    "identity_unchanged": true,
+    "launcher_unchanged": true,
+    "sandbox_unchanged": true,
+    "new_owner_permission_requested": false,
+    "scope": "copied native runtime; original candidate bundle not launched"
+  },
+  "strict_ad_hoc_signature_valid_after_checks": true,
+  "checks": {
+    "passed": true,
+    "exact_snapshot_pairs": 7,
+    "native_verify_intervals": 1000,
+    "captured_rows": 1001,
+    "independent_voltage_checks": 2002,
+    "maximum_absolute_voltage_error": 4.996003610813204e-16,
+    "over_limit_preserved_all_state_except": [
+      "viewport",
+      "command_revision",
+      "revision"
+    ],
+    "final_document_clean": true,
+    "final_live_paused_at_zero": true,
+    "installed_native_hash_unchanged": true
+  },
+  "native_checks_completed_for_copied_runtime": [
+    16,
+    17,
+    18
+  ],
+  "native_checks_remaining": 15,
+  "unresolved_observations": [
+    "Native Save Command-A fails via CUA keyboard route; native Edit > Select All works; physical keyboard behavior and dispatch cause unqualified",
+    "Footer summary wraps below fixed-height row at 1053x802"
+  ],
+  "original_205_download_preserved": true,
+  "product_source_changed_this_checkpoint": false,
+  "full_source_gate_rerun": false,
+  "full_source_gate_reference": "../manual-step-progress-220/README.md",
+  "final_state": "Owned test app running, clean, paused at time zero, saved disposable RC document and recording visible, no dialog",
+  "raw_members": 100,
+  "raw_archive_sha256": "be08b0e7915ca73b6d67400ee31eafdfbb7bcff18a08dd96004e7ae13409ae6d"
+}

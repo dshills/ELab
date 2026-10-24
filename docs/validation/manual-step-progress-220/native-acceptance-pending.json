@@ -1,6 +1,6 @@
 {
   "passed": false,
-  "status": "pending",
+  "status": "partially-qualified-copied-runtime",
   "required_checks": [
     "Detailed cursor bounds and units visible in the native Simulate inspector",
     "Light and Dark disclosure heading/readability with native fonts, pointer and keyboard expansion",
@@ -25,5 +25,13 @@
   "preserved_download": "0.181.4 /205",
   "source_commit": "aabc2c7bb579c7d817e18e68fe2f8d0bef994326",
   "native_sha256": "1baa4fa7dcc563a0c90b4c0f01a641749cc1673aa80cc2d6a6c7b0c135aca7be",
-  "agent_sha256": "42397e72d5d4653c996b5f912a480a594216313e2659dcf9e42a2687365339d3"
+  "agent_sha256": "42397e72d5d4653c996b5f912a480a594216313e2659dcf9e42a2687365339d3",
+  "completed_checks_for_copied_runtime": [
+    16,
+    17,
+    18
+  ],
+  "remaining_checks_count": 15,
+  "evidence": "../native-acceptance-220/README.md",
+  "unresolved_native_keyboard_observation": "Command-A fails in Save filename through the tested CUA route; Edit > Select All works; cause/ordinary hardware behavior still unqualified"
 }
