@@ -40,3 +40,12 @@ switching-time references, retained left/right edge frames, live wiper changes,
 kept-record save/reopen and SVG/PNG/PDF exports. Packaged-agent and native
 observations are appended at completion. The preserved /205 release archive
 is not replaced by this development candidate.
+
+Native /235 demonstrated capacitor/output/LED switching, one-shot high and low
+states, and the exact wiper control changing 50% to 80% at accepted time
+21.850 s. The paused capacitor display stayed 2.743 V. Loading the one-shot
+from that edited fixture correctly showed unsaved-work protection; only the
+owned synthetic wiper edit was discarded. Native inspection found an inherited
+“NPN scope” caption; the presentation follow-up uses “Live 555 scope” and a
+555-specific experiment description. Focused scope/timer/browser/race tests
+pass (25.259 s). Electrical equations and commands did not change.

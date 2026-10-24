@@ -66,6 +66,9 @@ func TestTimer555NativeExamplesSharedControlsAndProtection(t *testing.T) {
 			if !reflect.DeepEqual(left.Mixed, right.Mixed) || !reflect.DeepEqual(left.Scope.Selected, right.Scope.Selected) || left.Example.Info.ID != id || left.Document.Dirty {
 				t.Fatal("555 example defaults differ")
 			}
+			if title, ok := findNode(user.view(), "scope-title"); !ok || title.Text != "Live 555 scope" {
+				t.Fatal("555 scope mislabeled", title.Text)
+			}
 			for range 30 {
 				uiAction(t, user, "transient-step", nil)
 				agentAction(t, agent, "simulation.step", workbench.StepParams{Duration: left.TransientSettings.StepSeconds})

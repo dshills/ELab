@@ -1,0 +1,40 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestComponentBrowserUIAgentParity
+--- PASS: TestComponentBrowserUIAgentParity (0.10s)
+=== RUN   TestScopeShortDragUsesStartAndReleaseWithoutMoveEvents
+--- PASS: TestScopeShortDragUsesStartAndReleaseWithoutMoveEvents (0.01s)
+=== RUN   TestScopeFastReleaseWithoutAnyDragClassification
+--- PASS: TestScopeFastReleaseWithoutAnyDragClassification (0.01s)
+=== RUN   TestScopeSecondaryClickAndReleaseCannotRetargetMeasurements
+--- PASS: TestScopeSecondaryClickAndReleaseCannotRetargetMeasurements (0.01s)
+=== RUN   TestScopeClickRejectsStaleWindowAndFreshFrameUsesCapturedAxis
+--- PASS: TestScopeClickRejectsStaleWindowAndFreshFrameUsesCapturedAxis (0.02s)
+=== RUN   TestScopeDragOnlyContinuesItsOwnCursorWrites
+--- PASS: TestScopeDragOnlyContinuesItsOwnCursorWrites (0.01s)
+=== RUN   TestScopeGestureStopsWhenPreparedContextIsInvalidated
+--- PASS: TestScopeGestureStopsWhenPreparedContextIsInvalidated (0.01s)
+=== RUN   TestScopeClickCannotRetargetAnotherCaptureBeforeRedraw
+--- PASS: TestScopeClickCannotRetargetAnotherCaptureBeforeRedraw (0.02s)
+=== RUN   TestScopeScrollForwardsOnlyToItsNamedHostAndRestoresAbilities
+=== RUN   TestScopeScrollForwardsOnlyToItsNamedHostAndRestoresAbilities/already-unattended=false
+=== RUN   TestScopeScrollForwardsOnlyToItsNamedHostAndRestoresAbilities/already-unattended=true
+--- PASS: TestScopeScrollForwardsOnlyToItsNamedHostAndRestoresAbilities (0.01s)
+    --- PASS: TestScopeScrollForwardsOnlyToItsNamedHostAndRestoresAbilities/already-unattended=false (0.01s)
+    --- PASS: TestScopeScrollForwardsOnlyToItsNamedHostAndRestoresAbilities/already-unattended=true (0.00s)
+=== RUN   TestScopeScrollWithoutDockSuppressesCanvasZoomAndOtherPanes
+--- PASS: TestScopeScrollWithoutDockSuppressesCanvasZoomAndOtherPanes (0.00s)
+=== RUN   TestTimer555BlankDrawingAndAgentParity
+--- PASS: TestTimer555BlankDrawingAndAgentParity (7.00s)
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection/555-flasher
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection/555-oscillator
+=== RUN   TestTimer555NativeExamplesSharedControlsAndProtection/555-one-shot
+--- PASS: TestTimer555NativeExamplesSharedControlsAndProtection (16.40s)
+    --- PASS: TestTimer555NativeExamplesSharedControlsAndProtection/555-flasher (5.12s)
+    --- PASS: TestTimer555NativeExamplesSharedControlsAndProtection/555-oscillator (5.58s)
+    --- PASS: TestTimer555NativeExamplesSharedControlsAndProtection/555-one-shot (5.69s)
+=== RUN   TestTimer555SymbolAndPinTextRotateTogether
+--- PASS: TestTimer555SymbolAndPinTextRotateTogether (0.00s)
+PASS
+ok  	github.com/dshills/elab/desktop	25.259s
