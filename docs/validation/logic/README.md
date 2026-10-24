@@ -46,3 +46,8 @@ edges. The final defaults use 2 ms; a regression checks that these curated
 examples meet their own waveform-sampling guidance. Focused root and native
 race checks pass after the adjustment. This changes output sampling only, not
 the gate equations or solver work budget.
+
+The native AND check also showed its first ground symbol crowding the SB
+caption. The first pull-down ground is moved 100 drawing units left; electrical
+connectivity and values are unchanged. Logic electrical/workflow checks pass
+after this layout-only adjustment.

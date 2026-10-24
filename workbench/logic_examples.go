@@ -48,7 +48,11 @@ func logicExample(id string) Graph {
 			if k == 0 {
 				groundY = y + 190
 			}
-			add("GND"+name, "ground", "", x, groundY)
+			groundX := x
+			if k == 0 {
+				groundX -= 100
+			}
+			add("GND"+name, "ground", "", groundX, groundY)
 			wire("VCC.positive", "S"+name+".1")
 			wire("S"+name+".2", "RP"+name+".1")
 			wire("RP"+name+".2", "GND"+name+".reference")
