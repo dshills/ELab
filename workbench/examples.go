@@ -56,6 +56,9 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "rl", Title: "Coil current buildup and decay", Question: "Why does coil current keep flowing when the voltage changes?", Expected: "Current approaches 50 mA while input is high. At 50 ms, coil voltage reverses while current stays continuous and decays through R1; the time constant is 10 ms.", Try: "Plot coil current and voltage across the falling edge. Double L1 to 2 H, or set a signed startup current such as -20 mA and Restart.", Limitation: "Ideal 1 H coil and explicit 100 Ω resistance; no winding resistance beyond R1, saturation, parasitic capacitance, heating or ratings. Source low supplies an ideal return path."},
 		{ID: "rlc", Title: "RLC ringing and damping", Question: "How do electric and magnetic stored energy produce ringing?", Expected: "Capacitor voltage overshoots 5 V and rings while current reverses; R1 dissipates energy and the response settles.", Try: "Compare 50 Ω underdamping with 200 Ω critical damping and 500 Ω overdamping. Inspect signed L1 current and C1 voltage; startup edits reset the experiment.", Limitation: "Ideal L/C with explicit series resistance. No winding saturation, ESR, parasitic capacitance or ratings. Internal integration and output sampling have separate work/resolution limits."},
 		{ID: "flyback", Title: "Coil switching and flyback diode", Question: "Where does coil current go when the MOSFET turns off?", Expected: "After the falling gate edge, D1 provides a return path for the coil current. Drain voltage rises above the 5 V supply while stored magnetic energy drains through RL and D1.", Try: "Pause and step across 50 ms. Compare L1 current, drain voltage and diode current; increase L1 to lengthen decay. A missing diode path can exceed the model's node-voltage envelope.", Limitation: "Generic MOSFET/diode and ideal coil with explicit 100 Ω load resistance. No real coil saturation, switch avalanche, diode charge storage, heating or ratings."},
+		{ID: "pnp", Title: "PNP high-side LED switch", Question: "How does a PNP transistor switch the supply side?", Expected: "Low base drive lights D1; high drive turns it off. PNP base and collector currents are negative under the shared into-device convention.", Try: "Choose Low / High under the scope. Plot Q1 VBE and collector current; increase RB and compare.", Limitation: "Generic complementary Ebers–Moll model; no device identity, breakdown, heating, internal capacitance or switching delay. LED brightness is illustrative."},
+		{ID: "emitter-follower", Title: "NPN emitter follower", Question: "Why does the emitter follow the base with a voltage drop?", Expected: "The emitter follows the 10 Hz input below the base voltage; RL carries much more current than the base resistor.", Try: "Compare VIN, Q1 base and emitter voltages and base/emitter currents. Change RB or RL to see loading.", Limitation: "Generic transistor with instantaneous response; no high-frequency bandwidth, Early effect, heating or physical ratings."},
+		{ID: "bipolar-push-pull", Title: "Complementary transistor buffer", Question: "How can an NPN/PNP pair source and sink load current?", Expected: "Q1 supplies the positive half-cycle, Q2 the negative half-cycle. The unbiased stage has a visible crossover dead band near zero input.", Try: "Plot VIN, the shared emitters and both collector currents. Pause and compare positive, negative and near-zero input samples.", Limitation: "Unbiased educational class-B stage with illustrative complementary parameters; no thermal behavior, internal charge, real matched pair or physical power ratings."},
 		{ID: "npn", Title: "Transistor LED switch", Question: "How does a small base current control the LED?", Expected: "Low base drive turns the LED off; higher drive increases collector current until the transistor approaches saturation.", Try: "Choose base 0 V, 0.8 V and 5 V, then change RB and compare base/collector currents.", Limitation: "Educational Ebers–Moll NPN; no physical transistor identity, heating, breakdown or internal charge storage."},
 		{ID: "switch-npn", Title: "Manual transistor LED switch", Question: "How can a switch control an LED through a transistor?", Expected: "Closing S1 supplies base current and lights the LED. Opening S1 lets RPD hold the base near ground; the LED turns off.", Try: "Select S1 and choose Close switch / Open switch. Inspect Q1 base and collector currents, then increase RB.", Limitation: "Finite 1 Ω on / 1 GΩ off switch; educational NPN and illustrative LED brightness. No contact bounce, heating or physical ratings."},
 		{ID: "pmos", Title: "High-side MOSFET LED switch", Question: "How does a P-channel MOSFET switch the supply side?", Expected: "Gate high at the 5 V source turns M1 off. Pulling the gate low turns the LED on; signed drain current is negative because it leaves the drain.", Try: "Compare M1 gate-source voltage and drain current across a pulse edge. Change RG to 10k and add an external 1uF gate-source capacitor for delayed switching.", Limitation: PMOSDeviceModel().Limitations},
@@ -116,6 +119,20 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.selected = "R1"
 		d.probes = []string{"v:V1.positive", "v:R1", "v:C1"}
 		d.view = View{Center: Point{X: -70}, Zoom: .7}
+	case "pnp":
+		d.graph = PNPExampleGraph()
+		d.selected = "Q1"
+		d.settings.PlaybackSpeed = .1
+		d.probes = []string{"v:VIN.positive", "i:D1", "v:Q1.base-emitter", "i:Q1.collector"}
+	case "emitter-follower", "bipolar-push-pull":
+		d.graph = EmitterFollowerExampleGraph()
+		d.selected = "Q1"
+		d.settings.PlaybackSpeed = .1
+		d.probes = []string{"v:VIN.positive", "v:Q1.base", "v:Q1.emitter", "i:Q1.base", "i:Q1.emitter"}
+		if id == "bipolar-push-pull" {
+			d.graph = ComplementaryBipolarExampleGraph()
+			d.probes = []string{"v:VIN.positive", "v:Q1.emitter", "i:Q1.collector", "i:Q2.collector"}
+		}
 	case "npn":
 		d.graph = NPNExampleGraph()
 	case "rl":

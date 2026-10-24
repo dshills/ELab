@@ -38,6 +38,10 @@ func encodeVerificationExport(record *verificationRecord, format string) ([]byte
 			header = append(header, "opamp_model")
 			modelIDs = append(modelIDs, m.OpAmpModel.ID)
 		}
+		if m.PNPModel != nil {
+			header = append(header, "pnp_model")
+			modelIDs = append(modelIDs, m.PNPModel.ID)
+		}
 		if m.PMOSModel != nil {
 			header = append(header, "pmos_model")
 			modelIDs = append(modelIDs, m.PMOSModel.ID)

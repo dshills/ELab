@@ -32,7 +32,7 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			set("gate", p.ID+".gate", 1)
 			set("drain", p.ID+".drain", 1)
 			set("source", p.ID+".source", -1)
-		case "npn":
+		case "npn", "pnp":
 			set("base", p.ID+".base", 1)
 			set("collector", p.ID+".collector", 1)
 			set("emitter", p.ID+".emitter", -1)

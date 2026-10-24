@@ -47,7 +47,7 @@ func TestComponentSymbolsDecorateOnlyCatalogRows(t *testing.T) {
 	list := core.NewFrame(scene)
 	list.SetName("part-list")
 	symbols := browserSymbols()
-	if len(symbols) != 18 {
+	if len(symbols) != len(workbench.Library()) {
 		t.Fatal("incomplete symbol catalog")
 	}
 	unique := map[string]bool{}

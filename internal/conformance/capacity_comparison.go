@@ -15,7 +15,7 @@ const capacityReferenceCount = 4 * (3*205 + 405 + 205)
 
 func CompareCapacity(reference, actual CapacityResult) error {
 	for _, result := range []CapacityResult{reference, actual} {
-		if result.Limits != workbench.Limits() || len(result.Cases) != len(capacityCaseNames) || len(result.Checks) != capacityReferenceCount {
+		if !capacityLimitsCompatible(result.Limits) || len(result.Cases) != len(capacityCaseNames) || len(result.Checks) != capacityReferenceCount {
 			return fmt.Errorf("capacity limits/case/reference coverage differs")
 		}
 		checks := ElectricalResult{}
@@ -116,4 +116,17 @@ func CompareCapacity(reference, actual CapacityResult) error {
 		return fmt.Errorf("capacity public command/numerical evidence differs")
 	}
 	return nil
+}
+
+// The frozen capacity fixtures contain passive/RC/MOSFET circuits, not BJTs.
+// Accept their exact historical limit envelope as well as the current one;
+// added bipolar discovery fields do not retrospectively qualify PNP capacity.
+// All fixture graphs, numerical bounds, samples and other limits stay exact.
+func capacityLimitsCompatible(actual workbench.CircuitLimits) bool {
+	current := workbench.Limits()
+	if actual == current {
+		return true
+	}
+	current.PNP, current.CombinedBipolar = 0, 0
+	return actual == current
 }

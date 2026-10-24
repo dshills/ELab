@@ -1,0 +1,20 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults
+=== RUN   TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults/pnp
+=== RUN   TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults/emitter-follower
+=== RUN   TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults/bipolar-push-pull
+--- PASS: TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults (6.10s)
+    --- PASS: TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults/pnp (1.79s)
+    --- PASS: TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults/emitter-follower (1.45s)
+    --- PASS: TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults/bipolar-push-pull (2.86s)
+=== RUN   TestBipolarNativeExamplesShareProtectedLoadAndLiveStep
+=== RUN   TestBipolarNativeExamplesShareProtectedLoadAndLiveStep/pnp
+=== RUN   TestBipolarNativeExamplesShareProtectedLoadAndLiveStep/emitter-follower
+=== RUN   TestBipolarNativeExamplesShareProtectedLoadAndLiveStep/bipolar-push-pull
+--- PASS: TestBipolarNativeExamplesShareProtectedLoadAndLiveStep (15.37s)
+    --- PASS: TestBipolarNativeExamplesShareProtectedLoadAndLiveStep/pnp (4.83s)
+    --- PASS: TestBipolarNativeExamplesShareProtectedLoadAndLiveStep/emitter-follower (4.44s)
+    --- PASS: TestBipolarNativeExamplesShareProtectedLoadAndLiveStep/bipolar-push-pull (6.10s)
+PASS
+ok  	github.com/dshills/elab/desktop	23.108s

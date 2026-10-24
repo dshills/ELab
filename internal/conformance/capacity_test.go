@@ -12,7 +12,34 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/dshills/elab/workbench"
 )
+
+func TestCapacityLimitEnvelopeAcceptsOnlyExactHistoricalOrCurrentFields(t *testing.T) {
+	current := workbench.Limits()
+	if !capacityLimitsCompatible(current) {
+		t.Fatal("current limits refused")
+	}
+	legacy := current
+	legacy.PNP, legacy.CombinedBipolar = 0, 0
+	if !capacityLimitsCompatible(legacy) {
+		t.Fatal("historical limits refused")
+	}
+	for _, mutate := range []func(*workbench.CircuitLimits){
+		func(l *workbench.CircuitLimits) { l.PNP = 99 },
+		func(l *workbench.CircuitLimits) { l.CombinedBipolar = 99 },
+		func(l *workbench.CircuitLimits) { l.ElectricalNodes = 99 },
+		func(l *workbench.CircuitLimits) { l.Transistors = 99 },
+	} {
+		for _, value := range []workbench.CircuitLimits{current, legacy} {
+			mutate(&value)
+			if capacityLimitsCompatible(value) {
+				t.Fatal("changed capacity limits accepted", value)
+			}
+		}
+	}
+}
 
 func TestCapacityRCReferenceMatchesIndependentDecimalEigenvalues(t *testing.T) {
 	data, err := os.ReadFile("testdata/capacity-rc-reference.json")

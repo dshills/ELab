@@ -177,7 +177,7 @@ func validPinnedProbeID(id string) bool {
 		}
 	}
 	// These voltage differences are probes rather than physical terminals.
-	return strings.HasPrefix(id, "v:") && (parts[1] == "gate-source" || parts[1] == "input-difference" || parts[1] == "supply")
+	return strings.HasPrefix(id, "v:") && (parts[1] == "gate-source" || parts[1] == "base-emitter" || parts[1] == "input-difference" || parts[1] == "supply")
 }
 
 // PinnedReadingBounds is shared by native drawing/hit testing, Fit and export.

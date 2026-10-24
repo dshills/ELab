@@ -17,7 +17,7 @@ type menuChoices struct {
 
 var applicationMenus = []app.MenuGroup{
 	{Label: "File", Commands: []string{"project.clear", "file.open", "file.save", "file.save-as", "app.close"}},
-	{Label: "Examples", Commands: []string{"example.reset", "example.split-supply", "example.rc", "example.rc-high-pass", "example.rl", "example.rlc", "example.flyback", "example.npn", "example.switch-npn", "example.npn-pulse", "example.flasher", "example.led-fade", "example.nmos", "example.pmos", "example.cmos", "example.opamp-follower", "example.opamp-inverting", "example.rectifier"}},
+	{Label: "Examples", Commands: []string{"example.reset", "example.split-supply", "example.rc", "example.rc-high-pass", "example.rl", "example.rlc", "example.flyback", "example.npn", "example.pnp", "example.emitter-follower", "example.bipolar-push-pull", "example.switch-npn", "example.npn-pulse", "example.flasher", "example.led-fade", "example.nmos", "example.pmos", "example.cmos", "example.opamp-follower", "example.opamp-inverting", "example.rectifier"}},
 	{Label: "Appearance", Commands: []string{"appearance.light", "appearance.dark", "appearance.system", "appearance.apollo"}},
 }
 

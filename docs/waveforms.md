@@ -23,7 +23,7 @@ All sources are ideal; there is no output resistance, current limit, battery dis
 
 ## Sampling and numerical behavior
 
-The unreleased `elab.network-waveforms-mna-sdirk2.v1` engine combines sources with the existing bounded network parts, grounded-emitter NPNs and capacitors. Bounds are 3 sources, 100 electrical nodes including ground and the published [device/object limits](circuit-capacity.md). Ordinary ideal-constraint and direct source/capacitor restrictions apply.
+The unreleased `elab.network-waveforms-mna-sdirk2.v1` engine combines sources with the existing bounded network parts, NPN/PNP transistors and capacitors. Bounds are 3 sources, 100 electrical nodes including ground and the published [device/object limits](circuit-capacity.md). Ordinary ideal-constraint and direct source/capacitor restrictions apply.
 
 Smooth sources are stamped at both implicit stage times. [Adaptive SDIRK2](capacitor-integration.md) compares one full step with two half steps, using 5e-7 V absolute plus 5e-6 relative local capacitor tolerance for this engine. Local tolerances are not a global error guarantee. Internal sine steps are at most 1/64 period; ramps are at most 1/8 rise/fall duration. Each source's corners are split and retained exactly. Legacy square discontinuities retain both sides at the same time; finite corners are continuous. Constant configured waveforms avoid artificial corner/substep work.
 

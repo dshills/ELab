@@ -10,7 +10,7 @@ Capacitors are open circuits, with zero DC current and solved terminal voltage; 
 
 This follows the operating-point distinction described by the [ngspice DC documentation](https://ngspice.sourceforge.io/docs/ngspice-manual.pdf): DC transfer curves use steady operating points with capacitors open. ELab uses its own existing bounded MNA/Newton device models; it does not run ngspice or claim SPICE compatibility. No charge/time advancement, warm-start path following, physical ratings, temperature sweep, nested sweep or enumeration of multiple equilibria is implied.
 
-All points begin from a separate solver state. Generic grounded-emitter NPN, diode, LED, resistor, switch and potentiometer limitations remain in force. Floating nodes exposed by opening capacitors may make the DC system singular; the entire sweep then fails clearly. A solved-system check also rejects zero-residual but underdetermined cases rather than assigning arbitrary node voltages. Strictly distinct representable axis values are required. Finite solver results and residuals remain subject to the existing tolerances, so sweeps do not imply arbitrary precision.
+All points begin from a separate solver state. Generic NPN/PNP transistor, diode, LED, resistor, switch and potentiometer limitations remain in force. Floating nodes exposed by opening capacitors may make the DC system singular; the entire sweep then fails clearly. A solved-system check also rejects zero-residual but underdetermined cases rather than assigning arbitrary node voltages. Strictly distinct representable axis values are required. Finite solver results and residuals remain subject to the existing tolerances, so sweeps do not imply arbitrary precision.
 
 ## Shared commands
 

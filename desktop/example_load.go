@@ -21,6 +21,9 @@ func (s *screen) registerExampleLoadCommands() {
 		{"example.led-fade", "Load capacitor-buffered LED fade", "led-fade"},
 		{"example.nmos", "Load MOSFET LED switch", "nmos"},
 		{"example.pmos", "Load high-side MOSFET LED switch", "pmos"},
+		{"example.pnp", "Load PNP high-side LED switch", "pnp"},
+		{"example.emitter-follower", "Load NPN emitter follower", "emitter-follower"},
+		{"example.bipolar-push-pull", "Load complementary transistor buffer", "bipolar-push-pull"},
 		{"example.cmos", "Load complementary MOSFET inverter", "cmos"},
 		{"example.split-supply", "Load split-rail DC supply", "split-supply"},
 	} {

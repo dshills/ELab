@@ -186,7 +186,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	s.selectRecordingLocked(id)
 	s.lastOperation = id
 	metadata := VerificationMetadata{ActuationRevision: s.actuationRevision, Format: "elab.verification", Version: 1, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), InputRevision: s.revision, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, Graph: graph.Clone(), Settings: cfg, InputMode: settings.InputMode, Analysis: compiled.Analysis, LEDModel: Model(), Probes: probes, Duration: settings.Duration, Statistics: []ScopeStatistics{}}
-	if compiled.Transistor.ID != "" {
+	if hasBipolarPolarity(graph.Components, "npn") {
 		model := TransistorModel()
 		metadata.NPNModel = &model
 	}
@@ -232,6 +232,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 			break
 		}
 	}
+	metadata.PNPModel = pnpModelForGraph(graph)
 	metadata.OpAmpModel = opAmpModelForGraph(graph)
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
@@ -357,6 +358,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	if in.OpAmpModel != nil {
 		model := *in.OpAmpModel
 		out.OpAmpModel = &model
+	}
+	if in.PNPModel != nil {
+		model := *in.PNPModel
+		out.PNPModel = &model
 	}
 	if in.PMOSModel != nil {
 		model := *in.PMOSModel

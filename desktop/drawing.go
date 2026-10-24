@@ -386,16 +386,27 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 			at := point(pin.x, pin.y)
 			b.text(at.X, at.Y, pin.name, muted)
 		}
-	case "npn":
+	case "npn", "pnp":
 		stroke(ink, 3, canvas.Point{X: -12, Y: -20}, canvas.Point{X: -12, Y: 20})
 		stroke(wireColor, 2.5, canvas.Point{X: -40}, canvas.Point{X: -12})
 		stroke(ink, 2.5, canvas.Point{X: -12, Y: -10}, canvas.Point{X: 25, Y: -30}, canvas.Point{X: 25, Y: -35})
 		stroke(ink, 2.5, canvas.Point{X: -12, Y: 10}, canvas.Point{X: 25, Y: 30}, canvas.Point{X: 25, Y: 35})
-		stroke(accent, 3, canvas.Point{X: 12, Y: 15}, canvas.Point{X: 25, Y: 30}, canvas.Point{X: 5, Y: 25})
+		if part.Kind == "pnp" {
+			stroke(accent, 3, canvas.Point{X: 12, Y: -18}, canvas.Point{X: 0, Y: -17}, canvas.Point{X: 5, Y: -28})
+		} else {
+			stroke(accent, 3, canvas.Point{X: 12, Y: 15}, canvas.Point{X: 25, Y: 30}, canvas.Point{X: 5, Y: 25})
+		}
 		for _, pin := range []struct {
 			x, y float64
 			name string
 		}{{-46, -20, "B"}, {32, -36, "C"}, {32, 18, "E"}} {
+			if part.Kind == "pnp" {
+				if pin.name == "C" {
+					pin.name = "E"
+				} else if pin.name == "E" {
+					pin.name = "C"
+				}
+			}
 			p := point(pin.x, pin.y)
 			b.text(p.X, p.Y, pin.name, muted)
 		}

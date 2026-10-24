@@ -81,8 +81,8 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			inspector = append(inspector, ui.Node{ID: "cap-presets", Kind: ui.Row, Children: []ui.Node{s.valuePresetAction(state, "c-1u", "1 µF", workbench.ValueParams{ID: part.ID, Value: "1uF"}), s.valuePresetAction(state, "c-100u", "100 µF", workbench.ValueParams{ID: part.ID, Value: "100uF"})}})
 		}
 
-	} else if part.Kind == "npn" {
-		inspector = append(inspector, quiet("npn-model", "Generic NPN · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay."))
+	} else if workbench.IsBipolarKind(part.Kind) {
+		inspector = append(inspector, quiet("npn-model", fmt.Sprintf("Generic %s · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay.", strings.ToUpper(part.Kind))))
 	} else if part.Kind == "diode" {
 		inspector = append(inspector, quiet("diode-model", "Generic silicon diode · 27°C\nIS 1 nA · n 1.7 · Rs 1 Ω\nReverse leakage included. No breakdown, charge storage or ratings."))
 	} else if part.Kind == "led" {
@@ -102,6 +102,15 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 
 	if r := state.Mixed; r != nil {
+		for _, q := range r.Transistors {
+			if q.TransistorID == part.ID {
+				status := "Live"
+				if r.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("bipolar-selected-reading", fmt.Sprintf("%s · %s\nVBE %.6g V · VCE %.6g V\nIB %.6g µA · IC %.6g mA\nIE %.6g mA · power %.6g mW", status, q.State, q.VBE, q.VCE, q.BaseCurrent*1e6, q.CollectorCurrent*1000, q.EmitterCurrent*1000, q.TransistorPower*1000)), quiet("bipolar-current-signs", "IB / IC enter base / collector; IE leaves emitter. PNP readings normally have negative signs."))
+			}
+		}
 		for _, branches := range [][]workbench.BranchResult{r.LEDs, r.Diodes, r.Resistors, r.Sources} {
 			for _, b := range branches {
 				if b.ID == part.ID {

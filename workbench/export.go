@@ -194,7 +194,7 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			sources = append(sources, p)
 		}
 	}
-	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
+	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
 	if model := opAmpModelForGraph(g); model != nil {
 		metadataFields["opamp_model"] = model
 	}
@@ -275,8 +275,13 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			} else {
 				b.WriteString(`<path d="M4 -5 L-5 0 L4 5"/>`)
 			}
-		case "npn":
-			b.WriteString(`<circle r="25"/><path d="M-40 0 H-10 M-10 -14 V14 M-10 -10 L25 -35 M-10 10 L25 35 M15 31 L25 35 L21 25"/>`)
+		case "npn", "pnp":
+			b.WriteString(`<circle r="25"/><path d="M-40 0 H-10 M-10 -14 V14 M-10 -10 L25 -35 M-10 10 L25 35"/>`)
+			if p.Kind == "pnp" {
+				b.WriteString(`<path d="M12 -18 L0 -17 L5 -28"/>`)
+			} else {
+				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
+			}
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			b.WriteString(`<circle r="22"/><path d="M0 -34 V-22 M0 22 V34 M-6 -9 H6 M0 -15 V-3 M-6 10 H6"/>`)
 			if p.Kind == "sine-source" {
@@ -414,7 +419,7 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 	case "led":
 		at := LEDLabelPosition(p)
 		x, y = at.X, at.Y
-	case "nmos", "pmos", "npn":
+	case "nmos", "pmos", "npn", "pnp":
 		if p.Rotation == 180 {
 			x = p.Position.X - schematicLabelWidth(text) - 31
 		}

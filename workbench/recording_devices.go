@@ -2,6 +2,50 @@ package workbench
 
 import "fmt"
 
+func validateRecordedBipolars(c Compiled, graph Graph, result *MixedResult) error {
+	ids := map[string][]string{"npn": {}, "pnp": {}}
+	for _, device := range result.Transistors {
+		part, ok := graph.Component(device.TransistorID)
+		if !ok || !IsBipolarKind(part.Kind) {
+			return fmt.Errorf("invalid recorded bipolar transistor identity")
+		}
+		ids[part.Kind] = append(ids[part.Kind], part.ID)
+	}
+	for _, kind := range []string{"npn", "pnp"} {
+		if err := recordedObjectIDs(graph, kind, ids[kind]); err != nil {
+			return err
+		}
+	}
+	if len(result.Transistors) == 0 {
+		return nil
+	}
+	n, x, err := recordedDeviceNodes(c, result)
+	if err != nil {
+		return err
+	}
+	for _, actual := range result.Transistors {
+		part, _ := graph.Component(actual.TransistorID)
+		expected := n.bipolarResult(part, x)
+		validModel := actual.Model == expected.Model
+		if part.Kind == "npn" {
+			validModel = supportedNPNModel(actual.Model)
+		}
+		if !validModel || actual.State != expected.State || !recordingNear(actual.EmitterCurrent, actual.BaseCurrent+actual.CollectorCurrent) {
+			return fmt.Errorf("invalid recorded bipolar model, region or terminal-current convention")
+		}
+		for _, pair := range [][2]float64{
+			{actual.VBE, expected.VBE}, {actual.VCE, expected.VCE},
+			{actual.BaseCurrent, expected.BaseCurrent}, {actual.CollectorCurrent, expected.CollectorCurrent},
+			{actual.EmitterCurrent, expected.EmitterCurrent}, {actual.TransistorPower, expected.TransistorPower},
+		} {
+			if !recordingNear(pair[0], pair[1]) {
+				return fmt.Errorf("recorded bipolar readings disagree with its terminal voltages")
+			}
+		}
+	}
+	return nil
+}
+
 // Reconstruct only the saved node voltages, without rerunning a solve. A
 // captured device reading must agree with its own graph and terminal state
 // even when none of that device's readings was selected as a scope probe.

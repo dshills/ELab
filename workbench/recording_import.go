@@ -53,6 +53,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.OpAmpModel != nil {
 		envelope["opamp_model"] = m.OpAmpModel
 	}
+	if m.PNPModel != nil {
+		envelope["pnp_model"] = m.PNPModel
+	}
 	if m.PMOSModel != nil {
 		envelope["pmos_model"] = m.PMOSModel
 	}
@@ -217,7 +220,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		}
 	case NPNAnalysis, NPNTransientAnalysis:
 		r := m.NPN
-		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || r.Model != TransistorModel() || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID || r.BaseResistorID != c.BaseResistor.ID || r.LoadResistorID != c.Resistor.ID || r.LEDID != c.LED.ID {
+		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || !supportedNPNModel(r.Model) || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID || r.BaseResistorID != c.BaseResistor.ID || r.LoadResistorID != c.Resistor.ID || r.LEDID != c.LED.ID {
 			return fmt.Errorf("invalid recorded NPN final result")
 		}
 	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis:
@@ -250,11 +253,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return err
 		}
 
-		ids := []string{}
-		for _, q := range r.Transistors {
-			ids = append(ids, q.TransistorID)
-		}
-		if err := recordedObjectIDs(m.Graph, "npn", ids); err != nil {
+		if err := validateRecordedBipolars(c, m.Graph, r); err != nil {
 			return err
 		}
 		for _, group := range []struct {
@@ -297,12 +296,6 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			}
 			if err := recordedObjectIDs(m.Graph, group.kind, group.ids); err != nil {
 				return err
-			}
-		}
-		for _, q := range r.Transistors {
-			p, ok := m.Graph.Component(q.TransistorID)
-			if !ok || p.Kind != "npn" || q.Model != TransistorModel() {
-				return fmt.Errorf("invalid recorded mixed transistor")
 			}
 		}
 	default:

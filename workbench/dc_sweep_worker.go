@@ -22,13 +22,14 @@ type DCCircuit struct {
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
+	PNPModel           *PNPModel           `json:"pnp_model,omitempty"`
 	OpAmpModel         *OpAmpModel         `json:"opamp_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 }
 
 func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
-	out := DCCircuit{Graph: g.Clone(), Settings: cfg, LEDModel: Model(), OpAmpModel: opAmpModelForGraph(g)}
+	out := DCCircuit{Graph: g.Clone(), Settings: cfg, LEDModel: Model(), PNPModel: pnpModelForGraph(g), OpAmpModel: opAmpModelForGraph(g)}
 	for _, p := range g.Components {
 		switch p.Kind {
 		case "pmos":
@@ -59,7 +60,7 @@ func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
 func (c DCCircuit) document() Document {
 	paused := true
 	cfg := c.Settings
-	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, OpAmpModel: c.OpAmpModel, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
+	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PNPModel: c.PNPModel, OpAmpModel: c.OpAmpModel, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
 }
 
 type SweepMetadata struct {

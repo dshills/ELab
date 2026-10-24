@@ -74,6 +74,20 @@ Use `pulse-source` for a separate NPN base drive and a `dc-source` collector sup
 
 `snapshot.transient.engine` is `elab.npn-switch-quasistatic.v1`. Time samples expose drive `input_v`, VCE `voltage_v`, collector/LED `current_a`, and NPN state/base readings. `snapshot.npn` carries the matching full operating point. Pulses switch the memoryless generic model instantaneously; there is no physical device delay or charge storage. Files preserve the existing model and transient settings, then reopen at time zero in Auto. See [NPN transient contract, data fields, limits and validation](npn-transient.md) and `scripts/npn-pulse-demo.py`.
 
+## Broader NPN/PNP circuits
+
+`parts.list` includes `pnp`. Place it with `component.place`, connect its named
+base/collector/emitter pins with `wire.connect`, and use the existing component,
+source, simulation and measurement commands. Emitters may connect to other
+circuit nodes. NPN and PNP share a combined two-device network bound.
+
+`example.load` accepts `pnp`, `emitter-follower` and `bipolar-push-pull`; the native
+Examples menu uses the same loader. Probe `v:Q1` for VCE and
+`v:Q1.base-emitter` for VBE. `i:Q1.base` / `i:Q1.collector` enter the device;
+`i:Q1.emitter` leaves it, so a conducting PNP normally has negative readings.
+PNP projects/captures include exact `pnp_model` provenance. See
+[model equations, examples and compatibility](bipolar-transistors.md).
+
 ## Mixed RC/NPN workflow
 
 `example.flasher` loads the DC-powered two-transistor, two-capacitor LED oscillator. `capacitor.initial.set` sets a saved, undoable startup voltage (pin 1 minus pin 2, ±12 V), or value `default` restores the experiment default. Drawing, values, pulse settings, pause/step/resume/restart and file commands are shared. Mixed Auto/High/Low controls actuate `transient.source_id` while preserving capacitor state; the DC example labels them Power on/off.

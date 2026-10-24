@@ -53,7 +53,7 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 			join(p, "positive", "negative")
 		case "led", "diode":
 			join(p, "anode", "cathode")
-		case "npn":
+		case "npn", "pnp":
 			join(p, "base", "emitter")
 			join(p, "collector", "emitter")
 		case "nmos", "pmos":

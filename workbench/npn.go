@@ -20,7 +20,7 @@ type NPNModel struct {
 }
 
 func TransistorModel() NPNModel {
-	return NPNModel{NPNModelID, 1e-14, 100, 1, 27, "Educational Ebers–Moll DC model; no named physical device, breakdown, Early effect, heating, junction capacitance or switching delay. LED reverse current is neglected. Supports a grounded-emitter switch only."}
+	return NPNModel{NPNModelID, 1e-14, 100, 1, 27, "Educational Ebers–Moll model; no named physical device, breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing. LED reverse current is neglected."}
 }
 
 type NPNResult struct {

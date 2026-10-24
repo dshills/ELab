@@ -57,6 +57,8 @@ func TestPinnedAdvancedProbeSaveReopenAndMissingSource(t *testing.T) {
 	}{
 		{"nmos", "M1", NMOSExampleGraph()},
 		{"pmos", "M1", PMOSExampleGraph()},
+		{"pnp", "Q1", PNPExampleGraph()},
+		{"emitter-follower", "Q1", EmitterFollowerExampleGraph()},
 		{"opamp-follower", "U1", OpAmpFollowerExampleGraph()},
 		{"opamp-inverting", "U1", OpAmpInvertingExampleGraph()},
 	} {

@@ -47,6 +47,8 @@ func recordingModelHashes(m VerificationMetadata) map[string]string {
 			data, _ = json.Marshal(m.PMOSModel)
 		case NMOSModelID:
 			data, _ = json.Marshal(m.NMOSModel)
+		case PNPModelID:
+			data, _ = json.Marshal(m.PNPModel)
 		case NPNModelID:
 			data, _ = json.Marshal(m.NPNModel)
 		default:

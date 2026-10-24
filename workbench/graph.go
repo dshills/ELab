@@ -159,6 +159,7 @@ func libraryParts() []Part {
 		{Kind: "pmos", Name: "P-channel MOSFET", Terminals: []string{"gate", "drain", "source"}, Model: PMOSModelID},
 		{Kind: "nmos", Name: "N-channel MOSFET", Terminals: []string{"gate", "drain", "source"}, Model: NMOSModelID},
 		{Kind: "npn", Name: "NPN transistor", Terminals: []string{"base", "collector", "emitter"}, DefaultValue: "", Unit: "", Model: NPNModelID},
+		{Kind: "pnp", Name: "PNP transistor", Terminals: []string{"base", "collector", "emitter"}, Model: PNPModelID},
 		{Kind: "opamp", Name: "Powered op-amp", Terminals: []string{"noninverting", "inverting", "out", "vplus", "vminus"}, Model: OpAmpModelID},
 		{Kind: "ground", Name: "Ground", Terminals: []string{"reference"}, DefaultValue: "", Unit: "", Model: "ground.v1"},
 		{Kind: "junction", Name: "Junction", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "junction.v1"},
@@ -361,14 +362,20 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "npn":
+	case "npn", "pnp":
 		switch name {
 		case "base":
 			p = Point{-40, 0}
 		case "collector":
 			p = Point{25, -35}
+			if c.Kind == "pnp" {
+				p.Y = 35
+			}
 		case "emitter":
 			p = Point{25, 35}
+			if c.Kind == "pnp" {
+				p.Y = -35
+			}
 		default:
 			found = false
 		}
@@ -460,7 +467,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			hasMOS = true
 		case "opamp":
 			hasOpAmp = true
-		case "npn":
+		case "npn", "pnp":
 			transistors = append(transistors, c)
 		case "capacitor":
 			capacitors = append(capacitors, c)
@@ -545,18 +552,28 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	}
 	networkTopology := len(transistors) == 0 && (len(sources) > 1 || len(resistors) > 1 || len(leds) > 1 || len(capacitors) > 1 || len(capacitors) > 0 && len(leds) > 0 || len(capacitors) == 0 && len(leds) == 0 && len(resistors) > 0)
 	floatingDC := false
+	bipolarNetwork := len(transistors) > 0 && (len(transistors) != 1 || transistors[0].Kind == "pnp" || len(resistors) != 2 || len(leds) > 1)
 	if len(grounds) > 0 {
+		for _, q := range transistors {
+			bipolarNetwork = bipolarNetwork || out.TerminalNet[q.ID+".emitter"] != out.TerminalNet[grounds[0].ID+".reference"] || out.TerminalNet[q.ID+".base"] == out.TerminalNet[q.ID+".collector"]
+		}
 		for _, source := range sources {
 			if source.Kind == "dc-source" && out.TerminalNet[source.ID+".negative"] != out.TerminalNet[grounds[0].ID+".reference"] {
 				floatingDC = true
 			}
 		}
 	}
-	if hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {
-		return compileNPN(out, g, sources, resistors, leds, transistors, capacitors, grounds, groups, root)
+		compiled, status, diagnostic := compileNPN(out, g, sources, resistors, leds, transistors, capacitors, grounds, groups, root)
+		// Retain the established grounded-emitter engine where it applies.
+		// Followers, emitter resistors and multiple BJTs use the full network.
+		if status == "unsupported" && diagnostic != nil && diagnostic.Code == "unsupported-topology" {
+			return compileNetwork(out, g, groups, root)
+		}
+		return compiled, status, diagnostic
 	}
 	if len(capacitors) > 0 {
 		compiled, status, diagnostic := compileRC(out, g, sources, resistors, capacitors, leds, grounds, groups, root)

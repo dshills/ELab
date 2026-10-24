@@ -21,7 +21,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			mos = append(mos, p)
 		case "opamp":
 			opamps = append(opamps, p)
-		case "npn":
+		case "npn", "pnp":
 			qs = append(qs, p)
 		case "switch":
 			switches = append(switches, p)
@@ -38,10 +38,16 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		case "ground":
 			grounds = append(grounds, p)
 		default:
-			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, inductors, diodes, red LEDs, grounded-emitter NPNs, N/P-channel MOSFETs and generic powered op-amps.", p.ID)
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, inductors, diodes, red LEDs, NPN/PNP transistors, N/P-channel MOSFETs and generic powered op-amps.", p.ID)
 		}
 	}
-	if len(opamps) > 0 || len(mos) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 {
+	generalBipolar := hasBipolarPolarity(qs, "pnp")
+	if len(grounds) > 0 {
+		for _, q := range qs {
+			generalBipolar = generalBipolar || out.TerminalNet[q.ID+".emitter"] != out.TerminalNet[grounds[0].ID+".reference"]
+		}
+	}
+	if len(opamps) > 0 || len(mos) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 || generalBipolar {
 		out.Analysis = NetworkDCAnalysis
 		if len(caps) > 0 {
 			out.Analysis = NetworkTransientAnalysis
@@ -103,7 +109,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && p.Kind != "opamp" && p.Kind != "potentiometer" && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
+				if u == v && p.Kind != "opamp" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				if networkReferencePair(p, a, b, len(opamps) > 0) {
@@ -111,11 +117,6 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 					adjacency[v] = append(adjacency[v], u)
 				}
 			}
-		}
-	}
-	for _, q := range qs {
-		if net(q, "emitter") != out.Ground {
-			return fail("unsupported", "unsupported-topology", "Network NPN emitters must connect directly to ground.", q.ID+".emitter")
 		}
 	}
 	for _, v := range sources {

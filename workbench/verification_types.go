@@ -77,6 +77,7 @@ type VerificationMetadata struct {
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
+	PNPModel           *PNPModel           `json:"pnp_model,omitempty"`
 	OpAmpModel         *OpAmpModel         `json:"opamp_model,omitempty"`
 	Format             string              `json:"format"`
 	Version            int                 `json:"version"`

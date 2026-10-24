@@ -49,6 +49,7 @@ type Snapshot struct {
 	SwitchModel            *SwitchModel           `json:"switch_model,omitempty"`
 	NMOSModel              *NMOSModel             `json:"nmos_model,omitempty"`
 	PMOSModel              *PMOSModel             `json:"pmos_model,omitempty"`
+	PNPModel               *PNPModel              `json:"pnp_model,omitempty"`
 	OpAmpModel             *OpAmpModel            `json:"opamp_model,omitempty"`
 	Recording              *RecordingView         `json:"recording,omitempty"`
 	Recovery               RecoveryState          `json:"recovery"`
@@ -443,6 +444,7 @@ func (s *Service) snapshotLocked() Snapshot {
 			break
 		}
 	}
+	out.PNPModel = pnpModelForGraph(graph)
 	out.OpAmpModel = opAmpModelForGraph(graph)
 	out.LastExport = cloneArtifact(s.lastExport)
 	if len(s.undo) > 0 {
@@ -1127,6 +1129,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	if state.OpAmpModel != nil {
 		model := *state.OpAmpModel
 		state.OpAmpModel = &model
+	}
+	if state.PNPModel != nil {
+		model := *state.PNPModel
+		state.PNPModel = &model
 	}
 	if state.PMOSModel != nil {
 		model := *state.PMOSModel

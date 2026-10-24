@@ -51,3 +51,5 @@ Evidence: [final validation summary](validation/npn-validation.json), [headless 
 Run `python3 scripts/npn-demo.py --output docs/validation/headless-npn.json`; add `--connect /absolute/path/to/endpoint.json` for a desktop session. The script uses generated IDs and can be repeated in a persistent session. `./scripts/check.sh`, `./scripts/build.sh`, and `./build/elab --smoke` check the implementation.
 
 Remaining MVP work includes general DC/transient networks, transistor switching timing, selectable probes/cursors, waveform captures/export, recovery, command batches, performance/accessibility qualification, and broader platform acceptance.
+
+For emitter followers, emitter resistance, complementary pairs and PNPs, use the [broader transistor network support](bipolar-transistors.md). This article describes the retained specialized grounded-emitter engine.

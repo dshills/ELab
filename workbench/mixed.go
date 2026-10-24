@@ -87,17 +87,18 @@ func cloneMixed(r *MixedResult) *MixedResult {
 }
 
 type mixedNetwork struct {
-	dc            bool
-	nonlinear     bool
-	hasMOSFET     bool
-	c             Compiled
-	nodes         []string
-	index         map[string]int
-	sources, caps []Component
-	inductors     []Component
-	opamps        []Component
-	inductorCuts  []inductorCut
-	inductorPins  map[string]int
+	dc                bool
+	nonlinear         bool
+	hasMOSFET         bool
+	hasGeneralBipolar bool
+	c                 Compiled
+	nodes             []string
+	index             map[string]int
+	sources, caps     []Component
+	inductors         []Component
+	opamps            []Component
+	inductorCuts      []inductorCut
+	inductorPins      map[string]int
 }
 type mixedState struct {
 	net     *mixedNetwork
@@ -115,6 +116,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 	}
 	for _, p := range c.MixedGraph.Components {
 		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
+		n.hasGeneralBipolar = n.hasGeneralBipolar || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
 		switch p.Kind {
 		case "resistor", "capacitor", "inductor", "switch", "potentiometer":
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
@@ -291,15 +293,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			add(s, s, gm+gd)
 		case "opamp":
 			n.stampOpAmp(p, x, add, f)
-		case "npn":
-			b, c := n.pin(p, "base"), n.pin(p, "collector")
-			ib, ic, bb, bc, cb, cc := npnLinear(voltage(x, b), voltage(x, c))
-			f[b] += ib
-			f[c] += ic
-			add(b, b, bb)
-			add(b, c, bc)
-			add(c, b, cb)
-			add(c, c, cc)
+		case "npn", "pnp":
+			n.stampBipolar(p, x, add, f)
 		}
 	}
 	for k, p := range n.sources {
@@ -448,7 +443,7 @@ func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, d
 	}
 	qs := []Component{}
 	for _, p := range n.c.MixedGraph.Components {
-		if p.Kind == "npn" {
+		if IsBipolarKind(p.Kind) {
 			qs = append(qs, p)
 		}
 	}
@@ -460,12 +455,21 @@ func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, d
 		copy(seed, guess)
 		for i, q := range qs {
 			b, c := n.pin(q, "base"), n.pin(q, "collector")
+			emitter, sign := voltage(seed, n.pin(q, "emitter")), bipolarPolarity(q.Kind)
 			if i == choice {
-				seed[b] = .7
-				seed[c] = .1
+				if b >= 0 {
+					seed[b] = emitter + sign*.7
+				}
+				if c >= 0 {
+					seed[c] = emitter + sign*.1
+				}
 			} else {
-				seed[b] = -1
-				seed[c] = 3
+				if b >= 0 {
+					seed[b] = emitter - sign
+				}
+				if c >= 0 {
+					seed[c] = emitter + sign*3
+				}
 			}
 		}
 		if result, e := n.newton(ctx, seed, old, dt, t, at); e == nil {
@@ -498,7 +502,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET) {
+		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -633,18 +637,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			device := n.opAmpResult(p, x)
 			powers += device.Power
 			r.OpAmps = append(r.OpAmps, device)
-		case "npn":
-			vb, vc := voltage(x, n.pin(p, "base")), voltage(x, n.pin(p, "collector"))
-			ib, ic, _, _, _, _ := npnLinear(vb, vc)
-			state := "active"
-			if math.Abs(ib) < 1e-8 && math.Abs(ic) < 1e-8 {
-				state = "cutoff"
-			} else if vb > vc {
-				state = "saturation"
-			}
-			power := vb*ib + vc*ic
-			powers += power
-			r.Transistors = append(r.Transistors, MixedTransistor{TransistorID: p.ID, Model: TransistorModel(), BaseCurrent: ib, CollectorCurrent: ic, EmitterCurrent: ib + ic, VBE: vb, VCE: vc, State: state, TransistorPower: power})
+		case "npn", "pnp":
+			device := n.bipolarResult(p, x)
+			powers += device.TransistorPower
+			r.Transistors = append(r.Transistors, device)
 		}
 	}
 	for k, p := range n.sources {

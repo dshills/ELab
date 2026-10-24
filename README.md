@@ -1,6 +1,6 @@
 # ELab
 
-ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
+ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PNP, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
 ## Downloadable release
 
@@ -31,7 +31,7 @@ From the ELab directory:
 ./build/elab
 ```
 
-The window starts with a blank schematic, focuses component Search, and shows Common. Choose a category or All components, or type a name/alias and press Return to search the entire catalog. Pick a DC, sine, finite pulse or ideal square source, resistor, potentiometer, capacitor, inductor, red LED, silicon diode, NPN, N/P-channel MOSFET, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
+The window starts with a blank schematic, focuses component Search, and shows Common. Choose a category or All components, or type a name/alias and press Return to search the entire catalog. Pick a DC, sine, finite pulse or ideal square source, resistor, potentiometer, capacitor, inductor, red LED, silicon diode, NPN, PNP, N/P-channel MOSFET, SPST switch, junction, net label, or ground from the left palette, then click the sheet. Use Wire to click pairs of terminal dots. Select a component to edit its value in the right inspector; inputs such as `2.2k ohm` are accepted. The inspector also offers exact X/Y placement while a part is selected for placement, and named terminal connections while Wire is active.
 
 Connect source positive → resistor → LED anode, LED cathode → ground, and ground → source negative. Completing the loop starts live simulation. Examples → Load LED example loads a ready-made 5 V / 1 kΩ circuit. The 1 kΩ and 2 kΩ presets produce approximately 2.9168 mA and 1.4767 mA.
 
@@ -95,6 +95,8 @@ Choose **Examples → Load blinking NPN LED** for a pulse-driven transistor LED 
 Choose **Examples → Load capacitor-timed LED flasher** for a DC-powered, capacitor-timed two-NPN oscillator with alternating LEDs. Its coupled solver preserves charge, supports signed capacitor startup conditions, and exposes the same commands and measurements to agents. See the [mixed RC/NPN workflow and validation](docs/mixed-transient.md) and [flasher example spacing](docs/flasher-layout.md). [Capacitor caption clearance](docs/capacitor-labels.md) is shared by the native canvas and exported schematics.
 
 The generic Ebers–Moll junction model remains instantaneous; physical transistor delay, internal charge storage, heating and breakdown remain unsupported. See the [NPN model](docs/npn-switch.md).
+
+Choose **PNP high-side LED**, **NPN emitter follower**, or **Complementary transistor buffer** from Examples to explore both bipolar polarities and emitters above/below ground. Signed VBE/VCE, base/collector/emitter currents, live transient simulation, saved captures and the same user/agent commands are supported. [Models, examples and electrical checks](docs/bipolar-transistors.md).
 
 ## Inspect both sides and measure timing
 
@@ -186,7 +188,7 @@ Run `python3 scripts/verification-demo.py --output docs/validation/headless-veri
 
 ## Scope and structure
 
-The current engines support series LED DC, exact first-order RC, grounded-emitter NPN, coupled RC/NPN and bounded passive/switched circuit networks. Unsupported topologies report explicit diagnostics. Scope probes/cursors, recorded verification, recovery, atomic batches and portable exports are implemented. Participant usability, accessibility and distribution qualification remain upcoming work. DC results remain stable until input changes; transient results advance in simulated time with a bounded live trace.
+The current engines support series LED DC, exact first-order RC, NPN/PNP transistor networks, coupled RC/NPN and bounded passive/switched circuit networks. Unsupported topologies report explicit diagnostics. Scope probes/cursors, recorded verification, recovery, atomic batches and portable exports are implemented. Participant usability, accessibility and distribution qualification remain upcoming work. DC results remain stable until input changes; transient results advance in simulated time with a bounded live trace.
 
 - `workbench/`: portable circuit model, LED/RC/NPN solvers, shared semantic commands, revisions, history, and snapshots.
 - `transport/`: bounded JSON-line stdio and private local socket adapters.

@@ -170,9 +170,9 @@ func TestNPNTopologyAndGeometry(t *testing.T) {
 		status string
 	}{
 		{"open base", func(g *Graph) { g.Wires = g.Wires[:4] }, "incomplete"},
-		{"reversed LED", func(g *Graph) { g.Wires[1].To = "D1.cathode"; g.Wires[2].From = "D1.anode" }, "unsupported"},
+		{"reversed LED", func(g *Graph) { g.Wires[1].To = "D1.cathode"; g.Wires[2].From = "D1.anode" }, ""},
 		{"short CE", func(g *Graph) { g.Wires = append(g.Wires, Wire{"short", "Q1.collector", "Q1.emitter", true}) }, "error"},
-		{"extra base link", func(g *Graph) { g.Wires = append(g.Wires, Wire{"bad", "Q1.base", "VCC.positive", true}) }, "unsupported"},
+		{"extra base link", func(g *Graph) { g.Wires = append(g.Wires, Wire{"bad", "Q1.base", "VCC.positive", true}) }, ""},
 		{"capacitor", func(g *Graph) {
 			c, _ := MakeComponent("C1", "capacitor", Point{500, 0}, "")
 			g.Components = append(g.Components, c)
@@ -180,12 +180,18 @@ func TestNPNTopologyAndGeometry(t *testing.T) {
 		{"pulsed supply", func(g *Graph) {
 			c, _ := MakeComponent("VCC", "pulse-source", Point{260, -100}, "5 V")
 			g.Components[0] = c
-		}, "unsupported"},
+		}, ""},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			g := NPNExampleGraph()
 			test.edit(&g)
-			_, status, d := g.Compile()
+			c, status, d := g.Compile()
+			if test.status == "" {
+				if d != nil || status != "" || !IsNetworkAnalysis(c.Analysis) {
+					t.Fatalf("broader transistor graph did not reach the network solver: %s %+v", status, d)
+				}
+				return
+			}
 			if d == nil || status != test.status {
 				t.Fatalf("%s: %+v", status, d)
 			}

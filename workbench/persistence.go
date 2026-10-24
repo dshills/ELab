@@ -27,6 +27,7 @@ type Document struct {
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
+	PNPModel           *PNPModel           `json:"pnp_model,omitempty"`
 	OpAmpModel         *OpAmpModel         `json:"opamp_model,omitempty"`
 	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
 	Paused             *bool               `json:"paused,omitempty"`
@@ -352,6 +353,14 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := validateOpAmpModel(d.Graph, d.OpAmpModel); err != nil {
 		return d, err
 	}
+	if d.PNPModel != nil && *d.PNPModel != PNPDeviceModel() {
+		return d, fmt.Errorf("unsupported PNP model parameters/version")
+	}
+	for _, part := range d.Graph.Components {
+		if part.Kind == "pnp" && (d.PNPModel == nil || *d.PNPModel != PNPDeviceModel()) {
+			return d, fmt.Errorf("PNP schematics require supported pnp_model parameters")
+		}
+	}
 	if d.PMOSModel != nil && *d.PMOSModel != PMOSDeviceModel() {
 		return d, fmt.Errorf("unsupported PMOS model parameters/version")
 	}
@@ -375,11 +384,11 @@ func decodeDocument(data []byte) (Document, error) {
 		if c.Kind == "switch" && (d.SwitchModel == nil || *d.SwitchModel != SwitchDeviceModel()) {
 			return d, fmt.Errorf("switch schematics require supported switch_model parameters")
 		}
-		if c.Kind == "npn" && (d.NPNModel == nil || *d.NPNModel != TransistorModel()) {
+		if c.Kind == "npn" && (d.NPNModel == nil || !supportedNPNModel(*d.NPNModel)) {
 			return d, fmt.Errorf("NPN schematics require supported npn_model parameters")
 		}
 	}
-	if d.NPNModel != nil && *d.NPNModel != TransistorModel() {
+	if d.NPNModel != nil && !supportedNPNModel(*d.NPNModel) {
 		return d, fmt.Errorf("unsupported NPN model parameters or version")
 	}
 	if d.LEDModel != Model() {
@@ -574,6 +583,7 @@ func (s *Service) documentLocked() Document {
 			break
 		}
 	}
+	d.PNPModel = pnpModelForGraph(s.graph)
 	d.OpAmpModel = opAmpModelForGraph(s.graph)
 	return d
 }

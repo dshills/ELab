@@ -20,7 +20,7 @@ These are inspectable educational parameters, with no named physical part, rated
 
 ## Networks and measurement
 
-The [bounded network solver](switches.md) accepts up to eight silicon diodes, within the 100-node (including ground) and sheet limits. Diodes force the general network path and can combine with resistors, switches, capacitors, pulse sources, LEDs and grounded-emitter NPNs. Existing ground, source, constraint-loop, convergence and ±30 V node limits remain explicit.
+The [bounded network solver](switches.md) accepts up to eight silicon diodes, within the 100-node (including ground) and sheet limits. Diodes force the general network path and can combine with resistors, switches, capacitors, pulse sources, LEDs and NPN/PNP transistors. Existing ground, source, constraint-loop, convergence and ±30 V node limits remain explicit.
 
 `i:D1`, `v:D1`, and individual pin voltage probes are available in live and recorded scopes. Verify captures the full graph/model and its diode branch results. JSON, kept project recordings and recovery include complete model parameters and canonical dependency hashes. Missing or modified parameters are refused before document replacement. CSV recordings add a `diode_model` column when the captured circuit has a diode; switch circuits similarly add `switch_model`. Consumers should use header names. JSON remains the complete portable source record.
 

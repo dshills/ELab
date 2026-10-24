@@ -1,0 +1,119 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "examples": [
+    {
+      "example": "pnp",
+      "captured_rows": 105,
+      "maximum_follower_reference_error_v": 0,
+      "final_transistors": [
+        {
+          "transistor_id": "Q1",
+          "model": {
+            "id": "elab.generic-pnp.v1",
+            "saturation_current_a": 1e-14,
+            "forward_beta": 100,
+            "reverse_beta": 1,
+            "temperature_c": 27,
+            "limitations": "Educational complementary PNP Ebers\u2013Moll model; same illustrative parameter magnitudes as the generic NPN, not a named or physically matched device. No breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing."
+          },
+          "base_current_a": -0.0004242644129866973,
+          "collector_current_a": -0.00285998972629648,
+          "emitter_current_a": -0.0032842541392831773,
+          "vbe_v": -0.6885053364845861,
+          "vce_v": -0.057881076521946184,
+          "power_w": 0.0004576475966215879,
+          "state": "saturation"
+        }
+      ],
+      "exports": {
+        "svg": "22450481ce582267cab8a0b5e16b497f13df5c11fa4b98c92b9c922f95b8a432",
+        "png": "9d0f7022d020261cb6a41f73434cd24d1c931a4cfe07747b9a050b2f50ff726c",
+        "pdf": "dd62f4bd7f5737528155bb07c34b10d205395a5eaa5a9274be499b080deba818"
+      }
+    },
+    {
+      "example": "emitter-follower",
+      "captured_rows": 101,
+      "maximum_follower_reference_error_v": 8.556266806181156e-11,
+      "final_transistors": [
+        {
+          "transistor_id": "Q1",
+          "model": {
+            "id": "elab.generic-npn.v1",
+            "saturation_current_a": 1e-14,
+            "forward_beta": 100,
+            "reverse_beta": 1,
+            "temperature_c": 27,
+            "limitations": "Educational Ebers\u2013Moll model; no named physical device, breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing. LED reverse current is neglected."
+          },
+          "base_current_a": 8.329504900547933e-06,
+          "collector_current_a": 0.0008329504910747932,
+          "emitter_current_a": 0.0008412799959753412,
+          "vbe_v": 0.650390499126678,
+          "vce_v": 4.1587200040272005,
+          "power_w": 0.003469425300446768,
+          "state": "active"
+        }
+      ],
+      "exports": {
+        "svg": "826dd93dd6e505072b29b061845844f73e4af1bb835021f0309e7ab1914f34e0",
+        "png": "756878dafff9797bf1dc23d52964fe8b203edb6083ade30753846d372a09ca15",
+        "pdf": "f8e91408851932e72232cfbd0a7009983c6f6d258b1be9192dba75b8aa30e2e0"
+      }
+    },
+    {
+      "example": "bipolar-push-pull",
+      "captured_rows": 101,
+      "maximum_follower_reference_error_v": 9.184630833658503e-11,
+      "final_transistors": [
+        {
+          "transistor_id": "Q1",
+          "model": {
+            "id": "elab.generic-npn.v1",
+            "saturation_current_a": 1e-14,
+            "forward_beta": 100,
+            "reverse_beta": 1,
+            "temperature_c": 27,
+            "limitations": "Educational Ebers\u2013Moll model; no named physical device, breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing. LED reverse current is neglected."
+          },
+          "base_current_a": -1.0099999999999722e-14,
+          "collector_current_a": 1.0000000000027861e-14,
+          "emitter_current_a": -9.999999997186059e-17,
+          "vbe_v": -0.6881721057442973,
+          "vce_v": 6.811827894245603,
+          "power_w": 7.506881721066303e-14,
+          "state": "cutoff"
+        },
+        {
+          "transistor_id": "Q2",
+          "model": {
+            "id": "elab.generic-pnp.v1",
+            "saturation_current_a": 1e-14,
+            "forward_beta": 100,
+            "reverse_beta": 1,
+            "temperature_c": 27,
+            "limitations": "Educational complementary PNP Ebers\u2013Moll model; same illustrative parameter magnitudes as the generic NPN, not a named or physically matched device. No breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing."
+          },
+          "base_current_a": -1.7938890032045372e-05,
+          "collector_current_a": -0.001793889004224537,
+          "emitter_current_a": -0.0018118278942565824,
+          "vbe_v": -0.6702332157224615,
+          "vce_v": -3.188172105754397,
+          "power_w": 0.00573125012404087,
+          "state": "active"
+        }
+      ],
+      "exports": {
+        "svg": "a5650c09cba0b46033e8d66849f00369e513a388a727dbeccdb49bf72bc3fcc7",
+        "png": "3556bbfb1d39d8915fa33e74d0ce52dd10a0ae72c7437eafaac7ac741f5d922c",
+        "pdf": "2926bead32f93c7d80179fc8d45d20f56d3c2fd536d347dee96e7a1135be272f"
+      }
+    }
+  ],
+  "scope": "Public command discovery, guided loading, live stepping, capture, independent follower load lines, signed PNP switching, save/reopen and SVG/PNG/PDF exports.",
+  "limitations": [
+    "Educational model references, not measured hardware or a separate SPICE execution.",
+    "Native pointer/keyboard acceptance is checked separately."
+  ]
+}

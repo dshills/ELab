@@ -122,7 +122,8 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
 			}
-		case "npn":
+		case "npn", "pnp":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " collector-emitter voltage", "V", p.ID + ".collector", p.ID + ".emitter"}, Probe{"v:" + p.ID + ".base-emitter", p.ID + " base-emitter voltage", "V", p.ID + ".base", p.ID + ".emitter"})
 			for _, pin := range p.Terminals {
 				ref := p.ID + "." + pin
 				direction := "into device"
@@ -177,7 +178,7 @@ func defaultProbes(c Compiled) []string {
 			if IsMOSFETKind(p.Kind) {
 				out = append(out, "v:"+p.ID, "v:"+p.ID+".gate-source", "i:"+p.ID+".drain")
 			}
-			if p.Kind == "npn" {
+			if IsBipolarKind(p.Kind) {
 				out = append(out, "v:"+p.ID+".collector")
 			}
 		}
