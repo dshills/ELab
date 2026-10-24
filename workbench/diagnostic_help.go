@@ -2,7 +2,6 @@ package workbench
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
 )
 
@@ -176,12 +175,17 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	if code != "invalid-params" && code != "not-found" && code != "file-error" && code != "invalid-document" {
 		return nil
 	}
+	// Quantity decoding can fail before mutation admission. An old request
+	// must not name current targets or explain another run/capture's bounds.
+	currentContext := (r.ExpectedRevision == nil || *r.ExpectedRevision == s.revision) &&
+		(r.ExpectedCommandRevision == nil || *r.ExpectedCommandRevision == s.commandRevision) &&
+		(r.ExpectedDocumentGeneration == nil || *r.ExpectedDocumentGeneration == s.documentGeneration)
 	refs := []string{}
 	// Related request targets are context, never guessed solver causes. Parsing
 	// known intent fields cannot change state or make an unknown ID a marker.
 	var fields map[string]json.RawMessage
 	targeted := strings.HasPrefix(r.Command, "component.") || strings.HasPrefix(r.Command, "wire.") || strings.HasPrefix(r.Command, "source.") || strings.HasPrefix(r.Command, "capacitor.") || strings.HasPrefix(r.Command, "potentiometer.") || r.Command == "switch.set" || r.Command == "object.delete" || r.Command == "simulation.pulse.timing.set"
-	if targeted && json.Unmarshal(r.Params, &fields) == nil {
+	if currentContext && targeted && json.Unmarshal(r.Params, &fields) == nil {
 		for _, key := range []string{"id", "from", "to", "terminal"} {
 			var ref string
 			if json.Unmarshal(fields[key], &ref) == nil {
@@ -191,6 +195,9 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	}
 	c, _, _ := s.graph.Compile()
 	help := makeDiagnosticHelp(s.graph, c, Diagnostic{Code: code, Message: message}, "request", refs)
+	if !currentContext {
+		return &help
+	}
 	if code == "invalid-params" && r.Command == "component.set" {
 		componentValueRequestHelp(s.graph, r.Params, &help)
 	}
@@ -201,14 +208,7 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 		s.intervalTimeRequestHelpLocked(r, &help)
 	}
 	if code == "invalid-params" && r.Command == "recording.seek" {
-		if record, err := s.selectedRecordLocked(); err == nil {
-			help.Summary = "Choose a valid position in the recording."
-			help.Action = fmt.Sprintf("Use a whole sample index from 0 to %d, or a time from 0 s to %g s. Time units such as ms and us are accepted. Your circuit is unchanged.", len(record.rows)-1, record.metadata.Duration)
-			if record.metadata.Duration == 0 {
-				help.Summary = "This recording has one sample."
-				help.Action = "Use sample index 0 or time 0 s. Your circuit is unchanged."
-			}
-		}
+		s.recordedPositionRequestHelpLocked(r, &help)
 	}
 	return &help
 }

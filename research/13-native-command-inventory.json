@@ -47,7 +47,7 @@
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "44cf20fe63d68fafdd991d6f0aa4afbc0cf51a452c1ee2892a82bcadff1defe6",
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
-    "desktop/recorded_playback_actions.go": "161479a80a2d585df228f081b9b594cd95706803afec4bf33f6468e612c96a29",
+    "desktop/recorded_playback_actions.go": "a6f7687f201a3b2ea3f91480979ead96e21b54150e54812e0b3e32a24c8b9045",
     "desktop/recorded_timing_actions.go": "5c6792dc474f238105dd7ae037b7f7c2d089e4b6c2dee34b5df0e3bf4d5b1d82",
     "desktop/recording.go": "0483d0bd7d480bfbe306754a3bc088393d5403afd467648ac80a71a6bdbad318",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
@@ -2650,7 +2650,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 146,
+      "line": 150,
       "function": "*screen.recordedPlaybackAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\tif s.pendingRecordedPlayback != nil {\n\t\treturn\n\t}\n\tpending := \u0026recordedPlaybackWork{context: actionContext{state.CommandRevision, state.Document.Generation}, recordingID: r.ID, values: recordedPlaybackState(r), direction: direction}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.recordedPlaybackAccepted; accepted != nil \u0026\u0026 accepted.recordingID == r.ID \u0026\u0026 accepted.from.generation == pending.context.generation \u0026\u0026 accepted.from.revision \u003c= pending.context.revision \u0026\u0026 pending.context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) \u0026\u0026 current.Recording != nil \u0026\u0026 recordedPlaybackValuesMatch(accepted, current.Recording, direction != \"\") {\n\t\tpending.context, pending.values = accepted.to, accepted.values\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation || current.Recording == nil || current.Recording.ID != r.ID {\n\t\ts.finishRecordedPlayback(pending)\n\t\treturn\n\t}\n\ts.pendingRecordedPlayback = pending\n\ts.settleRecordedPlayback(pending, 0)\n}",
@@ -2658,7 +2658,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 221,
+      "line": 225,
       "function": "*screen.finishRecordedPlayback",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.step\", workbench.RecordingStepParams{Direction: pending.direction}, pending.context.revision, pending.context.generation)",
@@ -2669,7 +2669,7 @@
     },
     {
       "file": "desktop/recorded_playback_actions.go",
-      "line": 228,
+      "line": 232,
       "function": "*screen.finishRecordedPlayback",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"recording.play\", workbench.RecordingPlayParams{Speed: speed}, pending.context.revision, pending.context.generation)",

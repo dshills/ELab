@@ -97,7 +97,11 @@ func (s *screen) changeRecordedPlaybackField(state workbench.Snapshot, id string
 	}
 	if response.Error != nil {
 		s.recordedPlaybackAccepted = nil
-		if origin != nil && response.Error.Code == "invalid-params" {
+		current := s.service.Snapshot()
+		if origin != nil && response.Error.Code == "invalid-params" &&
+			*origin == (actionContext{current.CommandRevision, current.Document.Generation}) &&
+			current.Recording != nil && current.Recording.Viewing && current.Recording.ID == r.ID &&
+			recordedPlaybackFieldValue(current.Recording, id) == recordedPlaybackFieldValue(r, id) {
 			if s.recordedPlaybackRejected == nil {
 				s.recordedPlaybackRejected = make(map[string]recordedPlaybackRejection)
 			}

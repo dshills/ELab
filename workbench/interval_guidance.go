@@ -5,15 +5,9 @@ import (
 	"fmt"
 )
 
-// Explain only a strict interval request in its original command/document
-// context. Parsing failures can precede revision admission, so a later run or
-// capture must never supply a plausible but unrelated range.
+// requestDiagnosticLocked has checked revision/document context. Explain only
+// strict interval intent and leave other refusal causes with generic help.
 func (s *Service) intervalTimeRequestHelpLocked(r Request, help *DiagnosticHelp) {
-	if r.ExpectedRevision != nil && *r.ExpectedRevision != s.revision ||
-		r.ExpectedCommandRevision != nil && *r.ExpectedCommandRevision != s.commandRevision ||
-		r.ExpectedDocumentGeneration != nil && *r.ExpectedDocumentGeneration != s.documentGeneration {
-		return
-	}
 	var p struct {
 		Mode  string          `json:"mode,omitempty"`
 		Start json.RawMessage `json:"start_s"`

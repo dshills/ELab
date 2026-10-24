@@ -7,14 +7,9 @@ import (
 	"strings"
 )
 
-// A time parser can refuse before command admission. Do not explain a stale or
-// malformed request using a different run, document or selected recording.
+// requestDiagnosticLocked has checked revision/document context. Only a
+// strict cursor intent may now describe its live run or selected recording.
 func (s *Service) cursorTimeRequestHelpLocked(r Request, help *DiagnosticHelp) {
-	if r.ExpectedRevision != nil && *r.ExpectedRevision != s.revision ||
-		r.ExpectedCommandRevision != nil && *r.ExpectedCommandRevision != s.commandRevision ||
-		r.ExpectedDocumentGeneration != nil && *r.ExpectedDocumentGeneration != s.documentGeneration {
-		return
-	}
 	var p struct {
 		Cursor      string          `json:"cursor"`
 		Time        json.RawMessage `json:"time_s"`
