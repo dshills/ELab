@@ -170,3 +170,22 @@ readings, four-capture fresh project reopen and byte-exact JSON reexport. No
 simulation kernel, manual stepping, SDK or native UI source changes for /218.
 The candidate remains held for the accumulated native checks. /205 is still the
 qualified download; no new features or owner-review gate have been introduced.
+
+## Checkpoint: potentiometer wheel input
+
+The [slider wheel repair](97-slider-wheel.md) follows the numeric-field policy:
+wheel input scrolls the pane, while pointer gestures and arrow keys deliberately
+edit. The existing /206 session reproduces a 50%→100% unintended wiper change.
+Two current production-control and four driver cases fail before the repair.
+Text-field/selector wheel and inspector/scope-thumb checks preserve the complete
+RC snapshot; its graph and complete capture are saved and freshly reopened.
+The owned session is left on the clean pot fixture, fresh and paused at 50%.
+
+The elab11 export changes three members and preserves upstream dependencies,
+notices and bootstrap bytes. Full framework and application gates pass; all 889
+source/check inputs match. The clean /219 agent passes 90 numerical checks,
+deliberate wiper actuation with exact charge/time continuity, graph Undo/Redo,
+immutable capture, dirty-work refusal and saved reopen. Headless workers join
+and exit normally. The original /218 package and qualified /205 download remain
+preserved. Changed-candidate native acceptance remains separate; owner review
+is not a prerequisite and no new launch or unattended confirmation is queued.

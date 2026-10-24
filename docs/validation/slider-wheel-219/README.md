@@ -34,3 +34,9 @@ The reused session is left on the clean paused pot at 50%, with explicit fresh
 readings; its history/run/revision changes are recorded. This old-native proof
 does not qualify the changed candidate. /218 and /205 stay preserved; no launch
 or unattended permission question is queued. Clean packaging follows.
+
+The [clean /219 package and matching agent](candidate-report.json) pass
+90 numerical checks, explicit public actuation with charge continuity, graph
+Undo/Redo, immutable capture, dirty-work refusal and saved reopen. The exact
+bundle stays intact. It remains held for the [native checks](native-acceptance-pending.json);
+/205 is still the download.

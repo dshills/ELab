@@ -43,5 +43,10 @@ The driver also preserves one pointer-click commit. Verified SDK caches are not
 edited. The [elab11 pin review and full framework/application gates pass](../docs/validation/slider-wheel-219/README.md).
 All 8,435 SDK members match; upstream dependencies/notices/bootstrap bytes are
 unchanged. Desktop race takes 190.584 s, mounted race 169.917 s, and all
-889 frozen source/check inputs match. Clean packaging follows. The /205 download stays preserved; changed-candidate native acceptance
+889 frozen source/check inputs match. The clean /219 package and matching agent pass 90 numerical checks: 84
+captured waveform readings, two piecewise RC voltage endpoints and four
+instantaneous current/power relations. Deliberate wiper changes preserve charge
+and time; graph Undo/Redo, immutable captured data, exact dirty-work refusal
+and saved reopen pass. All owned headless workers join and the process exits 0.
+The app bundle remains intact. The candidate is held for native acceptance. The /205 download stays preserved; changed-candidate native acceptance
 remains separate from this old native reproduction.
