@@ -242,6 +242,7 @@ type screen struct {
 	pendingSweepStart                   *sweepStartWork
 	valueDraftAccepted                  *valueDraftContinuation
 	outputPageAccepted                  *outputPageContinuation
+	recordedStatisticsRejected          map[string]recordedStatisticsRejection
 	recordedTimingAccepted              *recordedTimingContinuation
 	recordedTimingRejected              map[string]*recordedTimingFieldRejection
 	pendingRecordedTimingPage           *recordedTimingPageWork

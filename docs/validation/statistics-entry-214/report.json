@@ -1,0 +1,171 @@
+{
+  "kind": "captured-statistics-entry-recovery",
+  "source_checks_passed": true,
+  "quality_exit_code": 0,
+  "source_parent_commit": "d32b27603f0e90f64d17e7ff1d5108780dab96e7",
+  "source_inputs": 883,
+  "changed_source_inputs": [
+    "desktop/main.go",
+    "desktop/recording.go",
+    "desktop/recording_statistics.go",
+    "desktop/recording_statistics_entry.go",
+    "desktop/recording_statistics_entry_test.go",
+    "desktop/recording_statistics_refusal_offscreen_test.go",
+    "desktop/view.go",
+    "research/13-native-command-inventory.json"
+  ],
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "desktop_race_seconds": 182.462,
+  "mounted_race_seconds": 164.391,
+  "python_tests": 67,
+  "mounted_focused_seconds": 2.563,
+  "final_focused_seconds": 4.36,
+  "mounted_baseline_failures": 4,
+  "stale_callback_cases": 5,
+  "owner_pruning_cases": 6,
+  "rejected_peer_preserved": true,
+  "backend_source_unchanged": true,
+  "inventory_comparison": {
+    "changed_sources": [
+      "desktop/main.go",
+      "desktop/recording.go",
+      "desktop/recording_statistics.go",
+      "desktop/recording_statistics_entry.go",
+      "desktop/view.go"
+    ],
+    "removed_sites": [
+      {
+        "file": "desktop/recording_statistics.go",
+        "function": "*screen.recordingStatisticsControls",
+        "kind": "node-Change",
+        "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.LastSampleTime\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\ts.invoke(\"recording.statistics.set\", p)\n}",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_statistics.go",
+        "function": "*screen.recordingStatisticsControls",
+        "kind": "callback-factory",
+        "expression": "timeField(\"recorded-statistics-\"+field.name, \"Measurement interval \"+field.name, field.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, field.name+\"_s\", text), state.CommandRevision)\n})",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_statistics.go",
+        "function": "*screen.recordingStatisticsControls",
+        "kind": "domain-ingress",
+        "expression": "s.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, field.name+\"_s\", text), state.CommandRevision)",
+        "public_commands": [
+          "recording.statistics.set"
+        ],
+        "status": "literal-public-route"
+      }
+    ],
+    "added_sites": [
+      {
+        "file": "desktop/recording_statistics.go",
+        "function": "*screen.recordingStatisticsControls",
+        "kind": "node-Change",
+        "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.LastSampleTime\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\tif response := s.invoke(\"recording.statistics.set\", p); response.Error == nil {\n\t\ts.pruneRecordedStatisticsRejections(response.Result.(workbench.Snapshot))\n\t}\n}",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_statistics.go",
+        "function": "*screen.recordingStatisticsControls",
+        "kind": "callback-factory",
+        "expression": "timeField(\"recorded-statistics-\"+field.name, \"Measurement interval \"+field.name, field.value, false, func(text string) {\n\ts.changeRecordedStatisticsTime(state, field.name, text)\n})",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_statistics_entry.go",
+        "function": "*screen.changeRecordedStatisticsTime",
+        "kind": "domain-ingress",
+        "expression": "s.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, side+\"_s\", text), state.CommandRevision, state.Document.Generation)",
+        "public_commands": [
+          "recording.statistics.set"
+        ],
+        "status": "literal-public-route"
+      }
+    ],
+    "public_commands_aliases_and_route_sets_unchanged": true,
+    "public_commands": 166,
+    "source_routes": 134,
+    "sites": 404,
+    "production_sources": 78
+  },
+  "sdk_unchanged": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-window-background-and-divider-compat.patch",
+      "sha256": "6b93a7f4cfbc8668bff33a6c2f4efdc5065e56a629f22d545457495418a07528"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab8.tar.gz",
+    "archive_bytes": 20390608,
+    "sha256": "89ef76d15a2dbd2d8e7777ceac502d802634d4877039dbad5b94829186d6bcdd",
+    "manifest_sha256": "1f7b36d96f47d96d843b8d3880188b30ab20c3dcb09c5e3da3401f0d406ca97d",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab8",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8428,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "preserved_download_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "old_native_baseline": {
+    "kind": "old-native-baseline",
+    "version": "0.181.5 /206",
+    "negative_start_text_replaced_by_accepted_value": true,
+    "baseline_correction_succeeded": true,
+    "accepted_interval_s": [
+      0,
+      0.02
+    ],
+    "measurements_restored_off": true,
+    "full_snapshot_changed_keys": [
+      "command_revision",
+      "revision"
+    ],
+    "physics_document_history_scope_capture_and_view_preserved": true,
+    "test_app_left_open": true,
+    "graphical_app_launched": false,
+    "updated_candidate_native_acceptance": false,
+    "paste_tool_warning": "First paste reported possible clipboard conflict. Fresh AX/screenshot verified the intended -1 ms before Return. No unknown text was committed.",
+    "evidence_files": {
+      "01-typed.png": "0bab2f1863c3662d12f3747f52a86deaeda4587ba39f307270cee542cdc3f21c",
+      "01-typed.txt": "c68d869b4f477fdff9c6f0fcfe255bfe6551f033722e9a437ecf01054004343a",
+      "02-refused.png": "34d15701ecd958d4cefd81b672ee044ebed62bcddd5440c71f77395a9ae3bc08",
+      "02-refused.txt": "3ca862183cc090a4714436ccf3e5e9711e2eb8840b120d91c1b916b0f4f46d57",
+      "03-correction.png": "84e47a74c62984fa9e8c19a22c7605b394f5d4c78b418e539e57025a13b12f79",
+      "03-correction.txt": "c3661bacb4732a497d6d1238f239ed24e062c9292e3c842c435e27f0deef4d9a",
+      "04-restored.png": "44f8e502a18d565d9537b4f117063c9244d90293f92241aa101d84a0577a7f10",
+      "04-restored.txt": "f58a2c843b2b80d82544c3234785be0269da1417e107d1f2b40d26e9c093041e"
+    },
+    "native_executable_sha256": "e453cd75b5ddbb374ea7790bcc811c3aba62b23d14c48c7738313363eef71cf1",
+    "source_commit": "4010b891b66fc56d57ffd879a6a2ee6aa86ebfd4",
+    "app_version": "0.181.5",
+    "app_build": "206",
+    "isolated_launcher_sha256": "f807469f1df930f4c5c134c36d36842977095b1734069e6b4d37dc468e42d60f"
+  },
+  "native_app_launched": false,
+  "native_acceptance_passed": false,
+  "release_ready": false,
+  "published": false,
+  "owner_review_required": false,
+  "new_commands": 0,
+  "new_components": 0,
+  "new_formats": 0,
+  "download_unchanged": "0.181.4 /205",
+  "raw_archive_sha256": "74c5edcad01d9dfa57fd3bc7b68a1f0da02c7d3f2f3326ebedbd8e39deaf21c3",
+  "raw_members": 35
+}
