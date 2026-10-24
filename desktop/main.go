@@ -243,6 +243,7 @@ type screen struct {
 	valueDraftAccepted                  *valueDraftContinuation
 	outputPageAccepted                  *outputPageContinuation
 	recordedStatisticsRejected          map[string]recordedStatisticsRejection
+	recordedComparisonRejected          *recordedComparisonRejection
 	recordedTimingAccepted              *recordedTimingContinuation
 	recordedTimingRejected              map[string]*recordedTimingFieldRejection
 	pendingRecordedTimingPage           *recordedTimingPageWork

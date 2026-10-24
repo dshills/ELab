@@ -88,6 +88,7 @@ func (s *screen) view() ui.Node {
 	s.pruneSweepFieldRejections(state)
 	s.pruneRecordedPlaybackRejections(state)
 	s.pruneRecordedStatisticsRejections(state)
+	s.pruneRecordedComparisonRejection(state)
 	s.pruneRecordedTimingRejections(state)
 	s.pruneCursorTimeRejections(state)
 	s.pruneIntervalTimeRejections(state)

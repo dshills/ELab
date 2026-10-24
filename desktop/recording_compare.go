@@ -8,6 +8,7 @@ import (
 )
 
 func (s *screen) recordingComparisonControls(state workbench.Snapshot) []ui.Node {
+	s.pruneRecordedComparisonRejection(state)
 	r := state.Recording
 	options := []ui.Option{{ID: "__none", Label: "No comparison"}}
 	for _, op := range state.Operations {
@@ -40,15 +41,26 @@ func (s *screen) recordingComparisonControls(state workbench.Snapshot) []ui.Node
 			next.ShowStatistics = r.Comparison.Settings.ShowStatistics
 			next.ShowOverlay = r.Comparison.Settings.ShowOverlay
 		}
-		s.invoke("recording.compare.set", next)
+		if response := s.invoke("recording.compare.set", next); response.Error == nil {
+			// A reference choice explicitly restarts at zero, including a
+			// choice of the same reference whose accepted time is already zero.
+			s.recordedComparisonRejected = nil
+		}
 	}}}
 	if r.Comparison == nil {
 		return nodes
 	}
 	comparison := r.Comparison
-	nodes = append(nodes, quiet("recorded-compare-time-label", "Compare at · time"), timeField("recorded-compare-time", "Requested comparison time", at, false, func(text string) {
-		s.invokeAtCommandRevision("recording.compare.set", map[string]any{"id": r.ID, "reference_id": comparison.Settings.ReferenceID, "time_s": text, "show_statistics": comparison.Settings.ShowStatistics, "show_overlay": comparison.Settings.ShowOverlay}, state.CommandRevision)
-	}))
+	entry := timeField("recorded-compare-time", "Requested comparison time", at, false, func(text string) {
+		s.changeRecordedComparisonTime(state, text)
+	})
+	if rejected := s.recordedComparisonRejected; rejected != nil {
+		entry.Text = rejected.text
+	}
+	nodes = append(nodes, quiet("recorded-compare-time-label", "Compare at · time"), entry)
+	if s.recordedComparisonRejected != nil {
+		nodes = append(nodes, quiet("recorded-compare-pending", "Showing the last accepted comparison.\nCorrect the time to update these results."))
+	}
 	nodes = append(nodes, ui.Node{ID: "recorded-compare-overlay", Kind: ui.Checkbox, Text: "Overlay reference", Checked: comparison.Settings.ShowOverlay, Accessibility: ui.Accessibility{Name: "Overlay captured reference B", Help: "A solid, B dashed; original captured seconds with shared voltage/current axes. No alignment or extrapolation. Plot cursors stay on selected A."}, Change: func(e ui.ChangeEvent) {
 		next := workbench.RecordingCompareParams(comparison.Settings)
 		next.ShowOverlay = e.Checked

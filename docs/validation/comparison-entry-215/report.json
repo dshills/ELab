@@ -1,0 +1,136 @@
+{
+  "kind": "captured-comparison-entry-recovery",
+  "source_checks_passed": true,
+  "quality_exit_code": 0,
+  "source_parent_commit": "2792db55edd89f5f42925c2e0fa7e34496395744",
+  "source_inputs": 886,
+  "changed_source_inputs": [
+    "desktop/main.go",
+    "desktop/recording.go",
+    "desktop/recording_compare.go",
+    "desktop/recording_comparison_entry.go",
+    "desktop/recording_comparison_entry_test.go",
+    "desktop/recording_comparison_refusal_offscreen_test.go",
+    "desktop/view.go",
+    "research/13-native-command-inventory.json"
+  ],
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "desktop_race_seconds": 176.064,
+  "mounted_race_seconds": 155.393,
+  "python_tests": 67,
+  "mounted_focused_seconds": 2.445,
+  "final_focused_seconds": 4.847,
+  "mounted_baseline_failures": 4,
+  "stale_callback_cases": 8,
+  "owner_pruning_and_reset_cases": 7,
+  "owned_refusal_survives_display_preference_edits": true,
+  "backend_source_unchanged": true,
+  "inventory_comparison": {
+    "changed_sources": [
+      "desktop/main.go",
+      "desktop/recording.go",
+      "desktop/recording_compare.go",
+      "desktop/recording_comparison_entry.go",
+      "desktop/view.go"
+    ],
+    "removed_sites": [
+      {
+        "file": "desktop/recording_compare.go",
+        "function": "*screen.recordingComparisonControls",
+        "kind": "node-Change",
+        "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\tnext := workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference}\n\tif r.Comparison != nil {\n\t\tnext.ShowStatistics = r.Comparison.Settings.ShowStatistics\n\t\tnext.ShowOverlay = r.Comparison.Settings.ShowOverlay\n\t}\n\ts.invoke(\"recording.compare.set\", next)\n}",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_compare.go",
+        "function": "*screen.recordingComparisonControls",
+        "kind": "callback-factory",
+        "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)\n})",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_compare.go",
+        "function": "*screen.recordingComparisonControls",
+        "kind": "domain-ingress",
+        "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)",
+        "public_commands": [
+          "recording.compare.set"
+        ],
+        "status": "literal-public-route"
+      }
+    ],
+    "added_sites": [
+      {
+        "file": "desktop/recording_compare.go",
+        "function": "*screen.recordingComparisonControls",
+        "kind": "node-Change",
+        "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\tnext := workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference}\n\tif r.Comparison != nil {\n\t\tnext.ShowStatistics = r.Comparison.Settings.ShowStatistics\n\t\tnext.ShowOverlay = r.Comparison.Settings.ShowOverlay\n\t}\n\tif response := s.invoke(\"recording.compare.set\", next); response.Error == nil {\n\n\t\ts.recordedComparisonRejected = nil\n\t}\n}",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_compare.go",
+        "function": "*screen.recordingComparisonControls",
+        "kind": "callback-factory",
+        "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.changeRecordedComparisonTime(state, text)\n})",
+        "status": "requires-binding-review"
+      },
+      {
+        "file": "desktop/recording_comparison_entry.go",
+        "function": "*screen.changeRecordedComparisonTime",
+        "kind": "domain-ingress",
+        "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", textFieldParams(cfg, \"time_s\", text), state.CommandRevision, state.Document.Generation)",
+        "public_commands": [
+          "recording.compare.set"
+        ],
+        "status": "literal-public-route"
+      }
+    ],
+    "public_commands_aliases_and_route_sets_unchanged": true,
+    "public_commands": 166,
+    "source_routes": 134,
+    "sites": 404,
+    "production_sources": 79
+  },
+  "sdk_unchanged": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-window-background-and-divider-compat.patch",
+      "sha256": "6b93a7f4cfbc8668bff33a6c2f4efdc5065e56a629f22d545457495418a07528"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab8.tar.gz",
+    "archive_bytes": 20390608,
+    "sha256": "89ef76d15a2dbd2d8e7777ceac502d802634d4877039dbad5b94829186d6bcdd",
+    "manifest_sha256": "1f7b36d96f47d96d843b8d3880188b30ab20c3dcb09c5e3da3401f0d406ca97d",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab8",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8428,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "preserved_download_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "native_app_launched": false,
+  "native_acceptance_passed": false,
+  "release_ready": false,
+  "published": false,
+  "owner_review_required": false,
+  "new_commands": 0,
+  "new_components": 0,
+  "new_formats": 0,
+  "download_unchanged": "0.181.4 /205",
+  "raw_archive_sha256": "8da571f52b8362ddaf2a053b62aec4336620bdde165f24a7755cd33712104eaf",
+  "raw_members": 30
+}

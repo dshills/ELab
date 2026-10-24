@@ -30,7 +30,7 @@
     "desktop/keyboard_workflow.go": "b191362c5d182dac02e265925c30bdfcaf5db3bf6a9ef0a189d0e264917c7349",
     "desktop/layout.go": "6205450e4903aced5f530f2832457a62bbf52c6f534134289fd916af25f2f427",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "bc9d907981dcc670a6d7dee68e2c870499ca0152f2d780527ba7cbfff1236bc1",
+    "desktop/main.go": "bab7d175e7939978bdd0937b2b1f08866e52fb1e61ce0ebfd4e93efc36c352ac",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
     "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
     "desktop/menus_darwin.go": "fedce80e039ce946802b932b6f778c3b509d4121dfc2b3270aba449d7724f3c3",
@@ -49,8 +49,9 @@
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
     "desktop/recorded_playback_actions.go": "a6f7687f201a3b2ea3f91480979ead96e21b54150e54812e0b3e32a24c8b9045",
     "desktop/recorded_timing_actions.go": "32de7374bceba81ba4dc6843765cfa8dd1611a9f6a1508530a3dcf8b5ec6e2a7",
-    "desktop/recording.go": "7c35a47ad5aaec41d86ceb1fb8a9160deaf356fcc6778bee4449f537649aecb5",
-    "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
+    "desktop/recording.go": "5c24733289ff234edcc30c84209dc5caf66bc9c6c4cb0abe8241c34d52990c5a",
+    "desktop/recording_compare.go": "af60b6affd995bec97e7033c63ebb393974610868b5af759875c38e49ba343d0",
+    "desktop/recording_comparison_entry.go": "1452a354f4a134b2bbb7049c03e2918be9141e399ce100aa153c4e6275a4d74f",
     "desktop/recording_statistics.go": "27a4c3968b9971673a0703e56acfa36d66e8c8ab7affdf4937376ebfcb4347be",
     "desktop/recording_statistics_entry.go": "adb7636ffbd10e508ee8ff2ccc37c8c419ff8cdf11b40b79df8c99628a00a07a",
     "desktop/recording_timing.go": "a7ceb35ed3cd66fed4ca88ff07600a7c44c7280db3e436f99092874b3262d3f0",
@@ -71,7 +72,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "ef4b096f90be2e5d22897aaecf975fd739b0e959ad1776a717ef781c1538b2f1",
+    "desktop/view.go": "e8709f5eea4706de66060fed32761aec1883518608534d5a2d37a6a294046f05",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -1723,7 +1724,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 262,
+      "line": 263,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -1731,7 +1732,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 288,
+      "line": 289,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -1739,7 +1740,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 292,
+      "line": 293,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -1747,7 +1748,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 327,
+      "line": 328,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -1758,7 +1759,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 327,
+      "line": 328,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -1769,7 +1770,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 328,
+      "line": 329,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -1780,7 +1781,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 328,
+      "line": 329,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -1791,7 +1792,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 329,
+      "line": 330,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -1802,7 +1803,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -1813,7 +1814,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -1824,7 +1825,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -1835,7 +1836,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -1846,7 +1847,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -1857,7 +1858,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -1868,7 +1869,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -1879,7 +1880,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 330,
+      "line": 331,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -1890,7 +1891,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 331,
+      "line": 332,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -1901,7 +1902,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 331,
+      "line": 332,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -1912,7 +1913,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 331,
+      "line": 332,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -1923,7 +1924,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 331,
+      "line": 332,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -1934,7 +1935,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 334,
+      "line": 335,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"simulation.restart\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif part, ok := (workbench.Graph{Components: state.Components}).Component(state.Selected); ok \u0026\u0026 (part.Kind == \"capacitor\" || part.Kind == \"inductor\") {\n\t\t\t\ts.beginComponentStartup(state, part, false)\n\t\t\t\treturn nil\n\t\t\t}\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\ts.continueSimulationFocus(entry.id, r)\n\t\treturn nil\n\t},\n})",
@@ -1942,7 +1943,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 364,
+      "line": 365,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -1950,7 +1951,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 368,
+      "line": 369,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -1958,7 +1959,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 393,
+      "line": 394,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -1966,7 +1967,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 447,
+      "line": 448,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -1974,7 +1975,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 468,
+      "line": 469,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)",
@@ -1982,7 +1983,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 480,
+      "line": 481,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -1990,7 +1991,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 483,
+      "line": 484,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -2768,7 +2769,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 144,
+      "line": 147,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-back-live\", \"View live\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"live\"})",
@@ -2779,7 +2780,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 147,
+      "line": 150,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "s.recordedPlaybackAction(state, direction)",
@@ -2787,7 +2788,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 154,
+      "line": 157,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "s.recordedPlaybackAction(state, \"\")",
@@ -2795,7 +2796,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 155,
+      "line": 158,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-pause\", \"Pause\", \"recording.pause\", struct{}{})",
@@ -2806,7 +2807,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 169,
+      "line": 172,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\n\ts.changeRecordedPlaybackField(state, \"recorded-index\", e)\n}",
@@ -2814,7 +2815,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 175,
+      "line": 178,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.changeRecordedPlaybackField(state, \"recorded-time\", ui.ChangeEvent{Text: text})\n})",
@@ -2822,7 +2823,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 184,
+      "line": 187,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedPlaybackField(state, \"recorded-speed\", e)\n}",
@@ -2830,7 +2831,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 200,
+      "line": 203,
       "function": "*screen.recordingPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -2838,7 +2839,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 212,
+      "line": 215,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", c.id)",
@@ -2849,7 +2850,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 217,
+      "line": 220,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.changeCursorTimeFor(state, c.id, text, r.ID)\n})",
@@ -2857,7 +2858,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 222,
+      "line": 225,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", c.id)",
@@ -2868,15 +2869,15 @@
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 31,
+      "line": 32,
       "function": "*screen.recordingComparisonControls",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\tnext := workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference}\n\tif r.Comparison != nil {\n\t\tnext.ShowStatistics = r.Comparison.Settings.ShowStatistics\n\t\tnext.ShowOverlay = r.Comparison.Settings.ShowOverlay\n\t}\n\ts.invoke(\"recording.compare.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\treference := e.SelectedID\n\tif reference == \"__none\" {\n\t\treference = \"\"\n\t}\n\n\tnext := workbench.RecordingCompareParams{ID: r.ID, ReferenceID: reference}\n\tif r.Comparison != nil {\n\t\tnext.ShowStatistics = r.Comparison.Settings.ShowStatistics\n\t\tnext.ShowOverlay = r.Comparison.Settings.ShowOverlay\n\t}\n\tif response := s.invoke(\"recording.compare.set\", next); response.Error == nil {\n\n\t\ts.recordedComparisonRejected = nil\n\t}\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 43,
+      "line": 44,
       "function": "*screen.recordingComparisonControls",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.compare.set\", next)",
@@ -2887,26 +2888,15 @@
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 49,
+      "line": 54,
       "function": "*screen.recordingComparisonControls",
       "kind": "callback-factory",
-      "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)\n})",
+      "expression": "timeField(\"recorded-compare-time\", \"Requested comparison time\", at, false, func(text string) {\n\ts.changeRecordedComparisonTime(state, text)\n})",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 50,
-      "function": "*screen.recordingComparisonControls",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", map[string]any{\"id\": r.ID, \"reference_id\": comparison.Settings.ReferenceID, \"time_s\": text, \"show_statistics\": comparison.Settings.ShowStatistics, \"show_overlay\": comparison.Settings.ShowOverlay}, state.CommandRevision)",
-      "public_commands": [
-        "recording.compare.set"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/recording_compare.go",
-      "line": 52,
+      "line": 64,
       "function": "*screen.recordingComparisonControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := workbench.RecordingCompareParams(comparison.Settings)\n\tnext.ShowOverlay = e.Checked\n\ts.invoke(\"recording.compare.set\", next)\n}",
@@ -2914,7 +2904,7 @@
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 55,
+      "line": 67,
       "function": "*screen.recordingComparisonControls",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.compare.set\", next)",
@@ -2925,7 +2915,7 @@
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 68,
+      "line": 80,
       "function": "*screen.recordingComparisonControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := workbench.RecordingCompareParams(comparison.Settings)\n\tnext.ShowStatistics = e.Checked\n\ts.invoke(\"recording.compare.set\", next)\n}",
@@ -2933,10 +2923,21 @@
     },
     {
       "file": "desktop/recording_compare.go",
-      "line": 71,
+      "line": 83,
       "function": "*screen.recordingComparisonControls",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"recording.compare.set\", next)",
+      "public_commands": [
+        "recording.compare.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_comparison_entry.go",
+      "line": 15,
+      "function": "*screen.changeRecordedComparisonTime",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.compare.set\", textFieldParams(cfg, \"time_s\", text), state.CommandRevision, state.Document.Generation)",
       "public_commands": [
         "recording.compare.set"
       ],
@@ -3816,7 +3817,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 145,
+      "line": 146,
       "function": "*screen.view",
       "kind": "command-menu",
       "expression": "s.commandMenu(\"file-menu\", \"File\", [][2]string{{\"project.clear\", \"New schematic\"}, {\"file.open\", \"Open…\"}, {\"file.save\", \"Save\"}, {\"file.save-as\", \"Save as…\"}, {\"app.close\", \"Close window\"}})",
@@ -3834,7 +3835,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 146,
+      "line": 147,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"file.save\", \"Save\")",
@@ -3846,7 +3847,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 147,
+      "line": 148,
       "function": "*screen.view",
       "kind": "command-menu",
       "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}})",
@@ -3874,7 +3875,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 148,
+      "line": 149,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"edit.undo\", \"Undo\")",
@@ -3885,7 +3886,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 148,
+      "line": 149,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"edit.redo\", \"Redo\")",
@@ -3896,7 +3897,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 201,
+      "line": 202,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil) }",
@@ -3904,7 +3905,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 201,
+      "line": 202,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
@@ -3915,7 +3916,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 202,
+      "line": 203,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil) }",
@@ -3923,7 +3924,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 202,
+      "line": 203,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
@@ -3934,7 +3935,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 203,
+      "line": 204,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
@@ -3942,7 +3943,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 203,
+      "line": 204,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
@@ -3953,7 +3954,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 220,
+      "line": 221,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
@@ -3961,7 +3962,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 225,
+      "line": 226,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -3972,7 +3973,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 227,
+      "line": 228,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-previous\", \"Back\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
@@ -3983,7 +3984,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 229,
+      "line": 230,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-next\", \"Next\", \"selection.navigate\", workbench.NavigateParams{Direction: \"next\", Center: true})",
@@ -3994,7 +3995,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 232,
+      "line": 233,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-center\", \"Center\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
@@ -4005,7 +4006,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 246,
+      "line": 247,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -4016,7 +4017,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 260,
+      "line": 261,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -4027,7 +4028,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 306,
+      "line": 307,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -4038,7 +4039,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 309,
+      "line": 310,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -4049,7 +4050,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 311,
+      "line": 312,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Esc\")",
@@ -4060,7 +4061,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 311,
+      "line": 312,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -4071,7 +4072,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 518,
+      "line": 519,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -4079,7 +4080,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 531,
+      "line": 532,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

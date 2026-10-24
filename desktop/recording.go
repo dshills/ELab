@@ -124,6 +124,9 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 		if r.Statistics != nil && strings.HasPrefix(nodes[i].ID, "recorded-statistics-") {
 			owner += ":statistics:" + r.Statistics.Settings.ProbeID
 		}
+		if r.Comparison != nil && strings.HasPrefix(nodes[i].ID, "recorded-compare-") {
+			owner += ":comparison:" + r.Comparison.Settings.ReferenceID
+		}
 		if r.Timing != nil && strings.HasPrefix(nodes[i].ID, "recorded-timing-") {
 			// Thresholds and interval drafts belong to this captured channel,
 			// even when another channel has identical accepted settings.
