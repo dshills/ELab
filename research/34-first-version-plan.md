@@ -9,18 +9,20 @@ PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
 **Current maintenance work:** /223's decimal-step repair and the
-[latest native interval-reset checks](105-native-reset-and-exit-classification.md)
-pass within scope. Nine of eighteen original native items now have evidence;
-nine remain. The earlier exit is classified as a native Quit-menu request from
-AppKit logs; its initiator is unknown, and no spontaneous crash or restoration
-defect is demonstrated. General lifecycle acceptance is not inferred.
+[latest native captured-measurement checks](107-native-captured-measurements.md)
+pass within scope. Eleven of eighteen original native items now have evidence;
+seven remain: 3, 6, 9, 11, 13, 14 and 15. Item 9 remains partial; bounded races do
+not establish exact native callback queue origin. Imported measurement defaults,
+cached-result recovery and measured-channel draft ownership are now qualified.
 
 Earlier validation-scroll, private-draft, footer/theme, manual-step, slider,
 Verify endpoint and numeric-wheel repairs remain included. [Electronics reference
 checks](95-gate-common-mode.md) cover seven RC-driven MOSFET circuits and active
-work preservation. /207–/223 stay held for remaining native acceptance and do not
-replace /205. Owner review remains deferred. Standing run/desktop authorization
-is saved in `AGENTS.md` and must not be requested again.
+work preservation. The earlier exit follows a native Quit-menu request whose
+initiator is unknown; no spontaneous crash or broad lifecycle pass is claimed.
+/207–/223 stay held for remaining native acceptance and do not replace /205.
+Owner review remains deferred. Standing run/desktop authorization is saved in
+`AGENTS.md` and must not be requested again.
 
 ## Historical plan and broader acceptance checklist
 

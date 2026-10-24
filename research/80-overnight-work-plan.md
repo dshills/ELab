@@ -278,3 +278,15 @@ original item 9 stays partial and nine original checks remain. All captured rows
 physics, source, signatures and /205 remain preserved. Next perform independent
 imported-measurement endpoint and cached-result checks. The running owned session
 is reused under saved authorization; no launch or desktop permission is pending.
+
+
+## Checkpoint: native captured measurement acceptance
+
+[Native items 10 and 12](107-native-captured-measurements.md) pass: actual saved
+endpoint defaults, 5 V mean/RMS, four refusal/first-correction cases, explicit
+cached-result presentation, private/rejected entries cleared by agent channel
+changes, and fresh editing on the new channel. Eleven original native items are
+complete and seven remain. All source, electrical references, rows, fixtures,
+signatures and /205 are preserved. Next captured comparison and independent
+preferences, then remaining forms and keyboard routes. Reuse the owned session
+under saved authorization; no owner-review or permission wait.
