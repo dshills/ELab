@@ -205,10 +205,17 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 		}
 	}
 	for _, part := range graph.Components {
+		if part.Kind == "zener" {
+			m := ZenerDeviceModel()
+			metadata.ZenerModel = &m
+		}
+		if part.Kind == "schottky" {
+			m := SchottkyDeviceModel()
+			metadata.SchottkyModel = &m
+		}
 		if part.Kind == "diode" {
 			model := SiliconDiodeModel()
 			metadata.DiodeModel = &model
-			break
 		}
 	}
 	for _, part := range graph.Components {
@@ -346,6 +353,14 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	if in.PotentiometerModel != nil {
 		model := *in.PotentiometerModel
 		out.PotentiometerModel = &model
+	}
+	if in.SchottkyModel != nil {
+		m := *in.SchottkyModel
+		out.SchottkyModel = &m
+	}
+	if in.ZenerModel != nil {
+		m := *in.ZenerModel
+		out.ZenerModel = &m
 	}
 	if in.DiodeModel != nil {
 		model := *in.DiodeModel

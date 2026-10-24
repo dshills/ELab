@@ -165,6 +165,8 @@ func libraryParts() []Part {
 		{Kind: "junction", Name: "Junction", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "junction.v1"},
 		{Kind: "net-label", Name: "Net label", Terminals: []string{"node"}, DefaultValue: "", Unit: "", Model: "net-label.v1"},
 		{Kind: "potentiometer", Name: "Potentiometer", Terminals: []string{"1", "2", "wiper"}, DefaultValue: "10k Ω", Unit: "Ω", Model: PotentiometerModelID},
+		{Kind: "zener", Name: "Zener diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "5.1", Unit: "V", Model: ZenerModelID},
+		{Kind: "schottky", Name: "Schottky diode", Terminals: []string{"anode", "cathode"}, Model: SchottkyModelID},
 		{Kind: "diode", Name: "Silicon diode", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: DiodeModelID},
 		{Kind: "switch", Name: "SPST switch", Terminals: []string{"1", "2"}, DefaultValue: "", Unit: "", Model: SwitchModelID},
 	}
@@ -244,7 +246,7 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Label = text
 		return c, nil
 	}
-	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && !IsWaveformSource(c.Kind) {
+	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && c.Kind != "zener" && !IsWaveformSource(c.Kind) {
 		return c, fmt.Errorf("this component has no editable value")
 	}
 	value, err := ParseValue(text, c.Unit)
@@ -327,7 +329,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "led", "diode":
+	case "led", "diode", "zener", "schottky":
 		switch name {
 		case "anode":
 			p = Point{0, -32}
@@ -457,7 +459,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			sources = append(sources, c)
 		case "switch":
 			hasSwitch = true
-		case "diode":
+		case "diode", "zener", "schottky":
 			hasDiode = true
 		case "potentiometer":
 			hasPot = true

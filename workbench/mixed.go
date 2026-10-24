@@ -268,9 +268,9 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			flow(one, w, (voltage(x, one)-voltage(x, w))/upper, 1/upper)
 			flow(two, w, (voltage(x, two)-voltage(x, w))/lower, 1/lower)
 
-		case "diode":
+		case "diode", "zener", "schottky":
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
-			i, g := siliconDiodeCurrent(voltage(x, u) - voltage(x, v))
+			i, g := deviceDiodeCurrent(p, voltage(x, u)-voltage(x, v))
 			flow(u, v, i, g)
 		case "led":
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
@@ -591,9 +591,9 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	energyRate := 0.
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
-		case "resistor", "led", "switch", "diode":
+		case "resistor", "led", "switch", "diode", "zener", "schottky":
 			a, b := "1", "2"
-			if p.Kind == "led" || p.Kind == "diode" {
+			if p.Kind == "led" || IsDiodeKind(p.Kind) {
 				a, b = "anode", "cathode"
 			}
 			v := voltage(x, n.pin(p, a)) - voltage(x, n.pin(p, b))
@@ -605,8 +605,8 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			switch p.Kind {
 			case "led":
 				i, _ = n.ledCurrent(v)
-			case "diode":
-				i, _ = siliconDiodeCurrent(v)
+			case "diode", "zener", "schottky":
+				i, _ = deviceDiodeCurrent(p, v)
 			default:
 				i = v / resistance
 			}
@@ -614,7 +614,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			powers += br.Power
 			if p.Kind == "led" {
 				r.LEDs = append(r.LEDs, br)
-			} else if p.Kind == "diode" {
+			} else if IsDiodeKind(p.Kind) {
 				r.Diodes = append(r.Diodes, br)
 			} else if p.Kind == "switch" {
 				r.Switches = append(r.Switches, br)

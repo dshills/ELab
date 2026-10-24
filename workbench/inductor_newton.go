@@ -22,7 +22,7 @@ func (n *mixedNetwork) inductorNewtonScale(x, delta []float64, stages int) float
 		}
 		for _, p := range n.c.MixedGraph.Components {
 			switch p.Kind {
-			case "led", "diode":
+			case "led", "diode", "zener", "schottky":
 				forward(junction(p, "anode", "cathode"))
 			case "npn", "pnp":
 				for _, other := range []string{"emitter", "collector"} {

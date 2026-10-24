@@ -64,7 +64,11 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		}
 	}
 	if part.Unit != "" {
-		inspector = append(inspector, section("value-title", "Value · "+part.Unit), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF"}, Change: s.changeValueDraft}, buttonStyle(s.valueApplyAction(state, part.ID, "Apply value"), true))
+		valueTitle := "Value · " + part.Unit
+		if part.Kind == "zener" {
+			valueTitle = "Breakdown voltage · V"
+		}
+		inspector = append(inspector, section("value-title", valueTitle), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF"}, Change: s.changeValueDraft}, buttonStyle(s.valueApplyAction(state, part.ID, "Apply value"), true))
 		if domain, ok := workbench.ValueDomainForKind(part.Kind); ok {
 			inspector = append(inspector, quiet("value-domain-range", domain.Range), quiet("value-domain-syntax", domain.Syntax))
 			if domain.Relation != "" {
@@ -94,6 +98,8 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 
 	} else if workbench.IsBipolarKind(part.Kind) {
 		inspector = append(inspector, quiet("npn-model", fmt.Sprintf("Generic %s · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay.", strings.ToUpper(part.Kind))))
+	} else if part.Kind == "schottky" {
+		inspector = append(inspector, quiet("diode-model", "Generic Schottky diode · 27°C\nIS 0.2 µA · n 1.05 · Rs 2 Ω\nLower forward drop; reverse leakage included."))
 	} else if part.Kind == "diode" {
 		inspector = append(inspector, quiet("diode-model", "Generic silicon diode · 27°C\nIS 1 nA · n 1.7 · Rs 1 Ω\nReverse leakage included. No breakdown, charge storage or ratings."))
 	} else if part.Kind == "led" {

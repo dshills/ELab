@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "examples": [
+    {
+      "example": "zener",
+      "captured_rows": 101,
+      "maximum_regulator_reference_error_v": 8.881784197001252e-16,
+      "final_diodes": [
+        {
+          "id": "D1",
+          "current_a": -0.004968814991683963,
+          "voltage_v": -5.149688139916839,
+          "power_w": 0.02558784763211589
+        }
+      ],
+      "exports": {
+        "svg": "b1cab45473f60454d2066433bbf4c263eb21c5e8a873b05a7e5a29ee00807c22",
+        "png": "865a189921af3382a36962ec52e5e562aa871541fcfa708c197cf23146cb03d2",
+        "pdf": "1dd2e752b82f547eb105ea10ff13c3ae5c7888c67fe5553d78a73d29f2922834"
+      }
+    },
+    {
+      "example": "schottky",
+      "captured_rows": 101,
+      "maximum_regulator_reference_error_v": 0,
+      "final_diodes": [
+        {
+          "id": "D1",
+          "current_a": -2e-07,
+          "voltage_v": -1.5175719771448262,
+          "power_w": 3.0351439542896523e-07
+        },
+        {
+          "id": "D2",
+          "current_a": -9.9999999999989e-10,
+          "voltage_v": -1.3119989263064071,
+          "power_w": 1.3119989263062628e-09
+        }
+      ],
+      "exports": {
+        "svg": "d4c33c5f9e23d131038393b03529323c4e45ab09635176ec093c8a07335d3afb",
+        "png": "e22be8f9988c0a387617ea9d3629bc001fbf1005e82c30d3fedb8c63d693bb19",
+        "pdf": "fb299e3f73e1b80a1b446d9545db3d7181d234c99a38e7270842b629c8a99041"
+      }
+    }
+  ],
+  "scope": "Public discovery, protected example loading, live step, capture, Zener line law, Schottky comparison/leakage, value edit, save/reopen and SVG/PNG/PDF exports.",
+  "limitations": [
+    "Educational equation references, not measured hardware or a separate SPICE execution.",
+    "Native pointer and keyboard checks are separate."
+  ]
+}

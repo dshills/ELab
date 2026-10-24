@@ -200,6 +200,8 @@ Project save/open now embeds kept completed recordings. `recording.keep.set {id,
 
 Per-source `sine-source` and `finite-pulse-source` configuration uses `source.sine.set`, `source.pulse.set` and `simulation.sampling.fit`. [Complete fields, waveform definitions, primary-source behavior and limits](waveforms.md). Projects/snapshots/records include `waveform_model`; per-component `sine`/`pulse` parameters are required for their respective kinds. The original `pulse-source` remains compatible.
 
+Zener (`zener`) and Schottky (`schottky`) diodes use the same placement, named-terminal wiring, value/probe, simulation and file commands. `example.load` accepts `zener` and `schottky`; Zener breakdown voltage is editable from 1–24 V via `component.set`. Snapshots/captures carry `zener_model` / `schottky_model`; all diode branch readings use `mixed.diodes`. [Equations, examples, provenance and the combined eight-diode bound](special-diodes.md).
+
 `parts.list` exposes aliases and model limitations. `scope.unavailable` identifies removed-source requests, and `scope.probe.remove {"id":"v:C1"}` removes one without changing the circuit or other requested probes. [Hardening semantics and evidence](prd-hardening.md).
 
 

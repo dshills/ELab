@@ -47,6 +47,12 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.PotentiometerModel != nil {
 		envelope["potentiometer_model"] = m.PotentiometerModel
 	}
+	if m.ZenerModel != nil {
+		envelope["zener_model"] = m.ZenerModel
+	}
+	if m.SchottkyModel != nil {
+		envelope["schottky_model"] = m.SchottkyModel
+	}
 	if m.DiodeModel != nil {
 		envelope["diode_model"] = m.DiodeModel
 	}
@@ -253,13 +259,16 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return err
 		}
 
+		if err := validateRecordedDiodes(c, m.Graph, r); err != nil {
+			return err
+		}
 		if err := validateRecordedBipolars(c, m.Graph, r); err != nil {
 			return err
 		}
 		for _, group := range []struct {
 			kind string
 			ids  []string
-		}{{"capacitor", nil}, {"inductor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}, {"switch", nil}, {"diode", nil}, {"potentiometer", nil}} {
+		}{{"capacitor", nil}, {"inductor", nil}, {"led", nil}, {"resistor", nil}, {"source", nil}, {"switch", nil}, {"potentiometer", nil}} {
 			switch group.kind {
 			case "inductor":
 				for _, v := range r.Inductors {
@@ -279,10 +288,6 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 				}
 			case "potentiometer":
 				for _, v := range r.Potentiometers {
-					group.ids = append(group.ids, v.ID)
-				}
-			case "diode":
-				for _, v := range r.Diodes {
 					group.ids = append(group.ids, v.ID)
 				}
 			case "switch":

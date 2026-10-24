@@ -43,10 +43,12 @@ type CircuitLimits struct {
 	OpAmps              int `json:"opamps"`
 	Resistors           int `json:"resistors"`
 	Switches            int `json:"switches"`
-	Diodes              int `json:"silicon_diodes"`
-	Potentiometers      int `json:"potentiometers"`
-	LEDs                int `json:"leds"`
-	ScopeTraces         int `json:"scope_traces"`
+	// Diodes is the combined silicon/Schottky/Zener budget. Keep the legacy
+	// JSON key for existing capacity reports and clients.
+	Diodes         int `json:"silicon_diodes"`
+	Potentiometers int `json:"potentiometers"`
+	LEDs           int `json:"leds"`
+	ScopeTraces    int `json:"scope_traces"`
 }
 
 func Limits() CircuitLimits {
@@ -62,5 +64,5 @@ func SimulatedComponentCount(g Graph) int {
 	return count
 }
 func networkLimitMessage() string {
-	return fmt.Sprintf("Network simulation supports at most %d simulated parts and %d electrical nodes including ground: %d sources, %d capacitors, %d inductors, %d total NPN/PNP transistors, %d total N/P-channel MOSFETs, %d op-amps, %d resistors, %d switches, %d diodes, %d potentiometers and %d LEDs. Excess drawings remain editable and savable.", MaxSimulatedComponents, MaxElectricalNodes, MaxNetworkSources, MaxNetworkCapacitors, MaxNetworkInductors, MaxNetworkTransistors, MaxNetworkMOSFETs, MaxNetworkOpAmps, MaxNetworkResistors, MaxNetworkSwitches, MaxNetworkDiodes, MaxNetworkPotentiometers, MaxNetworkLEDs)
+	return fmt.Sprintf("Network simulation supports at most %d simulated parts and %d electrical nodes including ground: %d sources, %d capacitors, %d inductors, %d total NPN/PNP transistors, %d total N/P-channel MOSFETs, %d op-amps, %d resistors, %d switches, %d total silicon/Schottky/Zener diodes, %d potentiometers and %d LEDs. Excess drawings remain editable and savable.", MaxSimulatedComponents, MaxElectricalNodes, MaxNetworkSources, MaxNetworkCapacitors, MaxNetworkInductors, MaxNetworkTransistors, MaxNetworkMOSFETs, MaxNetworkOpAmps, MaxNetworkResistors, MaxNetworkSwitches, MaxNetworkDiodes, MaxNetworkPotentiometers, MaxNetworkLEDs)
 }

@@ -25,6 +25,8 @@ func (s *screen) registerExampleLoadCommands() {
 		{"example.emitter-follower", "Load NPN emitter follower", "emitter-follower"},
 		{"example.bipolar-push-pull", "Load complementary transistor buffer", "bipolar-push-pull"},
 		{"example.cmos", "Load complementary MOSFET inverter", "cmos"},
+		{"example.zener", "Load Zener voltage regulator", "zener"},
+		{"example.schottky", "Load Schottky low-voltage rectifier", "schottky"},
 		{"example.split-supply", "Load split-rail DC supply", "split-supply"},
 	} {
 		if err := s.commands.Register(command.Command{ID: template.command, Label: template.label, Available: func() error {

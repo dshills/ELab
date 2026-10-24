@@ -98,6 +98,8 @@ The generic Ebers–Moll junction model remains instantaneous; physical transist
 
 Choose **PNP high-side LED**, **NPN emitter follower**, or **Complementary transistor buffer** from Examples to explore both bipolar polarities and emitters above/below ground. Signed VBE/VCE, base/collector/emitter currents, live transient simulation, saved captures and the same user/agent commands are supported. [Models, examples and electrical checks](docs/bipolar-transistors.md).
 
+Choose **Zener voltage regulator** or **Schottky rectifier** from Examples to explore reverse breakdown and lower forward loss. Both parts support drawing, live simulation, signed probes, saving/exports and the same agent commands. [Models, examples and electrical checks](docs/special-diodes.md).
+
 ## Inspect both sides and measure timing
 
 The right inspector's **Scope probes** selectors choose up to six terminal voltages or branch currents, including both flasher collectors, both LEDs, and each capacitor. Newly selected traces include already retained history without restarting the circuit. Voltage/current axes show signed values in V/mA.

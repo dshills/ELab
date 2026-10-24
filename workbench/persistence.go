@@ -24,6 +24,8 @@ type Document struct {
 	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
+	SchottkyModel      *DiodeModel         `json:"schottky_model,omitempty"`
+	ZenerModel         *ZenerModel         `json:"zener_model,omitempty"`
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
@@ -341,10 +343,22 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 	}
 
+	if d.ZenerModel != nil && *d.ZenerModel != ZenerDeviceModel() {
+		return d, fmt.Errorf("unsupported zener model parameters/version")
+	}
+	if d.SchottkyModel != nil && *d.SchottkyModel != SchottkyDeviceModel() {
+		return d, fmt.Errorf("unsupported schottky model parameters/version")
+	}
 	if d.DiodeModel != nil && *d.DiodeModel != SiliconDiodeModel() {
 		return d, fmt.Errorf("unsupported diode model parameters/version")
 	}
 	for _, part := range d.Graph.Components {
+		if part.Kind == "zener" && d.ZenerModel == nil {
+			return d, fmt.Errorf("zener schematics require zener_model")
+		}
+		if part.Kind == "schottky" && d.SchottkyModel == nil {
+			return d, fmt.Errorf("schottky schematics require schottky_model")
+		}
 		if part.Kind == "diode" && (d.DiodeModel == nil || *d.DiodeModel != SiliconDiodeModel()) {
 			return d, fmt.Errorf("diode schematics require supported diode_model parameters")
 		}
@@ -549,10 +563,17 @@ func (s *Service) documentLocked() Document {
 		}
 	}
 	for _, part := range s.graph.Components {
+		if part.Kind == "zener" {
+			m := ZenerDeviceModel()
+			d.ZenerModel = &m
+		}
+		if part.Kind == "schottky" {
+			m := SchottkyDeviceModel()
+			d.SchottkyModel = &m
+		}
 		if part.Kind == "diode" {
 			model := SiliconDiodeModel()
 			d.DiodeModel = &model
-			break
 		}
 	}
 	for _, c := range s.graph.Components {

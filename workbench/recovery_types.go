@@ -91,6 +91,8 @@ type DocumentInspection struct {
 	WaveformModel      *WaveformModel         `json:"waveform_model,omitempty"`
 	PotentiometerModel *PotentiometerModel    `json:"potentiometer_model,omitempty"`
 	DiodeModel         *DiodeModel            `json:"diode_model,omitempty"`
+	SchottkyModel      *DiodeModel            `json:"schottky_model,omitempty"`
+	ZenerModel         *ZenerModel            `json:"zener_model,omitempty"`
 	SwitchModel        *SwitchModel           `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel             `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel             `json:"pmos_model,omitempty"`

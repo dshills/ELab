@@ -106,3 +106,35 @@ func validateRecordedMOSFETs(c Compiled, graph Graph, result *MixedResult) error
 	}
 	return nil
 }
+
+func validateRecordedDiodes(c Compiled, graph Graph, result *MixedResult) error {
+	ids := map[string][]string{"diode": {}, "zener": {}, "schottky": {}}
+	for _, d := range result.Diodes {
+		p, ok := graph.Component(d.ID)
+		if !ok || !IsDiodeKind(p.Kind) {
+			return fmt.Errorf("invalid recorded diode identity")
+		}
+		ids[p.Kind] = append(ids[p.Kind], d.ID)
+	}
+	for _, kind := range []string{"diode", "zener", "schottky"} {
+		if err := recordedObjectIDs(graph, kind, ids[kind]); err != nil {
+			return err
+		}
+	}
+	if len(result.Diodes) == 0 {
+		return nil
+	}
+	n, x, err := recordedDeviceNodes(c, result)
+	if err != nil {
+		return err
+	}
+	for _, actual := range result.Diodes {
+		p, _ := graph.Component(actual.ID)
+		v := voltage(x, n.pin(p, "anode")) - voltage(x, n.pin(p, "cathode"))
+		i, _ := deviceDiodeCurrent(p, v)
+		if !recordingNear(actual.Voltage, v) || !recordingNear(actual.Current, i) || !recordingNear(actual.Power, v*i) {
+			return fmt.Errorf("recorded diode readings disagree with its terminal voltages")
+		}
+	}
+	return nil
+}

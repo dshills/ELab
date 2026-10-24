@@ -46,6 +46,8 @@ type Snapshot struct {
 	WaveformModel          *WaveformModel         `json:"waveform_model,omitempty"`
 	PotentiometerModel     *PotentiometerModel    `json:"potentiometer_model,omitempty"`
 	DiodeModel             *DiodeModel            `json:"diode_model,omitempty"`
+	SchottkyModel          *DiodeModel            `json:"schottky_model,omitempty"`
+	ZenerModel             *ZenerModel            `json:"zener_model,omitempty"`
 	SwitchModel            *SwitchModel           `json:"switch_model,omitempty"`
 	NMOSModel              *NMOSModel             `json:"nmos_model,omitempty"`
 	PMOSModel              *PMOSModel             `json:"pmos_model,omitempty"`
@@ -417,10 +419,17 @@ func (s *Service) snapshotLocked() Snapshot {
 		}
 	}
 	for _, part := range graph.Components {
+		if part.Kind == "zener" {
+			m := ZenerDeviceModel()
+			out.ZenerModel = &m
+		}
+		if part.Kind == "schottky" {
+			m := SchottkyDeviceModel()
+			out.SchottkyModel = &m
+		}
 		if part.Kind == "diode" {
 			model := SiliconDiodeModel()
 			out.DiodeModel = &model
-			break
 		}
 	}
 	for _, part := range graph.Components {
@@ -1117,6 +1126,14 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	if state.PotentiometerModel != nil {
 		model := *state.PotentiometerModel
 		state.PotentiometerModel = &model
+	}
+	if state.SchottkyModel != nil {
+		m := *state.SchottkyModel
+		state.SchottkyModel = &m
+	}
+	if state.ZenerModel != nil {
+		m := *state.ZenerModel
+		state.ZenerModel = &m
 	}
 	if state.DiodeModel != nil {
 		model := *state.DiodeModel

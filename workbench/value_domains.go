@@ -32,6 +32,8 @@ func ValueDomainForKind(kind string) (ComponentValueDomain, bool) {
 		d = ComponentValueDomain{Parameter: "resistance", Unit: "Ω", Minimum: 10, Maximum: 100000, Range: "10–100000 Ω"}
 	case "capacitor":
 		d = ComponentValueDomain{Parameter: "capacitance", Unit: "F", Minimum: 1e-12, Maximum: 1, Range: "1 pF–1 F"}
+	case "zener":
+		d = ComponentValueDomain{Parameter: "breakdown_voltage", Unit: "V", Minimum: 1, Maximum: 24, Range: "1–24 V", Relation: "Reverse knee voltage; breakdown adds 10 Ω dynamic resistance."}
 	case "inductor":
 		d = ComponentValueDomain{Parameter: "inductance", Unit: "H", Minimum: 1e-6, Maximum: 100, Range: "1 µH–100 H"}
 	default:

@@ -623,7 +623,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "opamp": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"dc-source": "V", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "opamp": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

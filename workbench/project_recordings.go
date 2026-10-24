@@ -37,6 +37,10 @@ func recordingModelHashes(m VerificationMetadata) map[string]string {
 			data, _ = json.Marshal(m.WaveformModel)
 		case PotentiometerModelID:
 			data, _ = json.Marshal(m.PotentiometerModel)
+		case ZenerModelID:
+			data, _ = json.Marshal(m.ZenerModel)
+		case SchottkyModelID:
+			data, _ = json.Marshal(m.SchottkyModel)
 		case DiodeModelID:
 			data, _ = json.Marshal(m.DiodeModel)
 		case SwitchModelID:

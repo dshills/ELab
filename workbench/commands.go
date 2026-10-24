@@ -80,6 +80,7 @@ var commonSchemas = []struct {
 }{
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
+	{reflect.TypeOf(ZenerModel{}), "urn:elab:zener-model:1"},
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
 	{reflect.TypeOf(OpAmpModel{}), "urn:elab:opamp-model:1"},
 	{reflect.TypeOf(OpAmpResult{}), "urn:elab:opamp-result:1"},

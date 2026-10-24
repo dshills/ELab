@@ -321,9 +321,16 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		stroke(ink, 2.5, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact + 5, Y: -25})
 	case "resistor":
 		stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
-	case "diode":
+	case "diode", "zener", "schottky":
 		stroke(ink, 3, canvas.Point{X: -20, Y: -24}, canvas.Point{X: 20, Y: -24}, canvas.Point{Y: 17}, canvas.Point{X: -20, Y: -24})
-		stroke(ink, 3, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19})
+		switch part.Kind {
+		case "zener":
+			stroke(ink, 3, canvas.Point{X: -22, Y: 11}, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19}, canvas.Point{X: 22, Y: 27})
+		case "schottky":
+			stroke(ink, 3, canvas.Point{X: -14, Y: 10}, canvas.Point{X: -22, Y: 10}, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19}, canvas.Point{X: 22, Y: 28}, canvas.Point{X: 14, Y: 28})
+		default:
+			stroke(ink, 3, canvas.Point{X: -22, Y: 19}, canvas.Point{X: 22, Y: 19})
+		}
 		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -24})
 		stroke(wireColor, 2.5, canvas.Point{Y: 19}, canvas.Point{Y: 32})
 	case "led":

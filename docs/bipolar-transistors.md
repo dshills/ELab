@@ -107,7 +107,7 @@ race-instrumented execution is not wall-clock latency evidence. Existing frozen
 engine captures remain byte-exact on import/export.
 
 Desktop tests build all three circuits from blank through actual view actions
-and compare the shared agent results. Menu, stepping, paused edits, plotting,+unsaved protection, selected readings and component symbols are covered.
+and compare the shared agent results. Menu, stepping, paused edits, plotting, unsaved protection, selected readings and component symbols are covered.
 Pinned VBE preferences round-trip with both present and removed owners.
 
 Run `python3 scripts/bipolar-demo.py --agent PATH --output REPORT --artifacts DIR`

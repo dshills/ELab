@@ -36,6 +36,10 @@ func partAliases(kind string) []string {
 		return []string{"label", "net name", "named connection"}
 	case "potentiometer":
 		return []string{"pot", "variable resistor", "rheostat", "volume knob"}
+	case "zener":
+		return []string{"breakdown diode", "voltage clamp", "shunt regulator"}
+	case "schottky":
+		return []string{"barrier diode", "low voltage rectifier"}
 	case "diode":
 		return []string{"rectifier", "silicon diode", "junction diode"}
 	case "switch":
@@ -71,6 +75,10 @@ func partLimitations(kind string) string {
 		return PNPDeviceModel().Limitations
 	case "opamp":
 		return OpAmpDeviceModel().Limitations
+	case "zener":
+		return ZenerDeviceModel().Limitations
+	case "schottky":
+		return SchottkyDeviceModel().Limitations
 	case "diode":
 		return SiliconDiodeModel().Limitations
 	case "potentiometer":

@@ -29,7 +29,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			rs = append(rs, p)
 		case "led":
 			leds = append(leds, p)
-		case "diode":
+		case "diode", "zener", "schottky":
 			diodes = append(diodes, p)
 		case "potentiometer":
 			pots = append(pots, p)

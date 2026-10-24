@@ -19,6 +19,8 @@ type DCCircuit struct {
 	LEDModel           LEDModel            `json:"led_model"`
 	NPNModel           *NPNModel           `json:"npn_model,omitempty"`
 	DiodeModel         *DiodeModel         `json:"diode_model,omitempty"`
+	SchottkyModel      *DiodeModel         `json:"schottky_model,omitempty"`
+	ZenerModel         *ZenerModel         `json:"zener_model,omitempty"`
 	SwitchModel        *SwitchModel        `json:"switch_model,omitempty"`
 	NMOSModel          *NMOSModel          `json:"nmos_model,omitempty"`
 	PMOSModel          *PMOSModel          `json:"pmos_model,omitempty"`
@@ -41,6 +43,12 @@ func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
 		case "npn":
 			m := TransistorModel()
 			out.NPNModel = &m
+		case "zener":
+			m := ZenerDeviceModel()
+			out.ZenerModel = &m
+		case "schottky":
+			m := SchottkyDeviceModel()
+			out.SchottkyModel = &m
 		case "diode":
 			m := SiliconDiodeModel()
 			out.DiodeModel = &m
@@ -60,7 +68,7 @@ func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
 func (c DCCircuit) document() Document {
 	paused := true
 	cfg := c.Settings
-	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PNPModel: c.PNPModel, OpAmpModel: c.OpAmpModel, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
+	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SchottkyModel: c.SchottkyModel, ZenerModel: c.ZenerModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PNPModel: c.PNPModel, OpAmpModel: c.OpAmpModel, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
 }
 
 type SweepMetadata struct {

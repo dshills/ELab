@@ -1,0 +1,20 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestComponentBrowserUIAgentParity
+--- PASS: TestComponentBrowserUIAgentParity (0.08s)
+=== RUN   TestNativeSiliconConstructionAndAgentParity
+--- PASS: TestNativeSiliconConstructionAndAgentParity (0.51s)
+=== RUN   TestSpecialDiodeBlankConstructionAndValueUIAgentParity
+=== RUN   TestSpecialDiodeBlankConstructionAndValueUIAgentParity/zener
+=== RUN   TestSpecialDiodeBlankConstructionAndValueUIAgentParity/schottky
+--- PASS: TestSpecialDiodeBlankConstructionAndValueUIAgentParity (1.63s)
+    --- PASS: TestSpecialDiodeBlankConstructionAndValueUIAgentParity/zener (0.88s)
+    --- PASS: TestSpecialDiodeBlankConstructionAndValueUIAgentParity/schottky (0.75s)
+=== RUN   TestSpecialDiodeNativeExamplesUseSharedLoadStepAndProtection
+=== RUN   TestSpecialDiodeNativeExamplesUseSharedLoadStepAndProtection/zener
+=== RUN   TestSpecialDiodeNativeExamplesUseSharedLoadStepAndProtection/schottky
+--- PASS: TestSpecialDiodeNativeExamplesUseSharedLoadStepAndProtection (5.26s)
+    --- PASS: TestSpecialDiodeNativeExamplesUseSharedLoadStepAndProtection/zener (1.82s)
+    --- PASS: TestSpecialDiodeNativeExamplesUseSharedLoadStepAndProtection/schottky (3.44s)
+PASS
+ok  	github.com/dshills/elab/desktop	9.109s

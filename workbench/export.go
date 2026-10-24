@@ -194,7 +194,7 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			sources = append(sources, p)
 		}
 	}
-	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
+	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
 	if model := opAmpModelForGraph(g); model != nil {
 		metadataFields["opamp_model"] = model
 	}
@@ -264,8 +264,16 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 				}
 				b.WriteString(`"/>`)
 			}
-		case "diode":
-			b.WriteString(`<path d="M0 -32 V-12 M-12 -12 H12 L0 10 Z M-12 11 H12 M0 11 V32"/>`)
+		case "diode", "zener", "schottky":
+			b.WriteString(`<path d="M0 -32 V-12 M-12 -12 H12 L0 10 Z M0 11 V32"/>`)
+			switch p.Kind {
+			case "zener":
+				b.WriteString(`<path d="M-12 5 V11 H12 V17"/>`)
+			case "schottky":
+				b.WriteString(`<path d="M-7 5 H-12 V11 H12 V17 H7"/>`)
+			default:
+				b.WriteString(`<path d="M-12 11 H12"/>`)
+			}
 		case "led":
 			b.WriteString(`<path d="M0 -32 V-12 M-12 -12 H12 L0 10 Z M-12 11 H12 M0 11 V32 M18 -5 L28 -15 M22 7 L32 -3 M23 -15 H28 V-10 M27 -3 H32 V2"/>`)
 		case "nmos", "pmos":

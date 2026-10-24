@@ -15,7 +15,10 @@ func SiliconDiodeModel() DiodeModel {
 // relation is monotone. In reverse bias, solving for junction voltage avoids
 // log1p rounding to -Inf as current approaches -Is.
 func siliconDiodeCurrent(v float64) (current, conductance float64) {
-	m := SiliconDiodeModel()
+	return junctionDiodeCurrent(SiliconDiodeModel(), v)
+}
+
+func junctionDiodeCurrent(m DiodeModel, v float64) (current, conductance float64) {
 	nv := m.EmissionCoefficient * 1.380649e-23 * (273.15 + m.Temperature) / 1.602176634e-19
 	if v <= 0 {
 		lo, hi := v, v+m.SaturationCurrent*m.SeriesResistance

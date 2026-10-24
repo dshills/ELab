@@ -19,7 +19,7 @@ The tested envelope admits **64 simulated parts and 100 electrical nodes includi
 | Powered op-amps | 2 |
 | Bipolar transistors, NPN/PNP combined | 2 |
 | Resistors / potentiometers | 64 each, subject to combined part/node bounds |
-| SPST switches / silicon diodes | 8 each |
+| SPST switches / silicon, Schottky and Zener diodes combined | 8 switches; 8 total diodes |
 | Generic red LEDs | 4 |
 | Selected scope traces | 6 |
 
