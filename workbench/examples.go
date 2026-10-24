@@ -69,6 +69,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "comparator-threshold", Title: "Comparator threshold detector", Question: "How does hysteresis prevent repeated switching near a threshold?", Expected: "With 2.5 V reference and 200 mV hysteresis, output rises at 2.6 V and falls at 2.4 V.", Try: "Compare VIN, VREF and output. Edit hysteresis width or the reference and watch both switching thresholds.", Limitation: ControlledDeviceModel().Limitations},
+		{ID: "comparator-counter", Title: "Analog signal to digit counter", Question: "Can a slow analog signal clock a digital counter cleanly?", Expected: "The comparator turns each sine cycle into one rising clock edge; the decimal display counts these crossings.", Try: "Change VIN frequency, reference or hysteresis; click SRESET to clear the count.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "button-counter", Title: "Pushbutton decimal counter", Question: "How can a button clock a counter?", Expected: "Click SCOUNT to advance one digit; click SRESET to clear it.", Try: "Press and hold: a clean button counts once. Release before pressing again.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "button-debounce", Title: "Contact bounce and RC debounce", Question: "Why can one physical press create several counts?", Expected: "Raw U2 counts five edges per complete bouncing click; RC-filtered U4 counts once. D1/D2 show each least significant bit.", Try: "Click SCOUNT and compare clocks/counter bits. Wait at least 250 ms of simulation time before another click; CDEB needs time to discharge.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "display-counter", Title: "555-driven digit counter", Question: "How does a timing capacitor clock a decimal digit?", Expected: "The real 555 output clocks U2 through 0–9; U3 drives seven individually current-limited LED segments.", Try: "Plot C1 and clock; change RB or C1 to change counting speed. Inspect each segment current.", Limitation: DigitalDisplayModel().Limitations},
@@ -112,6 +114,19 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "comparator-threshold", "comparator-counter":
+		d.graph = ComparatorThresholdExampleGraph()
+		if id == "comparator-counter" {
+			d.graph = ComparatorCounterExampleGraph()
+		}
+		d.selected = "U1"
+		d.settings.StepSeconds = .002
+		d.settings.PlaybackSpeed = .5
+		d.probes = []string{"v:U1.noninverting", "v:U1.inverting", "v:U1", "i:U1"}
+		if id == "comparator-counter" {
+			d.probes = append(d.probes, "v:U2.q0")
+		}
+		d.view = View{Center: Point{X: 0, Y: 100}, Zoom: .5}
 	case "button-counter", "button-debounce":
 		d.graph = ButtonCounterExampleGraph(id == "button-debounce")
 		d.selected = "SCOUNT"

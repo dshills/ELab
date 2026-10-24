@@ -12,5 +12,37 @@ func ControlSymbolPaths(kind string, m ControlMemory) [][]Point {
 		}
 		return paths
 	}
+	if kind == "comparator" {
+		return append(OpAmpSymbolPaths(), []Point{{-7, 8}, {-2, 8}, {-2, -7}, {5, -7}}, []Point{{-7, -7}, {-4, -7}, {-4, 8}, {5, 8}})
+	}
 	return nil
+}
+
+func ControlTerminalLocal(kind, pin string) (Point, bool) {
+	if kind == "comparator" {
+		switch pin {
+		case "noninverting":
+			return Point{-55, -20}, true
+		case "inverting":
+			return Point{-55, 20}, true
+		case "out":
+			return Point{55, 0}, true
+		case "vcc":
+			return Point{0, -45}, true
+		case "gnd":
+			return Point{0, 45}, true
+		}
+	}
+	return Point{}, false
+}
+func ControlSymbolLabels(p Component) []OpAmpSymbolLabel {
+	if p.Kind != "comparator" {
+		return nil
+	}
+	labels := []OpAmpSymbolLabel{{Point{7, -38}, "V+"}, {Point{7, 50}, "GND"}}
+	for k := range labels {
+		at := RotateLocal(labels[k].At, p.Rotation)
+		labels[k].At = Point{p.Position.X + at.X, p.Position.Y + at.Y}
+	}
+	return labels
 }

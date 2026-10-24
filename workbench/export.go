@@ -256,7 +256,7 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	for _, p := range g.Components {
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
 		switch p.Kind {
-		case "pushbutton", "bouncing-pushbutton":
+		case "comparator", "pushbutton", "bouncing-pushbutton":
 			for _, path := range ControlSymbolPaths(p.Kind, ControlMemory{}) {
 				b.WriteString(`<polyline points="`)
 				for _, point := range path {
@@ -404,6 +404,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
 			}
 		}
+		if IsControlKind(p.Kind) {
+			for _, label := range ControlSymbolLabels(p) {
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10">%s</text>`, label.At.X, label.At.Y, html.EscapeString(label.Text))
+			}
+		}
 		if IsDisplayKind(p.Kind) {
 			for _, label := range DisplaySymbolLabels(p) {
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
@@ -523,6 +528,9 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · 555"
 		at := Timer555LabelPosition(p)
 		x, y = at.X, at.Y
+	case "comparator":
+		text += " hysteresis"
+		x, y = p.Position.X-80, p.Position.Y-65
 	case "opamp":
 		at := OpAmpLabelPosition(p)
 		x, y = at.X, at.Y

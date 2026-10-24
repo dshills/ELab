@@ -109,6 +109,15 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
 			}
+		case "comparator":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " output / local ground", "V", p.ID + ".out", p.ID + ".gnd"}, Probe{"v:" + p.ID + ".input-difference", p.ID + " noninverting minus inverting", "V", p.ID + ".noninverting", p.ID + ".inverting"}, Probe{"i:" + p.ID, p.ID + " delivered output current", "A", p.ID + ".out", "out of device"})
+			for _, pin := range p.Terminals {
+				direction := "into device"
+				if pin == "out" {
+					direction = "out of device"
+				}
+				out = append(out, Probe{"i:" + p.ID + "." + pin, p.ID + "." + pin + " current", "A", p.ID + "." + pin, direction})
+			}
 		case "bcd-decoder", "seven-segment":
 			for _, pin := range p.Terminals {
 				direction := "into device"

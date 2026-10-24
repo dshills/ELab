@@ -325,3 +325,6 @@ shared native/agent controls.
 
 [Momentary buttons](docs/momentary-buttons.md) support press/release, automatic
 clicks, contact bounce, manual decimal counting and an RC debounce comparison.
+
+[Comparators with hysteresis](docs/comparators.md) add threshold detection and
+an analog sine signal driving a clean digital counter clock.

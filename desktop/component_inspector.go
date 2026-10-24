@@ -94,6 +94,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	if part.Kind == "potentiometer" {
 		inspector = append(inspector, s.potentiometerControls(state, part)...)
 	}
+	if part.Kind == "comparator" && state.Mixed != nil {
+		for _, c := range state.Mixed.Controls {
+			if c.ID == part.ID {
+				status := "Live"
+				if state.Mixed.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("comparator-selected-reading", fmt.Sprintf("%s · %s\nOutput %.5g V · delivered %.5g mA\nHysteresis %.5g mV · ±H/2", status, c.State, c.Voltage, c.Current*1000, part.Value*1000)))
+			}
+		}
+	}
 	if workbench.IsButtonKind(part.Kind) {
 		inspector = append(inspector, s.buttonControls(state, part)...)
 	}
@@ -115,6 +126,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 	if part.Unit != "" {
 		valueTitle := "Value · " + part.Unit
+		if part.Kind == "comparator" {
+			valueTitle = "Hysteresis width · V"
+		}
 		if part.Kind == "zener" {
 			valueTitle = "Breakdown voltage · V"
 		}

@@ -352,3 +352,8 @@ and current-derived illumination. See [digital displays](digital-display.md).
 staged `input_work`. Native controls use the same commands; await completion
 before stepping. Runtime button history is separate from saved startup edits.
 See [button timing and contracts](momentary-buttons.md).
+
+`comparator` uses ordinary `component.set` for its full differential hysteresis
+width. Examples `comparator-threshold` and `comparator-counter` expose the
+same controls to users and agents; state/current readings are in
+`mixed.controls`. See [comparator contracts](comparators.md).

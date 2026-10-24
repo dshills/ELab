@@ -298,7 +298,7 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
-		case "pushbutton", "bouncing-pushbutton":
+		case "comparator", "pushbutton", "bouncing-pushbutton":
 			n.stampControl(p, x, add, f)
 		case "bcd-decoder", "seven-segment":
 			n.stampDisplay(p, x, add, f)
@@ -677,7 +677,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
-		case "pushbutton", "bouncing-pushbutton":
+		case "comparator", "pushbutton", "bouncing-pushbutton":
 			device := n.controlResult(p, x)
 			r.Controls = append(r.Controls, device)
 			powers += device.Power

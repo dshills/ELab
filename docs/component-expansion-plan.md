@@ -9,9 +9,9 @@ Existing integration limits and the qualified release remain preserved.
    BCD decoder; a real 555 timing capacitor clocks a decade counter/display.
 2. Electrical/native command and agent replay checks passed; final visual checks pending: normally open momentary pushbutton, deterministic optional contact
    bounce, explicit press/release, manual counter/reset and debounce examples.
-3. In progress: powered comparator with hysteresis, threshold detector and
+3. Electrical/native command checks passed; final visual checks pending: powered comparator with hysteresis, threshold detector and
    analog-to-logic examples.
-4. Pending: relay coil dynamics, isolated switched contacts, transistor driver
+4. In progress: relay coil dynamics, isolated switched contacts, transistor driver
    and flyback protection examples.
 5. Pending: linear voltage regulators with finite load regulation, dropout,
    current limiting and practical supply examples.

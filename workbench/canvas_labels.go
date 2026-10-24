@@ -57,6 +57,9 @@ func CanvasPartLabel(part Component) (Point, string) {
 	if IsDisplayKind(part.Kind) {
 		title += " " + part.Name
 	}
+	if part.Kind == "comparator" {
+		title += " Hys"
+	}
 	if part.Kind == "timer555" {
 		title += " 555"
 	}
@@ -108,6 +111,8 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 		return Point{part.Position.X + 130, part.Position.Y - 245}
 	case "timer555":
 		return Timer555LabelPosition(part)
+	case "comparator":
+		return Point{part.Position.X - 80, part.Position.Y - 65}
 	case "opamp":
 		return OpAmpLabelPosition(part)
 	case "inductor":

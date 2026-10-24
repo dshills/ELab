@@ -5,7 +5,7 @@
     "desktop/actuation_controls.go": "7440a002d8fb8556463fda10e1f152529a3aa7cd79173455ed4af1a9066ca0e6",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "3d0a2607ac580d4cf1d4e7bd58edb452e2424eb0171082eca4fc522d9f243540",
-    "desktop/component_inspector.go": "a8b37583c6b5b1ad39433dca8630f80fc90c57570eb0db1e5feaef96c3935a4a",
+    "desktop/component_inspector.go": "0d16d49ea2d334046eb21c2a8b0520c28542dcbc5cdc3929298bb4a4e0592730",
     "desktop/component_palette.go": "d3195f223b9d569a013eacf54e13b8e1f05989c3b61db99751e641a94ed35be9",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
@@ -17,8 +17,8 @@
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
     "desktop/document_workspace.go": "130574f08669ac76d9dc7667175533f01c1da57081eda473d7ecdbfcbb0da616",
-    "desktop/drawing.go": "5ae9bdcdc8d174141623f4e396140d990414ea29d31820b84196447b9ae238c2",
-    "desktop/example_load.go": "26b5deeb62e85d60359af15f4f8e8d920cc56db5c6f1d75828c4c348f8aa4e63",
+    "desktop/drawing.go": "d566d4713f000be42b4b41e1d43a4fd83d7b8b61502f1026694799e67a83730b",
+    "desktop/example_load.go": "9475058dbb13f3559ece5db43dea609f8fb36ae01808741c42ae8a18c0836a6d",
     "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
     "desktop/field_context.go": "615916cc47caeb68e7b0e69feddf10d4ca5b057f0064eb5e80de4dc7bc68e39c",
     "desktop/file_decision.go": "0eefa5e911d9914966b47ca3fa439ec64c73f5da2868657a79d5ed899de62a67",
@@ -33,7 +33,7 @@
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/main.go": "bab7d175e7939978bdd0937b2b1f08866e52fb1e61ce0ebfd4e93efc36c352ac",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
-    "desktop/menus.go": "fdc2b1bb44971de75b50312375128ff0bd68dcb2fc6370bf817e8333df5039a1",
+    "desktop/menus.go": "13d7e64926cc58d3fc0090209520f4438d822b687127252de2cbc7b4074dcf3e",
     "desktop/menus_darwin.go": "fedce80e039ce946802b932b6f778c3b509d4121dfc2b3270aba449d7724f3c3",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
     "desktop/native_chrome.go": "c9990bed7c0b15abe210c6a80fffa5bbc8815e1bcc45a102b837aadbef935b38",
@@ -74,7 +74,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "5cf3a424174ed285501e91968e803a792a0be8b1b86edbd5b02ef510c72bf9f0",
+    "desktop/view.go": "a613d8847efd0f5ff5fa1ac7ae830539b3672da2d06d49329c6be6edcb4a722a",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -290,6 +290,12 @@
       "example.load"
     ],
     "example.cmos": [
+      "example.load"
+    ],
+    "example.comparator-counter": [
+      "example.load"
+    ],
+    "example.comparator-threshold": [
       "example.load"
     ],
     "example.d-flipflop": [
@@ -661,7 +667,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 105,
+      "line": 116,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -669,7 +675,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 105,
+      "line": 116,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
@@ -677,7 +683,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 121,
+      "line": 135,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -685,7 +691,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 121,
+      "line": 135,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
@@ -693,7 +699,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 130,
+      "line": 144,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -701,7 +707,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 130,
+      "line": 144,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -709,7 +715,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 143,
+      "line": 157,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeComponentStartup(state, part, fmt.Sprintf(\"%.9g V\", e.Number))\n}",
@@ -717,7 +723,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 145,
+      "line": 159,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.componentStartupDefault(state, part)",
@@ -725,7 +731,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 146,
+      "line": 160,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -733,7 +739,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 146,
+      "line": 160,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -741,7 +747,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 197,
+      "line": 211,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -752,7 +758,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 198,
+      "line": 212,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -763,7 +769,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 201,
+      "line": 215,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -774,7 +780,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 202,
+      "line": 216,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -1342,7 +1348,7 @@
     },
     {
       "file": "desktop/example_load.go",
-      "line": 46,
+      "line": 48,
       "function": "*screen.registerExampleLoadCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: template.command, Label: template.label, Available: func() error {\n\tif s.fileBusy || s.pendingCommand != \"\" || s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"finish the current operation before loading an example\")\n\t}\n\treturn nil\n}, Execute: func(context.Context) error {\n\ts.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})\n\treturn nil\n}})",
@@ -1350,7 +1356,7 @@
     },
     {
       "file": "desktop/example_load.go",
-      "line": 52,
+      "line": 54,
       "function": "*screen.registerExampleLoadCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})",
@@ -2159,7 +2165,7 @@
       "line": 20,
       "function": "(package)",
       "kind": "native-menu-group",
-      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.pnp\", \"example.emitter-follower\", \"example.bipolar-push-pull\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.opamp-follower\", \"example.opamp-inverting\", \"example.rectifier\", \"example.zener\", \"example.schottky\", \"example.button-counter\", \"example.button-debounce\", \"example.display-counter\", \"example.d-flipflop\", \"example.jk-flipflop\", \"example.t-flipflop\", \"example.binary-counter\", \"example.decade-counter\", \"example.logic-inverter\", \"example.logic-switches\", \"example.logic-half-adder\", \"example.555-flasher\", \"example.555-oscillator\", \"example.555-one-shot\"}",
+      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.pnp\", \"example.emitter-follower\", \"example.bipolar-push-pull\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.opamp-follower\", \"example.opamp-inverting\", \"example.rectifier\", \"example.zener\", \"example.schottky\", \"example.comparator-threshold\", \"example.comparator-counter\", \"example.button-counter\", \"example.button-debounce\", \"example.display-counter\", \"example.d-flipflop\", \"example.jk-flipflop\", \"example.t-flipflop\", \"example.binary-counter\", \"example.decade-counter\", \"example.logic-inverter\", \"example.logic-switches\", \"example.logic-half-adder\", \"example.555-flasher\", \"example.555-oscillator\", \"example.555-one-shot\"}",
       "public_commands": [
         "example.reset",
         "example.load",
@@ -2182,6 +2188,8 @@
         "example.load",
         "example.load",
         "example.rectifier",
+        "example.load",
+        "example.load",
         "example.load",
         "example.load",
         "example.load",
@@ -3957,7 +3965,7 @@
       "line": 148,
       "function": "*screen.view",
       "kind": "command-menu",
-      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.pnp\", \"PNP high-side LED\"}, {\"example.emitter-follower\", \"NPN emitter follower\"}, {\"example.bipolar-push-pull\", \"Complementary transistor buffer\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}, {\"example.zener\", \"Zener voltage regulator\"}, {\"example.schottky\", \"Schottky rectifier\"}, {\"example.button-counter\", \"Pushbutton decimal counter\"}, {\"example.button-debounce\", \"Contact bounce and RC debounce\"}, {\"example.display-counter\", \"555-driven digit counter\"}, {\"example.d-flipflop\", \"D flip-flop sampler\"}, {\"example.jk-flipflop\", \"JK flip-flop divider\"}, {\"example.t-flipflop\", \"T flip-flop toggle\"}, {\"example.binary-counter\", \"4-bit binary counter\"}, {\"example.decade-counter\", \"Decade counter\"}, {\"example.logic-inverter\", \"Logic inverter LED\"}, {\"example.logic-switches\", \"AND gate with switches\"}, {\"example.logic-half-adder\", \"Logic half adder\"}, {\"example.555-flasher\", \"555 LED flasher\"}, {\"example.555-oscillator\", \"Adjustable 555 oscillator\"}, {\"example.555-one-shot\", \"555 one-shot timer\"}})",
+      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.pnp\", \"PNP high-side LED\"}, {\"example.emitter-follower\", \"NPN emitter follower\"}, {\"example.bipolar-push-pull\", \"Complementary transistor buffer\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}, {\"example.zener\", \"Zener voltage regulator\"}, {\"example.schottky\", \"Schottky rectifier\"}, {\"example.comparator-threshold\", \"Comparator threshold detector\"}, {\"example.comparator-counter\", \"Analog signal to digit counter\"}, {\"example.button-counter\", \"Pushbutton decimal counter\"}, {\"example.button-debounce\", \"Contact bounce and RC debounce\"}, {\"example.display-counter\", \"555-driven digit counter\"}, {\"example.d-flipflop\", \"D flip-flop sampler\"}, {\"example.jk-flipflop\", \"JK flip-flop divider\"}, {\"example.t-flipflop\", \"T flip-flop toggle\"}, {\"example.binary-counter\", \"4-bit binary counter\"}, {\"example.decade-counter\", \"Decade counter\"}, {\"example.logic-inverter\", \"Logic inverter LED\"}, {\"example.logic-switches\", \"AND gate with switches\"}, {\"example.logic-half-adder\", \"Logic half adder\"}, {\"example.555-flasher\", \"555 LED flasher\"}, {\"example.555-oscillator\", \"Adjustable 555 oscillator\"}, {\"example.555-one-shot\", \"555 one-shot timer\"}})",
       "public_commands": [
         "example.reset",
         "example.load",
@@ -3980,6 +3988,8 @@
         "example.load",
         "example.load",
         "example.rectifier",
+        "example.load",
+        "example.load",
         "example.load",
         "example.load",
         "example.load",

@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import math
 from pathlib import Path
 import subprocess
 import time
@@ -88,6 +89,37 @@ def buttons(agent, assets):
     return reports
 
 
+def comparators(agent, assets):
+    reports = []
+    phase = math.asin(.25) / (2 * math.pi)
+    for example in ('comparator-threshold', 'comparator-counter'):
+        client = Client(agent)
+        try:
+            client.mutate('example.load', {'id': example})
+            client.mutate('simulation.pause')
+            client.mutate('simulation.restart')
+            client.ask('simulation.wait')
+            checked = 0
+            for _ in range(25):
+                state = client.step(.1)
+                at = state['mixed']['time_s']
+                comparator = next(u for u in state['mixed']['controls'] if u['id'] == 'U1')
+                high = phase <= at % 1 < .5 + phase
+                assert comparator['memory']['high'] == high, (example, at, comparator)
+                assert (comparator['voltage_v'] > 3.5) == high
+                if example == 'comparator-counter':
+                    expected = 0 if at < phase else (math.floor(at - phase) + 1) % 10
+                    assert state['mixed']['sequential'][0]['memory']['value'] == expected
+                    assert next(d for d in state['mixed']['displays'] if d['id'] == 'DS1')['digit'] == expected
+                assert state['mixed']['kcl_residual_a'] < 1e-8 and abs(state['mixed']['power_residual_w']) < 1e-7
+                checked += 1
+            exports = capture_and_reopen(client, agent, assets, example, ['v:U1', 'v:U1.input-difference', 'i:U1'])
+            reports.append(dict(example=example, independently_checked_states=checked, exports=exports))
+        finally:
+            client.close()
+    return reports
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent', type=Path, required=True)
@@ -96,7 +128,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    report = dict(passed=True, transport='headless-stdio', buttons=buttons(args.agent, assets))
+    report = dict(passed=True, transport='headless-stdio', buttons=buttons(args.agent, assets), comparators=comparators(args.agent, assets))
     args.output.write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report))
 

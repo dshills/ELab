@@ -32,7 +32,7 @@ func ControlledDeviceModel() ControlModel {
 	return ControlModel{ControlModelID, 1, 1e9, .001, 4, .05, 1e9, 50, 1e6, 2, 12, .1, 100, .03, .01, "Generic educational controls. Normally open momentary buttons; clean or deterministic four-transition 1 ms bounce after press/release; Click holds for 50 ms of simulation time. Powered comparator has explicit differential hysteresis and rail-connected 50 Ω output paths. Relay has a 100 Ω /100 mH unpolarized coil, 30 mA pickup /10 mA dropout and isolated SPDT contacts. No contact arcing/wear, physical mechanical delay, comparator propagation/setup timing, noise, heat, protection, current limit or hardware ratings. External resistance/storage determine circuit behavior; fixed bounce is illustrative, not a measured switch."}
 }
 func IsButtonKind(kind string) bool  { return kind == "pushbutton" || kind == "bouncing-pushbutton" }
-func IsControlKind(kind string) bool { return IsButtonKind(kind) }
+func IsControlKind(kind string) bool { return IsButtonKind(kind) || kind == "comparator" }
 func controlPins(kind string) []string {
 	switch kind {
 	case "comparator":
@@ -123,10 +123,9 @@ func controlDecision(p Component, v [5]float64, m ControlMemory, at, current flo
 		}
 		next := m
 		next.Powered = true
-		diff := v[0] - v[1]
-		if diff >= p.Value/2 {
+		if v[0] >= v[1]+p.Value/2 {
 			next.High = true
-		} else if diff <= -p.Value/2 {
+		} else if v[0] <= v[1]-p.Value/2 {
 			next.High = false
 		}
 		return next, nil
