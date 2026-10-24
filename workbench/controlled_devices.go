@@ -31,8 +31,10 @@ type ControlModel struct {
 func ControlledDeviceModel() ControlModel {
 	return ControlModel{ControlModelID, 1, 1e9, .001, 4, .05, 1e9, 50, 1e6, 2, 12, .1, 100, .03, .01, "Generic educational controls. Normally open momentary buttons; clean or deterministic four-transition 1 ms bounce after press/release; Click holds for 50 ms of simulation time. Powered comparator has explicit differential hysteresis and rail-connected 50 Ω output paths. Relay has a 100 Ω /100 mH unpolarized coil, 30 mA pickup /10 mA dropout and isolated SPDT contacts. No contact arcing/wear, physical mechanical delay, comparator propagation/setup timing, noise, heat, protection, current limit or hardware ratings. External resistance/storage determine circuit behavior; fixed bounce is illustrative, not a measured switch."}
 }
-func IsButtonKind(kind string) bool  { return kind == "pushbutton" || kind == "bouncing-pushbutton" }
-func IsControlKind(kind string) bool { return IsButtonKind(kind) || kind == "comparator" }
+func IsButtonKind(kind string) bool { return kind == "pushbutton" || kind == "bouncing-pushbutton" }
+func IsControlKind(kind string) bool {
+	return IsButtonKind(kind) || kind == "comparator" || kind == "relay"
+}
 func controlPins(kind string) []string {
 	switch kind {
 	case "comparator":
@@ -255,6 +257,10 @@ func (n *mixedNetwork) controlResult(p Component, x []float64) ControlResult {
 		r.Current = -e.Current[2]
 	}
 	if p.Kind == "relay" {
+		r.Current = n.relayCurrent(p, x)
+		r.PinCurrents[0] = r.Current
+		r.PinCurrents[1] = -r.Current
+		r.Energy = .5 * p.Value * r.Current * r.Current
 		r.State = "released"
 		if m.High {
 			r.State = "energized"
@@ -263,13 +269,16 @@ func (n *mixedNetwork) controlResult(p Component, x []float64) ControlResult {
 	for k, i := range e.Current {
 		r.Power += v[k] * i
 	}
+	if p.Kind == "relay" {
+		r.Power += r.Current * r.Current * inductorWindingResistance(p)
+	}
 	return r
 }
 func (s *mixedState) controlChanges() ([]ControlMemory, bool, error) {
 	next := append([]ControlMemory{}, s.net.controlMemory...)
 	changed := false
 	for k, p := range s.net.controls {
-		m, err := controlDecision(p, s.net.controlVoltages(p, s.x), next[k], s.result.Time, 0)
+		m, err := controlDecision(p, s.net.controlVoltages(p, s.x), next[k], s.result.Time, s.net.relayCurrent(p, s.x))
 		if err != nil {
 			return nil, false, fmt.Errorf("%s: %w", p.ID, err)
 		}
@@ -298,3 +307,24 @@ func (n *mixedNetwork) nextControlEvent(at float64) float64 {
 }
 
 func controlTimeReached(at, event float64) bool { return at >= event || sameSampleTime(at, event) }
+
+func inductorWindingResistance(p Component) float64 {
+	if p.Kind == "relay" {
+		return ControlledDeviceModel().RelayResistance
+	}
+	return 0
+}
+func (n *mixedNetwork) relayCurrent(p Component, x []float64) float64 {
+	if p.Kind != "relay" {
+		return 0
+	}
+	for k, q := range n.inductors {
+		if q.ID == p.ID {
+			index := n.inductorIndex(k)
+			if index < len(x) {
+				return x[index]
+			}
+		}
+	}
+	return 0
+}

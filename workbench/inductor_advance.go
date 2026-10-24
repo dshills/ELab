@@ -63,7 +63,7 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 			h /= 2
 			continue
 		}
-		if len(n.timers)+len(n.sequential) > 0 {
+		if len(n.timers)+len(n.sequential)+len(n.controls) > 0 {
 			for _, point := range []struct {
 				state  *inductorStage
 				at, dt float64

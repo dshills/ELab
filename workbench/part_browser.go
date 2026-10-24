@@ -46,7 +46,7 @@ func partGroup(kind string) (category string, common bool) {
 		category = "semiconductors"
 	case "opamp", "comparator":
 		category = "amplifiers"
-	case "switch", "pushbutton", "bouncing-pushbutton":
+	case "relay", "switch", "pushbutton", "bouncing-pushbutton":
 		category = "switches"
 	case "ground", "junction", "net-label":
 		category = "connections"

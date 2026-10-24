@@ -167,6 +167,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if workbench.IsDisplayKind(part.Kind) {
 			outlineW, outlineH = 128, 238
 		}
+		if part.Kind == "relay" {
+			outlineW, outlineH = 128, 138
+		}
 		if diagnosticObjects[part.ID] {
 			stroke(diagnosticColor, 2.5, canvas.Point{X: -outlineW - 12, Y: -outlineH - 12}, canvas.Point{X: outlineW + 12, Y: -outlineH - 12}, canvas.Point{X: outlineW + 12, Y: outlineH + 12}, canvas.Point{X: -outlineW - 12, Y: outlineH + 12}, canvas.Point{X: -outlineW - 12, Y: -outlineH - 12})
 			b.text(part.Position.X+82, part.Position.Y-50, "!", diagnosticColor)
@@ -310,7 +313,7 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		stroke(ink, 3, canvas.Point{X: -24, Y: 9}, canvas.Point{X: 24, Y: 9})
 		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -9})
 		stroke(wireColor, 2.5, canvas.Point{Y: 9}, canvas.Point{Y: 32})
-	case "comparator", "pushbutton", "bouncing-pushbutton":
+	case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 		memory := workbench.ControlMemory{}
 		if state.Mixed != nil && !state.Mixed.Stale {
 			for _, c := range state.Mixed.Controls {

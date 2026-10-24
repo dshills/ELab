@@ -11,9 +11,9 @@ Existing integration limits and the qualified release remain preserved.
    bounce, explicit press/release, manual counter/reset and debounce examples.
 3. Electrical/native command checks passed; final visual checks pending: powered comparator with hysteresis, threshold detector and
    analog-to-logic examples.
-4. In progress: relay coil dynamics, isolated switched contacts, transistor driver
+4. Electrical/native command and agent replay checks passed; final visual checks pending: relay coil dynamics, isolated switched contacts, transistor driver
    and flyback protection examples.
-5. Pending: linear voltage regulators with finite load regulation, dropout,
+5. Next: linear voltage regulators with finite load regulation, dropout,
    current limiting and practical supply examples.
 
 Models are educational functional models, not fitted package/device ratings.

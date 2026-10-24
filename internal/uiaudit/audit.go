@@ -65,6 +65,8 @@ func nativeAliases() map[string][]string {
 		"example.pnp":                  {"example.load"},
 		"example.emitter-follower":     {"example.load"},
 		"example.bipolar-push-pull":    {"example.load"},
+		"example.relay-switch":         {"example.load"},
+		"example.relay-flasher":        {"example.load"},
 		"example.comparator-threshold": {"example.load"},
 		"example.comparator-counter":   {"example.load"},
 		"example.button-counter":       {"example.load"},

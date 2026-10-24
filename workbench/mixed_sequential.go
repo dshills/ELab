@@ -120,7 +120,7 @@ func (s *mixedState) hybridAnalogGuardChanged() (bool, error) {
 		if IsButtonKind(p.Kind) {
 			continue
 		}
-		next, err := controlDecision(p, s.net.controlVoltages(p, s.x), s.net.controlMemory[k], s.result.Time, 0)
+		next, err := controlDecision(p, s.net.controlVoltages(p, s.x), s.net.controlMemory[k], s.result.Time, s.net.relayCurrent(p, s.x))
 		if err != nil {
 			return false, err
 		}

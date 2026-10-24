@@ -120,6 +120,34 @@ def comparators(agent, assets):
     return reports
 
 
+def relays(agent, assets):
+    reports = []
+    for example in ('relay-switch', 'relay-flasher'):
+        client = Client(agent)
+        try:
+            client.mutate('example.load', {'id': example})
+            client.mutate('simulation.pause')
+            client.mutate('simulation.restart')
+            client.ask('simulation.wait')
+            if example == 'relay-switch':
+                client.mutate('button.click', {'id': 'S1'})
+                client.ask('simulation.wait')
+            states = []
+            flyback = False
+            for _ in range(80):
+                state = client.step(.001)
+                relay = next(u for u in state['mixed']['controls'] if u['id'] == 'K1')
+                states.append(relay['memory']['high'])
+                flyback |= relay['voltage_v'] < -.1 and relay['current_a'] > .001
+                assert state['mixed']['kcl_residual_a'] < 1e-8 and abs(state['mixed']['power_residual_w']) < 1e-6
+            assert any(states) and not states[-1] and flyback, (example, states, flyback)
+            exports = capture_and_reopen(client, agent, assets, example, ['i:K1', 'v:K1', 'i:D2', 'i:D1'])
+            reports.append(dict(example=example, pickup_and_release=True, flyback_current=True, exports=exports))
+        finally:
+            client.close()
+    return reports
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent', type=Path, required=True)
@@ -128,7 +156,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    report = dict(passed=True, transport='headless-stdio', buttons=buttons(args.agent, assets), comparators=comparators(args.agent, assets))
+    report = dict(passed=True, transport='headless-stdio', buttons=buttons(args.agent, assets), comparators=comparators(args.agent, assets), relays=relays(args.agent, assets))
     args.output.write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report))
 

@@ -44,6 +44,9 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "relay":
+			join(p, "common", "no")
+			join(p, "common", "nc")
 		case "comparator":
 			for _, pin := range p.Terminals {
 				if pin != "gnd" {
@@ -155,7 +158,8 @@ func (n *mixedNetwork) stampInductorStartup(x []float64, a [][]float64, f []floa
 			p := n.inductors[edge.index]
 			one, two := n.pin(p, "1"), n.pin(p, "2")
 			weight := edge.sign / (p.Value * scale)
-			f[row] += weight * (voltage(x, one) - voltage(x, two))
+			f[row] += weight * (voltage(x, one) - voltage(x, two) - inductorWindingResistance(p)*x[n.inductorIndex(edge.index)])
+			a[row][n.inductorIndex(edge.index)] -= weight * inductorWindingResistance(p)
 			if one >= 0 {
 				a[row][one] += weight
 			}

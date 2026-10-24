@@ -149,7 +149,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		if p.Kind == "capacitor" {
 			n.caps = append(n.caps, p)
 		}
-		if p.Kind == "inductor" {
+		if p.Kind == "inductor" || p.Kind == "relay" {
 			n.inductors = append(n.inductors, p)
 		}
 		if p.Kind == "timer555" {
@@ -186,6 +186,14 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 	return n
 }
 func (n *mixedNetwork) pin(p Component, t string) int {
+	if p.Kind == "relay" {
+		if t == "1" {
+			t = "coil1"
+		}
+		if t == "2" {
+			t = "coil2"
+		}
+	}
 	if n.inductorPins != nil {
 		if node, ok := n.inductorPins[p.ID+"."+t]; ok {
 			return node
@@ -298,7 +306,7 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
-		case "comparator", "pushbutton", "bouncing-pushbutton":
+		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			n.stampControl(p, x, add, f)
 		case "bcd-decoder", "seven-segment":
 			n.stampDisplay(p, x, add, f)
@@ -677,7 +685,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
-		case "comparator", "pushbutton", "bouncing-pushbutton":
+		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			device := n.controlResult(p, x)
 			r.Controls = append(r.Controls, device)
 			powers += device.Power
@@ -743,6 +751,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	for k, p := range n.inductors {
 		v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
 		i := x[n.inductorIndex(k)]
+		if p.Kind == "relay" {
+			energyRate += (v - inductorWindingResistance(p)*i) * i
+			continue
+		}
 		energyRate += v * i
 		r.Inductors = append(r.Inductors, InductorResult{ID: p.ID, Voltage: v, Current: i, Energy: .5 * p.Value * i * i})
 	}

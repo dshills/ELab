@@ -2,6 +2,8 @@ package workbench
 
 func partAliases(kind string) []string {
 	switch kind {
+	case "relay":
+		return []string{"relay", "coil", "SPDT", "contacts", "flyback", "electromagnet"}
 	case "comparator":
 		return []string{"comparator", "threshold", "hysteresis", "Schmitt", "analog to digital", "detector"}
 	case "pushbutton", "bouncing-pushbutton":
@@ -67,6 +69,8 @@ func partAliases(kind string) []string {
 }
 func partLimitations(kind string) string {
 	switch kind {
+	case "relay":
+		return ControlledDeviceModel().Limitations
 	case "comparator":
 		return ControlledDeviceModel().Limitations
 	case "pushbutton", "bouncing-pushbutton":

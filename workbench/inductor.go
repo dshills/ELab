@@ -116,7 +116,8 @@ func (n *mixedNetwork) stampInductors(x, old []float64, add func(int, int, float
 			add(row, row, 1)
 			continue
 		}
-		f[row] = voltage(x, u) - voltage(x, v)
+		f[row] = voltage(x, u) - voltage(x, v) - inductorWindingResistance(p)*current
+		add(row, row, -inductorWindingResistance(p))
 		add(row, u, 1)
 		add(row, v, -1)
 	}

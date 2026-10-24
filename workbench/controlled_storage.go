@@ -44,6 +44,19 @@ func validateRecordedControls(c Compiled, g Graph, r *MixedResult) error {
 				n.controlMemory[k] = m
 			}
 		}
+		if p.Kind == "relay" {
+			if m.Powered || m.Pressed || m.ContactClosed || m.Bouncing || m.StartedAt != 0 || m.ReleaseAt != 0 {
+				return fmt.Errorf("invalid relay memory")
+			}
+			if len(x) < n.matrixSize(0) {
+				x = append(x, make([]float64, n.matrixSize(0)-len(x))...)
+			}
+			for k, l := range n.inductors {
+				if l.ID == p.ID {
+					x[n.inductorIndex(k)] = actual.Current
+				}
+			}
+		}
 		expected := n.controlResult(p, x)
 		if actual.Model != expected.Model || actual.State != expected.State {
 			return fmt.Errorf("invalid recorded control model/state")

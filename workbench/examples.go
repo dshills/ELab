@@ -69,6 +69,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "relay-switch", Title: "Pushbutton transistor relay", Question: "How can a transistor switch an isolated load?", Expected: "S1 energizes the 5 V coil through Q1; normally-open contacts switch a separate 9 V LED load. D2 carries flyback current after release.", Try: "Click S1, compare coil current and LED current, then change K1 inductance to change pickup/decay timing.", Limitation: ControlledDeviceModel().Limitations},
+		{ID: "relay-flasher", Title: "Relay coil and flyback protection", Question: "Where does the coil current go when its driver switches off?", Expected: "The coil current ramps up, pulls in the contacts, then decays through D2 after the transistor turns off. Contacts release below the dropout current.", Try: "Plot K1 current/voltage, Q1 collector and D2 current. Removing D2 can exceed the simulator voltage range; failed advances preserve committed state.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "comparator-threshold", Title: "Comparator threshold detector", Question: "How does hysteresis prevent repeated switching near a threshold?", Expected: "With 2.5 V reference and 200 mV hysteresis, output rises at 2.6 V and falls at 2.4 V.", Try: "Compare VIN, VREF and output. Edit hysteresis width or the reference and watch both switching thresholds.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "comparator-counter", Title: "Analog signal to digit counter", Question: "Can a slow analog signal clock a digital counter cleanly?", Expected: "The comparator turns each sine cycle into one rising clock edge; the decimal display counts these crossings.", Try: "Change VIN frequency, reference or hysteresis; click SRESET to clear the count.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "button-counter", Title: "Pushbutton decimal counter", Question: "How can a button clock a counter?", Expected: "Click SCOUNT to advance one digit; click SRESET to clear it.", Try: "Press and hold: a clean button counts once. Release before pressing again.", Limitation: ControlledDeviceModel().Limitations},
@@ -114,6 +116,13 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "relay-switch", "relay-flasher":
+		d.graph = RelayExampleGraph(id == "relay-switch")
+		d.selected = "K1"
+		d.settings.StepSeconds = .0002
+		d.settings.PlaybackSpeed = .02
+		d.probes = []string{"i:K1", "v:K1", "v:Q1.collector", "i:D2", "i:D1"}
+		d.view = View{Center: Point{X: 0, Y: 100}, Zoom: .6}
 	case "comparator-threshold", "comparator-counter":
 		d.graph = ComparatorThresholdExampleGraph()
 		if id == "comparator-counter" {

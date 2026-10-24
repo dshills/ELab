@@ -4,6 +4,10 @@ package workbench
 // Preserve legacy compilation for networks without op-amps. With op-amps,
 // an ideal MOS gate cannot supply a common-mode reference to their input pair.
 func networkReferencePair(p Component, one, two string, hasOpAmp bool) bool {
+	if p.Kind == "relay" {
+		coil := func(pin string) bool { return pin == "coil1" || pin == "coil2" }
+		return coil(one) == coil(two)
+	}
 	if p.Kind == "opamp" {
 		group := func(pin string) int {
 			switch pin {

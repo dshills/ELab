@@ -60,6 +60,10 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 				}
 				set(pin, p.ID+"."+pin, sign)
 			}
+		case "relay":
+			for _, pin := range p.Terminals {
+				set(pin, p.ID+"."+pin, 1)
+			}
 		case "comparator":
 			for _, pin := range p.Terminals {
 				sign := 1.

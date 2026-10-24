@@ -68,6 +68,8 @@ func routeBody(p Component) routeRect {
 		w, h = 92, 202
 	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "timer555":
 		w, h = 72, 92
+	case "relay":
+		w, h = 102, 92
 	case "potentiometer":
 		w, h = 58, 38
 	case "pushbutton", "bouncing-pushbutton", "resistor", "inductor", "switch":

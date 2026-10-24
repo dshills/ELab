@@ -94,6 +94,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	if part.Kind == "potentiometer" {
 		inspector = append(inspector, s.potentiometerControls(state, part)...)
 	}
+	if part.Kind == "relay" && state.Mixed != nil {
+		for _, c := range state.Mixed.Controls {
+			if c.ID == part.ID {
+				status := "Live"
+				if state.Mixed.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("relay-selected-reading", fmt.Sprintf("%s · %s\nCoil %.5g mA · %.5g V\nStored energy %.5g µJ\nDissipation %.5g mW", status, c.State, c.Current*1000, c.Voltage, c.Energy*1e6, c.Power*1000)))
+			}
+		}
+	}
 	if part.Kind == "comparator" && state.Mixed != nil {
 		for _, c := range state.Mixed.Controls {
 			if c.ID == part.ID {
@@ -126,6 +137,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 	if part.Unit != "" {
 		valueTitle := "Value · " + part.Unit
+		if part.Kind == "relay" {
+			valueTitle = "Coil inductance · H"
+		}
 		if part.Kind == "comparator" {
 			valueTitle = "Hysteresis width · V"
 		}

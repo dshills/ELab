@@ -60,7 +60,8 @@ func (n *mixedNetwork) radauEquations(x, old []float64, h float64, trace *Transi
 				base := other * size
 				coefficient := h * radauWeights[stage][other] / part.Value
 				positive, negative := voltage(x[base:base+size], one), voltage(x[base:base+size], two)
-				delta := coefficient * (positive - negative)
+				delta := coefficient * (positive - negative - inductorWindingResistance(part)*x[base+index])
+				matrix[row][base+index] += coefficient * inductorWindingResistance(part)
 				residual[row] -= delta
 				magnitude += math.Abs(coefficient) * (math.Abs(positive) + math.Abs(negative))
 				if one >= 0 {

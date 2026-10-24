@@ -156,6 +156,10 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			minY = math.Min(minY, p.Position.Y-250)
 			maxY = math.Max(maxY, p.Position.Y+250)
 		}
+		if p.Kind == "relay" {
+			minX = math.Min(minX, p.Position.X-140)
+			maxY = math.Max(maxY, p.Position.Y+140)
+		}
 		minY = math.Min(minY, p.Position.Y-80)
 		maxY = math.Max(maxY, p.Position.Y+95)
 	}
@@ -256,7 +260,7 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	for _, p := range g.Components {
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
 		switch p.Kind {
-		case "comparator", "pushbutton", "bouncing-pushbutton":
+		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			for _, path := range ControlSymbolPaths(p.Kind, ControlMemory{}) {
 				b.WriteString(`<polyline points="`)
 				for _, point := range path {
@@ -528,6 +532,8 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · 555"
 		at := Timer555LabelPosition(p)
 		x, y = at.X, at.Y
+	case "relay":
+		x, y = p.Position.X+125, p.Position.Y-110
 	case "comparator":
 		text += " hysteresis"
 		x, y = p.Position.X-80, p.Position.Y-65

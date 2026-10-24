@@ -24,6 +24,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			inductors = append(inductors, p)
 		case "nmos", "pmos":
 			mos = append(mos, p)
+		case "relay":
+			controls = append(controls, p)
+			inductors = append(inductors, p)
 		case "comparator", "pushbutton", "bouncing-pushbutton":
 			controls = append(controls, p)
 		case "bcd-decoder", "seven-segment":
@@ -142,12 +145,12 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 		for i, a := range p.Terminals {
 			ref := p.ID + "." + a
-			if !(p.Kind == "comparator" && a == "out") && !IsDisplayKind(p.Kind) && p.Kind != "potentiometer" && !(IsSequentialKind(p.Kind) && sequentialOutput(a)) && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
+			if !(p.Kind == "relay" && (a == "no" || a == "nc")) && !(p.Kind == "comparator" && a == "out") && !IsDisplayKind(p.Kind) && p.Kind != "potentiometer" && !(IsSequentialKind(p.Kind) && sequentialOutput(a)) && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
+				if u == v && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				if networkReferencePair(p, a, b, len(opamps) > 0) {

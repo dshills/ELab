@@ -111,6 +111,8 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 		return Point{part.Position.X + 130, part.Position.Y - 245}
 	case "timer555":
 		return Timer555LabelPosition(part)
+	case "relay":
+		return Point{part.Position.X + 125, part.Position.Y - 110}
 	case "comparator":
 		return Point{part.Position.X - 80, part.Position.Y - 65}
 	case "opamp":
