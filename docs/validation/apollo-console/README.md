@@ -32,3 +32,21 @@ These captures qualify rendered panel styling and the tested layout/interaction
 paths. Packaged-app visual observation is recorded separately when available;
 this does not close the four historical native acceptance items or promote the
 preserved /205 release. Existing owner app sessions and projects stay open.
+
+## Packaged native observation
+
+The clean /226 candidate built from `2ffc0d5e` opens with Apollo selected.
+The native Examples menu loads RC charge/discharge. The actual window shows the
+outlined cyan controls, monospace headings/body/browser labels, blue-black panels,
+component symbols, schematic and independent teal/amber scope signals. The new
+example is left paused at 2.199 s for visual review; older app sessions are intact.
+
+![Complete final foreground view](native-console.jpg)
+
+Three intermediate captures omitted canvas and/or text while accessibility retained
+the controls. Complete views are observed both before and after those omissions;
+a foreground Select click yields the saved complete view without changing the
+paused example's electrical state. The [running](native-partial-capture.jpg),
+[paused](native-paused-partial.jpg) and [idle](native-idle-partial.jpg) omissions
+are preserved. Capture-versus-render cause remains unclassified. This is visual
+appearance evidence, not a stable-capture or broad native acceptance pass.

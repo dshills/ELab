@@ -11,6 +11,24 @@
   "routes_unchanged": true,
   "new_commands": false,
   "new_components": false,
-  "native_visual_inspection": "pending separate packaged-app observation",
-  "broader_native_acceptance": "not asserted"
+  "native_visual_inspection": {
+    "app": "build/ELab-0.182.2-226-Apollo/ELab.app",
+    "source_commit": "2ffc0d5e9306c59fcaad9960dbda0f566c930ae8",
+    "observed": "Cyan outlines, selected controls, monospace labels, blue-black panels, component symbols and complete RC drawing/scope visible",
+    "actions": [
+      "Opened new candidate",
+      "Loaded RC example through native menu",
+      "Paused",
+      "Clicked Select in the foreground window"
+    ],
+    "left_open": "Apollo, RC example paused at 2.199 s",
+    "capture_limit": "Three captures omitted canvas and/or labels despite retained accessibility state; other captures, including final foreground observation, show complete content. Capture-versus-render cause is unclassified. No stable capture or broad native acceptance claim."
+  },
+  "broader_native_acceptance": "not asserted",
+  "native_capture_sha256": {
+    "native-console.jpg": "4517ba8f6b79f22b58b26480b5af8748a6fc566431e49278454c965a93f5f22a",
+    "native-idle-partial.jpg": "6558981749e6a483a87e5eb969cc5e27ebafc9eba6309f96e3c82da874a20db3",
+    "native-partial-capture.jpg": "0f55507d20576e6518a502433cc8091ace7c8ab9aa13c9fa7d0e6af80b660a75",
+    "native-paused-partial.jpg": "7cdaf966134568cd595d803d4c6f0b5c24683674aea3117d0c9d8273fa22bab5"
+  }
 }
