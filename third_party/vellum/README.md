@@ -69,7 +69,7 @@ All preceding compatibility fixes are included; historical archives are preserve
 
 ## Session-colored disclosure headings
 
-The active source is `211e3fe22aa2069721e77c607d0005f78fc0d9f0`, with the
+That repair's source is `211e3fe22aa2069721e77c607d0005f78fc0d9f0`, with the
 [complete compatibility patch](patches/elab-public-e58d405-disclosure-theme-compat.patch),
 `vellum-e58d405-elab7.tar.gz` and `build/.vellum-sdk-e58d405-elab7`.
 Disclosure headings use the native action-button style to inherit their managed
@@ -85,6 +85,28 @@ This is an ELab compatibility build from the same public base, not a new upstrea
 release. The /204 and /205 packages retain their qualified elab6 runtime. The
 elab7 source/offscreen checks do not qualify a newly launched native app or
 replace those preserved downloads. [Repair and evidence](../../research/85-disclosure-theme.md).
+
+## Per-window backgrounds and stable divider grips
+
+The active source is `a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a`, with the
+[complete compatibility patch](patches/elab-public-e58d405-window-background-and-divider-compat.patch),
+`vellum-e58d405-elab8.tar.gz` and `build/.vellum-sdk-e58d405-elab8`.
+Each host scene follows its managed root's opaque background without changing
+its existing content inset. Clear/translucent roots fall back to the configured
+theme or native surface. Per-window snapshots avoid global palette changes.
+
+The split handle retains the accepted fraction and physical press position.
+A focus click submits no resize; a drag applies its movement relative to the
+grip. Existing fast-release and classified-slide paths remain. Manual-window
+regressions cover both orientations, exact pane movement, independent window
+palettes, palette replacement, fallback and unchanged content bounds. A gallery
+metric is updated for elab7's shadow-free disclosure action, retaining the
+exact geometry and enablement assertions. All dependencies, notices and the six
+bootstrap sources are unchanged. Previous archives/caches remain preserved.
+
+These are local compatibility repairs from the same public base. Source and
+offscreen checks do not replace fresh native acceptance or the qualified /205
+download. [Repair and evidence](../../research/86-window-background-and-divider-grip.md).
 
 The exporter still marks SDK artifacts as private builds because public SDK/distribution qualification remains incomplete. **Public source availability is distinct from a qualified public SDK release.** MIT licensing, upstream notices, `SDK_MANIFEST.json` and `PRIVATE_BUILD.txt` remain included. Existing archives/caches, app bundles and their historical validation are unchanged. This dependency update does not qualify or replace the /189 owner app or /193 candidate.
 

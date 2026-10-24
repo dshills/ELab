@@ -1,0 +1,102 @@
+{
+  "kind": "window-background-and-divider-grip",
+  "source_checks_passed": true,
+  "release_ready": false,
+  "quality_exit_code": 0,
+  "sdk_quality_exit_code": 0,
+  "source_parent_commit": "77200276376252bd7a98f88aaedfaa7ed8709f8e",
+  "source_inputs": 868,
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "python_tests": 67,
+  "source_quality_command": "GOFLAGS='-p=1' GOPROXY=off PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",
+  "desktop_race_seconds": 181.456,
+  "mounted_race_seconds": 156.936,
+  "sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-window-background-and-divider-compat.patch",
+      "sha256": "6b93a7f4cfbc8668bff33a6c2f4efdc5065e56a629f22d545457495418a07528"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab8.tar.gz",
+    "archive_bytes": 20390608,
+    "sha256": "89ef76d15a2dbd2d8e7777ceac502d802634d4877039dbad5b94829186d6bcdd",
+    "manifest_sha256": "1f7b36d96f47d96d843b8d3880188b30ab20c3dcb09c5e3da3401f0d406ca97d",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab8",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8428,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "sdk_member_comparison": {
+    "changed_files": [
+      "SDK_DOCUMENTATION.md",
+      "drivers/cogent/cmd/gallery/structure_catalogue_offscreen_test.go",
+      "drivers/cogent/driver.go",
+      "drivers/cogent/manual_offscreen.go",
+      "drivers/cogent/split.go",
+      "drivers/cogent/split_grip_offscreen_test.go",
+      "drivers/cogent/split_offscreen_test.go",
+      "drivers/cogent/window_background.go",
+      "drivers/cogent/window_background_offscreen_test.go"
+    ],
+    "source_commit": "a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a",
+    "old_archive_preserved": true,
+    "bootstrap_unchanged": true,
+    "file_count": 8428,
+    "manifests_match_every_member": true,
+    "release_metadata_unchanged": true
+  },
+  "sdk_checks": [
+    "go test -race ./...",
+    "go test -race -tags=offscreen ./...",
+    "go vet -tags=offscreen ./..."
+  ],
+  "sdk_check_directory": "drivers/cogent in the clean derived Vellum source",
+  "native_baseline": {
+    "binary": "owned /206 fixture, unchanged old code",
+    "launch_required": false,
+    "dark_white_host_inset_observed": true,
+    "divider_click_before": 0.65,
+    "divider_click_after": 0.66611844,
+    "divider_restored": 0.65
+  },
+  "mounted_checks": {
+    "background_before_failed_both_themes": true,
+    "background_after_passed_both_themes": true,
+    "four_scene_corners": true,
+    "root_bounds_unchanged": true,
+    "accepted_snapshot_preserved": true,
+    "scope": "320x180 offscreen root-style probe with schematic children omitted"
+  },
+  "framework_regressions": {
+    "independent_window_palettes": true,
+    "post_mount_replacement": true,
+    "configured_and_native_fallback": true,
+    "translucency_applied_once": true,
+    "zero_motion_click_unchanged": true,
+    "off_center_grip_preserved": true,
+    "measured_pane_motion_matches_pointer_delta": true,
+    "both_orientations": true
+  },
+  "native_acceptance": "Pending for /207 guidance/file menus, /208 disclosure and /209 backdrop/divider repairs.",
+  "raw_archive_sha256": "3f443e3e7c41f21e52e47d2599e23572f9ff1989e80afa24bf7d319b95406a02",
+  "raw_members": 47,
+  "new_components": 0,
+  "new_commands": 0,
+  "owner_review_required": false,
+  "download_unchanged": "0.181.4 /205"
+}
