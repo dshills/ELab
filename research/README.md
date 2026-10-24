@@ -93,3 +93,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [RC-driven MOSFET reference checks](95-gate-common-mode.md): seven packaged-agent circuits, 1,722 independent scalar comparisons, active-work Save/Undo/Pause/cancellation and a fresh saved-file reopen. Existing educational models and protected live state are preserved.
 
 - [Verification output-step boundary](96-verification-output-grid.md): repair the false refusal of 1 ms at 1 µs by counting the represented worker grid, preserving distinct final intervals and the existing limits. Focused regressions, full quality and clean /218 matching-agent grid/storage checks pass; native acceptance remains separate.
+
+- [Sliders and pane scrolling](97-slider-wheel.md): old-native/current-source reproduction of accidental wiper edits, normal text/selector/thumb checks, and a narrow managed-slider repair. The elab11 pin and full quality pass; fresh native acceptance remains separate.

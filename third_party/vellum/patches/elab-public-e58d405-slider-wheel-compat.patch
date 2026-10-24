@@ -1,0 +1,3193 @@
+diff --git a/drivers/cogent/accessibility.go b/drivers/cogent/accessibility.go
+index d219a7f..fd8b006 100644
+--- a/drivers/cogent/accessibility.go
++++ b/drivers/cogent/accessibility.go
+@@ -1146,17 +1146,20 @@ func accessibilityFocusedID(root *record) string {
+ // layout/render pass. It never enters the application owner or reads models.
+ type accessibilityHost struct {
+ 	core.Frame
+-	window *nativeWindow
++	publishGeometry func()
++	painting        bool // Native render context only.
+ }
+ 
+ func newAccessibilityHost(w *nativeWindow) *core.Frame {
+ 	host := tree.New[accessibilityHost](w.body)
+-	host.window = w
++	host.publishGeometry = func() { publishAccessibilityGeometry(w) }
+ 	return &host.Frame
+ }
+ func (h *accessibilityHost) RenderWidget() {
+-	h.Frame.RenderWidget()
+-	publishAccessibilityGeometry(h.window)
++	renderAccessibilityFrame(&h.Frame, &h.painting)
++	if h.publishGeometry != nil {
++		h.publishGeometry()
++	}
+ }
+ func publishAccessibilityGeometry(w *nativeWindow) {
+ 	if w == nil || w.closing.Load() {
+@@ -1315,7 +1318,8 @@ func lookupAccessibility(window string) (*accessibilityBridge, error) {
+ // here handles resize and scroll independently of the main Scene's host.
+ type accessibilityDialogHost struct {
+ 	core.Frame
+-	record *record
++	record   *record
++	painting bool // Native render context only.
+ }
+ 
+ func newAccessibilityDialogHost(parent tree.Node, r *record) *accessibilityDialogHost {
+@@ -1324,7 +1328,10 @@ func newAccessibilityDialogHost(parent tree.Node, r *record) *accessibilityDialo
+ 	return host
+ }
+ func (h *accessibilityDialogHost) RenderWidget() {
+-	h.Frame.RenderWidget()
++	renderAccessibilityFrame(&h.Frame, &h.painting)
++	h.publishGeometry()
++}
++func (h *accessibilityDialogHost) publishGeometry() {
+ 	r := h.record
+ 	if r == nil || r.control == nil {
+ 		return
+diff --git a/drivers/cogent/accessibility_scroll.go b/drivers/cogent/accessibility_scroll.go
+new file mode 100644
+index 0000000..dc9be63
+--- /dev/null
++++ b/drivers/cogent/accessibility_scroll.go
+@@ -0,0 +1,48 @@
++package cogent
++
++import (
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/tree"
++)
++
++// A scroll can repaint only its own subtree. The enclosing accessibility host
++// is then absent from the paint traversal, despite its children's moved bounds.
++type accessibilityScrollHost struct {
++	core.Frame
++	painting bool // Native render context only.
++}
++
++func newAccessibilityScrollHost(parent tree.Node) *core.Frame {
++	return &tree.New[accessibilityScrollHost](parent).Frame
++}
++
++func renderAccessibilityFrame(frame *core.Frame, painting *bool) {
++	*painting = true
++	defer func() { *painting = false }()
++	frame.RenderWidget()
++}
++
++func (h *accessibilityScrollHost) RenderWidget() {
++	renderAccessibilityFrame(&h.Frame, &h.painting)
++	// Publish after the complete partial subtree, once. Full main/modal paints
++	// and nested scroll paints let their enclosing host publish at completion.
++	// Resolve the parent dynamically so reparented modal content keeps its scope.
++	for parent := h.Parent; !tree.IsNil(parent); parent = parent.AsTree().Parent {
++		switch host := parent.AsTree().This.(type) {
++		case *accessibilityScrollHost:
++			if host.painting {
++				return
++			}
++		case *accessibilityHost:
++			if !host.painting && host.publishGeometry != nil {
++				host.publishGeometry()
++			}
++			return
++		case *accessibilityDialogHost:
++			if !host.painting {
++				host.publishGeometry()
++			}
++			return
++		}
++	}
++}
+diff --git a/drivers/cogent/accessibility_scroll_geometry_offscreen_test.go b/drivers/cogent/accessibility_scroll_geometry_offscreen_test.go
+new file mode 100644
+index 0000000..2d6c89b
+--- /dev/null
++++ b/drivers/cogent/accessibility_scroll_geometry_offscreen_test.go
+@@ -0,0 +1,103 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"fmt"
++	"reflect"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/math32"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestAccessibilityGeometryFollowsPartialScrollPaint(t *testing.T) {
++	for _, dpi := range []float32{96, 192} {
++		for _, nested := range []bool{false, true} {
++			t.Run(fmt.Sprintf("dpi-%g/nested-%t", dpi, nested), func(t *testing.T) {
++				testAccessibilityPartialScroll(t, dpi, nested)
++			})
++		}
++	}
++}
++
++func testAccessibilityPartialScroll(t *testing.T, dpi float32, nested bool) {
++	t.Helper()
++	config := manualConfig(t, 7)
++	config.LogicalDPI = dpi
++	views := 0
++	m, a := gridManual(t, config, func() ui.Node {
++		views++
++		rows := []ui.Node{}
++		for i := range 20 {
++			rows = append(rows, ui.Node{ID: fmt.Sprint("row-", i), Kind: ui.Label, Text: fmt.Sprint("Row ", i), Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 40})}})
++		}
++		rows = append(rows, ui.Node{ID: "field", Kind: ui.TextField, Text: "Edit me"})
++		scroll := ui.Node{ID: "scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 160})}, Children: rows}
++		if nested {
++			scroll = ui.Node{ID: "outer", Kind: ui.Scroll, Grow: true, Children: []ui.Node{scroll}}
++		}
++		return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{scroll}}
++	})
++	gridFrame(t, m)
++	w := m.implementation.find("one").state
++	var scroll *core.Frame
++	var published map[string][4]float32
++	publications := 0
++	if err := a.Do(func() {
++		w.host.This.(*accessibilityHost).publishGeometry = func() {
++			publications++
++			published = nativeAccessibilityBounds(w.root)
++		}
++		scroll = findRecord(w.root, "scroll").widget.(*core.Frame)
++		if !scroll.HasScroll[math32.Y] {
++			t.Fatal("fixture did not create a scroll viewport")
++		}
++		published = nativeAccessibilityBounds(w.root)
++	}); err != nil {
++		t.Fatal(err)
++	}
++	beforeViews := views
++	before := published[accessibilityManagedID("field")]
++	if err := a.Do(func() { scroll.ScrollDimToStart(math32.Y, 100000) }); err != nil {
++		t.Fatal(err)
++	}
++	gridFrame(t, m)
++	if err := a.Do(func() {
++		actual := nativeAccessibilityBounds(w.root)
++		field := actual[accessibilityManagedID("field")]
++		if field == before || field[2] <= 0 || field[3] <= 0 {
++			t.Fatal("fixture did not reveal the text field", before, field)
++		}
++		if publications != 1 || !reflect.DeepEqual(published, actual) || views != beforeViews {
++			t.Fatalf("child-only scroll left native geometry stale: publications=%d views=%d/%d field=%v published=%v", publications, views, beforeViews, field, published[accessibilityManagedID("field")])
++		}
++	}); err != nil {
++		t.Fatal(err)
++	}
++	if err := a.Do(func() {
++		publications = 0
++		w.host.NeedsRender()
++	}); err != nil {
++		t.Fatal(err)
++	}
++	gridFrame(t, m)
++	if err := a.Do(func() {
++		if publications != 1 || !reflect.DeepEqual(published, nativeAccessibilityBounds(w.root)) || views != beforeViews {
++			t.Fatal("ancestor repaint published intermediate/repeated geometry", publications)
++		}
++		publications = 0
++		scroll.ScrollDimToContentStart(math32.Y)
++	}); err != nil {
++		t.Fatal(err)
++	}
++	gridFrame(t, m)
++	if err := a.Do(func() {
++		if publications != 1 || published[accessibilityManagedID("field")] != before || views != beforeViews {
++			t.Fatal("scrolling back retained revealed field geometry", publications, published)
++		}
++	}); err != nil {
++		t.Fatal(err)
++	}
++}
+diff --git a/drivers/cogent/button_context_test.go b/drivers/cogent/button_context_test.go
+new file mode 100644
+index 0000000..e35fdfb
+--- /dev/null
++++ b/drivers/cogent/button_context_test.go
+@@ -0,0 +1,96 @@
++package cogent
++
++import (
++	"image"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events"
++	"github.com/dshills/vellum/app"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestButtonActivationRetainsInputCallbackAcrossRebind(t *testing.T) {
++	for _, scenario := range []string{"held-pointer", "queued-pointer", "programmatic-latest", "canceled-pointer-keyboard", "next-pointer", "disabled", "disposed", "nil-origin"} {
++		t.Run(scenario, func(t *testing.T) {
++			a, err := app.New(app.Config{})
++			if err != nil {
++				t.Fatal(err)
++			}
++			defer a.Close()
++			if err := a.Open(app.Window{ID: "main", Title: "Button context", Width: 200, Height: 100, View: func() ui.Node { return ui.Node{ID: "root", Kind: ui.Column} }}); err != nil {
++				t.Fatal(err)
++			}
++			oldCalls, newCalls := 0, 0
++			n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "action", Kind: ui.Button, Text: "Action", Activate: func() { oldCalls++ }}}}
++			if scenario == "nil-origin" {
++				n.Children[0].Activate = nil
++			}
++			host := core.NewFrame(core.NewBody("button-context"))
++			r, err := reconcile(host, nil, n, a, "main")
++			if err != nil {
++				t.Fatal(err)
++			}
++			record := findRecord(r, "action")
++			button := record.widget.(*core.Button)
++			pointer := func(kind events.Types) {
++				e := events.NewMouse(kind, events.Left, image.Pt(10, 10), 0)
++				e.SetLocalOff(image.Point{})
++				if kind == events.Click {
++					// Match the native router's cloned MouseUp, including Base's
++					// loss of HasPos while retaining the original mouse button.
++					button.Send(events.Click, e)
++				} else {
++					button.HandleEvent(e)
++				}
++			}
++			if scenario == "programmatic-latest" {
++				button.Send(events.Click)
++			} else {
++				pointer(events.MouseDown)
++				if scenario == "queued-pointer" {
++					pointer(events.Click)
++				}
++			}
++			n.Children[0].Activate = func() { newCalls++ }
++			n.Children[0].Disabled = scenario == "disabled"
++			r, err = reconcile(host, r, n, a, "main")
++			if err != nil {
++				t.Fatal(err)
++			}
++			if findRecord(r, "action").widget != button {
++				t.Fatal("fixture replaced the widget")
++			}
++			switch scenario {
++			case "queued-pointer", "programmatic-latest":
++			case "canceled-pointer-keyboard":
++				pointer(events.MouseUp) // canceled router sequences emit no Click
++				button.Send(events.Click)
++			case "next-pointer":
++				pointer(events.MouseUp)
++				pointer(events.MouseDown)
++				pointer(events.Click)
++			case "disposed":
++				pointer(events.Click)
++				disposeControl(record)
++				if record.control.buttonPress.Load() != nil {
++					t.Fatal("disposal retained the pressed callback")
++				}
++			default:
++				pointer(events.MouseUp)
++				pointer(events.Click)
++			}
++			a.Drain()
++			wantOld, wantNew := 0, 0
++			switch scenario {
++			case "held-pointer", "queued-pointer":
++				wantOld = 1
++			case "programmatic-latest", "canceled-pointer-keyboard", "next-pointer":
++				wantNew = 1
++			}
++			if oldCalls != wantOld || newCalls != wantNew {
++				t.Fatalf("activation context: origin=%d refreshed=%d want %d/%d", oldCalls, newCalls, wantOld, wantNew)
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/cmd/gallery/structure_catalogue_offscreen_test.go b/drivers/cogent/cmd/gallery/structure_catalogue_offscreen_test.go
+index 7c023a8..46b22ad 100644
+--- a/drivers/cogent/cmd/gallery/structure_catalogue_offscreen_test.go
++++ b/drivers/cogent/cmd/gallery/structure_catalogue_offscreen_test.go
+@@ -202,15 +202,15 @@ func testStructureCataloguePublicManual(t *testing.T, dpi float32) {
+ 		t.Fatal("readonly disclosure mutated", g.structureModel())
+ 	}
+ 	setup(func() { g.detailsReadOnly = false; g.detailsDisabled = true })
+-	// Disabled Core buttons drop shadow margins; the inherited-disabled field
+-	// drops its reserved border. These are distinct style states, not a restore.
++	// The inherited-color disclosure action has no shadow margin. The child
++	// button drops its shadow and the inherited-disabled field its border.
+ 	disabledHeights := []int{find(heading).Bounds.Dy(), find("section-draft").Bounds.Dy(), find("section-action").Bounds.Dy()}
+-	for i, shrink := range []int{6, 2, 6} {
++	for i, shrink := range []int{0, 2, 6} {
+ 		if normalHeights[i]-disabledHeights[i] != shrink {
+ 			t.Fatal("disabled style metric", dpi, i, normalHeights, disabledHeights)
+ 		}
+ 	}
+-	if find("section-after").Bounds.Min.Y != afterY-14 {
++	if find("section-after").Bounds.Min.Y != afterY-8 {
+ 		t.Fatal("disabled section layout", dpi, afterY, find("section-after").Bounds)
+ 	}
+ 	if find(heading).Enabled || find("section-draft").Enabled {
+diff --git a/drivers/cogent/control_context_test.go b/drivers/cogent/control_context_test.go
+new file mode 100644
+index 0000000..d361b47
+--- /dev/null
++++ b/drivers/cogent/control_context_test.go
+@@ -0,0 +1,111 @@
++package cogent
++
++import (
++	"image"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events"
++	"github.com/dshills/vellum/app"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestHeldSliderRetainsBeginCallbackAcrossControlledRepaint(t *testing.T) {
++	a, err := app.New(app.Config{})
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer a.Close()
++	if err := a.Open(app.Window{ID: "main", Title: "Slider context", Width: 400, Height: 160, View: func() ui.Node { return ui.Node{ID: "root", Kind: ui.Column} }}); err != nil {
++		t.Fatal(err)
++	}
++	oldCalls, newCalls := 0, 0
++	n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "wiper", Kind: ui.Slider, Number: 50, Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Change: func(ui.ChangeEvent) { oldCalls++ }}}}
++	host := core.NewFrame(core.NewBody("held-slider"))
++	r, err := reconcile(host, nil, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	slider := findRecord(r, "wiper").widget.(*core.Slider)
++	slider.Update()
++	slider.Geom.Size.Actual.Content.X = 300
++	slider.Geom.Size.Actual.Content.Y = 20
++	from, to := image.Pt(150, 10), image.Pt(225, 10)
++	begin := events.NewMouse(events.SlideStart, events.Left, from, 0)
++	begin.SetLocalOff(image.Point{})
++	slider.HandleEvent(begin)
++	move := events.NewMouseDrag(events.Left, to, from, from, 0)
++	move.Typ = events.SlideMove
++	move.SetLocalOff(image.Point{})
++	slider.HandleEvent(move)
++	if oldCalls != 0 || newCalls != 0 {
++		t.Fatal("preview committed")
++	}
++	n.Children[0].Number = 20
++	n.Children[0].Change = func(ui.ChangeEvent) { newCalls++ }
++	r, err = reconcile(host, r, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if findRecord(r, "wiper").widget != slider {
++		t.Fatal("fixture replaced the held widget")
++	}
++	end := events.NewMouseDrag(events.Left, to, from, from, 0)
++	end.Typ = events.SlideStop
++	end.SetLocalOff(image.Point{})
++	slider.HandleEvent(end)
++	a.Drain()
++	if oldCalls != 1 || newCalls != 0 {
++		t.Fatalf("gesture borrowed refreshed callback: origin=%d refreshed=%d", oldCalls, newCalls)
++	}
++	// A declined originating callback restores the current controlled value.
++	r, err = reconcile(host, r, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if slider.Value != 20 {
++		t.Fatal("declined old gesture did not restore current model", slider.Value)
++	}
++	slider.SetValue(30).SendChange()
++	a.Drain()
++	if oldCalls != 1 || newCalls != 1 {
++		t.Fatal("future independent change failed to use current callback")
++	}
++}
++
++func TestQueuedSliderChangeRetainsEventCallbackAcrossRebind(t *testing.T) {
++	a, err := app.New(app.Config{})
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer a.Close()
++	if err := a.Open(app.Window{ID: "main", Title: "Queued context", Width: 200, Height: 100, View: func() ui.Node { return ui.Node{ID: "root", Kind: ui.Column} }}); err != nil {
++		t.Fatal(err)
++	}
++	oldCalls, newCalls := 0, 0
++	n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "slider", Kind: ui.Slider, Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Change: func(ui.ChangeEvent) { oldCalls++ }}}}
++	host := core.NewFrame(core.NewBody("queued-control"))
++	r, err := reconcile(host, nil, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	slider := findRecord(r, "slider").widget.(*core.Slider)
++	slider.SetValue(30).SendChange() // owner delivery remains queued
++	n.Children[0].Change = func(ui.ChangeEvent) { newCalls++ }
++	r, err = reconcile(host, r, n, a, "main")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if findRecord(r, "slider").widget != slider {
++		t.Fatal("fixture replaced the queued control")
++	}
++	a.Drain()
++	if oldCalls != 1 || newCalls != 0 {
++		t.Fatalf("queued event borrowed refreshed callback: origin=%d refreshed=%d", oldCalls, newCalls)
++	}
++	slider.SetValue(30).SendChange()
++	a.Drain()
++	if oldCalls != 1 || newCalls != 1 {
++		t.Fatal("future event did not use the new callback")
++	}
++}
+diff --git a/drivers/cogent/control_state_key_test.go b/drivers/cogent/control_state_key_test.go
+new file mode 100644
+index 0000000..ae65662
+--- /dev/null
++++ b/drivers/cogent/control_state_key_test.go
+@@ -0,0 +1,43 @@
++package cogent
++
++import (
++	"testing"
++
++	"cogentcore.org/core/core"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestControlStateKeyRetainsSameOwnerAndReplacesChangedOwner(t *testing.T) {
++	for _, kind := range []ui.Kind{ui.Button, ui.Checkbox, ui.Switch, ui.ToggleButton, ui.Selector, ui.Slider, ui.NumberField, ui.TextField, ui.RadioGroup, ui.SegmentedControl, ui.ListBox, ui.MenuButton} {
++		t.Run(string(kind), func(t *testing.T) {
++			a, _ := newAXTest(t, 8)
++			host := core.NewFrame(core.NewBody("control-owner"))
++			n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "control", Kind: kind, ControlStateKey: "doc:part1", Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Options: []ui.Option{{ID: "one", Label: "One"}}, SelectedID: "one", Activate: func() {}, Change: func(ui.ChangeEvent) {}}}}
++			if kind == ui.ListBox || kind == ui.MenuButton {
++				n.Children[0].Activate = nil
++			}
++			if kind == ui.MenuButton {
++				n.Children[0].SelectedID = ""
++				n.Children[0].Text = "Actions"
++			}
++			r, err := reconcile(host, nil, n, a, "ax")
++			if err != nil {
++				t.Fatal(err)
++			}
++			old := findRecord(r, "control")
++			r, err = reconcile(host, r, n, a, "ax")
++			if err != nil || findRecord(r, "control") != old {
++				t.Fatal("same owner changed binding", err)
++			}
++			n.Children[0].ControlStateKey = "doc:part2"
++			r, err = reconcile(host, r, n, a, "ax")
++			if err != nil {
++				t.Fatal(err)
++			}
++			fresh := findRecord(r, "control")
++			if fresh == old || fresh.widget == old.widget || !old.control.retired || fresh.node.ID != old.node.ID {
++				t.Fatal("owner change failed to retire old binding under the same public ID")
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/controls.go b/drivers/cogent/controls.go
+index dab2718..cbd1186 100644
+--- a/drivers/cogent/controls.go
++++ b/drivers/cogent/controls.go
+@@ -41,6 +41,13 @@ type Semantics struct {
+ // settlement. Its nonzero size keeps independently allocated identities distinct.
+ type fieldChangeEpoch struct{ marker byte }
+ 
++// A held gesture belongs to the descriptor at its start, even if a controlled
++// refresh replaces the callback before release. Application context guards must
++// see that originating callback rather than borrow the refreshed descriptor.
++type controlChangeBinding struct{ callback func(ui.ChangeEvent) }
++
++type controlActivationBinding struct{ callback func() }
++
+ type controlState struct {
+ 	a                 *app.Application
+ 	window            string
+@@ -64,6 +71,8 @@ type controlState struct {
+ 	gridEdit          *gridEditBinding
+ 	placement         *placementBinding
+ 	fieldChanges      atomic.Pointer[fieldChangeEpoch]
++	sliderGesture     atomic.Pointer[controlChangeBinding]
++	buttonPress       atomic.Pointer[controlActivationBinding]
+ 	fieldDelivered    string // owner: last delivered value, or controlled value applied by reconciliation
+ 	fieldState        *core.TextFieldEditingState
+ 	fieldSelection    *editor.Selection
+@@ -147,15 +156,34 @@ func mountControl(parent tree.Node, r *record, a *app.Application, window string
+ 				return
+ 			}
+ 			guard := placementActivationGuard(r)
++			var press *controlActivationBinding
++			// Native Send clones MouseUp into Base: HasPos is then false,
++			// but the mouse button survives. Keyboard/programmatic activation
++			// carries NoButton and must ignore an earlier canceled pointer press.
++			if e.MouseButton() == events.Left {
++				press = c.buttonPress.Swap(nil)
++			}
+ 			postControl(r, func() {
+-				if guard() && !c.disabled && r.node.Activate != nil {
+-					r.node.Activate()
++				activate := r.node.Activate
++				if press != nil {
++					activate = press.callback
++				}
++				if guard() && !c.disabled && activate != nil {
++					activate()
+ 					c.a.Invalidate(c.window)
+ 				}
+ 			})
+ 		})
+ 		widget = button
+-		button.OnFirst(events.MouseDown, func(e events.Event) { beginPlacement(r, e) })
++		button.OnFirst(events.MouseDown, func(e events.Event) {
++			if e.MouseButton() == events.Left && r.node.PlacementSource == nil {
++				c.buttonPress.Store(&controlActivationBinding{callback: r.node.Activate})
++			}
++			beginPlacement(r, e)
++		})
++		// The native router emits Click after MouseUp listeners finish. Do not
++		// clear the origin on MouseUp. Click consumes it; a canceled press is
++		// replaced by the next pointer press and ignored by keyboard activation.
+ 	case ui.Canvas2D:
+ 		widget = mountManagedCanvas(parent, r)
+ 	case ui.MenuButton:
+@@ -214,9 +242,23 @@ func mountControl(parent tree.Node, r *record, a *app.Application, window string
+ 		})
+ 		widget = chooser
+ 	case ui.Slider:
+-		widget = core.NewSlider(parent)
++		slider := core.NewSlider(parent)
++		// Wheel input scrolls the enclosing pane; changing a value requires
++		// a deliberate pointer gesture or key, as with managed number fields.
++		delete(slider.Listeners.Normal, events.Scroll)
++		slider.OnFirst(events.SlideStart, func(events.Event) {
++			c.sliderGesture.Store(&controlChangeBinding{callback: r.node.Change})
++		})
++		// The Slider's own SlideStop handler emits Change first; dispatchControl
++		// captures the origin before this later handler retires the gesture.
++		slider.OnFinal(events.SlideStop, func(events.Event) { c.sliderGesture.Store(nil) })
++		widget = slider
+ 	case ui.NumberField:
++		c.fieldChanges.Store(&fieldChangeEpoch{})
+ 		spinner := core.NewSpinner(parent)
++		// Wheel input belongs to the enclosing pane, even while this editor
++		// has focus. Keep typing, step buttons and arrow keys deliberate.
++		delete(spinner.Listeners.Normal, events.Scroll)
+ 		bindFieldPointerFocus(&spinner.TextField)
+ 		widget = spinner
+ 	case ui.TextField:
+@@ -254,7 +296,7 @@ func mountControl(parent tree.Node, r *record, a *app.Application, window string
+ 		c.client = textClientID.Add(1)
+ 		widget = mountEditor(parent, r)
+ 	case ui.Scroll:
+-		w := core.NewFrame(parent)
++		w := newAccessibilityScrollHost(parent)
+ 		w.Styler(func(s *styles.Style) { s.Direction = styles.Column; s.Overflow.Set(styles.OverflowAuto) })
+ 		widget = w
+ 	case ui.Tabs:
+@@ -352,6 +394,12 @@ func dispatchControl(r *record, e events.Event) {
+ 		return
+ 	} // private draft is synchronized only at the originating boundary/barrier
+ 	change := ui.ChangeEvent{ID: r.node.ID, Kind: r.node.Kind}
++	callback := r.node.Change
++	if change.Kind == ui.Slider {
++		if origin := r.control.sliderGesture.Load(); origin != nil {
++			callback = origin.callback
++		}
++	}
+ 	switch w := r.widget.(type) {
+ 	case *core.Switch:
+ 		change.Checked = w.IsChecked()
+@@ -372,10 +420,15 @@ func dispatchControl(r *record, e events.Event) {
+ 	}
+ 	fieldEpoch := r.control.fieldChanges.Load()
+ 	postControl(r, func() {
+-		if change.Kind == ui.TextField && r.control.fieldChanges.Load() != fieldEpoch {
++		if (change.Kind == ui.TextField || change.Kind == ui.NumberField) && r.control.fieldChanges.Load() != fieldEpoch {
+ 			return // explicit settlement already published this field's final value
+ 		}
+-		if r.control.disabled || r.node.Change == nil {
++		// Discrete controls keep their established latest-descriptor delivery.
++		// A slider change carries the callback of its originating interaction.
++		if change.Kind != ui.Slider {
++			callback = r.node.Change
++		}
++		if r.control.disabled || r.node.Change == nil || callback == nil {
+ 			requestControlRestore(r)
+ 			return
+ 		}
+@@ -408,7 +461,7 @@ func dispatchControl(r *record, e events.Event) {
+ 		if change.Kind == ui.TextField {
+ 			r.control.fieldDelivered = change.Text
+ 		}
+-		r.node.Change(change)
++		callback(change)
+ 		r.control.committed = true
+ 		r.control.a.Invalidate(r.control.window)
+ 	})
+@@ -853,6 +906,8 @@ func disposeControl(r *record) {
+ 	if r.control != nil {
+ 		disposePlacement(r)
+ 		r.control.retired = true
++		r.control.sliderGesture.Store(nil)
++		r.control.buttonPress.Store(nil)
+ 		if r.control.tabs != nil {
+ 			r.control.tabs.pending.Store(nil)
+ 			for _, binding := range r.control.tabs.bindings {
+diff --git a/drivers/cogent/disclosure.go b/drivers/cogent/disclosure.go
+index 928bfaa..789317c 100644
+--- a/drivers/cogent/disclosure.go
++++ b/drivers/cogent/disclosure.go
+@@ -25,7 +25,9 @@ func mountDisclosure(parent tree.Node, r *record) core.Widget {
+ 	c := &disclosureState{}
+ 	r.control.disclosure = c
+ 	outer.Styler(func(s *styles.Style) { s.Direction = styles.Column; s.Grow.Set(1, 0); s.Gap.Zero() })
+-	c.header = core.NewButton(outer).SetType(core.ButtonText)
++	// The managed node owns the heading's palette. ButtonAction inherits that
++	// foreground instead of taking a process-wide primary color like ButtonText.
++	c.header = core.NewButton(outer).SetType(core.ButtonAction)
+ 	c.header.SetName("vellum-disclosure-heading")
+ 	c.header.Styler(func(s *styles.Style) { s.Grow.Set(1, 0); s.Padding.Set(units.Dp(6)); s.Justify.Content = styles.Start })
+ 	c.header.OnClick(func(events.Event) { queueDisclosure(r, !r.node.Checked) })
+diff --git a/drivers/cogent/disclosure_offscreen_test.go b/drivers/cogent/disclosure_offscreen_test.go
+index 0bdeb5f..551d6ca 100644
+--- a/drivers/cogent/disclosure_offscreen_test.go
++++ b/drivers/cogent/disclosure_offscreen_test.go
+@@ -4,6 +4,7 @@ package cogent
+ 
+ import (
+ 	"bytes"
++	"image/color"
+ 	"testing"
+ 
+ 	"cogentcore.org/core/core"
+@@ -12,6 +13,47 @@ import (
+ 	"github.com/dshills/vellum/ui"
+ )
+ 
++func TestDisclosureManualHeadingInheritsControlledPalette(t *testing.T) {
++	foreground := []color.NRGBA{{R: 220, G: 230, B: 240, A: 255}, {R: 30, G: 40, B: 50, A: 255}}
++	background := []color.NRGBA{{R: 30, G: 30, B: 32, A: 255}, {R: 242, G: 242, B: 247, A: 255}}
++	swapped := false
++	view := func() ui.Node {
++		root := ui.Node{ID: "root", Kind: ui.Column}
++		for i, id := range []string{"first", "second"} {
++			index := i
++			if swapped {
++				index = 1 - index
++			}
++			root.Children = append(root.Children, ui.Node{ID: id, Kind: ui.Disclosure, Text: "Technical details", Style: ui.Style{Foreground: ui.Some(foreground[index]), Background: ui.Some(background[index])}, Change: func(ui.ChangeEvent) { t.Fatal("color update toggled the disclosure") }})
++		}
++		return root
++	}
++	m, a := simpleManual(t, manualConfig(t, 7), view)
++	for _, change := range []bool{false, true} {
++		if change {
++			if err := a.Do(func() { swapped = true; a.Invalidate("one") }); err != nil {
++				t.Fatal(err)
++			}
++		}
++		unitSettle(t, m)
++		for i, id := range []string{"first", "second"} {
++			index := i
++			if swapped {
++				index = 1 - index
++			}
++			r := findRecord(m.implementation.find("one").state.root, id)
++			got := color.NRGBAModel.Convert(r.control.disclosure.header.Styles.Color.At(0, 0)).(color.NRGBA)
++			if got != foreground[index] {
++				t.Fatalf("heading ignores controlled palette: %s swapped=%v got=%v want=%v", id, swapped, got, foreground[index])
++			}
++			got = color.NRGBAModel.Convert(r.widget.AsWidget().Styles.Background.At(0, 0)).(color.NRGBA)
++			if got != background[index] {
++				t.Fatal("disclosure surface ignores explicit palette", id, got, background[index])
++			}
++		}
++	}
++}
++
+ func TestDisclosureManualPointerKeyboardGeometryAndFocus(t *testing.T) {
+ 	expanded := true
+ 	changes := 0
+diff --git a/drivers/cogent/driver.go b/drivers/cogent/driver.go
+index 751fe40..23d7e0f 100644
+--- a/drivers/cogent/driver.go
++++ b/drivers/cogent/driver.go
+@@ -85,6 +85,7 @@ type nativeWindow struct {
+ 	presentation     *presentationSink
+ 	desktop          *DesktopSession
+ 	source           atomic.Pointer[events.Source]
++	background       atomic.Pointer[windowBackground]
+ 	pending, closing atomic.Bool
+ }
+ 
+@@ -217,6 +218,7 @@ func (d Driver) Run(ctx context.Context, a *app.Application) error {
+ 				fail(fmt.Errorf("cogent: reconciliation returned no root"))
+ 				return
+ 			}
++			syncWindowBackground(w)
+ 			nativeRefreshServices(w.body)
+ 			bindControlWake(w.root, func(e events.Event) { custom(w, e) }, d.OnError)
+ 			bindGridScopes(w.root)
+@@ -308,6 +310,7 @@ func (d Driver) Run(ctx context.Context, a *app.Application) error {
+ 			w := &nativeWindow{window: spec}
+ 			buildErr := a.Do(func() {
+ 				w.body = core.NewBody(spec.Title)
++				bindWindowBackground(w)
+ 				if d.PresentationMetrics != nil {
+ 					var err error
+ 					w.presentation, err = d.PresentationMetrics.bind(spec.ID)
+diff --git a/drivers/cogent/editor.go b/drivers/cogent/editor.go
+index 8089e50..9bb5c80 100644
+--- a/drivers/cogent/editor.go
++++ b/drivers/cogent/editor.go
+@@ -113,6 +113,7 @@ type textWindow struct {
+ 	boundaries          map[*core.Scene]func(events.Event) // originating loop, restored on teardown
+ }
+ type textSettlement struct {
++	number    bool
+ 	binding   *record
+ 	model     *editor.Model
+ 	gridEdit  *gridEditBinding
+@@ -481,7 +482,7 @@ func bindTextWindow(w *nativeWindow) error {
+ 		}
+ 	}
+ 	for id, request := range t.requests {
+-		if request.binding.control.retired || current[request.binding.control.client] != request.binding {
++		if request.binding.control.retired || (request.number && numberFieldRecord(w.root, request.binding.node.ID) != request.binding) || (!request.number && current[request.binding.control.client] != request.binding) {
+ 			t.complete(id, ErrTextInputStale)
+ 		}
+ 	}
+@@ -565,6 +566,12 @@ func (t *textWindow) apply(u textinput.Update) {
+ 		_ = t.owner.Invalidate(t.window.window.ID)
+ 		requestTextPublicationScoped(t.window.window.Ref())
+ 	}()
++	// The fallback key already ran earlier in this window's FIFO. Acknowledge
++	// its position and request publication through the existing defer; do not
++	// decode text, mutate a field or weaken any stale-baseline guard.
++	if textinput.IsLegacyBoundary(u) {
++		return
++	}
+ 	r := t.clients[u.ClientID]
+ 	shadow, known := t.shadows[u.ClientID]
+ 	if !known || r == nil || r.control.retired || r.control.disabled {
+@@ -753,6 +760,10 @@ func (t *textWindow) settled(id uint64) {
+ 		t.complete(id, err)
+ 		return
+ 	}
++	if q.number {
++		t.settledNumberField(id, q)
++		return
++	}
+ 	if q.binding.control.retired || t.clients[q.binding.control.client] != q.binding {
+ 		t.complete(id, ErrTextInputStale)
+ 		return
+@@ -955,6 +966,9 @@ func (t *textWindow) publishGridRules() {
+ 	t.rules.Store(rules)
+ }
+ func (t *textWindow) gridInputAllowed(u textinput.Update) bool {
++	if u.Kind == "legacy" {
++		return textinput.IsLegacyBoundary(u)
++	}
+ 	rules := t.rules.Load()
+ 	if rules == nil {
+ 		return true
+diff --git a/drivers/cogent/internal/textinput/encoding.go b/drivers/cogent/internal/textinput/encoding.go
+index 83c4180..0220db8 100644
+--- a/drivers/cogent/internal/textinput/encoding.go
++++ b/drivers/cogent/internal/textinput/encoding.go
+@@ -15,6 +15,15 @@ type Update struct {
+ 	Anchor, Focus, MarkedStart, MarkedEnd int // UTF-16 offsets; -1 means unmarked.
+ }
+ 
++// IsLegacyBoundary recognizes an empty acknowledgment marker, never a text
++// mutation or permission to apply a stale editor update. Its FIFO position is
++// after the fallback key that changed toolkit text or selection.
++func IsLegacyBoundary(u Update) bool {
++	return u.Kind == "legacy" && u.Sequence != 0 && u.ClientID == 0 && !u.Delta &&
++		u.Text == "" && u.BeforeText == "" && u.ReplaceStart == 0 && u.ReplaceEnd == 0 &&
++		u.Anchor == 0 && u.Focus == 0 && u.MarkedStart == -1 && u.MarkedEnd == -1
++}
++
+ type RuneUpdate struct {
+ 	Update
+ 	RuneAnchor, RuneFocus, RuneMarkedStart, RuneMarkedEnd int
+diff --git a/drivers/cogent/internal/textinput/input.h b/drivers/cogent/internal/textinput/input.h
+index 3a17335..5cf0083 100644
+--- a/drivers/cogent/internal/textinput/input.h
++++ b/drivers/cogent/internal/textinput/input.h
+@@ -43,3 +43,6 @@ void vellum_managed_input_fixture_edit(void *input,const char *value,int bytes,i
+ 
+ void *vellum_managed_input_fixture_pool(void);
+ void vellum_managed_input_fixture_drain(void *pool);
++
++void vellum_managed_input_fixture_key(void *input,const char *text,bool command);
++int vellum_managed_input_fixture_base_calls(void *input);
+diff --git a/drivers/cogent/internal/textinput/input_darwin.go b/drivers/cogent/internal/textinput/input_darwin.go
+index e4e7577..07fb970 100644
+--- a/drivers/cogent/internal/textinput/input_darwin.go
++++ b/drivers/cogent/internal/textinput/input_darwin.go
+@@ -287,3 +287,12 @@ func fixtureInputEdit(i *Input, value string, start, length, mode int) {
+ 
+ func fixtureInputPool() unsafe.Pointer          { return C.vellum_managed_input_fixture_pool() }
+ func fixtureDrainInputPool(pool unsafe.Pointer) { C.vellum_managed_input_fixture_drain(pool) }
++
++func fixtureInputKey(i *Input, text string, command bool) {
++	v := C.CString(text)
++	defer C.free(unsafe.Pointer(v))
++	C.vellum_managed_input_fixture_key(i.native, v, C.bool(command))
++}
++func fixtureInputBaseCalls(i *Input) int {
++	return int(C.vellum_managed_input_fixture_base_calls(i.native))
++}
+diff --git a/drivers/cogent/internal/textinput/input_darwin.m b/drivers/cogent/internal/textinput/input_darwin.m
+index b602a8b..6e228a1 100644
+--- a/drivers/cogent/internal/textinput/input_darwin.m
++++ b/drivers/cogent/internal/textinput/input_darwin.m
+@@ -15,9 +15,9 @@ static char inputKey, inputBaseClassKey;
+  NSView *view;
+  Class baseClass, subclass;
+  uintptr_t handle;
+- uint64_t sequence, clientID, requestedLimitClient;
++ uint64_t sequence, clientID, requestedLimitClient, legacyRequired;
+  NSUInteger maximum, requestedMaximum;
+- BOOL deltas, active, forwarding, forwarded, closed;
++ BOOL deltas, active, forwarding, forwarded, closed, legacyUnsent;
+  NSEvent *keyEvent;
+  NSMutableString *text;
+  NSString *before;
+@@ -43,7 +43,7 @@ static Class inputParentClass(id view) {
+ }
+ static struct objc_super parent(id view) { return (struct objc_super){view,inputParentClass(view)}; }
+ static BOOL responds(id view,SEL selector){Class base=inputParentClass(view);return base && class_getInstanceMethod(base,selector)!=NULL;}
+-static BOOL usable(VellumManagedInputState *s) { return s && s->active && !s->closed && !s->forwarding; }
++static BOOL usable(VellumManagedInputState *s) { return s && s->active && !s->closed && !s->forwarding && !s->legacyUnsent && s->legacyRequired==0; }
+ static BOOL composing(VellumManagedInputState *s){return s && (s->before || s->marked.location!=NSNotFound);}
+ static BOOL validRange(NSString *text, NSRange range) {
+  NSUInteger count=text.length;
+@@ -117,6 +117,14 @@ static void emit(VellumManagedInputState *s) {
+  [s->cells release];s->cells=nil;[s->carets release];s->carets=nil;
+  s->sequence++;goVellumManagedCommit(s->handle);
+ }
++// A fallback key reaches the toolkit before this marker enters its FIFO. Do
++// not activate Cocoa with a snapshot captured before that key or its selection.
++// Capacity refusal keeps fallback routing active; the next publication retries.
++static BOOL queueLegacy(VellumManagedInputState *s) {
++ if(!s || s->closed || !s->legacyUnsent || s->sequence==UINT64_MAX)return NO;
++ if(!goVellumManagedPreflight(s->handle,s->sequence+1,0,"legacy","","",0,0,-1,-1))return NO;
++ s->legacyUnsent=NO;s->legacyRequired=s->sequence+1;emit(s);return YES;
++}
+ static BOOL finish(VellumManagedInputState *s, BOOL cancel) {
+  if(!s->before && s->marked.location==NSNotFound)return YES;
+  // Externally published marked text has no restoration baseline. Cancel must
+@@ -133,10 +141,10 @@ static BOOL finish(VellumManagedInputState *s, BOOL cancel) {
+ static void forwardKey(id view) {
+  VellumManagedInputState *s=state(view);
+  if(!s || !s->keyEvent || s->forwarded)return;
+- s->forwarded=YES;s->forwarding=YES;
++ s->forwarded=YES;s->forwarding=YES;s->legacyUnsent=YES;
+  struct objc_super p=parent(view);
+  ((void(*)(struct objc_super *,SEL,id))objc_msgSendSuper)(&p,@selector(keyDown:),s->keyEvent);
+- s->forwarding=NO;
++ s->forwarding=NO;queueLegacy(s);
+ }
+ // NSIntersectionRect treats zero-width insertion/newline rectangles as empty.
+ static NSRect clipTextRect(NSRect r,NSRect viewport){
+@@ -148,7 +156,11 @@ static NSRect clipTextRect(NSRect r,NSRect viewport){
+ @implementation VellumManagedInputMethods
+ - (void)keyDown:(NSEvent *)event {
+  VellumManagedInputState *s=state(self);
+- if(!usable(s)){struct objc_super p=parent(self);((void(*)(struct objc_super *,SEL,id))objc_msgSendSuper)(&p,_cmd,event);return;}
++ if(!usable(s)){
++  if(s && !s->closed){s->keyEvent=event;s->forwarded=NO;forwardKey(self);s->keyEvent=nil;}
++  else{struct objc_super p=parent(self);((void(*)(struct objc_super *,SEL,id))objc_msgSendSuper)(&p,_cmd,event);}
++  return;
++ }
+  s->keyEvent=event;s->forwarded=NO;
+  if(event.keyCode==53 && composing(s)){if(finish(s,YES))[[self inputContext] discardMarkedText];s->keyEvent=nil;return;}
+  // Preserve application shortcuts; ordinary input belongs to the input context.
+@@ -314,6 +326,7 @@ static BOOL publish(void *input,const char *text,int anchor,int focus,int marked
+  VellumManagedInputState *s=(id)input;
+  NSCAssert(NSThread.isMainThread,@"Input update requires main thread");
+  if(!s || s->closed)return NO;
++ if(s->legacyUnsent){queueLegacy(s);return NO;}
+  if(!text || strnlen(text,(4u<<20)+1)>(4u<<20))return NO;
+  NSString *value=[NSString stringWithUTF8String:text];
+  if(!value || !characters(value,4u<<20) || anchor<0 || focus<0 || !isfinite(x) || !isfinite(y) || !isfinite(width) || !isfinite(height) || width<0 || height<0)return NO;
+@@ -331,6 +344,7 @@ static BOOL publish(void *input,const char *text,int anchor,int focus,int marked
+  // focus-loss commit leaves composition active until credit is available.
+  if(s->active && (!active || clientID!=s->clientID)){if(!finish(s,NO))return NO;[[s->view inputContext] discardMarkedText];}
+  if(acknowledged<s->sequence)return NO;
++ s->legacyRequired=0;
+  s->clientID=clientID;s->active=active;
+  if(s->requestedLimitClient==clientID)s->maximum=s->requestedMaximum;s->caret=NSMakeRect(x,y,width,height);
+  // External edits invalidate the whole-document restoration baseline. Retain
+@@ -516,6 +530,7 @@ static int fixtureViews;
+ - (NSTextInputContext *)inputContext { return nil; }
+ - (NSRange)selectedRange { return NSMakeRange(17,0); }
+ - (void)insertText:(id)value replacementRange:(NSRange)range { baseCalls++; }
++- (void)keyDown:(NSEvent *)event { baseCalls++; }
+ @end
+ @interface VellumManagedFixtureRejectedView : VellumManagedFixtureView
+ @end
+@@ -563,3 +578,11 @@ void vellum_managed_input_fixture_edit(void *input,const char *value,int bytes,i
+ 
+ void *vellum_managed_input_fixture_pool(void) { return [[NSAutoreleasePool alloc]init]; }
+ void vellum_managed_input_fixture_drain(void *pool) { [(NSAutoreleasePool *)pool drain]; }
++
++void vellum_managed_input_fixture_key(void *input,const char *text,bool command) {
++ VellumManagedInputState *s=(id)input;if(!s || s->closed)return;
++ NSString *chars=[NSString stringWithUTF8String:text];
++ NSEvent *event=[NSEvent keyEventWithType:NSEventTypeKeyDown location:NSZeroPoint modifierFlags:command ? NSEventModifierFlagCommand : 0 timestamp:0 windowNumber:0 context:nil characters:chars charactersIgnoringModifiers:chars isARepeat:NO keyCode:command ? 0 : 7];
++ [s->view keyDown:event];
++}
++int vellum_managed_input_fixture_base_calls(void *input) {VellumManagedInputState *s=(id)input;return s && !s->closed ? ((VellumManagedFixtureView *)s->view)->baseCalls : -1;}
+diff --git a/drivers/cogent/internal/textinput/input_darwin_test.go b/drivers/cogent/internal/textinput/input_darwin_test.go
+index 695897a..70875ab 100644
+--- a/drivers/cogent/internal/textinput/input_darwin_test.go
++++ b/drivers/cogent/internal/textinput/input_darwin_test.go
+@@ -202,6 +202,7 @@ func runInputNativeFixtures() map[string]error {
+ 			fixtureAssert(inputObserve(i) == before && len(updates) == count, "oversized incoming/prospective text reached admission or mutated state")
+ 		}
+ 	})
++	runLegacyHandoffFixtures(run, rect)
+ 	return results
+ }
+ func TestNativeInputPublicationValidationAndClosedMethods(t *testing.T) {
+diff --git a/drivers/cogent/internal/textinput/legacy_handoff_test.go b/drivers/cogent/internal/textinput/legacy_handoff_test.go
+new file mode 100644
+index 0000000..418c7e0
+--- /dev/null
++++ b/drivers/cogent/internal/textinput/legacy_handoff_test.go
+@@ -0,0 +1,77 @@
++//go:build darwin && cgo
++
++package textinput
++
++import "testing"
++
++func runLegacyHandoffFixtures(run func(string, func()), rect [4]float64) {
++	run("legacy-handoff", func() {
++		view := fixtureInputView()
++		defer fixtureReleaseInputView(view)
++		var updates []Update
++		i := Attach(view, func(u Update) bool { updates = append(updates, u); return true }, func() {})
++		fixtureAssert(i != nil, "attach failed")
++		defer i.Close()
++		fixtureInputKey(i, "8", false)
++		fixtureAssert(fixtureInputBaseCalls(i) == 1, "initial legacy key lost")
++		fixtureAssert(!i.UpdateClient(13, "6 ms", 4, 4, -1, -1, true, 0, rect), "activated Cocoa before the earlier legacy key was acknowledged")
++		for _, s := range []string{" ", "m", "s"} {
++			fixtureInputKey(i, s, false)
++		}
++		fixtureAssert(fixtureInputBaseCalls(i) == 4, "mixed legacy/native stream before acknowledgment")
++		fixtureAssert(len(updates) == 4, "missing ordered legacy acknowledgments")
++		for n, u := range updates {
++			fixtureAssert(u.Kind == "legacy" && u.ClientID == 0 && u.Sequence == uint64(n+1), "unexpected legacy marker")
++		}
++		fixtureAssert(i.UpdateClient(13, "8 ms", 4, 4, -1, -1, true, 4, rect), "coherent final publication refused")
++		fixtureInputEdit(i, "!", -1, 0, 0)
++		fixtureAssert(len(updates) == 5 && updates[4].Kind == "insert" && updates[4].BeforeText == "8 ms" && updates[4].Text == "8 ms!", "native edit did not use acknowledged legacy baseline")
++	})
++	run("legacy-select-all", func() {
++		view := fixtureInputView()
++		defer fixtureReleaseInputView(view)
++		var updates []Update
++		i := Attach(view, func(u Update) bool { updates = append(updates, u); return true }, func() {})
++		fixtureAssert(i != nil, "attach failed")
++		defer i.Close()
++		fixtureAssert(i.UpdateClient(13, "6 ms", 4, 4, -1, -1, true, 0, rect), "initial active publication refused")
++		fixtureInputKey(i, "a", true)
++		fixtureAssert(!i.UpdateClient(13, "6 ms", 0, 4, -1, -1, true, 0, rect), "selection publication bypassed queued select-all")
++		fixtureInputKey(i, "8", false)
++		fixtureAssert(fixtureInputBaseCalls(i) == 2, "typing borrowed stale Cocoa selection")
++		fixtureAssert(i.UpdateClient(13, "8", 1, 1, -1, -1, true, 2, rect), "replacement baseline refused after acknowledgment")
++		fixtureInputEdit(i, " ms", -1, 0, 0)
++		fixtureAssert(len(updates) == 3 && updates[2].Text == "8 ms", "native suffix used stale select-all baseline")
++	})
++	run("legacy-capacity-retry", func() {
++		view := fixtureInputView()
++		defer fixtureReleaseInputView(view)
++		allow := false
++		var updates []Update
++		i := Attach(view, func(u Update) bool {
++			if !allow {
++				return false
++			}
++			updates = append(updates, u)
++			return true
++		}, func() {})
++		fixtureAssert(i != nil, "attach failed")
++		defer i.Close()
++		fixtureInputKey(i, "8", false)
++		fixtureAssert(fixtureInputBaseCalls(i) == 1, "capacity refusal lost legacy key")
++		fixtureAssert(!i.UpdateClient(13, "6 ms", 4, 4, -1, -1, true, 0, rect), "capacity refusal permitted stale activation")
++		allow = true
++		fixtureAssert(!i.UpdateClient(13, "8", 1, 1, -1, -1, true, 0, rect), "retry marker skipped owner acknowledgment")
++		fixtureAssert(len(updates) == 1 && updates[0].Kind == "legacy", "publication did not retry bounded legacy marker")
++		fixtureAssert(i.UpdateClient(13, "8", 1, 1, -1, -1, true, 1, rect), "retry acknowledgment did not restore native input")
++	})
++}
++func TestNativeLegacyHandoff(t *testing.T) {
++	for _, name := range []string{"legacy-handoff", "legacy-select-all", "legacy-capacity-retry"} {
++		t.Run(name, func(t *testing.T) {
++			if err := nativeFixtureResults[name]; err != nil {
++				t.Fatal(err)
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/legacy_boundary_offscreen_test.go b/drivers/cogent/legacy_boundary_offscreen_test.go
+new file mode 100644
+index 0000000..cb3f379
+--- /dev/null
++++ b/drivers/cogent/legacy_boundary_offscreen_test.go
+@@ -0,0 +1,72 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"reflect"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events/key"
++	"github.com/dshills/vellum/drivers/cogent/internal/textinput"
++)
++
++func TestManagedLegacyBoundaryAcknowledgesEarlierKeyWithoutFieldMutation(t *testing.T) {
++	a, w, tw, r, changes := reviewSettlementField(t)
++	boundary := textinput.Update{Sequence: 1, Kind: "legacy", MarkedStart: -1, MarkedEnd: -1}
++	tw.rules.Store(&gridTextRules{clients: map[uint64]gridTextRule{}})
++	w.source.Load().KeyChord('8', key.Code8, 0)
++	if !tw.preflightInput(boundary) {
++		t.Fatal("valid acknowledgment refused before client publication")
++	}
++	if err := tw.commitInput(); err != nil {
++		t.Fatal(err)
++	}
++	reviewDeliverFieldFIFO(t, w, r)
++	if got := r.widget.(*core.TextField).EditingState().Text; got != "A8" {
++		t.Fatal("marker changed preceding legacy text", got)
++	}
++	if tw.ack != 1 || len(*changes) != 0 {
++		t.Fatal("marker was not a pure acknowledgment", tw.ack, *changes)
++	}
++	before := r.widget.(*core.TextField).EditingState()
++	reviewOwner(t, a, func() { tw.apply(boundary) })
++	if !reflect.DeepEqual(before, r.widget.(*core.TextField).EditingState()) {
++		t.Fatal("duplicate marker changed field")
++	}
++	w.source.Load().KeyChord(0, key.CodeReturnEnter, 0)
++	reviewDeliverFieldFIFO(t, w, r)
++	a.Drain()
++	if !reflect.DeepEqual(*changes, []string{"A8"}) {
++		t.Fatal("Enter did not commit exactly the preceding field text", *changes)
++	}
++}
++func TestManagedLegacyBoundaryRefusesMutationPayloads(t *testing.T) {
++	_, _, tw, _, _ := reviewSettlementField(t)
++	good := textinput.Update{Sequence: 1, Kind: "legacy", MarkedStart: -1, MarkedEnd: -1}
++	for name, mutate := range map[string]func(*textinput.Update){
++		"zero-sequence": func(u *textinput.Update) { u.Sequence = 0 },
++		"client":        func(u *textinput.Update) { u.ClientID = 1 },
++		"text":          func(u *textinput.Update) { u.Text = "wrong" },
++		"before":        func(u *textinput.Update) { u.BeforeText = "wrong" },
++		"delta":         func(u *textinput.Update) { u.Delta = true },
++		"range-start":   func(u *textinput.Update) { u.ReplaceStart = 1 },
++		"range-end":     func(u *textinput.Update) { u.ReplaceEnd = 1 },
++		"anchor":        func(u *textinput.Update) { u.Anchor = 1 },
++		"focus":         func(u *textinput.Update) { u.Focus = 1 },
++		"marked-start":  func(u *textinput.Update) { u.MarkedStart = 0 },
++		"marked-end":    func(u *textinput.Update) { u.MarkedEnd = 0 },
++	} {
++		t.Run(name, func(t *testing.T) {
++			bad := good
++			mutate(&bad)
++			if tw.preflightInput(bad) {
++				_ = tw.commitInput()
++				t.Fatal("mutation payload admitted as acknowledgment")
++			}
++		})
++	}
++	if tw.ack != 0 {
++		t.Fatal("refusal advanced acknowledgment")
++	}
++}
+diff --git a/drivers/cogent/manual_offscreen.go b/drivers/cogent/manual_offscreen.go
+index 72dae0c..e2d6fed 100644
+--- a/drivers/cogent/manual_offscreen.go
++++ b/drivers/cogent/manual_offscreen.go
+@@ -304,6 +304,7 @@ func (p *manualImplementation) refresh(w *managedManualWindow) error {
+ 		if updateErr != nil {
+ 			return
+ 		}
++		syncWindowBackground(n)
+ 		bindControlWake(n.root, func(e events.Event) { p.custom(n, e) }, p.fail)
+ 		bindGridScopes(n.root)
+ 		bindTreeScopes(n.root)
+@@ -474,6 +475,7 @@ func (p *manualImplementation) syncTopology(ctx context.Context) error {
+ 		n := w.state
+ 		if err := p.owner.Do(func() {
+ 			n.body = core.NewBody(spec.Title)
++			bindWindowBackground(n)
+ 			n.body.Scene.GPUSceneRendering = p.config.GPUSceneRendering
+ 			setGridScrollReuse(n.body.Scene, p.config.ExperimentalGridScrollReuse)
+ 			n.host = newAccessibilityHost(n)
+diff --git a/drivers/cogent/native/dependencies.json b/drivers/cogent/native/dependencies.json
+index a3dd0a5..a74f20a 100644
+--- a/drivers/cogent/native/dependencies.json
++++ b/drivers/cogent/native/dependencies.json
+@@ -1381,6 +1381,50 @@
+               "sha256": "f03b7af13f29d992add76f857f26da55bfd1604a40eee6cc7ab38c1e5b03b46a"
+             }
+           ]
++        },
++        {
++          "origin": "ELab macOS standard pointer compatibility",
++          "inputs": "native/patches/systemcursors/original-hashes.json",
++          "outputs": "native/patches/systemcursors/output-hashes.json",
++          "patches": [
++            {
++              "file": "native/patches/systemcursors/0106-macos-system-cursors.patch",
++              "sha256": "8c317334b933fb2e4197f2bdf246709ca18c0f7da545f31c04045d19a3e51f71"
++            }
++          ]
++        },
++        {
++          "origin": "ELab macOS callback event position compatibility",
++          "inputs": "native/patches/eventposition/original-hashes.json",
++          "outputs": "native/patches/eventposition/output-hashes.json",
++          "patches": [
++            {
++              "file": "native/patches/eventposition/0107-macos-event-position.patch",
++              "sha256": "593fa33f697e3d9cad2ada13775f454d583edea274eabb5ab5fc5a877a939994"
++            }
++          ]
++        },
++        {
++          "origin": "ELab scrollbar wheel direction compatibility",
++          "inputs": "native/patches/scrollwheel/original-hashes.json",
++          "outputs": "native/patches/scrollwheel/output-hashes.json",
++          "patches": [
++            {
++              "file": "native/patches/scrollwheel/0108-scrollbar-wheel-direction.patch",
++              "sha256": "0deed32a56e8494bff0a8cc4fce8cee5a530e6e304062065ef3febc3a7524204"
++            }
++          ]
++        },
++        {
++          "origin": "ELab text field Undo boundary compatibility",
++          "inputs": "native/patches/textundoboundary/original-hashes.json",
++          "outputs": "native/patches/textundoboundary/output-hashes.json",
++          "patches": [
++            {
++              "file": "native/patches/textundoboundary/0109-text-undo-boundary.patch",
++              "sha256": "20481060be517c7a458c526e30e9b75ba82918482b26cfee67bf7c7d6ae7eef4"
++            }
++          ]
+         }
+       ]
+     },
+diff --git a/drivers/cogent/native/patches/eventposition/0107-macos-event-position.patch b/drivers/cogent/native/patches/eventposition/0107-macos-event-position.patch
+new file mode 100644
+index 0000000..355312b
+--- /dev/null
++++ b/drivers/cogent/native/patches/eventposition/0107-macos-event-position.patch
+@@ -0,0 +1,134 @@
++--- a/system/driver/desktop/event.go
+++++ b/system/driver/desktop/event.go
++@@ -92,7 +92,7 @@
++ 		return image.Point{}, 0, 0, false
++ 	}
++ 	packed, focus := w.cursorScale.Load(), w.pointerFocus.Load()
++-	x, y := gw.GetCursorPos()
+++	x, y := callbackMousePosition(gw)
++ 	p, ok := w.pointerPointAt(x, y, packed)
++ 	return p, packed, focus, ok
++ }
++--- /dev/null
+++++ b/system/driver/desktop/event_position_vellum.go
++@@ -0,0 +1,15 @@
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package desktop
+++
+++import "github.com/go-gl/glfw/v3.4/glfw"
+++
+++// Callback coordinates belong to the event being dispatched, which can precede
+++// the current hardware cursor. Disabled mode instead owns GLFW virtual coordinates.
+++func selectCallbackPosition(mode int, event func() (float64, float64, bool), cursor func() (float64, float64)) (float64, float64) {
+++	if mode != glfw.CursorDisabled {
+++		if x, y, ok := event(); ok {
+++			return x, y // Existing pointer admission rejects nonfinite/overflow values.
+++		}
+++	}
+++	return cursor()
+++}
++--- /dev/null
+++++ b/system/driver/desktop/event_position_vellum_darwin.go
++@@ -0,0 +1,18 @@
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package desktop
+++
+++/*
+++#cgo LDFLAGS: -framework Cocoa
+++int vellumCallbackPosition(void *window, double *x, double *y);
+++*/
+++import "C"
+++
+++import "github.com/go-gl/glfw/v3.4/glfw"
+++
+++func callbackMousePosition(w *glfw.Window) (float64, float64) {
+++	return selectCallbackPosition(w.GetInputMode(glfw.CursorMode), func() (float64, float64, bool) {
+++		var x, y C.double
+++		ok := C.vellumCallbackPosition(w.GetCocoaWindow(), &x, &y)
+++		return float64(x), float64(y), ok != 0
+++	}, w.GetCursorPos)
+++}
++--- /dev/null
+++++ b/system/driver/desktop/event_position_vellum_darwin.m
++@@ -0,0 +1,27 @@
+++//go:build darwin
+++
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++#import <AppKit/AppKit.h>
+++
+++int vellumCallbackPosition(void *target, double *x, double *y) {
+++    if (![NSThread isMainThread] || target == NULL) return 0;
+++    NSEvent *event = [NSApp currentEvent];
+++    NSWindow *window = (NSWindow *)target;
+++    if (event == nil || [event window] != window) return 0;
+++    switch ([event type]) {
+++        case NSEventTypeLeftMouseDown: case NSEventTypeLeftMouseUp:
+++        case NSEventTypeRightMouseDown: case NSEventTypeRightMouseUp:
+++        case NSEventTypeOtherMouseDown: case NSEventTypeOtherMouseUp:
+++        case NSEventTypeScrollWheel:
+++            break;
+++        default: return 0;
+++    }
+++    NSView *view = [window contentView];
+++    if (view == nil) return 0;
+++    NSPoint point = [view convertPoint:[event locationInWindow] fromView:nil];
+++    NSRect bounds = [view bounds];
+++    *x = point.x - bounds.origin.x;
+++    *y = [view isFlipped] ? point.y - bounds.origin.y : NSMaxY(bounds) - point.y;
+++    // Logical points, just like GLFW. The existing admission applies DPR once.
+++    return 1;
+++}
++--- /dev/null
+++++ b/system/driver/desktop/event_position_vellum_other.go
++@@ -0,0 +1,8 @@
+++//go:build !darwin
+++
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package desktop
+++
+++import "github.com/go-gl/glfw/v3.4/glfw"
+++
+++func callbackMousePosition(w *glfw.Window) (float64, float64) { return w.GetCursorPos() }
++--- /dev/null
+++++ b/system/driver/desktop/event_position_vellum_test.go
++@@ -0,0 +1,40 @@
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package desktop
+++
+++import (
+++	"math"
+++	"testing"
+++
+++	"github.com/go-gl/glfw/v3.4/glfw"
+++)
+++
+++func TestVellumCallbackPositionEventAndVirtualCoordinates(t *testing.T) {
+++	for _, mode := range []int{glfw.CursorNormal, glfw.CursorHidden, glfw.CursorDisabled} {
+++		for _, available := range []bool{true, false} {
+++			events, polls := 0, 0
+++			x, y := selectCallbackPosition(mode, func() (float64, float64, bool) {
+++				events++
+++				return 12.75, -3.25, available
+++			}, func() (float64, float64) { polls++; return 500.5, 600.25 })
+++			if mode != glfw.CursorDisabled && available {
+++				if x != 12.75 || y != -3.25 || polls != 0 {
+++					t.Fatal("event position replaced by later hardware position")
+++				}
+++			} else if x != 500.5 || y != 600.25 || polls != 1 {
+++				t.Fatal("virtual coordinates or unavailable-event fallback lost")
+++			}
+++			if mode == glfw.CursorDisabled && events != 0 {
+++				t.Fatal("physical event queried in virtual mode")
+++			}
+++		}
+++	}
+++}
+++
+++func TestVellumCallbackPositionInvalidEventDoesNotPoll(t *testing.T) {
+++	x, _ := selectCallbackPosition(glfw.CursorNormal, func() (float64, float64, bool) {
+++		return math.NaN(), 1, true
+++	}, func() (float64, float64) { t.Fatal("invalid event silently retargeted to hardware"); return 0, 0 })
+++	if !math.IsNaN(x) {
+++		t.Fatal("invalid event must reach finite admission")
+++	}
+++}
+diff --git a/drivers/cogent/native/patches/eventposition/original-hashes.json b/drivers/cogent/native/patches/eventposition/original-hashes.json
+new file mode 100644
+index 0000000..497dbde
+--- /dev/null
++++ b/drivers/cogent/native/patches/eventposition/original-hashes.json
+@@ -0,0 +1,8 @@
++{
++  "system/driver/desktop/event.go": "9903ece6d9f3d87e5ad8aeb2ab8527dbf770cab4a97b4b0a6bd2b28e9cb8c52b",
++  "system/driver/desktop/event_position_vellum.go": null,
++  "system/driver/desktop/event_position_vellum_darwin.go": null,
++  "system/driver/desktop/event_position_vellum_darwin.m": null,
++  "system/driver/desktop/event_position_vellum_other.go": null,
++  "system/driver/desktop/event_position_vellum_test.go": null
++}
+diff --git a/drivers/cogent/native/patches/eventposition/output-hashes.json b/drivers/cogent/native/patches/eventposition/output-hashes.json
+new file mode 100644
+index 0000000..1c023f2
+--- /dev/null
++++ b/drivers/cogent/native/patches/eventposition/output-hashes.json
+@@ -0,0 +1,8 @@
++{
++  "system/driver/desktop/event.go": "04af42245ecfcc4c015023b0d49c5897a069fa6a2bd54e11f6440f6fee3f9654",
++  "system/driver/desktop/event_position_vellum.go": "8aee06f710760f0f8dffb00df063f99590bab13eeb43b1740fbdefacc0a3c7e1",
++  "system/driver/desktop/event_position_vellum_darwin.go": "16a1c3f5b9f1823aa653f48633887d4cdeeb6a9c87f4ae8bdeb5e9683b622308",
++  "system/driver/desktop/event_position_vellum_darwin.m": "4b7d145b2843012802dcba0b6618f80439d65768686d0f67fb96e96832440d74",
++  "system/driver/desktop/event_position_vellum_other.go": "4dfc0f29e5b3a9b28ed742ba7fa720bb46e929a888a33ae1092df6922383bfa3",
++  "system/driver/desktop/event_position_vellum_test.go": "294383135f9b14d06cc7114aea36518e580931298656cb3de56225a2295327a1"
++}
+diff --git a/drivers/cogent/native/patches/scrollwheel/0108-scrollbar-wheel-direction.patch b/drivers/cogent/native/patches/scrollwheel/0108-scrollbar-wheel-direction.patch
+new file mode 100644
+index 0000000..1590ae7
+--- /dev/null
++++ b/drivers/cogent/native/patches/scrollwheel/0108-scrollbar-wheel-direction.patch
+@@ -0,0 +1,56 @@
++--- a/core/slider.go
+++++ b/core/slider.go
++@@ -253,9 +253,8 @@
++ 		} else {
++ 			del = se.Delta.Y
++ 		}
++-		if sr.Type == SliderScrollbar {
++-			del = -del // invert for "natural" scroll
++-		}
+++		// Scroll deltas are already normalized by the system driver. A
+++		// scrollbar must move in the same direction as its owning frame.
++ 		edel := sr.scrollScale(del)
++ 		sr.setValueEvent(sr.Value + edel)
++ 		sr.sendChange()
++--- /dev/null
+++++ b/core/slider_scroll_vellum_test.go
++@@ -0,0 +1,39 @@
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package core
+++
+++import (
+++	"image"
+++	"testing"
+++
+++	"cogentcore.org/core/events"
+++	"cogentcore.org/core/math32"
+++	"cogentcore.org/core/styles"
+++)
+++
+++func TestVellumScrollbarWheelMatchesFrame(t *testing.T) {
+++	for _, direction := range []styles.Directions{styles.Row, styles.Column} {
+++		for _, delta := range []float32{30, -30, 2000, -2000} {
+++			fr := NewFrame()
+++			fr.Scene = NewScene()
+++			d := direction.Dim()
+++			fr.configScroll(d)
+++			fr.HasScroll[d] = true
+++			sb := fr.Scrolls[d]
+++			sb.Styles.Direction = direction
+++			sb.Min, sb.Max, sb.Step = 0, 1000, 1
+++			sb.SetVisiblePercent(.2).SetValue(400)
+++			vec := math32.Vector2{}
+++			vec.SetDim(d, delta)
+++			fr.scrollDelta(events.NewScroll(image.Point{}, vec, 0))
+++			want := sb.Value
+++			sb.SetValue(400)
+++			sb.HandleEvent(events.NewScroll(image.Point{}, vec, 0))
+++			if sb.Value != want {
+++				t.Fatalf("%v delta %g: frame=%g scrollbar=%g", direction, delta, want, sb.Value)
+++			}
+++			if want != math32.Clamp(400+delta, 0, 800) {
+++				t.Fatal("wheel direction or clamping changed")
+++			}
+++		}
+++	}
+++}
+diff --git a/drivers/cogent/native/patches/scrollwheel/original-hashes.json b/drivers/cogent/native/patches/scrollwheel/original-hashes.json
+new file mode 100644
+index 0000000..f5c9632
+--- /dev/null
++++ b/drivers/cogent/native/patches/scrollwheel/original-hashes.json
+@@ -0,0 +1,4 @@
++{
++  "core/slider.go": "0d92f62d3d0e476c93977bf3ab2cae5ee9f3e51c14c4bc5f9215c3e8078b1f3c",
++  "core/slider_scroll_vellum_test.go": null
++}
+diff --git a/drivers/cogent/native/patches/scrollwheel/output-hashes.json b/drivers/cogent/native/patches/scrollwheel/output-hashes.json
+new file mode 100644
+index 0000000..1d69b8c
+--- /dev/null
++++ b/drivers/cogent/native/patches/scrollwheel/output-hashes.json
+@@ -0,0 +1,4 @@
++{
++  "core/slider.go": "5a1ca57cec3d6b851fd70abdcd2fc3c073b788153ee319ef2e7d873a3c24a7b6",
++  "core/slider_scroll_vellum_test.go": "8291129e813d1a7c9e28ace566b660f5e27ae811319d6554557ec93e93e16157"
++}
+diff --git a/drivers/cogent/native/patches/systemcursors/0106-macos-system-cursors.patch b/drivers/cogent/native/patches/systemcursors/0106-macos-system-cursors.patch
+new file mode 100644
+index 0000000..2f783bf
+--- /dev/null
++++ b/drivers/cogent/native/patches/systemcursors/0106-macos-system-cursors.patch
+@@ -0,0 +1,385 @@
++--- a/system/driver/desktop/cursor.go
+++++ b/system/driver/desktop/cursor.go
++@@ -24,12 +24,14 @@
++ 
++ type Cursor struct {
++ 	system.CursorBase
++-	mu       sync.Mutex
++-	window   *Window
++-	app      *App
++-	owner    *nativeCursorOwner // stable pointer; contents accessed only on native main
++-	closed   bool
++-	sequence uint64
+++	mu              sync.Mutex
+++	window          *Window
+++	app             *App
+++	standard        *systemCursorOwner  // native-main owner for macOS standard shapes
+++	appliedStandard glfw.StandardCursor // mu-protected successful assignment
+++	owner           *nativeCursorOwner  // stable pointer; contents accessed only on native main
+++	closed          bool
+++	sequence        uint64
++ 	// Detached mirror published only after a successful native assignment.
++ 	// These fields belong to mu; native owner state remains native-main-only.
++ 	appliedKey                     nativeCursorKey
++@@ -75,6 +77,23 @@
++ 		},
++ 		destroy: func(h any) { h.(*glfw.Cursor).Destroy() },
++ 	})
+++	if w.App.Platform() == system.MacOS {
+++		cu.standard = &systemCursorOwner{
+++			handles: make(map[glfw.StandardCursor]any),
+++			create: func(shape glfw.StandardCursor) (any, error) {
+++				if !glfwCursorLayoutSupported(reflect.TypeOf(glfw.Cursor{})) {
+++					return nil, fmt.Errorf("desktop: unsupported GLFW cursor layout")
+++				}
+++				h := glfw.CreateStandardCursor(shape)
+++				if !glfwCursorAllocated(h) {
+++					return nil, fmt.Errorf("desktop: standard cursor allocation refused")
+++				}
+++				return h, nil
+++			},
+++			bind:    cu.owner.backend.bind,
+++			destroy: cu.owner.backend.destroy,
+++		}
+++	}
++ 	if w.App.cursorOwners == nil {
++ 		w.App.cursorOwners = make(map[*Cursor]struct{})
++ 	}
++@@ -149,6 +168,9 @@
++ 	cu.mu.Unlock()
++ 	if w == nil || a == nil {
++ 		return fmt.Errorf("desktop: cursor has no window")
+++	}
+++	if shape, ok := systemCursorShape(cursor); ok && cu.standard != nil {
+++		return cu.setStandard(cursor, shape, seq, w, a)
++ 	}
++ 	// Atomic geometry publication also permits Set from a main callback while
++ 	// existing Close holds w.Mu across its final native queue wait.
++@@ -221,6 +243,7 @@
++ 				cu.Cur = cursor
++ 				cu.appliedKey, cu.appliedSequence = key, seq
++ 				cu.appliedScale, cu.appliedPixels = packed, pixels
+++				cu.appliedStandard = 0
++ 			}
++ 			cu.mu.Unlock()
++ 		}
++@@ -265,6 +288,7 @@
++ 	cu.modeKnown = false
++ 	cu.Cur = nil
++ 	cu.appliedKey = nativeCursorKey{}
+++	cu.appliedStandard = 0
++ 	cu.appliedSequence, cu.appliedScale, cu.appliedPixels = 0, 0, 0
++ 	cu.Vis = false
++ 	cu.Size = units.Value{}
++@@ -279,7 +303,11 @@
++ 	}
++ 	cu.retireStatus()
++ 	delete(a.cursorOwners, cu)
++-	drainAll(cu.pointer.close, cu.owner.close)
+++	drainAll(cu.pointer.close, cu.owner.close, func() {
+++		if cu.standard != nil {
+++			cu.standard.close()
+++		}
+++	})
++ }
++ func (a *App) closeCursors() {
++ 	fs := make([]func(), 0, len(a.cursorOwners))
++--- a/system/driver/desktop/cursor_fastpath_vellum_test.go
+++++ b/system/driver/desktop/cursor_fastpath_vellum_test.go
++@@ -385,6 +385,9 @@
++ 	cu := newWindowCursor(w)
++ 	w.cursor = cu
++ 	cu.owner, _ = fakeCursors()
+++	if cu.standard != nil {
+++		cu.standard, _ = fakeSystemCursors()
+++	}
++ 	cu.pointer, _ = fakePointer()
++ 	cu.pointer.live = func() bool { return w.pointerLive() }
++ 	if cu.modeSequence != 0 || !cu.modeKnown || !cu.wantEnabled || cu.wantRaw {
++--- /dev/null
+++++ b/system/driver/desktop/cursor_system_vellum.go
++@@ -0,0 +1,123 @@
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package desktop
+++
+++import (
+++	"cogentcore.org/core/cursors"
+++	"cogentcore.org/core/enums"
+++	"cogentcore.org/core/system/driver/base"
+++	"fmt"
+++	"github.com/go-gl/glfw/v3.4/glfw"
+++)
+++
+++// Common macOS cursors use OS-owned artwork and accessibility sizing. Custom
+++// enums and shapes without a portable standard counterpart retain raster cursors.
+++func systemCursorShape(cursor enums.Enum) (glfw.StandardCursor, bool) {
+++	c, ok := cursor.(cursors.Cursor)
+++	if !ok {
+++		return 0, false
+++	}
+++	switch c {
+++	case cursors.None, cursors.Arrow:
+++		return glfw.ArrowCursor, true
+++	case cursors.Pointer:
+++		return glfw.HandCursor, true
+++	case cursors.Text:
+++		return glfw.IBeamCursor, true
+++	case cursors.Crosshair, cursors.Cell:
+++		return glfw.CrosshairCursor, true
+++	case cursors.ResizeCol, cursors.ResizeEW, cursors.ResizeE, cursors.ResizeW, cursors.ResizeLeft, cursors.ResizeRight:
+++		return glfw.HResizeCursor, true
+++	case cursors.ResizeRow, cursors.ResizeNS, cursors.ResizeN, cursors.ResizeS, cursors.ResizeUp, cursors.ResizeDown:
+++		return glfw.VResizeCursor, true
+++	}
+++	return 0, false
+++}
+++
+++// Native-main-only, bounded to the six admitted standard shapes. Handles are
+++// registered before binding so terminal cleanup also owns a failed assignment.
+++type systemCursorOwner struct {
+++	handles map[glfw.StandardCursor]any
+++	create  func(glfw.StandardCursor) (any, error)
+++	bind    func(any)
+++	destroy func(any)
+++	closed  bool
+++}
+++
+++func (o *systemCursorOwner) apply(shape glfw.StandardCursor) error {
+++	if o.closed {
+++		return fmt.Errorf("desktop: standard cursor closed")
+++	}
+++	switch shape {
+++	case glfw.ArrowCursor, glfw.HandCursor, glfw.IBeamCursor, glfw.CrosshairCursor, glfw.HResizeCursor, glfw.VResizeCursor:
+++	default:
+++		return fmt.Errorf("desktop: unsupported standard cursor")
+++	}
+++	h := o.handles[shape]
+++	if h == nil {
+++		var err error
+++		h, err = o.create(shape)
+++		if err != nil {
+++			return err
+++		}
+++		if h == nil {
+++			return fmt.Errorf("desktop: standard cursor allocation refused")
+++		}
+++		o.handles[shape] = h
+++	}
+++	o.bind(h)
+++	return nil
+++}
+++func (o *systemCursorOwner) close() {
+++	if o.closed {
+++		return
+++	}
+++	o.closed = true
+++	fs := []func(){func() { o.bind(nil) }}
+++	for shape, h := range o.handles {
+++		delete(o.handles, shape)
+++		handle := h
+++		fs = append(fs, func() { o.destroy(handle) })
+++	}
+++	defer func() { o.handles = nil; o.create = nil; o.bind = nil; o.destroy = nil }()
+++	drainAll(fs...)
+++}
+++func (cu *Cursor) setStandard(cursor enums.Enum, shape glfw.StandardCursor, seq uint64, w *Window, a *App) error {
+++	cu.mu.Lock()
+++	unchanged := !cu.closed && cu.window == w && cu.app == a && cu.sequence == seq &&
+++		cu.appliedSequence != 0 && cu.appliedSequence == seq-1 && cu.appliedStandard == shape &&
+++		cu.modeSequence == 0 && cu.modeKnown && cu.mode == glfw.CursorNormal && cu.wantEnabled && !cu.wantRaw &&
+++		!w.IsClosed() && !a.MainStopped()
+++	if unchanged {
+++		cu.appliedSequence = seq
+++		cu.Cur = cursor
+++	}
+++	cu.mu.Unlock()
+++	if unchanged {
+++		return nil
+++	}
+++	err := base.ErrMainStopped
+++	a.nativeOnMain(func() {
+++		cu.mu.Lock()
+++		valid := !cu.closed && cu.sequence == seq && cu.window == w && cu.app == a
+++		cu.mu.Unlock()
+++		if !valid || w.Glw == nil {
+++			err = fmt.Errorf("desktop: cursor request retired")
+++			return
+++		}
+++		err = cu.standard.apply(shape)
+++		if err != nil {
+++			return
+++		}
+++		// A later raster request must rebind even when its raster handle is cached.
+++		cu.owner.active = nil
+++		cu.mu.Lock()
+++		if !cu.closed {
+++			cu.Cur = cursor
+++			cu.appliedKey = nativeCursorKey{}
+++			cu.appliedSequence, cu.appliedStandard = seq, shape
+++			cu.appliedScale, cu.appliedPixels = 0, 0
+++		}
+++		cu.mu.Unlock()
+++	})
+++	return err
+++}
++--- /dev/null
+++++ b/system/driver/desktop/cursor_system_vellum_test.go
++@@ -0,0 +1,158 @@
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package desktop
+++
+++import (
+++	"cogentcore.org/core/cursors"
+++	"errors"
+++	"github.com/go-gl/glfw/v3.4/glfw"
+++	"testing"
+++)
+++
+++func fakeSystemCursors() (*systemCursorOwner, *fakeCursorBackend) {
+++	raster, f := fakeCursors()
+++	return &systemCursorOwner{handles: make(map[glfw.StandardCursor]any), create: func(glfw.StandardCursor) (any, error) { return raster.backend.create(nil) }, bind: raster.backend.bind, destroy: raster.backend.destroy}, f
+++}
+++func TestVellumSystemCursorMapping(t *testing.T) {
+++	for c, want := range map[cursors.Cursor]glfw.StandardCursor{
+++		cursors.Arrow: glfw.ArrowCursor, cursors.None: glfw.ArrowCursor, cursors.Text: glfw.IBeamCursor,
+++		cursors.Pointer: glfw.HandCursor, cursors.Crosshair: glfw.CrosshairCursor, cursors.Cell: glfw.CrosshairCursor,
+++		cursors.ResizeEW: glfw.HResizeCursor, cursors.ResizeLeft: glfw.HResizeCursor,
+++		cursors.ResizeNS: glfw.VResizeCursor, cursors.ResizeDown: glfw.VResizeCursor,
+++	} {
+++		if got, ok := systemCursorShape(c); !ok || got != want {
+++			t.Fatalf("%v: %v/%v", c, got, ok)
+++		}
+++	}
+++	for _, c := range []cursors.Cursor{cursors.Help, cursors.Grab, cursors.Grabbing, cursors.Wait, cursors.ZoomIn, cursors.ResizeNE, cursors.Cursor(900)} {
+++		if _, ok := systemCursorShape(c); ok {
+++			t.Fatalf("unsupported shape %v lost raster fallback", c)
+++		}
+++	}
+++	if _, ok := systemCursorShape(nil); ok {
+++		t.Fatal("nil enum admitted")
+++	}
+++}
+++func TestVellumSystemCursorBoundedReuseFailureAndClose(t *testing.T) {
+++	o, f := fakeSystemCursors()
+++	shapes := []glfw.StandardCursor{glfw.ArrowCursor, glfw.HandCursor, glfw.IBeamCursor, glfw.CrosshairCursor, glfw.HResizeCursor, glfw.VResizeCursor}
+++	for i := 0; i < 50; i++ {
+++		for _, shape := range shapes {
+++			if err := o.apply(shape); err != nil {
+++				t.Fatal(err)
+++			}
+++		}
+++	}
+++	if f.next != 6 || len(f.live) != 6 {
+++		t.Fatal("standard cursor handles not reused", f.next)
+++	}
+++	active := f.bound
+++	if err := o.apply(glfw.StandardCursor(99)); err == nil || f.bound != active {
+++		t.Fatal("unsupported shape changed binding")
+++	}
+++	o.close()
+++	o.close()
+++	if len(f.live) != 0 || f.bound != 0 || o.handles != nil || o.create != nil {
+++		t.Fatal("standard handles retained")
+++	}
+++	if err := o.apply(glfw.ArrowCursor); err == nil {
+++		t.Fatal("closed owner reopened")
+++	}
+++	o, f = fakeSystemCursors()
+++	if err := o.apply(glfw.ArrowCursor); err != nil {
+++		t.Fatal(err)
+++	}
+++	active = f.bound
+++	f.fail = true
+++	if err := o.apply(glfw.HandCursor); err == nil || f.bound != active || len(f.live) != 1 {
+++		t.Fatal("allocation failure replaced cursor")
+++	}
+++	f.fail = false
+++	o.close()
+++}
+++func TestVellumSystemCursorCleanupDespiteNativePanic(t *testing.T) {
+++	for _, kind := range []string{"bind", "destroy"} {
+++		t.Run(kind, func(t *testing.T) {
+++			o, f := fakeSystemCursors()
+++			for _, shape := range []glfw.StandardCursor{glfw.ArrowCursor, glfw.HandCursor} {
+++				if err := o.apply(shape); err != nil {
+++					t.Fatal(err)
+++				}
+++			}
+++			f.bindPanic = kind == "bind"
+++			f.destroyPanic = kind == "destroy"
+++			func() {
+++				defer func() {
+++					if recover() == nil {
+++						t.Error("missing native panic")
+++					}
+++				}()
+++				o.close()
+++			}()
+++			if len(f.live) != 0 || o.handles != nil {
+++				t.Fatal("native panic prevented complete teardown")
+++			}
+++			o.close()
+++		})
+++	}
+++}
+++func TestVellumSystemCursorSetNoopFallbackAndRetirement(t *testing.T) {
+++	a, cu, _, q := fastCursorFixture(t)
+++	o, f := fakeSystemCursors()
+++	cu.standard = o
+++	if err := fastCursorQueue(t, a, q, func() error { return cu.Set(cursors.Arrow) }); err != nil {
+++		t.Fatal(err)
+++	}
+++	for i := 0; i < 100; i++ {
+++		if err := fastCursorNoQueue(t, a, q, func() error { return cu.Set(cursors.Arrow) }); err != nil {
+++			t.Fatal(err)
+++		}
+++	}
+++	// A real shape change needs native admission; a failed one preserves Current.
+++	f.fail = true
+++	if err := fastCursorQueue(t, a, q, func() error { return cu.Set(cursors.Text) }); err == nil || cu.Current() != cursors.Arrow {
+++		t.Fatal("failed shape published")
+++	}
+++	f.fail = false
+++	if err := fastCursorQueue(t, a, q, func() error { return cu.Set(cursors.Text) }); err != nil {
+++		t.Fatal(err)
+++	}
+++	if err := fastCursorQueue(t, a, q, func() error { return cu.Set(cursors.Help) }); err != nil {
+++		t.Fatal(err)
+++	}
+++	if cu.appliedStandard != 0 || cu.owner.active == nil {
+++		t.Fatal("raster fallback did not replace standard cursor")
+++	}
+++	oldRaster := cu.owner.active
+++	if err := fastCursorQueue(t, a, q, func() error { return cu.Set(cursors.Arrow) }); err != nil {
+++		t.Fatal(err)
+++	}
+++	if cu.owner.active != nil {
+++		t.Fatal("standard shape did not invalidate raster binding")
+++	}
+++	// The existing raster cache must actually rebind after a standard shape.
+++	binds := 0
+++	bind := cu.owner.backend.bind
+++	cu.owner.backend.bind = func(h any) { binds++; bind(h) }
+++	if err := fastCursorQueue(t, a, q, func() error { return cu.Set(cursors.Help) }); err != nil {
+++		t.Fatal(err)
+++	}
+++	if binds != 1 || cu.owner.active != oldRaster {
+++		t.Fatal("cached raster was not rebound")
+++	}
+++	cu.retireStatus()
+++	if err := cu.Set(cursors.Arrow); err == nil {
+++		t.Fatal("retired request accepted")
+++	}
+++}
+++func TestVellumSystemCursorNilAllocationRefused(t *testing.T) {
+++	o, _ := fakeSystemCursors()
+++	defer o.close()
+++	o.create = func(glfw.StandardCursor) (any, error) { return nil, nil }
+++	if err := o.apply(glfw.ArrowCursor); err == nil {
+++		t.Fatal("nil handle accepted")
+++	}
+++	o.create = func(glfw.StandardCursor) (any, error) { return nil, errors.New("refused") }
+++	if err := o.apply(glfw.ArrowCursor); err == nil {
+++		t.Fatal("allocator error ignored")
+++	}
+++}
+diff --git a/drivers/cogent/native/patches/systemcursors/original-hashes.json b/drivers/cogent/native/patches/systemcursors/original-hashes.json
+new file mode 100644
+index 0000000..8c751e3
+--- /dev/null
++++ b/drivers/cogent/native/patches/systemcursors/original-hashes.json
+@@ -0,0 +1,6 @@
++{
++  "system/driver/desktop/cursor.go": "18cfb9b3742945adef39aa410216cbacd97ea1fa99530d1b0a68ded770c13774",
++  "system/driver/desktop/cursor_fastpath_vellum_test.go": "43313605f20fbbf41a57aeab24c318f54faea1accd4afe5a4d1b638c8e125292",
++  "system/driver/desktop/cursor_system_vellum.go": null,
++  "system/driver/desktop/cursor_system_vellum_test.go": null
++}
+diff --git a/drivers/cogent/native/patches/systemcursors/output-hashes.json b/drivers/cogent/native/patches/systemcursors/output-hashes.json
+new file mode 100644
+index 0000000..8816a97
+--- /dev/null
++++ b/drivers/cogent/native/patches/systemcursors/output-hashes.json
+@@ -0,0 +1,6 @@
++{
++  "system/driver/desktop/cursor.go": "6528c5732d766bba4f728ab90ce4732b78d7b1cfd3cc24a8e4a417bd39904ca0",
++  "system/driver/desktop/cursor_fastpath_vellum_test.go": "d63b691d4669c4a6ffdf5d096ae463746ff82c870a1d446c1df5b7258783aaf3",
++  "system/driver/desktop/cursor_system_vellum.go": "b927db75ac056852278b96baef2c7d2fb637e38cbca1e4e49408e26b8a71d591",
++  "system/driver/desktop/cursor_system_vellum_test.go": "9fcb6c5e3700f955de96204ad382d941dee867351483d8ad818f66e585335a85"
++}
+diff --git a/drivers/cogent/native/patches/textundoboundary/0109-text-undo-boundary.patch b/drivers/cogent/native/patches/textundoboundary/0109-text-undo-boundary.patch
+new file mode 100644
+index 0000000..839f6d5
+--- /dev/null
++++ b/drivers/cogent/native/patches/textundoboundary/0109-text-undo-boundary.patch
+@@ -0,0 +1,79 @@
++--- a/core/textfield.go
+++++ b/core/textfield.go
++@@ -1085,7 +1085,9 @@
++ func (us *textFieldUndos) undo(txt []rune, curpos int) *textFieldUndoRecord {
++ 	n := len(us.stack)
++ 	if us.pos <= 0 || n == 0 {
++-		return &textFieldUndoRecord{}
+++		// The initial field value is the history boundary, not an implicit
+++		// empty edit. Preserve its text and selection when there is no Undo.
+++		return nil
++ 	}
++ 	if us.pos == n {
++ 		us.lastSave = time.Time{}
++--- /dev/null
+++++ b/core/textfield_undo_boundary_vellum_test.go
++@@ -0,0 +1,63 @@
+++// Copyright 2026 Vellum contributors. SPDX-License-Identifier: MIT.
+++package core
+++
+++import "testing"
+++
+++func TestVellumTextUndoEmptyHistoryPreservesEditingState(t *testing.T) {
+++	for _, text := range []string{"", "1 kΩ", "12 µF", "A😀éאב"} {
+++		t.Run(text, func(t *testing.T) {
+++			tf := &TextField{text: text, editText: []rune(text), cursorPos: len([]rune(text))}
+++			tf.SetEditingSelection(0, len([]rune(text)))
+++			before := tf.EditingState()
+++			tf.undo()
+++			if tf.EditingState() != before || len(tf.undos.stack) != 0 || tf.undos.pos != 0 {
+++				t.Fatal("empty Undo changed controlled text, selection or history", before, tf.EditingState())
+++			}
+++			tf.redo()
+++			if tf.EditingState() != before || len(tf.undos.stack) != 0 || tf.undos.pos != 0 {
+++				t.Fatal("empty Redo changed controlled text, selection or history")
+++			}
+++		})
+++	}
+++}
+++
+++func TestVellumTextUndoBoundaryKeepsBaselineAndRedo(t *testing.T) {
+++	tf := &TextField{text: "1 kΩ", editText: []rune("1 kΩ"), cursorPos: 4}
+++	if !tf.ApplyNativeEdit("2 kΩ", 4, 4, -1, -1, "insert") {
+++		t.Fatal("native edit refused")
+++	}
+++	tf.undo()
+++	if tf.EditingState().Text != "1 kΩ" {
+++		t.Fatal("Undo lost the baseline")
+++	}
+++	before := tf.EditingState()
+++	for range 3 {
+++		tf.undo()
+++		if tf.EditingState() != before {
+++			t.Fatal("Undo below the baseline changed text/selection")
+++		}
+++	}
+++	tf.redo()
+++	if tf.EditingState().Text != "2 kΩ" {
+++		t.Fatal("boundary Undo lost Redo")
+++	}
+++	before = tf.EditingState()
+++	for range 3 {
+++		tf.redo()
+++		if tf.EditingState() != before {
+++			t.Fatal("Redo above the newest edit changed text/selection")
+++		}
+++	}
+++	tf.undo()
+++	if !tf.ApplyNativeEdit("3 kΩ", 4, 4, -1, -1, "insert") {
+++		t.Fatal("branch edit refused")
+++	}
+++	tf.redo()
+++	if tf.EditingState().Text != "3 kΩ" {
+++		t.Fatal("branch retained the old redo value")
+++	}
+++	tf.undo()
+++	if tf.EditingState().Text != "1 kΩ" {
+++		t.Fatal("branch Undo lost the baseline")
+++	}
+++}
+diff --git a/drivers/cogent/native/patches/textundoboundary/README.md b/drivers/cogent/native/patches/textundoboundary/README.md
+new file mode 100644
+index 0000000..a9bb4bc
+--- /dev/null
++++ b/drivers/cogent/native/patches/textundoboundary/README.md
+@@ -0,0 +1,9 @@
++# Text field Undo boundary
++
++ELab compatibility stage 0109 after the existing native stages. No public API
++or model changes. Empty/exhausted text Undo returns no record instead of an
++implicit empty field, preserving its accepted baseline and selection. Normal
++undo/redo, repeated boundary calls, Unicode and branch-after-undo are tested.
++
++Original and output hashes pin the exact prepared dependency. The patch adds
++its regression alongside the implementation. Previous stages are unchanged.
+diff --git a/drivers/cogent/native/patches/textundoboundary/original-hashes.json b/drivers/cogent/native/patches/textundoboundary/original-hashes.json
+new file mode 100644
+index 0000000..1e906cc
+--- /dev/null
++++ b/drivers/cogent/native/patches/textundoboundary/original-hashes.json
+@@ -0,0 +1,4 @@
++{
++  "core/textfield.go": "bcf6f144260a328c0fd8ac26cd4084811f7c5f46347e53689b345740c7926b5e",
++  "core/textfield_undo_boundary_vellum_test.go": null
++}
+diff --git a/drivers/cogent/native/patches/textundoboundary/output-hashes.json b/drivers/cogent/native/patches/textundoboundary/output-hashes.json
+new file mode 100644
+index 0000000..5324eab
+--- /dev/null
++++ b/drivers/cogent/native/patches/textundoboundary/output-hashes.json
+@@ -0,0 +1,4 @@
++{
++  "core/textfield.go": "012bdcfeae42b5fb8d7ebd2a4145781f732f89ef15113d95d32a7ec3fd6bb606",
++  "core/textfield_undo_boundary_vellum_test.go": "296badf98c1c5ab324844f0d12248474e4768fe5b76bf18c5e71d2c74624e802"
++}
+diff --git a/drivers/cogent/numberfield_settle.go b/drivers/cogent/numberfield_settle.go
+new file mode 100644
+index 0000000..1fa8143
+--- /dev/null
++++ b/drivers/cogent/numberfield_settle.go
+@@ -0,0 +1,100 @@
++package cogent
++
++import (
++	"context"
++	"fmt"
++	"strconv"
++
++	"cogentcore.org/core/core"
++	"github.com/dshills/vellum/app"
++	"github.com/dshills/vellum/editor"
++	"github.com/dshills/vellum/ui"
++)
++
++// SettleNumberField commits one managed NumberField before an action that does
++// not move pointer focus. Call on the Application owner. The originating-window
++// FIFO delivers earlier input before reading the draft, then publishes Change
++// before callback. Immediate refusal never invokes callback. Cancellation,
++// retirement and window closure use the same barrier lifetime as SettleTextField.
++// NumberField remains a legacy spinner; this does not activate native text input.
++func SettleNumberField(ctx context.Context, a *app.Application, window, id string, callback func(error)) error {
++	if ctx == nil || a == nil || id == "" || callback == nil {
++		return fmt.Errorf("cogent: number field settlement requires context, owner, ID and callback")
++	}
++	if err := ctx.Err(); err != nil {
++		return err
++	}
++	t := lookupTextWindow(window)
++	if t == nil || t.owner != a || !t.acceptsNativeInput() {
++		return app.ErrWindowClosed
++	}
++	binding := numberFieldRecord(t.window.root, id)
++	if binding == nil || binding.control.disabled || binding.node.Change == nil || binding.control.fieldChanges.Load() == nil {
++		return fmt.Errorf("%w: number field %q unavailable", ErrTextInputStale, id)
++	}
++	return t.admitSettlement(ctx, &textSettlement{binding: binding, number: true, field: binding.control.fieldChanges.Load(), ctx: ctx, callback: callback})
++}
++
++func numberFieldRecord(root *record, id string) *record {
++	var binding *record
++	ambiguous := false
++	var visit func(*record)
++	visit = func(r *record) {
++		if r == nil {
++			return
++		}
++		if r.node.ID == id && r.node.Kind == ui.NumberField && r.control != nil && !r.control.retired {
++			ambiguous = ambiguous || binding != nil
++			binding = r
++		}
++		for _, child := range r.children {
++			visit(child)
++		}
++		for _, child := range activeWorkbenchRecords(r) {
++			visit(child)
++		}
++	}
++	visit(root)
++	if ambiguous {
++		return nil
++	}
++	return binding
++}
++
++func (t *textWindow) settledNumberField(id uint64, q *textSettlement) {
++	r := q.binding
++	if r.control.retired || numberFieldRecord(t.window.root, r.node.ID) != r || r.control.disabled || r.node.Change == nil || r.control.fieldChanges.Load() != q.field {
++		t.complete(id, fmt.Errorf("%w: number field binding changed", ErrTextInputStale))
++		return
++	}
++	spinner := r.widget.(*core.Spinner)
++	if _, _, marked := spinner.NativeCompositionRange(); marked {
++		t.complete(id, editor.ErrComposition)
++		return
++	}
++	value, err := strconv.ParseFloat(spinner.EditingState().Text, 32)
++	number, valid := ui.ClampNumeric(float32(value), r.node.Numeric)
++	if err != nil || !valid {
++		t.complete(id, fmt.Errorf("cogent: invalid number field entry"))
++		return
++	}
++	// Finish may enqueue an ordinary Change. Retire it (and older queued
++	// snapshots) before delivering the exact value once on the owner.
++	spinner.FinishNativeFocusLost()
++	r.control.fieldChanges.Store(&fieldChangeEpoch{})
++	spinner.SetValue(number)
++	if number != r.node.Number {
++		r.node.Change(ui.ChangeEvent{ID: r.node.ID, Kind: ui.NumberField, Number: number})
++		if !t.acceptsNativeInput() {
++			t.complete(id, app.ErrWindowClosed)
++			return
++		}
++		if r.control.retired {
++			t.complete(id, ErrTextInputStale)
++			return
++		}
++		r.control.committed = true
++	}
++	_ = t.owner.Invalidate(r.control.window)
++	t.complete(id, nil)
++}
+diff --git a/drivers/cogent/numberfield_settle_test.go b/drivers/cogent/numberfield_settle_test.go
+new file mode 100644
+index 0000000..fd0a5ce
+--- /dev/null
++++ b/drivers/cogent/numberfield_settle_test.go
+@@ -0,0 +1,172 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"context"
++	"errors"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events/key"
++	"github.com/dshills/vellum/app"
++	"github.com/dshills/vellum/drivers/cogent/internal/mailbox"
++	"github.com/dshills/vellum/ui"
++)
++
++func numberSettlementFixture(t *testing.T) (*app.Application, *nativeWindow, *textWindow, *record, *[]float32) {
++	t.Helper()
++	a, w, tw, _, _ := editorFixture(t, "peer")
++	disposeControlTree(w.root)
++	var changes []float32
++	n := ui.Node{ID: "number", Kind: ui.NumberField, Number: 0, Numeric: ui.Numeric{Min: -200, Max: 200, Step: 10}, Change: func(e ui.ChangeEvent) { changes = append(changes, e.Number) }}
++	r, err := reconcile(w.body, nil, n, a, w.window.ID)
++	if err != nil {
++		t.Fatal(err)
++	}
++	w.root = r
++	tw.manual = true
++	if err := bindTextWindow(w); err != nil {
++		t.Fatal(err)
++	}
++	return a, w, tw, r, &changes
++}
++
++func numberDraft(t *testing.T, r *record, text string) {
++	t.Helper()
++	if !r.widget.(*core.Spinner).ApplyNativeEdit(text, len(text), len(text), -1, -1, "insert") {
++		t.Fatal("private numeric draft refused")
++	}
++}
++
++func TestNumberSettlementFIFOAndOnce(t *testing.T) {
++	a, w, tw, r, changes := numberSettlementFixture(t)
++	numberDraft(t, r, "-11")
++	w.source.Load().KeyChord('0', key.Code0, 0)
++	called := 0
++	reviewOwner(t, a, func() {
++		if err := SettleNumberField(context.Background(), a, w.window.ID, r.node.ID, func(err error) {
++			called++
++			if err != nil || len(*changes) != 1 || (*changes)[0] != -110 {
++				t.Errorf("callback preceded final numeric Change: %v %v", err, *changes)
++			}
++		}); err != nil {
++			t.Fatal(err)
++		}
++	})
++	if called != 0 || len(*changes) != 0 {
++		t.Fatal("barrier ran before explicit originating FIFO delivery")
++	}
++	reviewDeliverFieldFIFO(t, w, r)
++	a.Drain()
++	if called != 1 || len(*changes) != 1 || len(tw.requests) != 0 {
++		t.Fatal("settled Change replayed or barrier did not finish", called, *changes)
++	}
++}
++
++func TestNumberSettlementRetiresQueuedChange(t *testing.T) {
++	a, w, _, r, changes := numberSettlementFixture(t)
++	spinner := r.widget.(*core.Spinner)
++	numberDraft(t, r, "10")
++	spinner.Text() // old Change queued, not delivered
++	numberDraft(t, r, "-110")
++	reviewOwner(t, a, func() {
++		if err := SettleNumberField(context.Background(), a, w.window.ID, r.node.ID, func(err error) {
++			if err != nil {
++				t.Error(err)
++			}
++		}); err != nil {
++			t.Fatal(err)
++		}
++	})
++	reviewDeliverFieldFIFO(t, w, r)
++	a.Drain()
++	if len(*changes) != 1 || (*changes)[0] != -110 {
++		t.Fatal("older queued Change survived", *changes)
++	}
++	spinner.SetValue(20).SendChange()
++	a.Drain()
++	if len(*changes) != 2 || (*changes)[1] != 20 {
++		t.Fatal("future ordinary numeric Change lost", *changes)
++	}
++}
++
++func TestNumberSettlementRefusesInvalidOrRetiredEntry(t *testing.T) {
++	for _, scenario := range []string{"invalid", "nan", "range-error", "marked", "cancel", "retire", "disabled"} {
++		t.Run(scenario, func(t *testing.T) {
++			a, w, tw, r, changes := numberSettlementFixture(t)
++			text := "-110"
++			if scenario == "invalid" {
++				text = "-"
++			} else if scenario == "nan" {
++				text = "NaN"
++			} else if scenario == "range-error" {
++				text = "1e999"
++			}
++			numberDraft(t, r, text)
++			if scenario == "marked" {
++				if !r.widget.(*core.Spinner).ApplyNativeEdit(text, 4, 4, 0, 4, "mark") {
++					t.Fatal("marked fixture refused")
++				}
++			}
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			called := 0
++			reviewOwner(t, a, func() {
++				if err := SettleNumberField(ctx, a, w.window.ID, r.node.ID, func(err error) {
++					called++
++					if err == nil {
++						t.Error("refused settlement reported success")
++					}
++				}); err != nil {
++					t.Fatal(err)
++				}
++			})
++			switch scenario {
++			case "cancel":
++				cancel()
++			case "retire":
++				r.control.retired = true
++			case "disabled":
++				r.control.disabled = true
++			}
++			reviewDeliverFieldFIFO(t, w, r)
++			a.Drain()
++			if called != 1 || len(*changes) != 0 || len(tw.requests) != 0 {
++				t.Fatal("refused numeric entry mutated/did not finish", called, *changes)
++			}
++		})
++	}
++}
++
++func TestNumberSettlementAdmissionAndUnchangedValue(t *testing.T) {
++	a, w, _, r, changes := numberSettlementFixture(t)
++	if err := SettleNumberField(nil, a, w.window.ID, r.node.ID, func(error) {}); err == nil {
++		t.Fatal("nil context admitted")
++	}
++	if err := SettleNumberField(context.Background(), a, w.window.ID, "missing", func(error) {}); !errors.Is(err, ErrTextInputStale) {
++		t.Fatal("unknown numeric field admitted", err)
++	}
++	called := 0
++	reviewOwner(t, a, func() {
++		if err := SettleNumberField(context.Background(), a, w.window.ID, r.node.ID, func(err error) {
++			called++
++			if err != nil {
++				t.Error(err)
++			}
++		}); err != nil {
++			t.Fatal(err)
++		}
++		if err := SettleNumberField(context.Background(), a, w.window.ID, r.node.ID, func(error) { t.Error("refused callback invoked") }); !errors.Is(err, mailbox.ErrFull) {
++			t.Fatal("second barrier admitted", err)
++		}
++	})
++	if err := bindTextWindow(w); err != nil {
++		t.Fatal(err)
++	}
++	reviewDeliverFieldFIFO(t, w, r)
++	a.Drain()
++	if called != 1 || len(*changes) != 0 {
++		t.Fatal("unchanged numeric value emitted Change", called, *changes)
++	}
++}
+diff --git a/drivers/cogent/numberfield_wheel_offscreen_test.go b/drivers/cogent/numberfield_wheel_offscreen_test.go
+new file mode 100644
+index 0000000..d7382ab
+--- /dev/null
++++ b/drivers/cogent/numberfield_wheel_offscreen_test.go
+@@ -0,0 +1,85 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"fmt"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events"
++	"cogentcore.org/core/events/key"
++	"cogentcore.org/core/math32"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestNumberFieldWheelPreservesValueAndDraft(t *testing.T) {
++	for _, scrolling := range []bool{false, true} {
++		t.Run(fmt.Sprintf("scroll-parent=%t", scrolling), func(t *testing.T) {
++			number, calls := float32(25), 0
++			m, _ := simpleManual(t, manualConfig(t, 7), func() ui.Node {
++				children := []ui.Node{
++					{ID: "number", Kind: ui.NumberField, Number: number, MinHeight: 40, Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Change: func(e ui.ChangeEvent) { number = e.Number; calls++ }},
++					{ID: "witness", Kind: ui.Label, Text: "Following controls", MinHeight: 32},
++				}
++				if scrolling {
++					for i := range 16 {
++						children = append(children, ui.Node{ID: fmt.Sprintf("padding-%d", i), Kind: ui.Label, Text: "Further controls", MinHeight: 32})
++					}
++					children = []ui.Node{{ID: "scroll", Kind: ui.Scroll, Grow: true, Children: []ui.Node{{ID: "content", Kind: ui.Column, Children: children}}}}
++				}
++				return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Focus: ui.FocusRequest{ID: "number", Sequence: 1}, Children: children}
++			})
++			unitSettle(t, m)
++			w := m.implementation.find("one")
++			send := func(input ManualInput) {
++				t.Helper()
++				input.Window, input.WindowIncarnation = "one", w.incarnation
++				if err := m.Input(testContext, input); err != nil {
++					t.Fatal(err)
++				}
++				unitSettle(t, m)
++			}
++			snapshot, err := m.Snapshot(testContext)
++			if err != nil {
++				t.Fatal(err)
++			}
++			if snapshot.Windows[0].FocusedID != "number" {
++				t.Fatal("number field did not receive actual focus")
++			}
++			spinner := findRecord(w.state.root, "number").widget.(*core.Spinner)
++			// A private unfinished entry must not be submitted or replaced by a wheel.
++			send(ManualInput{Type: events.KeyChord, Rune: '9'})
++			draft := spinner.EditingState()
++			if draft.Text == "25" || number != 25 || calls != 0 {
++				t.Fatal("fixture did not retain a private unfinished edit", draft, number, calls)
++			}
++			before := findRecord(w.state.root, "witness").widget.AsWidget().Geom.TotalBBox
++			box := spinner.Geom.TotalBBox
++			send(ManualInput{Type: events.Scroll, Position: box.Min.Add(box.Size().Div(2)), Delta: math32.Vec2(0, 12)})
++			afterDraft := spinner.EditingState()
++			// The caret rectangle moves with a scrolling pane; logical text and
++			// selection must remain unchanged.
++			afterDraft.Caret = draft.Caret
++			if number != 25 || calls != 0 || afterDraft != draft {
++				t.Fatal("wheel changed the number or its private draft", number, calls, draft, spinner.EditingState())
++			}
++			if scrolling {
++				after := findRecord(w.state.root, "witness").widget.AsWidget().Geom.TotalBBox
++				if after.Min.Y >= before.Min.Y {
++					t.Fatal("wheel did not reach the enclosing scroll pane", before, after)
++				}
++			}
++			// Only the wheel behavior changes; ordinary explicit editing still works.
++			send(ManualInput{Type: events.KeyChord, Code: key.CodeEscape})
++			send(ManualInput{Type: events.KeyChord, Code: key.CodeUpArrow})
++			if number != 26 || calls != 1 {
++				t.Fatal("Up did not step once after wheel", number, calls)
++			}
++			send(ManualInput{Type: events.KeyChord, Code: key.CodeDownArrow})
++			if number != 25 || calls != 2 {
++				t.Fatal("Down did not step once after wheel", number, calls)
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/prepare_test.py b/drivers/cogent/prepare_test.py
+index 1824f38..43b9db4 100644
+--- a/drivers/cogent/prepare_test.py
++++ b/drivers/cogent/prepare_test.py
+@@ -280,12 +280,14 @@ class PreparationChecks(unittest.TestCase):
+         core, font = manifest["dependencies"]
+         self.assertEqual(core["module"], "cogentcore.org/core")
+         numbers = [int(Path(patch["file"]).name[:4]) for stage in core["stages"] for patch in stage["patches"]]
+-        self.assertEqual(numbers, list(range(1, 106)))
+-        stage105 = core["stages"][-1]
++        self.assertEqual(numbers, list(range(1, 110)))
++        self.assertEqual(Path(core["stages"][-1]["patches"][0]["file"]).name, "0109-text-undo-boundary.patch")
++        stage105 = next(stage for stage in core["stages"] if any(Path(patch["file"]).name.startswith("0105-") for patch in stage["patches"]))
+         self.assertEqual(Path(stage105["patches"][0]["file"]).name, "0105-acknowledged-skipped-drawable.patch")
+         original = json.loads((ROOT / stage105["inputs"]).read_text())
+         result = json.loads((ROOT / stage105["outputs"]).read_text())
+-        previous = json.loads((ROOT / core["stages"][-2]["outputs"]).read_text())
++        stage104 = next(stage for stage in core["stages"] if any(Path(patch["file"]).name.startswith("0104-") for patch in stage["patches"]))
++        previous = json.loads((ROOT / stage104["outputs"]).read_text())
+         expected = {"core/display_backpressure_vellum_test.go", "system/driver/desktop/display_backpressure.go",
+                     "system/driver/desktop/display_backpressure_darwin.go", "system/driver/desktop/display_backpressure_vellum_test.go"}
+         self.assertEqual(set(original), expected)
+@@ -312,7 +314,8 @@ class PreparationChecks(unittest.TestCase):
+         import shutil
+         from unittest import mock
+         core = json.loads((ROOT / "native/dependencies.json").read_text())["dependencies"][0]
+-        prior, stage = core["stages"][-2:]
++        prior = next(stage for stage in core["stages"] if any(Path(patch["file"]).name.startswith("0104-") for patch in stage["patches"]))
++        stage = next(stage for stage in core["stages"] if any(Path(patch["file"]).name.startswith("0105-") for patch in stage["patches"]))
+         original = json.loads((ROOT / stage["inputs"]).read_text())
+         outputs = json.loads((ROOT / stage["outputs"]).read_text())
+         lines = (ROOT / prior["patches"][0]["file"]).read_text().splitlines(keepends=True)
+diff --git a/drivers/cogent/reconcile.go b/drivers/cogent/reconcile.go
+index 59f2f54..e8d269d 100644
+--- a/drivers/cogent/reconcile.go
++++ b/drivers/cogent/reconcile.go
+@@ -242,7 +242,10 @@ func reconcileScoped(parent core.Widget, previous *record, n ui.Node, a *app.App
+ }
+ 
+ func compatible(old, next ui.Node) bool {
+-	if old.ID != next.ID || old.Kind != next.Kind {
++	if old.ID != next.ID || old.Kind != next.Kind || old.ControlStateKey != next.ControlStateKey {
++		return false
++	}
++	if next.Kind == ui.TextField && old.TextStateKey != next.TextStateKey {
+ 		return false
+ 	}
+ 	if next.Kind == ui.DataTree && old.Tree != next.Tree {
+diff --git a/drivers/cogent/slider_wheel_offscreen_test.go b/drivers/cogent/slider_wheel_offscreen_test.go
+new file mode 100644
+index 0000000..77665d8
+--- /dev/null
++++ b/drivers/cogent/slider_wheel_offscreen_test.go
+@@ -0,0 +1,90 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"fmt"
++	"testing"
++
++	"cogentcore.org/core/core"
++	"cogentcore.org/core/events"
++	"cogentcore.org/core/events/key"
++	"cogentcore.org/core/math32"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestSliderWheelPreservesValueAndScrollsParent(t *testing.T) {
++	for _, scrolling := range []bool{false, true} {
++		for _, focused := range []bool{false, true} {
++			t.Run(fmt.Sprintf("scroll-parent=%t/focused=%t", scrolling, focused), func(t *testing.T) {
++				value, calls := float32(25), 0
++				focus := "neutral"
++				if focused {
++					focus = "slider"
++				}
++				m, _ := simpleManual(t, manualConfig(t, 7), func() ui.Node {
++					children := []ui.Node{
++						{ID: "slider", Kind: ui.Slider, Number: value, MinHeight: 40, Numeric: ui.Numeric{Min: 0, Max: 100, Step: 1}, Change: func(e ui.ChangeEvent) { value = e.Number; calls++ }},
++						{ID: "witness", Kind: ui.Label, Text: "Following controls", MinHeight: 32},
++					}
++					if scrolling {
++						for i := range 16 {
++							children = append(children, ui.Node{ID: fmt.Sprintf("padding-%d", i), Kind: ui.Label, Text: "Further controls", MinHeight: 32})
++						}
++						children = []ui.Node{{ID: "scroll", Kind: ui.Scroll, Grow: true, Children: []ui.Node{{ID: "content", Kind: ui.Column, Children: children}}}}
++					}
++					return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Focus: ui.FocusRequest{ID: focus, Sequence: 1}, Children: append([]ui.Node{{ID: "neutral", Kind: ui.Button, Text: "Outside the slider", Activate: func() {}}}, children...)}
++				})
++				unitSettle(t, m)
++				w := m.implementation.find("one")
++				send := func(input ManualInput) {
++					t.Helper()
++					input.Window, input.WindowIncarnation = "one", w.incarnation
++					if err := m.Input(testContext, input); err != nil {
++						t.Fatal(err)
++					}
++					unitSettle(t, m)
++				}
++				snapshot, err := m.Snapshot(testContext)
++				if err != nil {
++					t.Fatal(err)
++				}
++				if snapshot.Windows[0].FocusedID != focus {
++					t.Fatal("fixture did not establish actual focus", snapshot.Windows[0].FocusedID)
++				}
++				slider := findRecord(w.state.root, "slider").widget.(*core.Slider)
++				before := findRecord(w.state.root, "witness").widget.AsWidget().Geom.TotalBBox
++				box := slider.Geom.TotalBBox
++				send(ManualInput{Type: events.Scroll, Position: box.Min.Add(box.Size().Div(2)), Delta: math32.Vec2(0, 12)})
++				if value != 25 || slider.Value != 25 || calls != 0 {
++					t.Fatal("wheel changed the accepted slider value", value, slider.Value, calls)
++				}
++				if scrolling {
++					after := findRecord(w.state.root, "witness").widget.AsWidget().Geom.TotalBBox
++					if after.Min.Y >= before.Min.Y {
++						t.Fatal("wheel did not reach the enclosing pane", before, after)
++					}
++				}
++				if focused {
++					send(ManualInput{Type: events.KeyChord, Code: key.CodeRightArrow})
++					if value != 26 || calls != 1 {
++						t.Fatal("Right did not increment exactly once", value, calls)
++					}
++					send(ManualInput{Type: events.KeyChord, Code: key.CodeLeftArrow})
++					if value != 25 || calls != 2 {
++						t.Fatal("Left did not decrement exactly once", value, calls)
++					}
++				}
++				// Pointer changes remain deliberate and commit once on release.
++				beforeCalls := calls
++				box = slider.Geom.TotalBBox
++				point := box.Min.Add(box.Size().Div(2))
++				send(ManualInput{Type: events.MouseDown, Button: events.Left, Position: point})
++				send(ManualInput{Type: events.MouseUp, Button: events.Left, Position: point})
++				if value == 25 || calls != beforeCalls+1 {
++					t.Fatal("pointer click lost its single deliberate commit", value, calls-beforeCalls)
++				}
++			})
++		}
++	}
++}
+diff --git a/drivers/cogent/split.go b/drivers/cogent/split.go
+index af38ce7..654a292 100644
+--- a/drivers/cogent/split.go
++++ b/drivers/cogent/split.go
+@@ -2,6 +2,7 @@ package cogent
+ 
+ import (
+ 	"html"
++	"image"
+ 	"strings"
+ 
+ 	"cogentcore.org/core/colors"
+@@ -19,11 +20,17 @@ import (
+ // Private pane hosts preserve scroll/layout state and isolate native Splits'
+ // child styling from the managed child descriptors. Parts owns one native handle.
+ type splitState struct {
+-	native     *core.Splits
+-	panes      [2]*core.Frame
+-	childIDs   [2]string
+-	plannedIDs [2]string // Preparation routes children without publishing accepted binding.
+-	handle     *core.Handle
++	native                      *core.Splits
++	panes                       [2]*core.Frame
++	childIDs                    [2]string
++	plannedIDs                  [2]string // Preparation routes children without publishing accepted binding.
++	handle                      *core.Handle
++	pointerDown, pointerSliding bool
++	pointerStart                image.Point
++	pointerNumber, pointerSpan  float32
++	pointerOrientation          ui.Orientation
++	pointerPanes                [2]string
++	pointerMoved                bool
+ }
+ 
+ // Native Splits hides any pane below 1%, even though a positive managed fraction
+@@ -104,26 +111,66 @@ func mountSplit(parent tree.Node, r *record) core.Widget {
+ 		}
+ 	})
+ 	c.handle.OnFirst(events.KeyChord, func(e events.Event) { splitKey(r, e) })
+-	c.handle.OnFirst(events.SlideMove, func(e events.Event) {
+-		e.SetHandled() // Never invoke native optimistic collapse/normalization.
+-		if !splitWritable(r) {
+-			return
++	c.handle.OnFirst(events.MouseDown, func(e events.Event) {
++		c.pointerDown = e.MouseButton() == events.Left && splitWritable(r)
++		c.pointerSliding = false
++		c.pointerMoved = false
++		if c.pointerDown {
++			c.pointerStart = e.Pos()
++			c.pointerNumber = r.node.Number
++			c.pointerSpan = c.handle.Max - c.handle.Min
++			c.pointerOrientation, c.pointerPanes = r.node.Orientation, c.childIDs
+ 		}
+-		span := c.handle.Max - c.handle.Min
+-		if span <= 0 {
++	})
++	c.handle.OnFirst(events.MouseUp, func(e events.Event) {
++		if !c.pointerDown || c.pointerSliding {
+ 			return
+ 		}
+-		position := w.AsWidget().PointToRelPos(e.Pos())
+-		axis := math32.X
+-		if r.node.Orientation == ui.Vertical {
+-			axis = math32.Y
++		c.pointerDown = false
++		if e.MouseButton() == events.Left {
++			splitPointerPosition(r, e)
+ 		}
+-		value := (math32.FromPoint(position).Dim(axis) - c.handle.Min) / span
+-		queueSplit(r, value)
++		e.SetHandled()
+ 	})
++	for _, kind := range []events.Types{events.SlideStart, events.SlideMove, events.SlideStop} {
++		c.handle.OnFirst(kind, func(e events.Event) {
++			e.SetHandled() // Never invoke native optimistic collapse/normalization.
++			if !c.pointerDown || e.MouseButton() != events.Left || !splitWritable(r) {
++				return
++			}
++			c.pointerSliding = true
++			splitPointerPosition(r, e)
++			if kind == events.SlideStop {
++				c.pointerDown, c.pointerSliding = false, false
++			}
++		})
++	}
+ 	return outer
+ }
+ 
++func splitPointerPosition(r *record, e events.Event) {
++	if !splitWritable(r) {
++		return
++	}
++	c := r.control.split
++	if c.pointerSpan <= 0 || c.pointerOrientation != r.node.Orientation || c.pointerPanes != c.childIDs {
++		return
++	}
++	axis := math32.X
++	if r.node.Orientation == ui.Vertical {
++		axis = math32.Y
++	}
++	distance := math32.FromPoint(e.Pos().Sub(c.pointerStart)).Dim(axis)
++	if distance == 0 && !c.pointerMoved {
++		return
++	}
++	c.pointerMoved = true
++	// Preserve the grip and accepted fraction; mapping the handle's rounded
++	// center back to a fraction makes an ordinary focus click resize panes.
++	value := c.pointerNumber + distance/c.pointerSpan
++	queueSplit(r, value)
++}
++
+ func splitWritable(r *record) bool {
+ 	return r.control != nil && r.control.split != nil && !r.control.retired && !r.control.disabled && r.node.Change != nil
+ }
+diff --git a/drivers/cogent/split_grip_offscreen_test.go b/drivers/cogent/split_grip_offscreen_test.go
+new file mode 100644
+index 0000000..122f632
+--- /dev/null
++++ b/drivers/cogent/split_grip_offscreen_test.go
+@@ -0,0 +1,71 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"image"
++	"math"
++	"testing"
++
++	"cogentcore.org/core/events"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestSplitManualClickAndOffCenterGripPreserveAcceptedFraction(t *testing.T) {
++	for _, orientation := range []ui.Orientation{ui.Horizontal, ui.Vertical} {
++		t.Run(string(orientation), func(t *testing.T) {
++			fraction, changes := float32(.35), 0
++			m, _ := simpleManual(t, manualConfig(t, 7), func() ui.Node {
++				return ui.Node{ID: "panes", Kind: ui.SplitPane, Grow: true, Orientation: orientation, Number: fraction, Change: func(e ui.ChangeEvent) { fraction = e.Number; changes++ }, Children: []ui.Node{
++					{ID: "first", Kind: ui.Column, Grow: true}, {ID: "second", Kind: ui.Column, Grow: true},
++				}}
++			})
++			unitSettle(t, m)
++			w := m.implementation.find("one")
++			r := w.state.root
++			c := r.control.split
++			start := c.handle.Geom.TotalBBox.Min.Add(c.handle.Geom.TotalBBox.Size().Div(2))
++			if orientation == ui.Horizontal {
++				start.X++
++			} else {
++				start.Y++
++			}
++			send := func(kind events.Types, x, y int) {
++				t.Helper()
++				if err := m.Input(testContext, ManualInput{Window: "one", WindowIncarnation: w.incarnation, Type: kind, Button: events.Left, Position: start.Add(image.Pt(x, y))}); err != nil {
++					t.Fatal(err)
++				}
++				unitSettle(t, m)
++			}
++			send(events.MouseDown, 0, 0)
++			send(events.MouseUp, 0, 0)
++			if fraction != .35 || changes != 0 {
++				t.Fatal("focus click changed the accepted split", fraction, changes)
++			}
++			span := c.handle.Max - c.handle.Min
++			beforePane := c.panes[0].Geom.TotalBBox.Dx()
++			if orientation == ui.Vertical {
++				beforePane = c.panes[0].Geom.TotalBBox.Dy()
++			}
++			delta := int(span / 5)
++			x, y := delta, 0
++			if orientation == ui.Vertical {
++				x, y = 0, delta
++			}
++			send(events.MouseDown, 0, 0)
++			send(events.MouseMove, x, y)
++			send(events.MouseUp, x, y)
++			want := float32(.35) + float32(delta)/span
++			if math.Abs(float64(fraction-want)) > 1e-6 || changes != 1 {
++				t.Fatal("drag jumped from the off-center grip", fraction, want, changes)
++			}
++			afterPane := c.panes[0].Geom.TotalBBox.Dx()
++			if orientation == ui.Vertical {
++				afterPane = c.panes[0].Geom.TotalBBox.Dy()
++			}
++			if math.Abs(float64(afterPane-beforePane-delta)) > 1 {
++				t.Fatal("pane movement differs from physical pointer movement", beforePane, afterPane, delta)
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/split_offscreen_test.go b/drivers/cogent/split_offscreen_test.go
+index 93f9d5f..afe08da 100644
+--- a/drivers/cogent/split_offscreen_test.go
++++ b/drivers/cogent/split_offscreen_test.go
+@@ -98,6 +98,8 @@ func TestSplitManualKeyboardPointerGeometryAndRetainedDraft(t *testing.T) {
+ 			if target.ID != id || target.Bounds != c.handle.Geom.TotalBBox {
+ 				t.Fatal("measured private divider target missing", target)
+ 			}
++			grip := target.Bounds.Min.Add(target.Bounds.Size().Div(2))
++			initialFraction, span := fraction, c.handle.Max-c.handle.Min
+ 			if err := m.Input(testContext, ManualInput{Window: "one", WindowIncarnation: w.incarnation, Type: events.MouseDown, Button: events.Left, Target: id, TargetIncarnation: target.Incarnation}); err != nil {
+ 				t.Fatal(err)
+ 			}
+@@ -106,13 +108,14 @@ func TestSplitManualKeyboardPointerGeometryAndRetainedDraft(t *testing.T) {
+ 				t.Fatal(err)
+ 			}
+ 			position := func(value float32) image.Point {
+-				p := c.handle.Geom.TotalBBox.Min.Add(c.handle.Geom.TotalBBox.Size().Div(2))
+-				coordinate := int(c.handle.Min + value*(c.handle.Max-c.handle.Min))
+-				origin := r.widget.AsWidget().Geom.ContentBBox.Min
++				p := grip
++				// Move from the measured grip, preserving its offset within the
++				// native handle instead of assuming its center equals value*span.
++				distance := int(math32.Round((value - initialFraction) * span))
+ 				if axis == math32.X {
+-					p.X = origin.X + coordinate
++					p.X += distance
+ 				} else {
+-					p.Y = origin.Y + coordinate
++					p.Y += distance
+ 				}
+ 				return p
+ 			}
+@@ -280,3 +283,99 @@ func TestSplitManualReadOnlyAndDisabledAncestor(t *testing.T) {
+ 		})
+ 	}
+ }
++
++// Native queues may coalesce a fast drag to one movement and a distinct release.
++func TestSplitManualSingleMovementAndReleasePosition(t *testing.T) {
++	for _, orientation := range []ui.Orientation{ui.Horizontal, ui.Vertical} {
++		t.Run(string(orientation), func(t *testing.T) {
++			fraction := float32(.5)
++			config := manualConfig(t, 7)
++			m, _ := simpleManual(t, config, func() ui.Node {
++				n := splitFixture()
++				n.Number, n.Orientation, n.Grow = fraction, orientation, true
++				n.Change = func(e ui.ChangeEvent) { fraction = e.Number }
++				return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{n}}
++			})
++			unitSettle(t, m)
++			w := m.implementation.find("one")
++			r := findRecord(w.state.root, "split")
++			c := r.control.split
++			position := func(value float32) image.Point {
++				p := c.handle.Geom.TotalBBox.Min.Add(c.handle.Geom.TotalBBox.Size().Div(2))
++				coordinate := int(c.handle.Min + value*(c.handle.Max-c.handle.Min))
++				origin := r.widget.AsWidget().Geom.ContentBBox.Min
++				if orientation == ui.Vertical {
++					p.Y = origin.Y + coordinate
++				} else {
++					p.X = origin.X + coordinate
++				}
++				return p
++			}
++			input := func(kind events.Types, at image.Point) {
++				t.Helper()
++				if err := m.Input(testContext, ManualInput{Window: "one", WindowIncarnation: w.incarnation, Type: kind, Button: events.Left, Position: at}); err != nil {
++					t.Fatal(err)
++				}
++				unitSettle(t, m)
++			}
++			input(events.MouseDown, position(.5))
++			if _, err := config.Clock.Advance(core.TimingSettings.SlideStartTime + time.Nanosecond); err != nil {
++				t.Fatal(err)
++			}
++			input(events.MouseMove, position(.7))
++			if math.Abs(float64(fraction-.7)) > .015 {
++				t.Fatal("first and only movement lost", fraction)
++			}
++			input(events.MouseUp, position(.8))
++			if math.Abs(float64(fraction-.8)) > .015 {
++				t.Fatal("release position lost", fraction)
++			}
++		})
++	}
++}
++
++func TestSplitManualFastReleaseWithoutSlideStart(t *testing.T) {
++	for _, orientation := range []ui.Orientation{ui.Horizontal, ui.Vertical} {
++		t.Run(string(orientation), func(t *testing.T) {
++			fraction := float32(.5)
++			config := manualConfig(t, 7)
++			m, _ := simpleManual(t, config, func() ui.Node {
++				n := splitFixture()
++				n.Number, n.Orientation, n.Grow = fraction, orientation, true
++				n.Change = func(e ui.ChangeEvent) { fraction = e.Number }
++				return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{n}}
++			})
++			unitSettle(t, m)
++			w := m.implementation.find("one")
++			r := findRecord(w.state.root, "split")
++			c := r.control.split
++			position := func(value float32) image.Point {
++				p := c.handle.Geom.TotalBBox.Min.Add(c.handle.Geom.TotalBBox.Size().Div(2))
++				coordinate := int(c.handle.Min + value*(c.handle.Max-c.handle.Min))
++				origin := r.widget.AsWidget().Geom.ContentBBox.Min
++				if orientation == ui.Vertical {
++					p.Y = origin.Y + coordinate
++				} else {
++					p.X = origin.X + coordinate
++				}
++				return p
++			}
++			input := func(kind events.Types, at image.Point) {
++				t.Helper()
++				if err := m.Input(testContext, ManualInput{Window: "one", WindowIncarnation: w.incarnation, Type: kind, Button: events.Left, Position: at}); err != nil {
++					t.Fatal(err)
++				}
++				unitSettle(t, m)
++			}
++			input(events.MouseDown, position(.5))
++			input(events.MouseMove, position(.7))
++			if fraction != .5 {
++				t.Fatal("test unexpectedly entered timed sliding", fraction)
++			}
++			input(events.MouseUp, position(.8))
++			if math.Abs(float64(fraction-.8)) > .015 {
++				t.Fatal("release position lost", fraction)
++			}
++		})
++	}
++}
+diff --git a/drivers/cogent/state_key_test.go b/drivers/cogent/state_key_test.go
+new file mode 100644
+index 0000000..6758801
+--- /dev/null
++++ b/drivers/cogent/state_key_test.go
+@@ -0,0 +1,54 @@
++package cogent
++
++import (
++	"testing"
++
++	"cogentcore.org/core/core"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestTextStateKeyReplacesPrivateFieldStateAndRetiresQueuedChanges(t *testing.T) {
++	a, _ := newAXTest(t, 8)
++	host := core.NewFrame(core.NewBody("field-owner"))
++	calls := 0
++	n := ui.Node{ID: "root", Kind: ui.Column, Children: []ui.Node{{ID: "field", Kind: ui.TextField, TextStateKey: "doc1:part1", Text: "1k", Change: func(ui.ChangeEvent) { calls++ }}}}
++	r, err := reconcile(host, nil, n, a, "ax")
++	if err != nil {
++		t.Fatal(err)
++	}
++	old := findRecord(r, "field")
++	field := old.widget.(*core.TextField)
++	if !field.ApplyNativeEdit("2.2k", 4, 4, -1, -1, "insert") {
++		t.Fatal("private native edit refused")
++	}
++	r, err = reconcile(host, r, n, a, "ax")
++	if err != nil {
++		t.Fatal(err)
++	}
++	if findRecord(r, "field") != old || field.EditingState().Text != "2.2k" {
++		t.Fatal("ordinary redraw lost private text")
++	}
++	field.SendChange() // owner callback is queued before the binding is retired
++	n.Children[0].TextStateKey = "doc2:part1"
++	r, err = reconcile(host, r, n, a, "ax")
++	if err != nil {
++		t.Fatal(err)
++	}
++	a.Drain()
++	fresh := findRecord(r, "field")
++	if fresh == old || fresh.widget == field || !old.control.retired || calls != 0 {
++		t.Fatal("logical owner change retained field or delivered old queued change")
++	}
++	current := fresh.widget.(*core.TextField)
++	if current.EditingState().Text != "1k" {
++		t.Fatal("replacement inherited private text", current.EditingState())
++	}
++	if !current.ApplyNativeEdit("3.3k", 4, 4, -1, -1, "insert") {
++		t.Fatal("fresh field edit refused")
++	}
++	current.SendChange()
++	a.Drain()
++	if calls != 1 {
++		t.Fatal("fresh field did not deliver its change")
++	}
++}
+diff --git a/drivers/cogent/window_background.go b/drivers/cogent/window_background.go
+new file mode 100644
+index 0000000..19adaea
+--- /dev/null
++++ b/drivers/cogent/window_background.go
+@@ -0,0 +1,55 @@
++package cogent
++
++import (
++	"image"
++	"image/color"
++
++	"cogentcore.org/core/styles"
++	"github.com/dshills/vellum/ui"
++)
++
++// A window's scene inset belongs to its managed surface. Keep the accepted
++// color immutable for native styling, without reading mutable records there.
++type windowBackground struct {
++	color color.NRGBA
++	fill  *image.Uniform
++}
++
++func bindWindowBackground(w *nativeWindow) {
++	w.body.Scene.Styler(func(s *styles.Style) {
++		if accepted := w.background.Load(); accepted != nil {
++			s.Background = accepted.fill
++		}
++	})
++}
++
++// Called under root ownership, after successful reconciliation. Translucent
++// root paint is applied by the root widget once, over the configured host or
++// the native default; it must not also tint the scene underneath itself.
++func syncWindowBackground(w *nativeWindow) {
++	if w.root == nil {
++		return
++	}
++	value, err := ui.ResolveStyle(w.root.node, w.root.theme)
++	if err != nil {
++		return
++	}
++	wanted := value.Background
++	if !wanted.Set || wanted.Value.A != 255 {
++		wanted = w.root.theme.Default.Background
++	}
++	old := w.background.Load()
++	if wanted.Set && wanted.Value.A == 255 {
++		if old != nil && old.color == wanted.Value {
++			return
++		}
++		w.background.Store(&windowBackground{color: wanted.Value, fill: image.NewUniform(wanted.Value)})
++	} else {
++		if old == nil {
++			return
++		}
++		w.background.Store(nil)
++	}
++	w.body.Scene.Style()
++	w.body.Scene.NeedsRender()
++}
+diff --git a/drivers/cogent/window_background_offscreen_test.go b/drivers/cogent/window_background_offscreen_test.go
+new file mode 100644
+index 0000000..6c3be29
+--- /dev/null
++++ b/drivers/cogent/window_background_offscreen_test.go
+@@ -0,0 +1,106 @@
++//go:build offscreen
++
++package cogent
++
++import (
++	"image"
++	"image/color"
++	"testing"
++
++	"cogentcore.org/core/colors"
++	"github.com/dshills/vellum/app"
++	"github.com/dshills/vellum/ui"
++)
++
++func TestManualWindowBackgroundRestoresNativeFallback(t *testing.T) {
++	config := manualConfig(t, 7)
++	config.Theme.Default.Background = ui.Some(color.NRGBA{})
++	background := ui.Some(color.NRGBA{R: 30, G: 30, B: 32, A: 255})
++	m, a := simpleManual(t, config, func() ui.Node {
++		return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Background: background}}
++	})
++	unitSettle(t, m)
++	for _, replacement := range []ui.Optional[color.NRGBA]{
++		{},
++		ui.Some(color.NRGBA{R: 242, G: 242, B: 247, A: 255}),
++		ui.Some(color.NRGBA{B: 255, A: 128}),
++	} {
++		if err := a.Do(func() { background = replacement; a.Invalidate("one") }); err != nil {
++			t.Fatal(err)
++		}
++		unitSettle(t, m)
++		im, err := m.Capture(testContext, "one")
++		if err != nil {
++			t.Fatal(err)
++		}
++		want := color.NRGBAModel.Convert(colors.Scheme.Surface.At(0, 0)).(color.NRGBA)
++		if replacement.Set && replacement.Value.A == 255 {
++			want = replacement.Value
++		}
++		if got := color.NRGBAModel.Convert(im.At(0, 0)).(color.NRGBA); got != want {
++			t.Fatal("old root color leaked into native fallback", got, want)
++		}
++	}
++}
++
++func TestManualWindowBackgroundFollowsRootWithoutMovingContent(t *testing.T) {
++	config := manualConfig(t, 7)
++	base := color.NRGBA{R: 220, G: 222, B: 224, A: 255}
++	config.Theme.Default.Background = ui.Some(base)
++	colors := []color.NRGBA{{R: 30, G: 30, B: 32, A: 255}, {R: 242, G: 242, B: 247, A: 255}}
++	phase := 0
++	a, err := app.New(app.Config{})
++	if err != nil {
++		t.Fatal(err)
++	}
++	t.Cleanup(a.Close)
++	for index, id := range []string{"first", "second"} {
++		if err := a.Open(app.Window{ID: id, Title: id, Width: 200, Height: 120, View: func() ui.Node {
++			background := ui.Some(colors[(index+phase)%2])
++			if phase == 2 {
++				if index == 0 {
++					background = ui.Some(color.NRGBA{B: 255, A: 128})
++				} else {
++					background = ui.Style{}.Background
++				}
++			}
++			return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Background: background}}
++		}}); err != nil {
++			t.Fatal(err)
++		}
++	}
++	m, err := NewManual(testContext, a, config)
++	if err != nil {
++		t.Fatal(err)
++	}
++	t.Cleanup(func() { _ = m.Close(testContext) })
++	for current := 0; current < 3; current++ {
++		if current > 0 {
++			if err := a.Do(func() { phase = current; a.Invalidate("first"); a.Invalidate("second") }); err != nil {
++				t.Fatal(err)
++			}
++		}
++		unitSettle(t, m)
++		for index, id := range []string{"first", "second"} {
++			w := m.implementation.find(id)
++			bounds := w.state.root.widget.AsWidget().Geom.TotalBBox
++			t.Logf("%s phase %d content bounds %v", id, phase, bounds)
++			if bounds != image.Rect(8, 8, 192, 112) {
++				t.Fatal("background update changed the existing content inset", bounds)
++			}
++			im, err := m.Capture(testContext, id)
++			if err != nil {
++				t.Fatal(err)
++			}
++			want := colors[(index+phase)%2]
++			if phase == 2 {
++				want = base // Clear or translucent roots use the host theme once.
++			}
++			for _, p := range []image.Point{{0, 0}, {199, 0}, {0, 119}, {199, 119}} {
++				if got := color.NRGBAModel.Convert(im.At(p.X, p.Y)).(color.NRGBA); got != want {
++					t.Fatalf("host border ignores %s phase %d palette at %v: got %v want %v", id, phase, p, got, want)
++				}
++			}
++		}
++	}
++}
+diff --git a/ui/control_state_key_test.go b/ui/control_state_key_test.go
+new file mode 100644
+index 0000000..f0b5c6c
+--- /dev/null
++++ b/ui/control_state_key_test.go
+@@ -0,0 +1,36 @@
++package ui
++
++import (
++	"strings"
++	"testing"
++
++	"github.com/dshills/vellum/placement"
++)
++
++func TestControlStateKeyRequiresSimpleControl(t *testing.T) {
++	for _, kind := range []Kind{Button, Checkbox, Switch, ToggleButton, Selector, Slider, NumberField, TextField, RadioGroup, SegmentedControl, ListBox, MenuButton, Label, Column, DataGrid, DataTree, MultilineText} {
++		n := Node{ID: "control", Kind: kind, ControlStateKey: "doc:part", Numeric: Numeric{Min: 0, Max: 100, Step: 1}, Options: []Option{{ID: "one", Label: "One"}}, SelectedID: "one", Activate: func() {}, Change: func(ChangeEvent) {}}
++		if kind == ListBox || kind == MenuButton {
++			n.Activate = nil
++		}
++		if kind == MenuButton {
++			n.SelectedID = ""
++			n.Text = "Actions"
++		}
++		err := Validate(n)
++		if SupportsControlStateKey(kind) {
++			if err != nil {
++				t.Fatalf("supported kind %s: %v", kind, err)
++			}
++		} else if err == nil || !strings.Contains(err.Error(), "ControlStateKey") {
++			t.Fatalf("kind=%s must refuse unsupported state key: %v", kind, err)
++		}
++	}
++}
++
++func TestControlStateKeyRejectsPlacementModelBinding(t *testing.T) {
++	n := Node{ID: "source", Kind: Button, ControlStateKey: "owner", PlacementSource: &placement.Source{}}
++	if err := Validate(n); err == nil || !strings.Contains(err.Error(), "ControlStateKey") {
++		t.Fatalf("placement model must retain its established binding contract: %v", err)
++	}
++}
+diff --git a/ui/node.go b/ui/node.go
+index 08049ab..80781ab 100644
+--- a/ui/node.go
++++ b/ui/node.go
+@@ -35,6 +35,19 @@ type Node struct {
+ 	ID   string
+ 	Kind Kind
+ 	Text string
++	// TextStateKey identifies the logical owner of a managed TextField's private
++	// editing state. A change remounts that field, even when Text is unchanged,
++	// while retaining its public ID. Empty preserves normal ID/kind retention.
++	// Other kinds must leave this empty; caller-owned editor/grid/tree models
++	// already provide their own identity contracts.
++	TextStateKey string
++	// ControlStateKey identifies the logical owner of a simple managed control's
++	// local editing, selection or pressed state. Changing it remounts the control
++	// without changing its public ID. Empty retains ordinary ID/kind behavior.
++	// Use SupportsControlStateKey to distinguish these controls from caller-owned
++	// editor/grid/tree models, which retain their separate identity contracts.
++	// Placement-bound controls must also leave this empty.
++	ControlStateKey string
+ 	// Icon is bundled artwork for Icon/Button/ToggleButton. Text is alternate
+ 	// text for an Icon. Icon-only actions require Accessibility.Name.
+ 	Icon Symbol
+@@ -106,6 +119,12 @@ func Validate(root Node) error {
+ 		if n.ID == "" || seen[n.ID] {
+ 			return fmt.Errorf("ui: empty or duplicate ID %q", n.ID)
+ 		}
++		if n.ControlStateKey != "" && (!SupportsControlStateKey(n.Kind) || n.PlacementSource != nil || n.PlacementTarget != nil) {
++			return fmt.Errorf("ui: node %q: ControlStateKey requires a simple managed control", n.ID)
++		}
++		if n.TextStateKey != "" && n.Kind != TextField {
++			return fmt.Errorf("ui: node %q: TextStateKey requires TextField", n.ID)
++		}
+ 		if strings.HasPrefix(n.ID, "canvas-object:") {
+ 			return fmt.Errorf("ui: ID %q uses reserved canvas-object: prefix", n.ID)
+ 		}
+@@ -194,3 +213,16 @@ func Validate(root Node) error {
+ 	}
+ 	return nil
+ }
++
++// SupportsControlStateKey reports the ordinary controls whose local native state
++// can be replaced independently of their public IDs. It excludes caller-owned
++// model bindings and containers; keys do not propagate to descendants.
++func SupportsControlStateKey(kind Kind) bool {
++	switch kind {
++	case Button, Checkbox, Switch, ToggleButton, Selector, Slider, NumberField,
++		TextField, RadioGroup, SegmentedControl, ListBox, MenuButton:
++		return true
++	default:
++		return false
++	}
++}
+diff --git a/ui/text_state_key_test.go b/ui/text_state_key_test.go
+new file mode 100644
+index 0000000..3d92573
+--- /dev/null
++++ b/ui/text_state_key_test.go
+@@ -0,0 +1,20 @@
++package ui
++
++import (
++	"strings"
++	"testing"
++)
++
++func TestTextStateKeyRequiresManagedTextField(t *testing.T) {
++	for _, kind := range []Kind{TextField, Label, Button, NumberField, MultilineText} {
++		n := Node{ID: "field", Kind: kind, TextStateKey: "document:part"}
++		err := Validate(n)
++		if kind == TextField {
++			if err != nil {
++				t.Fatal(err)
++			}
++		} else if err == nil || !strings.Contains(err.Error(), "TextStateKey") {
++			t.Fatalf("kind=%s must reject the text-only key: %v", kind, err)
++		}
++	}
++}
