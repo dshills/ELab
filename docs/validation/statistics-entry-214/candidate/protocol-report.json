@@ -1,0 +1,145 @@
+{
+  "source_commit": "28d18ee6a1c45bab05ad2e76f96e68c4f1a26a7a",
+  "agent_sha256": "00024e43e47d4000e37c34807491cc70409d02bb70cd093bdbca9383ba88b51f",
+  "transport": "headless-stdio",
+  "fixture_sha256": "296b96c988aa88a8fe02a2a1886cdee58c6115d13cc302f460b30ab9cefdf069",
+  "refusal_cases": 8,
+  "covered_cases": 4,
+  "results": [
+    {
+      "settings": {
+        "id": "record-1",
+        "probe_id": "v:V1.positive",
+        "start_s": 0,
+        "end_s": 0.0199999999995
+      },
+      "origin_id": "verify-1",
+      "engine": "elab.ideal-rc-exact.v1",
+      "method": "piecewise-linear.v1",
+      "probe": {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      "sample_count": 21,
+      "segment_count": 20,
+      "duration_s": 0.0199999999995,
+      "minimum": 5,
+      "maximum": 5,
+      "peak_to_peak": 0,
+      "time_mean": 5,
+      "time_rms": 5,
+      "ac_rms": 0
+    },
+    {
+      "settings": {
+        "id": "record-1",
+        "probe_id": "v:V1.positive",
+        "start_s": 0.019999999999,
+        "end_s": 0.0199999999995
+      },
+      "origin_id": "verify-1",
+      "engine": "elab.ideal-rc-exact.v1",
+      "method": "piecewise-linear.v1",
+      "probe": {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      "sample_count": 21,
+      "segment_count": 1,
+      "duration_s": 4.999993474807951e-13,
+      "minimum": 5,
+      "maximum": 5,
+      "peak_to_peak": 0,
+      "time_mean": 5,
+      "time_rms": 5,
+      "ac_rms": 0
+    },
+    {
+      "settings": {
+        "id": "record-1",
+        "probe_id": "v:V1.positive",
+        "start_s": 0.019999999999499998,
+        "end_s": 0.0199999999995
+      },
+      "origin_id": "verify-1",
+      "engine": "elab.ideal-rc-exact.v1",
+      "method": "piecewise-linear.v1",
+      "probe": {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      "sample_count": 21,
+      "segment_count": 1,
+      "duration_s": 3.469446951953614e-18,
+      "minimum": 5,
+      "maximum": 5,
+      "peak_to_peak": 0,
+      "time_mean": 5,
+      "time_rms": 5,
+      "ac_rms": 0
+    },
+    {
+      "settings": {
+        "id": "record-2",
+        "probe_id": "v:V1.positive",
+        "start_s": 0,
+        "end_s": 0.0199999999995
+      },
+      "origin_id": "verify-1",
+      "engine": "elab.ideal-rc-exact.v1",
+      "method": "piecewise-linear.v1",
+      "probe": {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      "sample_count": 21,
+      "segment_count": 20,
+      "duration_s": 0.0199999999995,
+      "minimum": 5,
+      "maximum": 5,
+      "peak_to_peak": 0,
+      "time_mean": 5,
+      "time_rms": 5,
+      "ac_rms": 0
+    }
+  ],
+  "saved_rows_and_metadata_preserved": true,
+  "fixture_unchanged": true,
+  "declared_duration_s": 0.02,
+  "actual_last_sample_time_s": 0.0199999999995,
+  "public_sample_reads_discover_actual_bound": true,
+  "quantity_sets": 2,
+  "quantity_refusal_cases": 2,
+  "measurement_clear_succeeded": true,
+  "quantity_query_set_equality": true,
+  "measurement_edits_preserve_live_document_history": true,
+  "shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "input_revision": 26,
+    "command_revision": 12,
+    "document_generation": 2,
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "passed": true,
+  "agent_exit_code": 0
+}

@@ -81,3 +81,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Recorded-position request context](88-recorded-position-context.md): stale seek feedback and late rejected drafts stay with their original context, with full checks and packaged immutable-capture/RC evidence after a live model edit.
 
 - [Recorded interval coverage](89-recorded-statistics-coverage.md) and [analysis entry ownership](90-analysis-field-context.md): refuse statistics outside actual saved timestamps and prevent old form callbacks from retaining malformed text after agent edits. Full source and matching packaged-agent checks pass; native acceptance of the held candidates remains separate, and /205 stays the current download.
+
+- [Captured measurement entry recovery](91-statistics-entry-recovery.md): retained invalid start/end entries, cached-result labeling and channel-owned private editing. Four mounted failures are repaired; the old native baseline is observed and restored. Full quality and the clean /214 matching agent pass, with changed-candidate native acceptance still separate.

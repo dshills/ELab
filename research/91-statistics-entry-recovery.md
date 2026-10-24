@@ -63,3 +63,11 @@ entry helper, and native source count becomes 78. The SDK, backend source,
 current /205 download and previous candidates are preserved. Changed-candidate
 native acceptance remains separate from the old native baseline, source,
 mounted and headless evidence. No new launch prompt or review request is queued.
+
+
+The [clean /214 candidate](../docs/validation/statistics-entry-214/candidate-report.json)
+passes matching-agent imported coverage, exact round-trip and constant-source
+checks, plus voltage/current unit-time edits, pure query/set equality, two
+ordinary invalid-entry refusals and measurement clearing. Workers join and the
+agent exits 0. All 883 source/check inputs and the signed bundle remain exact.
+The candidate is held for fresh native acceptance; /205 remains the download.

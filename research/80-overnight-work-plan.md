@@ -115,3 +115,19 @@ remains separate. /205 and all earlier candidates are preserved; no graphical
 launch prompt is queued. Continue the remaining keyboard/agent/state-contract
 review under the standing authorization, prioritizing demonstrated defects
 before optional features.
+
+## Checkpoint: captured measurement entry recovery
+
+The [measurement entry repair](91-statistics-entry-recovery.md) reproduces three
+discarded rejected intervals and private text following an agent's channel
+selection. Separate retained endpoints, a last-accepted-result note and channel
+ownership repair those four mounted cases. Stale callbacks, peer corrections
+and owner pruning have focused regressions. Full quality and clean /214 matching
+agent checks pass; backend source, SDK and existing public command sets remain
+unchanged.
+
+The existing /206 native test session independently replaces a rejected negative
+start with its accepted text. Its fresh correction succeeds, and its restored
+full state differs only in revision counters. The owned app stays open for
+reuse; no graphical app launch or permission request is queued. Fresh native
+acceptance of /214 remains separate, and /205 is still the current download.

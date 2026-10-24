@@ -29,3 +29,19 @@ race 164.391 s. All 883 source/check inputs match. Inventory retains
 entry helper and native sources become 78. Backend source, SDK and /205 remain
 unchanged. Fresh native acceptance of the changed candidate remains separate;
 no unattended launch prompt or owner review is requested.
+
+
+The [clean /214 candidate](candidate-report.json) identifies exact source
+`28d18ee6a1c45bab05ad2e76f96e68c4f1a26a7a` and native/agent hashes. All three binaries report
+that revision with `vcs.modified=false`; strict ad-hoc signature validation
+passes. Its matching headless agent refuses eight uncovered query/set cases,
+passes four constant-5-V covered measurements (including a one-step-wide span),
+and preserves rows/metadata through export/reimport. Two fresh voltage/current
+quantity edits match pure queries, two ordinary invalid entries preserve cached
+state, and clearing measurements preserves live physics, document and history.
+Normal shutdown joins workers and exits 0; the signed bundle stays unchanged.
+
+The candidate is held for [native acceptance](native-acceptance-pending.json).
+Headless checks do not exercise private widget text. The old native /206 baseline
+and its restored state are separately documented. The /213 binaries and current
+/205 ZIP remain exact; nothing is promoted, published or graphically launched.
