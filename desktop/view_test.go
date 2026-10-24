@@ -100,7 +100,7 @@ func agentAction(t *testing.T, service *workbench.Service, id string, p any) {
 	if response.Error != nil {
 		t.Fatal(response.Error)
 	}
-	if s := service.Snapshot(); s.Status == "updating" || activeInputWork(s) {
+	if s := service.Snapshot(); id == "simulation.step" || s.Status == "updating" || activeInputWork(s) {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 		if _, err := service.Wait(ctx); err != nil {

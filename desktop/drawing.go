@@ -317,7 +317,7 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -9})
 		stroke(wireColor, 2.5, canvas.Point{Y: 9}, canvas.Point{Y: 32})
 	case "linear-regulator", "ldo-regulator":
-		for _, path := range workbench.RegulatorSymbolPaths() {
+		for _, path := range workbench.RegulatorSymbolPaths(part.Kind) {
 			points := make([]canvas.Point, len(path))
 			for k, at := range path {
 				points[k] = canvas.Point{X: at.X, Y: at.Y}

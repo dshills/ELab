@@ -12,7 +12,11 @@ func TestNativeNarrowWindowReportsNoRowsAndDisablesCSV(t *testing.T) {
 	defer cleanup()
 	uiAction(t, s, "example.rc", nil)
 	uiAction(t, s, "simulation.pause", nil)
+	uiAction(t, s, "simulation.restart", nil)
 	agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: 1e-12})
+	if at := s.service.Snapshot().Transient.Sample.Time; at != 1e-12 {
+		t.Fatal("fixture endpoint", at)
+	}
 	agentAction(t, s.service, "scope.probes.set", workbench.ProbeParams{IDs: []string{"v:C1"}})
 	uiAction(t, s, "window-start", &ui.ChangeEvent{Text: "0.4 ps"})
 	uiAction(t, s, "window-end", &ui.ChangeEvent{Text: "0.6 ps"})

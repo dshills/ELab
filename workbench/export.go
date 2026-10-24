@@ -264,7 +264,7 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
 		switch p.Kind {
 		case "linear-regulator", "ldo-regulator":
-			for _, path := range RegulatorSymbolPaths() {
+			for _, path := range RegulatorSymbolPaths(p.Kind) {
 				b.WriteString(`<polyline points="`)
 				for _, point := range path {
 					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)

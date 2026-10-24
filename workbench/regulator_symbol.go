@@ -11,8 +11,12 @@ func RegulatorTerminalLocal(pin string) (Point, bool) {
 	}
 	return Point{}, false
 }
-func RegulatorSymbolPaths() [][]Point {
-	return [][]Point{{{-65, -45}, {65, -45}, {65, 45}, {-65, 45}, {-65, -45}}, {{-100, 0}, {-65, 0}}, {{65, 0}, {100, 0}}, {{0, 45}, {0, 90}}}
+func RegulatorSymbolPaths(kind string) [][]Point {
+	paths := [][]Point{{{-65, -45}, {65, -45}, {65, 45}, {-65, 45}, {-65, -45}}, {{-100, 0}, {-65, 0}}, {{65, 0}, {100, 0}}, {{0, 45}, {0, 90}}}
+	if kind == "ldo-regulator" {
+		paths = append(paths, []Point{{-14, 26}, {-14, 12}, {0, 12}, {0, 0}, {14, 0}})
+	}
+	return paths
 }
 func RegulatorSymbolLabels(p Component) []OpAmpSymbolLabel {
 	labels := []OpAmpSymbolLabel{{Point{-56, -8}, "IN"}, {Point{24, -8}, "OUT"}, {Point{8, 67}, "GND"}}
