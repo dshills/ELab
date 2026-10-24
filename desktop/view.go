@@ -516,6 +516,10 @@ func (s *screen) view() ui.Node {
 	if state.Document.Dirty {
 		filename += " · Unsaved"
 	}
+	footer := quiet("footer", fmt.Sprintf("%d components · %d wires", len(state.Components), len(state.Wires)))
+	// The title and history already identify the document and last change.
+	// Keep the status row compact; retain the full summary for hover and AX.
+	footer.Accessibility.Help = fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)
 	schematicChildren := []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints)}
 	if message != "" {
 		schematicChildren = append(schematicChildren, messages)
@@ -538,7 +542,7 @@ func (s *screen) view() ui.Node {
 			s.inspectorRail(state, inspector),
 		}},
 		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 48}), Gap: ui.Some(float32(1)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), compactReadingStatus(readStatus)}},
-		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 24}), Padding: ui.Some(ui.Insets{Left: 10, Right: 10}), Gap: ui.Some(float32(8))}, Children: []ui.Node{quiet("footer", fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)), {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
+		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 24}), Padding: ui.Some(ui.Insets{Left: 10, Right: 10}), Gap: ui.Some(float32(8))}, Children: []ui.Node{footer, {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
 	if sourcePaneHidden(state) {
