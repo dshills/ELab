@@ -37,6 +37,9 @@ func TestRelayNativeExamplesAndSharedValueEdit(t *testing.T) {
 			if _, ok := findNode(user.view(), "relay-selected-reading"); !ok {
 				t.Fatal("missing relay inspector")
 			}
+			if node, ok := findNode(user.view(), "plot-v:K1.coil1"); !ok || node.Text != "Plot coil1 voltage" {
+				t.Fatal("ambiguous terminal plot control")
+			}
 			for _, probe := range []string{"plot-v:K1", "plot-i:K1", "plot-v:K1.coil1"} {
 				if _, ok := findNode(user.view(), probe); !ok {
 					t.Fatal("missing relay plot", probe)

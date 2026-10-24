@@ -33,6 +33,30 @@ func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Componen
 			if probe.Unit == "A" {
 				text = "Plot current"
 			}
+			if workbench.IsControlKind(p.Kind) || workbench.IsRegulatorKind(p.Kind) {
+				switch probe.ID {
+				case "v:" + p.ID:
+					text = "Plot output voltage"
+					if p.Kind == "relay" {
+						text = "Plot coil voltage"
+					}
+					if workbench.IsButtonKind(p.Kind) {
+						text = "Plot button voltage"
+					}
+				case "i:" + p.ID:
+					text = "Plot delivered output current"
+					if p.Kind == "relay" {
+						text = "Plot coil current"
+					}
+					if workbench.IsButtonKind(p.Kind) {
+						text = "Plot button current"
+					}
+				case "v:" + p.ID + ".input-difference":
+					text = "Plot input difference"
+				default:
+					text = "Plot " + strings.TrimPrefix(probe.ID, "v:"+p.ID+".") + " voltage"
+				}
+			}
 			if workbench.IsDisplayKind(p.Kind) {
 				pin := strings.TrimPrefix(strings.TrimPrefix(probe.ID, "v:"+p.ID+"."), "i:"+p.ID+".")
 				text = "Plot " + pin + " voltage"

@@ -81,7 +81,7 @@
     "desktop/window_minimum.go": "f6c1590898646b8b570abac29c857162bf13b50d14f39809c8f7f92bee9d180e",
     "desktop/window_minimum_darwin.go": "b7c9fe1d3bb1b7350f70dc4b1ba29708b8975ef0b507ba0595d730c4ddb607e8",
     "desktop/window_minimum_other.go": "1acf27d143422fd66ad4e691aa191afd844510f24004de9aec1f3c8030ca0225",
-    "desktop/workflow.go": "d03aab8ac334babed1fd591c4bdd6e99fa5f853a86732a6dbc92644d19d6a824",
+    "desktop/workflow.go": "619cc7f4f33da9cfd57b5633cf63a006d3bebc2d6fd20ebe84ca5b7fa19726cb",
     "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32",
     "desktop/workspace_tabs.go": "9108731d1b6756faf6cdbb12f296e057869b52b6e4909bea94ed1cb5ee47f985"
   },
@@ -4366,7 +4366,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 87,
+      "line": 111,
       "function": "*screen.partPlotControls",
       "kind": "action-factory",
       "expression": "s.action(\"plot-\"+probe.ID, text, \"scope.probes.set\", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, probe.ID)})",
@@ -4377,7 +4377,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 143,
+      "line": 167,
       "function": "*screen.scopeWindowControls",
       "kind": "callback-factory",
       "expression": "timeField(\"window-\"+side, \"Scope interval \"+side, value, t == nil || t.Stale, func(text string) {\n\ts.changeIntervalTime(state, side, text, \"\")\n})",
@@ -4385,7 +4385,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 179,
+      "line": 203,
       "function": "*screen.scopeWindowControls",
       "kind": "request-command-field",
       "expression": "Command: \"component.set\"",
@@ -4396,7 +4396,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 181,
+      "line": 205,
       "function": "*screen.scopeWindowControls",
       "kind": "action-factory",
       "expression": "s.action(\"cap-pair-\"+value, \"Both capacitors · \"+value, \"edit.batch\", workbench.BatchParams{Name: \"Set both capacitors to \" + value, Edits: edits})",

@@ -37,6 +37,9 @@ func TestComparatorNativeExamplesAndSharedValueEdit(t *testing.T) {
 			if _, ok := findNode(user.view(), "comparator-selected-reading"); !ok {
 				t.Fatal("missing comparator inspector")
 			}
+			if node, ok := findNode(user.view(), "plot-v:U1.noninverting"); !ok || node.Text != "Plot noninverting voltage" {
+				t.Fatal("ambiguous terminal plot control")
+			}
 			for _, probe := range []string{"plot-v:U1", "plot-i:U1", "plot-v:U1.noninverting"} {
 				if _, ok := findNode(user.view(), probe); !ok {
 					t.Fatal("missing comparator plot", probe)

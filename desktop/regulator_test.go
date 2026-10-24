@@ -37,6 +37,9 @@ func TestRegulatorNativeExamplesAndSharedValueEdit(t *testing.T) {
 			if _, ok := findNode(user.view(), "regulator-selected-reading"); !ok {
 				t.Fatal("missing regulator inspector")
 			}
+			if node, ok := findNode(user.view(), "plot-v:U1.in"); !ok || node.Text != "Plot in voltage" {
+				t.Fatal("ambiguous terminal plot control")
+			}
 			for _, probe := range []string{"plot-v:U1", "plot-i:U1", "plot-v:U1.in"} {
 				if _, ok := findNode(user.view(), probe); !ok {
 					t.Fatal("missing regulator plot", probe)
