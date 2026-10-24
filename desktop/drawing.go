@@ -164,6 +164,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if part.Kind == "timer555" || workbench.IsSequentialKind(part.Kind) {
 			outlineW, outlineH = 108, 118
 		}
+		if workbench.IsDisplayKind(part.Kind) {
+			outlineW, outlineH = 128, 238
+		}
 		if diagnosticObjects[part.ID] {
 			stroke(diagnosticColor, 2.5, canvas.Point{X: -outlineW - 12, Y: -outlineH - 12}, canvas.Point{X: outlineW + 12, Y: -outlineH - 12}, canvas.Point{X: outlineW + 12, Y: outlineH + 12}, canvas.Point{X: -outlineW - 12, Y: outlineH + 12}, canvas.Point{X: -outlineW - 12, Y: -outlineH - 12})
 			b.text(part.Position.X+82, part.Position.Y-50, "!", diagnosticColor)
@@ -400,6 +403,44 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 			b.text(label.At.X, label.At.Y, label.Text, muted)
 			// Pin text rotates with this dense IC symbol so adjacent pin
 			// captions retain their spacing at every component orientation.
+			for i := first; i < len(b.vertices); i++ {
+				at := b.vertices[i].Position
+				d := workbench.RotateLocal(workbench.Point{X: at.X - label.At.X, Y: at.Y - label.At.Y}, part.Rotation)
+				b.vertices[i].Position = canvas.Point{X: label.At.X + d.X, Y: label.At.Y + d.Y}
+			}
+		}
+	case "bcd-decoder", "seven-segment":
+		for _, path := range workbench.DisplaySymbolPaths(part.Kind) {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		if part.Kind == "seven-segment" {
+			var lit [7]bool
+			if state.Mixed != nil && !state.Mixed.Stale {
+				for _, d := range state.Mixed.Displays {
+					if d.ID == part.ID {
+						lit = d.Lit
+					}
+				}
+			}
+			for k, path := range workbench.DisplaySegmentPaths() {
+				c := muted
+				if lit[k] {
+					c = color.NRGBA{R: 255, G: 65, B: 50, A: 255}
+				}
+				points := make([]canvas.Point, len(path))
+				for j, at := range path {
+					points[j] = canvas.Point{X: at.X, Y: at.Y}
+				}
+				stroke(c, 7, points...)
+			}
+		}
+		for _, label := range workbench.DisplaySymbolLabels(part) {
+			first := len(b.vertices)
+			b.text(label.At.X, label.At.Y, label.Text, muted)
 			for i := first; i < len(b.vertices); i++ {
 				at := b.vertices[i].Position
 				d := workbench.RotateLocal(workbench.Point{X: at.X - label.At.X, Y: at.Y - label.At.Y}, part.Rotation)

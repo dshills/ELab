@@ -151,6 +151,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			minX, maxX = math.Min(minX, x-10), math.Max(maxX, x+schematicLabelWidth(text)+10)
 			minY, maxY = math.Min(minY, y-25), math.Max(maxY, y+10)
 		}
+		if IsDisplayKind(p.Kind) {
+			minX = math.Min(minX, p.Position.X-140)
+			minY = math.Min(minY, p.Position.Y-250)
+			maxY = math.Max(maxY, p.Position.Y+250)
+		}
 		minY = math.Min(minY, p.Position.Y-80)
 		maxY = math.Max(maxY, p.Position.Y+95)
 	}
@@ -200,6 +205,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	}
 	if model := logicModelForGraph(g); model != nil {
 		metadataFields["logic_model"] = model
+	}
+	if model := displayModelForGraph(g); model != nil {
+		metadataFields["display_model"] = model
 	}
 	if model := sequentialModelForGraph(g); model != nil {
 		metadataFields["sequential_model"] = model
@@ -281,6 +289,24 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 				}
 				b.WriteString(`"/>`)
 			}
+		case "bcd-decoder", "seven-segment":
+			for _, path := range DisplaySymbolPaths(p.Kind) {
+				b.WriteString(`<polyline points="`)
+				for _, point := range path {
+					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+				}
+				b.WriteString(`"/>`)
+			}
+			if p.Kind == "seven-segment" {
+				for _, path := range DisplaySegmentPaths() {
+					b.WriteString(`<polyline stroke-width="7" points="`)
+					for _, point := range path {
+						fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+					}
+					b.WriteString(`"/>`)
+				}
+			}
+
 		case "timer555":
 			for _, path := range Timer555SymbolPaths() {
 				b.WriteString(`<polyline points="`)
@@ -364,6 +390,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		}
 		if IsSequentialKind(p.Kind) {
 			for _, label := range SequentialSymbolLabels(p) {
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
+			}
+		}
+		if IsDisplayKind(p.Kind) {
+			for _, label := range DisplaySymbolLabels(p) {
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
 			}
 		}
@@ -474,6 +505,9 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + SequentialShortName(p.Kind)
 		at := SequentialLabelPosition(p)
 		x, y = at.X, at.Y
+	case "bcd-decoder", "seven-segment":
+		text += " · " + p.Name
+		x, y = p.Position.X+130, p.Position.Y-245
 	case "timer555":
 		text += " · 555"
 		at := Timer555LabelPosition(p)

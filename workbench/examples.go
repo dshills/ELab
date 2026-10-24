@@ -69,6 +69,7 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "display-counter", Title: "555-driven digit counter", Question: "How does a timing capacitor clock a decimal digit?", Expected: "The real 555 output clocks U2 through 0–9; U3 drives seven individually current-limited LED segments.", Try: "Plot C1 and clock; change RB or C1 to change counting speed. Inspect each segment current.", Limitation: DigitalDisplayModel().Limitations},
 		{ID: "d-flipflop", Title: "D flip-flop sampler", Question: "Which data changes are remembered?", Expected: "Q takes D only at a rising clock edge; /Q is complementary. Closing SRESET clears Q immediately.", Try: "Compare DATA, CLK, Q and /Q. Change data between clock edges; Q holds until the next rising edge.", Limitation: SequentialDeviceModel().Limitations},
 		{ID: "jk-flipflop", Title: "JK flip-flop divider", Question: "What happens when J and K are both high?", Expected: "Q toggles on each rising clock edge, dividing clock frequency by two. Falling edges hold state.", Try: "Compare clock, Q and /Q. Close SRESET to clear Q; release reset while the clock is high and check no extra count appears.", Limitation: SequentialDeviceModel().Limitations},
 		{ID: "t-flipflop", Title: "T flip-flop toggle", Question: "How does a toggle flip-flop divide a clock?", Expected: "With T high Q toggles at rising edges. Setting T low holds the bit.", Try: "Compare clock and Q. Rewire T to ground to hold, or close SRESET to clear asynchronously.", Limitation: SequentialDeviceModel().Limitations},
@@ -109,6 +110,13 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "display-counter":
+		d.graph = DisplayCounterExampleGraph()
+		d.selected = "DS1"
+		d.settings.StepSeconds = .005
+		d.settings.PlaybackSpeed = .5
+		d.probes = []string{"v:C1.1", "v:U1", "v:U2.q0", "v:U2.q3", "i:DS1.a", "i:DS1.g"}
+		d.view = View{Center: Point{X: 100, Y: 0}, Zoom: .4}
 	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
 		d.graph = sequentialExample(id)
 		d.selected = "U1"

@@ -2,6 +2,8 @@ package workbench
 
 func partAliases(kind string) []string {
 	switch kind {
+	case "bcd-decoder", "seven-segment":
+		return []string{"display", "BCD", "digit", "decoder", "seven segment", "7 segment", "common cathode"}
 	case "d-flipflop", "jk-flipflop", "t-flipflop":
 		return []string{"sequential", "digital", "CMOS", "clock", "flip-flop", "register", "divider"}
 	case "binary-counter":
@@ -63,6 +65,8 @@ func partLimitations(kind string) string {
 	switch kind {
 	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
 		return SequentialDeviceModel().Limitations
+	case "bcd-decoder", "seven-segment":
+		return DigitalDisplayModel().Limitations
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return LogicDeviceModel().Limitations
 	case "dc-source":

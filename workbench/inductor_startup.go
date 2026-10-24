@@ -44,6 +44,16 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "bcd-decoder", "seven-segment":
+			ground := "gnd"
+			if p.Kind == "seven-segment" {
+				ground = "common"
+			}
+			for _, pin := range p.Terminals {
+				if pin != ground {
+					join(p, pin, ground)
+				}
+			}
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 			for _, pin := range p.Terminals {
 				if pin != "gnd" {

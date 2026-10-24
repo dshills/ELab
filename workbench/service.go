@@ -56,6 +56,7 @@ type Snapshot struct {
 	Timer555Model          *Timer555Model         `json:"timer555_model,omitempty"`
 	LogicModel             *LogicModel            `json:"logic_model,omitempty"`
 	SequentialModel        *SequentialModel       `json:"sequential_model,omitempty"`
+	DisplayModel           *DisplayModel          `json:"display_model,omitempty"`
 	Recording              *RecordingView         `json:"recording,omitempty"`
 	Recovery               RecoveryState          `json:"recovery"`
 	VerificationSettings   VerificationSettings   `json:"verification_settings"`
@@ -461,6 +462,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out.Timer555Model = timer555ModelForGraph(graph)
 	out.LogicModel = logicModelForGraph(graph)
 	out.SequentialModel = sequentialModelForGraph(graph)
+	out.DisplayModel = displayModelForGraph(graph)
 	out.LastExport = cloneArtifact(s.lastExport)
 	if len(s.undo) > 0 {
 		out.UndoName = s.undo[len(s.undo)-1].Name
@@ -1160,6 +1162,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	if state.SequentialModel != nil {
 		m := *state.SequentialModel
 		state.SequentialModel = &m
+	}
+	if state.DisplayModel != nil {
+		m := *state.DisplayModel
+		state.DisplayModel = &m
 	}
 	if state.OpAmpModel != nil {
 		model := *state.OpAmpModel

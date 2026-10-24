@@ -84,6 +84,7 @@ type VerificationMetadata struct {
 	Timer555Model      *Timer555Model      `json:"timer555_model,omitempty"`
 	LogicModel         *LogicModel         `json:"logic_model,omitempty"`
 	SequentialModel    *SequentialModel    `json:"sequential_model,omitempty"`
+	DisplayModel       *DisplayModel       `json:"display_model,omitempty"`
 	Format             string              `json:"format"`
 	Version            int                 `json:"version"`
 	OperationID        string              `json:"operation_id"`

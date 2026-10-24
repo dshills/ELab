@@ -342,3 +342,8 @@ Their example IDs match their kind IDs. Snapshots expose `sequential_model`
 and `mixed.sequential`; captures include the exact stored memory and 15-pin
 current array. See [sequential logic](sequential-logic.md) for rising-edge,
 reset/enable, startup and current-probe contracts.
+
+`bcd-decoder` and `seven-segment` use the same drawing/simulation commands.
+Load `display-counter` for a real 555-driven decimal digit; inspect
+`display_model` and `mixed.displays`, including each segment's voltage, current
+and current-derived illumination. See [digital displays](digital-display.md).

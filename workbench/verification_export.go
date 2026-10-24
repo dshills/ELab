@@ -42,6 +42,10 @@ func encodeVerificationExport(record *verificationRecord, format string) ([]byte
 			header = append(header, "logic_model")
 			modelIDs = append(modelIDs, m.LogicModel.ID)
 		}
+		if m.DisplayModel != nil {
+			header = append(header, "display_model")
+			modelIDs = append(modelIDs, m.DisplayModel.ID)
+		}
 		if m.SequentialModel != nil {
 			header = append(header, "sequential_model")
 			modelIDs = append(modelIDs, m.SequentialModel.ID)

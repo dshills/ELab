@@ -318,3 +318,7 @@ D, JK and T flip-flops plus binary and decade counters share the Logic browser,
 live simulation and agent commands. Five examples show sampling, divide-by-two,
 enable/hold and asynchronous reset. See [sequential logic](docs/sequential-logic.md)
 for pins, startup behavior, electrical limits and verification.
+
+The [seven-segment display and BCD decoder](docs/digital-display.md) add a
+555-driven decimal counter example, individual simulated segment currents and
+shared native/agent controls.

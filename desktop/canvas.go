@@ -106,6 +106,9 @@ func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 		if part.Kind == "timer555" || workbench.IsSequentialKind(part.Kind) {
 			width, height = 72, 92
 		}
+		if workbench.IsDisplayKind(part.Kind) {
+			width, height = 92, 202
+		}
 		if part.Kind == "potentiometer" {
 			width, height = 65, 50
 		}

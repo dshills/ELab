@@ -44,6 +44,14 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 				}
 				set(pin, p.ID+"."+pin, sign)
 			}
+		case "bcd-decoder", "seven-segment":
+			for _, pin := range p.Terminals {
+				sign := 1.
+				if p.Kind == "bcd-decoder" && len(pin) == 1 {
+					sign = -1
+				}
+				set(pin, p.ID+"."+pin, sign)
+			}
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555":
 			for _, pin := range p.Terminals {
 				sign := 1.

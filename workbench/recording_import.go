@@ -62,6 +62,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.LogicModel != nil {
 		envelope["logic_model"] = m.LogicModel
 	}
+	if m.DisplayModel != nil {
+		envelope["display_model"] = m.DisplayModel
+	}
 	if m.SequentialModel != nil {
 		envelope["sequential_model"] = m.SequentialModel
 	}
@@ -247,6 +250,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return fmt.Errorf("invalid recorded numerical damping for integration method")
 		}
 		if _, _, err := recordedDeviceNodes(c, r); err != nil {
+			return err
+		}
+		if err := validateRecordedDisplays(c, m.Graph, r); err != nil {
 			return err
 		}
 		if err := validateRecordedSequential(c, m.Graph, r); err != nil {

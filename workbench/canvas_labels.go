@@ -54,6 +54,9 @@ func CanvasPartLabel(part Component) (Point, string) {
 	if IsSequentialKind(part.Kind) {
 		title += " " + SequentialShortName(part.Kind)
 	}
+	if IsDisplayKind(part.Kind) {
+		title += " " + part.Name
+	}
 	if part.Kind == "timer555" {
 		title += " 555"
 	}
@@ -101,6 +104,8 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 		return LogicLabelPosition(part)
 	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
 		return SequentialLabelPosition(part)
+	case "bcd-decoder", "seven-segment":
+		return Point{part.Position.X + 130, part.Position.Y - 245}
 	case "timer555":
 		return Timer555LabelPosition(part)
 	case "opamp":

@@ -65,6 +65,17 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		}
 	}
 	currents := map[string]float64{}
+	for _, u := range r.Displays {
+		p, _ := compiled.MixedGraph.Component(u.ID)
+		for k, i := range u.PinCurrents {
+			if pin := displayPin(p, k); pin != "" {
+				if p.Kind == "bcd-decoder" && k >= 4 && k <= 10 {
+					i = -i
+				}
+				currents[p.ID+"."+pin] = i
+			}
+		}
+	}
 	for _, u := range r.Sequential {
 		part, _ := compiled.MixedGraph.Component(u.ID)
 		for k, pin := range sequentialPinOrder {

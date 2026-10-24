@@ -82,6 +82,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
 	{reflect.TypeOf(ZenerModel{}), "urn:elab:zener-model:1"},
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
+	{reflect.TypeOf(DisplayModel{}), "urn:elab:display-model:1"},
+	{reflect.TypeOf(DisplayResult{}), "urn:elab:display-result:1"},
 	{reflect.TypeOf(SequentialModel{}), "urn:elab:sequential-model:1"},
 	{reflect.TypeOf(SequentialMemory{}), "urn:elab:sequential-memory:1"},
 	{reflect.TypeOf(SequentialResult{}), "urn:elab:sequential-result:1"},

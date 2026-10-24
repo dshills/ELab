@@ -109,6 +109,14 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
 			}
+		case "bcd-decoder", "seven-segment":
+			for _, pin := range p.Terminals {
+				direction := "into device"
+				if p.Kind == "bcd-decoder" && len(pin) == 1 {
+					direction = "out of device"
+				}
+				out = append(out, Probe{"i:" + p.ID + "." + pin, p.ID + "." + pin + " current", "A", p.ID + "." + pin, direction})
+			}
 		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
 			primary := "q"
 			if IsCounterKind(p.Kind) {

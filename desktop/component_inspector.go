@@ -58,6 +58,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if workbench.IsDisplayKind(part.Kind) && state.Mixed != nil {
+		for _, d := range state.Mixed.Displays {
+			if d.ID == part.ID {
+				status := "Live"
+				if state.Mixed.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("display-selected-reading", fmt.Sprintf("%s · %s\nSegments a–g: %v\nPower %.5g mW", status, d.State, d.Lit, d.Power*1000)))
+			}
+		}
+	}
 	if workbench.IsSequentialKind(part.Kind) && state.Mixed != nil {
 		for _, u := range state.Mixed.Sequential {
 			if u.ID == part.ID {

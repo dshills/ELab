@@ -27,11 +27,18 @@ func withProbe(ids []string, id string) []string {
 func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Component) []ui.Node {
 	nodes := []ui.Node{}
 	for _, probe := range state.Scope.Available {
-		match := workbench.IsSequentialKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsLogicKind(p.Kind) && (probe.ID == "v:"+p.ID+".a" || probe.ID == "v:"+p.ID+".b") || p.Kind == "timer555" && (probe.ID == "v:"+p.ID+".threshold" || probe.ID == "v:"+p.ID+".trigger" || probe.ID == "v:"+p.ID+".control") || p.Kind == "opamp" && (probe.ID == "v:"+p.ID+".input-difference" || probe.ID == "v:"+p.ID+".supply") || workbench.IsMOSFETKind(p.Kind) && (probe.ID == "v:"+p.ID+".gate-source" || probe.ID == "i:"+p.ID+".drain") || p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || workbench.IsBipolarKind(p.Kind) && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "v:"+p.ID+".base-emitter" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
+		match := workbench.IsDisplayKind(p.Kind) && (strings.HasPrefix(probe.ID, "v:"+p.ID+".") || strings.HasPrefix(probe.ID, "i:"+p.ID+".")) || workbench.IsSequentialKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsLogicKind(p.Kind) && (probe.ID == "v:"+p.ID+".a" || probe.ID == "v:"+p.ID+".b") || p.Kind == "timer555" && (probe.ID == "v:"+p.ID+".threshold" || probe.ID == "v:"+p.ID+".trigger" || probe.ID == "v:"+p.ID+".control") || p.Kind == "opamp" && (probe.ID == "v:"+p.ID+".input-difference" || probe.ID == "v:"+p.ID+".supply") || workbench.IsMOSFETKind(p.Kind) && (probe.ID == "v:"+p.ID+".gate-source" || probe.ID == "i:"+p.ID+".drain") || p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || workbench.IsBipolarKind(p.Kind) && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "v:"+p.ID+".base-emitter" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
 		if match {
 			text := "Plot voltage"
 			if probe.Unit == "A" {
 				text = "Plot current"
+			}
+			if workbench.IsDisplayKind(p.Kind) {
+				pin := strings.TrimPrefix(strings.TrimPrefix(probe.ID, "v:"+p.ID+"."), "i:"+p.ID+".")
+				text = "Plot " + pin + " voltage"
+				if probe.Unit == "A" {
+					text = "Plot " + pin + " current"
+				}
 			}
 			if p.Kind == "timer555" || workbench.IsLogicKind(p.Kind) || workbench.IsSequentialKind(p.Kind) {
 				switch probe.ID {
