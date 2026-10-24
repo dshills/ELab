@@ -1,0 +1,7 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestNextWorkflowControlsUseAgentCommands (4.76s)
+    workflow_test.go:62: &{integration-time-limit mixed integration exceeded its work budget: elapsed-time limit (23 attempted, maximum 512; 119.804 ms elapsed, maximum 100 ms); reduce sample step at 0.0935074223 s, step 4.97e-06: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (22 attempted, maximum 512; 119.756 ms elapsed, maximum 100 ms); reduce sample step}
+FAIL
+FAIL	github.com/dshills/elab/desktop	545.791s
+FAIL

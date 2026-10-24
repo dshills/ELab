@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "examples": [
+    {
+      "example": "logic-inverter",
+      "frames": 337,
+      "valid_level_truth_rows": 329,
+      "half_adder_combinations": 0,
+      "manual_truth_table": [],
+      "exports": {
+        "svg": "6270ee4d0618273143e49740ba87b395b6367ad22d38df73d133a4a08f60c076",
+        "png": "07920d44a09fe5e79552427956408fc419c4b58f304c7c1b200e1960991abdb9",
+        "pdf": "38ff7c910b0b23cb4e6b4ef14f9c3561abe055e4389d2968f0aa9823c9e23579"
+      }
+    },
+    {
+      "example": "logic-switches",
+      "frames": 1,
+      "valid_level_truth_rows": 0,
+      "half_adder_combinations": 0,
+      "manual_truth_table": [
+        {
+          "a": false,
+          "b": false,
+          "output": "low"
+        },
+        {
+          "a": true,
+          "b": false,
+          "output": "low"
+        },
+        {
+          "a": false,
+          "b": true,
+          "output": "low"
+        },
+        {
+          "a": true,
+          "b": true,
+          "output": "high"
+        }
+      ],
+      "exports": {
+        "svg": "17454efc3396025c2376f022890babb9fec4c3a8dea2e2b0837c05bd888a498a",
+        "png": "8ae43249786e2f41931d8954c4324e053661159abf13cc5bd5f1257df5cbcbde",
+        "pdf": "aeb11fa6de3c6c4e6f85bc413698a13950bad8c42faf3c482829059b82a579f4"
+      }
+    },
+    {
+      "example": "logic-half-adder",
+      "frames": 337,
+      "valid_level_truth_rows": 329,
+      "half_adder_combinations": 4,
+      "manual_truth_table": [],
+      "exports": {
+        "svg": "aaadd67f4e0b384cc98670e723e17e6ecd757489b5971bbcaa334827cae85a85",
+        "png": "0609761ab7168beb18b31c7f597e1598c57382129eee67acdd338ef4fcd9f587",
+        "pdf": "55d2c385ecedf6261c51974a02f59a7bc926d01288cb3720e7ccf49fa3865ea3"
+      }
+    }
+  ],
+  "scope": "Catalog, shared commands, manual AND truth table, inverter and half-adder transient truth, current/power conservation, kept-record save/reopen and SVG/PNG/PDF export.",
+  "limitations": [
+    "Generic educational gates; no fitted IC, hardware timing or independent SPICE execution.",
+    "Intermediate input voltages do not count as valid digital levels.",
+    "Native pointer and keyboard observations are separate."
+  ]
+}

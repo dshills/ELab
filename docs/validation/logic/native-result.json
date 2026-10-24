@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "method": "CUA native pointer/AX observations and window screenshots",
+  "final_build": "0.186.2 /239",
+  "source_commit": "41936d4a8d904aaf3cd17f973e440c2a6a2d7b57",
+  "observations": [
+    "/237 category menu exposes Logic with seven named gates and schematic artwork.",
+    "/237 inverter shows A high and output low with live output/LED-current traces; its sample guidance prompted the 2 ms default adjustment.",
+    "/238 running AND stays at 0.000 mA LED current with only SA closed and reaches 2.780 mA when SB is also closed. U1 reports A/B high and output high at 4.8609 V.",
+    "Changing examples after those owned switch edits shows unsaved protection. Only the synthetic SA/SB edits were discarded.",
+    "/239 AND ground and SB caption are visually separated; power wiring, gate, pull-downs and LED remain readable.",
+    "/239 half adder shows A/B, sum/carry traces and operating LEDs; no coarse waveform sampling warning.",
+    "/239 Simulate inspector reports Logic experiment and Sample step 2 ms, with no internal delay stated.",
+    "Final app left running the clean half-adder example in Auto with U1 selected, Logic category and inherited Apollo theme.",
+    "Owned /237 and /238 sessions were quit normally. Other application sessions and user projects preserved."
+  ],
+  "limitations": [
+    "Feature-specific checks, not a new whole-distribution acceptance or hardware timing/visible-latency qualification.",
+    "Native captures at distinct times are observations, not synchronized timing measurements."
+  ]
+}
