@@ -252,6 +252,8 @@ type screen struct {
 	pendingPlacement                    *placementActionWork
 	cursorFieldAccepted                 *cursorFieldContinuation
 	cursorTimeRejected                  map[string]cursorTimeRejection
+	intervalTimeRejected                map[string]intervalTimeRejection
+	intervalFieldAccepted               *intervalFieldContinuation
 	pendingCursorAction                 *cursorActionWork
 }
 

@@ -94,14 +94,14 @@ func (s *screen) scopeWindowControls(state workbench.Snapshot) []ui.Node {
 	sc := state.Scope
 	t := state.Transient
 	nodes := []ui.Node{section("scope-window-title", "Measure an interval")}
-	live := s.action("scope-live-window", "Follow live history", "scope.window.set", workbench.ScopeWindow{Mode: "live"})
+	live := s.intervalResetAction(state, "scope-live-window", "Follow live history", workbench.ScopeWindow{Mode: "live"}, "")
 	nodes = append(nodes, buttonStyle(live, sc.Window.Mode != "fixed"))
 	lo, hi := 0., 0.
 	if t != nil && len(t.Samples) > 0 {
 		lo = t.Samples[0].Time
 		hi = t.Sample.Time
 	}
-	latest := s.action("scope-latest-window", "Last 200 ms", "scope.window.set", workbench.ScopeWindow{Mode: "fixed", Start: math.Max(lo, hi-.2), End: hi})
+	latest := s.intervalResetAction(state, "scope-latest-window", "Last 200 ms", workbench.ScopeWindow{Mode: "fixed", Start: math.Max(lo, hi-.2), End: hi}, "")
 	latest.Disabled = t == nil || t.Stale || hi <= lo
 	nodes = append(nodes, latest)
 	for _, side := range []string{"start", "end"} {
@@ -110,11 +110,11 @@ func (s *screen) scopeWindowControls(state workbench.Snapshot) []ui.Node {
 		if side == "end" {
 			value = sc.Window.End
 		}
-		nodes = append(nodes, quiet("window-label-"+side, side+" · time"), timeField("window-"+side, "Scope interval "+side, value, t == nil || t.Stale, func(text string) {
-			p := sc.Window
-			p.Mode = "fixed"
-			s.invokeAtCommandRevision("scope.window.set", textFieldParams(p, side+"_s", text), state.CommandRevision)
-		}))
+		field := timeField("window-"+side, "Scope interval "+side, value, t == nil || t.Stale, func(text string) {
+			s.changeIntervalTime(state, side, text, "")
+		})
+		s.applyIntervalTimeRejection(state, side, "", &field)
+		nodes = append(nodes, quiet("window-label-"+side, side+" · time"), field)
 	}
 	if !sc.WindowValid {
 		nodes = append(nodes, quiet("window-warning", sc.WindowReason))

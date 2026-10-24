@@ -55,7 +55,7 @@ func (s *screen) changeCursorTimeFor(state workbench.Snapshot, cursor, text, rec
 		}
 		return
 	}
-	delete(s.cursorTimeRejected, cursorTimeFieldKey(cursor, recordingID))
+	delete(s.cursorTimeRejected, measurementTimeFieldKey(cursor, recordingID))
 	if origin == nil {
 		return
 	}

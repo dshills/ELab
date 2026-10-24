@@ -136,13 +136,9 @@ func (s *Service) recordingCommandLocked(command string, raw json.RawMessage) er
 		if err := params(raw, &p, "start_s", "end_s"); err != nil {
 			return err
 		}
-		if !finite(p.Start) || !finite(p.End) || !scopeTimeInside(p.Start, 0, record.metadata.Duration) || !scopeTimeInside(p.End, 0, record.metadata.Duration) || p.Start > p.End {
-			return fmt.Errorf("recorded window must be an ordered interval inside the complete recording")
-		}
-		p.Start = math.Max(0, math.Min(record.metadata.Duration, p.Start))
-		p.End = math.Max(0, math.Min(record.metadata.Duration, p.End))
-		if record.metadata.Duration > 0 && p.Start >= p.End {
-			return fmt.Errorf("recorded window must retain positive width after boundary normalization")
+		p, err = normalizeRecordingWindow(p, record.metadata.Duration)
+		if err != nil {
+			return err
 		}
 		s.recording.window = &p
 	case "recording.probes.set":
@@ -200,6 +196,18 @@ func (s *Service) recordingCommandLocked(command string, raw json.RawMessage) er
 		return fmt.Errorf("unknown recorded command")
 	}
 	return nil
+}
+
+func normalizeRecordingWindow(p RecordingWindowParams, duration float64) (RecordingWindowParams, error) {
+	if !finite(p.Start) || !finite(p.End) || !scopeTimeInside(p.Start, 0, duration) || !scopeTimeInside(p.End, 0, duration) || p.Start > p.End {
+		return p, fmt.Errorf("recorded window must be an ordered interval inside the complete recording")
+	}
+	p.Start = math.Max(0, math.Min(duration, p.Start))
+	p.End = math.Max(0, math.Min(duration, p.End))
+	if duration > 0 && p.Start >= p.End {
+		return p, fmt.Errorf("recorded window must retain positive width after boundary normalization")
+	}
+	return p, nil
 }
 func (s *Service) startRecordingClockLocked() {
 	if s.recording.cancel != nil {

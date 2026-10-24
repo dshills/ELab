@@ -14,7 +14,7 @@ type cursorTimeRejection struct {
 	placed                    bool
 }
 
-func cursorTimeFieldKey(cursor, recordingID string) string {
+func measurementTimeFieldKey(cursor, recordingID string) string {
 	return recordingID + ":" + cursor
 }
 
@@ -51,7 +51,7 @@ func (s *screen) retainCursorTimeRejection(state workbench.Snapshot, cursor, tex
 	if s.cursorTimeRejected == nil {
 		s.cursorTimeRejected = make(map[string]cursorTimeRejection)
 	}
-	s.cursorTimeRejected[cursorTimeFieldKey(cursor, recordingID)] = cursorTimeRejection{
+	s.cursorTimeRejected[measurementTimeFieldKey(cursor, recordingID)] = cursorTimeRejection{
 		generation: state.Document.Generation, runID: state.RunID,
 		cursor: cursor, recordingID: recordingID, text: text, requested: requested,
 		placed: placed,
@@ -71,7 +71,7 @@ func (s *screen) pruneCursorTimeRejections(state workbench.Snapshot) {
 
 func (s *screen) applyCursorTimeRejection(state workbench.Snapshot, cursor, recordingID string, field *ui.Node) {
 	s.pruneCursorTimeRejections(state)
-	if rejected, ok := s.cursorTimeRejected[cursorTimeFieldKey(cursor, recordingID)]; ok {
+	if rejected, ok := s.cursorTimeRejected[measurementTimeFieldKey(cursor, recordingID)]; ok {
 		field.Text = rejected.text
 	}
 }
@@ -90,7 +90,7 @@ func (s *screen) retryCursorTimeRejection(pending *cursorActionWork, index int) 
 	if index == 1 {
 		cursor = "b"
 	}
-	rejected, ok := s.cursorTimeRejected[cursorTimeFieldKey(cursor, pending.recordingID)]
+	rejected, ok := s.cursorTimeRejected[measurementTimeFieldKey(cursor, pending.recordingID)]
 	if !ok {
 		return
 	}

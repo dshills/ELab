@@ -1,0 +1,108 @@
+{
+  "kind": "live-and-recorded-interval-correction",
+  "source_checks_passed": true,
+  "quality_exit_code": 0,
+  "source_parent_commit": "007a43a568b06bfef41c2a3be822a244aea4f86a",
+  "source_inputs": 873,
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "python_tests": 67,
+  "source_quality_command": "GOFLAGS='-p=1' GOPROXY=off GOTOOLCHAIN=local PYTHONDONTWRITEBYTECODE=1 ./scripts/check.sh",
+  "desktop_race_seconds": 180.336,
+  "mounted_race_seconds": 160.79,
+  "focused_mounted_race_seconds": 16.008,
+  "changed_source_inputs": [
+    "desktop/cursor_actions.go",
+    "desktop/cursor_rejection.go",
+    "desktop/main.go",
+    "desktop/recording.go",
+    "desktop/scope_interval_refusal_offscreen_test.go",
+    "desktop/scope_interval_rejection.go",
+    "desktop/scope_interval_rejection_test.go",
+    "desktop/view.go",
+    "desktop/workflow.go",
+    "research/13-native-command-inventory.json",
+    "workbench/cursor_guidance.go",
+    "workbench/diagnostic_help.go",
+    "workbench/interval_guidance.go",
+    "workbench/interval_guidance_test.go",
+    "workbench/recording.go",
+    "workbench/scope_window.go"
+  ],
+  "inventory_comparison": {
+    "changed_sources": [
+      "desktop/cursor_actions.go",
+      "desktop/cursor_rejection.go",
+      "desktop/main.go",
+      "desktop/recording.go",
+      "desktop/scope_interval_rejection.go",
+      "desktop/view.go",
+      "desktop/workflow.go"
+    ],
+    "public_commands_unchanged": true,
+    "native_aliases_unchanged": true,
+    "route_sets_unchanged": true,
+    "sites": 404,
+    "production_sources": 77,
+    "public_commands": 166,
+    "source_routes": 134,
+    "review": "Existing interval field/reset routes move into shared private helpers. Every branch retains scope.window.set or recording.window.set; reset continuation admits only an observed own-field response, with exact current command/document and owner checks. No new action IDs or public commands."
+  },
+  "native_baseline": {
+    "native_binary": "owned /206 fixture, unchanged old code",
+    "app_launched": false,
+    "live_interval_restored": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0.02
+    },
+    "graph_samples_results_document_history_recording_preserved": true,
+    "changed_snapshot_fields": [
+      "command_revision",
+      "revision"
+    ],
+    "native_baseline_rejected_text_disappeared": true,
+    "temporary_recovery": "18 ms then 20 ms, followed by Follow live history",
+    "changed_binary_native_acceptance": false
+  },
+  "sdk_unchanged": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-window-background-and-divider-compat.patch",
+      "sha256": "6b93a7f4cfbc8668bff33a6c2f4efdc5065e56a629f22d545457495418a07528"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab8.tar.gz",
+    "archive_bytes": 20390608,
+    "sha256": "89ef76d15a2dbd2d8e7777ceac502d802634d4877039dbad5b94829186d6bcdd",
+    "manifest_sha256": "1f7b36d96f47d96d843b8d3880188b30ab20c3dcb09c5e3da3401f0d406ca97d",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab8",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8428,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "preserved_download_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "native_acceptance_passed": false,
+  "release_ready": false,
+  "published": false,
+  "owner_review_required": false,
+  "new_commands": 0,
+  "new_components": 0,
+  "new_formats": 0,
+  "download_unchanged": "0.181.4 /205",
+  "raw_archive_sha256": "9b17410ce8f8727f3d00dfc897c2300781d95ae4f591f5b68bad8197d2c1ab7b",
+  "raw_members": 60
+}

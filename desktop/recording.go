@@ -56,17 +56,18 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 			s.invoke("recording.probes.set", workbench.ProbeParams{IDs: ids})
 		}})
 	}
-	nodes = append(nodes, s.action("recorded-whole-window", "Show complete recording", "recording.window.set", workbench.RecordingWindowParams{End: r.LastSampleTime}))
+	nodes = append(nodes, s.intervalResetAction(state, "recorded-whole-window", "Show complete recording", workbench.RecordingWindowParams{End: r.LastSampleTime}, r.ID))
 	for _, side := range []string{"start", "end"} {
 		side := side
 		value := r.Scope.Window.Start
 		if side == "end" {
 			value = r.Scope.Window.End
 		}
-		nodes = append(nodes, quiet("recorded-window-label-"+side, "Recorded "+side+" · time"), timeField("recorded-window-"+side, "Recorded interval "+side, value, r.Duration == 0, func(text string) {
-			p := workbench.RecordingWindowParams{Start: r.Scope.Window.Start, End: r.Scope.Window.End}
-			s.invokeAtCommandRevision("recording.window.set", textFieldParams(p, side+"_s", text), state.CommandRevision)
-		}))
+		field := timeField("recorded-window-"+side, "Recorded interval "+side, value, r.Duration == 0, func(text string) {
+			s.changeIntervalTime(state, side, text, r.ID)
+		})
+		s.applyIntervalTimeRejection(state, side, r.ID, &field)
+		nodes = append(nodes, quiet("recorded-window-label-"+side, "Recorded "+side+" · time"), field)
 	}
 
 	if !r.Scope.WindowValid {

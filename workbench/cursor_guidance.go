@@ -29,7 +29,7 @@ func (s *Service) cursorTimeRequestHelpLocked(r Request, help *DiagnosticHelp) {
 	if _, hasOperation := fields["operation_id"]; r.Command == "scope.cursor.set" && hasOperation {
 		return
 	}
-	at, typed, parsed := cursorGuidanceTime(p.Time)
+	at, typed, parsed := requestGuidanceTime(p.Time)
 	if !typed {
 		return
 	}
@@ -55,7 +55,7 @@ func (s *Service) cursorTimeRequestHelpLocked(r Request, help *DiagnosticHelp) {
 	help.Action = fmt.Sprintf("Enter a time from %g s to %g s. Units such as ms and us are accepted; bare numbers are seconds. Existing cursor positions and circuit state are unchanged.", start, end)
 }
 
-func cursorGuidanceTime(raw json.RawMessage) (value float64, typed, parsed bool) {
+func requestGuidanceTime(raw json.RawMessage) (value float64, typed, parsed bool) {
 	raw = bytes.TrimSpace(raw)
 	if len(raw) == 0 {
 		return 0, false, false

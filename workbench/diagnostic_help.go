@@ -197,6 +197,9 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	if code == "invalid-params" && (r.Command == "scope.cursor.set" || r.Command == "recording.cursor.set") {
 		s.cursorTimeRequestHelpLocked(r, &help)
 	}
+	if code == "invalid-params" && (r.Command == "scope.window.set" || r.Command == "recording.window.set") {
+		s.intervalTimeRequestHelpLocked(r, &help)
+	}
 	if code == "invalid-params" && r.Command == "recording.seek" {
 		if record, err := s.selectedRecordLocked(); err == nil {
 			help.Summary = "Choose a valid position in the recording."

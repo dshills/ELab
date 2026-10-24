@@ -25,12 +25,18 @@ func (s *Service) setScopeWindowLocked(p ScopeWindow) error {
 		return nil
 	}
 	t := s.transient
-	if p.Mode != "fixed" || !finite(p.Start) || !finite(p.End) || t == nil || t.Stale || len(t.Samples) == 0 || !scopeTimeInside(p.Start, t.Samples[0].Time, t.Sample.Time) || !scopeTimeInside(p.End, t.Samples[0].Time, t.Sample.Time) || p.Start >= p.End {
+	if t == nil || t.Stale || len(t.Samples) == 0 || !validFixedScopeWindow(p, t.Samples[0].Time, t.Sample.Time) {
 		return fmt.Errorf("fixed scope window requires a fresh retained interval with start_s < end_s; mode live follows the rolling history")
 	}
 	s.scopeWindow = &p
 	return nil
 }
+
+func validFixedScopeWindow(p ScopeWindow, start, end float64) bool {
+	return p.Mode == "fixed" && finite(p.Start) && finite(p.End) &&
+		scopeTimeInside(p.Start, start, end) && scopeTimeInside(p.End, start, end) && p.Start < p.End
+}
+
 func scopeStatistics(points []ScopePoint, id string) ScopeStatistics {
 	out := ScopeStatistics{ProbeID: id, Count: len(points)}
 	if len(points) == 0 {
