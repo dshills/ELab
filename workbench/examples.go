@@ -69,6 +69,11 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "d-flipflop", Title: "D flip-flop sampler", Question: "Which data changes are remembered?", Expected: "Q takes D only at a rising clock edge; /Q is complementary. Closing SRESET clears Q immediately.", Try: "Compare DATA, CLK, Q and /Q. Change data between clock edges; Q holds until the next rising edge.", Limitation: SequentialDeviceModel().Limitations},
+		{ID: "jk-flipflop", Title: "JK flip-flop divider", Question: "What happens when J and K are both high?", Expected: "Q toggles on each rising clock edge, dividing clock frequency by two. Falling edges hold state.", Try: "Compare clock, Q and /Q. Close SRESET to clear Q; release reset while the clock is high and check no extra count appears.", Limitation: SequentialDeviceModel().Limitations},
+		{ID: "t-flipflop", Title: "T flip-flop toggle", Question: "How does a toggle flip-flop divide a clock?", Expected: "With T high Q toggles at rising edges. Setting T low holds the bit.", Try: "Compare clock and Q. Rewire T to ground to hold, or close SRESET to clear asynchronously.", Limitation: SequentialDeviceModel().Limitations},
+		{ID: "binary-counter", Title: "4-bit binary counter", Question: "How do four bits count clock edges?", Expected: "Q0 is the least significant bit; the LEDs count 0 through 15, then wrap to 0.", Try: "Open SENABLE to hold the count while clock continues; close SRESET to clear. Plot clock and all four Q bits.", Limitation: SequentialDeviceModel().Limitations},
+		{ID: "decade-counter", Title: "Decade counter", Question: "How does a BCD counter stop at nine?", Expected: "The four LEDs count 0 through 9, then wrap to 0; values 10 through 15 are skipped.", Try: "Compare this sequence with the binary counter. Use SENABLE to pause counting or SRESET to clear.", Limitation: SequentialDeviceModel().Limitations},
 		{ID: "logic-inverter", Title: "Logic inverter LED", Question: "Why does an inverter turn the LED on when its input is low?", Expected: "D1 lights for a low A input and turns off for a high input. The finite input edges reveal intermediate analog levels.", Try: "Compare A, U1 output and D1 current. Pause and step across an edge.", Limitation: LogicDeviceModel().Limitations},
 		{ID: "logic-switches", Title: "AND gate with switches", Question: "Which switch combinations light the LED?", Expected: "D1 lights only when both SA and SB are closed. Pull-down resistors keep open inputs low.", Try: "Select SA and SB and try all four combinations; inspect A, B and output.", Limitation: LogicDeviceModel().Limitations},
 		{ID: "logic-half-adder", Title: "Logic half adder", Question: "How can two gates add two binary inputs?", Expected: "U1 XOR gives the sum bit; U2 AND gives the carry bit. D1 and D2 show 00, 01, 10 and 11 input cases.", Try: "Compare A, B, sum and carry traces. Pause to inspect each combination.", Limitation: LogicDeviceModel().Limitations},
@@ -104,6 +109,19 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+		d.graph = sequentialExample(id)
+		d.selected = "U1"
+		d.settings.StepSeconds = .002
+		d.settings.PlaybackSpeed = .1
+		d.probes = []string{"v:U1.clk", "v:U1.q", "v:U1.nq"}
+		if id == "d-flipflop" {
+			d.probes = []string{"v:U1.clk", "v:U1.d", "v:U1.q", "v:U1.nq"}
+		}
+		if IsCounterKind(id) {
+			d.probes = []string{"v:U1.clk", "v:U1.q0", "v:U1.q1", "v:U1.q2", "v:U1.q3"}
+		}
+		d.view = View{Center: Point{X: -30, Y: 130}, Zoom: .55}
 	case "logic-inverter", "logic-switches", "logic-half-adder":
 		d.graph = logicExample(id)
 		d.selected = "U1"

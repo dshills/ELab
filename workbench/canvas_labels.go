@@ -51,6 +51,9 @@ func CanvasPartLabel(part Component) (Point, string) {
 	if IsLogicKind(part.Kind) {
 		title += " " + strings.ToUpper(strings.TrimPrefix(part.Kind, "logic-"))
 	}
+	if IsSequentialKind(part.Kind) {
+		title += " " + SequentialShortName(part.Kind)
+	}
 	if part.Kind == "timer555" {
 		title += " 555"
 	}
@@ -96,6 +99,8 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 	switch part.Kind {
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return LogicLabelPosition(part)
+	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+		return SequentialLabelPosition(part)
 	case "timer555":
 		return Timer555LabelPosition(part)
 	case "opamp":

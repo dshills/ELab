@@ -14,6 +14,9 @@ func MixedRegion(result *MixedResult) (deviceID, state string) {
 			m := result.MOSFETs[0]
 			return m.ID, m.State
 		}
+		if len(result.Sequential) > 0 {
+			return result.Sequential[0].ID, result.Sequential[0].State
+		}
 		if len(result.Timers555) > 0 {
 			return result.Timers555[0].ID, result.Timers555[0].State
 		}

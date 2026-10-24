@@ -32,7 +32,7 @@ def main():
         client, fresh = Client(), None
         mutate = lambda command, params=None: client.ask(command, params, True)
         try:
-            gates = [p for p in client.ask('parts.list') if p['category'] == 'logic']
+            gates = [p for p in client.ask('parts.list') if p['kind'].startswith('logic-')]
             assert {p['kind'] for p in gates} == {'logic-' + k for k in ('not', 'and', 'or', 'nand', 'nor', 'xor', 'xnor')}
             assert all(p['value_type'] == 'none' and p['model'] == 'elab.generic-cmos-logic.v1' for p in gates)
             assert any(item['id'] == example for item in client.ask('examples.list'))

@@ -161,7 +161,7 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if workbench.IsLogicKind(part.Kind) {
 			outlineW, outlineH = 72, 72
 		}
-		if part.Kind == "timer555" {
+		if part.Kind == "timer555" || workbench.IsSequentialKind(part.Kind) {
 			outlineW, outlineH = 108, 118
 		}
 		if diagnosticObjects[part.ID] {
@@ -377,6 +377,25 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 			stroke(ink, 2.5, points...)
 		}
 		for _, label := range workbench.LogicSymbolLabels(part) {
+			first := len(b.vertices)
+			b.text(label.At.X, label.At.Y, label.Text, muted)
+			// Pin text rotates with this dense IC symbol so adjacent pin
+			// captions retain their spacing at every component orientation.
+			for i := first; i < len(b.vertices); i++ {
+				at := b.vertices[i].Position
+				d := workbench.RotateLocal(workbench.Point{X: at.X - label.At.X, Y: at.Y - label.At.Y}, part.Rotation)
+				b.vertices[i].Position = canvas.Point{X: label.At.X + d.X, Y: label.At.Y + d.Y}
+			}
+		}
+	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+		for _, path := range workbench.SequentialSymbolPaths(part.Kind) {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		for _, label := range workbench.SequentialSymbolLabels(part) {
 			first := len(b.vertices)
 			b.text(label.At.X, label.At.Y, label.Text, muted)
 			// Pin text rotates with this dense IC symbol so adjacent pin

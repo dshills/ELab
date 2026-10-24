@@ -309,3 +309,8 @@ You can [disable autosave even while its current recovery folder is unavailable]
 Basic powered NOT, AND, OR, NAND, NOR, XOR and XNOR gates are in the Logic
 category. Try the inverter LED, switch-controlled AND and half-adder examples;
 see [logic gates](docs/logic-gates.md) for wiring, commands and model bounds.
+
+D, JK and T flip-flops plus binary and decade counters share the Logic browser,
+live simulation and agent commands. Five examples show sampling, divide-by-two,
+enable/hold and asynchronous reset. See [sequential logic](docs/sequential-logic.md)
+for pins, startup behavior, electrical limits and verification.

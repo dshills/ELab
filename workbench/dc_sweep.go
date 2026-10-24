@@ -126,6 +126,9 @@ func newSweepPlan(g Graph, settings SweepSettings) (sweepPlan, error) {
 }
 func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (sweepPlan, error) {
 	plan := sweepPlan{graph: g.Clone(), settings: settings}
+	if sequentialModelForGraph(g) != nil {
+		return sweepPlan{}, fmt.Errorf("sequential circuits require clock history and cannot use a DC sweep")
+	}
 	if timer555ModelForGraph(g) != nil {
 		return plan, fmt.Errorf("555 latch circuits require transient simulation; DC sweeps do not preserve latch history")
 	}

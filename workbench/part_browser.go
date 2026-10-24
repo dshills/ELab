@@ -36,7 +36,7 @@ func browserCategory(category string) string {
 
 func partGroup(kind string) (category string, common bool) {
 	switch kind {
-	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		category = "logic"
 	case "dc-source", "sine-source", "finite-pulse-source", "pulse-source":
 		category = "sources"

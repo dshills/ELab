@@ -10,6 +10,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	opamps := []Component{}
 	timers := []Component{}
 	logic := []Component{}
+	sequential := []Component{}
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
@@ -23,6 +24,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			mos = append(mos, p)
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 			logic = append(logic, p)
+		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+			sequential = append(sequential, p)
 		case "timer555":
 			timers = append(timers, p)
 		case "opamp":
@@ -44,7 +47,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		case "ground":
 			grounds = append(grounds, p)
 		default:
-			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, inductors, diodes, red LEDs, NPN/PNP transistors, N/P-channel MOSFETs generic powered op-amps, 555 timers and logic gates.", p.ID)
+			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, inductors, diodes, red LEDs, NPN/PNP transistors, N/P-channel MOSFETs generic powered op-amps, 555 timers, logic gates, flip-flops and counters.", p.ID)
 		}
 	}
 	generalBipolar := hasBipolarPolarity(qs, "pnp")
@@ -78,6 +81,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(timers) > 0 {
 		out.Analysis = Timer555Analysis
 	}
+	if len(sequential) > 0 {
+		out.Analysis = SequentialAnalysis
+	}
 	if len(timers) > MaxNetworkTimers555 {
 		return fail("unsupported", "mixed-limit", "Network simulation supports at most two 555 timers.", "")
 	}
@@ -87,8 +93,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic) == 0 {
-		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer or logic gate to complete the network.", "")
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential) == 0 {
+		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
 	out.Ground = net(grounds[0], "reference")
@@ -114,17 +120,17 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 		}
 
-		if (p.Kind == "timer555" || IsLogicKind(p.Kind)) && net(p, "vcc") == net(p, "gnd") {
+		if (p.Kind == "timer555" || IsLogicKind(p.Kind) || IsSequentialKind(p.Kind)) && net(p, "vcc") == net(p, "gnd") {
 			return fail("error", "shorted-component", "Remove the short across IC supply pins.", p.ID)
 		}
 		for i, a := range p.Terminals {
 			ref := p.ID + "." + a
-			if p.Kind != "potentiometer" && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
+			if p.Kind != "potentiometer" && !(IsSequentialKind(p.Kind) && sequentialOutput(a)) && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
+				if u == v && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				if networkReferencePair(p, a, b, len(opamps) > 0) {
@@ -225,6 +231,12 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		out.Output = net(qs[0], "collector")
 	} else if len(mos) > 0 {
 		out.Output = net(mos[0], "drain")
+	} else if len(sequential) > 0 {
+		pin := "q"
+		if IsCounterKind(sequential[0].Kind) {
+			pin = "q0"
+		}
+		out.Output = net(sequential[0], pin)
 	} else if len(timers) > 0 {
 		out.Output = net(timers[0], "out")
 	} else if len(logic) > 0 {

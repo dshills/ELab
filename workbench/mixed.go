@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Sequential         []SequentialResult    `json:"sequential,omitempty"`
 	LogicGates         []LogicResult         `json:"logic_gates,omitempty"`
 	OpAmps             []OpAmpResult         `json:"opamps,omitempty"`
 	Inductors          []InductorResult      `json:"inductors,omitempty"`
@@ -69,6 +70,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Sequential = append([]SequentialResult(nil), r.Sequential...)
 	o.LogicGates = append([]LogicResult(nil), r.LogicGates...)
 	o.Timers555 = append([]Timer555Result(nil), r.Timers555...)
 	o.OpAmps = append([]OpAmpResult(nil), r.OpAmps...)
@@ -104,6 +106,8 @@ type mixedNetwork struct {
 	opamps            []Component
 	timers            []Component
 	timerMemory       []timer555Memory
+	sequential        []Component
+	sequenceMemory    []SequentialMemory
 	inductorCuts      []inductorCut
 	inductorPins      map[string]int
 }
@@ -144,6 +148,10 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		if p.Kind == "timer555" {
 			n.timers = append(n.timers, p)
 			n.timerMemory = append(n.timerMemory, timer555Memory{})
+		}
+		if IsSequentialKind(p.Kind) {
+			n.sequential = append(n.sequential, p)
+			n.sequenceMemory = append(n.sequenceMemory, SequentialMemory{})
 		}
 		if IsLogicKind(p.Kind) {
 			n.logic = append(n.logic, p)
@@ -278,6 +286,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 			n.stampLogic(p, x, add, f)
+		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+			n.stampSequential(p, x, add, f)
 		case "timer555":
 			n.stampTimer555(p, x, add, f)
 		case "potentiometer":
@@ -422,8 +432,11 @@ func (n *mixedNetwork) solve(guess, old []float64, dt float64, t *Transient, at 
 }
 func (n *mixedNetwork) solveContext(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
 	result, err := n.solveAnalogContext(ctx, guess, old, dt, t, at)
-	if err != nil || len(n.timers) == 0 || dt > 0 {
+	if err != nil || len(n.timers)+len(n.sequential) == 0 || dt > 0 {
 		return result, err
+	}
+	if len(n.sequential) > 0 {
+		return result.resolveSequential(ctx, t)
 	}
 	return result.resolveTimers555(ctx, t)
 }
@@ -527,7 +540,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0) {
+		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -650,6 +663,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			device := n.logicResult(p, x)
 			r.LogicGates = append(r.LogicGates, device)
 			powers += device.Power
+		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+			device := n.sequentialResult(p, x)
+			r.Sequential = append(r.Sequential, device)
+			powers += device.Power
 		case "timer555":
 			device := n.timer555Result(p, x)
 			r.Timers555 = append(r.Timers555, device)
@@ -717,6 +734,9 @@ func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error)
 	return state.advanceBudget(t, end, newIntegrationBudget())
 }
 func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
+	if len(state.net.sequential) > 0 {
+		return state.advanceSequential(t, end, budget)
+	}
 	if len(state.net.timers) > 0 {
 		return state.advanceTimers555(t, end, budget)
 	}
@@ -791,9 +811,9 @@ func (state *mixedState) advanceAnalogBudget(t *Transient, end float64, budget *
 		}
 		failure = fmt.Sprintf("ratio %.3g, errors %v / %v / %v", errRatio, e1, e2, e3)
 		if errRatio <= 1 {
-			if len(cur.net.timers) > 0 {
+			if len(cur.net.timers)+len(cur.net.sequential) > 0 {
 				for _, candidate := range []*mixedState{half, refined} {
-					_, changed, err := candidate.timer555Changes()
+					changed, err := candidate.hybridGuardChanged()
 					if err != nil {
 						return nil, err
 					}

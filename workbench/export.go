@@ -201,6 +201,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	if model := logicModelForGraph(g); model != nil {
 		metadataFields["logic_model"] = model
 	}
+	if model := sequentialModelForGraph(g); model != nil {
+		metadataFields["sequential_model"] = model
+	}
 	if model := opAmpModelForGraph(g); model != nil {
 		metadataFields["opamp_model"] = model
 	}
@@ -264,6 +267,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			b.WriteString(`<path d="M0 -32 V-7 M-23 -7 H23 M-23 7 H23 M0 7 V32"/>`)
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 			for _, path := range LogicSymbolPaths(p.Kind) {
+				b.WriteString(`<polyline points="`)
+				for _, point := range path {
+					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+				}
+				b.WriteString(`"/>`)
+			}
+		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+			for _, path := range SequentialSymbolPaths(p.Kind) {
 				b.WriteString(`<polyline points="`)
 				for _, point := range path {
 					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
@@ -348,6 +359,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	for _, p := range g.Components {
 		if IsLogicKind(p.Kind) {
 			for _, label := range LogicSymbolLabels(p) {
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
+			}
+		}
+		if IsSequentialKind(p.Kind) {
+			for _, label := range SequentialSymbolLabels(p) {
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
 			}
 		}
@@ -453,6 +469,10 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		text += " · " + strings.ToUpper(strings.TrimPrefix(p.Kind, "logic-"))
 		at := LogicLabelPosition(p)
+		x, y = at.X, at.Y
+	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+		text += " · " + SequentialShortName(p.Kind)
+		at := SequentialLabelPosition(p)
 		x, y = at.X, at.Y
 	case "timer555":
 		text += " · 555"

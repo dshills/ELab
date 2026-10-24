@@ -33,6 +33,7 @@ type Document struct {
 	OpAmpModel         *OpAmpModel         `json:"opamp_model,omitempty"`
 	Timer555Model      *Timer555Model      `json:"timer555_model,omitempty"`
 	LogicModel         *LogicModel         `json:"logic_model,omitempty"`
+	SequentialModel    *SequentialModel    `json:"sequential_model,omitempty"`
 	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
 	Paused             *bool               `json:"paused,omitempty"`
 	ScopeProbes        *ProbeParams        `json:"scope_probes,omitempty"`
@@ -366,6 +367,9 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 	}
 
+	if err := validateSequentialModel(d.Graph, d.SequentialModel); err != nil {
+		return d, err
+	}
 	if err := validateLogicModel(d.Graph, d.LogicModel); err != nil {
 		return d, err
 	}
@@ -616,6 +620,7 @@ func (s *Service) documentLocked() Document {
 	d.OpAmpModel = opAmpModelForGraph(s.graph)
 	d.Timer555Model = timer555ModelForGraph(s.graph)
 	d.LogicModel = logicModelForGraph(s.graph)
+	d.SequentialModel = sequentialModelForGraph(s.graph)
 	return d
 }
 

@@ -109,6 +109,19 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
 			}
+		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+			primary := "q"
+			if IsCounterKind(p.Kind) {
+				primary = "q0"
+			}
+			out = append(out, Probe{"v:" + p.ID, p.ID + " output / local ground", "V", p.ID + "." + primary, p.ID + ".gnd"}, Probe{"i:" + p.ID, p.ID + " delivered primary output current", "A", p.ID + "." + primary, "out of device"})
+			for _, pin := range p.Terminals {
+				direction := "into device"
+				if sequentialOutput(pin) {
+					direction = "out of device"
+				}
+				out = append(out, Probe{"i:" + p.ID + "." + pin, p.ID + "." + pin + " current", "A", p.ID + "." + pin, direction})
+			}
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " output / local ground", "V", p.ID + ".out", p.ID + ".gnd"}, Probe{"i:" + p.ID, p.ID + " delivered output current", "A", p.ID + ".out", "out of device"})
 			for _, pin := range p.Terminals {
@@ -182,6 +195,14 @@ func defaultProbes(c Compiled) []string {
 	if IsNetworkAnalysis(c.Analysis) {
 		out := []string{}
 		for _, p := range c.MixedGraph.Components {
+			if IsSequentialKind(p.Kind) {
+				out = append(out, "v:"+p.ID+".clk", "v:"+p.ID)
+				if IsCounterKind(p.Kind) {
+					out = append(out, "v:"+p.ID+".q1", "v:"+p.ID+".q2", "v:"+p.ID+".q3")
+				} else {
+					out = append(out, "v:"+p.ID+".nq")
+				}
+			}
 			if IsLogicKind(p.Kind) {
 				out = append(out, "v:"+p.ID+".a", "v:"+p.ID, "i:"+p.ID)
 			}

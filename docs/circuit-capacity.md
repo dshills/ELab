@@ -45,3 +45,8 @@ The [bipolar extension](bipolar-transistors.md) admits PNPs and ungrounded emitt
 Basic logic gates count toward the existing 64 simulated-part and 100-node
 envelope. No separate gate-count limit is introduced. Each single gate has
 four (NOT) or five named terminals; supply, input and output nets count normally.
+
+[Flip-flops and counters](sequential-logic.md) also use the existing combined
+part/node limits without a separate device-count field. Every connected input,
+power and output net counts normally. The original boundary fixtures do not
+qualify arbitrary sequential networks or their event-integration work cost.

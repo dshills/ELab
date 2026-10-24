@@ -62,6 +62,7 @@ func solveInputWork(ctx context.Context, state *mixedState, trace *Transient, gr
 	}
 	net := newMixedNetwork(c)
 	net.inheritTimers555(state.net)
+	net.inheritSequential(state.net)
 	next, err := net.solveContext(ctx, state.x, state.capV, 0, trace, trace.Sample.Time)
 	if err != nil {
 		return nil, nil, err

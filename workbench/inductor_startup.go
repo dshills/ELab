@@ -50,6 +50,12 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 					join(p, pin, "gnd")
 				}
 			}
+		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+			for _, pin := range p.Terminals {
+				if pin != "gnd" {
+					join(p, pin, "gnd")
+				}
+			}
 		case "timer555":
 			for _, pin := range timer555Pins[1:] {
 				join(p, pin, "gnd")

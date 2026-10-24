@@ -4,7 +4,7 @@ const NPNTransientAnalysis = "NPN transient"
 const NPNTransientEngineID = "elab.npn-switch-quasistatic.v1"
 
 func IsTransientAnalysis(analysis string) bool {
-	return analysis == Timer555Analysis || analysis == InductorAnalysis || analysis == WaveformAnalysis || analysis == "RC transient" || analysis == NPNTransientAnalysis || analysis == MixedAnalysis || analysis == NetworkTransientAnalysis
+	return analysis == SequentialAnalysis || analysis == Timer555Analysis || analysis == InductorAnalysis || analysis == WaveformAnalysis || analysis == "RC transient" || analysis == NPNTransientAnalysis || analysis == MixedAnalysis || analysis == NetworkTransientAnalysis
 }
 func NPNPulseExampleGraph() Graph {
 	g := NPNExampleGraph()

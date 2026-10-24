@@ -160,6 +160,11 @@ func libraryParts() []Part {
 		{Kind: "nmos", Name: "N-channel MOSFET", Terminals: []string{"gate", "drain", "source"}, Model: NMOSModelID},
 		{Kind: "npn", Name: "NPN transistor", Terminals: []string{"base", "collector", "emitter"}, DefaultValue: "", Unit: "", Model: NPNModelID},
 		{Kind: "pnp", Name: "PNP transistor", Terminals: []string{"base", "collector", "emitter"}, Model: PNPModelID},
+		{Kind: "d-flipflop", Name: "D flip-flop", Terminals: sequentialPins("d-flipflop"), Model: SequentialModelID},
+		{Kind: "jk-flipflop", Name: "JK flip-flop", Terminals: sequentialPins("jk-flipflop"), Model: SequentialModelID},
+		{Kind: "t-flipflop", Name: "T flip-flop", Terminals: sequentialPins("t-flipflop"), Model: SequentialModelID},
+		{Kind: "binary-counter", Name: "4-bit binary counter", Terminals: sequentialPins("binary-counter"), Model: SequentialModelID},
+		{Kind: "decade-counter", Name: "Decade counter", Terminals: sequentialPins("decade-counter"), Model: SequentialModelID},
 		{Kind: "logic-not", Name: "NOT gate", Terminals: logicPins("logic-not"), Model: LogicModelID},
 		{Kind: "logic-and", Name: "AND gate", Terminals: logicPins("logic-and"), Model: LogicModelID},
 		{Kind: "logic-or", Name: "OR gate", Terminals: logicPins("logic-or"), Model: LogicModelID},
@@ -310,6 +315,8 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		}
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		p, found = LogicTerminalLocal(c.Kind, name)
+	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+		p, found = SequentialTerminalLocal(c.Kind, name)
 	case "timer555":
 		p, found = Timer555TerminalLocal(name)
 	case "capacitor":
@@ -469,7 +476,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		switch c.Kind {
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, c)
-		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
+		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true

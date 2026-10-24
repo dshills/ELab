@@ -62,6 +62,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.LogicModel != nil {
 		envelope["logic_model"] = m.LogicModel
 	}
+	if m.SequentialModel != nil {
+		envelope["sequential_model"] = m.SequentialModel
+	}
 	if m.OpAmpModel != nil {
 		envelope["opamp_model"] = m.OpAmpModel
 	}
@@ -235,7 +238,7 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if r == nil || m.LED != nil || m.Mixed != nil || r.Stale || r.Engine != NPNEngineID || !supportedNPNModel(r.Model) || r.TransistorID != c.Transistor.ID || r.SupplyID != c.Source.ID || r.InputID != c.Input.ID || r.BaseResistorID != c.BaseResistor.ID || r.LoadResistorID != c.Resistor.ID || r.LEDID != c.LED.ID {
 			return fmt.Errorf("invalid recorded NPN final result")
 		}
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis, Timer555Analysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis, Timer555Analysis, SequentialAnalysis:
 		r := m.Mixed
 		if r == nil || m.LED != nil || m.NPN != nil || r.Stale || r.Engine != m.Engine || !recordingNear(r.Time, m.Duration) || len(r.Nodes) > MaxMixedNodes+1 {
 			return fmt.Errorf("invalid recorded mixed final result")
@@ -244,6 +247,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return fmt.Errorf("invalid recorded numerical damping for integration method")
 		}
 		if _, _, err := recordedDeviceNodes(c, r); err != nil {
+			return err
+		}
+		if err := validateRecordedSequential(c, m.Graph, r); err != nil {
 			return err
 		}
 		if err := validateRecordedLogic(c, m.Graph, r); err != nil {

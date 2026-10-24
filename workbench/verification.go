@@ -243,6 +243,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	metadata.OpAmpModel = opAmpModelForGraph(graph)
 	metadata.Timer555Model = timer555ModelForGraph(graph)
 	metadata.LogicModel = logicModelForGraph(graph)
+	metadata.SequentialModel = sequentialModelForGraph(graph)
 	metadata.Engine = verificationEngineID(compiled.Analysis)
 	operation.inputMetadata = cloneVerificationMetadata(metadata)
 	input := verificationInput{compiled: compiled, settings: cfg, mode: settings.InputMode, probes: probes, duration: settings.Duration, steps: steps, serial: s.operationSerial, metadata: metadata}
@@ -380,6 +381,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 		m := *in.LogicModel
 		out.LogicModel = &m
 	}
+	if in.SequentialModel != nil {
+		m := *in.SequentialModel
+		out.SequentialModel = &m
+	}
 	if in.OpAmpModel != nil {
 		model := *in.OpAmpModel
 		out.OpAmpModel = &model
@@ -437,7 +442,7 @@ func validateCapacitorInitialFields(raw json.RawMessage) error {
 
 func verificationEngineID(analysis string) string {
 	switch analysis {
-	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis, Timer555Analysis:
+	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis, Timer555Analysis, SequentialAnalysis:
 		return networkEngine(analysis)
 	case "RC transient":
 		return RCEngineID

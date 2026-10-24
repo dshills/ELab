@@ -60,6 +60,8 @@ SDIRK2/Radau engines and work bounds; DC and memoryless networks remain
 algebraic. Feedback can settle at an intermediate analog equilibrium. It is
 not a digital latch or ring-oscillator timing model.
 
+For explicit stateful devices, use the separate [flip-flops and counters](sequential-logic.md).
+
 The existing 64 simulated-part, 100 electrical-node and device/source limits
 still apply; no extra gate-specific capacity field or engine is introduced.
 Previously supported graphs take the original numerical paths.

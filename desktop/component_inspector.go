@@ -58,6 +58,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if workbench.IsSequentialKind(part.Kind) && state.Mixed != nil {
+		for _, u := range state.Mixed.Sequential {
+			if u.ID == part.ID {
+				status := "Live"
+				if state.Mixed.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("sequential-selected-reading", fmt.Sprintf("%s · state %s\nClock %s · reset %s\nPrimary output %.5g V\nSupply %.5g V · power %.5g mW", status, u.State, u.Clock, u.Reset, u.OutputVoltage, u.SupplyVoltage, u.Power*1000)))
+			}
+		}
+	}
 	if part.Kind == "timer555" && state.Mixed != nil {
 		for _, timer := range state.Mixed.Timers555 {
 			if timer.ID == part.ID {

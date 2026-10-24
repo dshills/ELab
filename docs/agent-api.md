@@ -333,3 +333,12 @@ switch, simulation, scope and project commands. Examples are `logic-inverter`,
 `logic_model` and `mixed.logic_gates`; pin currents enter the device, except
 output current probes report delivered current. See [the complete electrical
 and agent contract](logic-gates.md).
+
+## Flip-flops and counters
+
+`d-flipflop`, `jk-flipflop`, `t-flipflop`, `binary-counter` and `decade-counter`
+use the ordinary placement, wiring, switch, scope and simulation commands.
+Their example IDs match their kind IDs. Snapshots expose `sequential_model`
+and `mixed.sequential`; captures include the exact stored memory and 15-pin
+current array. See [sequential logic](sequential-logic.md) for rising-edge,
+reset/enable, startup and current-probe contracts.
