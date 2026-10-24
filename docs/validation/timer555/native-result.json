@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "method": "CUA native pointer/AX observations and window screenshots",
+  "source_commit": "81cd748a71317b29d1d618c709b4c6bbafbae454",
+  "build": "0.185.1 /236",
+  "final_observations": [
+    "Examples menu loads 555 LED flasher with U1 selected and a clean document.",
+    "Visible timing capacitor charge/discharge and periodic output/LED-current switching.",
+    "Live 555 scope title and 555 experiment title present.",
+    "Timer inspector displays output state, supply, trigger/threshold levels and delivered current.",
+    "Final app left running the flasher in Auto with Apollo inherited."
+  ],
+  "preceding_235_feature_observations": [
+    "Flasher capacitor/output/LED traces switch repeatedly.",
+    "One-shot high and low output observed.",
+    "Paused exact wiper changed 50 to 80 percent at 21.850 s; capacitor remained 2.743 V.",
+    "Unsaved-work protection shown; only synthetic wiper edit discarded before loading one-shot.",
+    "Owned /235 session quit normally before /236 launch."
+  ],
+  "limitations": [
+    "Feature-specific checks, not a new whole-distribution acceptance or latency measurement.",
+    "Other application sessions and user projects preserved."
+  ]
+}

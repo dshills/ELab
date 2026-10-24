@@ -37,8 +37,7 @@ vet pass. These test durations are not visible-latency measurements.
 
 The public stdio replay passes discovery, all three examples, independent
 switching-time references, retained left/right edge frames, live wiper changes,
-kept-record save/reopen and SVG/PNG/PDF exports. Packaged-agent and native
-observations are appended at completion. The preserved /205 release archive
+kept-record save/reopen and SVG/PNG/PDF exports. The preserved /205 release archive
 is not replaced by this development candidate.
 
 Native /235 demonstrated capacitor/output/LED switching, one-shot high and low
@@ -49,3 +48,26 @@ owned synthetic wiper edit was discarded. Native inspection found an inherited
 “NPN scope” caption; the presentation follow-up uses “Live 555 scope” and a
 555-specific experiment description. Focused scope/timer/browser/race tests
 pass (25.259 s). Electrical equations and commands did not change.
+
+Final candidate **0.185.1 /236** is built from clean source
+`81cd748a71317b29d1d618c709b4c6bbafbae454`. Both native and agent binaries
+record that source with `vcs.modified=false`; the ad hoc signature verifies
+strictly. [Package manifest](build-result.json) records their hashes. This is a
+local development candidate, not a promoted public release.
+
+The [packaged stdio replay](packaged-stdio.json) passes all three examples,
+edge capture, independent timing, live wiper preservation, kept-record
+save/reopen and SVG/PNG/PDF export. Its largest observed reference error is
+1.159 µs at 5 ms sampling. All three exported PNG schematics were inspected:
+pins, power feed, timing network, labels and parts lists are readable.
+
+The [native result](native-result.json) records the feature-specific /235
+interactions and final /236 presentation check. The final window shows the
+flasher operating with capacitor, output and LED-current traces, the corrected
+“Live 555 scope” caption and “555 experiment” inspector. It is left running in
+Auto, with U1 selected and the inherited Apollo theme. The earlier owned /235
+session was closed normally. Other sessions and user projects were preserved.
+This is not a new whole-distribution acceptance or latency qualification.
+
+Final lint and source-inventory verification pass. The qualified /205 release
+archive retains its original checksum and has not been promoted or replaced.
