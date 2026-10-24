@@ -49,7 +49,9 @@ func DefaultAppearanceFile() (string, error) {
 	}
 	return filepath.Join(directory, "ELab", "appearance.json"), nil
 }
-func validTheme(theme string) bool { return theme == "light" || theme == "dark" || theme == "system" }
+func validTheme(theme string) bool {
+	return theme == "light" || theme == "dark" || theme == "system" || theme == "apollo"
+}
 func readAppearance(ctx context.Context, path string) (appearanceLoaded, error) {
 	if err := ctx.Err(); err != nil {
 		return appearanceLoaded{}, err

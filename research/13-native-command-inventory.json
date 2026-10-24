@@ -32,7 +32,7 @@
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/main.go": "bab7d175e7939978bdd0937b2b1f08866e52fb1e61ce0ebfd4e93efc36c352ac",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
-    "desktop/menus.go": "d78bfdb0b8ad01e290c7a3a8179dafc72b3e2a6f8b65d3994ca69f334aff700c",
+    "desktop/menus.go": "9bc3d37baa626b57c3f28125d0561d4231f473e61ae34eddacb25dd84c18ed72",
     "desktop/menus_darwin.go": "fedce80e039ce946802b932b6f778c3b509d4121dfc2b3270aba449d7724f3c3",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
     "desktop/native_chrome.go": "4743715b8b64c50615103d8845e583cb6547b779d67b4831f451ceb6b725ea8a",
@@ -67,7 +67,7 @@
     "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
     "desktop/scope_visibility.go": "9594a6afdb06c2d612c4a507ac90b9443651d38c4c88005e2af65ff2d3d6c686",
     "desktop/shutdown.go": "39c1d9db0f15f23fc69d810ed37dc62262f9e752c7f4ae14e45b3a47afe1f337",
-    "desktop/theme.go": "477aa8c38fb0a8987bb45c9348e7158b1f79d056a2a5543121c8f87feabd2c2d",
+    "desktop/theme.go": "b0106e706b7e483faff07da09b85a239af48b61f184d69a8d147bceb86a5c409",
     "desktop/time_fields.go": "95e7aea3e173449ca0b555f2677f22dd2c757accee1bf91a6a1424a958a19aa6",
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
@@ -251,6 +251,9 @@
     "workspace.layout.set"
   ],
   "native_alias_targets": {
+    "appearance.apollo": [
+      "appearance.theme.set"
+    ],
     "appearance.dark": [
       "appearance.theme.set"
     ],
@@ -2100,8 +2103,9 @@
       "line": 21,
       "function": "(package)",
       "kind": "native-menu-group",
-      "expression": "Commands: []string{\"appearance.light\", \"appearance.dark\", \"appearance.system\"}",
+      "expression": "Commands: []string{\"appearance.light\", \"appearance.dark\", \"appearance.system\", \"appearance.apollo\"}",
       "public_commands": [
+        "appearance.theme.set",
         "appearance.theme.set",
         "appearance.theme.set",
         "appearance.theme.set"
@@ -2113,7 +2117,7 @@
       "line": 27,
       "function": "*screen.registerAppearanceCommands",
       "kind": "event-or-dispatch-router",
-      "expression": "s.commands.Register(command.Command{ID: \"appearance.\" + mode, Label: map[string]string{\"light\": \"Light\", \"dark\": \"Dark\", \"system\": \"System\"}[mode], Execute: func(context.Context) error {\n\tresult := s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": mode})\n\tif result.Error != nil {\n\t\treturn fmt.Errorf(\"%s\", result.Error.Message)\n\t}\n\treturn nil\n}})",
+      "expression": "s.commands.Register(command.Command{ID: \"appearance.\" + mode, Label: map[string]string{\"light\": \"Light\", \"dark\": \"Dark\", \"system\": \"System\", \"apollo\": \"Apollo\"}[mode], Execute: func(context.Context) error {\n\tresult := s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": mode})\n\tif result.Error != nil {\n\t\treturn fmt.Errorf(\"%s\", result.Error.Message)\n\t}\n\treturn nil\n}})",
       "status": "requires-binding-review"
     },
     {
@@ -3530,7 +3534,7 @@
     },
     {
       "file": "desktop/theme.go",
-      "line": 84,
+      "line": 99,
       "function": "*screen.themeMenu",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": e.SelectedID}) }",
@@ -3538,7 +3542,7 @@
     },
     {
       "file": "desktop/theme.go",
-      "line": 84,
+      "line": 99,
       "function": "*screen.themeMenu",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": e.SelectedID})",

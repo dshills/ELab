@@ -1,6 +1,9 @@
 package main
 
 import (
+	"context"
+	"image/color"
+	"math"
 	"testing"
 
 	"github.com/dshills/elab/workbench"
@@ -8,7 +11,7 @@ import (
 )
 
 func TestDiagnosticDisclosureUsesTheSessionPalette(t *testing.T) {
-	for _, mode := range []string{"light", "dark"} {
+	for _, mode := range []string{"light", "dark", "apollo"} {
 		t.Run(mode, func(t *testing.T) {
 			s, cleanup := testScreen(t)
 			t.Cleanup(cleanup)
@@ -66,7 +69,7 @@ func TestNativeThemeMenuMatchesSharedStateAndColors(t *testing.T) {
 func TestThemeMenuUsesValidCheckedActionContract(t *testing.T) {
 	s, cleanup := testScreen(t)
 	defer cleanup()
-	for _, mode := range []string{"light", "dark", "system"} {
+	for _, mode := range []string{"light", "dark", "system", "apollo"} {
 		node := s.themeMenu(mode)
 		if err := ui.Validate(node); err != nil {
 			t.Fatal("portable theme menu invalid", err)
@@ -85,6 +88,70 @@ func TestThemeMenuUsesValidCheckedActionContract(t *testing.T) {
 		}
 		if checked != 1 || node.SelectedID != "" {
 			t.Fatal("theme used selector semantics")
+		}
+	}
+}
+
+func TestApolloThemeMatchesUserAndAgentAndRestoresOtherThemes(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, s, "simulation.pause", nil)
+	before := s.service.Snapshot()
+	uiAction(t, s, "theme-menu", &ui.ChangeEvent{SelectedID: "apollo"})
+	after := s.service.Snapshot()
+	assertCursorMeasurementPreservesPhysics(t, before, after)
+	if after.Theme != "apollo" || after.Document != before.Document || after.UndoName != before.UndoName {
+		t.Fatal("Apollo did not remain a presentation-only shared preference")
+	}
+	p := resolvePalette("apollo", false)
+	if resolvePalette("apollo", true) != p {
+		t.Fatal("Apollo follows the system appearance instead of its selected palette")
+	}
+	for _, mode := range []string{"apollo", "light", "apollo", "dark"} {
+		agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": mode})
+		root := s.view()
+		palette := resolvePalette(mode, false)
+		for _, id := range []string{"part-search", "selection", "schematic", "inspector-navigation"} {
+			node, ok := findNode(root, id)
+			if !ok || node.Style.Foreground.Value != palette.Ink || !node.Style.Background.Set {
+				t.Fatal("theme did not reach the application control", mode, id)
+			}
+			if id == "part-search" && node.Style.CornerRadius.Value != palette.ControlRadius {
+				t.Fatal("control shape did not follow the selected theme", mode)
+			}
+		}
+	}
+	s.app.Do(func() {
+		if err := s.commands.Invoke(context.Background(), "appearance.apollo"); err != nil {
+			t.Fatal("native application menu could not select Apollo", err)
+		}
+	})
+	if s.service.Snapshot().Theme != "apollo" {
+		t.Fatal("native menu command disagrees with the user and agent preference")
+	}
+}
+
+func TestApolloPaletteTextContrast(t *testing.T) {
+	// Check actual sRGB contrast of text, secondary labels, warnings and selected
+	// controls rather than assuming that a darker panel makes them readable.
+	luminance := func(c color.NRGBA) float64 {
+		linear := func(v uint8) float64 {
+			s := float64(v) / 255
+			if s <= .04045 {
+				return s / 12.92
+			}
+			return math.Pow((s+.055)/1.055, 2.4)
+		}
+		return .2126*linear(c.R) + .7152*linear(c.G) + .0722*linear(c.B)
+	}
+	p := resolvePalette("apollo", false)
+	for _, foreground := range []color.NRGBA{p.Ink, p.Muted, p.Accent, p.Danger} {
+		for _, background := range []color.NRGBA{p.Paper, p.Surface} {
+			a, b := luminance(foreground), luminance(background)
+			contrast := (max(a, b) + .05) / (min(a, b) + .05)
+			if contrast < 4.5 {
+				t.Fatalf("Apollo text contrast %.2f is below 4.5:1: %v on %v", contrast, foreground, background)
+			}
 		}
 	}
 }

@@ -70,6 +70,7 @@ func nativeAliases() map[string][]string {
 		"appearance.light":        {"appearance.theme.set"},
 		"appearance.dark":         {"appearance.theme.set"},
 		"appearance.system":       {"appearance.theme.set"},
+		"appearance.apollo":       {"appearance.theme.set"},
 	}
 }
 

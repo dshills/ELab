@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "requirements": 27,
+  "counts": {
+    "implemented": 17,
+    "partial": 10,
+    "pending": 0
+  },
+  "scope": "Requirement coverage validation only; does not establish product acceptance"
+}
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab14", "source": "23063545f871d8de0724077744d53f8f90d32c69"}
+..........................................Starting owned
+Starting owned
+Starting owned
+.........................
+----------------------------------------------------------------------
+Ran 67 tests in 1.370s
+
+OK
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	3.464s
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	114.657s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+--- FAIL: TestNativeInventoryMatchesReviewedLedger (0.12s)
+    audit_test.go:63: native source route errors [desktop/menus.go:21 (package): unknown literal route "appearance.apollo"] <nil>
+FAIL
+FAIL	github.com/dshills/elab/internal/uiaudit	0.477s
+ok  	github.com/dshills/elab/transport	1.366s
+ok  	github.com/dshills/elab/workbench	83.753s
+FAIL

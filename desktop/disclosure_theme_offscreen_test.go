@@ -15,7 +15,7 @@ import (
 )
 
 func TestMountedInspectorDisclosurePaletteAndSharedExpansion(t *testing.T) {
-	for _, mode := range []string{"light", "dark"} {
+	for _, mode := range []string{"light", "dark", "apollo"} {
 		t.Run(mode, func(t *testing.T) {
 			s, cleanup := testScreen(t)
 			t.Cleanup(cleanup)
@@ -75,7 +75,7 @@ func TestMountedInspectorDisclosurePaletteAndSharedExpansion(t *testing.T) {
 				for x := text.Min.X; x < text.Max.X; x++ {
 					p := color.NRGBAModel.Convert(im.At(x, y)).(color.NRGBA)
 					sum := int(p.R) + int(p.G) + int(p.B)
-					if mode == "dark" && sum > 600 || mode == "light" && sum < 240 {
+					if mode != "light" && sum > 600 || mode == "light" && sum < 240 {
 						inkPixels++
 					}
 				}

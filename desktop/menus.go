@@ -18,13 +18,13 @@ type menuChoices struct {
 var applicationMenus = []app.MenuGroup{
 	{Label: "File", Commands: []string{"project.clear", "file.open", "file.save", "file.save-as", "app.close"}},
 	{Label: "Examples", Commands: []string{"example.reset", "example.split-supply", "example.rc", "example.rc-high-pass", "example.rl", "example.rlc", "example.flyback", "example.npn", "example.switch-npn", "example.npn-pulse", "example.flasher", "example.led-fade", "example.nmos", "example.pmos", "example.cmos", "example.opamp-follower", "example.opamp-inverting", "example.rectifier"}},
-	{Label: "Appearance", Commands: []string{"appearance.light", "appearance.dark", "appearance.system"}},
+	{Label: "Appearance", Commands: []string{"appearance.light", "appearance.dark", "appearance.system", "appearance.apollo"}},
 }
 
 func (s *screen) registerAppearanceCommands() {
-	for _, mode := range []string{"light", "dark", "system"} {
+	for _, mode := range []string{"light", "dark", "system", "apollo"} {
 		mode := mode
-		if err := s.commands.Register(command.Command{ID: "appearance." + mode, Label: map[string]string{"light": "Light", "dark": "Dark", "system": "System"}[mode], Execute: func(context.Context) error {
+		if err := s.commands.Register(command.Command{ID: "appearance." + mode, Label: map[string]string{"light": "Light", "dark": "Dark", "system": "System", "apollo": "Apollo"}[mode], Execute: func(context.Context) error {
 			result := s.invoke("appearance.theme.set", map[string]string{"theme": mode})
 			if result.Error != nil {
 				return fmt.Errorf("%s", result.Error.Message)

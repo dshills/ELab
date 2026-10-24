@@ -48,24 +48,31 @@ func appearanceRelease(t *testing.T, s *Service, release chan struct{}) func() {
 }
 
 func TestAppearancePersistsFreshSessionsWithoutCircuitChanges(t *testing.T) {
+	for _, theme := range []string{"dark", "apollo"} {
+		t.Run(theme, func(t *testing.T) { testAppearancePersistsFreshSessions(t, theme) })
+	}
+}
+
+func testAppearancePersistsFreshSessions(t *testing.T, theme string) {
+	t.Helper()
 	path := filepath.Join(t.TempDir(), "private", "appearance.json")
 	s := New()
 	call(t, s, "appearance.configure", AppearanceConfigureParams{Path: path}, "configure")
 	appearanceReady(t, s)
 	before := s.Snapshot()
-	call(t, s, "appearance.theme.set", map[string]string{"theme": "dark"}, "dark")
+	call(t, s, "appearance.theme.set", map[string]string{"theme": theme}, "theme")
 	state := appearanceReady(t, s)
 	if !reflect.DeepEqual(state.Document, before.Document) || state.ElectricalRevision != before.ElectricalRevision || state.RunID != before.RunID || state.CanUndo != before.CanUndo {
 		t.Fatal("preference save changed circuit/history")
 	}
 	s.Close()
-	if savedAppearance(t, path) != "dark" {
+	if savedAppearance(t, path) != theme {
 		t.Fatal("theme not saved")
 	}
 	reopened := New()
 	defer reopened.Close()
 	call(t, reopened, "appearance.configure", AppearanceConfigureParams{Path: path}, "reopen")
-	if state := appearanceReady(t, reopened); state.Theme != "dark" || state.Document.Dirty {
+	if state := appearanceReady(t, reopened); state.Theme != theme || state.Document.Dirty {
 		t.Fatal("fresh session did not load appearance independently")
 	}
 	info, err := os.Stat(path)

@@ -554,7 +554,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		if !validTheme(p.Theme) {
-			return fmt.Errorf("theme must be light, dark, or system")
+			return fmt.Errorf("theme must be light, dark, system, or apollo")
 		}
 		// An explicit choice, including the current value, supersedes a pending
 		// profile load. Retried commands are deduplicated before reaching here.

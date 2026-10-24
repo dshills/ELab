@@ -379,7 +379,7 @@ func Catalog() []Capability {
 		queryCapability("appearance.work.inspect", "Inspect one retained appearance operation by stable ID, including captured input, progress, artifact and error", reflect.TypeOf(IDParams{}), reflect.TypeOf(AppearanceWork{})),
 		typedCapability("appearance.work.cancel", "Cancel the exact current appearance operation before publication; preserves session theme and existing files", reflect.TypeOf(IDParams{})),
 		capability("appearance.wait", "Wait up to 5 s for theme preference loading/saving; inspect appearance status/error", false, `{"type":"object","additionalProperties":false}`),
-		capability("appearance.theme.set", "Theme: light, dark, system; autosaves if configured; preserves circuit/history", true, `{"type":"object","required":["theme"],"properties":{"theme":{"type":"string","enum":["light","dark","system"]}},"additionalProperties":false}`),
+		capability("appearance.theme.set", "Theme: light, dark, system, apollo; autosaves if configured; preserves circuit/history", true, `{"type":"object","required":["theme"],"properties":{"theme":{"type":"string","enum":["light","dark","system","apollo"]}},"additionalProperties":false}`),
 		typedCapability("display.preferences.set", "Set persisted voltage/current/motion/direction cues; signed current stays conventional. Preserves physics.", reflect.TypeOf(DisplayPreferences{})),
 		typedCapability("measurement.select", "Focus a live measurement target; empty follows selection; session only; details in capabilities.list", reflect.TypeOf(MeasurementSelectParams{})),
 		queryCapability("measurement.inspect", "Inspect a live measurement target with signed values and provenance; pure query", reflect.TypeOf(MeasurementQueryParams{}), reflect.TypeOf(MeasurementInspection{})),

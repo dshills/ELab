@@ -1,0 +1,63 @@
+{
+  "changed_native_sources": [
+    "desktop/menus.go",
+    "desktop/theme.go"
+  ],
+  "new_alias": {
+    "appearance.apollo": [
+      "appearance.theme.set"
+    ]
+  },
+  "changed_sites": [
+    {
+      "before": {
+        "file": "desktop/menus.go",
+        "line": 21,
+        "function": "(package)",
+        "kind": "native-menu-group",
+        "expression": "Commands: []string{\"appearance.light\", \"appearance.dark\", \"appearance.system\"}",
+        "public_commands": [
+          "appearance.theme.set",
+          "appearance.theme.set",
+          "appearance.theme.set"
+        ],
+        "status": "declared-native-wrapper"
+      },
+      "after": {
+        "file": "desktop/menus.go",
+        "line": 21,
+        "function": "(package)",
+        "kind": "native-menu-group",
+        "expression": "Commands: []string{\"appearance.light\", \"appearance.dark\", \"appearance.system\", \"appearance.apollo\"}",
+        "public_commands": [
+          "appearance.theme.set",
+          "appearance.theme.set",
+          "appearance.theme.set",
+          "appearance.theme.set"
+        ],
+        "status": "declared-native-wrapper"
+      }
+    },
+    {
+      "before": {
+        "file": "desktop/menus.go",
+        "line": 27,
+        "function": "*screen.registerAppearanceCommands",
+        "kind": "event-or-dispatch-router",
+        "expression": "s.commands.Register(command.Command{ID: \"appearance.\" + mode, Label: map[string]string{\"light\": \"Light\", \"dark\": \"Dark\", \"system\": \"System\"}[mode], Execute: func(context.Context) error {\n\tresult := s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": mode})\n\tif result.Error != nil {\n\t\treturn fmt.Errorf(\"%s\", result.Error.Message)\n\t}\n\treturn nil\n}})",
+        "status": "requires-binding-review"
+      },
+      "after": {
+        "file": "desktop/menus.go",
+        "line": 27,
+        "function": "*screen.registerAppearanceCommands",
+        "kind": "event-or-dispatch-router",
+        "expression": "s.commands.Register(command.Command{ID: \"appearance.\" + mode, Label: map[string]string{\"light\": \"Light\", \"dark\": \"Dark\", \"system\": \"System\", \"apollo\": \"Apollo\"}[mode], Execute: func(context.Context) error {\n\tresult := s.invoke(\"appearance.theme.set\", map[string]string{\"theme\": mode})\n\tif result.Error != nil {\n\t\treturn fmt.Errorf(\"%s\", result.Error.Message)\n\t}\n\treturn nil\n}})",
+        "status": "requires-binding-review"
+      }
+    }
+  ],
+  "public_command_set_preserved": true,
+  "literal_coverage_preserved": true,
+  "unrelated_sites_preserved_except_line_numbers": true
+}

@@ -254,7 +254,7 @@ Time fields now accept values such as `10 ms` and `250 us` through the same nati
 
 ## Appearance and agent observation
 
-The header offers Light, Dark and System [themes saved on this device](docs/appearance.md), and File/Examples/Theme open native macOS menus. Agents use `appearance.theme.set` for the same preference. [Coalesced observation](docs/events.md) lets a separate `events.poll` connection wait for state/job changes without blocking commands. [UI audit screenshots](research/ui-audit/README.md) record the visible repairs and remaining limits.
+The header offers Light, Dark, System and Apollo [themes saved on this device](docs/appearance.md), and File/Examples/Theme open native macOS menus. Apollo uses gray-green panels, cream labels and amber accents inspired by the command module controls. Agents use `appearance.theme.set` for the same preference. [Coalesced observation](docs/events.md) lets a separate `events.poll` connection wait for state/job changes without blocking commands. [UI audit screenshots](research/ui-audit/README.md) record the visible repairs and remaining limits.
 
 Use **Hide scope** in the scope toolbar to give the schematic more room. **Show scope** restores the live or recorded plot with its measurements intact. Agents use the same [scope visibility command](docs/scope-visibility.md).
 

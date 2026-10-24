@@ -15,7 +15,7 @@ import (
 )
 
 func TestMountedInspectorWindowBackgroundMatchesTheSessionRoot(t *testing.T) {
-	for _, mode := range []string{"light", "dark"} {
+	for _, mode := range []string{"light", "dark", "apollo"} {
 		t.Run(mode, func(t *testing.T) {
 			s, cleanup := testScreen(t)
 			t.Cleanup(cleanup)
