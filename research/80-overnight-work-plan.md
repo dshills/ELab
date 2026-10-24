@@ -302,3 +302,15 @@ pass; all rows, metadata, source, signatures, saved fixture and /205 stay exact.
 Twelve original native items are complete; six remain. Next local text Undo/Redo
 and application history, then remaining form/input ownership. Reuse the owned
 session under saved authorization; no owner-review or permission wait.
+
+
+## Checkpoint: native keyboard and text history
+
+[Native items 14 and 15](109-native-keyboard-history.md) pass: empty/oldest text
+history and explicit selection preservation, real local Undo/Redo, search/value
+editing keys, and application Undo/Redo after Tab to actual Apply/list controls.
+Fourteen original checks are complete; 3, 6, 9 and 11 remain. Source, electrical
+state, signatures, fixture and /205 stay exact. Current evidence does not qualify
+the separate AppKit Save route, controlled drag rates or exact callback queue
+origins. Continue remaining form/parser and native-route checks in the existing
+owned session; no owner-review or launch-permission wait.

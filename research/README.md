@@ -111,3 +111,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Native captured measurements](107-native-captured-measurements.md): exact endpoint defaults, cached-result correction, native/agent channel ownership, independent electrical references and seven remaining native checks.
 
 - [Native captured comparison](108-native-captured-comparison.md): reference ownership, refusal/correction, independent preferences, same-reference reset, and 138 RC/statistics references; six native checks remain.
+
+- [Native keyboard and text history](109-native-keyboard-history.md): initial/boundary selection, local text editing, actual application-history routing, exact state preservation and four remaining native checks.

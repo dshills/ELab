@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "native_checks_completed": [
+    14,
+    15
+  ],
+  "empty_undo_redo_initial_text_preserved": true,
+  "initial_selection_proved_by_replacement": true,
+  "real_text_undo_sequence": [
+    "47",
+    "4",
+    "1 k\u03a9"
+  ],
+  "repeated_oldest_undo_count": 6,
+  "explicit_oldest_selection_proved_by_replacement": true,
+  "local_character_undo_redo_passed": true,
+  "new_edit_invalidates_old_redo": true,
+  "native_editing_key_cases": 12,
+  "value_private_full_state_equalities": 7,
+  "search_private_full_state_equalities": 2,
+  "application_history_positive_controls": 4,
+  "actual_noneditor_focus_routes": [
+    "Apply value button",
+    "component list row"
+  ],
+  "application_history_each_one_command": true,
+  "electrical_result_and_other_state_exact": true,
+  "harness_assumptions_corrected": [
+    "CUA typeText delivered individual character edits: first Undo of 47k yields 47. Retained original assertion/capture; no product defect or code change.",
+    "Verifier initially omitted optional redo_entry from expected history metadata. It is now included and asserted exactly equal to the original move history entry. Initial verification stopped before socket access/restoration."
+  ],
+  "source_inputs_unchanged": 897,
+  "saved_fixture_unchanged": true,
+  "installed_signature_valid": true,
+  "original_candidate_unchanged": true,
+  "preserved_205_unchanged": true,
+  "final_clean_paused_at_zero": true,
+  "production_changes": 0,
+  "full_source_suites_repeated": false,
+  "remaining_original_native_checks": 4,
+  "source_commit": "4356b8fb9e721e71ca327159d37b36c2d0675530",
+  "native_sha256": "e957008f182845572fe39158f4819e5601e28a79ac803e3446071ff9cd56f82d",
+  "observed_utc": "2026-10-24T11:00:06.279605+00:00",
+  "raw_members": 107,
+  "raw_archive_sha256": "355e65ef626762a5b4cdac97066bf1b845ce4dab3d6567db1b33e857d2eb3d46"
+}

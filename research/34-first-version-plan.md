@@ -9,20 +9,20 @@ PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
 **Current maintenance work:** /223's decimal-step repair and the
-[latest native captured-comparison checks](108-native-captured-comparison.md)
-pass within scope. Twelve of eighteen original native items now have evidence;
-six remain: 3, 6, 9, 11, 14 and 15. Item 9 remains partial; bounded races do not
-establish exact native callback queue origin. Captured measurement/default and
-comparison recovery, independent preferences and draft ownership are qualified.
+[latest native keyboard/history checks](109-native-keyboard-history.md) pass
+within scope. Fourteen of eighteen original native items now have evidence;
+four remain: 3, 6, 9 and 11. AppKit Save Command-A, controlled divider drag rates
+and exact pre-agent callback queue origins remain distinct. Item 9 is partial.
+Native value/search editing and actual application Undo/Redo routing are qualified.
 
 Earlier validation-scroll, private-draft, footer/theme, manual-step, slider,
-Verify endpoint and numeric-wheel repairs remain included. [Electronics reference
-checks](95-gate-common-mode.md) cover seven RC-driven MOSFET circuits and active
-work preservation. The earlier exit follows a native Quit-menu request whose
-initiator is unknown; no spontaneous crash or broad lifecycle pass is claimed.
-/207–/223 stay held for remaining native acceptance and do not replace /205.
-Owner review remains deferred. Standing run/desktop authorization is saved in
-`AGENTS.md` and must not be requested again.
+Verify endpoint, numeric-wheel and captured-measurement/comparison repairs remain
+included. [Electronics reference checks](95-gate-common-mode.md) cover seven
+RC-driven MOSFET circuits and active work preservation. The earlier exit follows
+a native Quit-menu request whose initiator is unknown; no spontaneous crash or
+broad lifecycle pass is claimed. /207–/223 stay held for remaining native acceptance
+and do not replace /205. Owner review remains deferred. Standing run/desktop
+authorization is saved in `AGENTS.md` and must not be requested again.
 
 ## Historical plan and broader acceptance checklist
 
