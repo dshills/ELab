@@ -17,3 +17,15 @@ activation, mode/tab keyboard navigation, Escape handling, and toolbar overflow.
 Focused desktop tests pass in 11.423 seconds. Lint, vet and native command ledger
 tests pass. The source inventory retains all 166 public commands and 404 native
 sites; differences are the Cancel display text and line numbers only.
+
+Clean-source 0.182.7 /231 is packaged at
+`build/ELab-0.182.7-231-Cancel/ELab.app` from `c13df677` with a verified
+strict ad hoc signature. Native Apollo inspection confirms the Cancel label,
+accessible tooltip text and aligned action borders. Clicking Pan then Cancel
+returns to Select. The new app is open on an empty disposable circuit; existing
+sessions and projects remain open. The preserved /205 release is unchanged.
+
+Tooltip contents were confirmed in the native accessibility help and existing
+Vellum Help-to-tooltip binding. A visible Cancel hover popup was not captured;
+clicks suppress that popup. Later CUA captures omitted unchanged text while the
+initial native frame retained it, consistent with the existing capture limitation.
