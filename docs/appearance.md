@@ -12,6 +12,8 @@ File actions and examples preserve existing command enablement and unsaved-chang
 
 Select, Wire and Pan share a segmented drawing-mode control. Inspect, Simulate and Document use equal-width tabs with an accent underline above the inspector form. Both retain the existing button identities, selected-state help, toolbar arrow navigation and shared commands. Their flat toolbar appearance avoids reserving normal button shadow space, and their content heights include room for padding and outlines. These treatments use each theme's own palette and typography; Apollo keeps its cyan console outlines.
 
+The remaining toolbars share 30-point button targets, eight-point gaps, square icon actions, and neutral outlined faces. Active Fit, input modes and scope cursors use an accent outline and label on a subtle surface. Disabled actions stay muted, and Vellum's keyboard-focus indication remains intact. Document actions have quiet separators between file, examples, history and appearance groups. Pause and Resume occupy the same width. Toolbar rows reserve room for focus and horizontal overflow; numeric and time inputs retain their existing minimum widths and editing behavior. This applies to live and recorded scope controls, sweep and print-preview actions as well as the document header.
+
 See [the UI audit and screenshots](../research/ui-audit/README.md) for observed results and remaining limits. This does not establish full keyboard, IME, screen-reader, or clean-distribution qualification.
 
 ## Persistent preferences

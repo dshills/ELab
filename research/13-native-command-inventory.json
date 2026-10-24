@@ -69,10 +69,11 @@
     "desktop/shutdown.go": "39c1d9db0f15f23fc69d810ed37dc62262f9e752c7f4ae14e45b3a47afe1f337",
     "desktop/theme.go": "38b2545a0e4bd0dfc41857b0dce49c2a706dfa04d62ac4a1e68418e68e9d48eb",
     "desktop/time_fields.go": "95e7aea3e173449ca0b555f2677f22dd2c757accee1bf91a6a1424a958a19aa6",
+    "desktop/toolbar_style.go": "b0480aac14071f8d03943aa4d28df85c693060b6430841e1388abb0ff1442cf3",
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "a612ff558e29f52540b6fc33f9174f814737fe67f01ca926c2efb97de1f5efc0",
+    "desktop/view.go": "a831ba7a793d30673cb9c19939b3f7051709b3f07d34fefc02f763310cc121a5",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -3902,7 +3903,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 202,
+      "line": 205,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil) }",
@@ -3910,7 +3911,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 202,
+      "line": 205,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
@@ -3921,7 +3922,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 203,
+      "line": 206,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil) }",
@@ -3929,7 +3930,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 203,
+      "line": 206,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
@@ -3940,7 +3941,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 204,
+      "line": 207,
       "function": "*screen.view",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
@@ -3948,7 +3949,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 204,
+      "line": 207,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
@@ -3959,7 +3960,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 221,
+      "line": 224,
       "function": "*screen.view",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
@@ -3967,7 +3968,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 226,
+      "line": 229,
       "function": "*screen.view",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -3978,7 +3979,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 228,
+      "line": 231,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-previous\", \"Back\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
@@ -3989,7 +3990,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 230,
+      "line": 233,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-next\", \"Next\", \"selection.navigate\", workbench.NavigateParams{Direction: \"next\", Center: true})",
@@ -4000,7 +4001,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 233,
+      "line": 236,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"selection-center\", \"Center\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
@@ -4011,7 +4012,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 247,
+      "line": 250,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -4022,7 +4023,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 261,
+      "line": 264,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -4033,7 +4034,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 313,
+      "line": 316,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -4044,7 +4045,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 320,
+      "line": 323,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -4055,7 +4056,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 322,
+      "line": 325,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Esc\")",
@@ -4066,7 +4067,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 322,
+      "line": 325,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"DC sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -4077,7 +4078,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 536,
+      "line": 539,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -4085,7 +4086,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 549,
+      "line": 552,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

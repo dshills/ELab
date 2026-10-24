@@ -148,14 +148,17 @@ func (s *screen) view() ui.Node {
 		s.commandMenu("examples-menu", "Examples", [][2]string{{"example.reset", "LED circuit"}, {"example.split-supply", "Split-rail DC supply"}, {"example.rc", "RC charge / discharge"}, {"example.rc-high-pass", "RC high-pass filter"}, {"example.rl", "Coil buildup / decay"}, {"example.rlc", "RLC ringing"}, {"example.flyback", "Coil / flyback diode"}, {"example.npn", "Transistor LED"}, {"example.switch-npn", "Manual transistor switch"}, {"example.npn-pulse", "Blinking LED"}, {"example.flasher", "Capacitor-timed flasher"}, {"example.led-fade", "LED fade"}, {"example.nmos", "MOSFET LED switch"}, {"example.pmos", "High-side MOSFET LED"}, {"example.cmos", "CMOS inverter"}, {"example.opamp-follower", "Op-amp follower"}, {"example.opamp-inverting", "Inverting amplifier"}, {"example.rectifier", "Rectifier / smoothing"}}),
 		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
 	}}
-	// Reserve the complete action row even when both history labels include
-	// "agent"/"other". Otherwise the toolbar clips Theme while header space
-	// remains unused beside the status controls.
-	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 300, Height: 32})
+	// Reserve the complete document action row, including its group dividers.
+	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 380, Height: toolbarHeight})
+	var documentActions []ui.Node
 	for i := range toolbar.Children {
-		toolbar.Children[i] = documentToolbarAction(toolbar.Children[i])
-		toolbar.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 7, Right: 7})
+		action := documentToolbarAction(toolbar.Children[i])
+		documentActions = append(documentActions, action)
+		if action.ID == "file.save" || action.ID == "examples-menu" || action.ID == "edit.redo" {
+			documentActions = append(documentActions, toolbarDivider(action.ID))
+		}
 	}
+	toolbar.Children = documentActions
 	pause, pauseText := "simulation.pause", "Pause"
 	if state.Paused {
 		pause, pauseText = "simulation.resume", "Resume"
@@ -546,7 +549,7 @@ func (s *screen) view() ui.Node {
 		s.previewPixels = previewPixels{}
 	}
 	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1)), Background: ui.Some(surface)}, Children: []ui.Node{
-		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 48}), MaxSize: ui.Some(ui.Size{Height: 48}), Padding: ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 12, Right: 12}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{s.documentTitle(state), toolbar, statusNode, s.button(pause, pauseText)}},
+		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 48}), MaxSize: ui.Some(ui.Size{Height: 48}), Padding: ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 12, Right: 12}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{s.documentTitle(state), toolbar, statusNode, {ID: "simulation-toolbar", Kind: ui.Toolbar, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 76}), MaxSize: ui.Some(ui.Size{Width: 76}), Padding: ui.Some(ui.UniformInsets(0))}, Children: []ui.Node{s.button(pause, pauseText)}}}},
 		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1))}, Children: []ui.Node{
 			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 224}), MaxSize: ui.Some(ui.Size{Width: 224}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 176, palette...)}},
 			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(8)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: schematicChildren},
@@ -586,6 +589,7 @@ func (s *screen) view() ui.Node {
 	s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
 	s.platformSelectors(&root, state.CommandRevision)
 	applyPalette(&root, colors)
+	polishToolbars(&root, colors, false)
 	return root
 }
 
