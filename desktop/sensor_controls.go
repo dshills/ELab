@@ -75,7 +75,9 @@ func (s *screen) sensorControls(state workbench.Snapshot, part workbench.Compone
 			return
 		}
 		v := float64(e.Number)
-		if !temperature {
+		if temperature {
+			v = math.Round(v*2) / 2
+		} else {
 			v = lightAtPosition(v)
 		}
 		apply(v)
@@ -91,9 +93,9 @@ func (s *screen) sensorControls(state workbench.Snapshot, part workbench.Compone
 	if !temperature {
 		exactMin, exactMax, exactStep = 0, 10000, 1
 	}
-	help := "Changes settle at the current simulation time, preserving capacitor voltage and coil current. Accepted settings are saved and undoable."
+	help := "Preserves simulation time, capacitor voltage and coil current. Saved and undoable."
 	if !temperature {
-		help = "Light slider uses a logarithmic scale; zero is darkness. Enter lux below for an exact level. " + help
+		help = "Logarithmic scale; zero is darkness. Enter exact lux below. " + help
 	}
 	nodes := []ui.Node{section("sensor-title", title), quiet("sensor-environment", fmt.Sprintf("%.6g %s", value, unit)), {ID: "sensor-slider", Kind: ui.Slider, Number: float32(sliderValue), Numeric: ui.Numeric{Min: float32(min), Max: float32(max), Step: float32(step)}, Accessibility: ui.Accessibility{Name: title, Help: help}, Change: change}, {ID: "sensor-exact", Kind: ui.NumberField, Number: float32(value), Numeric: ui.Numeric{Min: float32(exactMin), Max: float32(exactMax), Step: float32(exactStep)}, Accessibility: ui.Accessibility{Name: "Exact " + title + " · " + unit}, Change: exact}, quiet("sensor-help", help)}
 	if state.Mixed != nil {
@@ -105,7 +107,7 @@ func (s *screen) sensorControls(state workbench.Snapshot, part workbench.Compone
 				} else if pending {
 					status = "Committed · environment change pending"
 				}
-				nodes = append(nodes, quiet("sensor-reading", fmt.Sprintf("%s · %.6g %s\nResistance %.6g Ω\n%.6g V · %.6g mA · %.6g mW", status, r.Environment, r.EnvironmentUnit, r.Resistance, r.Voltage, r.Current*1000, r.Power*1000)))
+				nodes = append(nodes, quiet("sensor-reading", fmt.Sprintf("%s · %.6g %s", status, r.Environment, r.EnvironmentUnit)), quiet("sensor-resistance", fmt.Sprintf("Resistance · %.6g Ω", r.Resistance)), quiet("sensor-electrical", fmt.Sprintf("%.6g V · %.6g mA · %.6g mW", r.Voltage, r.Current*1000, r.Power*1000)))
 			}
 		}
 	}
