@@ -43,7 +43,7 @@ func TestMountedComponentBrowserSearchAndKeyboardPlacement(t *testing.T) {
 	// clears the query without changing the selected placement kind.
 	agentAction(t, s.service, "parts.category.set", workbench.PartCategoryParams{Category: "passives"})
 	m.frame()
-	if state = s.service.Snapshot(); state.PartSearch != "" || len(state.MatchingParts) != 4 || state.Drawing.Kind != "pmos" {
+	if state = s.service.Snapshot(); state.PartSearch != "" || len(state.MatchingParts) != 6 || state.Drawing.Kind != "pmos" {
 		t.Fatal("agent category did not update UI")
 	}
 }
