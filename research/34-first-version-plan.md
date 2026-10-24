@@ -10,8 +10,10 @@ the delivery definition. Older candidate/release statements below are historical
 
 **Current maintenance work:** /221 repairs the clipped footer and qualifies the
 native Light/Dark outer inset. [Implementation and checks](101-footer-layout.md).
-Four of eighteen native checks now have scoped evidence, including the three
-unaffected /220 checks. Fourteen remain open. The /220 manual-step, /219 slider,
+Seven of eighteen native checks now have scoped evidence, including cursor
+guidance, themed disclosure and Save/Cancel lifecycle. [Latest native checks](102-native-guidance-lifecycle.md).
+Eleven remain open. The three unaffected /220 checks retain their evidence.
+The /220 manual-step, /219 slider,
 /218 Verify endpoint and /217 numeric wheel repairs remain included. [Electronics reference checks](95-gate-common-mode.md)
 cover seven RC-driven MOSFET circuits and active-work preservation.
 The /207–/221 changes remain held for the remaining native acceptance;
