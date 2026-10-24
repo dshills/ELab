@@ -1,0 +1,243 @@
+Window: "ELab · Live electronics", App: ELab.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 container node:ZG9jdW1lbnQtdGl0bGU
+				4 text (settable) 555-driven digit counter, ID: node:dGl0bGU
+				5 text (settable) ELab, ID: node:ZG9jdW1lbnQtc3VidGl0bGU
+			6 toolbar node:dG9vbGJhcg
+				7 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				8 button Save, ID: node:ZmlsZS5zYXZl
+				9 row node:dG9vbGJhci1kaXZpZGVyLWZpbGUuc2F2ZQ
+				10 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				11 row node:dG9vbGJhci1kaXZpZGVyLWV4YW1wbGVzLW1lbnU
+				12 button Undo, Help: Load example · by user, ID: node:ZWRpdC51bmRv
+				13 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				14 row node:dG9vbGJhci1kaXZpZGVyLWVkaXQucmVkbw
+				15 button Appearance theme, Help: Current choice: Apollo. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			16 text (settable) ● Live · Sequential logic transient, ID: node:c3RhdHVz
+			17 toolbar node:c2ltdWxhdGlvbi10b29sYmFy
+				18 button Pause, ID: node:c2ltdWxhdGlvbi5wYXVzZQ
+		19 split group Schematic and scope divider, ID: node:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			20 row node:d29ya3NwYWNl
+				21 scroll area node:cGFydHMtc2Nyb2xs
+					22 container node:cGFsZXR0ZQ
+						23 text (settable) Components, ID: node:cGFydHMtdGl0bGU
+						24 button Component category, ID: node:cGFydC1jYXRlZ29yeQ, Help: Common holds six everyday parts. Choosing a category clears search. Current choice: Common · 6 ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						25 text (settable) Search all components, ID: node:cGFydC1zZWFyY2gtbGFiZWw
+						26 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g
+						27 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+							28 row (settable, boolean) DC source, Value: off, ID: option:cGFydC1saXN0:ZGMtc291cmNl
+							29 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
+							30 row (settable, boolean) Red LED, Value: off, ID: option:cGFydC1saXN0:bGVk
+							31 row (settable, boolean) Capacitor, Value: off, ID: option:cGFydC1saXN0:Y2FwYWNpdG9y
+							32 row (settable, boolean) Ground, Value: off, ID: option:cGFydC1saXN0:Z3JvdW5k
+							33 row (settable, boolean) SPST switch, Value: off, ID: option:cGFydC1saXN0:c3dpdGNo
+						34 text (settable) 6 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
+						35 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
+				36 container node:c2NoZW1hdGljLXBhbmVs
+					37 toolbar node:dG9vbHM
+						38 row Drawing mode, ID: node:ZHJhd2luZy1tb2RlLXRhYnM
+							39 button Select, Help: Selected drawing mode., ID: node:dG9vbC1zZWxlY3Q
+							40 button Wire, ID: node:dG9vbC13aXJl
+							41 button Pan, ID: node:dG9vbC1wYW4
+						42 row node:ZHJhd2luZy1hY3Rpb25z
+							43 button Cancel, ID: node:ZHJhd2luZy5jYW5jZWw, Help: Cancel an unfinished wire or component placement and return to Select mode. Existing components and wires are kept. Shortcut: Escape.
+							44 row node:dG9vbC1zcGFjZXI
+							45 button DC sweep, ID: node:c3dlZXAtb3Blbg
+							46 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning. Selected.
+					47 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+					48 text (settable) Recovery available · choose a snapshot in the Document inspector to restore a copy., ID: node:bWVzc2FnZXM
+				49 container node:aW5zcGVjdG9yLXJhaWw
+					50 row node:aW5zcGVjdG9yLW5hdmlnYXRpb24tdG9wLXNwYWNl
+					51 toolbar Inspector section, ID: node:aW5zcGVjdG9yLW5hdmlnYXRpb24
+						52 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWNvbXBvbmVudA
+							53 button Inspect inspector, Help: Selected inspector section., ID: node:aW5zcGVjdG9yLXNlY3Rpb24tY29tcG9uZW50
+							54 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItY29tcG9uZW50
+						55 container node:aW5zcGVjdG9yLXRhYi1jZWxsLXNpbXVsYXRpb24
+							56 button Simulate inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tc2ltdWxhdGlvbg
+							57 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3Itc2ltdWxhdGlvbg
+						58 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWRvY3VtZW50
+							59 button Document inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tZG9jdW1lbnQ
+							60 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItZG9jdW1lbnQ
+					61 scroll area node:c2lkZWJhci0yLWNvbXBvbmVudA
+						62 container node:c2lkZWJhci1jb250ZW50
+							63 container Object inspector, ID: node:aW5zcGVjdG9yLWdyb3VwLW9iamVjdA
+								64 text (settable) Inspector, ID: node:aW5zcGVjdG9yLXRpdGxl
+								65 button Selected object, ID: node:c2VsZWN0aW9u, Help: Current choice: DS1 · Seven-segment display ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								66 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
+									67 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+									68 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+									69 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
+								70 text (settable) DS1 · Seven-segment display, ID: node:aW5zcGVjdG9y
+								71 text (settable) Terminals: a, b, c, d, e, f, g, common, ID: node:cGFydC10ZXJtaW5hbHM
+								72 text (settable) Model: elab.generic-seven-segment.v1, ID: node:cGFydC1tb2RlbC1pZA
+								73 text (settable) ID: node:ZGlzcGxheS1zZWxlY3RlZC1yZWFkaW5n, Live · 7
+Segments a–g: [true true true false false false false]
+Power 17.354 mW
+								74 button Plot a voltage, ID: node:cGxvdC12OkRTMS5h
+								75 button Plot b voltage, ID: node:cGxvdC12OkRTMS5i
+								76 button Plot c voltage, ID: node:cGxvdC12OkRTMS5j
+								77 button Plot d voltage, ID: node:cGxvdC12OkRTMS5k
+								78 button Plot e voltage, ID: node:cGxvdC12OkRTMS5l
+								79 button Plot f voltage, ID: node:cGxvdC12OkRTMS5m
+								80 button Plot g voltage, ID: node:cGxvdC12OkRTMS5n
+								81 button Plot common voltage, ID: node:cGxvdC12OkRTMS5jb21tb24
+								82 button Plot a current, ID: node:cGxvdC1pOkRTMS5h
+								83 button Plot b current, ID: node:cGxvdC1pOkRTMS5i
+								84 button Plot c current, ID: node:cGxvdC1pOkRTMS5j
+								85 button Plot d current, ID: node:cGxvdC1pOkRTMS5k
+								86 button Plot e current, ID: node:cGxvdC1pOkRTMS5l
+								87 button Plot f current, ID: node:cGxvdC1pOkRTMS5m
+								88 button Plot g current, ID: node:cGxvdC1pOkRTMS5n
+								89 button Plot common current, ID: node:cGxvdC1pOkRTMS5jb21tb24
+								90 text (settable) Adds a trace; replaces the last when six are shown., ID: node:cGxvdC1oZWxw
+								91 text (settable) ID: node:cGFydC1hc3N1bXB0aW9ucw, Seven independent generic red LED segments with a common cathode; each needs an external current-limiting resistor. Powered combinational BCD decoder, active-high outputs a–g, codes 10–15 blank. No latch, lamp test, decimal point, propagation delay, package pinout, hardware current limit or thermal/optical rating. Intermediate BCD inputs interpolate analog output conductance, not a valid digit. Output paths and supply load use the declared generic logic model.
+								92 text (settable) Position 1460, 0 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
+								93 button Rotate 90°, ID: node:cm90YXRlLXBhcnQ
+								94 button Duplicate, ID: node:ZHVwbGljYXRlLXBhcnQ
+								95 button Delete selected, ID: node:ZGVsZXRlLW9iamVjdA
+							96 container Live measurements, ID: node:aW5zcGVjdG9yLWdyb3VwLW1lYXN1cmVtZW50cw
+								97 text (settable) Live measurements, ID: node:bWVhc3VyZW1lbnQtdGl0bGU
+								98 text (settable) Plot adds a trace, replacing the last if six are shown. Pin keeps a reading on the sheet., ID: node:bWVhc3VyZW1lbnQtaGVscA
+								99 button Inspect named terminal voltage, ID: node:aW5zcGVjdC10ZXJtaW5hbA, Help: Current choice: Measure a terminal… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								100 button Inspect named electrical net, ID: node:aW5zcGVjdC1uZXQ, Help: Current choice: Measure a net… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								101 button Inspect voltage or current probe, ID: node:aW5zcGVjdC1wcm9iZQ, Help: Current choice: Measure voltage/current… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								102 text (settable) DS1 · sample 12725 ms, ID: node:bWVhc3VyZW1lbnQtc291cmNl
+								103 text (settable) Live v:DS1.a · 2.0806 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuYQ
+								104 text (settable) Voltage: DS1.a - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmE
+								105 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5h
+									106 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5h
+									107 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmE
+								108 text (settable) Live v:DS1.b · 2.0806 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuYg
+								109 text (settable) Voltage: DS1.b - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmI
+								110 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5i
+									111 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5i
+									112 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmI
+								113 text (settable) Live v:DS1.c · 2.0806 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuYw
+								114 text (settable) Voltage: DS1.c - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmM
+								115 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5j
+									116 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5j
+									117 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmM
+								118 text (settable) Live v:DS1.d · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuZA
+								119 text (settable) Voltage: DS1.d - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmQ
+								120 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5k
+									121 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5k
+									122 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmQ
+								123 text (settable) Live v:DS1.e · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuZQ
+								124 text (settable) Voltage: DS1.e - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmU
+								125 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5l
+									126 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5l
+									127 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmU
+								128 text (settable) Live v:DS1.f · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuZg
+								129 text (settable) Voltage: DS1.f - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmY
+								130 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5m
+									131 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5m
+									132 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmY
+								133 text (settable) Live v:DS1.g · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuZw
+								134 text (settable) Voltage: DS1.g - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmc
+								135 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5n
+									136 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5n
+									137 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmc
+								138 text (settable) Live v:DS1.common · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpEUzEuY29tbW9u
+								139 text (settable) Voltage: DS1.common - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6RFMxLmNvbW1vbg
+								140 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkRTMS5jb21tb24
+									141 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkRTMS5jb21tb24
+									142 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6RFMxLmNvbW1vbg
+								143 text (settable) Live i:DS1.a · 2.7803 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuYQ
+								144 text (settable) Current: DS1.a -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmE
+								145 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5h
+									146 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5h
+									147 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmE
+								148 text (settable) Live i:DS1.b · 2.7803 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuYg
+								149 text (settable) Current: DS1.b -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmI
+								150 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5i
+									151 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5i
+									152 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmI
+								153 text (settable) Live i:DS1.c · 2.7803 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuYw
+								154 text (settable) Current: DS1.c -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmM
+								155 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5j
+									156 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5j
+									157 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmM
+								158 text (settable) Live i:DS1.d · 0 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuZA
+								159 text (settable) Current: DS1.d -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmQ
+								160 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5k
+									161 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5k
+									162 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmQ
+								163 text (settable) Live i:DS1.e · 0 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuZQ
+								164 text (settable) Current: DS1.e -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmU
+								165 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5l
+									166 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5l
+									167 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmU
+								168 text (settable) Live i:DS1.f · 0 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuZg
+								169 text (settable) Current: DS1.f -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmY
+								170 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5m
+									171 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5m
+									172 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmY
+								173 text (settable) Live i:DS1.g · 0 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuZw
+								174 text (settable) Current: DS1.g -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmc
+								175 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5n
+									176 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5n
+									177 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmc
+								178 text (settable) Live i:DS1.common · -8.341 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpEUzEuY29tbW9u
+								179 text (settable) Current: DS1.common -> into device, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6RFMxLmNvbW1vbg
+								180 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkRTMS5jb21tb24
+									181 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkRTMS5jb21tb24
+									182 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6RFMxLmNvbW1vbg
+								183 button Inspect selected object, ID: node:bWVhc3VyZW1lbnQtY2xlYXI
+							184 container Pinned readings, ID: node:aW5zcGVjdG9yLWdyb3VwLXBpbm5lZA
+								185 text (settable) Pinned live readings, ID: node:cGlubmVkLXJlYWRpbmdzLXRpdGxl
+								186 text (settable) ID: node:cGlubmVkLXJlYWRpbmdzLWhlbHA, Pin up to eight voltage/current readings, then drag a card on the sheet or edit X / Y. Readings always follow the live circuit.
+								187 button Pin a live voltage or current reading, ID: node:cGluLXJlYWRpbmctcHJvYmU, Help: Current choice: Pin a reading… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+			188 splitter (settable, float) Schematic and scope divider, Value: 0.65, ID: split:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			189 scroll area node:c2NvcGUtc2Nyb2xs
+				190 container node:c2NvcGUtcGFuZWw
+					191 toolbar node:c2NvcGUtdG9vbGJhcg
+						192 button Hide scope, Help: Expand or collapse the dock without changing simulation or recorded measurements, ID: node:c2NvcGUtdmlzaWJpbGl0eQ
+						193 text (settable) Live sequential scope, ID: node:c2NvcGUtdGl0bGU
+						194 text (settable) t = 12.72 s · U2 7 · run 2, ID: node:c2NvcGUtY2FwdGlvbg
+						195 button Auto, Help: Selected., ID: node:aW5wdXQtYXV0bw
+						196 button Power on, ID: node:aW5wdXQtaGlnaA
+						197 button Power off, ID: node:aW5wdXQtbG93
+						198 button (disabled) Step +1 sample, ID: node:dHJhbnNpZW50LXN0ZXA
+						199 button Restart, ID: node:c2ltdWxhdGlvbi5yZXN0YXJ0
+					200 toolbar node:c2NvcGUtdHJhY2Utcm93
+						201 button Export scope CSV, ID: node:ZXhwb3J0LWNzdg
+						202 button Inspect trace source, ID: node:c2NvcGUtdHJhY2UtZm9jdXM, Help: Current choice: Inspect trace… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						203 text (settable) ID: node:c2NvcGUtbGVnZW5k, Teal: C1.1 / ground · Blue: U1 output / local ground · Coral: U2.q0 / ground · Rose: U2.q3 / ground · Purple: DS1.a current · Amber: DS1.g current
+					204 text (settable) node:c3RlcC13b3JrLXN0YXR1cw
+					205 toolbar node:c2NvcGUtY3Vyc29ycw
+						206 button A, Help: Selected., ID: node:Y3Vyc29yLXNlbGVjdC1h
+						207 text field (settable) Cursor A time, ID: node:Y3Vyc29yLXRpbWUtYQ, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						208 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWE
+						209 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i
+						210 text field (settable) Cursor B time, ID: node:Y3Vyc29yLXRpbWUtYg, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						211 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWI
+						212 text (settable) ms · click / drag plot to place selected cursor, ID: node:Y3Vyc29yLW1lYXN1cmVtZW50
+		213 row node:cmVhZGluZ3M
+			214 container node:Y3VycmVudA
+				215 text (settable) RA current, ID: node:Y3VycmVudC10aXRsZQ
+				216 text (settable) 0.039387 mA, ID: node:Y3VycmVudC12YWx1ZQ
+			217 container node:dm9sdGFnZQ
+				218 text (settable) C1 voltage, ID: node:dm9sdGFnZS10aXRsZQ
+				219 text (settable) 2.755 V, ID: node:dm9sdGFnZS12YWx1ZQ
+			220 container node:cG93ZXI
+				221 text (settable) Power residual, ID: node:cG93ZXItdGl0bGU
+				222 text (settable) -2.77e-07 nW, ID: node:cG93ZXItdmFsdWU
+			223 container node:c2ltdWxhdGlvbi1pbmZv
+				224 text (settable) Live simulation, ID: node:c2ltdWxhdGlvbi10aXRsZQ
+				225 text (settable) Network · t = 12.72 s, ID: node:cmVhZGluZy1zdGF0dXM
+		226 row node:Zm9vdGVyLXJvdw
+			227 text (settable) 31 components · 43 wires, Help: 555-driven digit counter · 31 components · 43 wires · last change: user, ID: node:Zm9vdGVy
+			228 row node:Zm9vdGVyLXNwYWNlcg
+			229 text (settable) 35%, ID: node:em9vbQ
+			230 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	231 close button
+	232 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	233 minimize button
+	234 text ELab · Live electronics
+235 menu bar
+	236 ELab
+	237 File
+	238 Examples
+	239 Appearance

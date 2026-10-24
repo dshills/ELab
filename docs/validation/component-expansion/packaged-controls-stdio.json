@@ -1,0 +1,95 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "buttons": [
+    {
+      "example": "button-counter",
+      "counts_after_click": {
+        "U2": 1
+      },
+      "asynchronous_reset": true,
+      "project_clean_after_runtime_actions": true,
+      "exports": {
+        "svg": "6b600a70a3fb5d7edecb51fbf134393830ec4b44cddaf9f1a9991a153b3f936b",
+        "png": "fa01b9cadb5b7b3d22f9709f12cddf6e08985e147c8192152df04319e6adcdd6",
+        "pdf": "c7d14c5feb3428aff4dd9714847e9b5f71d0fe26734047f5bcfcaf549cb5bc2b"
+      }
+    },
+    {
+      "example": "button-debounce",
+      "counts_after_click": {
+        "U2": 5,
+        "U4": 1
+      },
+      "asynchronous_reset": true,
+      "project_clean_after_runtime_actions": true,
+      "exports": {
+        "svg": "5508fd584b1d7adc2989a8a658d35d3cfd196c4537085466267595012a71e740",
+        "png": "9fc8095b97caae5b9bf2d6e9efc8d76d08cc7351ca5f6750501756023afc6371",
+        "pdf": "9dd7714b10ac0924c3bc9345b28c361446428705e84d90f362823953dd80bf42"
+      }
+    }
+  ],
+  "comparators": [
+    {
+      "example": "comparator-threshold",
+      "independently_checked_states": 25,
+      "exports": {
+        "svg": "8d4d7ebb5413a8e77e0052adde79dc36eb4024d9589be212483f0124cfef37b5",
+        "png": "d49e3147ffb7b1b3d262435cd55103021ae04e21b4d0610b752b0b5a390accff",
+        "pdf": "c3003097552b04159b4f4b7fb87e70df86cb71b62408f39ac875906bf1d29dc5"
+      }
+    },
+    {
+      "example": "comparator-counter",
+      "independently_checked_states": 25,
+      "exports": {
+        "svg": "3d922edc81aa2ff161356c54ae2a6b8577812aeb548e6b3c6c053d4202f4f34d",
+        "png": "7fc2df3c455d729bc883610a85ec306cbebdb637f224003d6faaf55838417e87",
+        "pdf": "0c7ab0468a562b4f27ea1dbc47a9668952e3f88aa74e558671da35ade6f8a98a"
+      }
+    }
+  ],
+  "relays": [
+    {
+      "example": "relay-switch",
+      "pickup_and_release": true,
+      "flyback_current": true,
+      "exports": {
+        "svg": "dd98a5f2062e0a9bcc957218020cd4bf0583e4ed66d4acc7882de87aff3a2228",
+        "png": "e357c488691b64f6d3b03e632cd4a9393677e7aa0cd0063f7611973cb3245927",
+        "pdf": "263b65c27b676041b4198920536ba7c6a66ade5ae1cc026c21747303302fae82"
+      }
+    },
+    {
+      "example": "relay-flasher",
+      "pickup_and_release": true,
+      "flyback_current": true,
+      "exports": {
+        "svg": "2e60e5671a2cd217d8c81caa1fc230701e9e75161806ab61dc59bed8d7e02a9d",
+        "png": "21475ac706e3d71351f113ef68c0a2e5ba83b92ba675e00162277785468c0b33",
+        "pdf": "f219fe056c6bf0fafd47d676fb9c2904809c1403454feef29637a28a22835ff6"
+      }
+    }
+  ],
+  "regulators": [
+    {
+      "example": "regulator-supply",
+      "independently_checked_states": 3,
+      "exports": {
+        "svg": "97610bca104d1515b564f2df9a053d2529facb448012c32246aeea332af8fb12",
+        "png": "0b4520cc95603ec9adfd4f3be6c55d56ff64b18796e3b77ea444770a06ca75cc",
+        "pdf": "a84086fddb3969d79ee08fd5fe1cffa8b2cbbbd37d228d22b7b941407b3d1872"
+      }
+    },
+    {
+      "example": "regulator-dropout",
+      "independently_checked_states": 40,
+      "exports": {
+        "svg": "ad35b320202e3e230197dd294b844926192be679800d8ce3e8b6dc77d1f060cb",
+        "png": "0c411c3badfdbea8ed6db5bb05cfb0d7f6593e3bde2d76646db8250ab2362746",
+        "pdf": "50604dcae9d4cbdc2e007caccf2e11b3655a6d83aab89fdf96149ed053fd08e4"
+      }
+    }
+  ]
+}

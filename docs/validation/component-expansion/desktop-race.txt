@@ -1,0 +1,9 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestComponentSymbolsDecorateOnlyCatalogRows (0.04s)
+    component_browser_test.go:57: missing/duplicate symbol ldo-regulator
+--- FAIL: TestNativeNarrowWindowReportsNoRowsAndDisablesCSV (0.55s)
+    scope_precision_test.go:37: native one-row interval {[] {fixed 7.5e-13 1e-12} false No exact saved samples in this interval [] [{v:V1.positive V1.positive / ground V V1.positive ground} {v:V1.negative V1.negative / ground V V1.negative ground} {v:V1 V1 voltage V V1.positive V1.negative} {i:V1 V1 delivered current A V1.positive out of positive} {v:R1.1 R1.1 / ground V R1.1 ground} {v:R1.2 R1.2 / ground V R1.2 ground} {v:R1 R1 voltage V R1.1 R1.2} {i:R1 R1 current A R1.1 R1.2} {v:C1.1 C1.1 / ground V C1.1 ground} {v:C1.2 C1.2 / ground V C1.2 ground} {v:C1 C1 voltage V C1.1 C1.2} {i:C1 C1 current A C1.1 C1.2} {v:GND.reference GND.reference / ground V GND.reference ground}] [v:C1] [{{v:C1 C1 voltage V C1.1 C1.2} []}] 2 false a <nil> <nil> <nil> <nil> []}
+FAIL
+FAIL	github.com/dshills/elab/desktop	529.521s
+FAIL

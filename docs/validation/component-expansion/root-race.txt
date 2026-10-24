@@ -1,0 +1,13 @@
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	3.420s
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	124.205s
+ok  	github.com/dshills/elab/internal/printspool	(cached)
+ok  	github.com/dshills/elab/internal/schematicpdf	(cached)
+ok  	github.com/dshills/elab/internal/uiaudit	1.481s
+ok  	github.com/dshills/elab/transport	1.391s
+--- FAIL: TestFlasherProbesBackfillAndCursorTiming (0.17s)
+    scope_test.go:24: simulation.step: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (26 attempted, maximum 512; 109.179 ms elapsed, maximum 100 ms); reduce sample step at 0.093512389 s, step 2.48e-06: ratio +Inf, errors mixed integration exceeded its work budget: elapsed-time limit (25 attempted, maximum 512; 108.911 ms elapsed, maximum 100 ms); reduce sample step / mixed integration exceeded its work budget: elapsed-time limit (25 attempted, maximum 512; 108.912 ms elapsed, maximum 100 ms); reduce sample step / <nil>}
+FAIL
+FAIL	github.com/dshills/elab/workbench	149.727s
+FAIL
