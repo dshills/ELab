@@ -53,3 +53,19 @@ all control IDs, shared commands and guards; focused user/agent, flasher, NPN,
 inspector form across four themes, tab and symbol regressions pass in 43.466 s.
 The owned /232 session was closed normally for its replacement; other sessions
 and user projects were preserved. No original electrical reference was rewritten.
+
+Clean-source **0.183.1 /233**, built from `c53a4802`, passes strict ad hoc
+signature verification. Its packaged external agent passes the three-example
+stdio replay again; `stdio-report.json` and `build-result.json` describe the
+finished candidate. The actual-part inspector ordering/label test also passes
+in 7.639 seconds. Native observations confirm follower and complementary
+waveforms, PNP sinking under negative drive, and explicit PNP LED Low/High plus
+Step transitions. Low gives LED 2.860 mA and signed collector -2.85999 mA; High
+gives cutoff. The PNP LED example is left running in Auto with Q1 selected and
+Apollo active. The owned /232 test session was closed normally; existing user
+sessions and projects remain intact. The /205 release archive is unchanged.
+
+Some immediate AX observations preceded queued native updates, so fresh state
+was used before dependent actions. This is not a general one-click latency
+acceptance result. Some CUA captures omit unchanged text; native capture,
+comprehensive accessibility and distribution qualification remain separate.
