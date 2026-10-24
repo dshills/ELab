@@ -1,0 +1,86 @@
+{
+  "application_quality_passed": true,
+  "sdk_quality_passed": true,
+  "python_tests": 67,
+  "sdk_python_tests": 30,
+  "source_parent_commit": "5b33b03dae29ad56b8281b4f66a15755d1633d01",
+  "source_inputs": 894,
+  "changed_source_inputs": [
+    "desktop/go.mod",
+    "desktop/inspector_validation_scroll_offscreen_test.go",
+    "third_party/vellum/patches/elab-public-e58d405-focus-scroll-compat.patch",
+    "third_party/vellum/sdk.lock.json",
+    "third_party/vellum/vellum-e58d405-elab12.tar.gz"
+  ],
+  "desktop_race_seconds": 187.399,
+  "mounted_race_seconds": 190.051,
+  "sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "b8ffabbe3f6050415247760863e66e1f59c33d87",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-focus-scroll-compat.patch",
+      "sha256": "eeb32872b1c3100f61489f61b8fda096b84c2a8e900df3d60fd7dcc330c6d481"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab12.tar.gz",
+    "archive_bytes": 20393146,
+    "sha256": "e408d52dbdda3a71ba72de4e4f0cb787efef79f6a40b45aad22469fa9e45e29f",
+    "manifest_sha256": "dd408cbc94929012ef905e9d9a56b784ef2f77d539ebc3937a4d6a09c81ce913",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab12",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8437,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "sdk_member_comparison": {
+    "changed_files": [
+      "SDK_DOCUMENTATION.md",
+      "drivers/cogent/accessibility.go",
+      "drivers/cogent/controls.go",
+      "drivers/cogent/driver.go",
+      "drivers/cogent/focus_scroll.go",
+      "drivers/cogent/focus_scroll_offscreen_test.go",
+      "drivers/cogent/manual_offscreen.go"
+    ],
+    "source_commit": "b8ffabbe3f6050415247760863e66e1f59c33d87",
+    "old_archive_preserved": true,
+    "bootstrap_unchanged": true,
+    "file_count": 8437,
+    "manifests_match_every_member": true,
+    "release_metadata_unchanged": true
+  },
+  "sdk_baseline": {
+    "pre_repair_exit_code": 1,
+    "focused_text_and_number_clipping_reproduced": true,
+    "numeric_draft_reset_reproduced": true,
+    "candidate_source_restored_exactly": true,
+    "verified_sdk_caches_edited": false
+  },
+  "production_app_go_and_backend_unchanged": true,
+  "app_interval_regression_cases": 4,
+  "native_before": {
+    "version": "0.181.20 /221",
+    "interval_validation_focus_clipped": true,
+    "numeric_source_selection_preserved_private_draft": true,
+    "numeric_layout_bug_reproduced_offscreen": true,
+    "divider_default_cua_drag_passed": true,
+    "controlled_native_drag_speed_qualified": false
+  },
+  "native_candidate_acceptance_passed": false,
+  "release_ready": false,
+  "preserved_download": "0.181.4 /205",
+  "new_features": 0,
+  "owner_review_required": false,
+  "raw_archive_sha256": "60f64cc93d738a322cc5374577899d5dd6aeee72672808f43a7b64b67e6a7ad7",
+  "raw_members": 97
+}

@@ -99,3 +99,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Scope scrolling and schematic zoom](98-plot-wheel-validation.md): unchanged native plot-wheel paths preserve circuit state, with a focused routing/flag-restoration regression. No product or package change; /219's separate native acceptance list remains open.
 
 - [Manual-step progress counts](99-manual-step-progress.md): match planned totals to the worker’s existing target grid, preserving timing and bounds. Focused and full gates pass; the original flasher wall-budget failure and numerical-test clock adjustment remain explicit.
+
+- [Validation layout and numeric drafts](103-validation-scroll-and-drafts.md): focused interval visibility and retained unfinished values across layout, with unchanged electrical commands and full source checks.

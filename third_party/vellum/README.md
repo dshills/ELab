@@ -133,7 +133,7 @@ are preserved. Fresh native acceptance remains separate.
 
 ## Number-field wheel input
 
-The active source is `2a0f783acb7f2ef20a6003c3277309ef6490be3c`, with the
+That repair used source `2a0f783acb7f2ef20a6003c3277309ef6490be3c`, with the
 [complete compatibility patch](patches/elab-public-e58d405-number-field-wheel-compat.patch),
 `vellum-e58d405-elab10.tar.gz` and `build/.vellum-sdk-e58d405-elab10`.
 Managed number fields leave wheel input to their enclosing scroll pane, even
@@ -173,3 +173,23 @@ Use `python3 -B` when running SDK Python utilities directly so they do not creat
 To update, select a fixed public commit, review compatibility patches against it, prepare dependencies and export a checksum-pinned SDK with the upstream release script. Update the archive, provenance lock, bootstrap set and four `desktop/go.mod` replacements together. Run source/offscreen consumer checks; native acceptance remains separate when no desktop session is available. The [historical mouse patch and reconstruction hashes](../../docs/validation/native-mouse-sdk-sources.json) target their recorded base and must not be applied blindly to a different revision.
 
 The separate [packaged application baseline](../../docs/vellum-baseline-current.json) records the last qualified app bundle. This source pin does not change that bundle or its release status.
+
+
+## Focus visibility and numeric drafts during layout
+
+The active compatibility source is `b8ffabbe3f6050415247760863e66e1f59c33d87`,
+with the [complete patch](patches/elab-public-e58d405-focus-scroll-compat.patch),
+`vellum-e58d405-elab12.tar.gz` and `build/.vellum-sdk-e58d405-elab12`.
+After layout inserts content above a focused control, reveal that control once
+if its ownership and scroll position still match. Deliberate scrolling away,
+a replaced/disabled editor or a different focus owner cancels the old reveal.
+The managed number field also retains private text across parent layout changes;
+its accepted model value is still set explicitly by managed synchronization.
+
+The pinned Spinner updater layout is checked before removing its unconditional
+value-to-text refresh. Intentional typing, buttons and keys retain their existing
+paths. This changes four existing driver files and adds the helper and behavioral
+regressions. All 8,437 exported files match their manifest. Upstream dependency
+bytes, notices and all bootstrap scripts are unchanged; earlier archives/caches
+and the qualified /205 download are preserved. Framework normal/offscreen race
+and vet checks pass. Native acceptance of the rebuilt app is separate.
