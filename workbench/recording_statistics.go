@@ -64,6 +64,16 @@ func (s *Service) measureRecordingStatisticsLocked(p RecordingStatisticsParams) 
 	if index < 0 {
 		return nil, &actionError{"not-found", "Measurement probe was not captured in this recording"}
 	}
+	if len(record.rows) < 2 {
+		return nil, &actionError{"unavailable", "No positive-duration saved segments cover this interval"}
+	}
+	// Import preserves tolerated timestamp roundoff. Nominal duration alone
+	// cannot prove coverage: dividing a partial integral by the whole requested
+	// duration would silently treat the missing tail as a zero-valued signal.
+	first, last := record.rows[0].Time, record.rows[len(record.rows)-1].Time
+	if p.Start < first || p.End > last {
+		return nil, &actionError{"unavailable", fmt.Sprintf("Saved samples cover %g s to %g s; choose an interval entirely inside those timestamps", first, last)}
+	}
 	out := &RecordingStatistics{Settings: RecordingStatisticsSettings(p), OriginID: record.metadata.OperationID, Engine: record.metadata.Engine, Method: "piecewise-linear.v1", Probe: record.metadata.Probes[index], SampleCount: len(record.rows), Duration: p.End - p.Start}
 	segments := make([]statisticsSegment, 0, len(record.rows)-1)
 	for i := 1; i < len(record.rows); i++ {

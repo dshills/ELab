@@ -51,7 +51,7 @@
     "desktop/recorded_timing_actions.go": "5c6792dc474f238105dd7ae037b7f7c2d089e4b6c2dee34b5df0e3bf4d5b1d82",
     "desktop/recording.go": "0483d0bd7d480bfbe306754a3bc088393d5403afd467648ac80a71a6bdbad318",
     "desktop/recording_compare.go": "8d5ca482bb6b06ef7d880d70133e6f7e040c5d61b38510676a6e9cb86e9473d5",
-    "desktop/recording_statistics.go": "161cc2eb9e62f089a91eb1967b9d6ed8a9a30dd914af3b7705ad3584bee2caec",
+    "desktop/recording_statistics.go": "316d0c1ee7d8f814cddc5524e53586e9ce6aed309e17254c102ecf7e6ac737ab",
     "desktop/recording_timing.go": "a7ceb35ed3cd66fed4ca88ff07600a7c44c7280db3e436f99092874b3262d3f0",
     "desktop/recovery.go": "861a98a5411f432028f371925192b9ffb68198de6dd92246d8846d37fd9902fa",
     "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
@@ -2946,7 +2946,7 @@
       "line": 20,
       "function": "*screen.recordingStatisticsControls",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.Duration\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\ts.invoke(\"recording.statistics.set\", p)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.LastSampleTime\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\ts.invoke(\"recording.statistics.set\", p)\n}",
       "status": "requires-binding-review"
     },
     {

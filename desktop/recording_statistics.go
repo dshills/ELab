@@ -20,7 +20,7 @@ func (s *screen) recordingStatisticsControls(state workbench.Snapshot) []ui.Node
 	nodes := []ui.Node{section("recorded-statistics-title", "Interval measurements"), {ID: "recorded-statistics-probe", Kind: ui.Selector, Options: options, SelectedID: selected, Disabled: r.Duration == 0, Accessibility: ui.Accessibility{Name: "Captured interval measurement probe"}, Change: func(e ui.ChangeEvent) {
 		p := workbench.RecordingStatisticsParams{ID: r.ID}
 		if e.SelectedID != "__none" {
-			p.ProbeID, p.End = e.SelectedID, r.Duration
+			p.ProbeID, p.End = e.SelectedID, r.LastSampleTime
 			if r.Statistics != nil {
 				p.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End
 			}

@@ -1,0 +1,139 @@
+{
+  "kind": "recorded-statistics-coverage",
+  "source_checks_passed": true,
+  "quality_exit_code": 0,
+  "source_parent_commit": "28cf38f65f0deca7c61e10bc0dd59b88833bc4da",
+  "source_inputs": 879,
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "changed_source_inputs": [
+    "desktop/recording_statistics.go",
+    "desktop/recording_statistics_coverage_test.go",
+    "research/13-native-command-inventory.json",
+    "workbench/recording_statistics.go",
+    "workbench/recording_statistics_capabilities.go",
+    "workbench/recording_statistics_coverage_test.go",
+    "workbench/testdata/recorded-statistics-short-tail.json"
+  ],
+  "python_tests": 67,
+  "desktop_race_seconds": 177.986,
+  "mounted_race_seconds": 159.929,
+  "backend_focused_seconds": 1.755,
+  "desktop_focused_seconds": 1.913,
+  "old_packaged_agent_baseline": {
+    "agent_binary": "/Users/dshills/Development/projects/ELab/build/ELab-0.181.10-211-candidate/elab-agent",
+    "source_fixture": "/Users/dshills/Development/projects/ELab/build/statistics-coverage-212-tools/source.json",
+    "imported_fixture": "/Users/dshills/Development/projects/ELab/build/statistics-coverage-212-tools/short-tail.json",
+    "declared_duration_s": 0.02,
+    "last_sample_time_s": 0.0199999999995,
+    "params": {
+      "id": "record-2",
+      "probe_id": "v:V1.positive",
+      "start_s": 0.019999999999,
+      "end_s": 0.02
+    },
+    "result": {
+      "settings": {
+        "id": "record-2",
+        "probe_id": "v:V1.positive",
+        "start_s": 0.019999999999,
+        "end_s": 0.02
+      },
+      "origin_id": "verify-1",
+      "engine": "elab.ideal-rc-exact.v1",
+      "method": "piecewise-linear.v1",
+      "probe": {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      "sample_count": 21,
+      "segment_count": 1,
+      "duration_s": 9.999986949615902e-13,
+      "minimum": 5,
+      "maximum": 5,
+      "peak_to_peak": 0,
+      "time_mean": 2.5,
+      "time_rms": 3.5355339059327378,
+      "ac_rms": 0
+    },
+    "expected_constant_signal_v": 5,
+    "accepted_import": true,
+    "query_state_unchanged": true,
+    "shutdown": {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 18,
+      "command_revision": 7,
+      "document_generation": 2,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    "agent_exit_code": 0
+  },
+  "inventory_comparison": {
+    "changed_sources": [
+      "desktop/recording_statistics.go"
+    ],
+    "removed_expressions": [
+      "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.Duration\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\ts.invoke(\"recording.statistics.set\", p)\n}"
+    ],
+    "added_expressions": [
+      "Change: func(e ui.ChangeEvent) {\n\tp := workbench.RecordingStatisticsParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID, p.End = e.SelectedID, r.LastSampleTime\n\t\tif r.Statistics != nil {\n\t\t\tp.Start, p.End = r.Statistics.Settings.Start, r.Statistics.Settings.End\n\t\t}\n\t}\n\ts.invoke(\"recording.statistics.set\", p)\n}"
+    ],
+    "public_commands_aliases_and_route_sets_unchanged": true,
+    "public_commands": 166,
+    "source_routes": 134,
+    "sites": 404,
+    "production_sources": 77
+  },
+  "sdk_unchanged": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-window-background-and-divider-compat.patch",
+      "sha256": "6b93a7f4cfbc8668bff33a6c2f4efdc5065e56a629f22d545457495418a07528"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab8.tar.gz",
+    "archive_bytes": 20390608,
+    "sha256": "89ef76d15a2dbd2d8e7777ceac502d802634d4877039dbad5b94829186d6bcdd",
+    "manifest_sha256": "1f7b36d96f47d96d843b8d3880188b30ab20c3dcb09c5e3da3401f0d406ca97d",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab8",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8428,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "preserved_download_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "native_app_launched": false,
+  "native_acceptance_passed": false,
+  "release_ready": false,
+  "published": false,
+  "owner_review_required": false,
+  "new_commands": 0,
+  "new_components": 0,
+  "new_formats": 0,
+  "download_unchanged": "0.181.4 /205",
+  "raw_archive_sha256": "c2e316a812836cc4c10a5613e7fcbaad864409f8bd1a27526fd65325cbd4fdf0",
+  "raw_members": 31
+}
