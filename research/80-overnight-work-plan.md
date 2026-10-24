@@ -67,3 +67,16 @@ driver tests, mounted paint/expansion and shared-agent collapse pass. The clean
 the preceding file-menu/guidance checks remain pending, so /205 stays the download.
 Continue item 5 and applicable existing-session checks without another launch
 permission request. Record a concrete failure before extending further UI fixes.
+
+## Checkpoint: interval correction and reset
+
+The [interval repair](87-scope-interval-correction.md) reproduces discarded invalid
+start/end text in all four mounted fields and through the existing old native
+session. It also repairs a first-click reset conflicting with its own blur edit.
+Source, full quality, actor-interleaving and clean /210 matching-agent checks
+pass, including 52 independent RC voltage/current comparisons. It adds no
+commands, devices or formats and keeps the existing SDK. The /209 host-border
+and divider repair is included. Changed-binary native acceptance for these and
+the preceding /207–/208 paths remains pending; /205 is still the download.
+Continue remaining input/agent contract work and applicable existing-session
+checks under the saved authorization, without requesting it again.

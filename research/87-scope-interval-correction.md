@@ -78,3 +78,12 @@ Fresh native acceptance of the changed interval behavior and the accumulated
 /207–/209 changes remains separate. Preserve /205 until those paths pass; no
 new owner approval or unattended launch prompt is requested. The current owned
 old-code fixture remains paused and restored for applicable subsequent checks.
+
+The clean 0.181.9 /210 app and matching agent build from `c9c72f2c`.
+Strict ad-hoc bundle verification passes. The matching packaged agent passes
+refusal/correction and unchanged-state checks for live and recorded intervals.
+Both 4–16 ms windows contain 13 samples; 52 voltage/current readings match
+independent RC equations. Maximum errors are 8.88178e-16 V and
+8.13152e-20 A. Workers join, the agent exits zero, all 873 inputs
+and the app bundle remain exact. [Receipt](../docs/validation/scope-interval-210/candidate-report.json).
+Native acceptance remains pending; no graphical candidate launch is used.

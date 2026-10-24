@@ -1,0 +1,45 @@
+{
+  "source_commit": "c9c72f2ca69ac2206a8bb8ed618415b025ee7fc8",
+  "agent_sha256": "7151eb9b50d59649df2440058c595a9c30f8315dc240be059c469ed612054d03",
+  "transport": "headless-stdio",
+  "checks": [
+    {
+      "mode": "live",
+      "refusals": 6,
+      "units_range_order_guidance": true,
+      "original_error_and_state_preserved": true,
+      "corrected_interval_samples": 13,
+      "stale_and_malformed_context_not_borrowed": true,
+      "independent_reference": "5 V, 10 kohm, 1 uF: Vc=5*(1-exp(-t/0.01)); Ic=0.0005*exp(-t/0.01)"
+    },
+    {
+      "mode": "recorded",
+      "refusals": 6,
+      "units_range_order_guidance": true,
+      "original_error_and_state_preserved": true,
+      "corrected_interval_samples": 13,
+      "stale_and_malformed_context_not_borrowed": true,
+      "independent_reference": "5 V, 10 kohm, 1 uF: Vc=5*(1-exp(-t/0.01)); Ic=0.0005*exp(-t/0.01)"
+    }
+  ],
+  "scalar_readings_checked": 52,
+  "max_voltage_error_v": 8.881784197001252e-16,
+  "max_current_error_a": 8.131516293641283e-20,
+  "passed": true,
+  "shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "input_revision": 17,
+    "command_revision": 12,
+    "document_generation": 2,
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "agent_exit_code": 0
+}

@@ -46,3 +46,14 @@ Fresh changed-binary native interval/correction/reset acceptance and the
 accumulated /207–/209 native checks remain pending. Offscreen evidence and old
 native baseline cannot qualify those paths. No new owner permission or review
 is requested and no unattended launch prompt is queued.
+
+The [clean 0.181.9 /210 candidate](candidate-report.json) builds from
+`c9c72f2ca69ac2206a8bb8ed618415b025ee7fc8` and verifies its strict ad-hoc bundle
+signature. Its matching agent passes live/recorded interval refusal, unit
+correction, exact protected-state and stale/malformed-context checks. The 4–16 ms
+windows each contain 13 samples. All 52 scalar readings match independent
+5 V / 10 kΩ / 1 µF RC equations; maximum errors are 8.88178e-16 V
+and 8.13152e-20 A. Its shutdown joins workers and the agent exits zero.
+All 873 source/check inputs and the complete app bundle still match.
+[Fresh native acceptance](native-acceptance-pending.json) remains pending, so
+the candidate is held and the /205 download stays unchanged.
