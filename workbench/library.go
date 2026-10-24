@@ -2,6 +2,8 @@ package workbench
 
 func partAliases(kind string) []string {
 	switch kind {
+	case "linear-regulator", "ldo-regulator":
+		return []string{"regulator", "supply", "power", "dropout", "LDO", "linear"}
 	case "relay":
 		return []string{"relay", "coil", "SPDT", "contacts", "flyback", "electromagnet"}
 	case "comparator":
@@ -79,6 +81,8 @@ func partLimitations(kind string) string {
 		return SequentialDeviceModel().Limitations
 	case "bcd-decoder", "seven-segment":
 		return DigitalDisplayModel().Limitations
+	case "linear-regulator", "ldo-regulator":
+		return VoltageRegulatorModel().Limitations
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return LogicDeviceModel().Limitations
 	case "dc-source":

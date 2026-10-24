@@ -94,6 +94,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	if part.Kind == "potentiometer" {
 		inspector = append(inspector, s.potentiometerControls(state, part)...)
 	}
+	if workbench.IsRegulatorKind(part.Kind) && state.Mixed != nil {
+		for _, r := range state.Mixed.Regulators {
+			if r.ID == part.ID {
+				status := "Live"
+				if state.Mixed.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("regulator-selected-reading", fmt.Sprintf("%s · %s\nInput %.5g V · output %.5g V\nDelivered %.5g mA · loss %.5g mW", status, r.State, r.InputVoltage, r.OutputVoltage, r.Current*1000, r.Power*1000)))
+			}
+		}
+	}
 	if part.Kind == "relay" && state.Mixed != nil {
 		for _, c := range state.Mixed.Controls {
 			if c.ID == part.ID {
@@ -137,6 +148,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 	if part.Unit != "" {
 		valueTitle := "Value · " + part.Unit
+		if workbench.IsRegulatorKind(part.Kind) {
+			valueTitle = "Output setpoint · V"
+		}
 		if part.Kind == "relay" {
 			valueTitle = "Coil inductance · H"
 		}

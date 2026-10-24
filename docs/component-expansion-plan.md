@@ -13,7 +13,7 @@ Existing integration limits and the qualified release remain preserved.
    analog-to-logic examples.
 4. Electrical/native command and agent replay checks passed; final visual checks pending: relay coil dynamics, isolated switched contacts, transistor driver
    and flyback protection examples.
-5. Next: linear voltage regulators with finite load regulation, dropout,
+5. Electrical/native command and agent replay checks passed; final visual checks pending: linear voltage regulators with finite load regulation, dropout,
    current limiting and practical supply examples.
 
 Models are educational functional models, not fitted package/device ratings.

@@ -73,7 +73,7 @@ func ButtonDebounceExampleGraph() Graph {
 	b.wire("V1.positive", "SCOUNT.1")
 	b.part("RCLK", "resistor", "10k", -250, 100, 90)
 	b.wire("SCOUNT.2", "RCLK.1")
-	b.ground("GNDP", "RCLK.2", -250, 280)
+	b.ground("GNDP", "RCLK.2", -120, 180)
 	b.part("SRESET", "pushbutton", "", -600, 450, 0)
 	b.wire("V1.positive", "SRESET.1")
 	b.part("RRESET", "resistor", "10k", -380, 550, 90)
@@ -86,8 +86,12 @@ func ButtonDebounceExampleGraph() Graph {
 	b.wire("U6.out", "U7.a")
 	b.wire("U7.out", "RDEB.1")
 	for _, id := range []string{"U6", "U7"} {
-		b.wire("V1.positive", id+".vcc")
-		b.wire("GNDV.reference", id+".gnd")
+		x := -470.
+		if id == "U7" {
+			x = -280
+		}
+		b.label("PWR"+id, "VCC", id+".vcc", x, 180)
+		b.ground("GND"+id, id+".gnd", x, 410)
 	}
 	b.part("CDEB", "capacitor", "10u", -20, 650, 0)
 	b.wire("RDEB.2", "CDEB.1")
@@ -98,7 +102,7 @@ func ButtonDebounceExampleGraph() Graph {
 		b.label("POWER"+id, "VCC", id+".vcc", 200, y-230)
 		b.label("ENABLE"+id, "VCC", id+".enable", 20, y-70)
 		b.wire(id+".reset", "SRESET.2")
-		b.ground("GND"+id, id+".gnd", 200, y+250)
+		b.ground("GND"+id, id+".gnd", 350, y+200)
 		r, d := fmt.Sprintf("RL%d", k+1), fmt.Sprintf("D%d", k+1)
 		b.part(r, "resistor", "1k", 450, y-60, 0)
 		b.part(d, "led", "", 650, y-60, 270)

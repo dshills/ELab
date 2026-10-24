@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Regulators         []RegulatorResult     `json:"regulators,omitempty"`
 	Controls           []ControlResult       `json:"controls,omitempty"`
 	Displays           []DisplayResult       `json:"displays,omitempty"`
 	Sequential         []SequentialResult    `json:"sequential,omitempty"`
@@ -72,6 +73,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Regulators = append([]RegulatorResult(nil), r.Regulators...)
 	o.Controls = append([]ControlResult(nil), r.Controls...)
 	o.Displays = append([]DisplayResult(nil), r.Displays...)
 	o.Sequential = append([]SequentialResult(nil), r.Sequential...)
@@ -99,6 +101,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 type mixedNetwork struct {
 	dc                bool
 	nonlinear         bool
+	hasRegulator      bool
 	hasMOSFET         bool
 	hasGeneralBipolar bool
 	c                 Compiled
@@ -133,6 +136,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
+		n.hasRegulator = n.hasRegulator || IsRegulatorKind(p.Kind)
 		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
 		n.hasGeneralBipolar = n.hasGeneralBipolar || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
 		switch p.Kind {
@@ -306,6 +310,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			}
 			g := 1 / resistance
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
+		case "linear-regulator", "ldo-regulator":
+			n.stampRegulator(p, x, add, f)
 		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			n.stampControl(p, x, add, f)
 		case "bcd-decoder", "seven-segment":
@@ -566,7 +572,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
+		if good && (n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -631,6 +637,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 					}
 				}
 				scale = n.opAmpNewtonScale(x, delta, 1, scale)
+				scale = n.regulatorNewtonScale(x, delta, 1, scale)
 			}
 		}
 		for i := range x {
@@ -685,6 +692,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
+		case "linear-regulator", "ldo-regulator":
+			device := n.regulatorResult(p, x)
+			r.Regulators = append(r.Regulators, device)
+			powers += device.Power
 		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			device := n.controlResult(p, x)
 			r.Controls = append(r.Controls, device)

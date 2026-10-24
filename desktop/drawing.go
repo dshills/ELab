@@ -167,6 +167,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if workbench.IsDisplayKind(part.Kind) {
 			outlineW, outlineH = 128, 238
 		}
+		if workbench.IsRegulatorKind(part.Kind) {
+			outlineW, outlineH = 108, 98
+		}
 		if part.Kind == "relay" {
 			outlineW, outlineH = 128, 138
 		}
@@ -313,6 +316,17 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		stroke(ink, 3, canvas.Point{X: -24, Y: 9}, canvas.Point{X: 24, Y: 9})
 		stroke(wireColor, 2.5, canvas.Point{Y: -32}, canvas.Point{Y: -9})
 		stroke(wireColor, 2.5, canvas.Point{Y: 9}, canvas.Point{Y: 32})
+	case "linear-regulator", "ldo-regulator":
+		for _, path := range workbench.RegulatorSymbolPaths() {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		for _, label := range workbench.RegulatorSymbolLabels(part) {
+			b.text(label.At.X, label.At.Y, label.Text, muted)
+		}
 	case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 		memory := workbench.ControlMemory{}
 		if state.Mixed != nil && !state.Mixed.Stale {

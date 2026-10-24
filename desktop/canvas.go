@@ -109,6 +109,9 @@ func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 		if workbench.IsDisplayKind(part.Kind) {
 			width, height = 92, 202
 		}
+		if workbench.IsRegulatorKind(part.Kind) {
+			width, height = 68, 48
+		}
 		if part.Kind == "relay" {
 			width, height = 102, 92
 		}

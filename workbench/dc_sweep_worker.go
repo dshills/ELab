@@ -30,13 +30,14 @@ type DCCircuit struct {
 	LogicModel         *LogicModel         `json:"logic_model,omitempty"`
 	SequentialModel    *SequentialModel    `json:"sequential_model,omitempty"`
 	DisplayModel       *DisplayModel       `json:"display_model,omitempty"`
+	RegulatorModel     *RegulatorModel     `json:"regulator_model,omitempty"`
 	ControlModel       *ControlModel       `json:"control_model,omitempty"`
 	PotentiometerModel *PotentiometerModel `json:"potentiometer_model,omitempty"`
 	WaveformModel      *WaveformModel      `json:"waveform_model,omitempty"`
 }
 
 func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
-	out := DCCircuit{Graph: g.Clone(), Settings: cfg, LEDModel: Model(), PNPModel: pnpModelForGraph(g), OpAmpModel: opAmpModelForGraph(g), SequentialModel: sequentialModelForGraph(g), DisplayModel: displayModelForGraph(g), ControlModel: controlModelForGraph(g), LogicModel: logicModelForGraph(g), Timer555Model: timer555ModelForGraph(g)}
+	out := DCCircuit{Graph: g.Clone(), Settings: cfg, LEDModel: Model(), PNPModel: pnpModelForGraph(g), OpAmpModel: opAmpModelForGraph(g), SequentialModel: sequentialModelForGraph(g), DisplayModel: displayModelForGraph(g), RegulatorModel: regulatorModelForGraph(g), ControlModel: controlModelForGraph(g), LogicModel: logicModelForGraph(g), Timer555Model: timer555ModelForGraph(g)}
 	for _, p := range g.Components {
 		switch p.Kind {
 		case "pmos":
@@ -73,7 +74,7 @@ func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
 func (c DCCircuit) document() Document {
 	paused := true
 	cfg := c.Settings
-	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SchottkyModel: c.SchottkyModel, ZenerModel: c.ZenerModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PNPModel: c.PNPModel, OpAmpModel: c.OpAmpModel, SequentialModel: c.SequentialModel, DisplayModel: c.DisplayModel, ControlModel: c.ControlModel, LogicModel: c.LogicModel, Timer555Model: c.Timer555Model, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
+	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SchottkyModel: c.SchottkyModel, ZenerModel: c.ZenerModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PNPModel: c.PNPModel, OpAmpModel: c.OpAmpModel, SequentialModel: c.SequentialModel, DisplayModel: c.DisplayModel, RegulatorModel: c.RegulatorModel, ControlModel: c.ControlModel, LogicModel: c.LogicModel, Timer555Model: c.Timer555Model, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
 }
 
 type SweepMetadata struct {

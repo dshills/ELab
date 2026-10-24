@@ -44,6 +44,9 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "linear-regulator", "ldo-regulator":
+			join(p, "in", "gnd")
+			join(p, "out", "gnd")
 		case "relay":
 			join(p, "common", "no")
 			join(p, "common", "nc")

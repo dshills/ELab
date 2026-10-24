@@ -148,6 +148,55 @@ def relays(agent, assets):
     return reports
 
 
+def regulators(agent, assets):
+    reports = []
+    for example in ('regulator-supply', 'regulator-dropout'):
+        client = Client(agent)
+        try:
+            client.mutate('example.load', {'id': example})
+            client.mutate('simulation.pause')
+            client.mutate('simulation.restart')
+            client.ask('simulation.wait')
+            checked = 0
+            if example == 'regulator-supply':
+                state = client.step(.02)
+                unloaded = state['mixed']['regulators'][0]['output_voltage_v']
+                assert 4.99 < unloaded < 5
+                client.mutate('switch.set', {'id': 'S1', 'closed': True})
+                client.ask('simulation.wait')
+                state = client.step(.02)
+                loaded = state['mixed']['regulators'][0]['output_voltage_v']
+                assert 4.98 < loaded < unloaded
+                client.mutate('component.set', {'id': 'RLOAD', 'value': '10 Ω'})
+                client.mutate('simulation.restart')
+                client.ask('simulation.wait')
+                client.mutate('switch.set', {'id': 'S1', 'closed': True})
+                client.ask('simulation.wait')
+                state = client.step(.02)
+                reg = state['mixed']['regulators'][0]
+                assert reg['state'] == 'current limited' and reg['output_voltage_v'] < 1.1
+                assert reg['current_a'] <= .10000001 and reg['power_w'] > .6
+                checked = 3
+                probes = ['v:U1', 'i:U1', 'v:COUT']
+            else:
+                for _ in range(20):
+                    state = client.step(.05)
+                    vin = 6.5 + 2.5 * math.sin(2 * math.pi * state['mixed']['time_s'])
+                    for reg in state['mixed']['regulators']:
+                        dropout = .3 if reg['kind'] == 'ldo-regulator' else 2
+                        target = min(5, max(0, vin - dropout))
+                        current = reg['output_voltage_v'] * (.001 + 1e-9)
+                        required = reg['output_voltage_v'] + .2 * current / math.sqrt(1 - (current / .1)**2)
+                        assert abs(required - target) < 1e-6
+                        checked += 1
+                probes = ['v:U1', 'v:U2', 'i:U1', 'i:U2']
+            exports = capture_and_reopen(client, agent, assets, example, probes)
+            reports.append(dict(example=example, independently_checked_states=checked, exports=exports))
+        finally:
+            client.close()
+    return reports
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent', type=Path, required=True)
@@ -156,7 +205,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    report = dict(passed=True, transport='headless-stdio', buttons=buttons(args.agent, assets), comparators=comparators(args.agent, assets), relays=relays(args.agent, assets))
+    report = dict(passed=True, transport='headless-stdio', buttons=buttons(args.agent, assets), comparators=comparators(args.agent, assets), relays=relays(args.agent, assets), regulators=regulators(args.agent, assets))
     args.output.write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report))
 

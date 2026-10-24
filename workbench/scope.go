@@ -109,6 +109,15 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + ref, ref + " current", "A", ref, direction})
 			}
+		case "linear-regulator", "ldo-regulator":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " output / local ground", "V", p.ID + ".out", p.ID + ".gnd"}, Probe{"i:" + p.ID, p.ID + " delivered output current", "A", p.ID + ".out", "out of device"})
+			for _, pin := range p.Terminals {
+				direction := "into device"
+				if pin == "out" {
+					direction = "out of device"
+				}
+				out = append(out, Probe{"i:" + p.ID + "." + pin, p.ID + "." + pin + " current", "A", p.ID + "." + pin, direction})
+			}
 		case "relay":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " coil voltage", "V", p.ID + ".coil1", p.ID + ".coil2"}, Probe{"i:" + p.ID, p.ID + " coil current", "A", p.ID + ".coil1", p.ID + ".coil2"})
 			for _, pin := range p.Terminals {

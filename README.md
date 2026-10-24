@@ -328,3 +328,10 @@ clicks, contact bounce, manual decimal counting and an RC debounce comparison.
 
 [Comparators with hysteresis](docs/comparators.md) add threshold detection and
 an analog sine signal driving a clean digital counter clock.
+
+A [SPDT relay](docs/relays.md) adds a resistive/inductive coil, pickup/dropout
+hysteresis and isolated contacts, with pushbutton and pulse-driven transistor
+examples that show flyback current. [Linear and LDO regulators](docs/voltage-regulators.md)
+add finite load regulation, dropout and current limiting; examples compare
+headroom and capacitor charging/load steps. All eight new components use the
+ordinary placement, wiring, values, probes, simulation and project commands.

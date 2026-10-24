@@ -85,6 +85,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(ControlModel{}), "urn:elab:control-model:1"},
 	{reflect.TypeOf(ControlMemory{}), "urn:elab:control-memory:1"},
 	{reflect.TypeOf(ControlResult{}), "urn:elab:control-result:1"},
+	{reflect.TypeOf(RegulatorModel{}), "urn:elab:regulator-model:1"},
+	{reflect.TypeOf(RegulatorResult{}), "urn:elab:regulator-result:1"},
 	{reflect.TypeOf(DisplayModel{}), "urn:elab:display-model:1"},
 	{reflect.TypeOf(DisplayResult{}), "urn:elab:display-result:1"},
 	{reflect.TypeOf(SequentialModel{}), "urn:elab:sequential-model:1"},

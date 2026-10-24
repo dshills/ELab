@@ -69,6 +69,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "regulator-supply", Title: "Regulated supply and load", Question: "How does load change a regulated output?", Expected: "A 9 V input charges COUT toward 5 V. Closing S1 increases load and output droop; a 10 Ω RLOAD reaches the 100 mA current limit.", Try: "Plot output and regulator current, close S1, then change RLOAD from 100 Ω to 10 Ω. Inspect regulator power loss.", Limitation: VoltageRegulatorModel().Limitations},
+		{ID: "regulator-dropout", Title: "Linear versus LDO dropout", Question: "How much input headroom does a regulator need?", Expected: "Both target 5 V. As VIN falls, the standard regulator loses regulation below 7 V; the LDO below 5.3 V, with finite load droop.", Try: "Plot VIN, U1 and U2 outputs. Pause and step through a cycle; change the output setpoints or loads.", Limitation: VoltageRegulatorModel().Limitations},
 		{ID: "relay-switch", Title: "Pushbutton transistor relay", Question: "How can a transistor switch an isolated load?", Expected: "S1 energizes the 5 V coil through Q1; normally-open contacts switch a separate 9 V LED load. D2 carries flyback current after release.", Try: "Click S1, compare coil current and LED current, then change K1 inductance to change pickup/decay timing.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "relay-flasher", Title: "Relay coil and flyback protection", Question: "Where does the coil current go when its driver switches off?", Expected: "The coil current ramps up, pulls in the contacts, then decays through D2 after the transistor turns off. Contacts release below the dropout current.", Try: "Plot K1 current/voltage, Q1 collector and D2 current. Removing D2 can exceed the simulator voltage range; failed advances preserve committed state.", Limitation: ControlledDeviceModel().Limitations},
 		{ID: "comparator-threshold", Title: "Comparator threshold detector", Question: "How does hysteresis prevent repeated switching near a threshold?", Expected: "With 2.5 V reference and 200 mV hysteresis, output rises at 2.6 V and falls at 2.4 V.", Try: "Compare VIN, VREF and output. Edit hysteresis width or the reference and watch both switching thresholds.", Limitation: ControlledDeviceModel().Limitations},
@@ -116,6 +118,19 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "regulator-supply", "regulator-dropout":
+		d.graph = RegulatorSupplyExampleGraph()
+		d.settings.StepSeconds = .0005
+		d.settings.PlaybackSpeed = .05
+		d.probes = []string{"v:U1", "i:U1", "v:COUT"}
+		if id == "regulator-dropout" {
+			d.graph = RegulatorDropoutExampleGraph()
+			d.settings.StepSeconds = .005
+			d.settings.PlaybackSpeed = .5
+			d.probes = []string{"v:VIN.positive", "v:U1", "v:U2", "i:U1", "i:U2"}
+		}
+		d.selected = "U1"
+		d.view = View{Center: Point{X: 100, Y: 100}, Zoom: .7}
 	case "relay-switch", "relay-flasher":
 		d.graph = RelayExampleGraph(id == "relay-switch")
 		d.selected = "K1"

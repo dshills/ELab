@@ -65,6 +65,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.ControlModel != nil {
 		envelope["control_model"] = m.ControlModel
 	}
+	if m.RegulatorModel != nil {
+		envelope["regulator_model"] = m.RegulatorModel
+	}
 	if m.DisplayModel != nil {
 		envelope["display_model"] = m.DisplayModel
 	}
@@ -256,6 +259,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return err
 		}
 		if err := validateRecordedControls(c, m.Graph, r); err != nil {
+			return err
+		}
+		if err := validateRecordedRegulators(c, m.Graph, r); err != nil {
 			return err
 		}
 		if err := validateRecordedDisplays(c, m.Graph, r); err != nil {

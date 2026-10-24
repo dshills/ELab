@@ -65,6 +65,15 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		}
 	}
 	currents := map[string]float64{}
+	for _, u := range r.Regulators {
+		currents[u.ID] = u.Current
+		for k, i := range u.PinCurrents {
+			if k == 1 {
+				i = -i
+			}
+			currents[u.ID+"."+regulatorPins[k]] = i
+		}
+	}
 	for _, u := range r.Controls {
 		p, _ := compiled.MixedGraph.Component(u.ID)
 		for k, pin := range p.Terminals {

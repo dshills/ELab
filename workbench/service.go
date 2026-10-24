@@ -57,6 +57,7 @@ type Snapshot struct {
 	LogicModel             *LogicModel            `json:"logic_model,omitempty"`
 	SequentialModel        *SequentialModel       `json:"sequential_model,omitempty"`
 	DisplayModel           *DisplayModel          `json:"display_model,omitempty"`
+	RegulatorModel         *RegulatorModel        `json:"regulator_model,omitempty"`
 	ControlModel           *ControlModel          `json:"control_model,omitempty"`
 	Recording              *RecordingView         `json:"recording,omitempty"`
 	Recovery               RecoveryState          `json:"recovery"`
@@ -464,6 +465,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out.LogicModel = logicModelForGraph(graph)
 	out.SequentialModel = sequentialModelForGraph(graph)
 	out.DisplayModel = displayModelForGraph(graph)
+	out.RegulatorModel = regulatorModelForGraph(graph)
 	out.ControlModel = controlModelForGraph(graph)
 	out.LastExport = cloneArtifact(s.lastExport)
 	if len(s.undo) > 0 {
@@ -1168,6 +1170,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	if state.DisplayModel != nil {
 		m := *state.DisplayModel
 		state.DisplayModel = &m
+	}
+	if state.RegulatorModel != nil {
+		m := *state.RegulatorModel
+		state.RegulatorModel = &m
 	}
 	if state.ControlModel != nil {
 		m := *state.ControlModel

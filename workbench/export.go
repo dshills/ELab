@@ -213,6 +213,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	if model := controlModelForGraph(g); model != nil {
 		metadataFields["control_model"] = model
 	}
+	if model := regulatorModelForGraph(g); model != nil {
+		metadataFields["regulator_model"] = model
+	}
 	if model := displayModelForGraph(g); model != nil {
 		metadataFields["display_model"] = model
 	}
@@ -260,6 +263,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	for _, p := range g.Components {
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
 		switch p.Kind {
+		case "linear-regulator", "ldo-regulator":
+			for _, path := range RegulatorSymbolPaths() {
+				b.WriteString(`<polyline points="`)
+				for _, point := range path {
+					fmt.Fprintf(&b, "%g,%g ", point.X, point.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			for _, path := range ControlSymbolPaths(p.Kind, ControlMemory{}) {
 				b.WriteString(`<polyline points="`)
@@ -408,8 +419,8 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
 			}
 		}
-		if IsControlKind(p.Kind) {
-			for _, label := range ControlSymbolLabels(p) {
+		if IsControlKind(p.Kind) || IsRegulatorKind(p.Kind) {
+			for _, label := range append(ControlSymbolLabels(p), regulatorLabels(p)...) {
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10">%s</text>`, label.At.X, label.At.Y, html.EscapeString(label.Text))
 			}
 		}
@@ -532,6 +543,8 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · 555"
 		at := Timer555LabelPosition(p)
 		x, y = at.X, at.Y
+	case "linear-regulator", "ldo-regulator":
+		return p.Position.X + 125, p.Position.Y - 65, p.ID + " · " + FormatValue(p.Value, "V")
 	case "relay":
 		x, y = p.Position.X+125, p.Position.Y-110
 	case "comparator":

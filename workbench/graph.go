@@ -175,6 +175,8 @@ func libraryParts() []Part {
 		{Kind: "logic-xor", Name: "XOR gate", Terminals: logicPins("logic-xor"), Model: LogicModelID},
 		{Kind: "logic-xnor", Name: "XNOR gate", Terminals: logicPins("logic-xnor"), Model: LogicModelID},
 		{Kind: "relay", Name: "SPDT relay", Terminals: controlPins("relay"), DefaultValue: "100mH", Unit: "H", Model: ControlModelID},
+		{Kind: "linear-regulator", Name: "Linear voltage regulator", Terminals: append([]string{}, regulatorPins...), DefaultValue: "5 V", Unit: "V", Model: RegulatorModelID},
+		{Kind: "ldo-regulator", Name: "LDO voltage regulator", Terminals: append([]string{}, regulatorPins...), DefaultValue: "3.3 V", Unit: "V", Model: RegulatorModelID},
 		{Kind: "comparator", Name: "Comparator with hysteresis", Terminals: controlPins("comparator"), DefaultValue: "20 mV", Unit: "V", Model: ControlModelID},
 		{Kind: "opamp", Name: "Powered op-amp", Terminals: []string{"noninverting", "inverting", "out", "vplus", "vminus"}, Model: OpAmpModelID},
 		{Kind: "ground", Name: "Ground", Terminals: []string{"reference"}, DefaultValue: "", Unit: "", Model: "ground.v1"},
@@ -265,7 +267,7 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Label = text
 		return c, nil
 	}
-	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && c.Kind != "zener" && c.Kind != "comparator" && c.Kind != "relay" && !IsWaveformSource(c.Kind) {
+	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && c.Kind != "zener" && c.Kind != "comparator" && c.Kind != "relay" && !IsRegulatorKind(c.Kind) && !IsWaveformSource(c.Kind) {
 		return c, fmt.Errorf("this component has no editable value")
 	}
 	value, err := ParseValue(text, c.Unit)
@@ -365,6 +367,8 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
+	case "linear-regulator", "ldo-regulator":
+		p, found = RegulatorTerminalLocal(name)
 	case "relay", "comparator":
 		p, found = ControlTerminalLocal(c.Kind, name)
 	case "opamp":
@@ -486,7 +490,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		switch c.Kind {
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, c)
-		case "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
+		case "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true
