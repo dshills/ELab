@@ -60,7 +60,7 @@ func TestMountedPlacementOneClickUsesTypedCoordinate(t *testing.T) {
 	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "resistor"})
 	m := mountedPlacementControls(t, s)
 	before := s.service.Snapshot()
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range "120" {
 		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 	}
@@ -82,7 +82,7 @@ func TestMountedPlacementSequentialCoordinates(t *testing.T) {
 	m := mountedPlacementControls(t, s)
 	for _, field := range []struct{ id, text string }{{"position-x", "0"}, {"position-y", "-110"}} {
 		clickMountedControl(t, m, field.id)
-		m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+		m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 		for _, r := range field.text {
 			m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 		}
@@ -115,7 +115,7 @@ func TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent(t *testing.T) {
 			}
 			clickMountedControl(t, m, id)
 			before := s.service.Snapshot()
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, r := range text {
 				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 			}
@@ -159,7 +159,7 @@ func TestMountedPlacementHeldClickRefusesAgentAfterOwnCommit(t *testing.T) {
 	t.Cleanup(cleanup)
 	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "resistor"})
 	m := mountedPlacementControls(t, s)
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range "120" {
 		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 	}

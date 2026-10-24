@@ -53,7 +53,7 @@ func TestMountedOutputPageOneClickPreviewIncludesTypedMargin(t *testing.T) {
 	if *before.SchematicPage.MarginMM == 17 {
 		t.Fatal("fixture must change the margin")
 	}
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range "17" {
 		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 	}
@@ -101,7 +101,7 @@ func TestMountedOutputPageFitAndRefreshUseTypedMargin(t *testing.T) {
 			}
 			m := mountedOutputPage(t, s, control)
 			before := s.service.Snapshot()
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, r := range "17" {
 				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 			}
@@ -132,7 +132,7 @@ func TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit(t *testing.T) {
 				waitOutputPreview(t, s)
 			}
 			m := mountedOutputPage(t, s, control)
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, r := range "17" {
 				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 			}
@@ -176,7 +176,7 @@ func TestMountedOutputPagePreviewPixelsMatchPublicAgent(t *testing.T) {
 	agentAction(t, agent, "example.reset", workbench.ReplaceParams{})
 	m := mountedOutputPage(t, s, "print-preview")
 	before := s.service.Snapshot()
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range "17" {
 		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 	}

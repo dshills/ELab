@@ -56,7 +56,7 @@ func TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement(t *testin
 			}
 			before := s.service.Snapshot()
 			original := field()
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, ch := range []struct {
 				rune rune
 				code key.Codes
@@ -112,7 +112,7 @@ func TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement(t *testin
 			for _, kind := range []events.Types{events.MouseDown, events.MouseUp} {
 				m.input(cogent.ManualInput{Type: kind, Button: events.Left, Target: "value-entry", TargetIncarnation: current.Incarnation})
 			}
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, ch := range []struct {
 				rune rune
 				code key.Codes

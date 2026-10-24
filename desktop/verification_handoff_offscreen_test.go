@@ -57,7 +57,7 @@ func TestMountedVerificationStartUsesUnfinishedDuration(t *testing.T) {
 	agentAction(t, s.service, "simulation.restart", struct{}{})
 	m := mountedVerificationStart(t, s)
 	before := s.service.Snapshot()
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range "200 ms" {
 		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 	}
@@ -101,7 +101,7 @@ func TestMountedVerificationFieldsMatchAgentCapture(t *testing.T) {
 			before := s.service.Snapshot()
 			if edit.id == "verify-initial" || edit.id == "verify-cap-C1" {
 				clickMountedControl(t, m, edit.id)
-				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 				code := key.Code2
 				if edit.text == "3" {
 					code = key.Code3

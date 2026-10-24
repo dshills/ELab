@@ -42,7 +42,7 @@ func mountedRecordedPlay(t *testing.T, s *screen, focus string) *mountedControlW
 
 func typeRecordedPlay(t *testing.T, m *mountedControlWindow, text string) {
 	t.Helper()
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range text {
 		code := key.CodeUnknown
 		switch {

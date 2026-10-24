@@ -88,7 +88,7 @@ replace those preserved downloads. [Repair and evidence](../../research/85-discl
 
 ## Per-window backgrounds and stable divider grips
 
-The active source is `a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a`, with the
+That repair's source is `a4ae0319ec1f1ed1ec5f85aee825af893a2a4f8a`, with the
 [complete compatibility patch](patches/elab-public-e58d405-window-background-and-divider-compat.patch),
 `vellum-e58d405-elab8.tar.gz` and `build/.vellum-sdk-e58d405-elab8`.
 Each host scene follows its managed root's opaque background without changing
@@ -107,6 +107,29 @@ bootstrap sources are unchanged. Previous archives/caches remain preserved.
 These are local compatibility repairs from the same public base. Source and
 offscreen checks do not replace fresh native acceptance or the qualified /205
 download. [Repair and evidence](../../research/86-window-background-and-divider-grip.md).
+
+## Text-field Undo boundary
+
+The active source is `8b8eb73bff531e911448236a576c704c5da97db2`, with the
+[complete compatibility patch](patches/elab-public-e58d405-text-undo-boundary-compat.patch),
+`vellum-e58d405-elab9.tar.gz` and `build/.vellum-sdk-e58d405-elab9`.
+Compatibility stage 0109 preserves initial text and selection when the field's
+Undo history is empty or exhausted. Normal Undo/Redo and a new edit after Undo
+are covered, including Unicode text. Existing text/IME/native-edit tests pass.
+
+Two preparation tests now locate historical stages by identifier while retaining
+their checksum assertions and requiring all 109 stages in order. Nine exported
+members change, including five additions; every other member and all six
+bootstrap sources match elab8. The export comparison refused generated golden
+images from a supplemental upstream test run before the lock was changed.
+The final archive uses dependencies re-prepared from the pinned recipe.
+
+The framework's root/driver race and vet checks, normal and offscreen, pass.
+A supplemental full upstream Core race suite reports existing render/menu
+races with both original and changed text-field sources; that separate suite
+is not claimed green. Previous archives/caches and the qualified /205 download
+are preserved. Fresh native acceptance remains separate.
+[Repair and evidence](../../research/93-text-undo-boundary.md).
 
 The exporter still marks SDK artifacts as private builds because public SDK/distribution qualification remains incomplete. **Public source availability is distinct from a qualified public SDK release.** MIT licensing, upstream notices, `SDK_MANIFEST.json` and `PRIVATE_BUILD.txt` remain included. Existing archives/caches, app bundles and their historical validation are unchanged. This dependency update does not qualify or replace the /189 owner app or /193 candidate.
 

@@ -67,7 +67,7 @@ func TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft(t *testing.T) {
 			m := mountedInspectorControl(t, s, "pot-wiper-exact")
 			original := mountedControlElement(t, m, "pot-wiper-exact")
 			before := s.service.Snapshot()
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, ch := range []struct {
 				rune rune
 				code key.Codes
@@ -112,7 +112,7 @@ func TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft(t *testing.T) {
 				for _, kind := range []events.Types{events.MouseDown, events.MouseUp} {
 					m.input(cogent.ManualInput{Type: kind, Button: events.Left, Target: field.ID, TargetIncarnation: field.Incarnation})
 				}
-				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: '6', Code: key.Code6})
 				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: '0', Code: key.Code0})
 				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
@@ -255,7 +255,7 @@ func TestMountedButtonOwnerPreservesSingleClickValueApply(t *testing.T) {
 		return cogent.SettleTextField(m.ctx, s.app, "main", id, done)
 	}
 	before := s.service.Snapshot()
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, ch := range []struct {
 		rune rune
 		code key.Codes

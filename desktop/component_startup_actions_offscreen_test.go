@@ -72,7 +72,7 @@ func TestMountedComponentStartupOneClick(t *testing.T) {
 			prepareComponentStartup(t, s, fixture.kind)
 			m := mountedComponentStartup(t, s, fixture.kind)
 			before := s.service.Snapshot()
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, r := range fixture.draft {
 				code := key.CodeUnknown
 				if fixture.kind == "capacitor" {
@@ -128,7 +128,7 @@ func TestMountedComponentStartupDescriptorAndDiscard(t *testing.T) {
 						action = "cap-initial-default"
 					}
 				}
-				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 				text := "30 mA"
 				if kind == "capacitor" {
 					text = "3"
@@ -172,7 +172,7 @@ func TestMountedComponentStartupDescriptorAndDiscard(t *testing.T) {
 				}
 				clickMountedControl(t, m, field)
 				original := mountedControlElement(t, m, field)
-				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 				invalid := "20 mV"
 				if kind == "capacitor" {
 					invalid = "-"
@@ -352,7 +352,7 @@ func TestMountedComponentStartupMatchesPublicAgent(t *testing.T) {
 					typeMountedCursor(t, m, field, "30 mA")
 				} else {
 					clickMountedControl(t, m, field)
-					m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+					m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 					m.input(cogent.ManualInput{Type: events.KeyChord, Rune: '3', Code: key.Code3})
 				}
 				agentAction(t, reference, command, workbench.ValueParams{ID: id, Value: draft})

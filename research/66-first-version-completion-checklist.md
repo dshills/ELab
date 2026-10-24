@@ -1,7 +1,14 @@
 # First-version release checklist
 
-Updated October 23, 2026. **ELab 0.181.3 /204 is the current first usable private
-macOS release in the owner-selected unsigned channel.** [Handoff](79-first-version-release-closeout.md),
+Updated October 23, 2026. **ELab 0.181.4 /205 is the current maintenance download
+in the owner-selected unsigned channel.** [Current repair and qualification](81-component-value-guidance.md),
+[app](../build/releases/ELab-0.181.4-macos-arm64/ELab.app),
+[ZIP](../build/releases/ELab-0.181.4-macos-arm64.zip).
+The original first-usable /204 closeout remains preserved below, with its exact
+historical evidence and scope. /207–/216 maintenance candidates are held for
+fresh native acceptance and do not replace the current download.
+
+**Preserved /204 closeout:** [Handoff](79-first-version-release-closeout.md),
 [final evidence](../docs/validation/first-version-completion-204/README.md),
 [app](../build/releases/ELab-0.181.3-macos-arm64/ELab.app),
 [ZIP](../build/releases/ELab-0.181.3-macos-arm64.zip).

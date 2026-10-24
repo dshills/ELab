@@ -58,7 +58,7 @@ func typeMountedCursor(t *testing.T, m *mountedControlWindow, id, text string) {
 	if m.snapshot().FocusedID != id {
 		t.Fatal("cursor field did not receive pointer focus", id)
 	}
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range text {
 		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 	}

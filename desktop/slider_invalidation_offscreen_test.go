@@ -19,6 +19,7 @@ import (
 	"cogentcore.org/core/core"
 	"cogentcore.org/core/events"
 	"cogentcore.org/core/events/key"
+	"cogentcore.org/core/keymap"
 	"cogentcore.org/core/text/fonts"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
@@ -95,8 +96,12 @@ func newMountedControlWindow(t *testing.T, s *screen, view func() ui.Node) *moun
 	return newMountedControlWindowSize(t, s, view, 520, 180, theme)
 }
 
-func newMountedControlWindowSize(t *testing.T, s *screen, view func() ui.Node, width, height float32, theme ui.Theme) *mountedControlWindow {
+func newMountedControlWindowSize(t *testing.T, s *screen, view func() ui.Node, width, height float32, theme ui.Theme, configure ...func(*cogent.ManualConfig)) *mountedControlWindow {
 	t.Helper()
+	// The offscreen system selects LinuxStandard at package initialization.
+	// ELab's macOS fixtures must exercise actual Command modifier mappings.
+	previousMap, previousMapName := keymap.ActiveMap, keymap.ActiveMapName
+	t.Cleanup(func() { keymap.SetActiveMap(previousMap, previousMapName) })
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	t.Cleanup(cancel)
 	if _, err := s.service.Wait(ctx); err != nil {
@@ -117,6 +122,9 @@ func newMountedControlWindowSize(t *testing.T, s *screen, view func() ui.Node, w
 	t.Cleanup(executor.Close)
 	config := cogent.ManualConfig{Clock: clock, Executor: executor, LogicalDPI: 160, OwnerBatch: 7, EventCapacity: 128, MaxWindows: 1}
 	config.Theme = theme
+	for _, apply := range configure {
+		apply(&config)
+	}
 	if err := fs.WalkDir(fonts.Default, ".", func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -148,6 +156,7 @@ func newMountedControlWindowSize(t *testing.T, s *screen, view func() ui.Node, w
 	m := &mountedControlWindow{t: t, ctx: ctx, screen: s, manual: manual, clock: clock}
 	m.settle()
 	m.window = m.snapshot()
+	keymap.SetActiveMapName("MacStandard")
 	return m
 }
 

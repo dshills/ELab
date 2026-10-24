@@ -57,7 +57,7 @@ func TestMountedButtonOwnerGeometrySettlesValueDraft(t *testing.T) {
 				prepareGeometryPart(t, reference, kind)
 				m := mountedValuePreset(t, s, control)
 				before := s.service.Snapshot()
-				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+				m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 				// Drafts, including invalid values, are not configured component values.
 				draft := "unfinished value"
 				for _, r := range draft {
@@ -97,7 +97,7 @@ func TestMountedButtonOwnerGeometryRefusesAgentAfterDraft(t *testing.T) {
 			t.Cleanup(cleanup)
 			prepareGeometryPart(t, s.service, "resistor")
 			m := mountedValuePreset(t, s, control)
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, r := range "9k" {
 				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 			}

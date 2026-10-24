@@ -59,7 +59,7 @@ func TestMountedButtonOwnerValuePresetsSettleOwnDraft(t *testing.T) {
 			want := reference.Snapshot().Components
 			m := mountedValuePreset(t, s, fixture.preset)
 			before := s.service.Snapshot()
-			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 			for _, r := range fixture.draft {
 				m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 			}
@@ -90,7 +90,7 @@ func TestMountedButtonOwnerValuePresetRefusesAgentAfterDraft(t *testing.T) {
 	t.Cleanup(cleanup)
 	prepareValuePreset(t, s)
 	m := mountedValuePreset(t, s, "r-2k")
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, r := range "9k" {
 		m.input(cogent.ManualInput{Type: events.KeyChord, Rune: r})
 	}

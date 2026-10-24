@@ -27,7 +27,7 @@ func TestMountedNumericOwnerRecordedIndexRefusesFractionAndCorrects(t *testing.T
 		return root
 	})
 	before := s.service.Snapshot()
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	for _, edit := range []struct {
 		r rune
 		c key.Codes
@@ -44,7 +44,7 @@ func TestMountedNumericOwnerRecordedIndexRefusesFractionAndCorrects(t *testing.T
 	// Explicitly refocus: correction must work, not merely appear protected
 	// because Enter moved focus away from the rejected field.
 	clickMountedControl(t, m, "recorded-index")
-	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: key.Meta})
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeA, Modifiers: 1 << key.Meta})
 	m.input(cogent.ManualInput{Type: events.KeyChord, Rune: '3', Code: key.Code3})
 	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
 	after := s.service.Snapshot()
