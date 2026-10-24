@@ -1,0 +1,24 @@
+{
+  "candidate": "ELab 0.188.2 /244",
+  "source_commit": "3275ca58ede8a59d6ae7b13f8b006068730ca066",
+  "method": "CUA native menus, mouse and owned window screenshots",
+  "passed": true,
+  "checks": [
+    "All components category reports 42; Amplifiers / ICs reports four",
+    "Linear and LDO browser symbols are visually distinct",
+    "LDO schematic has the distinguishing glyph; IN/OUT/GND labels appear in native and exported diagrams",
+    "Regulator inspector exposes Plot in/out/gnd/output voltage and delivered output current",
+    "Live standard/LDO example shows different dropout traces",
+    "555-driven counter visibly displays 8 with all seven segments lit, agreeing with U2=8 at t=6.475 s; scope shows timing-capacitor charging and clock switching"
+  ],
+  "screenshots": [
+    "ui/09-final-regulator-browser.png",
+    "ui/10-final-regulator.png",
+    "ui/11-final-counter.png"
+  ],
+  "app_left_open": "/Users/dshills/Development/projects/ELab/build/ELab-0.188.2-244-Components/ELab.app",
+  "open_example": "555-driven digit counter",
+  "theme": "Apollo",
+  "user_projects_modified": false,
+  "owned_previous_test_session_closed_normally": true
+}

@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "candidate": "ELab 0.188.2 /244",
+  "source_commit": "3275ca58ede8a59d6ae7b13f8b006068730ca066",
+  "new_components": [
+    "bcd-decoder",
+    "seven-segment",
+    "pushbutton",
+    "bouncing-pushbutton",
+    "comparator",
+    "relay",
+    "linear-regulator",
+    "ldo-regulator"
+  ],
+  "new_examples": [
+    "display-counter",
+    "button-counter",
+    "button-debounce",
+    "comparator-threshold",
+    "comparator-counter",
+    "relay-switch",
+    "relay-flasher",
+    "regulator-supply",
+    "regulator-dropout"
+  ],
+  "root_race_passed": true,
+  "desktop": {
+    "log": "../build/component-expansion/desktop-race-final.jsonl",
+    "passed": true,
+    "top_level_passed": 312,
+    "passed_including_subtests": 731,
+    "failed": [],
+    "skipped": [],
+    "packages": [
+      {
+        "package": "github.com/dshills/elab/desktop",
+        "result": "pass",
+        "elapsed": 508.247
+      }
+    ]
+  },
+  "offscreen_desktop": {
+    "log": "../build/component-expansion/desktop-offscreen-race-final.jsonl",
+    "passed": true,
+    "top_level_passed": 428,
+    "passed_including_subtests": 1275,
+    "failed": [],
+    "skipped": [],
+    "packages": [
+      {
+        "package": "github.com/dshills/elab/desktop",
+        "result": "pass",
+        "elapsed": 790.002
+      }
+    ]
+  },
+  "quality": [
+    "goimports",
+    "staticcheck",
+    "root/native/offscreen go vet",
+    "67 Python tests",
+    "27-requirement coverage audit",
+    "native command source inventory"
+  ],
+  "shared_commands": true,
+  "public_commands": 168,
+  "native_source_sites": 406,
+  "simulation_limits_unchanged": true,
+  "original_integration_attempts": 512,
+  "original_integration_wall_ms": 100,
+  "package": {
+    "source_commit": "3275ca58ede8a59d6ae7b13f8b006068730ca066",
+    "app": "/Users/dshills/Development/projects/ELab/build/ELab-0.188.2-244-Components/ELab.app",
+    "agent": "/Users/dshills/Development/projects/ELab/build/ELab-0.188.2-244-Components/elab-agent",
+    "native_sha256": "96777ffbe7de62ae9b29c41a1b5864603151a2d7dad6bfa9d8b614b3c06b7b7a",
+    "agent_sha256": "a3f7df48e8d51f5b9fef65279fa74902a1b7570db094dcbbf8bd556dfaa6bc50",
+    "clean_source": true,
+    "strict_signature_valid": true,
+    "ad_hoc_signed": true,
+    "graphical_app_launched": false,
+    "release_promoted": false,
+    "preserved_release_unchanged": true
+  },
+  "original_release_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "developer_id_signed": false,
+  "notarized": false,
+  "distribution_requalification_claimed": false,
+  "model_scope": "Generic educational functional models; electrical equations/state machines validated, no independent SPICE/hardware qualification",
+  "native_final_receipt": "native-final.json"
+}

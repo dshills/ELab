@@ -1,0 +1,116 @@
+Window: "ELab · Live electronics", App: ELab.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 container node:ZG9jdW1lbnQtdGl0bGU
+				4 text (settable) Untitled circuit, ID: node:dGl0bGU
+				5 text (settable) ELab, ID: node:ZG9jdW1lbnQtc3VidGl0bGU
+			6 toolbar node:dG9vbGJhcg
+				7 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				8 button Save, ID: node:ZmlsZS5zYXZl
+				9 row node:dG9vbGJhci1kaXZpZGVyLWZpbGUuc2F2ZQ
+				10 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				11 row node:dG9vbGJhci1kaXZpZGVyLWV4YW1wbGVzLW1lbnU
+				12 button (disabled) Undo, ID: node:ZWRpdC51bmRv
+				13 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				14 row node:dG9vbGJhci1kaXZpZGVyLWVkaXQucmVkbw
+				15 button Appearance theme, Help: Current choice: Apollo. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			16 text (settable) Building · live simulation ready, ID: node:c3RhdHVz
+			17 toolbar node:c2ltdWxhdGlvbi10b29sYmFy
+				18 button Pause, ID: node:c2ltdWxhdGlvbi5wYXVzZQ
+		19 row node:d29ya3NwYWNl
+			20 scroll area node:cGFydHMtc2Nyb2xs
+				21 container node:cGFsZXR0ZQ
+					22 text (settable) Components, ID: node:cGFydHMtdGl0bGU
+					23 button Component category, ID: node:cGFydC1jYXRlZ29yeQ, Help: Common holds six everyday parts. Choosing a category clears search. Current choice: Amplifiers / ICs · 4 ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+					24 text (settable) Search all components, ID: node:cGFydC1zZWFyY2gtbGFiZWw
+					25 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g
+					26 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+						27 row (settable, boolean) Linear voltage regulator, Value: off, ID: option:cGFydC1saXN0:bGluZWFyLXJlZ3VsYXRvcg
+						28 row (settable, boolean) LDO voltage regulator, Value: off, ID: option:cGFydC1saXN0:bGRvLXJlZ3VsYXRvcg
+						29 row (settable, boolean) Comparator with hysteresis, Value: off, ID: option:cGFydC1saXN0:Y29tcGFyYXRvcg
+						30 row (settable, boolean) Powered op-amp, Value: off, ID: option:cGFydC1saXN0:b3BhbXA
+					31 text (settable) 4 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
+					32 button (disabled) Connect by name, ID: node:d2lyZS1ieS1uYW1l
+			33 container node:c2NoZW1hdGljLXBhbmVs
+				34 toolbar node:dG9vbHM
+					35 row Drawing mode, ID: node:ZHJhd2luZy1tb2RlLXRhYnM
+						36 button Select, Help: Selected drawing mode., ID: node:dG9vbC1zZWxlY3Q
+						37 button Wire, ID: node:dG9vbC13aXJl
+						38 button Pan, ID: node:dG9vbC1wYW4
+					39 row node:ZHJhd2luZy1hY3Rpb25z
+						40 button Cancel, ID: node:ZHJhd2luZy5jYW5jZWw, Help: Cancel an unfinished wire or component placement and return to Select mode. Existing components and wires are kept. Shortcut: Escape.
+						41 row node:dG9vbC1zcGFjZXI
+						42 button DC sweep, ID: node:c3dlZXAtb3Blbg
+						43 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning.
+				44 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+				45 text (settable) Place a DC source, resistor, red LED, and ground to build the LED circuit., ID: node:bWVzc2FnZXM
+			46 container node:aW5zcGVjdG9yLXJhaWw
+				47 row node:aW5zcGVjdG9yLW5hdmlnYXRpb24tdG9wLXNwYWNl
+				48 toolbar Inspector section, ID: node:aW5zcGVjdG9yLW5hdmlnYXRpb24
+					49 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWNvbXBvbmVudA
+						50 button Inspect inspector, Help: Selected inspector section., ID: node:aW5zcGVjdG9yLXNlY3Rpb24tY29tcG9uZW50
+						51 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItY29tcG9uZW50
+					52 container node:aW5zcGVjdG9yLXRhYi1jZWxsLXNpbXVsYXRpb24
+						53 button Simulate inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tc2ltdWxhdGlvbg
+						54 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3Itc2ltdWxhdGlvbg
+					55 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWRvY3VtZW50
+						56 button Document inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tZG9jdW1lbnQ
+						57 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItZG9jdW1lbnQ
+				58 scroll area node:c2lkZWJhci0xLWNvbXBvbmVudA
+					59 container node:c2lkZWJhci1jb250ZW50
+						60 container Object inspector, ID: node:aW5zcGVjdG9yLWdyb3VwLW9iamVjdA
+							61 text (settable) Inspector, ID: node:aW5zcGVjdG9yLXRpdGxl
+							62 button Selected object, ID: node:c2VsZWN0aW9u, Help: Current choice: Choose an object… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+							63 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
+								64 button (disabled) Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+								65 button (disabled) Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+								66 button (disabled) Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
+							67 text (settable) Explore your circuit, ID: node:bm90aGluZy1zZWxlY3RlZA
+							68 text (settable) Select a component to edit its value, rotate it, or see its terminals., ID: node:aW5zcGVjdGlvbi1oZWxw
+						69 container Live measurements, ID: node:aW5zcGVjdG9yLWdyb3VwLW1lYXN1cmVtZW50cw
+							70 text (settable) Live measurements, ID: node:bWVhc3VyZW1lbnQtdGl0bGU
+							71 text (settable) Plot adds a trace, replacing the last if six are shown. Pin keeps a reading on the sheet., ID: node:bWVhc3VyZW1lbnQtaGVscA
+							72 button Inspect named terminal voltage, ID: node:aW5zcGVjdC10ZXJtaW5hbA, Help: Current choice: Measure a terminal… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+							73 button Inspect named electrical net, ID: node:aW5zcGVjdC1uZXQ, Help: Current choice: Measure a net… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+							74 button Inspect voltage or current probe, ID: node:aW5zcGVjdC1wcm9iZQ, Help: Current choice: Measure voltage/current… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+							75 text (settable) ID: node:bWVhc3VyZW1lbnQtZW1wdHk, Select a component, terminal or wire to inspect. Wires show their net voltage; current cues require a uniquely determined wire current.
+						76 container Pinned readings, ID: node:aW5zcGVjdG9yLWdyb3VwLXBpbm5lZA
+							77 text (settable) Pinned live readings, ID: node:cGlubmVkLXJlYWRpbmdzLXRpdGxl
+							78 text (settable) ID: node:cGlubmVkLXJlYWRpbmdzLWhlbHA, Pin up to eight voltage/current readings, then drag a card on the sheet or edit X / Y. Readings always follow the live circuit.
+							79 button Pin a live voltage or current reading, ID: node:cGluLXJlYWRpbmctcHJvYmU, Help: Current choice: Pin a reading… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						80 container Circuit guidance, ID: node:aW5zcGVjdG9yLWdyb3VwLWd1aWRhbmNl
+							81 text (settable) Circuit guidance, ID: node:ZGlhZ25vc3RpYy10aXRsZQ
+							82 text (settable) Place a DC source, resistor, red LED, and ground to build the LED circuit., ID: node:ZGlhZ25vc3RpYy0wLXN1bW1hcnk
+							83 text (settable) Place the missing parts and connect their named terminals; the drawing stays editable., ID: node:ZGlhZ25vc3RpYy0wLWFjdGlvbg
+							84 container Show diagnostic technical details, ID: node:ZGlhZ25vc3RpYy1kZXRhaWxz
+								85 disclosure triangle (settable, boolean) Show diagnostic technical details, Value: off, ID: disclosure:ZGlhZ25vc3RpYy1kZXRhaWxz
+		86 row node:cmVhZGluZ3M
+			87 container node:Y3VycmVudA
+				88 text (settable) LED current, ID: node:Y3VycmVudC10aXRsZQ
+				89 text (settable) —, ID: node:Y3VycmVudC12YWx1ZQ
+			90 container node:dm9sdGFnZQ
+				91 text (settable) LED voltage, ID: node:dm9sdGFnZS10aXRsZQ
+				92 text (settable) —, ID: node:dm9sdGFnZS12YWx1ZQ
+			93 container node:cG93ZXI
+				94 text (settable) LED power, ID: node:cG93ZXItdGl0bGU
+				95 text (settable) —, ID: node:cG93ZXItdmFsdWU
+			96 container node:c2ltdWxhdGlvbi1pbmZv
+				97 text (settable) Live simulation, ID: node:c2ltdWxhdGlvbi10aXRsZQ
+				98 text (settable) Complete the circuit to start, ID: node:cmVhZGluZy1zdGF0dXM
+		99 row node:Zm9vdGVyLXJvdw
+			100 text (settable) 0 components · 0 wires, Help: Untitled circuit · 0 components · 0 wires · last change: user, ID: node:Zm9vdGVy
+			101 row node:Zm9vdGVyLXNwYWNlcg
+			102 text (settable) 100%, ID: node:em9vbQ
+			103 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	104 close button
+	105 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	106 minimize button
+	107 text ELab · Live electronics
+108 menu bar
+	109 ELab
+	110 File
+	111 Examples
+	112 Appearance
+
+The focused UI element is 25 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g

@@ -27,9 +27,29 @@ The first broad desktop run (`desktop-race.txt`) found the duplicate LDO icon
 and an existing scope test that did not await asynchronous Step completion.
 Its fixture now restarts at zero and awaits Step; the exact picosecond endpoint
 and scope behavior pass three repeated focused race runs. No simulation
-limits/tolerances were changed. Isolated full regression receipts are pending.
+limits/tolerances were changed. The isolated full root race suite subsequently passes. The complete standard desktop suite passes 312 top-level tests /731 including subtests in 508.247 seconds. The complete mounted-control suite also passes; exact counts and duration are recorded in [report.json](report.json) and its linked raw logs. Neither suite skips tests. Both complete suites retain their 30-minute runner timeout, and production simulation guards remain 512 integration attempts /100 ms per sample.
 
 Generic models are functional teaching models, not fitted IC/package ratings,
 independent SPICE validation or hardware measurements. The qualified /205
 unsigned private-alpha archive remains preserved; these are development
 candidates, not a new distribution qualification.
+
+
+## Final candidate
+
+ELab **0.188.2 /244** is built from clean committed source; its exact revision,
+binary hashes, strict ad-hoc signature result and preserved release checksum
+are in [the final build receipt](final-build-final-result.json). It includes
+the relay trace-energy correction, distinct LDO browser/schematic glyph and
+terminal-specific plot button names. Final packaged replays pass every new
+example again; see [controls](final-controls-stdio.json) and
+[display](final-display-stdio.json). [Final native checks](native-final.json)
+record the updated browser and live counter. The app is at
+`build/ELab-0.188.2-244-Components/ELab.app`.
+
+Goimports/staticcheck, root and both desktop vets, Python tests, the existing
+27-requirement coverage audit and native source inventory pass. The inventory
+remains 168 public commands /406 sites /136 literal routes /82 production
+desktop sources. New components use the ordinary editing/simulation/probe/IO
+API; buttons add explicit `button.set` and `button.click`. Native commands and
+agents call the same service. No new user review or permissions are pending.
