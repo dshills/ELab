@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "native_session": "owned /206",
+  "native_observations": 5,
+  "source_comparison": {
+    "old_native_source": "4010b891b66fc56d57ffd879a6a2ee6aa86ebfd4",
+    "source_files_equal": {
+      "desktop/workspace.go": true,
+      "desktop/scope.go": true,
+      "desktop/canvas.go": true,
+      "desktop/pointer_darwin.go": true,
+      "desktop/pointer_darwin.m": true
+    },
+    "current_parent_commit": "58c3857bb47aa6e0d65c5a3d137e7c093ef37135",
+    "framework_files_equal_from_elab6_to_elab11": {
+      "drivers/cogent/mesh_canvas.go": true,
+      "drivers/cogent/build/upstream/core/frame.go": true
+    }
+  },
+  "scope_full_public_snapshot_exact": true,
+  "schematic_zoom_changes_only": [
+    "view",
+    "revision",
+    "command_revision",
+    "last_actor"
+  ],
+  "schematic_zoom_before": 0.44376899696034344,
+  "schematic_zoom_after": 0.987626065531294,
+  "reverse_zoom_max_absolute_coordinate_error": 2.842170943040401e-14,
+  "reverse_zoom_tolerance": 1e-12,
+  "whole_snapshot_restored": false,
+  "circuit_physics_history_and_document_exact": true,
+  "fixture_files_unchanged": true,
+  "routing_test_cases": 3,
+  "focused_race_seconds": 1.747,
+  "staticcheck_passed": true,
+  "vet_passed": true,
+  "prior_qualification_inputs_unchanged": 889,
+  "added_test_file": "desktop/scope_scroll_routing_test.go",
+  "added_test_sha256": "c6fb8dd9a4aaa21882d23c31cc2cd2d1db58c92660f00e2651a03d01db99ef9d",
+  "product_source_changed": false,
+  "sdk_changed": false,
+  "new_candidate_built": false,
+  "graphical_app_launched": false,
+  "owner_review_required": false,
+  "current_candidate": "/219 held",
+  "preserved_download": "0.181.4 /205",
+  "raw_archive_sha256": "0eff5e23aeb2ae28e1c91be1e6a84d8869db237f8118c4d4dd46ffc1b0d3277f",
+  "raw_members": 26,
+  "limitations": "Five observations on the existing paused single-frame live scope and schematic, with unchanged wheel-routing sources. This does not qualify every gesture, new candidate window or accumulated native repairs."
+}

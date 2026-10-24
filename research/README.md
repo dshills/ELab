@@ -95,3 +95,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Verification output-step boundary](96-verification-output-grid.md): repair the false refusal of 1 ms at 1 µs by counting the represented worker grid, preserving distinct final intervals and the existing limits. Focused regressions, full quality and clean /218 matching-agent grid/storage checks pass; native acceptance remains separate.
 
 - [Sliders and pane scrolling](97-slider-wheel.md): old-native/current-source reproduction of accidental wiper edits, normal text/selector/thumb checks, and a narrow managed-slider repair. The elab11 pin, full quality and clean /219 public-actuation/capture checks pass; fresh native acceptance remains separate.
+
+- [Scope scrolling and schematic zoom](98-plot-wheel-validation.md): unchanged native plot-wheel paths preserve circuit state, with a focused routing/flag-restoration regression. No product or package change; /219's separate native acceptance list remains open.

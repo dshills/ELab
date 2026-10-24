@@ -189,3 +189,15 @@ immutable capture, dirty-work refusal and saved reopen. Headless workers join
 and exit normally. The original /218 package and qualified /205 download remain
 preserved. Changed-candidate native acceptance remains separate; owner review
 is not a prerequisite and no new launch or unattended confirmation is queued.
+
+## Checkpoint: plot wheel routing
+
+[Five native plot observations](98-plot-wheel-validation.md) verify that wheel
+input over the scope scrolls its dock without changing any public state, while
+schematic wheel input zooms presentation only. Reverse zoom returns within
+1e-12; physical state, graph, history, dirty state and fixture files stay exact.
+The relevant app and framework sources match the old native build. Three new
+race-tested routing/temporary-flag cases, staticcheck and vet pass. No product,
+SDK or package changes are needed, and /219's separate native repairs remain
+pending. Continue electronics and shared state-contract checks after this UI
+round, without repeating successful unaffected native paths.
