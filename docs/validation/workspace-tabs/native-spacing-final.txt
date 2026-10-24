@@ -1,0 +1,26 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions
+=== RUN   TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/light
+    workspace_tabs_offscreen_test.go:71: component cell=(753,22)-(841,56) action=(753,22)-(841,52) indicator=(753,54)-(841,56) visible=true
+    workspace_tabs_offscreen_test.go:71: simulation cell=(841,22)-(929,56) action=(841,22)-(929,52) indicator=(841,54)-(929,56) visible=true
+    workspace_tabs_offscreen_test.go:71: document cell=(929,22)-(1017,56) action=(929,22)-(1017,52) indicator=(929,54)-(1017,56) visible=true
+=== RUN   TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/dark
+    workspace_tabs_offscreen_test.go:71: component cell=(753,22)-(841,56) action=(753,22)-(841,52) indicator=(753,54)-(841,56) visible=true
+    workspace_tabs_offscreen_test.go:71: simulation cell=(841,22)-(929,56) action=(841,22)-(929,52) indicator=(841,54)-(929,56) visible=true
+    workspace_tabs_offscreen_test.go:71: document cell=(929,22)-(1017,56) action=(929,22)-(1017,52) indicator=(929,54)-(1017,56) visible=true
+=== RUN   TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/system
+    workspace_tabs_offscreen_test.go:71: component cell=(753,22)-(841,56) action=(753,22)-(841,52) indicator=(753,54)-(841,56) visible=true
+    workspace_tabs_offscreen_test.go:71: simulation cell=(841,22)-(929,56) action=(841,22)-(929,52) indicator=(841,54)-(929,56) visible=true
+    workspace_tabs_offscreen_test.go:71: document cell=(929,22)-(1017,56) action=(929,22)-(1017,52) indicator=(929,54)-(1017,56) visible=true
+=== RUN   TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/apollo
+    workspace_tabs_offscreen_test.go:71: component cell=(753,22)-(841,56) action=(753,22)-(841,52) indicator=(753,54)-(841,56) visible=true
+    workspace_tabs_offscreen_test.go:71: simulation cell=(841,22)-(929,56) action=(841,22)-(929,52) indicator=(841,54)-(929,56) visible=true
+    workspace_tabs_offscreen_test.go:71: document cell=(929,22)-(1017,56) action=(929,22)-(1017,52) indicator=(929,54)-(1017,56) visible=true
+--- PASS: TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions (5.34s)
+    --- PASS: TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/light (1.35s)
+    --- PASS: TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/dark (1.34s)
+    --- PASS: TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/system (1.36s)
+    --- PASS: TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/apollo (1.29s)
+PASS
+ok  	github.com/dshills/elab/desktop	7.023s

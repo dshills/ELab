@@ -128,8 +128,11 @@ func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node) ui.No
 			}
 			actions = append(actions, inspectorTabCell(action, item.id, state.InspectorSection == item.id))
 		}
-		header := ui.Node{ID: "inspector-navigation", Kind: ui.Toolbar, Style: ui.Style{Background: ui.Some(paper), Padding: ui.Some(ui.Insets{Top: 14, Left: 16, Right: 16, Bottom: 2}), Gap: ui.Some(float32(0)), MinSize: ui.Some(ui.Size{Height: 34}), MaxSize: ui.Some(ui.Size{Height: 34})}, Accessibility: ui.Accessibility{Name: "Inspector section"}, Children: actions}
-		children = append([]ui.Node{header}, children...)
+		// Keep vertical spacing outside the height-constrained toolbar. Native
+		// sibling allocation otherwise lets the scrolling form cover its underline.
+		inset := ui.Node{ID: "inspector-navigation-top-space", Kind: ui.Row, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 14}), MaxSize: ui.Some(ui.Size{Height: 14}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}}
+		header := ui.Node{ID: "inspector-navigation", Kind: ui.Toolbar, Style: ui.Style{Background: ui.Some(paper), Padding: ui.Some(ui.Insets{Left: 16, Right: 16}), Gap: ui.Some(float32(0)), MinSize: ui.Some(ui.Size{Height: 34}), MaxSize: ui.Some(ui.Size{Height: 34})}, Accessibility: ui.Accessibility{Name: "Inspector section"}, Children: actions}
+		children = append([]ui.Node{inset, header}, children...)
 	}
 	return ui.Node{ID: "inspector-rail", Kind: ui.Column, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: children}
 }

@@ -17,7 +17,7 @@ func drawingModeTabs(actions []ui.Node) ui.Node {
 		actions[i].Style.TextAlign = ui.Some(ui.AlignCenter)
 	}
 	return ui.Node{ID: "drawing-mode-tabs", Kind: ui.Row, Accessibility: ui.Accessibility{Name: "Drawing mode"}, Style: ui.Style{
-		MinSize: ui.Some(ui.Size{Width: 186, Height: 30}), MaxSize: ui.Some(ui.Size{Width: 186, Height: 30}),
+		MinSize: ui.Some(ui.Size{Height: 30}), MaxSize: ui.Some(ui.Size{Height: 30}),
 		Padding: ui.Some(ui.UniformInsets(2)), Gap: ui.Some(float32(0)), Align: ui.Some(ui.AlignCenter),
 		Background: ui.Some(surface),
 	}, Children: actions}

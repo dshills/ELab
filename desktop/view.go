@@ -303,8 +303,8 @@ func (s *screen) view() ui.Node {
 		inspector = append(inspector, inspectorGroup("sweep", "DC sweep", s.sweepInspector(state))...)
 	}
 	tools := ui.Node{ID: "tools", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: []ui.Node{}}
-	// Toolbar sizes describe content. Leave room for padding, outlines and
-	// keyboard focus rings instead of cropping the buttons at the old 32 units.
+	// Leave room for padding, outlines and keyboard focus rings instead of
+	// cropping the buttons at the old 32 units.
 	tools.Style.Padding = ui.Some(ui.Insets{Top: 2, Bottom: 2})
 	tools.Style.MinSize = ui.Some(ui.Size{Width: 200, Height: 36})
 	tools.Style.MaxSize = ui.Some(ui.Size{Height: 36})

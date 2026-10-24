@@ -1,6 +1,6 @@
 {
   "base_commit": "2778a4a2",
-  "production_changed_after_broad_run": false,
+  "production_changed_after_broad_run": true,
   "full_desktop_race_offscreen": {
     "seconds": 362.9,
     "failures": 1,
@@ -12,7 +12,10 @@
   "lint": "passed",
   "desktop_vet_offscreen": "passed",
   "native_inventory": "verified; commands, aliases and route coverage unchanged",
-  "native_window_check": "not yet performed",
+  "native_window_check": "initial /227 checked; corrected candidate not yet checked",
   "preserved_release": "build/releases/ELab-0.181.4-macos-arm64.zip",
-  "preserved_release_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b"
+  "preserved_release_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "subsequent_native_finding": "In /227 the scrolling inspector form painted over the underline; full-rail mounted regression reproduced it.",
+  "repair": "Separate the top inset from the height-constrained toolbar; use intrinsic drawing-mode rail width to separate Esc.",
+  "final_affected_tests": "passed; complete inspector rail, four themes, physical clicks, toolbar arrows/Return, agent state, scrolling and request guidance"
 }

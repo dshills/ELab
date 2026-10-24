@@ -29,18 +29,21 @@ func TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions(t *testing.T) {
 				root := s.view()
 				root.Focus = ui.FocusRequest{} // The reduced probe excludes the Resume button.
 				tools, _ := findNode(root, "tools")
-				navigation, _ := findNode(root, "inspector-navigation")
-				// Keep the production schematic inset and fixed inspector width.
-				// Custom drawing extensions are not part of this paint/layout probe.
+				rail, _ := findNode(root, "inspector-rail")
+				// Keep the production inset and complete inspector rail: its scrolling
+				// form must not paint over the navigation indicators. Custom drawing
+				// extensions are not part of this paint/layout probe.
 				root.Children = []ui.Node{{ID: "strip-row", Kind: ui.Row, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(1)), Align: ui.Some(ui.AlignStart)}, Children: []ui.Node{
 					{ID: "drawing-header", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(8))}, Children: []ui.Node{tools}},
-					{ID: "inspector-header", Kind: ui.Column, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0))}, Children: []ui.Node{navigation}},
+					rail,
 				}}}
 				return root
 			}
 			theme := desktopTheme()
 			theme.Default.Background = ui.Some(color.NRGBA{})
-			m := newMountedControlWindowSize(t, s, view, 1040, 100, theme)
+			m := newMountedControlWindowSize(t, s, view, 1040, 760, theme, func(config *cogent.ManualConfig) {
+				config.GPUSceneRendering = true
+			})
 			for _, group := range []struct {
 				id       string
 				children []string
@@ -55,6 +58,10 @@ func TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions(t *testing.T) {
 						t.Errorf("control is clipped: %s=%v parent %s=%v", id, child.Bounds, group.id, parent)
 					}
 				}
+			}
+			modeGroup := mountedControlElement(t, m, "drawing-mode-tabs").Bounds
+			if cancel := mountedControlElement(t, m, "drawing.cancel").Bounds; cancel.Min.X-modeGroup.Max.X < 4 {
+				t.Error("Esc touches the drawing-mode rail", modeGroup, cancel)
 			}
 			im, err := m.manual.Capture(m.ctx, "main")
 			if err != nil {
