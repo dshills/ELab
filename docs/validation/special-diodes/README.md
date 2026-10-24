@@ -31,3 +31,28 @@ These are educational equation references, not measured devices or an
 independent SPICE execution. Source and callback tests are separate from native
 pointer/keyboard acceptance. Packaged and native observations are appended at
 completion; the preserved /205 release archive is not replaced.
+
+
+## Completion
+
+Clean-source **0.184.0 /234**, from `d498adad`, passes strict ad hoc signature
+verification. Its packaged agent passes both example workflows, references,
+recording round trips, edits and schematic exports. The full desktop offscreen
+race suite passes (454.278 s). The full root race suite passes, including
+workbench (94.305 s) and conformance (121.896 s); the later example-ground-only
+layout adjustment and added coil reference pass the final focused race checks.
+Lint, root/desktop vet and native command-inventory verification pass.
+
+Native /234 shows the Apollo Zener regulator with the 8–12 V input and nearly
+steady output. Pointer Pause, keyboard entry of 3.3 V, Apply and Restart produce
+a fresh 3.43243 V output at 10 V input. The edit remains stale until the existing
+restart/resume action, as specified. Loading Schottky from that edited fixture
+shows the ordinary unsaved dialog; only the owned synthetic edit was discarded.
+The Schottky view shows separate ground returns, distinct diode symbols, and
+C1 above C2 on the live scope. It remains open, unmodified and running.
+
+CUA initially rejected stale control snapshots during live updates. A fresh
+state read immediately followed by the pointer action succeeded. This is
+recorded as a tool observation, not an established mouse defect or a latency
+measurement. Feature observations do not replace broader distribution gates.
+The preserved /205 archive hash is unchanged; no public release was promoted.

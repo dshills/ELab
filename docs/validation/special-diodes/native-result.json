@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "app": "/Users/dshills/Development/projects/ELab/build/ELab-0.184.0-234-Diodes/ELab.app",
+  "source_commit": "d498adadf7bd694c14d1ed255be23303c094bd67",
+  "method": "CUA native menus, keyboard value entry, pointer buttons and window screenshots",
+  "checks": [
+    "Zener menu loads live regulator in inherited Apollo theme",
+    "Zener numeric field labels breakdown voltage and 1\u201324 V domain",
+    "Pause, edit 5.1 V to 3.3 V and Apply preserve accepted readings as stale until restart",
+    "Restart produces signed -3.43243 V / -13.2432 mA at the initial 10 V input",
+    "Switching away from edited fixture shows unsaved protection; discard only owned synthetic edit",
+    "Schottky menu loads comparison with distinct symbols, separate grounds and live C1/C2/current traces",
+    "Native Schottky output C1 visibly exceeds silicon C2"
+  ],
+  "left_open": "Schottky comparison, Auto input, running, D1 selected, Apollo",
+  "limitations": [
+    "CUA rejected stale live snapshots for initial Pause attempts; reading state and clicking within the same call succeeded. This does not establish a native hardware input defect or a response-time measurement.",
+    "Feature-specific visual and input checks, not a new full-distribution or clean-account acceptance run."
+  ]
+}
