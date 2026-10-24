@@ -8,11 +8,13 @@ review and clean-account installation retain their explicit deferrals; complete
 PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
-**Current maintenance work:** /220 makes completed manual-step counts match
-the worker’s existing output grid. [Implementation and checks](99-manual-step-progress.md).
-The /219 slider, /218 Verify endpoint and /217 numeric wheel repairs remain included. [Electronics reference checks](95-gate-common-mode.md)
+**Current maintenance work:** /221 repairs the clipped footer and qualifies the
+native Light/Dark outer inset. [Implementation and checks](101-footer-layout.md).
+Four of eighteen native checks now have scoped evidence, including the three
+unaffected /220 checks. Fourteen remain open. The /220 manual-step, /219 slider,
+/218 Verify endpoint and /217 numeric wheel repairs remain included. [Electronics reference checks](95-gate-common-mode.md)
 cover seven RC-driven MOSFET circuits and active-work preservation.
-The /207–/220 changes remain held for fresh changed-candidate native acceptance;
+The /207–/221 changes remain held for the remaining native acceptance;
 they do not replace the /205 download. Owner review remains deferred. Standing
 authorization to run ELab and use the desktop is saved in `AGENTS.md` and must
 not be requested again.

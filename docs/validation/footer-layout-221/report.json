@@ -1,0 +1,78 @@
+{
+  "status": "repair qualified; accumulated candidate acceptance partial",
+  "version": "0.181.20",
+  "build": "221",
+  "source_commit": "4ec39cbf0c462e7c6a462494512f25d253dd4649",
+  "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.181.20-221-candidate",
+  "native_sha256": "4b3585fe0145f5aee9fda24fc9b6c073fbf6a6698822ef7b4f39e74cd878f377",
+  "agent_sha256": "f4395f1642156c6bf710c8ee358deea517cbddb91b988a322c92bec8babd3148",
+  "owned_native_sha256": "aae4ff09d6676c45b49eee5519ae6abbbd195e380812ce11ca971fcabf53a929",
+  "source_clean_at_build": true,
+  "strict_ad_hoc_integrity_valid": true,
+  "full_quality_gate_passed": true,
+  "python_tests": 67,
+  "desktop_race_s": 177.01,
+  "mounted_race_s": 167.844,
+  "source_inputs": 891,
+  "inputs_changed_from_220": [
+    "AGENTS.md",
+    "desktop/view.go",
+    "research/13-native-command-inventory.json",
+    "scripts/check.sh"
+  ],
+  "new_source_inputs": [
+    "desktop/footer_layout_offscreen_test.go"
+  ],
+  "source_inventory_review": {
+    "passed": true,
+    "changed_source_hashes": [
+      "desktop/view.go"
+    ],
+    "all_404_sites_unchanged_except_line_numbers": true,
+    "literal_commands": 134,
+    "public_commands": 166,
+    "source_files": 79
+  },
+  "mounted_pre_repair_failures": 4,
+  "mounted_post_repair_passes": 4,
+  "native_footer_passed": true,
+  "native_inset_passed": true,
+  "native": {
+    "passed": true,
+    "normal_cua_launch": true,
+    "no_new_owner_permission_question": true,
+    "unchanged_test_identity_and_sandbox": true,
+    "original_candidate_bundle_unchanged": true,
+    "preserved_205_zip_unchanged": true,
+    "stored_rows_exact_to_220": 1001,
+    "independent_voltage_checks": 2002,
+    "maximum_absolute_error_v": 4.996003610813204e-16,
+    "theme_switch_preserves_all_state_except": [
+      "theme",
+      "command_revision",
+      "revision"
+    ],
+    "original_saved_project_unchanged": true,
+    "final_document_clean": true,
+    "final_live_paused_at_zero": true,
+    "final_theme": "light",
+    "strict_installed_signature_valid": true,
+    "source_inputs_match": 891,
+    "exact_original_candidate_bundle_launched": false
+  },
+  "native_checks_newly_passed_for_copied_runtime": [
+    5
+  ],
+  "unaffected_checks_carried_forward_from_220": [
+    16,
+    17,
+    18
+  ],
+  "native_checks_remaining": 14,
+  "release_ready": false,
+  "promotion_status": "held",
+  "preserved_download": "0.181.4 /205",
+  "known_open_native_keyboard_observation": "Save Command-A fails through tested CUA key route; Edit > Select All works; dispatch cause and hardware behavior unqualified",
+  "raw_members": 69,
+  "raw_sha256": "9764169839773b318d840e7379822a02fdded01b9ba51b725b7d9e44078b3a8a"
+}
