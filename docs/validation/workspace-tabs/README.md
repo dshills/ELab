@@ -68,7 +68,28 @@ An intermediate design still reserved normal button shadows, and an initial
 the painted indicator as well as its bounds so those defects cannot pass on
 rectangle checks alone.
 
+## Native confirmation and package
+
+Clean-source candidate **0.182.4 /228**, built from `81323ce2`, is open at
+`build/ELab-0.182.4-228-Tabs/ELab.app`. `build-result.json` records executable
+hashes, clean Git provenance, strict ad hoc signature verification and the
+unchanged preserved /205 archive. The build-time `graphical_app_launched:false`
+precedes the native checks recorded here and in `report.json`.
+
+`native-apollo.jpg`, `native-light.jpg`, `native-dark.jpg` and `native-system.jpg`
+confirm complete outlines, the separated Esc control, and visible selected
+inspector underlines in the actual app. System resolves to Light on this
+desktop. Native actions selected Wire and all three inspector sections; the
+app is left in Select/Inspect with Apollo selected. The empty superseded /227
+test app was closed normally; older sessions were preserved.
+
+One back-to-back automated mode/section click met the existing command revision
+guard; the section action succeeded after observing a fresh frame. The
+intermediate `native-simulate-partial.jpg` shows the correctly moved underline
+but omits some unchanged labels, consistent with the prior native capture
+limitation. The complete final theme frames are retained separately. No stable
+capture or comprehensive native acceptance is claimed.
+
 This is a presentation repair. It introduces no agent commands or electronics
-features. Native captures and package provenance are recorded separately after
-the candidate is built; these mounted checks do not establish full native
-accessibility or distribution acceptance.
+features. These checks do not establish full native accessibility or
+distribution acceptance.

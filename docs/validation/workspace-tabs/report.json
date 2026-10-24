@@ -12,7 +12,20 @@
   "lint": "passed",
   "desktop_vet_offscreen": "passed",
   "native_inventory": "verified; commands, aliases and route coverage unchanged",
-  "native_window_check": "initial /227 checked; corrected candidate not yet checked",
+  "native_window_check": {
+    "candidate": "0.182.4 /228",
+    "source_commit": "81323ce23142f93f98dd8c975f6fd73062270cd1",
+    "themes_checked": [
+      "light",
+      "dark",
+      "system (resolved light)",
+      "apollo"
+    ],
+    "observed": "Complete drawing-mode outlines; Esc separated; inspector underline visible and follows selected section. User actions selected Wire, Inspect, Simulate and Document; finished in Select/Inspect/Apollo.",
+    "limits": "A back-to-back automated mode/section click met the existing command revision guard; section selection succeeded after a fresh frame. One intermediate capture omitted unchanged labels; final theme captures show complete controls. No new full native acceptance or stable capture qualification is claimed.",
+    "app_left_open": true,
+    "superseded_empty_227_test_closed_normally": true
+  },
   "preserved_release": "build/releases/ELab-0.181.4-macos-arm64.zip",
   "preserved_release_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
   "subsequent_native_finding": "In /227 the scrolling inspector form painted over the underline; full-rail mounted regression reproduced it.",
