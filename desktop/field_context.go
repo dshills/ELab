@@ -6,6 +6,17 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
+// Retained refusals belong to the field context that actually failed. Parsing
+// can fail before command admission checks freshness, so an invalid response
+// alone is not evidence that an old callback still owns the current editor.
+func (s *screen) fieldContextCurrent(context *actionContext) bool {
+	if context == nil {
+		return false
+	}
+	current := s.service.Snapshot()
+	return *context == (actionContext{current.CommandRevision, current.Document.Generation})
+}
+
 // Bind before platform selector adaptation so asynchronous native choices keep
 // the original field callback's context too. All callbacks run on the owner.
 func (s *screen) bindFieldContext(node *ui.Node, context actionContext) {

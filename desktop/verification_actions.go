@@ -62,7 +62,7 @@ func (s *screen) changeVerificationField(state workbench.Snapshot, id string, pa
 	response := s.invokeAtCommandRevision("verification.settings.set", params, state.CommandRevision, state.Document.Generation)
 	if response.Error != nil {
 		s.verificationAccepted = nil
-		if origin != nil && response.Help != nil && response.Help.Code == "invalid-params" && (id == "verify-duration" || id == "verify-step") {
+		if s.fieldContextCurrent(origin) && response.Help != nil && response.Help.Code == "invalid-params" && (id == "verify-duration" || id == "verify-step") {
 			if s.verificationRejected == nil {
 				s.verificationRejected = make(map[string]verificationFieldRejection)
 			}

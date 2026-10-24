@@ -60,7 +60,7 @@ func (s *screen) changeRecordedTimingFields(state workbench.Snapshot, fields map
 	response := s.invokeAtCommandRevision("recording.timing.set", textFieldsParams(cfg, fields), state.CommandRevision)
 	if response.Error != nil {
 		s.recordedTimingAccepted = nil
-		if origin != nil && response.Error.Code == "invalid-params" {
+		if s.fieldContextCurrent(origin) && response.Error.Code == "invalid-params" {
 			if s.recordedTimingRejected == nil {
 				s.recordedTimingRejected = make(map[string]*recordedTimingFieldRejection)
 			}

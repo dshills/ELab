@@ -79,6 +79,9 @@ func (s *screen) changeSweepField(state workbench.Snapshot, id, text string) {
 	response := workbench.Response{}
 	if parseError {
 		s.errorMessage = "Enter a whole sweep point count"
+		if origin != nil && !s.fieldContextCurrent(origin) {
+			s.errorMessage = "Sweep settings changed. Review them and try again."
+		}
 		s.requestHelp = nil
 		s.app.Invalidate("main")
 	} else {
@@ -86,7 +89,7 @@ func (s *screen) changeSweepField(state workbench.Snapshot, id, text string) {
 	}
 	if parseError || response.Error != nil {
 		s.sweepSettingsAccepted = nil
-		if origin != nil && (parseError || response.Help != nil && response.Help.Code == "invalid-params") {
+		if s.fieldContextCurrent(origin) && (parseError || response.Help != nil && response.Help.Code == "invalid-params") {
 			if s.sweepFieldRejected == nil {
 				s.sweepFieldRejected = make(map[string]sweepFieldRejection)
 			}
