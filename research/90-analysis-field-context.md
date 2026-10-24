@@ -53,3 +53,12 @@ from production-callback, offscreen and headless evidence. The current /205
 download, previous candidates and the running owned native session are preserved.
 Standing ELab/desktop authorization remains in `AGENTS.md`; no new launch prompt
 or permission request is queued.
+
+
+The [clean /213 matching agent](../docs/validation/analysis-field-context-213/candidate-report.json)
+passes nine current invalid entries, three stale valid requests and three fresh
+form corrections, preserving the agent's draft. A 41-row RC capture passes
+123 independent scalar references and brackets the analytic 3 V crossing.
+Workers join and the process exits 0. The signed bundle, captured inputs,
+previous candidate and /205 download remain exact. Private native refusal
+behavior remains a separate acceptance check; the candidate is held.

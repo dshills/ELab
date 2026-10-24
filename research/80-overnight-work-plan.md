@@ -91,3 +91,27 @@ pass, including four stale contexts and 22 original captured RC readings after
 a live resistor edit. No command, model, schema or SDK changes. /210 and /205
 are preserved; new native acceptance remains separate. Continue the remaining
 contract work without requesting launch permission or owner review.
+
+## Checkpoint: saved coverage and analysis field ownership
+
+The [coverage repair](89-recorded-statistics-coverage.md) prevents a partially
+unsupported imported interval from reporting 2.5 V mean for a constant 5 V
+signal. The desktop defaults to the actual saved endpoint and agents discover
+that bound through existing APIs. Full quality and clean /212 packaged-agent
+checks pass; source, timestamps, imported rows and prior measurements are
+preserved within the recorded scopes.
+
+The [analysis entry repair](90-analysis-field-context.md) reproduces five late
+parser refusals appearing in newer verification, sweep and timing forms. A
+shared freshness check protects refusal retention while preserving corrections
+of currently owned errors after unrelated agent work. Nine stale-field and nine
+current-correction cases pass, as do full quality and the clean /213 matching
+agent's nine invalid, three stale and three fresh form requests. Its 41-row RC
+capture passes 123 independent scalar references and brackets the analytic
+threshold crossing. Backend source and the SDK remain unchanged for /213.
+
+Native acceptance of these changed forms and accumulated /207–/211 UI changes
+remains separate. /205 and all earlier candidates are preserved; no graphical
+launch prompt is queued. Continue the remaining keyboard/agent/state-contract
+review under the standing authorization, prioritizing demonstrated defects
+before optional features.

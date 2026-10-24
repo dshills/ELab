@@ -79,3 +79,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Maintenance work plan](80-overnight-work-plan.md) and [scope interval correction](87-scope-interval-correction.md): retained invalid input, shared range guidance and first-click resets, with full source checks and 52 packaged-agent RC reference readings. The newer candidates retain separately pending native checks; the qualified /205 download remains preserved.
 
 - [Recorded-position request context](88-recorded-position-context.md): stale seek feedback and late rejected drafts stay with their original context, with full checks and packaged immutable-capture/RC evidence after a live model edit.
+
+- [Recorded interval coverage](89-recorded-statistics-coverage.md) and [analysis entry ownership](90-analysis-field-context.md): refuse statistics outside actual saved timestamps and prevent old form callbacks from retaining malformed text after agent edits. Full source and matching packaged-agent checks pass; native acceptance of the held candidates remains separate, and /205 stays the current download.

@@ -1,0 +1,31 @@
+{
+  "source_commit": "94fd57320ea773b20f6c2b7e6260578f92b8b6a4",
+  "agent_sha256": "cdec27b4eb1f39ced0935de9343469583919c89d4321c6d9a744778158a1de8b",
+  "transport": "headless-stdio",
+  "fresh_refusal_cases": 9,
+  "stale_valid_cases": 3,
+  "fresh_corrections": 3,
+  "scalar_readings_checked": 123,
+  "max_voltage_error_v": 8.881784197001252e-16,
+  "max_current_error_a": 9.486769009248164e-20,
+  "captured_metadata_preserved": true,
+  "crossing_brackets_independent_rc_reference": true,
+  "independent_reference": "5 V / 10 kohm / 1 uF, zero startup: Vc=5*(1-exp(-t/.01)); Ic=.0005*exp(-t/.01)",
+  "shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "input_revision": 13,
+    "command_revision": 11,
+    "document_generation": 2,
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "passed": true,
+  "agent_exit_code": 0
+}
