@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "examples": [
+    {
+      "example": "d-flipflop",
+      "captured_rows": 920,
+      "checked_state_rows": 900,
+      "distinct_values": [
+        0,
+        1
+      ],
+      "live_enable_hold": false,
+      "live_reset": true,
+      "exports": {
+        "svg": "321a6c19c89b2811b7838ce5e71708dde97311a9932505c53bddc56c1b613305",
+        "png": "21dc0bfb8154aa05c75faed42dd2f01fb1e9ccd177ffcbc5c003bcd172dc38ec",
+        "pdf": "fafcd345baabdc44db7fdb7ce1266cc96fd55bed26c17a8c1c8e16775478954f"
+      }
+    },
+    {
+      "example": "jk-flipflop",
+      "captured_rows": 923,
+      "checked_state_rows": 900,
+      "distinct_values": [
+        0,
+        1
+      ],
+      "live_enable_hold": false,
+      "live_reset": true,
+      "exports": {
+        "svg": "9b79739938599abf34e841e11e9736e2b57cd59e5fc0843e90c89410141fdc97",
+        "png": "f37fb6528c5224b0ba05228a5b29bbe151087bf4c223b918587823ae0fa6e961",
+        "pdf": "055c4d47276dddf672bb961b079e03be2f32cf8cb3787aa2f6936ee2d1604424"
+      }
+    },
+    {
+      "example": "t-flipflop",
+      "captured_rows": 923,
+      "checked_state_rows": 900,
+      "distinct_values": [
+        0,
+        1
+      ],
+      "live_enable_hold": false,
+      "live_reset": true,
+      "exports": {
+        "svg": "904922276e97c80350186032631fd0c3e9cbb936eb57db065fc665633c7f2025",
+        "png": "e1d31b243b7bb8a83c973d96a055638380fa2d2ba55d6cb343667545a9cbaf35",
+        "pdf": "b1f4618546e4859f0fbfb9491dcb0532715c90b67fadcfa2218ec3f1f69bc791"
+      }
+    },
+    {
+      "example": "binary-counter",
+      "captured_rows": 876,
+      "checked_state_rows": 842,
+      "distinct_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "live_enable_hold": true,
+      "live_reset": true,
+      "exports": {
+        "svg": "9f33faa1b0399779de76f9b5116300b9504cef798e8585c2a71beb74f7d9b4c0",
+        "png": "a8a8c3dfe81595604d268f6ec69d253e571df7d4359b5e1a48a26adadfc4fc85",
+        "pdf": "d3d86010333134038f6f2cea4729f85ae98c0815d14920a1e90971d69e420b08"
+      }
+    },
+    {
+      "example": "decade-counter",
+      "captured_rows": 876,
+      "checked_state_rows": 842,
+      "distinct_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "live_enable_hold": true,
+      "live_reset": true,
+      "exports": {
+        "svg": "6cbf55985a87e9d87d3a2673a596c242d14cc5d76164baeed5ad8c3c0a1068ba",
+        "png": "bd6b668b4e5f9fb996bd75bb92199fa02f8363a1260694aabb3ae6477957d235",
+        "pdf": "9b99054429862812cff4eaad903a1f0e34e562295135eb70dc33b0c16f3c5abd"
+      }
+    }
+  ],
+  "scope": "Discovery, independent rising-edge sequences and wrap, complementary outputs, captures, enable/reset, power/current balance, kept-record save/reopen and schematic exports.",
+  "limitations": [
+    "Functional educational devices; no measured hardware timing, setup/hold or metastability qualification.",
+    "Native input and common-clock/feedback/stored-energy tests are recorded separately."
+  ]
+}

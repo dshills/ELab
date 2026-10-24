@@ -137,3 +137,6 @@ examples and check rotated symbols/hit areas. Export tests check rotated SVG
 and closed-switch raster continuity. `scripts/sequential-demo.py` independently
 checks expected edge sequences, all counter states, live controls, captures,
 saved project reopen and SVG/PNG/PDF output through the public stdio transport.
+
+The [validation checkpoint](validation/sequential/README.md) records the packaged
+build, native observations, passed checks and the broad desktop-suite timeout.

@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "method": "CUA native pointer/AX observations and window screenshots",
+  "build": "0.187.1 /241",
+  "source_commit": "f57308daf7aa05eb8eb8641878cf4baafa8208dc",
+  "final_observations": [
+    "D flip-flop sampler loads cleanly with U1 selected; clock/data/Q/NQ traces advance live.",
+    "Final supply/ground captions are clear of clock waveform annotations.",
+    "Decade counter loads cleanly, advances and wraps; observed count 1 at 4.110 s agrees with 21 rising clock edges modulo 10.",
+    "Logic category shows 12 functions, including all five new parts and their symbols.",
+    "Final app left running the clean decade counter in Auto, U1 selected, Apollo inherited."
+  ],
+  "preceding_240_feature_observations": [
+    "Binary counter counted while enabled.",
+    "Opening SENABLE held count 15 while time advanced from 2.934 s to 3.774 s.",
+    "Closing SRESET cleared the held count to zero at 4.604 s.",
+    "Simulate inspector shows Sequential experiment, 2 ms samples, and explicit rising-edge/reset/restart guidance.",
+    "Unsaved protection appeared on Quit; discarded only owned synthetic switch edits and closed the interim session normally."
+  ],
+  "limitations": [
+    "These are feature observations, not hardware timing, visible-latency or renewed distribution qualification.",
+    "The /240 to /241 change moves two example supply coordinates only; model and native controls are identical.",
+    "The broad desktop race run reached its default ten-minute suite timeout; focused sequential and mounted verification follow-up passes.",
+    "Existing app sessions and user projects were preserved."
+  ]
+}

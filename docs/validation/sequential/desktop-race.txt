@@ -1,0 +1,84 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+panic: test timed out after 10m0s
+	running tests:
+		TestMountedVerificationCorrectionToAcceptedTime (7s)
+		TestMountedVerificationCorrectionToAcceptedTime/verify-start/verify-step/without-blur/none (0s)
+
+goroutine 8622 [running]:
+testing.(*M).startAlarm.func1()
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2961 +0x490
+created by time.goFunc
+	/opt/homebrew/opt/go/libexec/src/time/sleep.go:182 +0x44
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc000175448, {0x1063a17ca, 0x2f}, 0x107ff6790)
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2268 +0x7dc
+testing.runTests.func1(0xc000175448)
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2744 +0x78
+testing.tRunner(0xc000175448, 0xc0006c3a28)
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2195 +0x168
+testing.runTests({0x10637e184, 0x1f}, {0x10637e184, 0x1f}, 0xc0002f6288, {0x1081823c0, 0x1a7, 0x1a7}, {0x0?, 0xc0004f5298?, ...})
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2742 +0x7a4
+testing.(*M).Run(0xc000221c20)
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2602 +0xb3c
+main.main()
+	_testmain.go:890 +0x104
+
+goroutine 8616 [chan receive]:
+testing.(*T).Run(0xc0018e5208, {0xc001c2aba0, 0x2a}, 0xc00190ef00)
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2268 +0x7dc
+github.com/dshills/elab/desktop.TestMountedVerificationCorrectionToAcceptedTime(0xc0018e5208)
+	/Users/dshills/Development/projects/ELab/desktop/verification_handoff_offscreen_test.go:337 +0x344
+testing.tRunner(0xc0018e5208, 0x107ff6790)
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2195 +0x168
+created by testing.(*T).Run in goroutine 1
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2260 +0x7c0
+
+goroutine 8718 [runnable]:
+encoding/json/internal/jsonwire.AppendQuote({0xc0031a7080, 0xa0, 0x580}, {0x10634f669, 0xc, 0xc}, 0xc003159248)
+	/opt/homebrew/opt/go/libexec/src/encoding/json/internal/jsonwire/encode.go:104 +0x728
+encoding/json/v2.makeStringArshaler.func1(0xc003159180, {{0x107e8f6e8?, 0xc0031998a0?, 0x5?}, 0x99?}, 0xc003159248)
+	/opt/homebrew/opt/go/libexec/src/encoding/json/v2/arshal_default.go:231 +0x234
+encoding/json/v2.makeStructArshaler.func2(0xc003159180, {{0x107f7f1a0?, 0xc003199888?, 0x2?}, 0x28?}, 0xc003159248)
+	/opt/homebrew/opt/go/libexec/src/encoding/json/v2/arshal_default.go:1231 +0xb88
+encoding/json/v2.makeStructArshaler.func2(0xc003159180, {{0x107df1c80?, 0xc003199860?, 0x107df1c80?}, 0x10?}, 0xc003159248)
+	/opt/homebrew/opt/go/libexec/src/encoding/json/v2/arshal_default.go:1231 +0xb88
+encoding/json/v2.marshalEncode(0xc003159180, {0x107df1c80, 0xc003199810}, 0xc003159248)
+	/opt/homebrew/opt/go/libexec/src/encoding/json/v2/arshal.go:248 +0x25c
+encoding/json/v2.Marshal({0x107df1c80, 0xc003199810}, {0xc00375a698, 0x1, 0x1})
+	/opt/homebrew/opt/go/libexec/src/encoding/json/v2/arshal.go:168 +0x150
+encoding/json.Marshal(...)
+	/opt/homebrew/opt/go/libexec/src/encoding/json/v2_encode.go:186
+github.com/dshills/elab/workbench.preferencesHash({0x0, 0x0, 0x4014000000000000?}, {0x0, 0x4014000000000000, 0x0, 0x0, 0x0, {0x10634f669, 0xc}}, ...)
+	/Users/dshills/Development/projects/ELab/workbench/display_preferences.go:39 +0x164
+github.com/dshills/elab/workbench.(*Service).snapshotLocked(_)
+	/Users/dshills/Development/projects/ELab/workbench/service.go:377 +0x1f10
+github.com/dshills/elab/workbench.(*Service).Snapshot(_)
+	/Users/dshills/Development/projects/ELab/workbench/service.go:315 +0xc0
+github.com/dshills/elab/desktop.(*screen).registerExampleLoadCommands.func1()
+	/Users/dshills/Development/projects/ELab/desktop/example_load.go:44 +0x74
+github.com/dshills/vellum/command.(*Registry).Enabled(0xc000602268, {0x10635206c, 0xd})
+	/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab14/command/command.go:57 +0xb8
+github.com/dshills/elab/desktop.(*screen).button(_, {_, _}, {_, _})
+	/Users/dshills/Development/projects/ELab/desktop/main.go:484 +0xb40
+github.com/dshills/elab/desktop.(*screen).commandMenu(_, {_, _}, {_, _}, {_, _, _})
+	/Users/dshills/Development/projects/ELab/desktop/layout.go:24 +0x138
+github.com/dshills/elab/desktop.(*screen).view(_)
+	/Users/dshills/Development/projects/ELab/desktop/view.go:148 +0x1a30
+github.com/dshills/elab/desktop.uiAction.func1()
+	/Users/dshills/Development/projects/ELab/desktop/view_test.go:45 +0x2a4
+github.com/dshills/vellum/app.(*Application).Do(0xc003068b40, 0xc0037750b8)
+	/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab14/app/app.go:317 +0x184
+github.com/dshills/elab/desktop.uiAction(0xc00254a248, 0xc002f41888, {0x106377f37, 0x1c}, 0x0)
+	/Users/dshills/Development/projects/ELab/desktop/view_test.go:39 +0x100
+github.com/dshills/elab/desktop.mountedVerificationStart(0xc00254a248, 0xc002f41888)
+	/Users/dshills/Development/projects/ELab/desktop/verification_handoff_offscreen_test.go:25 +0xac
+github.com/dshills/elab/desktop.TestMountedVerificationCorrectionToAcceptedTime.func1(0xc00254a248)
+	/Users/dshills/Development/projects/ELab/desktop/verification_handoff_offscreen_test.go:345 +0x244
+testing.tRunner(0xc00254a248, 0xc00190ef00)
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2195 +0x168
+created by testing.(*T).Run in goroutine 8616
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:2260 +0x7c0
+FAIL	github.com/dshills/elab/desktop	600.654s
+FAIL
