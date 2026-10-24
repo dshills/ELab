@@ -1,0 +1,43 @@
+{
+  "current_native_refusals_passed": true,
+  "first_corrections_passed": 3,
+  "public_protocol_passed": true,
+  "bounded_interleavings": {
+    "cursor-10": {
+      "accepted_recording_preserved": true,
+      "snapshot_differences": [],
+      "native_queue_origin_proven": false
+    },
+    "cursor-0": {
+      "accepted_recording_preserved": true,
+      "snapshot_differences": [
+        "viewport",
+        "command_revision",
+        "revision",
+        "last_actor"
+      ],
+      "native_queue_origin_proven": false
+    }
+  },
+  "exact_native_queued_parser_origin_qualified": false,
+  "native_check9_complete": false,
+  "fresh_next_one_command": true,
+  "stored_rows_exact": 1001,
+  "independent_voltage_references": 2002,
+  "max_absolute_error_v": 4.996003610813204e-16,
+  "source_inputs_unchanged": 897,
+  "saved_fixture_unchanged": true,
+  "installed_signature_valid": true,
+  "original_candidate_unchanged": true,
+  "preserved_205_unchanged": true,
+  "final_clean_paused_at_zero": true,
+  "production_changes": 0,
+  "full_source_suites_repeated": false,
+  "remaining_original_native_checks": 9,
+  "source_commit": "4356b8fb9e721e71ca327159d37b36c2d0675530",
+  "native_sha256": "e957008f182845572fe39158f4819e5601e28a79ac803e3446071ff9cd56f82d",
+  "observed_utc": "2026-10-24T10:27:51.796157+00:00",
+  "raw_members": 63,
+  "raw_archive_sha256": "909031f40dad40282c4520e91cfcc08b25bb73a0c090645b2882215237773395",
+  "verifier_correction": "Initial pre-socket text assertion used wrong capitalization/spacing. Corrected to the captured AX wording and normalized 2 ms; no product failure or source change."
+}

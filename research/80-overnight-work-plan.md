@@ -267,3 +267,14 @@ No speculative source fix or general lifecycle pass. Next continue item 9's
 recorded-position correction and pre-agent parser ownership, then captured
 measurement defaults/presentation. /205 stays preserved; no owner-review or
 launch-permission wait and no unrelated source-gate repetition.
+
+
+## Checkpoint: native recorded-position partial qualification
+
+[Current refusals and corrections](106-native-recorded-position.md) pass, along
+with exact public stale/current protocol checks and a fresh Next after bounded
+native/agent interleavings. Exact native callback queue origin is not established;
+original item 9 stays partial and nine original checks remain. All captured rows,
+physics, source, signatures and /205 remain preserved. Next perform independent
+imported-measurement endpoint and cached-result checks. The running owned session
+is reused under saved authorization; no launch or desktop permission is pending.

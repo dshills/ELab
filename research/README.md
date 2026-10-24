@@ -105,3 +105,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Decimal number steps](104-decimal-number-steps.md): keep stepped values and displayed decimals consistent, with bounded arithmetic and unchanged public command types.
 
 - [Native interval reset and exit classification](105-native-reset-and-exit-classification.md): both fields/views, timed agent interventions, immutable captures, and the AppKit Quit-menu evidence for the earlier exit.
+
+- [Native recorded-position checks](106-native-recorded-position.md): refusal/correction, bounded agent interleavings, exact public protocol and the remaining native queue-origin qualification.
