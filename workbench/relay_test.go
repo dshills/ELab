@@ -34,6 +34,10 @@ func TestRelayCoilExponentialThresholdAndIsolatedContacts(t *testing.T) {
 			t.Fatal(at, err)
 		}
 		r := kernel.mixed.result.Controls[0]
+		sample := mixedSample(c, kernel.mixed.result, 5)
+		if math.Abs(sample.Energy-r.Energy) > 1e-14 {
+			t.Fatal("trace omitted relay coil energy", sample.Energy, r.Energy)
+		}
 		want := .05 * (1 - math.Exp(-at/.001))
 		if math.Abs(r.Current-want) > 1e-8 {
 			t.Fatal("coil exponential", at, r.Current, want)

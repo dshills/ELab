@@ -55,13 +55,20 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 			p.Voltage = r.Nodes[compiled.Output]
 		}
 	}
-	if len(r.Inductors) > 0 {
+	hasRelay := false
+	for _, device := range r.Controls {
+		hasRelay = hasRelay || device.Kind == "relay"
+	}
+	if len(r.Inductors) > 0 || hasRelay {
 		p.Energy = 0
 		for _, part := range r.Inductors {
 			p.Energy += part.Energy
 		}
 		for _, part := range r.Capacitors {
 			p.Energy += part.Energy
+		}
+		for _, device := range r.Controls {
+			p.Energy += device.Energy
 		}
 	}
 	currents := map[string]float64{}
