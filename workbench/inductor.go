@@ -74,7 +74,7 @@ func (n *mixedNetwork) capacitorIndex(k int) int {
 }
 func (n *mixedNetwork) matrixSize(dt float64) int {
 	size := n.capacitorIndex(0)
-	if dt == 0 || len(n.inductors) > 0 {
+	if dt == 0 || n.usesCollocation() {
 		size += len(n.caps)
 	}
 	return size

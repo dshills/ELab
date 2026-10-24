@@ -37,6 +37,7 @@ type Document struct {
 	DisplayModel       *DisplayModel       `json:"display_model,omitempty"`
 	RegulatorModel     *RegulatorModel     `json:"regulator_model,omitempty"`
 	SensorModel        *SensorModel        `json:"sensor_model,omitempty"`
+	PowerModel         *PowerModel         `json:"power_model,omitempty"`
 	ControlModel       *ControlModel       `json:"control_model,omitempty"`
 	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
 	Paused             *bool               `json:"paused,omitempty"`
@@ -374,6 +375,9 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := validateControlModel(d.Graph, d.ControlModel); err != nil {
 		return Document{}, err
 	}
+	if err := validatePowerModel(d.Graph, d.PowerModel); err != nil {
+		return Document{}, err
+	}
 	if err := validateSensorModel(d.Graph, d.SensorModel); err != nil {
 		return Document{}, err
 	}
@@ -486,6 +490,10 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, fmt.Errorf("waveform source requires complete per-source parameters")
 		}
 
+		if err := validatePower(c); err != nil {
+			return d, err
+		}
+		expected.Power = clonePower(c.Power)
 		if IsSensorKind(c.Kind) {
 			v := c.TemperatureC
 			if c.Kind == "ldr" {
@@ -656,6 +664,7 @@ func (s *Service) documentLocked() Document {
 	d.DisplayModel = displayModelForGraph(s.graph)
 	d.RegulatorModel = regulatorModelForGraph(s.graph)
 	d.SensorModel = sensorModelForGraph(s.graph)
+	d.PowerModel = powerModelForGraph(s.graph)
 	d.ControlModel = controlModelForGraph(s.graph)
 	return d
 }

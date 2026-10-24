@@ -14,6 +14,9 @@ func PartActuationHint(kind string) string {
 }
 
 func addActuationCapabilityDetails(id string, schema map[string]any) bool {
+	if addPowerCapabilityDetails(id, schema) {
+		return true
+	}
 	if addSensorCapabilityDetails(id, schema) {
 		return true
 	}

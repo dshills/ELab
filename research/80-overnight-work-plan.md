@@ -329,3 +329,30 @@ The existing /223 app/agent, saved fixture and /205 ZIP stay exact. No replaceme
 candidate is built, launched or promoted. Four native items remain (3, 6, 9 and 11);
 affected native qualification is deferred. This checkpoint supersedes the earlier
 continuation instructions. Work stops; no autonomous next item or desktop test.
+
+## October 24 evening: new power, motion and AC work authorized
+
+The owner has now explicitly requested, in order, batteries with sag/discharge,
+DC motors/PWM, AC sweeps/Bode plots, optocouplers, and transformers/coupled
+inductors; afterward continue working and testing while they are signed off.
+This new request resumes work beyond the older stopped checkpoint above.
+Preserve the qualified /205 ZIP and /246 sensor candidate. Owner review and
+another ELab launch/desktop permission are not prerequisites.
+
+Battery implementation checkpoint: [model/commands/examples](../docs/batteries.md).
+Focused electrical/capture/ownership and native command-parity race tests pass;
+goimports/staticcheck and a public stdio replay pass. The latter observes both
+LED fade and regulator dropout and verifies conservation, captures, fresh saved
+reopen and SVG/PNG/PDF exports. Source discovery retains its original 64 KiB
+budget by sharing the existing empty-input schema through the registry. There
+are 171 commands /415 sites /139 literal routes /84 production desktop sources.
+Raw development outputs are in `build/power-expansion`. Actual changed-build
+native interaction and complete regressions remain for the combined package.
+
+Next: DC motor armature RL/back-EMF, mechanical inertia/damping/load, readings,
+shared controls and 555 PWM example; then the other three requested phases.
+Keep accepted storage inside the existing adaptive integration/atomic-publication
+path, reserve existing internal resource budgets and leave simulation work and
+accuracy limits unchanged. After the five phases, finish broad quality/native
+checks and package a clean local app/agent. Continue reproduced defect and
+remaining acceptance work rather than add unrelated component families.

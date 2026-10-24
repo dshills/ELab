@@ -73,6 +73,9 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 			p.Energy += device.Energy
 		}
 	}
+	for _, b := range r.Batteries {
+		p.Energy += b.Energy
+	}
 	currents := map[string]float64{}
 	for _, u := range r.Sensors {
 		currents[u.ID] = u.Current

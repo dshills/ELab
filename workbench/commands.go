@@ -54,6 +54,9 @@ func capability(id, description string, mutates bool, schema string) Capability 
 	}
 	var input map[string]any
 	_ = json.Unmarshal([]byte(schema), &input)
+	if input["type"] == "object" && input["additionalProperties"] == false && len(input) == 2 {
+		input = map[string]any{"$ref": "urn:elab:empty-input:1"}
+	}
 	encoded, _ := json.Marshal(timeInputSchema(id, input))
 	outputLabel := "Query result"
 	if mutates {
@@ -78,6 +81,7 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(struct{}{}), "urn:elab:empty-input:1"},
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
 	{reflect.TypeOf(ZenerModel{}), "urn:elab:zener-model:1"},
@@ -85,6 +89,10 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(ControlModel{}), "urn:elab:control-model:1"},
 	{reflect.TypeOf(ControlMemory{}), "urn:elab:control-memory:1"},
 	{reflect.TypeOf(ControlResult{}), "urn:elab:control-result:1"},
+	{reflect.TypeOf(BatteryParams{}), "urn:elab:battery-input:1"},
+	{reflect.TypeOf(PowerModel{}), "urn:elab:power-model:1"},
+	{reflect.TypeOf(PowerParameters{}), "urn:elab:power-parameters:1"},
+	{reflect.TypeOf(BatteryResult{}), "urn:elab:battery-result:1"},
 	{reflect.TypeOf(TemperatureParams{}), "urn:elab:sensor-temperature-input:1"},
 	{reflect.TypeOf(LightParams{}), "urn:elab:sensor-light-input:1"},
 	{reflect.TypeOf(SensorModel{}), "urn:elab:sensor-model:1"},
@@ -308,6 +316,7 @@ func Catalog() []Capability {
 		typedCapability("source.pulse.set", "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics", reflect.TypeOf(PulseParams{})),
 		typedCapability("source.pulse.timing.set", "Set finite-pulse frequency/period and duty; preserve voltage/ramp settings. Undoable electrical edit.", reflect.TypeOf(PulseTimingParams{})),
 		typedCapability("simulation.pulse.timing.set", "Set frequency/period and duty for all ideal squares; preserve sampling/playback and voltage levels.", reflect.TypeOf(IdealPulseTimingParams{})),
+		typedCapability("battery.configure", "Set battery ESR, capacity and startup charge; undoable startup edit.", reflect.TypeOf(BatteryParams{})),
 		typedCapability("sensor.temperature.set", "Set NTC °C; inspect input_work and simulation.wait.", reflect.TypeOf(TemperatureParams{})),
 		typedCapability("sensor.light.set", "Set LDR lux; inspect input_work and simulation.wait.", reflect.TypeOf(LightParams{})),
 		typedCapability("potentiometer.wiper.set", "Set wiper 0–1 through staged input_work; inspect/wait for completion. Preserves fresh transient charge/time/run.", reflect.TypeOf(WiperParams{})),

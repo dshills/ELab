@@ -22,6 +22,8 @@ type ComponentValueDomain struct {
 func ValueDomainForKind(kind string) (ComponentValueDomain, bool) {
 	d := ComponentValueDomain{}
 	switch kind {
+	case "battery":
+		d = ComponentValueDomain{Parameter: "full_charge_voltage", Unit: "V", Minimum: .1, Maximum: 12, Range: "0.1–12 V", Relation: "Generic linear OCV/charge model; startup charge and ESR determine actual terminal voltage."}
 	case "dc-source", "pulse-source":
 		d = ComponentValueDomain{Parameter: "voltage", Unit: "V", Minimum: 0, Maximum: 12, Range: "0–12 V"}
 	case "sine-source":

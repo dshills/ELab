@@ -20,6 +20,7 @@ func ExampleGraph() Graph { c := DefaultCircuit(); return Graph{Components(c), W
 func (g Graph) Clone() Graph {
 	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
 	for i := range out.Components {
+		out.Components[i].Power = clonePower(out.Components[i].Power)
 		out.Components[i].Terminals = append([]string{}, out.Components[i].Terminals...)
 		if w := out.Components[i].Sine; w != nil {
 			v := *w
@@ -156,6 +157,7 @@ type Part struct {
 
 func libraryParts() []Part {
 	return []Part{
+		{Kind: "battery", Name: "Battery", Terminals: []string{"positive", "negative"}, DefaultValue: "9 V", Unit: "V", Model: PowerModelID},
 		{Kind: "dc-source", Name: "DC source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-dc.v1"},
 		{Kind: "thermistor", Name: "NTC thermistor", Terminals: []string{"1", "2"}, DefaultValue: "10k Ω", Unit: "Ω", Model: SensorModelID},
 		{Kind: "ldr", Name: "Light-dependent resistor", Terminals: []string{"1", "2"}, DefaultValue: "10k Ω", Unit: "Ω", Model: SensorModelID},
@@ -241,6 +243,7 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 			w := DefaultPulseWaveform()
 			c.Pulse = &w
 		}
+		defaultPower(&c)
 		if IsSensorKind(kind) {
 			v := 25.
 			if kind == "ldr" {
@@ -284,7 +287,7 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Label = text
 		return c, nil
 	}
-	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && c.Kind != "zener" && c.Kind != "comparator" && c.Kind != "relay" && !IsSensorKind(c.Kind) && !IsRegulatorKind(c.Kind) && !IsWaveformSource(c.Kind) {
+	if c.Kind != "battery" && c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && c.Kind != "zener" && c.Kind != "comparator" && c.Kind != "relay" && !IsSensorKind(c.Kind) && !IsRegulatorKind(c.Kind) && !IsWaveformSource(c.Kind) {
 		return c, fmt.Errorf("this component has no editable value")
 	}
 	value, err := ParseValue(text, c.Unit)
@@ -329,7 +332,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 	p := Point{}
 	found := true
 	switch c.Kind {
-	case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+	case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		switch name {
 		case "positive":
 			p = Point{0, -34}
@@ -505,7 +508,10 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			parent[ref] = ref
 		}
 		switch c.Kind {
-		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+			if c.Kind == "battery" {
+				hasSwitch = true
+			}
 			sources = append(sources, c)
 		case "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true

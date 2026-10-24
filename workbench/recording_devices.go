@@ -54,16 +54,22 @@ func recordedDeviceNodes(c Compiled, result *MixedResult) (*mixedNetwork, []floa
 		return nil, nil, fmt.Errorf("invalid recorded device ground reference")
 	}
 	n := newMixedNetwork(c)
-	if len(result.Nodes) != len(n.nodes)+1 {
+	if len(result.Nodes) != len(c.Nets) {
 		return nil, nil, fmt.Errorf("recorded device node inventory disagrees with its graph")
 	}
 	x := make([]float64, len(n.nodes))
 	for k, node := range n.nodes {
+		if privatePart(node) {
+			continue
+		}
 		v, ok := result.Nodes[node]
 		if !ok || !finite(v) || v < -maxMixedNodeVoltage || v > maxMixedNodeVoltage {
 			return nil, nil, fmt.Errorf("invalid recorded device node voltages")
 		}
 		x[k] = v
+	}
+	if err := n.restorePowerNodes(result, x); err != nil {
+		return nil, nil, err
 	}
 	return n, x, nil
 }

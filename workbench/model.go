@@ -29,24 +29,25 @@ type View struct {
 	Zoom   float64 `json:"zoom"`
 }
 type Component struct {
-	TemperatureC   *float64       `json:"temperature_c,omitempty"`
-	IlluminanceLux *float64       `json:"illuminance_lux,omitempty"`
-	Sine           *SineWaveform  `json:"sine,omitempty"`
-	Pulse          *PulseWaveform `json:"pulse,omitempty"`
-	WiperPosition  *float64       `json:"wiper_position,omitempty"`
-	SwitchClosed   *bool          `json:"switch_closed,omitempty"`
-	Label          string         `json:"label,omitempty"`
-	InitialVoltage *float64       `json:"initial_voltage_v,omitempty"`
-	InitialCurrent *float64       `json:"initial_current_a,omitempty"`
-	ID             string         `json:"id"`
-	Kind           string         `json:"kind"`
-	Name           string         `json:"name"`
-	Terminals      []string       `json:"terminals"`
-	Position       Point          `json:"position"`
-	Value          float64        `json:"value"`
-	Unit           string         `json:"unit,omitempty"`
-	Model          string         `json:"model,omitempty"`
-	Rotation       int            `json:"rotation"`
+	Power          *PowerParameters `json:"power,omitempty"`
+	TemperatureC   *float64         `json:"temperature_c,omitempty"`
+	IlluminanceLux *float64         `json:"illuminance_lux,omitempty"`
+	Sine           *SineWaveform    `json:"sine,omitempty"`
+	Pulse          *PulseWaveform   `json:"pulse,omitempty"`
+	WiperPosition  *float64         `json:"wiper_position,omitempty"`
+	SwitchClosed   *bool            `json:"switch_closed,omitempty"`
+	Label          string           `json:"label,omitempty"`
+	InitialVoltage *float64         `json:"initial_voltage_v,omitempty"`
+	InitialCurrent *float64         `json:"initial_current_a,omitempty"`
+	ID             string           `json:"id"`
+	Kind           string           `json:"kind"`
+	Name           string           `json:"name"`
+	Terminals      []string         `json:"terminals"`
+	Position       Point            `json:"position"`
+	Value          float64          `json:"value"`
+	Unit           string           `json:"unit,omitempty"`
+	Model          string           `json:"model,omitempty"`
+	Rotation       int              `json:"rotation"`
 }
 type Wire struct {
 	ID        string `json:"id"`

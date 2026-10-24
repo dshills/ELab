@@ -341,3 +341,8 @@ add temperature/light sliders and exact environment entry, live resistance
 readings, an automatic night-light and a relay thermostat. Native controls and
 agents share `sensor.temperature.set` / `sensor.light.set`; fresh transient
 changes preserve capacitor voltage, coil current and accepted time.
+
+[Batteries with voltage sag and stored charge](docs/batteries.md) add internal
+resistance, capacity and startup-charge controls, live charge/OCV/current/energy
+readings, and LED-fade / regulator-dropout examples. Native controls and agents
+share `battery.configure`; discharge uses the existing adaptive storage solver.

@@ -46,6 +46,10 @@ func encodeVerificationExport(record *verificationRecord, format string) ([]byte
 			header = append(header, "control_model")
 			modelIDs = append(modelIDs, m.ControlModel.ID)
 		}
+		if m.PowerModel != nil {
+			header = append(header, "power_model")
+			modelIDs = append(modelIDs, m.PowerModel.ID)
+		}
 		if m.SensorModel != nil {
 			header = append(header, "sensor_model")
 			modelIDs = append(modelIDs, m.SensorModel.ID)

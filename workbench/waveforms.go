@@ -114,7 +114,7 @@ func IsWaveformSource(kind string) bool {
 	return kind == "sine-source" || kind == "finite-pulse-source"
 }
 func IsVoltageSource(kind string) bool {
-	return kind == "dc-source" || kind == "pulse-source" || IsWaveformSource(kind)
+	return kind == "battery" || kind == "dc-source" || kind == "pulse-source" || IsWaveformSource(kind)
 }
 func sourceVoltageAt(p Component, t *Transient, at float64, primary bool) float64 {
 	mode := "auto"

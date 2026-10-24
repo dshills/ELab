@@ -65,6 +65,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.ControlModel != nil {
 		envelope["control_model"] = m.ControlModel
 	}
+	if m.PowerModel != nil {
+		envelope["power_model"] = m.PowerModel
+	}
 	if m.SensorModel != nil {
 		envelope["sensor_model"] = m.SensorModel
 	}
@@ -262,6 +265,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return err
 		}
 		if err := validateRecordedControls(c, m.Graph, r); err != nil {
+			return err
+		}
+		if err := validateRecordedPower(c, m.Graph, r); err != nil {
 			return err
 		}
 		if err := validateRecordedSensors(c, m.Graph, r); err != nil {

@@ -219,6 +219,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	if model := controlModelForGraph(g); model != nil {
 		metadataFields["control_model"] = model
 	}
+	if model := powerModelForGraph(g); model != nil {
+		metadataFields["power_model"] = model
+	}
 	if model := sensorModelForGraph(g); model != nil {
 		metadataFields["sensor_model"] = model
 		conditions := []map[string]any{}
@@ -405,6 +408,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
+		case "battery":
+			for _, path := range BatterySymbolPaths() {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			b.WriteString(`<circle r="22"/><path d="M0 -34 V-22 M0 22 V34 M-6 -9 H6 M0 -15 V-3 M-6 10 H6"/>`)
 			if p.Kind == "sine-source" {
@@ -491,6 +502,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		}
 		if p.Unit != "" {
 			text += " · " + displayPartValue(p)
+		}
+		if p.Kind == "battery" {
+			text += fmt.Sprintf(" · startup %.6g%% · %.6g mAh · ESR %.6g Ω", p.Power.Battery.Charge*100, p.Power.Battery.CapacityAh*1000, p.Power.Battery.Resistance)
 		}
 		if IsSensorKind(p.Kind) {
 			unit := "lux"
@@ -615,7 +629,7 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 	case "capacitor":
 		at := CapacitorLabelPosition(p)
 		x, y = at.X, at.Y
-	case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+	case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		x, y = p.Position.X-schematicLabelWidth(text)-32, p.Position.Y-2
 	case "junction":
 		x, y = p.Position.X+8, p.Position.Y-8

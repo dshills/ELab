@@ -42,7 +42,7 @@ func commandEventTopics(command string, documentChanged bool) []string {
 	switch {
 	case strings.HasPrefix(command, "selection."):
 		topics = append(topics, "editor", "view")
-	case strings.HasPrefix(command, "component."), strings.HasPrefix(command, "wire."), strings.HasPrefix(command, "drawing."), strings.HasPrefix(command, "editor."), strings.HasPrefix(command, "edit."), strings.HasPrefix(command, "capacitor."), strings.HasPrefix(command, "source."), strings.HasPrefix(command, "switch."), strings.HasPrefix(command, "potentiometer."), strings.HasPrefix(command, "sensor."):
+	case strings.HasPrefix(command, "component."), strings.HasPrefix(command, "wire."), strings.HasPrefix(command, "drawing."), strings.HasPrefix(command, "editor."), strings.HasPrefix(command, "edit."), strings.HasPrefix(command, "capacitor."), strings.HasPrefix(command, "source."), strings.HasPrefix(command, "switch."), strings.HasPrefix(command, "potentiometer."), strings.HasPrefix(command, "sensor."), strings.HasPrefix(command, "battery."):
 		topics = append(topics, "editor")
 	case strings.HasPrefix(command, "view."):
 		topics = append(topics, "view")

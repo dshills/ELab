@@ -67,7 +67,11 @@ func newSimulationKernel(ctx context.Context, input kernelPlan) (*simulationKern
 			return nil, err
 		}
 		k.mixed = state
-		t.Sample = mixedSample(c, state.result, n.sourceVoltage(c.Source, t, 0))
+		input := n.sourceVoltage(c.Source, t, 0)
+		if c.Source.Kind == "battery" {
+			input = mixedSourceVoltage(c, state.result)
+		}
+		t.Sample = mixedSample(c, state.result, input)
 	case NPNAnalysis:
 		r, err := SolveNPN(ctx, c)
 		if err != nil {

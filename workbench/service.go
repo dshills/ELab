@@ -59,6 +59,7 @@ type Snapshot struct {
 	DisplayModel           *DisplayModel          `json:"display_model,omitempty"`
 	RegulatorModel         *RegulatorModel        `json:"regulator_model,omitempty"`
 	SensorModel            *SensorModel           `json:"sensor_model,omitempty"`
+	PowerModel             *PowerModel            `json:"power_model,omitempty"`
 	ControlModel           *ControlModel          `json:"control_model,omitempty"`
 	Recording              *RecordingView         `json:"recording,omitempty"`
 	Recovery               RecoveryState          `json:"recovery"`
@@ -324,6 +325,9 @@ func (s *Service) snapshotLocked() Snapshot {
 	liveModes := []string{}
 	if diagnostic == nil {
 		liveModes = LiveInputModes(compiled.Analysis)
+		if compiled.Source.Kind == "battery" {
+			liveModes = []string{}
+		}
 	}
 	analysis := compiled.Analysis
 	if analysis == "" {
@@ -468,6 +472,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out.DisplayModel = displayModelForGraph(graph)
 	out.RegulatorModel = regulatorModelForGraph(graph)
 	out.SensorModel = sensorModelForGraph(graph)
+	out.PowerModel = powerModelForGraph(graph)
 	out.ControlModel = controlModelForGraph(graph)
 	out.LastExport = cloneArtifact(s.lastExport)
 	if len(s.undo) > 0 {
@@ -1177,6 +1182,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 		m := *state.RegulatorModel
 		state.RegulatorModel = &m
 	}
+	if state.PowerModel != nil {
+		m := *state.PowerModel
+		state.PowerModel = &m
+	}
 	if state.SensorModel != nil {
 		m := *state.SensorModel
 		state.SensorModel = &m
@@ -1229,6 +1238,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Transient = cloneTransient(state.Transient)
 	state.Components = append([]Component{}, state.Components...)
 	for i := range state.Components {
+		state.Components[i].Power = clonePower(state.Components[i].Power)
 		state.Components[i].Terminals = append([]string(nil), state.Components[i].Terminals...)
 		if state.Components[i].Sine != nil {
 			w := *state.Components[i].Sine

@@ -26,8 +26,10 @@ func partAliases(kind string) []string {
 		return []string{"logic", "digital", "CMOS", "boolean", "inverter", "inverting gate"}
 	case "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return []string{"logic", "digital", "CMOS", "boolean", "gate"}
+	case "battery":
+		return []string{"cell", "battery pack", "charge", "internal resistance", "voltage sag"}
 	case "dc-source":
-		return []string{"battery", "power supply", "voltage supply"}
+		return []string{"power supply", "voltage supply", "ideal voltage source"}
 	case "resistor":
 		return []string{"resistance", "current limiter"}
 	case "capacitor":
@@ -91,6 +93,8 @@ func partLimitations(kind string) string {
 		return ResistiveSensorModel().Limitations
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return LogicDeviceModel().Limitations
+	case "battery":
+		return PowerDeviceModel().Battery
 	case "dc-source":
 		return "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity."
 	case "resistor":

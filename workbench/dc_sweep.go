@@ -105,7 +105,7 @@ func sweepTargets(g Graph) []SweepTarget {
 func dcSourceLevels(g Graph) []SweepSource {
 	out := []SweepSource{}
 	for _, p := range g.Components {
-		if !IsVoltageSource(p.Kind) {
+		if !IsVoltageSource(p.Kind) || p.Kind == "battery" {
 			continue
 		}
 		level, origin := p.Value, "configured DC value"

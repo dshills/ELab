@@ -25,7 +25,7 @@ func (s *screen) registerExampleLoadCommands() {
 		{"example.emitter-follower", "Load NPN emitter follower", "emitter-follower"},
 		{"example.bipolar-push-pull", "Load complementary transistor buffer", "bipolar-push-pull"},
 		{"example.cmos", "Load complementary MOSFET inverter", "cmos"},
-		{"example.night-light", "Load automatic night-light", "night-light"},
+		{"example.battery-led", "Load battery LED", "battery-led"}, {"example.battery-regulator", "Load battery regulator", "battery-regulator"}, {"example.night-light", "Load automatic night-light", "night-light"},
 		{"example.thermostat", "Load thermistor relay thermostat", "thermostat"},
 		{"example.regulator-supply", "Load regulated supply and load", "regulator-supply"},
 		{"example.regulator-dropout", "Load linear versus LDO dropout", "regulator-dropout"},

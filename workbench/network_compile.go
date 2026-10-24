@@ -17,7 +17,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
-		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, p)
 		case "capacitor":
 			caps = append(caps, p)
@@ -87,6 +87,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 
+	for _, p := range sources {
+		if p.Kind == "battery" {
+			out.Analysis = NetworkTransientAnalysis
+		}
+	}
 	if len(inductors) > 0 {
 		out.Analysis = InductorAnalysis
 	}
@@ -104,6 +109,15 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	}
 	if len(opamps) > MaxNetworkOpAmps {
 		return fail("unsupported", "mixed-limit", "Network simulation supports at most two generic powered op-amps within the existing total part, node and source limits.", "")
+	}
+	batteries := 0
+	for _, p := range sources {
+		if p.Kind == "battery" {
+			batteries++
+		}
+	}
+	if SimulatedComponentCount(g)+batteries > MaxSimulatedComponents || len(caps)+batteries > MaxNetworkCapacitors || len(rs)+batteries > MaxNetworkResistors || len(out.Nets)+batteries > MaxElectricalNodes {
+		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
@@ -164,8 +178,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 	for _, v := range sources {
-		if v.Kind != "dc-source" && net(v, "negative") != out.Ground {
+		if v.Kind != "battery" && v.Kind != "dc-source" && net(v, "negative") != out.Ground {
 			return fail("unsupported", "unsupported-topology", "Waveform sources must have their negative terminal grounded; DC sources may float in a ground-referenced network.", v.ID+".negative")
+		}
+		if v.Kind == "battery" {
+			continue
 		}
 		for _, c := range caps {
 			a, b := net(c, "1"), net(c, "2")
@@ -199,6 +216,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return true
 	}
 	for _, p := range sources {
+		if p.Kind == "battery" {
+			continue
+		}
 		if !join(net(p, "positive"), net(p, "negative")) {
 			return fail("unsupported", "ideal-constraint-loop", "A loop of ideal voltage sources has indeterminate or inconsistent constraints; remove the redundant source or add series resistance.", p.ID)
 		}

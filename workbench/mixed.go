@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Batteries          []BatteryResult       `json:"batteries,omitempty"`
 	Sensors            []SensorResult        `json:"sensors,omitempty"`
 	Regulators         []RegulatorResult     `json:"regulators,omitempty"`
 	Controls           []ControlResult       `json:"controls,omitempty"`
@@ -74,6 +75,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Batteries = append([]BatteryResult(nil), r.Batteries...)
 	o.Sensors = append([]SensorResult(nil), r.Sensors...)
 	o.Regulators = append([]RegulatorResult(nil), r.Regulators...)
 	o.Controls = append([]ControlResult(nil), r.Controls...)
@@ -101,6 +103,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 }
 
 type mixedNetwork struct {
+	authored          Graph
 	dc                bool
 	nonlinear         bool
 	hasRegulator      bool
@@ -130,7 +133,8 @@ type mixedState struct {
 }
 
 func newMixedNetwork(c Compiled) *mixedNetwork {
-	n := &mixedNetwork{c: c, index: map[string]int{c.Ground: -1}}
+	c, authored := lowerPowerDevices(c)
+	n := &mixedNetwork{authored: authored, c: c, index: map[string]int{c.Ground: -1}}
 	for _, node := range c.Nets {
 		if node.ID != c.Ground {
 			n.index[node.ID] = len(n.nodes)
@@ -660,7 +664,9 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at float64) *mixedState {
 	r := &MixedResult{Engine: networkEngine(n.c.Analysis), RunID: t.RunID, ElectricalRevision: t.ElectricalRevision, Time: at, Nodes: map[string]float64{n.c.Ground: 0}, Transistors: []MixedTransistor{}, Capacitors: []CapacitorResult{}, LEDs: []BranchResult{}, Resistors: []BranchResult{}, Sources: []BranchResult{}}
 	for i, id := range n.nodes {
-		r.Nodes[id] = x[i]
+		if !privatePart(id) {
+			r.Nodes[id] = x[i]
+		}
 	}
 	capV := make([]float64, len(n.caps))
 	powers := 0.
@@ -696,7 +702,9 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else if p.Kind == "switch" {
 				r.Switches = append(r.Switches, br)
 			} else {
-				r.Resistors = append(r.Resistors, br)
+				if !privatePart(p.ID) {
+					r.Resistors = append(r.Resistors, br)
+				}
 			}
 		case "thermistor", "ldr":
 			device := n.sensorResult(p, x)
@@ -752,14 +760,16 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		v := n.sourceStimulus(p, t, at, dt)
 		i := -x[len(n.nodes)+k]
 		br := BranchResult{p.ID, i, v, v * i}
-		r.Sources = append(r.Sources, br)
+		if !privatePart(p.ID) {
+			r.Sources = append(r.Sources, br)
+		}
 		sourcePower += br.Power
 	}
 	for k, p := range n.caps {
 		v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
 		capV[k] = v
 		i := 0.
-		if dt == 0 || len(n.inductors) > 0 {
+		if dt == 0 || n.usesCollocation() {
 			i = x[n.capacitorIndex(k)]
 		} else {
 			i = p.Value * (v - old[k]) / dt
@@ -767,7 +777,9 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		// SDIRK history is a stage construction, not the previous accepted
 		// voltage. Balance instantaneous terminal power for every method.
 		energyRate += v * i
-		r.Capacitors = append(r.Capacitors, CapacitorResult{p.ID, v, i, .5 * p.Value * v * v})
+		if !privatePart(p.ID) {
+			r.Capacitors = append(r.Capacitors, CapacitorResult{p.ID, v, i, .5 * p.Value * v * v})
+		}
 	}
 	for k, p := range n.inductors {
 		v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
@@ -779,10 +791,11 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		energyRate += v * i
 		r.Inductors = append(r.Inductors, InductorResult{ID: p.ID, Voltage: v, Current: i, Energy: .5 * p.Value * i * i})
 	}
-	_, f := n.mnaEquations(x, old, dt, t, at, len(n.inductors) == 0)
+	_, f := n.mnaEquations(x, old, dt, t, at, !n.usesCollocation())
 	for i := range n.nodes {
 		r.KCLResidual = math.Max(r.KCLResidual, math.Abs(f[i]))
 	}
+	n.publishPower(r, x)
 	r.PowerResidual = sourcePower - powers - energyRate - r.NumericalDamping
 	return &mixedState{n, x, capV, r}
 }
@@ -802,7 +815,7 @@ func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integr
 	return state.advanceAnalogBudget(t, end, budget)
 }
 func (state *mixedState) advanceAnalogBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
-	if len(state.net.inductors) > 0 {
+	if state.net.usesCollocation() {
 		return state.advanceInductorBudget(t, end, budget)
 	}
 	cur := state

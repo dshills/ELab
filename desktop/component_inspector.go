@@ -91,6 +91,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if part.Kind == "battery" {
+		inspector = append(inspector, s.batteryControls(state, part)...)
+	}
 	if workbench.IsSensorKind(part.Kind) {
 		inspector = append(inspector, s.sensorControls(state, part)...)
 	}
@@ -151,6 +154,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 	if part.Unit != "" {
 		valueTitle := "Value · " + part.Unit
+		if part.Kind == "battery" {
+			valueTitle = "Full-charge voltage · V"
+		}
 		if part.Kind == "thermistor" {
 			valueTitle = "Reference resistance at 25 °C · Ω"
 		}

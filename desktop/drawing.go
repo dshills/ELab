@@ -284,6 +284,14 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		b.stroke(c, width, transformed...)
 	}
 	switch part.Kind {
+	case "battery":
+		for _, path := range workbench.BatterySymbolPaths() {
+			points := make([]canvas.Point, len(path))
+			for k, p := range path {
+				points[k] = canvas.Point{X: p.X, Y: p.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
 	case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		p := make([]canvas.Point, 49)
 		for i := range p {

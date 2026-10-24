@@ -69,6 +69,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "battery-led", Title: "Battery sag and LED fade", Question: "Why does a weak battery dim an LED?", Expected: "Internal resistance sags under load; stored charge and open-circuit voltage fall as current is delivered.", Try: "Select B1 for live charge and voltage. Close S1 to add load. Change startup charge, capacity or ESR and Restart.", Limitation: PowerDeviceModel().Battery},
+		{ID: "battery-regulator", Title: "Battery discharge and regulator dropout", Question: "When does a regulator lose its output as a battery weakens?", Expected: "The 5 V regulator enters dropout as battery terminal voltage loses headroom.", Try: "Compare B1 terminal voltage, U1 output and battery current; change startup charge or capacity and Restart.", Limitation: PowerDeviceModel().Battery},
 		{ID: "night-light", Title: "Automatic night-light", Question: "How can light switch an LED automatically?", Expected: "LDR resistance rises as light falls. U1 switches the LED on in darkness, retaining its state across a narrow threshold band.", Try: "Select LDR1 and move Light level or enter lux. P1 adjusts the light threshold. Compare sensor resistance, divider voltage and LED current.", Limitation: ResistiveSensorModel().Limitations},
 		{ID: "thermostat", Title: "Thermistor relay thermostat", Question: "How does a thermostat avoid relay chatter?", Expected: "A cold NTC divider makes U1 energize the relay through Q1; warming releases it. Hysteresis separates switching temperatures, and D2 carries coil flyback current.", Try: "Select RT1; move temperature between 20 and 30 °C. P1 adjusts the setpoint. Plot sensor voltage, comparator output, coil current and heater-indicator current.", Limitation: ResistiveSensorModel().Limitations},
 		{ID: "regulator-supply", Title: "Regulated supply and load", Question: "How does load change a regulated output?", Expected: "A 9 V input charges COUT toward 5 V. Closing S1 increases load and output droop; a 10 Ω RLOAD reaches the 100 mA current limit.", Try: "Plot output and regulator current, close S1, then change RLOAD from 100 Ω to 10 Ω. Inspect regulator power loss.", Limitation: VoltageRegulatorModel().Limitations},
@@ -120,6 +122,16 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "battery-led", "battery-regulator":
+		d.graph = BatteryExampleGraph(id == "battery-regulator")
+		d.selected = "B1"
+		d.settings.StepSeconds = .005
+		d.settings.PlaybackSpeed = 1
+		d.probes = []string{"v:B1", "i:B1", "i:D1"}
+		if id == "battery-regulator" {
+			d.probes = []string{"v:B1", "v:U1", "i:B1"}
+		}
+		d.view = View{Zoom: .8}
 	case "night-light", "thermostat":
 		d.graph = SensorExampleGraph(id == "thermostat")
 		d.selected = "LDR1"
