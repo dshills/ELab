@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Sensors            []SensorResult        `json:"sensors,omitempty"`
 	Regulators         []RegulatorResult     `json:"regulators,omitempty"`
 	Controls           []ControlResult       `json:"controls,omitempty"`
 	Displays           []DisplayResult       `json:"displays,omitempty"`
@@ -73,6 +74,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Sensors = append([]SensorResult(nil), r.Sensors...)
 	o.Regulators = append([]RegulatorResult(nil), r.Regulators...)
 	o.Controls = append([]ControlResult(nil), r.Controls...)
 	o.Displays = append([]DisplayResult(nil), r.Displays...)
@@ -140,7 +142,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
 		n.hasGeneralBipolar = n.hasGeneralBipolar || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
 		switch p.Kind {
-		case "resistor", "capacitor", "inductor", "switch", "potentiometer":
+		case "thermistor", "ldr", "resistor", "capacitor", "inductor", "switch", "potentiometer":
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		case "ground", "junction", "net-label":
 		default:
@@ -302,6 +304,10 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "thermistor", "ldr":
+			u, v := n.pin(p, "1"), n.pin(p, "2")
+			r := sensorResistance(p)
+			flow(u, v, (voltage(x, u)-voltage(x, v))/r, 1/r)
 		case "resistor", "switch":
 			u, v := n.pin(p, "1"), n.pin(p, "2")
 			resistance := p.Value
@@ -692,6 +698,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			} else {
 				r.Resistors = append(r.Resistors, br)
 			}
+		case "thermistor", "ldr":
+			device := n.sensorResult(p, x)
+			r.Sensors = append(r.Sensors, device)
+			powers += device.Power
 		case "linear-regulator", "ldo-regulator":
 			device := n.regulatorResult(p, x)
 			r.Regulators = append(r.Regulators, device)

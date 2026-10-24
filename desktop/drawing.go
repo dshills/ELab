@@ -170,6 +170,9 @@ func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*
 		if workbench.IsRegulatorKind(part.Kind) {
 			outlineW, outlineH = 108, 98
 		}
+		if part.Kind == "ldr" {
+			outlineW, outlineH = 76, 82
+		}
 		if part.Kind == "relay" {
 			outlineW, outlineH = 128, 138
 		}
@@ -365,6 +368,14 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		contact := 35 * (1 - 2*(*part.WiperPosition))
 		stroke(ink, 2.5, canvas.Point{Y: -45}, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact - 5, Y: -25})
 		stroke(ink, 2.5, canvas.Point{X: contact, Y: -17}, canvas.Point{X: contact + 5, Y: -25})
+	case "thermistor", "ldr":
+		for _, path := range workbench.SensorSymbolPaths(part.Kind) {
+			points := make([]canvas.Point, len(path))
+			for k, at := range path {
+				points[k] = canvas.Point{X: at.X, Y: at.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
 	case "resistor":
 		stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
 	case "diode", "zener", "schottky":

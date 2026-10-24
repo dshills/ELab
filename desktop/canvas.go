@@ -115,6 +115,9 @@ func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 		if part.Kind == "relay" {
 			width, height = 102, 92
 		}
+		if workbench.IsSensorKind(part.Kind) {
+			width, height = 62, 52
+		}
 		if part.Kind == "potentiometer" {
 			width, height = 65, 50
 		}

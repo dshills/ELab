@@ -69,6 +69,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "night-light", Title: "Automatic night-light", Question: "How can light switch an LED automatically?", Expected: "LDR resistance rises as light falls. U1 switches the LED on in darkness, retaining its state across a narrow threshold band.", Try: "Select LDR1 and move Light level or enter lux. P1 adjusts the light threshold. Compare sensor resistance, divider voltage and LED current.", Limitation: ResistiveSensorModel().Limitations},
+		{ID: "thermostat", Title: "Thermistor relay thermostat", Question: "How does a thermostat avoid relay chatter?", Expected: "A cold NTC divider makes U1 energize the relay through Q1; warming releases it. Hysteresis separates switching temperatures, and D2 carries coil flyback current.", Try: "Select RT1; move temperature between 20 and 30 °C. P1 adjusts the setpoint. Plot sensor voltage, comparator output, coil current and heater-indicator current.", Limitation: ResistiveSensorModel().Limitations},
 		{ID: "regulator-supply", Title: "Regulated supply and load", Question: "How does load change a regulated output?", Expected: "A 9 V input charges COUT toward 5 V. Closing S1 increases load and output droop; a 10 Ω RLOAD reaches the 100 mA current limit.", Try: "Plot output and regulator current, close S1, then change RLOAD from 100 Ω to 10 Ω. Inspect regulator power loss.", Limitation: VoltageRegulatorModel().Limitations},
 		{ID: "regulator-dropout", Title: "Linear versus LDO dropout", Question: "How much input headroom does a regulator need?", Expected: "Both target 5 V. As VIN falls, the standard regulator loses regulation below 7 V; the LDO below 5.3 V, with finite load droop.", Try: "Plot VIN, U1 and U2 outputs. Pause and step through a cycle; change the output setpoints or loads.", Limitation: VoltageRegulatorModel().Limitations},
 		{ID: "relay-switch", Title: "Pushbutton transistor relay", Question: "How can a transistor switch an isolated load?", Expected: "S1 energizes the 5 V coil through Q1; normally-open contacts switch a separate 9 V LED load. D2 carries flyback current after release.", Try: "Click S1, compare coil current and LED current, then change K1 inductance to change pickup/decay timing.", Limitation: ControlledDeviceModel().Limitations},
@@ -118,6 +120,19 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "night-light", "thermostat":
+		d.graph = SensorExampleGraph(id == "thermostat")
+		d.selected = "LDR1"
+		d.settings.StepSeconds = .0005
+		d.settings.PlaybackSpeed = .2
+		d.probes = []string{"v:LDR1.2", "v:U1", "i:D1", "i:LDR1"}
+		if id == "thermostat" {
+			d.selected = "RT1"
+			d.settings.StepSeconds = .0002
+			d.settings.PlaybackSpeed = .02
+			d.probes = []string{"v:RT1.2", "v:U1", "i:K1", "i:D1", "i:D2"}
+		}
+		d.view = View{Center: Point{X: 0, Y: 100}, Zoom: .6}
 	case "regulator-supply", "regulator-dropout":
 		d.graph = RegulatorSupplyExampleGraph()
 		d.settings.StepSeconds = .0005

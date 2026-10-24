@@ -14,6 +14,9 @@ func PartActuationHint(kind string) string {
 }
 
 func addActuationCapabilityDetails(id string, schema map[string]any) bool {
+	if addSensorCapabilityDetails(id, schema) {
+		return true
+	}
 	if id == "button.set" || id == "button.click" {
 		return addButtonCapabilityDetails(id, schema)
 	}

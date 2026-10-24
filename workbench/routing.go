@@ -70,6 +70,8 @@ func routeBody(p Component) routeRect {
 		w, h = 72, 92
 	case "linear-regulator", "ldo-regulator":
 		w, h = 68, 48
+	case "thermistor", "ldr":
+		w, h = 62, 52
 	case "relay":
 		w, h = 102, 92
 	case "potentiometer":

@@ -65,6 +65,8 @@ func nativeAliases() map[string][]string {
 		"example.pnp":                  {"example.load"},
 		"example.emitter-follower":     {"example.load"},
 		"example.bipolar-push-pull":    {"example.load"},
+		"example.night-light":          {"example.load"},
+		"example.thermostat":           {"example.load"},
 		"example.regulator-supply":     {"example.load"},
 		"example.regulator-dropout":    {"example.load"},
 		"example.relay-switch":         {"example.load"},

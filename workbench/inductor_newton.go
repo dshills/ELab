@@ -40,7 +40,7 @@ func (n *mixedNetwork) inductorNewtonScale(x, delta []float64, stages int) float
 				} else {
 					forward(junction(p, "drain", "source"))
 				}
-			case "relay", "comparator", "pushbutton", "bouncing-pushbutton", "timer555", "resistor", "capacitor", "inductor", "switch", "potentiometer",
+			case "relay", "comparator", "pushbutton", "bouncing-pushbutton", "timer555", "thermistor", "ldr", "resistor", "capacitor", "inductor", "switch", "potentiometer",
 				"dc-source", "pulse-source", "sine-source", "finite-pulse-source",
 				"ground", "junction", "net-label":
 			default:

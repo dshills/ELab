@@ -29,6 +29,8 @@ type View struct {
 	Zoom   float64 `json:"zoom"`
 }
 type Component struct {
+	TemperatureC   *float64       `json:"temperature_c,omitempty"`
+	IlluminanceLux *float64       `json:"illuminance_lux,omitempty"`
 	Sine           *SineWaveform  `json:"sine,omitempty"`
 	Pulse          *PulseWaveform `json:"pulse,omitempty"`
 	WiperPosition  *float64       `json:"wiper_position,omitempty"`

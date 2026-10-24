@@ -36,6 +36,7 @@ type Document struct {
 	SequentialModel    *SequentialModel    `json:"sequential_model,omitempty"`
 	DisplayModel       *DisplayModel       `json:"display_model,omitempty"`
 	RegulatorModel     *RegulatorModel     `json:"regulator_model,omitempty"`
+	SensorModel        *SensorModel        `json:"sensor_model,omitempty"`
 	ControlModel       *ControlModel       `json:"control_model,omitempty"`
 	Recordings         *ProjectRecordings  `json:"recordings,omitempty"`
 	Paused             *bool               `json:"paused,omitempty"`
@@ -373,6 +374,9 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := validateControlModel(d.Graph, d.ControlModel); err != nil {
 		return Document{}, err
 	}
+	if err := validateSensorModel(d.Graph, d.SensorModel); err != nil {
+		return Document{}, err
+	}
 	if err := validateRegulatorModel(d.Graph, d.RegulatorModel); err != nil {
 		return Document{}, err
 	}
@@ -482,6 +486,22 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, fmt.Errorf("waveform source requires complete per-source parameters")
 		}
 
+		if IsSensorKind(c.Kind) {
+			v := c.TemperatureC
+			if c.Kind == "ldr" {
+				v = c.IlluminanceLux
+			}
+			if v == nil {
+				return d, fmt.Errorf("sensor requires explicit environment")
+			}
+			if err := validateSensorEnvironment(c.Kind, *v); err != nil {
+				return d, err
+			}
+			setSensorEnvironment(&expected, *v)
+		}
+		if c.TemperatureC != nil && c.Kind != "thermistor" || c.IlluminanceLux != nil && c.Kind != "ldr" {
+			return d, fmt.Errorf("wrong sensor environment field")
+		}
 		if c.WiperPosition != nil {
 			if c.Kind != "potentiometer" || !finite(*c.WiperPosition) || *c.WiperPosition < 0 || *c.WiperPosition > 1 {
 				return d, fmt.Errorf("invalid potentiometer wiper on %s", c.ID)
@@ -635,6 +655,7 @@ func (s *Service) documentLocked() Document {
 	d.SequentialModel = sequentialModelForGraph(s.graph)
 	d.DisplayModel = displayModelForGraph(s.graph)
 	d.RegulatorModel = regulatorModelForGraph(s.graph)
+	d.SensorModel = sensorModelForGraph(s.graph)
 	d.ControlModel = controlModelForGraph(s.graph)
 	return d
 }

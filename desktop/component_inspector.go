@@ -91,6 +91,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if workbench.IsSensorKind(part.Kind) {
+		inspector = append(inspector, s.sensorControls(state, part)...)
+	}
 	if part.Kind == "potentiometer" {
 		inspector = append(inspector, s.potentiometerControls(state, part)...)
 	}
@@ -148,6 +151,12 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 	if part.Unit != "" {
 		valueTitle := "Value · " + part.Unit
+		if part.Kind == "thermistor" {
+			valueTitle = "Reference resistance at 25 °C · Ω"
+		}
+		if part.Kind == "ldr" {
+			valueTitle = "Reference resistance at 10 lux · Ω"
+		}
 		if workbench.IsRegulatorKind(part.Kind) {
 			valueTitle = "Output setpoint · V"
 		}

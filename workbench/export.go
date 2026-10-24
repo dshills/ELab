@@ -156,6 +156,12 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			minY = math.Min(minY, p.Position.Y-250)
 			maxY = math.Max(maxY, p.Position.Y+250)
 		}
+		if p.Kind == "ldr" {
+			minX = math.Min(minX, p.Position.X-80)
+			minY = math.Min(minY, p.Position.Y-80)
+			maxX = math.Max(maxX, p.Position.X+80)
+			maxY = math.Max(maxY, p.Position.Y+80)
+		}
 		if p.Kind == "relay" {
 			minX = math.Min(minX, p.Position.X-140)
 			maxY = math.Max(maxY, p.Position.Y+140)
@@ -212,6 +218,22 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	}
 	if model := controlModelForGraph(g); model != nil {
 		metadataFields["control_model"] = model
+	}
+	if model := sensorModelForGraph(g); model != nil {
+		metadataFields["sensor_model"] = model
+		conditions := []map[string]any{}
+		for _, p := range g.Components {
+			if IsSensorKind(p.Kind) {
+				condition := map[string]any{"id": p.ID, "kind": p.Kind, "reference_resistance_ohm": p.Value, "resistance_ohm": sensorResistance(p)}
+				if p.Kind == "thermistor" {
+					condition["temperature_c"] = sensorEnvironment(p)
+				} else {
+					condition["illuminance_lux"] = sensorEnvironment(p)
+				}
+				conditions = append(conditions, condition)
+			}
+		}
+		metadataFields["sensor_environments"] = conditions
 	}
 	if model := regulatorModelForGraph(g); model != nil {
 		metadataFields["regulator_model"] = model
@@ -289,6 +311,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			b.WriteString(`<path d="M-55 0 H-34 L-28 -10 L-17 10 L-6 -10 L6 10 L17 -10 L28 10 L34 0 H55"/>`)
 			contact := 28 * (1 - 2*(*p.WiperPosition))
 			fmt.Fprintf(&b, `<path d="M0 -45 L%g -12 L%g -20 M%g -12 L%g -20"/>`, contact, contact-5, contact, contact+5)
+		case "thermistor", "ldr":
+			for _, path := range SensorSymbolPaths(p.Kind) {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "resistor":
 			b.WriteString(`<path d="M-55 0 H-34 L-28 -10 L-17 10 L-6 -10 L6 10 L17 -10 L28 10 L34 0 H55"/>`)
 		case "inductor":
@@ -462,6 +492,13 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		if p.Unit != "" {
 			text += " · " + displayPartValue(p)
 		}
+		if IsSensorKind(p.Kind) {
+			unit := "lux"
+			if p.Kind == "thermistor" {
+				unit = "°C"
+			}
+			text += fmt.Sprintf(" · %.6g %s", sensorEnvironment(p), unit)
+		}
 		if p.InitialVoltage != nil {
 			text += fmt.Sprintf(" · initial %.4g V", *p.InitialVoltage)
 		}
@@ -563,6 +600,12 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		if p.Rotation == 180 {
 			x = p.Position.X - schematicLabelWidth(text) - 31
 		}
+	case "thermistor", "ldr":
+		if p.Kind == "ldr" {
+			return p.Position.X + 90, p.Position.Y - 15, p.ID + " R10 · " + FormatValue(p.Value, "Ω")
+		}
+		x, y, text := schematicPartLabel(Component{ID: p.ID + " R25", Kind: "resistor", Value: p.Value, Unit: p.Unit, Position: p.Position, Rotation: p.Rotation})
+		return x, y, text
 	case "resistor":
 		if p.Rotation == 90 || p.Rotation == 270 {
 			x, y = p.Position.X+17, p.Position.Y-2

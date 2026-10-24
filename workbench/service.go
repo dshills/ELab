@@ -58,6 +58,7 @@ type Snapshot struct {
 	SequentialModel        *SequentialModel       `json:"sequential_model,omitempty"`
 	DisplayModel           *DisplayModel          `json:"display_model,omitempty"`
 	RegulatorModel         *RegulatorModel        `json:"regulator_model,omitempty"`
+	SensorModel            *SensorModel           `json:"sensor_model,omitempty"`
 	ControlModel           *ControlModel          `json:"control_model,omitempty"`
 	Recording              *RecordingView         `json:"recording,omitempty"`
 	Recovery               RecoveryState          `json:"recovery"`
@@ -466,6 +467,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out.SequentialModel = sequentialModelForGraph(graph)
 	out.DisplayModel = displayModelForGraph(graph)
 	out.RegulatorModel = regulatorModelForGraph(graph)
+	out.SensorModel = sensorModelForGraph(graph)
 	out.ControlModel = controlModelForGraph(graph)
 	out.LastExport = cloneArtifact(s.lastExport)
 	if len(s.undo) > 0 {
@@ -1175,6 +1177,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 		m := *state.RegulatorModel
 		state.RegulatorModel = &m
 	}
+	if state.SensorModel != nil {
+		m := *state.SensorModel
+		state.SensorModel = &m
+	}
 	if state.ControlModel != nil {
 		m := *state.ControlModel
 		state.ControlModel = &m
@@ -1231,6 +1237,14 @@ func cloneSnapshot(state Snapshot) Snapshot {
 		if state.Components[i].Pulse != nil {
 			w := *state.Components[i].Pulse
 			state.Components[i].Pulse = &w
+		}
+		if v := state.Components[i].TemperatureC; v != nil {
+			c := *v
+			state.Components[i].TemperatureC = &c
+		}
+		if v := state.Components[i].IlluminanceLux; v != nil {
+			c := *v
+			state.Components[i].IlluminanceLux = &c
 		}
 		if state.Components[i].WiperPosition != nil {
 			v := *state.Components[i].WiperPosition

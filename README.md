@@ -335,3 +335,9 @@ examples that show flyback current. [Linear and LDO regulators](docs/voltage-reg
 add finite load regulation, dropout and current limiting; examples compare
 headroom and capacitor charging/load steps. All eight new components use the
 ordinary placement, wiring, values, probes, simulation and project commands.
+
+[NTC thermistors and light-dependent resistors](docs/resistive-sensors.md)
+add temperature/light sliders and exact environment entry, live resistance
+readings, an automatic night-light and a relay thermostat. Native controls and
+agents share `sensor.temperature.set` / `sensor.light.set`; fresh transient
+changes preserve capacitor voltage, coil current and accepted time.

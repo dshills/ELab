@@ -29,6 +29,14 @@ func (g Graph) Clone() Graph {
 			v := *w
 			out.Components[i].Pulse = &v
 		}
+		if v := out.Components[i].TemperatureC; v != nil {
+			c := *v
+			out.Components[i].TemperatureC = &c
+		}
+		if v := out.Components[i].IlluminanceLux; v != nil {
+			c := *v
+			out.Components[i].IlluminanceLux = &c
+		}
 		if v := out.Components[i].WiperPosition; v != nil {
 			copy := *v
 			out.Components[i].WiperPosition = &copy
@@ -149,6 +157,8 @@ type Part struct {
 func libraryParts() []Part {
 	return []Part{
 		{Kind: "dc-source", Name: "DC source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-dc.v1"},
+		{Kind: "thermistor", Name: "NTC thermistor", Terminals: []string{"1", "2"}, DefaultValue: "10k Ω", Unit: "Ω", Model: SensorModelID},
+		{Kind: "ldr", Name: "Light-dependent resistor", Terminals: []string{"1", "2"}, DefaultValue: "10k Ω", Unit: "Ω", Model: SensorModelID},
 		{Kind: "resistor", Name: "Resistor", Terminals: []string{"1", "2"}, DefaultValue: "1k", Unit: "Ω", Model: "ideal-resistor.v1"},
 		{Kind: "led", Name: "Red LED", Terminals: []string{"anode", "cathode"}, DefaultValue: "", Unit: "", Model: ModelID},
 		{Kind: "capacitor", Name: "Capacitor", Terminals: []string{"1", "2"}, DefaultValue: "1uF", Unit: "F", Model: "ideal-capacitor.v1"},
@@ -231,6 +241,13 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 			w := DefaultPulseWaveform()
 			c.Pulse = &w
 		}
+		if IsSensorKind(kind) {
+			v := 25.
+			if kind == "ldr" {
+				v = 100
+			}
+			setSensorEnvironment(&c, v)
+		}
 		if kind == "potentiometer" {
 			w := .5
 			c.WiperPosition = &w
@@ -267,7 +284,7 @@ func SetValue(c Component, text string) (Component, error) {
 		c.Label = text
 		return c, nil
 	}
-	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && c.Kind != "zener" && c.Kind != "comparator" && c.Kind != "relay" && !IsRegulatorKind(c.Kind) && !IsWaveformSource(c.Kind) {
+	if c.Kind != "dc-source" && c.Kind != "pulse-source" && c.Kind != "resistor" && c.Kind != "capacitor" && c.Kind != "inductor" && c.Kind != "potentiometer" && c.Kind != "zener" && c.Kind != "comparator" && c.Kind != "relay" && !IsSensorKind(c.Kind) && !IsRegulatorKind(c.Kind) && !IsWaveformSource(c.Kind) {
 		return c, fmt.Errorf("this component has no editable value")
 	}
 	value, err := ParseValue(text, c.Unit)
@@ -349,7 +366,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "pushbutton", "bouncing-pushbutton", "switch", "resistor", "inductor":
+	case "thermistor", "ldr", "pushbutton", "bouncing-pushbutton", "switch", "resistor", "inductor":
 		switch name {
 		case "1":
 			p = Point{-55, 0}
@@ -494,6 +511,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true
+		case "thermistor", "ldr":
+			hasSwitch = true
 		case "potentiometer":
 			hasPot = true
 		case "resistor":

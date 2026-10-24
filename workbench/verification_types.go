@@ -86,6 +86,7 @@ type VerificationMetadata struct {
 	SequentialModel    *SequentialModel    `json:"sequential_model,omitempty"`
 	DisplayModel       *DisplayModel       `json:"display_model,omitempty"`
 	RegulatorModel     *RegulatorModel     `json:"regulator_model,omitempty"`
+	SensorModel        *SensorModel        `json:"sensor_model,omitempty"`
 	ControlModel       *ControlModel       `json:"control_model,omitempty"`
 	Format             string              `json:"format"`
 	Version            int                 `json:"version"`
