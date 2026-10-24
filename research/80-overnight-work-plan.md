@@ -80,3 +80,14 @@ and divider repair is included. Changed-binary native acceptance for these and
 the preceding /207–/208 paths remains pending; /205 is still the download.
 Continue remaining input/agent contract work and applicable existing-session
 checks under the saved authorization, without requesting it again.
+
+## Checkpoint: recorded-position request context
+
+The [position-context repair](88-recorded-position-context.md) fixes a packaged
+stale seek request receiving another capture's range and late malformed UI
+input appearing after agent edits. One central context check now protects all
+specialized request help. Full source checks and the clean /211 matching agent
+pass, including four stale contexts and 22 original captured RC readings after
+a live resistor edit. No command, model, schema or SDK changes. /210 and /205
+are preserved; new native acceptance remains separate. Continue the remaining
+contract work without requesting launch permission or owner review.

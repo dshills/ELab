@@ -35,3 +35,14 @@ download remain unchanged, and previous candidates are preserved. Fresh native
 acceptance of this UI guard and the accumulated /207–/210 changes remains
 separate from source/offscreen and headless evidence. No permission or owner
 review is requested and no launch prompt is left waiting.
+
+The [clean 0.181.10 /211 candidate](candidate-report.json) builds from
+`8085b347b44739abecc04a338c5fd42a1830034a` and verifies its strict ad-hoc bundle signature.
+Its matching agent passes four stale-context cases, five malformed requests and
+six current refusals. After changing live R1 from 10 kΩ to 20 kΩ, all 22 captured
+voltage/current readings still match the original 5 V / 10 kΩ / 1 µF RC equations.
+Captured metadata, window and cursors remain exact, including seeks outside the
+visible interval. Maximum errors are 2.77556e-16 V and 5.42101e-20 A. Workers join and the
+agent exits zero. All 876 source/check inputs, the complete app bundle and the
+preserved /210 binaries still match. [Fresh native acceptance](native-acceptance-pending.json)
+remains pending; the candidate is held and /205 stays the download.

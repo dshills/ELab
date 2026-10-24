@@ -1,0 +1,32 @@
+{
+  "source_commit": "8085b347b44739abecc04a338c5fd42a1830034a",
+  "agent_sha256": "5cc67c97a30cb5af366d276851b51f29ab61fe6259938ad0d88633e70c04ad99",
+  "transport": "headless-stdio",
+  "stale_context_cases": 4,
+  "malformed_cases": 5,
+  "fresh_refusal_cases": 6,
+  "scalar_readings_checked": 22,
+  "max_voltage_error_v": 2.7755575615628914e-16,
+  "max_current_error_a": 5.421010862427522e-20,
+  "shutdown": {
+    "id": "shutdown-1",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.stdio",
+    "input_revision": 28,
+    "command_revision": 23,
+    "document_generation": 2,
+    "discard_recovery": true,
+    "checkpoint_recovery": false,
+    "cancelable": false,
+    "recovery_finalized": true,
+    "workers_joined": true,
+    "exit_ready": true
+  },
+  "passed": true,
+  "agent_exit_code": 0,
+  "live_resistance_ohm": 20000,
+  "captured_resistance_ohm": 10000,
+  "capture_window_cursors_and_metadata_preserved": true,
+  "independent_reference": "5 V / 10 kohm / 1 uF: Vc=5*(1-exp(-t/.01)), Ic=.0005*exp(-t/.01); live R1 changed afterward to 20 kohm"
+}

@@ -60,3 +60,12 @@ Changed-binary native acceptance remains separate from source/offscreen and
 headless-agent evidence. Use the saved authorization without a new permission
 request or unattended launch prompt. The owned native session is untouched by
 this checkpoint.
+
+The clean 0.181.10 /211 candidate builds from `8085b347`, passes
+strict ad-hoc bundle verification and the matching packaged-agent checks: four
+stale contexts, five malformed requests and six current refusals. After a live
+10 kΩ → 20 kΩ edit, 22 captured readings match the original RC equations, with
+metadata, window and cursors preserved. Workers join and the agent exits zero.
+All 876 inputs, app bytes and preserved /210 binaries remain exact.
+[Receipt](../docs/validation/recorded-position-211/candidate-report.json).
+The candidate stays held for fresh native acceptance; /205 remains unchanged.
