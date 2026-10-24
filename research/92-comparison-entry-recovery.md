@@ -40,3 +40,13 @@ then edits the live resistor to verify capture immutability. This is separately
 scoped from fresh native acceptance of the UI changes. The current /205 download,
 all earlier candidates and the existing owned app are preserved; no graphical
 launch or permission request is queued.
+
+
+The [clean /215 matching agent](../docs/validation/comparison-entry-215/candidate-report.json)
+passes 23 pure comparisons and 138 independent RC voltage/current/delta readings
+across different saved rates and resistances. It preserves captured metadata
+after a live 30 kohm edit, refuses six invalid/stale requests without changing
+state, and passes unit-time correction, preference/reference changes and clear.
+Scope windows/cursors remain exact; workers join and the process exits 0.
+All 886 source/check inputs and the signed bundle remain exact. The candidate
+is held for fresh native acceptance; /205 remains the current download.

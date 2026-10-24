@@ -131,3 +131,19 @@ start with its accepted text. Its fresh correction succeeds, and its restored
 full state differs only in revision counters. The owned app stays open for
 reuse; no graphical app launch or permission request is queued. Fresh native
 acceptance of /214 remains separate, and /205 is still the current download.
+
+## Checkpoint: captured comparison entry recovery
+
+The [comparison entry repair](92-comparison-entry-recovery.md) reproduces three
+lost rejected times and private text following an agent's replacement reference.
+Retained-time ownership, a last-accepted-comparison note and reference-scoped
+widget state repair those four mounted cases. Eight stale callbacks, seven
+pruning/reset cases, preference preservation and existing query parity pass.
+The backend, SDK and public command/alias/route sets remain unchanged.
+
+Full quality and the clean /215 matching agent pass. Its 23 pure comparisons
+check 138 independent RC voltage/current/delta references at the actual selected
+saved timestamps, across different rates and resistances. Captures remain exact
+after a live 30 kohm edit; six invalid/stale requests preserve the full state.
+Fresh native acceptance remains separate. /214 and /205 are preserved, the
+existing native session is untouched, and no graphical launch prompt is queued.
