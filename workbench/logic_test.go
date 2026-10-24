@@ -146,6 +146,9 @@ func TestLogicExamplesTransientTruthAndLiveSwitches(t *testing.T) {
 			if initial.LogicModel == nil || initial.Document.Dirty || initial.Mixed == nil {
 				t.Fatal("logic example startup", initial.Diagnostics)
 			}
+			if warnings := waveformSamplingWarnings(Graph{Components: initial.Components, Wires: initial.Wires}, initial.TransientSettings); len(warnings) != 0 {
+				t.Fatal("logic example undersamples its own edges", warnings)
+			}
 			if id == "logic-switches" {
 				for _, bits := range []int{0, 1, 3, 2, 0} {
 					for k, name := range []string{"SA", "SB"} {

@@ -107,7 +107,7 @@ func findExample(id string) (exampleDefinition, bool) {
 	case "logic-inverter", "logic-switches", "logic-half-adder":
 		d.graph = logicExample(id)
 		d.selected = "U1"
-		d.settings.StepSeconds = .005
+		d.settings.StepSeconds = .002
 		d.settings.PlaybackSpeed = .1
 		d.probes = []string{"v:A.positive", "v:U1", "i:D1"}
 		if id == "logic-switches" {

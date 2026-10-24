@@ -39,3 +39,10 @@ and eight-category count), the fixed export markup issue, and a timer/coil
 wall-clock budget overrun under concurrent race/build load. Catalog tests now
 include the new gates/category. Production work limits are unchanged. Final
 broad checks and packaged/native observations are recorded at completion.
+
+Native inspection of the first /237 build found the examples' 5 ms output
+interval triggered the existing four-samples-per-ramp guidance on 10 ms input
+edges. The final defaults use 2 ms; a regression checks that these curated
+examples meet their own waveform-sampling guidance. Focused root and native
+race checks pass after the adjustment. This changes output sampling only, not
+the gate equations or solver work budget.
