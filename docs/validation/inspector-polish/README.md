@@ -25,7 +25,27 @@ These are manual scene-adapter software captures, not native GPU screenshots.
 `inventory-review.json` records identical command, alias and route coverage:
 all 404 native source sites are unchanged except for line numbers. One new
 production presentation source is added. The existing Apollo selection test is
-updated to expect ordinary field text rather than action-accent text. Further
-editing/scrolling regression results and native package checks are recorded
-after completion; comprehensive accessibility/distribution acceptance remains
-outside this cosmetic change.
+updated to expect ordinary field text rather than action-accent text.
+
+`focused.txt` passes editing, value application, output-page, validation,
+focused-field reveal, scroll preservation, theme and layout regressions with
+the race detector in 44.281 seconds. The full desktop suite including offscreen
+tests passes in 378.850 seconds (`desktop-race.txt`). Lint, vet, root inventory
+tests and checked-in inventory verification pass.
+
+Clean-source **0.182.6 /230**, built from `f3a6f82b`, is open at
+`build/ELab-0.182.6-230-Inspector/ELab.app`. `build-result.json` records clean
+provenance, executable hashes, strict ad hoc signature verification and the
+unchanged preserved /205 release archive. Its build-time launch flag predates
+the native checks here.
+
+Native captures cover the selected R1 component form, simulation controls and
+Document settings in Apollo, plus Document in Light, Dark and System (resolved
+Light). Wheel scrolling reveals the lower Document sections while navigation
+remains fixed; returning to Inspect restores its start. The app is left paused
+with R1 selected in Apollo. Existing sessions and projects are preserved.
+
+Some intermediate native captures omit custom canvas content while retaining
+the inspector form. Complete final/theme captures are retained separately;
+tooltips outside the inspector are preserved as observed. Comprehensive stable
+capture, accessibility and distribution acceptance remain outside this change.

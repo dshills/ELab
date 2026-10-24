@@ -1,0 +1,19 @@
+{
+  "source_commit": "f3a6f82ba9acaf53723e1d9bebd181a3aa5fc86a",
+  "candidate": "ELab 0.182.6 /230",
+  "full_desktop_race_offscreen": "passed in 378.850s",
+  "focused_race": "passed in 44.281s",
+  "layout_paint": "all three inspector pages, four themes passed",
+  "lint_vet_uiaudit": "passed",
+  "command_inventory": "166 public commands; 404 native source sites unchanged except line numbers",
+  "native_checks": [
+    "R1 component form in Apollo",
+    "simulation form in Apollo",
+    "Document form in Apollo, Light, Dark, System (resolved Light)",
+    "wheel scrolling to lower Document sections with tab header fixed",
+    "return to Inspect resets that page to its start"
+  ],
+  "native_limits": "Some intermediate captures omit custom canvas content; inspector form paint remains visible. Final Apollo, Dark and System captures show the circuit. Tooltips outside the inspector are retained as observed. No comprehensive capture, accessibility or distribution qualification is claimed.",
+  "left_open": "Paused RC circuit, R1 selected, Inspect page, Apollo. Existing sessions and projects preserved.",
+  "preserved_release_unchanged": true
+}
