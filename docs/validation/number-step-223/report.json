@@ -1,0 +1,79 @@
+{
+  "source_parent_commit": "75d67b19dea67545b760e0c14c8b1c79a75ac753",
+  "application_quality_passed": true,
+  "sdk_quality_passed": true,
+  "python_tests": 67,
+  "sdk_prepare_tests": 30,
+  "source_inputs": 897,
+  "changed_source_inputs": [
+    "desktop/go.mod",
+    "desktop/numeric_step_offscreen_test.go",
+    "third_party/vellum/patches/elab-public-e58d405-decimal-step-compat.patch",
+    "third_party/vellum/sdk.lock.json",
+    "third_party/vellum/vellum-e58d405-elab13.tar.gz"
+  ],
+  "production_desktop_go_sources_unchanged": 126,
+  "backend_unchanged": true,
+  "desktop_race_seconds": 175.715,
+  "mounted_race_seconds": 181.24,
+  "sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "35d9d8d67b053adce223b714c8b62164119d3373",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-decimal-step-compat.patch",
+      "sha256": "ccc4f7ff88b777eba11bd0be1a7ecd437efa19017fc62419c787e9854a820492"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab13.tar.gz",
+    "archive_bytes": 20393736,
+    "sha256": "3ac573dde257c4fbdd79b302b43a4905aec13ce1cbb3a36f3d1476be0ca8a3f2",
+    "manifest_sha256": "aa4cfa1f47d4ff2a9697bb395a9e03f639b36244e9deec0806f74a728f948b1e",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab13",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8439,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "sdk_member_comparison": {
+    "changed_files": [
+      "SDK_DOCUMENTATION.md",
+      "drivers/cogent/controls.go",
+      "drivers/cogent/numberfield_step.go",
+      "drivers/cogent/numberfield_step_offscreen_test.go"
+    ],
+    "source_commit": "35d9d8d67b053adce223b714c8b62164119d3373",
+    "old_archive_preserved": true,
+    "bootstrap_unchanged": true,
+    "file_count": 8439,
+    "manifests_match_every_member": true,
+    "release_metadata_unchanged": true
+  },
+  "baseline_driver_failures": 2,
+  "baseline_production_control_failures": 2,
+  "driver_step_cases": 7,
+  "numeric_boundary": "existing float32 native controls and existing float64 public parameters; no migration or shortening of supplied values",
+  "preserved_cache_and_native": {
+    "native_baseline_bytes_still_installed": true,
+    "previous_sdk_cache_unchanged_members": 8437,
+    "native_baseline_sha256": "9e06ccdbf8d515c7d1c9aae54ea67af8011cc9253e98ac7ad5c1044a3ab792ec"
+  },
+  "new_components": 0,
+  "new_commands": 0,
+  "new_models": 0,
+  "new_formats": 0,
+  "native_candidate_acceptance_passed": false,
+  "release_ready": false,
+  "preserved_download": "0.181.4 /205",
+  "raw_archive_sha256": "80d56ea8d070ff98596d80756b77f8dcd577dd781c888f28cd646eef719a711d",
+  "raw_members": 50
+}

@@ -101,3 +101,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Manual-step progress counts](99-manual-step-progress.md): match planned totals to the worker’s existing target grid, preserving timing and bounds. Focused and full gates pass; the original flasher wall-budget failure and numerical-test clock adjustment remain explicit.
 
 - [Validation layout and numeric drafts](103-validation-scroll-and-drafts.md): focused interval visibility and retained unfinished values across layout, with unchanged electrical commands and full source checks.
+
+- [Decimal number steps](104-decimal-number-steps.md): keep stepped values and displayed decimals consistent, with bounded arithmetic and unchanged public command types.

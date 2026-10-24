@@ -47,10 +47,10 @@ require (
 )
 
 replace (
-	cogentcore.org/core => ../build/.vellum-sdk-e58d405-elab12/drivers/cogent/build/upstream
-	github.com/dshills/vellum => ../build/.vellum-sdk-e58d405-elab12
-	github.com/dshills/vellum/drivers/cogent => ../build/.vellum-sdk-e58d405-elab12/drivers/cogent
-	github.com/go-text/typesetting => ../build/.vellum-sdk-e58d405-elab12/drivers/cogent/build/typesetting
+	cogentcore.org/core => ../build/.vellum-sdk-e58d405-elab13/drivers/cogent/build/upstream
+	github.com/dshills/vellum => ../build/.vellum-sdk-e58d405-elab13
+	github.com/dshills/vellum/drivers/cogent => ../build/.vellum-sdk-e58d405-elab13/drivers/cogent
+	github.com/go-text/typesetting => ../build/.vellum-sdk-e58d405-elab13/drivers/cogent/build/typesetting
 )
 
 require github.com/dshills/elab v0.0.0

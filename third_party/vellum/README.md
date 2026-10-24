@@ -177,7 +177,7 @@ The separate [packaged application baseline](../../docs/vellum-baseline-current.
 
 ## Focus visibility and numeric drafts during layout
 
-The active compatibility source is `b8ffabbe3f6050415247760863e66e1f59c33d87`,
+That repair used source `b8ffabbe3f6050415247760863e66e1f59c33d87`,
 with the [complete patch](patches/elab-public-e58d405-focus-scroll-compat.patch),
 `vellum-e58d405-elab12.tar.gz` and `build/.vellum-sdk-e58d405-elab12`.
 After layout inserts content above a focused control, reveal that control once
@@ -193,3 +193,25 @@ regressions. All 8,437 exported files match their manifest. Upstream dependency
 bytes, notices and all bootstrap scripts are unchanged; earlier archives/caches
 and the qualified /205 download are preserved. Framework normal/offscreen race
 and vet checks pass. Native acceptance of the rebuilt app is separate.
+
+
+## Decimal number stepping
+
+The active compatibility source is `35d9d8d67b053adce223b714c8b62164119d3373`,
+with the [complete patch](patches/elab-public-e58d405-decimal-step-compat.patch),
+`vellum-e58d405-elab13.tar.gz` and `build/.vellum-sdk-e58d405-elab13`.
+Managed numeric buttons and keys step the displayed decimal value and increment
+using exact rational arithmetic, then round once to the existing native float32.
+Thus repeated 0.001 steps from 0.03 reach 0.031 and 0.032, without binary-addition
+artifacts. The text remains a round-trip representation of the stored native
+value; display precision is not reduced. Existing typed and agent-supplied
+values are not normalized or migrated.
+
+Native wrap behavior, tight bounds, off-grid values, private drafts and wheel
+scrolling remain covered. The seven driver cases, focused ownership/precision
+checks and both live/recorded production-control regressions pass. Full framework
+preparation and normal/offscreen race/vet pass. All 8,439 exported files match;
+only the factory line, helper, new regression and generated provenance differ
+from elab12. Dependency/notices/bootstrap bytes, earlier archives/caches and
+/205 remain unchanged. Full application and changed-candidate native checks
+are separate from those framework results.
