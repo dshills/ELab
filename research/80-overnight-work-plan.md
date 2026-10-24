@@ -225,3 +225,15 @@ already-authorized update; do not switch to a shell/Finder launch or change
 security settings to evade review. Standing permission is already recorded;
 do not ask for it again. Keep a tooling refusal distinct from missing owner
 authorization and continue independent work if that route is unavailable.
+
+
+## Checkpoint: native validation layout
+
+The existing test installation has been updated normally through /220, /221 and
+/222, preserving identity, sandbox and backups, without a new permission question.
+The [latest repair](103-validation-scroll-and-drafts.md) qualifies affected native
+interval and number-field behavior; full framework/application checks pass.
+Ten original native checks remain open. Next prioritize the newly reproduced
+numeric-step display artifact, then the remaining keyboard/state-contract checks.
+The /205 download remains preserved. Do not repeat the completed unaffected
+source gates for this evidence-only checkpoint.

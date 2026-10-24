@@ -8,18 +8,21 @@ review and clean-account installation retain their explicit deferrals; complete
 PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
-**Current maintenance work:** /221 repairs the clipped footer and qualifies the
-native Light/Dark outer inset. [Implementation and checks](101-footer-layout.md).
-Seven of eighteen native checks now have scoped evidence, including cursor
-guidance, themed disclosure and Save/Cancel lifecycle. [Latest native checks](102-native-guidance-lifecycle.md).
-Eleven remain open. The three unaffected /220 checks retain their evidence.
-The /220 manual-step, /219 slider,
-/218 Verify endpoint and /217 numeric wheel repairs remain included. [Electronics reference checks](95-gate-common-mode.md)
-cover seven RC-driven MOSFET circuits and active-work preservation.
-The /207–/221 changes remain held for the remaining native acceptance;
-they do not replace the /205 download. Owner review remains deferred. Standing
-authorization to run ELab and use the desktop is saved in `AGENTS.md` and must
-not be requested again.
+**Current maintenance work:** /222 repairs validation scrolling and unfinished
+numeric drafts. [Implementation and native checks](103-validation-scroll-and-drafts.md).
+Eight of eighteen accumulated native checks have scoped evidence; ten remain.
+Fresh /222 checks cover live/recorded interval correction and numeric wheel/edit
+behavior; six unaffected items retain earlier evidence. The native Save
+Command-A observation and controlled divider speeds remain open. A cosmetic
+numeric-step formatting issue is recorded for a focused repair.
+
+The /221 footer and native Light/Dark inset, /220 manual-step, /219 slider,
+/218 Verify endpoint and /217 numeric wheel repairs remain included.
+[Electronics reference checks](95-gate-common-mode.md) cover seven RC-driven
+MOSFET circuits and active-work preservation. The /207–/222 changes stay held for
+the remaining native acceptance and do not replace /205. Owner review remains
+deferred. Standing run/desktop authorization is saved in `AGENTS.md`; the /222
+ordinary update and reopen proceeded without another owner permission question.
 
 ## Historical plan and broader acceptance checklist
 
