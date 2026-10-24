@@ -39,10 +39,26 @@ func TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults(t *testing.T) {
 			if !ok || !strings.Contains(reading.Text, "VBE") || !strings.Contains(reading.Text, "IC") {
 				t.Fatal("selected transistor lacks signed junction/current readings")
 			}
-			for _, probe := range []string{"v:" + id, "v:" + id + ".base-emitter", "i:" + id + ".collector"} {
-				if _, ok := findNode(user.view(), "plot-"+probe); !ok {
-					t.Fatal("transistor plot action missing", probe)
+			for probe, label := range map[string]string{"v:" + id: "Plot VCE", "v:" + id + ".base-emitter": "Plot VBE", "v:" + id + ".collector": "Plot collector voltage", "i:" + id + ".collector": "Plot collector current"} {
+				if node, ok := findNode(user.view(), "plot-"+probe); !ok || node.Text != label {
+					t.Fatal("transistor plot action missing or ambiguous", probe, node.Text)
 				}
+			}
+			selectedState := user.service.Snapshot()
+			selectedGraph := workbench.Graph{Components: selectedState.Components, Wires: selectedState.Wires}
+			selectedPart, _ := selectedGraph.Component(id)
+			panel := user.componentInspector(selectedState, selectedGraph, selectedPart)
+			readingIndex, modelIndex := -1, -1
+			for i, node := range panel {
+				if node.ID == "bipolar-selected-reading" {
+					readingIndex = i
+				}
+				if node.ID == "npn-model" {
+					modelIndex = i
+				}
+			}
+			if readingIndex < 0 || modelIndex < readingIndex {
+				t.Fatal("transistor readings should precede model notes")
 			}
 			uiAction(t, user, "selection", &ui.ChangeEvent{SelectedID: ids["RL"]})
 			uiAction(t, user, "value-entry", &ui.ChangeEvent{Text: "2k"})

@@ -54,6 +54,18 @@ func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Componen
 					text = "Plot drain current"
 				}
 			}
+			if workbench.IsBipolarKind(p.Kind) {
+				switch probe.ID {
+				case "v:" + p.ID:
+					text = "Plot VCE"
+				case "v:" + p.ID + ".base-emitter":
+					text = "Plot VBE"
+				case "v:" + p.ID + ".collector":
+					text = "Plot collector voltage"
+				default:
+					text = "Plot collector current"
+				}
+			}
 			n := s.action("plot-"+probe.ID, text, "scope.probes.set", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, probe.ID)})
 			n.Disabled = state.Transient == nil
 			nodes = append(nodes, n)

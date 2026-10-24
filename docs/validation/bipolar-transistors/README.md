@@ -35,3 +35,21 @@ aliases target the existing example.load command. No new public command path.
 Final full desktop offscreen/race and native candidate observations are recorded
 in the completion checkpoint below when available. The preserved /205 release
 archive is not replaced by this development candidate.
+
+## Completion checkpoint
+
+The full desktop suite with offscreen paint/input tests and the race detector
+passes in 421.816 seconds. The full root race suite passes, including workbench
+(89.290 s), conformance (116.810 s) and socket transport (1.380 s). These runs
+cover the electrical implementation; the subsequent supply-caption-only move
+passes final focused electrical/example checks. Lint, vet and Python checks pass.
+
+Native /232 shows the working Apollo PNP example with an illuminated LED,
+negative base/collector/emitter readings and synchronized input/LED/VBE/collector
+traces. The native check revealed ambiguous duplicate Plot voltage captions.
+They now explicitly identify VBE, VCE and collector voltage/current. Selected
+readings now precede the model notes. This presentation-only follow-up retains
+all control IDs, shared commands and guards; focused user/agent, flasher, NPN,
+inspector form across four themes, tab and symbol regressions pass in 43.466 s.
+The owned /232 session was closed normally for its replacement; other sessions
+and user projects were preserved. No original electrical reference was rewritten.

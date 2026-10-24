@@ -33,6 +33,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	} else {
 		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model))
 	}
+	if r := state.Mixed; r != nil {
+		for _, q := range r.Transistors {
+			if q.TransistorID == part.ID {
+				status := "Live"
+				if r.Stale {
+					status = "Stale"
+				}
+				inspector = append(inspector, quiet("bipolar-selected-reading", fmt.Sprintf("%s · %s\nVBE %.6g V · VCE %.6g V\nIB %.6g µA · IC %.6g mA\nIE %.6g mA · power %.6g mW", status, q.State, q.VBE, q.VCE, q.BaseCurrent*1e6, q.CollectorCurrent*1000, q.EmitterCurrent*1000, q.TransistorPower*1000)), quiet("bipolar-current-signs", "IB / IC enter base / collector; IE leaves emitter. PNP readings normally have negative signs."))
+			}
+		}
+	}
 	if part.Kind == "potentiometer" {
 		inspector = append(inspector, s.potentiometerControls(state, part)...)
 	}
@@ -102,15 +113,6 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 
 	if r := state.Mixed; r != nil {
-		for _, q := range r.Transistors {
-			if q.TransistorID == part.ID {
-				status := "Live"
-				if r.Stale {
-					status = "Stale"
-				}
-				inspector = append(inspector, quiet("bipolar-selected-reading", fmt.Sprintf("%s · %s\nVBE %.6g V · VCE %.6g V\nIB %.6g µA · IC %.6g mA\nIE %.6g mA · power %.6g mW", status, q.State, q.VBE, q.VCE, q.BaseCurrent*1e6, q.CollectorCurrent*1000, q.EmitterCurrent*1000, q.TransistorPower*1000)), quiet("bipolar-current-signs", "IB / IC enter base / collector; IE leaves emitter. PNP readings normally have negative signs."))
-			}
-		}
 		for _, branches := range [][]workbench.BranchResult{r.LEDs, r.Diodes, r.Resistors, r.Sources} {
 			for _, b := range branches {
 				if b.ID == part.ID {

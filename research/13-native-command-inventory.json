@@ -5,7 +5,7 @@
     "desktop/actuation_controls.go": "9b0e8148f7ca32ac2f1802d69411fcd355c2df5b2af4b89df1084d413166ee1e",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "99e4b5e240dc59b1c60c0283a23cc9086479633efa78e673bf0a116fb02b8616",
-    "desktop/component_inspector.go": "127529090796061975f84ef36ac46ff8c56a2107cac033ee7fde922a940782ea",
+    "desktop/component_inspector.go": "3c4112326f9a905f20e3437d6f438bf24c2d42162765e6bfc3ea1a403ff30bd6",
     "desktop/component_palette.go": "d3195f223b9d569a013eacf54e13b8e1f05989c3b61db99751e641a94ed35be9",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
@@ -81,7 +81,7 @@
     "desktop/window_minimum.go": "f6c1590898646b8b570abac29c857162bf13b50d14f39809c8f7f92bee9d180e",
     "desktop/window_minimum_darwin.go": "b7c9fe1d3bb1b7350f70dc4b1ba29708b8975ef0b507ba0595d730c4ddb607e8",
     "desktop/window_minimum_other.go": "1acf27d143422fd66ad4e691aa191afd844510f24004de9aec1f3c8030ca0225",
-    "desktop/workflow.go": "92dc9b2046d57c38c1adfb047adbc0f765a888b8736b067a79a6d988dacbdd7c",
+    "desktop/workflow.go": "f71cfe3b4825c3e51999a40239872a11493567912864c5db8665ec7add3cd05b",
     "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32",
     "desktop/workspace_tabs.go": "9108731d1b6756faf6cdbb12f296e057869b52b6e4909bea94ed1cb5ee47f985"
   },
@@ -589,7 +589,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 44,
+      "line": 55,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -597,7 +597,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 44,
+      "line": 55,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
@@ -605,7 +605,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 56,
+      "line": 67,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -613,7 +613,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 56,
+      "line": 67,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
@@ -621,7 +621,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 65,
+      "line": 76,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -629,7 +629,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 65,
+      "line": 76,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -637,7 +637,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 78,
+      "line": 89,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeComponentStartup(state, part, fmt.Sprintf(\"%.9g V\", e.Number))\n}",
@@ -645,7 +645,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 80,
+      "line": 91,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.componentStartupDefault(state, part)",
@@ -653,7 +653,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 81,
+      "line": 92,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -661,7 +661,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 81,
+      "line": 92,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -669,7 +669,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 139,
+      "line": 141,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -680,7 +680,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 140,
+      "line": 142,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -691,7 +691,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 143,
+      "line": 145,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -702,7 +702,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 144,
+      "line": 146,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -4232,7 +4232,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 57,
+      "line": 69,
       "function": "*screen.partPlotControls",
       "kind": "action-factory",
       "expression": "s.action(\"plot-\"+probe.ID, text, \"scope.probes.set\", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, probe.ID)})",
@@ -4243,7 +4243,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 113,
+      "line": 125,
       "function": "*screen.scopeWindowControls",
       "kind": "callback-factory",
       "expression": "timeField(\"window-\"+side, \"Scope interval \"+side, value, t == nil || t.Stale, func(text string) {\n\ts.changeIntervalTime(state, side, text, \"\")\n})",
@@ -4251,7 +4251,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 149,
+      "line": 161,
       "function": "*screen.scopeWindowControls",
       "kind": "request-command-field",
       "expression": "Command: \"component.set\"",
@@ -4262,7 +4262,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 151,
+      "line": 163,
       "function": "*screen.scopeWindowControls",
       "kind": "action-factory",
       "expression": "s.action(\"cap-pair-\"+value, \"Both capacitors · \"+value, \"edit.batch\", workbench.BatchParams{Name: \"Set both capacitors to \" + value, Edits: edits})",
