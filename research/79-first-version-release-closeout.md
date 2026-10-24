@@ -2,7 +2,7 @@
 
 The current maintenance download is [ELab 0.181.4 /205](81-component-value-guidance.md).
 The original /204 closeout below preserves its historical package, checks and
-scope. Later /207–/216 candidates remain held for fresh native acceptance.
+scope. Later /207–/217 candidates remain held for fresh native acceptance.
 
 October 23, 2026. **ELab 0.181.3 /204 is ready as the agreed private macOS
 hobbyist release in the owner-selected unsigned download channel.** The current

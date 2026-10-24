@@ -110,7 +110,7 @@ download. [Repair and evidence](../../research/86-window-background-and-divider-
 
 ## Text-field Undo boundary
 
-The active source is `8b8eb73bff531e911448236a576c704c5da97db2`, with the
+That repair's source is `8b8eb73bff531e911448236a576c704c5da97db2`, with the
 [complete compatibility patch](patches/elab-public-e58d405-text-undo-boundary-compat.patch),
 `vellum-e58d405-elab9.tar.gz` and `build/.vellum-sdk-e58d405-elab9`.
 Compatibility stage 0109 preserves initial text and selection when the field's
@@ -130,6 +130,31 @@ races with both original and changed text-field sources; that separate suite
 is not claimed green. Previous archives/caches and the qualified /205 download
 are preserved. Fresh native acceptance remains separate.
 [Repair and evidence](../../research/93-text-undo-boundary.md).
+
+## Number-field wheel input
+
+The active source is `2a0f783acb7f2ef20a6003c3277309ef6490be3c`, with the
+[complete compatibility patch](patches/elab-public-e58d405-number-field-wheel-compat.patch),
+`vellum-e58d405-elab10.tar.gz` and `build/.vellum-sdk-e58d405-elab10`.
+Managed number fields leave wheel input to their enclosing scroll pane, even
+when focused. Standalone fields ignore the wheel. Typed drafts and accepted
+values are preserved; ordinary typing, step buttons and arrow keys remain.
+The change removes the inherited spinner wheel handlers without changing
+upstream Core or the public UI/agent API.
+
+The old native /206 session reproduces a focused playback-rate edit from 0.1
+to 0.13000001, while the unfocused field scrolls normally. Current-source
+retained-widget cases reproduce the same issue for live initial voltage and
+recorded playback. Driver checks preserve a private unfinished draft, move the
+containing viewport and keep explicit Up/Down increments available.
+
+Exactly three exported members change: controls.go, its new regression and the
+provenance note. The 8,434-member manifest matches every file. Core/typesetting,
+notices and all six bootstrap sources match elab9; historical archives/caches
+remain preserved. Root/driver normal/offscreen race and vet gates pass, with
+local Unix socket access for the workbench example tests. Source/offscreen
+checks do not qualify a newly launched native app or replace the /205 download.
+[Repair and evidence](../../research/94-number-field-wheel.md).
 
 The exporter still marks SDK artifacts as private builds because public SDK/distribution qualification remains incomplete. **Public source availability is distinct from a qualified public SDK release.** MIT licensing, upstream notices, `SDK_MANIFEST.json` and `PRIVATE_BUILD.txt` remain included. Existing archives/caches, app bundles and their historical validation are unchanged. This dependency update does not qualify or replace the /189 owner app or /193 candidate.
 

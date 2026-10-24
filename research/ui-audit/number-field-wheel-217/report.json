@@ -1,0 +1,51 @@
+{
+  "native_baseline_reproduced": true,
+  "native_fix_qualified": false,
+  "source": {
+    "native_sdk": "elab6",
+    "source_sdk_before_repair": "elab9",
+    "number_field_factory_equal": true,
+    "spinner_source_equal": true,
+    "number_field_factory_sha256": "f32355aed06a7e34c9460c62f8a47cb893988054e023ef6fae60262506555921",
+    "spinner_sha256": "6b1f9c7e6bea6bbc98e2ec41f25fcbe7873f265db3d8cb90b750e3dcf3f84f5c",
+    "native_binary_sha256": "e453cd75b5ddbb374ea7790bcc811c3aba62b23d14c48c7738313363eef71cf1",
+    "native_bundle_identifier": "com.dshills.elab.cursor-guidance206",
+    "native_version": "0.181.5",
+    "native_build": "206"
+  },
+  "unfocused_whole_snapshot_unchanged": true,
+  "focused_changed_snapshot_keys": [
+    "recording",
+    "command_revision",
+    "revision"
+  ],
+  "focused_recording_change": {
+    "seconds_per_wall_second": [
+      0,
+      0.1300000101327896
+    ]
+  },
+  "displayed_rate_before": 0.1,
+  "displayed_rate_after": 0.13000001,
+  "restoration": {
+    "effective_playback_rate_restored": true,
+    "changed_snapshot_keys": [
+      "recording",
+      "command_revision",
+      "revision",
+      "last_actor"
+    ],
+    "recording_changes": {
+      "seconds_per_wall_second": [
+        0,
+        0.1
+      ]
+    },
+    "other_snapshot_fields_exact": true,
+    "default_sentinel_becomes_explicit_rate": true,
+    "scope": "The original stored rate 0 was displayed as the 0.1 fallback. Public speed.set requires a positive rate; the original effective rate is restored as explicit 0.1. Revision counters and last_actor also change."
+  },
+  "native_app_launched": false,
+  "owner_projects_untouched": true,
+  "scope": "Existing owned /206 session. Production number-field factory and spinner source match before-repair elab9. This is an old native baseline, not acceptance of the newly repaired source."
+}

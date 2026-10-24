@@ -1,0 +1,167 @@
+{
+  "kind": "number-field-wheel",
+  "application_checks_passed": true,
+  "quality_exit_code": 0,
+  "source_parent_commit": "9d784c1a2d840b87181f427f7d3b96a9d643780b",
+  "source_inputs": 888,
+  "changed_source_inputs": [
+    "desktop/go.mod",
+    "desktop/numeric_scroll_offscreen_test.go",
+    "third_party/vellum/patches/elab-public-e58d405-number-field-wheel-compat.patch",
+    "third_party/vellum/sdk.lock.json",
+    "third_party/vellum/vellum-e58d405-elab10.tar.gz"
+  ],
+  "absent_source_inputs": [
+    "go.sum"
+  ],
+  "desktop_race_seconds": 189.581,
+  "mounted_race_seconds": 168.282,
+  "python_tests": 67,
+  "focused_keyboard_and_wheel_seconds": 5.984,
+  "sdk_python_tests": 30,
+  "sdk_root_driver_race_vet_passed": true,
+  "driver_before_cases": 2,
+  "application_before_cases": 2,
+  "driver_focused_seconds": 1.906,
+  "prospective_application_seconds": 2.724,
+  "sdk_member_comparison": {
+    "changed_files": [
+      "SDK_DOCUMENTATION.md",
+      "drivers/cogent/controls.go",
+      "drivers/cogent/numberfield_wheel_offscreen_test.go"
+    ],
+    "source_commit": "2a0f783acb7f2ef20a6003c3277309ef6490be3c",
+    "old_archive_preserved": true,
+    "bootstrap_unchanged": true,
+    "file_count": 8434,
+    "manifests_match_every_member": true,
+    "release_metadata_unchanged": true
+  },
+  "sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "2a0f783acb7f2ef20a6003c3277309ef6490be3c",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-number-field-wheel-compat.patch",
+      "sha256": "07179a07af4dc6122beb612f3fb12c96f36ce39531deba2e1de2b6eeb1a6c48e"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab10.tar.gz",
+    "archive_bytes": 20393031,
+    "sha256": "c716d25cd3954de918337cb787d39e0768ba5e0e77af57e2774bbf76ff89b79c",
+    "manifest_sha256": "f9e38ae63ac3845e31ac250c5c3575e7f3cab6aca952f274825b40fc392c0cc2",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab10",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8434,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "previous_sdk": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "8b8eb73bff531e911448236a576c704c5da97db2",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-text-undo-boundary-compat.patch",
+      "sha256": "5ffb62c77bdb25a73134822e95c7ad0e34ba43baed8d6bad85b04956039fb86a"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab9.tar.gz",
+    "archive_bytes": 20391643,
+    "sha256": "2ec76b4bb6c692d49b2440dc1e70d7020687c73bec696e4b1f2c122f97123e5c",
+    "manifest_sha256": "16f3106422b823955170e740578999ab22160532a3fb87b6a055e37ba23b68ae",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab9",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8433,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "upstream_dependencies_unchanged": true,
+  "production_desktop_go_sources_unchanged": 126,
+  "inventory_sources_unchanged": 79,
+  "backend_source_unchanged": true,
+  "public_commands": 166,
+  "source_routes": 134,
+  "sites": 404,
+  "old_native_baseline": {
+    "native_baseline_reproduced": true,
+    "native_fix_qualified": false,
+    "source": {
+      "native_sdk": "elab6",
+      "source_sdk_before_repair": "elab9",
+      "number_field_factory_equal": true,
+      "spinner_source_equal": true,
+      "number_field_factory_sha256": "f32355aed06a7e34c9460c62f8a47cb893988054e023ef6fae60262506555921",
+      "spinner_sha256": "6b1f9c7e6bea6bbc98e2ec41f25fcbe7873f265db3d8cb90b750e3dcf3f84f5c",
+      "native_binary_sha256": "e453cd75b5ddbb374ea7790bcc811c3aba62b23d14c48c7738313363eef71cf1",
+      "native_bundle_identifier": "com.dshills.elab.cursor-guidance206",
+      "native_version": "0.181.5",
+      "native_build": "206"
+    },
+    "unfocused_whole_snapshot_unchanged": true,
+    "focused_changed_snapshot_keys": [
+      "recording",
+      "command_revision",
+      "revision"
+    ],
+    "focused_recording_change": {
+      "seconds_per_wall_second": [
+        0,
+        0.1300000101327896
+      ]
+    },
+    "displayed_rate_before": 0.1,
+    "displayed_rate_after": 0.13000001,
+    "restoration": {
+      "effective_playback_rate_restored": true,
+      "changed_snapshot_keys": [
+        "recording",
+        "command_revision",
+        "revision",
+        "last_actor"
+      ],
+      "recording_changes": {
+        "seconds_per_wall_second": [
+          0,
+          0.1
+        ]
+      },
+      "other_snapshot_fields_exact": true,
+      "default_sentinel_becomes_explicit_rate": true,
+      "scope": "The original stored rate 0 was displayed as the 0.1 fallback. Public speed.set requires a positive rate; the original effective rate is restored as explicit 0.1. Revision counters and last_actor also change."
+    },
+    "native_app_launched": false,
+    "owner_projects_untouched": true,
+    "scope": "Existing owned /206 session. Production number-field factory and spinner source match before-repair elab9. This is an old native baseline, not acceptance of the newly repaired source."
+  },
+  "native_candidate_launched": false,
+  "native_acceptance_passed": false,
+  "release_ready": false,
+  "published": false,
+  "owner_review_required": false,
+  "new_commands": 0,
+  "new_components": 0,
+  "new_formats": 0,
+  "download_unchanged": "0.181.4 /205",
+  "previous_candidate_preserved": "0.181.15 /216",
+  "raw_archive_sha256": "08d73638a6bc9169b1f876be507a15155853ffb870b3f15d8ab61c3eb4cebe05",
+  "raw_members": 65,
+  "supplemental_upstream_core_race_status": "Prior /216 supplemental Core race failures remain recorded; all upstream dependency bytes are unchanged. No broad upstream Core pass is inferred."
+}
