@@ -197,7 +197,7 @@ and vet checks pass. Native acceptance of the rebuilt app is separate.
 
 ## Decimal number stepping
 
-The active compatibility source is `35d9d8d67b053adce223b714c8b62164119d3373`,
+That arithmetic repair used source `35d9d8d67b053adce223b714c8b62164119d3373`,
 with the [complete patch](patches/elab-public-e58d405-decimal-step-compat.patch),
 `vellum-e58d405-elab13.tar.gz` and `build/.vellum-sdk-e58d405-elab13`.
 Managed numeric buttons and keys step the displayed decimal value and increment
@@ -215,3 +215,21 @@ only the factory line, helper, new regression and generated provenance differ
 from elab12. Dependency/notices/bootstrap bytes, earlier archives/caches and
 /205 remain unchanged. Full application and changed-candidate native checks
 are separate from those framework results.
+
+## Queued field callback ownership
+
+The active compatibility source is `23063545f871d8de0724077744d53f8f90d32c69`,
+with the [complete patch](patches/elab-public-e58d405-field-origin-compat.patch),
+`vellum-e58d405-elab14.tar.gz` and `build/.vellum-sdk-e58d405-elab14`.
+Queued text and number commits retain the callback present when their native
+Change event was admitted. A later descriptor repaint cannot lend that old edit
+a newer form's request context. Future independent edits use the fresh callback;
+settlement epochs, lifetime checks and other discrete-control behavior remain.
+
+Both queue regressions fail before the repair and pass afterward. Full framework
+preparation, normal/offscreen race and vet checks pass. Every one of 8,440 SDK
+members matches its manifest; only controls.go, its new regression and generated
+provenance differ from elab13. Dependencies, notices, release metadata and bootstrap
+scripts are unchanged. ELab application checks and changed-candidate native
+qualification remain separate. The existing /223 app and /205 download are
+preserved. [Repair status](../../research/110-queued-field-origin.md).

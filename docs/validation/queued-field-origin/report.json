@@ -1,0 +1,56 @@
+{
+  "status": "source-qualified-stopped-at-owner-return",
+  "date": "2026-10-24",
+  "application_source_parent": "37c85b73354eee30327a74402fb9002dc3a2ef91",
+  "sdk_source_commit": "23063545f871d8de0724077744d53f8f90d32c69",
+  "sdk_archive": "third_party/vellum/vellum-e58d405-elab14.tar.gz",
+  "sdk_archive_sha256": "2e5e05fd84200c6b8136263145d4ac045b8468d297ba294eb65cbb3aafff9e68",
+  "before_regression_failures": [
+    "TextField",
+    "NumberField"
+  ],
+  "after_regressions_passed": true,
+  "related_focused_checks_passed": true,
+  "framework_full_quality_exit_code": 0,
+  "application_full_quality_exit_code": 0,
+  "frozen_input_count": 900,
+  "frozen_inputs_preserved": true,
+  "verified_sdk_members": 8440,
+  "old_sdk_cache_preserved": true,
+  "sdk_export_comparison": {
+    "changed_files": [
+      "SDK_DOCUMENTATION.md",
+      "drivers/cogent/controls.go",
+      "drivers/cogent/field_change_context_test.go"
+    ],
+    "source_commit": "23063545f871d8de0724077744d53f8f90d32c69",
+    "old_archive_preserved": true,
+    "bootstrap_unchanged": true,
+    "file_count": 8440,
+    "manifests_match_every_member": true,
+    "release_metadata_unchanged": true
+  },
+  "initial_framework_sandbox_failure": "Temporary Unix socket bind restriction; retained separately; authorized full rerun passes.",
+  "preservation": {
+    "/private/tmp/elab-cursor-guidance-206/ELab Cursor Recovery.app/Contents/MacOS/ELab Cursor Recovery": "e957008f182845572fe39158f4819e5601e28a79ac803e3446071ff9cd56f82d",
+    "build/ELab-0.181.22-223-candidate/elab-agent": "0d1195d71774ab98604a57452500c4be93dd080949da8630e3ca8a2d07d2f4a6",
+    "build/ELab-0.181.22-223-candidate/ELab.app/Contents/MacOS/ELab": "c02816486cf9d5140bb7bcda600f970e8d2584aef99dde64520be3452f27a7b5",
+    "build/native-acceptance-220-tools/RC native 220.elab": "b042198f86c9430bc3dd00d0018fa604055bb833fa8d8a7fb9b57a827f8b15cc",
+    "build/releases/ELab-0.181.4-macos-arm64.zip": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b"
+  },
+  "installed_strict_signature_exit_code": 0,
+  "app_production_go_changed": false,
+  "backend_go_changed": false,
+  "new_features": false,
+  "new_candidate_built": false,
+  "fresh_native_acceptance": false,
+  "release_promoted": false,
+  "original_native_checks_remaining": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "stop_reason": "Owner returned and instructed: Finish up what you are working on and stop.",
+  "raw_archive_sha256": "64ae083637275f594fa2a4635e075b1e158052cd38fa51f4d1fc99893b85a4bb"
+}

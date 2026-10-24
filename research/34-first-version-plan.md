@@ -15,6 +15,13 @@ four remain: 3, 6, 9 and 11. AppKit Save Command-A, controlled divider drag rate
 and exact pre-agent callback queue origins remain distinct. Item 9 is partial.
 Native value/search editing and actual application Undo/Redo routing are qualified.
 
+**Stopped at owner return, October 24:** the [queued field callback repair](110-queued-field-origin.md)
+is integrated through private SDK elab14. Both original text/number regressions
+fail before the repair and pass after it; full framework and application quality
+pass with 900 frozen inputs preserved. The owner asked to finish the current work
+and stop. No new candidate is built or promoted, and affected native qualification
+is deferred. The four native items above remain open; /223 and /205 are preserved.
+
 Earlier validation-scroll, private-draft, footer/theme, manual-step, slider,
 Verify endpoint, numeric-wheel and captured-measurement/comparison repairs remain
 included. [Electronics reference checks](95-gate-common-mode.md) cover seven

@@ -113,3 +113,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Native captured comparison](108-native-captured-comparison.md): reference ownership, refusal/correction, independent preferences, same-reference reset, and 138 RC/statistics references; six native checks remain.
 
 - [Native keyboard and text history](109-native-keyboard-history.md): initial/boundary selection, local text editing, actual application-history routing, exact state preservation and four remaining native checks.
+
+- [Queued field callback ownership](110-queued-field-origin.md): reproduced text/number queue-context defect, private SDK elab14 repair and passing full framework/application quality. Owner returned and requested a stop; new candidate/native checks are deferred and the existing release remains preserved.

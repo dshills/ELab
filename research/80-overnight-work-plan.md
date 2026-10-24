@@ -314,3 +314,18 @@ state, signatures, fixture and /205 stay exact. Current evidence does not qualif
 the separate AppKit Save route, controlled drag rates or exact callback queue
 origins. Continue remaining form/parser and native-route checks in the existing
 owned session; no owner-review or launch-permission wait.
+
+## Stopped at owner return: queued field callback repair
+
+The owner returned on October 24 and instructed: “Finish up what you are working
+on and stop.” The [current repair](110-queued-field-origin.md) prevents queued
+text/number edits from borrowing a later form callback's context. Both original
+regressions fail before the fix and pass after it. Full SDK and application
+quality pass; all 900 frozen inputs and old/new SDK caches are reverified.
+
+Private SDK elab14 is pinned with source, patch and export evidence. No application
+or backend Go production source, command, component, model or format changes.
+The existing /223 app/agent, saved fixture and /205 ZIP stay exact. No replacement
+candidate is built, launched or promoted. Four native items remain (3, 6, 9 and 11);
+affected native qualification is deferred. This checkpoint supersedes the earlier
+continuation instructions. Work stops; no autonomous next item or desktop test.
