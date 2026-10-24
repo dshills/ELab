@@ -15,11 +15,11 @@ type appPalette struct {
 func paletteForTheme(mode string) appPalette { return resolvePalette(mode, matcolor.SchemeIsDark) }
 func resolvePalette(mode string, systemDark bool) appPalette {
 	if mode == "apollo" {
-		// Gray-green instrument panels, engraved cream legends and amber
-		// annunciators. Keep signal/warning colors distinct from panel ink.
+		// Gray-green instrument panels, engraved cream legends and blue keys.
+		// Keep signal/warning colors distinct from panel ink.
 		return appPalette{
 			Ink: color.NRGBA{R: 239, G: 235, B: 218, A: 255}, Muted: color.NRGBA{R: 182, G: 188, B: 170, A: 255},
-			Accent: color.NRGBA{R: 236, G: 195, B: 106, A: 255}, Paper: color.NRGBA{R: 29, G: 35, B: 33, A: 255},
+			Accent: color.NRGBA{R: 126, G: 168, B: 196, A: 255}, Paper: color.NRGBA{R: 29, G: 35, B: 33, A: 255},
 			Surface: color.NRGBA{R: 49, G: 58, B: 54, A: 255}, Grid: color.NRGBA{R: 67, G: 77, B: 70, A: 255},
 			Danger: color.NRGBA{R: 255, G: 151, B: 129, A: 255}, ControlRadius: 2,
 		}

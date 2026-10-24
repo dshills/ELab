@@ -1,0 +1,12 @@
+./scripts/lint.sh
+{"passed": true, "sdk": "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-e58d405-elab14", "source": "23063545f871d8de0724077744d53f8f90d32c69"}
+go test -race ./internal/uiaudit
+ok  	github.com/dshills/elab/internal/uiaudit	1.478s
+go test -race -count=1 -run ^Test(Apollo|ThemeMenu|NativeTheme|DiagnosticDisclosure) .
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/elab/desktop	1.938s
+go test -race -tags=offscreen -count=1 -run ^TestMountedInspector(DisclosurePaletteAndSharedExpansion|WindowBackgroundMatchesTheSessionRoot)/apollo$ .
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/elab/desktop	2.390s
