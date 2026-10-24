@@ -14,7 +14,7 @@ Failed operations show a captured-experiment explanation and next action before 
 
 ## Bounds and lifecycle
 
-- At most one active verification, 10 simulated seconds, 1000 output steps and 4096 retained recorded frames. Shorten duration or increase Verify's sample step if admission exceeds the bound.
+- At most one active verification, 10 simulated seconds, 1000 output steps and 4096 retained recorded frames. Shorten duration or increase Verify's sample step if admission exceeds the bound. The output grid uses `n × sample step`, clipped to the requested duration: 1 ms at 1 µs uses exactly 1000 intervals. Any distinct final partial interval counts as another step; nearby timestamps are not merged.
 - Sample steps are 1 µs–1 s (or zero to follow project settings); pulse durations must still be at least one step. Offline computation does not apply the live playback-rate restriction.
 - A 30-second wall budget bounds the operation. Existing kernel convergence/work limits remain in effect; there is no model substitution. Cancellation is checked before/after output steps and during cancellable DC solves; a mixed solve is bounded and observes cancellation after it returns.
 - Status is `queued`, `running`, `canceling`, `completed`, `failed`, or `canceled`. Failure/cancellation publishes no partial record. Captured input metadata stays inspectable even when a run fails.

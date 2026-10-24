@@ -12,6 +12,22 @@ const MaxVerificationSteps = 1000
 const MaxVerificationFrames = 4096
 const MaxVerificationOperations = 8
 
+// verificationOutputSteps counts the actual binary64 output grid, whose last
+// time is min(duration, float64(n)*step). Division can round an exact endpoint
+// above an integer (1 ms / 1 µs, for example). Correct its estimate using the
+// same multiplication as the worker, without merging any distinct final time.
+// Callers validate positive finite duration/step and the bounded ratio first.
+func verificationOutputSteps(duration, step float64) int {
+	steps := max(1, int(math.Ceil(duration/step)))
+	for steps > 1 && float64(steps-1)*step >= duration {
+		steps--
+	}
+	for float64(steps)*step < duration {
+		steps++
+	}
+	return steps
+}
+
 func validateVerificationSettings(settings VerificationSettings, g Graph) error {
 	if !finite(settings.Duration) || settings.Duration < 0 || settings.Duration > 10 {
 		return fmt.Errorf("verify duration must be 0–10 seconds; DC uses zero")
@@ -127,7 +143,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	}
 	steps := 1
 	if transient {
-		steps = int(math.Ceil(settings.Duration / cfg.StepSeconds))
+		steps = verificationOutputSteps(settings.Duration, cfg.StepSeconds)
 		if steps > MaxVerificationSteps {
 			return fmt.Errorf("verify supports at most %d output steps; shorten duration or increase its sample step", MaxVerificationSteps)
 		}

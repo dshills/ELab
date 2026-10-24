@@ -125,3 +125,71 @@ func TestRecordingGridBoundaryRoundTripAcrossEngines(t *testing.T) {
 		})
 	}
 }
+
+func TestVerificationOutputGridUsesRepresentedEndpoints(t *testing.T) {
+	step := 1e-6
+	for _, test := range []struct {
+		name     string
+		duration float64
+		steps    int
+	}{
+		{"limit", .001, 1000},
+		{"below-limit", math.Nextafter(.001, 0), 1000},
+		{"short-grid", .000063, 63},
+		{"distinct-tail", math.Nextafter(.000063, math.Inf(1)), 64},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			s := pausedRC(t)
+			defer s.Close()
+			before := s.Snapshot()
+			_, view := verify(t, s, VerifyParams{Duration: &test.duration, Step: &step, InputMode: "charge", ProbeIDs: []string{"v:C1"}}, "grid")
+			if view.Operation.TotalSteps != test.steps || view.Operation.CompletedSteps != test.steps || view.Metadata.SampleCount != test.steps+1 {
+				t.Fatalf("wrong output grid: %+v, samples %d", view.Operation, view.Metadata.SampleCount)
+			}
+			s.mu.Lock()
+			record := s.operations[view.Operation.ID].record
+			encoded, err := encodeVerificationExport(record, "json")
+			s.mu.Unlock()
+			if err != nil {
+				t.Fatal(err)
+			}
+			decoded, err := decodeRecording(encoded)
+			if err != nil {
+				t.Fatal("complete recording refused on import", err)
+			}
+			for i, row := range decoded.rows {
+				at := math.Min(test.duration, float64(i)*step)
+				want := 5 * (1 - math.Exp(-at/.01))
+				if row.Time != at || math.Abs(row.Values[0]-want) > 1e-12 {
+					t.Fatalf("row %d: got %+v, want time %.17g voltage %.17g", i, row, at, want)
+				}
+			}
+			var document VerificationDocument
+			if err := json.Unmarshal(encoded, &document); err != nil {
+				t.Fatal(err)
+			}
+			project, err := json.Marshal(ProjectRecordings{Entries: []ProjectRecording{{Data: document, ModelHashes: recordingModelHashes(document.Metadata)}}, Selected: 0, Viewing: true})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := validateProjectRecordings(project); err != nil {
+				t.Fatal("complete embedded recording refused", err)
+			}
+			after := s.Snapshot()
+			if !reflect.DeepEqual(before.Transient, after.Transient) || !reflect.DeepEqual(before.Components, after.Components) || before.RunID != after.RunID || before.Paused != after.Paused {
+				t.Fatal("offline recording changed live physics or circuit")
+			}
+		})
+	}
+}
+
+func TestVerificationOutputGridStillRefusesDistinctIntervalAboveLimit(t *testing.T) {
+	s := pausedRC(t)
+	defer s.Close()
+	before := s.Snapshot()
+	duration, step := math.Nextafter(.001, math.Inf(1)), 1e-6
+	refuse(t, s, "simulation.verify", VerifyParams{Duration: &duration, Step: &step}, "invalid-params")
+	if !reflect.DeepEqual(before, s.Snapshot()) {
+		t.Fatal("over-limit recording request changed state")
+	}
+}

@@ -89,3 +89,7 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Text editing and application shortcuts](93-text-undo-boundary.md): preserve initial text at the Undo boundary, exercise actual Command modifier mappings, and distinguish local text history from circuit Undo/Redo. The elab9 compatibility pin, focused checks and full application quality gate pass; native acceptance remains separate.
 
 - [Number fields and wheel scrolling](94-number-field-wheel.md): native reproduction of focused wheel input changing playback, current-source initial-voltage/playback regressions, and a narrow managed-control repair preserving drafts and explicit keyboard edits. The elab10 pin and full source/offscreen gates pass; fresh native acceptance remains separate.
+
+- [RC-driven MOSFET reference checks](95-gate-common-mode.md): seven packaged-agent circuits, 1,722 independent scalar comparisons, active-work Save/Undo/Pause/cancellation and a fresh saved-file reopen. Existing educational models and protected live state are preserved.
+
+- [Verification output-step boundary](96-verification-output-grid.md): repair the false refusal of 1 ms at 1 µs by counting the represented worker grid, preserving distinct final intervals and the existing limits. Focused regressions and full quality pass; clean packaging is next.

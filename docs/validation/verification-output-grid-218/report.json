@@ -1,0 +1,68 @@
+{
+  "kind": "verification-output-grid",
+  "application_checks_passed": true,
+  "source_parent_commit": "411d779a6bede5235d53bdb2b6bc5e453dfe8eeb",
+  "source_inputs": 888,
+  "changed_source_inputs": [
+    "workbench/recording_grid_precision_test.go",
+    "workbench/recording_import.go",
+    "workbench/verification.go",
+    "workbench/verification_capabilities.go"
+  ],
+  "initial_public_agent": {
+    "source_commit": "29220270dc9289af0f1b1dd4a44884554ecfcef6",
+    "agent_sha256": "fd013beb6b7fa10a7199122678abcf3d20c82100a6b714a2a71ce69a5fdc0267",
+    "binary": "/Users/dshills/Development/projects/ELab/build/ELab-0.181.16-217-candidate/elab-agent"
+  },
+  "initial_public_false_refusals": 2,
+  "initial_source_regression_failed": true,
+  "focused_race_seconds": 2.371,
+  "root_race_and_vet_passed": true,
+  "desktop_race_seconds": 174.489,
+  "mounted_race_seconds": 159.428,
+  "python_tests": 67,
+  "sdk_unchanged": {
+    "schema": 2,
+    "repository": "https://github.com/dshills/vellum",
+    "upstream_commit": "e58d40581fe21d1de53fd54cab1bcf6acf11c163",
+    "source_commit": "2a0f783acb7f2ef20a6003c3277309ef6490be3c",
+    "compatibility_patch": {
+      "path": "third_party/vellum/patches/elab-public-e58d405-number-field-wheel-compat.patch",
+      "sha256": "07179a07af4dc6122beb612f3fb12c96f36ce39531deba2e1de2b6eeb1a6c48e"
+    },
+    "archive": "third_party/vellum/vellum-e58d405-elab10.tar.gz",
+    "archive_bytes": 20393031,
+    "sha256": "c716d25cd3954de918337cb787d39e0768ba5e0e77af57e2774bbf76ff89b79c",
+    "manifest_sha256": "f9e38ae63ac3845e31ac250c5c3575e7f3cab6aca952f274825b40fc392c0cc2",
+    "prefix": "vellum-v0.1.0-alpha.2",
+    "cache": "build/.vellum-sdk-e58d405-elab10",
+    "private_build": true,
+    "module": "github.com/dshills/vellum",
+    "version": "v0.1.0-alpha.2",
+    "files": 8434,
+    "bootstrap": {
+      "scripts/check-sdk.py": "482cd470d79655440f0e8ef07fa1097ee4e96d9c16c851e9c37c43cc4c07c1e3",
+      "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+      "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+      "scripts/native_gpu.py": "2e7c76e72dcb489ee405dd54bdca95392c6e907ed3822dc46242425cf9ae54e4",
+      "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+      "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+    }
+  },
+  "production_desktop_sources_unchanged": 126,
+  "new_commands": 0,
+  "new_components": 0,
+  "new_models": 0,
+  "new_formats": 0,
+  "max_verification_steps": 1000,
+  "distinct_final_times_preserved": true,
+  "manual_step_unchanged": true,
+  "graphical_app_launched": false,
+  "preserved_download": "0.181.4 /205",
+  "release_ready": false,
+  "published": false,
+  "native_acceptance_passed": false,
+  "owner_review_required": false,
+  "raw_archive_sha256": "a5ffa0ad87ee009475515a3c61483ed01a9e06b968ed81bc171f5fb930b9a3a2",
+  "raw_members": 25
+}

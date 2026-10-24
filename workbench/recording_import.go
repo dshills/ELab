@@ -84,7 +84,7 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 		return nil, fmt.Errorf("invalid recorded mode or duration")
 	}
 	if IsTransientAnalysis(m.Analysis) {
-		if m.Duration <= 0 || math.Ceil(m.Duration/m.Settings.StepSeconds) > MaxVerificationSteps {
+		if m.Duration <= 0 || verificationOutputSteps(m.Duration, m.Settings.StepSeconds) > MaxVerificationSteps {
 			return nil, fmt.Errorf("recorded transient duration exceeds output bounds")
 		}
 	} else if m.Duration != 0 || len(d.Rows) != 1 {
@@ -133,7 +133,7 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	}
 	if IsTransientAnalysis(m.Analysis) {
 		// A recording must include every requested output step, not only endpoints.
-		steps := int(math.Ceil(m.Duration / m.Settings.StepSeconds))
+		steps := verificationOutputSteps(m.Duration, m.Settings.StepSeconds)
 		index := 0
 		for step := 0; step <= steps; step++ {
 			target := math.Min(m.Duration, float64(step)*m.Settings.StepSeconds)
