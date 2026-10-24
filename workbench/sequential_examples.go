@@ -20,8 +20,8 @@ func sequentialExample(kind string) Graph {
 	wire := func(a, b string) {
 		g.Wires = append(g.Wires, Wire{ID: fmt.Sprintf("W%d", len(g.Wires)+1), From: a, To: b, Connected: true})
 	}
-	add("VCC", "dc-source", "5", -650, -300, 0)
-	add("GNDV", "ground", "", -650, -140, 0)
+	add("VCC", "dc-source", "5", -820, -300, 0)
+	add("GNDV", "ground", "", -820, -140, 0)
 	wire("VCC.negative", "GNDV.reference")
 	add("JV", "junction", "", -300, -390, 0)
 	wire("VCC.positive", "JV.node")
