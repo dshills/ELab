@@ -322,15 +322,15 @@ func (s *screen) view() ui.Node {
 	tools.Children = append(tools.Children, drawingModeTabs(modes))
 	fit := buttonStyle(s.button("view.fit", "Fit"), state.Viewport.Following)
 	fit.Accessibility.Help = "Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning."
-	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit)
-	for i := range tools.Children {
-		if tools.Children[i].Kind == ui.Button {
-			tools.Children[i].Appearance = ui.ButtonTool
-			tools.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 9, Right: 9})
-			tools.Children[i].Style.MinSize = ui.Some(ui.Size{Height: 20})
-			tools.Children[i].Style.MaxSize = ui.Some(ui.Size{Height: 20})
-		}
-	}
+	cancel := s.button("drawing.cancel", "Cancel")
+	cancel.Accessibility.Help = "Cancel an unfinished wire or component placement and return to Select mode. Existing components and wires are kept. Shortcut: Escape."
+	// Match the mode rail's two-point inset and one-point outline. The native
+	// toolbar places its children at the top, even with cross-axis centering;
+	// this equal-height row aligns action labels and borders with the modes.
+	tools.Children = append(tools.Children, ui.Node{ID: "drawing-actions", Kind: ui.Row, Grow: true, Style: ui.Style{
+		MinSize: ui.Some(ui.Size{Height: 30}), MaxSize: ui.Some(ui.Size{Height: 30}),
+		Padding: ui.Some(ui.Insets{Top: 3, Bottom: 3}), Gap: ui.Some(float32(8)), Align: ui.Some(ui.AlignCenter),
+	}, Children: []ui.Node{cancel, {ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit}})
 	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"
 	switch state.Drawing.Tool {
 	case "wire":

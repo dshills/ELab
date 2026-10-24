@@ -8,6 +8,7 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"cogentcore.org/core/events"
@@ -60,8 +61,21 @@ func TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions(t *testing.T) {
 				}
 			}
 			modeGroup := mountedControlElement(t, m, "drawing-mode-tabs").Bounds
-			if cancel := mountedControlElement(t, m, "drawing.cancel").Bounds; cancel.Min.X-modeGroup.Max.X < 4 {
-				t.Error("Esc touches the drawing-mode rail", modeGroup, cancel)
+			cancel := mountedControlElement(t, m, "drawing.cancel").Bounds
+			modeButton := mountedControlElement(t, m, "tool-select").Bounds
+			t.Logf("mode rail=%v Select=%v Cancel=%v", modeGroup, modeButton, cancel)
+			if cancel.Min.X-modeGroup.Max.X < 4 {
+				t.Error("Cancel touches the drawing-mode rail", modeGroup, cancel)
+			}
+			for _, id := range []string{"drawing.cancel", "sweep-open", "view.fit"} {
+				bounds := mountedControlElement(t, m, id).Bounds
+				if bounds.Min.Y != modeButton.Min.Y || bounds.Max.Y != modeButton.Max.Y {
+					t.Error("drawing action is not aligned with the mode buttons", id, bounds, modeButton)
+				}
+			}
+			cancelNode, _ := findNode(view(), "drawing.cancel")
+			if cancelNode.Text != "Cancel" || cancelNode.Accessibility.Name != "Cancel" || !strings.Contains(cancelNode.Accessibility.Help, "Escape") || !strings.Contains(cancelNode.Accessibility.Help, "unfinished wire or component placement") {
+				t.Fatal("Cancel label or explanatory shortcut tooltip is missing", cancelNode)
 			}
 			im, err := m.manual.Capture(m.ctx, "main")
 			if err != nil {
@@ -86,7 +100,7 @@ func TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions(t *testing.T) {
 			}
 			if mode == "apollo" {
 				// AX rectangles can already be clipped to the toolbar. Inspect the
-				// actual bottom border too: the old Esc/Wire/Pan boxes lose it.
+				// actual bottom border too: the old Cancel/Wire/Pan boxes lose it.
 				bounds := mountedControlElement(t, m, "drawing.cancel").Bounds
 				palette := resolvePalette(mode, false)
 				columns := 0
@@ -134,6 +148,10 @@ func TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions(t *testing.T) {
 			m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
 			if s.service.Snapshot().Drawing.Tool != "pan" {
 				t.Fatal("keyboard activation did not select the drawing mode")
+			}
+			bottomClick("drawing.cancel")
+			if s.service.Snapshot().Drawing.Tool != "select" {
+				t.Fatal("Cancel did not return to selection through the shared command")
 			}
 			bottomClick("inspector-section-document")
 			if s.service.Snapshot().InspectorSection != "document" {
