@@ -303,16 +303,29 @@ func (s *screen) view() ui.Node {
 		inspector = append(inspector, inspectorGroup("sweep", "DC sweep", s.sweepInspector(state))...)
 	}
 	tools := ui.Node{ID: "tools", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: []ui.Node{}}
+	// Toolbar sizes describe content. Leave room for padding, outlines and
+	// keyboard focus rings instead of cropping the buttons at the old 32 units.
+	tools.Style.Padding = ui.Some(ui.Insets{Top: 2, Bottom: 2})
+	tools.Style.MinSize = ui.Some(ui.Size{Width: 200, Height: 36})
+	tools.Style.MaxSize = ui.Some(ui.Size{Height: 36})
+	var modes []ui.Node
 	for _, tool := range []string{"select", "wire", "pan"} {
 		n := s.action("tool-"+tool, strings.ToUpper(tool[:1])+tool[1:], "drawing.tool.set", workbench.ToolParams{Tool: tool})
-		tools.Children = append(tools.Children, buttonStyle(n, state.Drawing.Tool == tool))
+		if state.Drawing.Tool == tool {
+			n.Accessibility.Help = "Selected drawing mode."
+		}
+		modes = append(modes, buttonStyle(n, state.Drawing.Tool == tool))
 	}
+	tools.Children = append(tools.Children, drawingModeTabs(modes))
 	fit := buttonStyle(s.button("view.fit", "Fit"), state.Viewport.Following)
 	fit.Accessibility.Help = "Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning."
 	tools.Children = append(tools.Children, s.button("drawing.cancel", "Esc"), ui.Node{ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "DC sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit)
 	for i := range tools.Children {
 		if tools.Children[i].Kind == ui.Button {
-			tools.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 9, Bottom: 9, Left: 9, Right: 9})
+			tools.Children[i].Appearance = ui.ButtonTool
+			tools.Children[i].Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 9, Right: 9})
+			tools.Children[i].Style.MinSize = ui.Some(ui.Size{Height: 20})
+			tools.Children[i].Style.MaxSize = ui.Some(ui.Size{Height: 20})
 		}
 	}
 	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"

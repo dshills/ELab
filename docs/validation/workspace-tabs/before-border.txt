@@ -1,0 +1,8 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions (1.02s)
+    --- FAIL: TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions/apollo (0.17s)
+        workspace_tabs_offscreen_test.go:78: toolbar clips the painted lower border: 0 columns in (201,16)-(249,48)
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.707s
+FAIL

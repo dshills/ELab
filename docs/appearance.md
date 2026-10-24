@@ -10,6 +10,8 @@ Theme commands do not restart simulation, change charge/time/run/electrical revi
 
 File actions and examples preserve existing command enablement and unsaved-change/generation protection. macOS popup presentation is asynchronous and uses Vellum’s existing registry callbacks; obsolete/shutdown callbacks retain the service’s validation. Drawing and live/recorded scope controls use Toolbar with explicit content height and horizontal overflow with room for their controls and any overflow bar rather than disappearing when compressed. Rails apply consistent descendant widths and text wrapping; inputs use readable local foreground/background colors. The initial window is 1040 × 760 device-independent units; rails scroll independently.
 
+Select, Wire and Pan share a segmented drawing-mode control. Inspect, Simulate and Document use equal-width tabs with an accent underline above the inspector form. Both retain the existing button identities, selected-state help, toolbar arrow navigation and shared commands. Their flat toolbar appearance avoids reserving normal button shadow space, and their content heights include room for padding and outlines. These treatments use each theme's own palette and typography; Apollo keeps its cyan console outlines.
+
 See [the UI audit and screenshots](../research/ui-audit/README.md) for observed results and remaining limits. This does not establish full keyboard, IME, screen-reader, or clean-distribution qualification.
 
 ## Persistent preferences

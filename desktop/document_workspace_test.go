@@ -51,6 +51,21 @@ func TestInspectorPagesMatchAgentAndKeepControlsReachable(t *testing.T) {
 	defer cleanup()
 	uiAction(t, s, "example.rc", nil)
 	uiAction(t, s, "simulation.pause", nil)
+	assertSelection := func(root ui.Node, state workbench.Snapshot) {
+		t.Helper()
+		palette := paletteForTheme(state.Theme)
+		for _, section := range []string{"component", "simulation", "document"} {
+			labelColor, indicatorColor := palette.Muted, palette.Grid
+			if section == state.InspectorSection {
+				labelColor, indicatorColor = palette.Accent, palette.Accent
+			}
+			tab, tabOK := findNode(root, "inspector-section-"+section)
+			indicator, indicatorOK := findNode(root, "inspector-tab-indicator-"+section)
+			if !tabOK || !indicatorOK || tab.Style.Foreground.Value != labelColor || indicator.Style.Background.Value != indicatorColor {
+				t.Fatal("tab selection differs from shared state", section, state.InspectorSection)
+			}
+		}
+	}
 	for _, section := range []string{"simulation", "document", "component"} {
 		before := s.service.Snapshot()
 		uiAction(t, s, "inspector-section-"+section, nil)
@@ -59,20 +74,14 @@ func TestInspectorPagesMatchAgentAndKeepControlsReachable(t *testing.T) {
 			t.Fatal("page change did not preserve circuit")
 		}
 		root := s.view()
-		tabs, ok := findNode(root, "inspector-section-"+section)
-		if !ok || tabs.Style.Background.Value != paletteForTheme(after.Theme).Accent {
-			t.Fatal("tab selection differs from shared state")
-		}
+		assertSelection(root, after)
 		target := map[string]string{"component": "selection", "simulation": "setting-step", "document": "pdf-paper"}[section]
 		if _, ok := ui.FocusTarget(root, target); !ok {
 			t.Fatal("selected inspector control is unreachable", section, target)
 		}
 	}
 	agentAction(t, s.service, "workspace.inspector.set", workbench.InspectorParams{Section: "document"})
-	tabs, _ := findNode(s.view(), "inspector-section-document")
-	if tabs.Style.Background.Value != paletteForTheme(s.service.Snapshot().Theme).Accent {
-		t.Fatal("external selection did not appear in UI")
-	}
+	assertSelection(s.view(), s.service.Snapshot())
 	if _, ok := ui.FocusTarget(s.view(), "value-entry"); ok {
 		t.Fatal("hidden component field remained focusable")
 	}

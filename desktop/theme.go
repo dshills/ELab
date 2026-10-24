@@ -106,6 +106,7 @@ func applyPalette(node *ui.Node, palette appPalette) {
 			}
 		}
 	}
+	applyWorkspaceTabStyle(node, palette, selected)
 	for i := range node.Children {
 		applyPalette(&node.Children[i], palette)
 	}
