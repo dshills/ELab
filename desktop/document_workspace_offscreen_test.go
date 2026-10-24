@@ -20,7 +20,7 @@ import (
 
 func TestMountedInspectorRequestGuidanceStaysVisibleOnTaskPages(t *testing.T) {
 	for _, section := range []string{"simulation", "document"} {
-		for _, themeName := range []string{"light", "dark"} {
+		for _, themeName := range []string{"light", "dark", "apollo"} {
 			t.Run(section+"/"+themeName, func(t *testing.T) {
 				s, cleanup := testScreen(t)
 				t.Cleanup(cleanup)

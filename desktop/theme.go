@@ -9,19 +9,22 @@ import (
 
 type appPalette struct {
 	Ink, Muted, Accent, Paper, Surface, Grid, Danger color.NRGBA
+	Outline                                          color.NRGBA
+	FontFamily                                       string
 	ControlRadius                                    float32
 }
 
 func paletteForTheme(mode string) appPalette { return resolvePalette(mode, matcolor.SchemeIsDark) }
 func resolvePalette(mode string, systemDark bool) appPalette {
 	if mode == "apollo" {
-		// Gray-green instrument panels, engraved cream legends and blue keys.
-		// Keep signal/warning colors distinct from panel ink.
+		// The owner's visual reference uses blue-black panels, cyan outlined
+		// keys and compact instrument lettering. Signal colors stay distinct.
 		return appPalette{
-			Ink: color.NRGBA{R: 239, G: 235, B: 218, A: 255}, Muted: color.NRGBA{R: 182, G: 188, B: 170, A: 255},
-			Accent: color.NRGBA{R: 126, G: 168, B: 196, A: 255}, Paper: color.NRGBA{R: 29, G: 35, B: 33, A: 255},
-			Surface: color.NRGBA{R: 49, G: 58, B: 54, A: 255}, Grid: color.NRGBA{R: 67, G: 77, B: 70, A: 255},
-			Danger: color.NRGBA{R: 255, G: 151, B: 129, A: 255}, ControlRadius: 2,
+			Ink: color.NRGBA{R: 146, G: 220, B: 232, A: 255}, Muted: color.NRGBA{R: 130, G: 171, B: 182, A: 255},
+			Accent: color.NRGBA{R: 45, G: 201, B: 235, A: 255}, Paper: color.NRGBA{R: 3, G: 17, B: 22, A: 255},
+			Surface: color.NRGBA{R: 10, G: 28, B: 36, A: 255}, Grid: color.NRGBA{R: 18, G: 48, B: 59, A: 255},
+			Danger: color.NRGBA{R: 255, G: 151, B: 129, A: 255}, Outline: color.NRGBA{R: 45, G: 113, B: 131, A: 255},
+			FontFamily: "Roboto Mono", ControlRadius: 1,
 		}
 	}
 	if mode == "dark" || mode == "system" && systemDark {
@@ -67,6 +70,14 @@ func applyPalette(node *ui.Node, palette appPalette) {
 	if selected {
 		node.Style.Foreground = ui.Some(palette.Paper)
 	}
+	if palette.FontFamily != "" {
+		typography := node.Style.Typography.Value
+		typography.Family = palette.FontFamily
+		if typography.Size == 0 || typography.Size == 13 {
+			typography.Size = 12
+		}
+		node.Style.Typography = ui.Some(typography)
+	}
 	switch node.Kind {
 	case ui.TextField, ui.NumberField, ui.MultilineText, ui.Selector, ui.MenuButton, ui.Button, ui.Disclosure:
 		node.Style.CornerRadius = ui.Some(palette.ControlRadius)
@@ -78,6 +89,22 @@ func applyPalette(node *ui.Node, palette appPalette) {
 		}
 	case ui.Extension:
 		node.Style.Background = ui.Some(palette.Paper)
+	}
+	if palette.Outline.A != 0 {
+		switch node.Kind {
+		case ui.Button, ui.MenuButton, ui.Selector, ui.TextField, ui.NumberField, ui.MultilineText, ui.Disclosure, ui.ListBox:
+			outline := palette.Outline
+			if selected {
+				outline = palette.Accent
+			}
+			node.Style.Border = ui.Some(ui.Border{Width: 1, Color: outline})
+		}
+		switch node.Kind {
+		case ui.Button, ui.MenuButton, ui.Selector:
+			if !selected && node.Style.Foreground.Value == palette.Ink {
+				node.Style.Foreground = ui.Some(palette.Accent)
+			}
+		}
 	}
 	for i := range node.Children {
 		applyPalette(&node.Children[i], palette)

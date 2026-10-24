@@ -16,7 +16,7 @@ import (
 )
 
 func TestMountedFooterFitsOneLineWithLongDocumentName(t *testing.T) {
-	for _, mode := range []string{"light", "dark"} {
+	for _, mode := range []string{"light", "dark", "apollo"} {
 		for _, width := range []int{1040, 1440} {
 			t.Run(fmt.Sprintf("%s/%d", mode, width), func(t *testing.T) {
 				s, cleanup := testScreen(t)

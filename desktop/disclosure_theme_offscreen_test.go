@@ -74,8 +74,7 @@ func TestMountedInspectorDisclosurePaletteAndSharedExpansion(t *testing.T) {
 			for y := text.Min.Y; y < text.Max.Y; y++ {
 				for x := text.Min.X; x < text.Max.X; x++ {
 					p := color.NRGBAModel.Convert(im.At(x, y)).(color.NRGBA)
-					sum := int(p.R) + int(p.G) + int(p.B)
-					if mode != "light" && sum > 600 || mode == "light" && sum < 240 {
+					if readingTextCoverage(p, palette.Surface, palette.Ink) > .6 {
 						inkPixels++
 					}
 				}

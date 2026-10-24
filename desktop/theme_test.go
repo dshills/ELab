@@ -113,7 +113,11 @@ func TestApolloThemeMatchesUserAndAgentAndRestoresOtherThemes(t *testing.T) {
 		palette := resolvePalette(mode, false)
 		for _, id := range []string{"part-search", "selection", "schematic", "inspector-navigation"} {
 			node, ok := findNode(root, id)
-			if !ok || node.Style.Foreground.Value != palette.Ink || !node.Style.Background.Set {
+			foreground := palette.Ink
+			if id == "selection" && mode == "apollo" {
+				foreground = palette.Accent
+			}
+			if !ok || node.Style.Foreground.Value != foreground || !node.Style.Background.Set {
 				t.Fatal("theme did not reach the application control", mode, id)
 			}
 			if id == "part-search" && node.Style.CornerRadius.Value != palette.ControlRadius {
@@ -152,6 +156,12 @@ func TestApolloPaletteTextContrast(t *testing.T) {
 			if contrast < 4.5 {
 				t.Fatalf("Apollo text contrast %.2f is below 4.5:1: %v on %v", contrast, foreground, background)
 			}
+		}
+	}
+	for _, background := range []color.NRGBA{p.Paper, p.Surface} {
+		contrast := (luminance(p.Outline) + .05) / (luminance(background) + .05)
+		if contrast < 3 {
+			t.Fatalf("Apollo control outline contrast %.2f is below 3:1", contrast)
 		}
 	}
 }

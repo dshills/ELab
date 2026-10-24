@@ -6,6 +6,7 @@ import (
 	"cogentcore.org/core/core"
 	"cogentcore.org/core/styles"
 	"cogentcore.org/core/styles/units"
+	"cogentcore.org/core/text/rich"
 )
 
 // Vellum's public theme does not yet expose native scrollbar/private disclosure
@@ -28,6 +29,23 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 	scene.WidgetWalkDown(func(widget core.Widget, w *core.WidgetBase) bool {
 		if styleComponentRow(widget, w) {
 			changed = true
+		}
+		if row, ok := widget.(*core.Switch); ok && w.Parent != nil && w.Parent.AsTree().Name == "part-list" {
+			install(w, func(style *styles.Style) {
+				p := s.nativeColors()
+				if p.FontFamily == "" {
+					return
+				}
+				style.Font.Family = rich.Custom
+				style.Font.CustomFont = rich.FontName(p.FontFamily)
+				style.Border.Radius.Set(units.Dp(p.ControlRadius))
+				style.Color = image.NewUniform(p.Ink)
+				style.Background = image.NewUniform(p.Paper)
+				if row.IsChecked() {
+					style.Color = image.NewUniform(p.Paper)
+					style.Background = image.NewUniform(p.Accent)
+				}
+			})
 		}
 		if frame := core.AsFrame(widget); frame != nil {
 			install(w, func(style *styles.Style) {
