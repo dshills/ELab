@@ -5,7 +5,7 @@ in the owner-selected unsigned channel.** [Current repair and qualification](81-
 [app](../build/releases/ELab-0.181.4-macos-arm64/ELab.app),
 [ZIP](../build/releases/ELab-0.181.4-macos-arm64.zip).
 The original first-usable /204 closeout remains preserved below, with its exact
-historical evidence and scope. /207–/217 maintenance candidates are held for
+historical evidence and scope. /207–/218 maintenance candidates are held for
 fresh native acceptance and do not replace the current download.
 
 **Preserved /204 closeout:** [Handoff](79-first-version-release-closeout.md),

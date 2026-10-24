@@ -32,6 +32,11 @@ run and existing verification/grid regressions pass in 2.371 s.
 The [full quality gate passes](../docs/validation/verification-output-grid-218/README.md):
 lint/staticcheck, 67 Python tests, root/desktop race and vet, mounted race and
 offscreen vet. Desktop race takes 174.489 s; mounted race 159.428 s. All
-888 frozen source/check inputs match. Clean packaging and matching-agent storage
-checks follow this source receipt. The qualified /205 download remains preserved;
+888 frozen source/check inputs match. The clean 0.181.17 /218 package and matching agent pass 6,136 independent
+RC voltage/current readings across 3,068 captured rows. A fresh process reopens
+all four saved captures unchanged; another imports the 1,001-row boundary JSON
+and reexports identical bytes. Above-limit refusal preserves the full snapshot,
+all owned workers join and all three processes exit 0. The app bundle remains
+unchanged with valid strict ad-hoc integrity. The candidate is held for native
+acceptance and does not replace /205. The qualified /205 download remains preserved;
 the accumulated native UI acceptance work remains separate.

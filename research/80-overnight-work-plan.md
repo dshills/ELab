@@ -147,3 +147,26 @@ saved timestamps, across different rates and resistances. Captures remain exact
 after a live 30 kohm edit; six invalid/stale requests preserve the full state.
 Fresh native acceptance remains separate. /214 and /205 are preserved, the
 existing native session is untouched, and no graphical launch prompt is queued.
+
+## Checkpoint: wheel behavior and electronics verification
+
+The [numeric wheel repair](94-number-field-wheel.md) has a clean /217 package,
+full source/offscreen quality and an owned old-native reproduction. Its changed
+native behavior remains in the prepared acceptance list. Standing run/desktop
+authorization is in `AGENTS.md`; do not request it again or queue an unattended
+launch confirmation.
+
+[Seven RC-driven MOSFET fixtures](95-gate-common-mode.md) pass 1,722 independent
+scalar comparisons on the exact /217 agent, with both capacitor orientations,
+three DC reference voltages and a 56-part/55-node equivalent graph. Ordinary
+active-work Pan/Save/Undo/Pause/cancellation preserves live physics; a fresh
+process opens the file actually saved during that work. This is bounded
+educational-model and public-status evidence, not a latency distribution.
+
+The [Verify output-grid repair](96-verification-output-grid.md) fixes a false
+refusal of 1 ms at 1 µs without raising limits or merging final timestamps.
+Full quality passes; clean /218 matching-agent checks include 6,136 analytic RC
+readings, four-capture fresh project reopen and byte-exact JSON reexport. No
+simulation kernel, manual stepping, SDK or native UI source changes for /218.
+The candidate remains held for the accumulated native checks. /205 is still the
+qualified download; no new features or owner-review gate have been introduced.

@@ -8,9 +8,11 @@ review and clean-account installation retain their explicit deferrals; complete
 PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
-**Current maintenance work:** /217 prevents wheel input from accidentally
-editing focused number fields. [Implementation and checks](94-number-field-wheel.md).
-The /207–/217 changes remain held for fresh changed-candidate native acceptance;
+**Current maintenance work:** /218 repairs false Verify output-limit refusals
+while preserving distinct final samples. [Implementation and checks](96-verification-output-grid.md).
+The /217 numeric wheel repair remains included. [Electronics reference checks](95-gate-common-mode.md)
+cover seven RC-driven MOSFET circuits and active-work preservation.
+The /207–/218 changes remain held for fresh changed-candidate native acceptance;
 they do not replace the /205 download. Owner review remains deferred. Standing
 authorization to run ELab and use the desktop is saved in `AGENTS.md` and must
 not be requested again.

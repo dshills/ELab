@@ -19,3 +19,9 @@ take 2.371 s. The full gate passes lint/staticcheck, 67 Python tests, root/deskt
 race and vet, mounted race and offscreen vet: desktop 174.489 s, mounted
 159.428 s. All 888 frozen source/check inputs match. Native UI acceptance is
 separate; /205 remains the download. Clean packaging follows this source receipt.
+
+The [clean /218 package and matching agent](candidate-report.json) pass
+6,136 independent RC readings, exact grid endpoints, four-capture fresh project
+reopen and separate JSON import/byte-exact reexport. The bundle stays intact;
+all owned headless workers join. The candidate remains held for the
+[native acceptance list](native-acceptance-pending.json); /205 stays current.

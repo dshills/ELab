@@ -1,0 +1,108 @@
+{
+  "version": "0.181.17",
+  "build": "218",
+  "source_commit": "1a3e49c810d84d18c5fec5cd8a32a726836c07e2",
+  "candidate": "/Users/dshills/Development/projects/ELab/build/ELab-0.181.17-218-candidate",
+  "native_sha256": "1624c9565671c85d174136fce4113a4069894f8dc6b0ca6b9260cc0038c9dafe",
+  "agent_sha256": "7966f7cc19e99b0c475a7b48b447acd182db09731d20688ef0f8267c1a4380ef",
+  "clean_build_vcs": true,
+  "source_inputs_still_match": 888,
+  "strict_ad_hoc_signature_valid": true,
+  "bundle_unchanged_after_headless_checks": true,
+  "matching_headless_agent_passed": true,
+  "scalar_readings_checked": 6136,
+  "captured_rows": 3068,
+  "boundary_cases": [
+    {
+      "case": "number",
+      "total_steps": 1000,
+      "rows": 1001,
+      "final_time_s": 0.001
+    },
+    {
+      "case": "units",
+      "total_steps": 1000,
+      "rows": 1001,
+      "final_time_s": 0.001
+    },
+    {
+      "case": "below",
+      "total_steps": 1000,
+      "rows": 1001,
+      "final_time_s": 0.0009999999999999998
+    },
+    {
+      "case": "distinct-tail",
+      "total_steps": 64,
+      "rows": 65,
+      "final_time_s": 6.300000000000001e-05
+    }
+  ],
+  "max_voltage_error_v": 4.996003610813204e-16,
+  "max_current_error_a": 1.0842021724855044e-19,
+  "above_limit_refused_without_mutation": true,
+  "live_state_preserved": true,
+  "fresh_project_reopen_preserves_all_records": true,
+  "fresh_import_and_byte_exact_reexport": true,
+  "shutdowns": [
+    {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 33,
+      "command_revision": 10,
+      "document_generation": 2,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 5,
+      "command_revision": 3,
+      "document_generation": 2,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    },
+    {
+      "id": "shutdown-1",
+      "status": "completed",
+      "phase": "completed",
+      "actor": "agent.stdio",
+      "input_revision": 13,
+      "command_revision": 5,
+      "document_generation": 1,
+      "discard_recovery": true,
+      "checkpoint_recovery": false,
+      "cancelable": false,
+      "recovery_finalized": true,
+      "workers_joined": true,
+      "exit_ready": true
+    }
+  ],
+  "owned_agent_exit_codes": [
+    0,
+    0,
+    0
+  ],
+  "prior_candidate_preserved": true,
+  "graphical_app_launched": false,
+  "native_acceptance_passed": false,
+  "promotion_status": "held",
+  "release_ready": false,
+  "published": false,
+  "owner_review_required": false,
+  "preserved_download": "0.181.4 /205",
+  "limitations": "Headless checks qualify the shared grid/storage repair, not the accumulated native UI changes. Ad-hoc sealing is not Developer ID signing/notarization. No new graphical app or unattended launch prompt is started."
+}
