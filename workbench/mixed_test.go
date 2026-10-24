@@ -36,7 +36,11 @@ func TestMixedFlasherKernel(t *testing.T) {
 	last := s.result.Transistors[0].State
 	min, max := 1., 0.
 	for i := 0; i < 600; i++ {
-		s, err = s.advance(tr, s.result.Time+.005)
+		// This checks sustained numerical oscillation, not host scheduling.
+		// Keep the attempt cap; elapsed-time rejection has dedicated tests.
+		budget := newIntegrationBudget()
+		budget.elapsed = func() time.Duration { return 0 }
+		s, err = s.advanceBudget(tr, s.result.Time+.005, budget)
 		if err != nil {
 			t.Fatalf("at %d: %v", i, err)
 		}

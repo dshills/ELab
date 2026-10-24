@@ -193,3 +193,54 @@ func TestWiperEventSupersedesStagedStepWithoutBeingOverwritten(t *testing.T) {
 		t.Fatal("obsolete step overwrote wiper input")
 	}
 }
+
+func TestManualStepProgressCountsActualOutputTargets(t *testing.T) {
+	for _, test := range []struct {
+		name           string
+		seed, duration float64
+		smallStep      bool
+		samples        int
+	}{
+		{name: "exact", duration: .001, samples: 1},
+		{name: "tiny-tail", duration: .001 + .1e-12, samples: 1},
+		{name: "adjacent-endpoint", duration: math.Nextafter(.001, math.Inf(1)), samples: 1},
+		{name: "seeded-tail", seed: .005, duration: .003 + .5e-12, samples: 3},
+		{name: "partial-final", duration: .0025, samples: 3},
+		{name: "above-snap-threshold", duration: .001 + 2e-12, samples: 2},
+		{name: "maximum-samples", duration: .001, smallStep: true, samples: 1000},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			s := pausedRC(t)
+			defer s.Close()
+			if test.smallStep {
+				settings := DefaultTransientSettings()
+				settings.StepSeconds, settings.PlaybackSpeed = 1e-6, .001
+				call(t, s, "simulation.transient.set", settings, "small-step")
+				call(t, s, "simulation.restart", struct{}{}, "fresh-small-step")
+				settled(t, s)
+			}
+			if test.seed > 0 {
+				call(t, s, "simulation.step", StepParams{Duration: test.seed}, "seed")
+			}
+			before := s.Snapshot()
+			admitted := call(t, s, "simulation.step.start", StepParams{Duration: test.duration}, "grid").Result.(Snapshot)
+			if admitted.StepWork == nil || admitted.StepWork.TotalSamples != test.samples {
+				t.Fatalf("wrong planned count: %+v; want %d", admitted.StepWork, test.samples)
+			}
+			s.liveWorkers.Wait()
+			after := s.Snapshot()
+			work := after.StepWork
+			if work.Status != "completed" || work.CompletedSamples != test.samples || work.TotalSamples != test.samples || work.Progress != 1 {
+				t.Fatal("completed job did not reach its declared sample count", work)
+			}
+			at := before.Transient.Sample.Time + test.duration
+			want := 5 * -math.Expm1(-at/.01)
+			if after.Transient.Sample.Time != at || math.Abs(after.Transient.Sample.Voltage-want) > 1e-12 {
+				t.Fatal("progress planning changed the requested time or ideal RC response", after.Transient.Sample, at, want)
+			}
+			if before.Document != after.Document || !reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Wires, after.Wires) || !reflect.DeepEqual(before.UndoEntry, after.UndoEntry) || before.CanRedo != after.CanRedo || !after.Paused {
+				t.Fatal("manual step changed the source, document or history")
+			}
+		})
+	}
+}

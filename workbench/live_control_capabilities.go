@@ -60,7 +60,7 @@ func addLiveControlDetails(id string, schema map[string]any) bool {
 			{"operator": "snapshot.transient.sample.time_s + duration_s > snapshot.transient.sample.time_s"},
 			{"operator": "duration_s>=minimum for network analyses with capacitors", "minimum": MinCapacitorStepSeconds},
 		}
-		schema["x-rounding-policy"] = "Duration compares against rounded(1000*step_s); next larger representable duration refuses. The ceil-derived total-sample estimate is capped at 1000 at that boundary."
+		schema["x-rounding-policy"] = "Duration compares against rounded(1000*step_s); next larger representable duration refuses. Progress counts the worker's actual start_time + n*step_s targets, clipped to the requested endpoint, preserving its existing <1 ps final-tail snapping."
 		contract.Preconditions = []string{"Paused, complete supported transient with fresh physical state; network analysis also needs a fresh network state", "No active input_work or step_work, including canceling; duration is positive, <=1 s, and <= the rounded product of 1000 and step", "Duration advances floating-point time; networks containing capacitors require at least 1e-10 s"}
 		contract.Effects = []string{"Capture graph/settings/current charge/time and queued input into isolated work; apply queued input before advancing", "Publish the complete requested advance atomically on success; progress reports attempted output samples without exposing partial physics", "Failure/cancel/supersession preserves committed physical state and pending input; one latest step_work is retained; it is not a kept recording or saved project data"}
 		failure("unavailable", "admission", "Not paused, incomplete/DC/unsupported, stale or network state not ready")

@@ -57,6 +57,28 @@ func cloneMixedState(state *mixedState) *mixedState {
 	}
 	return &mixedState{net: state.net, x: append([]float64{}, state.x...), capV: append([]float64{}, state.capV...), result: cloneMixed(state.result)}
 }
+
+func manualStepTargetTime(start, end, step float64, sample int) float64 {
+	next := math.Min(end, start+float64(sample)*step)
+	if end-next < 1e-12 {
+		return end
+	}
+	return next
+}
+
+// Count the worker's actual absolute-time grid, including its existing tiny
+// final-tail snapping. Admission validates the interval and 1000-sample bound.
+// A quotient ceiling can overestimate the count at an adjacent endpoint or
+// after a nonzero origin, leaving a completed job reporting fewer than its total.
+func manualStepTargetCount(start, end, step float64) int {
+	for sample := 1; sample < MaxManualStepSamples; sample++ {
+		if manualStepTargetTime(start, end, step, sample) == end {
+			return sample
+		}
+	}
+	return MaxManualStepSamples
+}
+
 func (s *Service) startStepLocked(p StepParams) error {
 	if s.activeInputWorkLocked() {
 		return &actionError{"busy", "finish or cancel applying the current input before stepping"}
@@ -88,7 +110,7 @@ func (s *Service) startStepLocked(p StepParams) error {
 		inputMode: s.inputMode, pendingInputMode: s.pendingInputMode, networkAdvance: s.networkAdvance}
 	ctx, cancel := context.WithTimeout(context.Background(), ManualStepDeadline)
 	s.stepSerial++
-	job := &stepJob{work: StepWork{ID: fmt.Sprintf("step-%d", s.stepSerial), Status: "queued", RunID: s.run, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, CommandRevision: s.commandRevision + 1, StartTime: s.transient.Sample.Time, Duration: p.Duration, TotalSamples: min(MaxManualStepSamples, int(math.Ceil(p.Duration/s.transientSettings.StepSeconds)))},
+	job := &stepJob{work: StepWork{ID: fmt.Sprintf("step-%d", s.stepSerial), Status: "queued", RunID: s.run, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, CommandRevision: s.commandRevision + 1, StartTime: s.transient.Sample.Time, Duration: p.Duration, TotalSamples: manualStepTargetCount(s.transient.Sample.Time, end, s.transientSettings.StepSeconds)},
 		ctx: ctx, cancel: cancel, done: make(chan struct{}), input: input, compiled: c, originalTrace: s.transient, originalState: s.mixedState, actuation: s.actuationRevision,
 		mode: s.transient.Mode, pending: s.transient.PendingMode, end: end}
 	s.stepJob = job
@@ -141,10 +163,7 @@ func (s *Service) runStep(job *stepJob) {
 		}
 		// Anchor every requested output to the captured origin. Repeated
 		// addition can drift far enough to require a 1001st final sample.
-		next := math.Min(job.end, job.work.StartTime+float64(completed+1)*input.transientSettings.StepSeconds)
-		if job.end-next < 1e-12 {
-			next = job.end
-		}
+		next := manualStepTargetTime(job.work.StartTime, job.end, input.transientSettings.StepSeconds, completed+1)
 		err = input.advanceTransientLocked(job.compiled, next)
 		if err != nil {
 			break

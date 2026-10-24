@@ -16,6 +16,13 @@ Only a fully successful job publishes its entire requested advance, including pe
 
 Statuses are queued, running, canceling, completed, failed, canceled and superseded. Progress represents staged computation, not committed time. Notifications are coalesced at roughly 50 ms, with initial and terminal publication. Final counts/progress remain consistent even on cancellation. Job IDs are never reused during a process; only the latest manual job is shown. A prior-run job is labeled Previous in the scope. No manual job is a kept recording or schematic history action.
 
+The planned count uses the same absolute-time output targets as the worker,
+including its existing final-tail snapping below 1 ps. Completed work therefore
+reaches its declared total even when a duration is just above a sample boundary
+or starts at a nonzero time. The duration, numerical equations, output targets
+and 1,000-sample admission limit are unchanged; Verify retains its separate
+strict final-sample policy.
+
 Electrical/model/settings edits, switch/wiper/input changes, Restart, Resume and project replacement supersede the captured work. Pause and Close cancel it. Resume proceeds from the last committed sample. The worker checks cancellation between output samples and after numerical work; existing bounded kernel work remains in effect. A 30-second wall budget bounds the job. Network/NPN pulse startup is now background work. Some algebraic input/file/recovery work remains synchronous and is a separate work item.
 
 ## Waiting, retries and ownership
