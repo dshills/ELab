@@ -237,3 +237,20 @@ Ten original native checks remain open. Next prioritize the newly reproduced
 numeric-step display artifact, then the remaining keyboard/state-contract checks.
 The /205 download remains preserved. Do not repeat the completed unaffected
 source gates for this evidence-only checkpoint.
+
+
+## Checkpoint: decimal numeric steps
+
+The [decimal-step repair](104-decimal-number-steps.md) passes focused and full
+framework/application checks and affected native plus/arrow/bounds/draft checks.
+It preserves typed/agent values and the existing float32 control boundary. All
+1,001 stored samples and the /205 download stay intact. /222 is backed up.
+
+A single unexplained native exit after the first restore is preserved, not
+claimed fixed or dismissed. No panic or matching user-directory crash report
+was found. Two restoration repeats did not reproduce it; the reopened process
+survived the recorded almost-five-minute checkpoints. Next investigate that
+lifecycle observation, then continue the ten remaining original native checks.
+Do not ask for launch/desktop authorization again or repeat unrelated successful
+source gates for this evidence-only update. The arithmetic repair is qualified
+within scope; /223 is held and broader release acceptance remains separate.

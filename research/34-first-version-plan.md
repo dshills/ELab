@@ -8,21 +8,19 @@ review and clean-account installation retain their explicit deferrals; complete
 PRD MVP acceptance is not asserted. The original Outcome and scope below remains
 the delivery definition. Older candidate/release statements below are historical.
 
-**Current maintenance work:** /222 repairs validation scrolling and unfinished
-numeric drafts. [Implementation and native checks](103-validation-scroll-and-drafts.md).
-Eight of eighteen accumulated native checks have scoped evidence; ten remain.
-Fresh /222 checks cover live/recorded interval correction and numeric wheel/edit
-behavior; six unaffected items retain earlier evidence. The native Save
-Command-A observation and controlled divider speeds remain open. A cosmetic
-numeric-step formatting issue is recorded for a focused repair.
+**Current maintenance work:** /223 repairs repeated decimal numeric steps;
+[implementation and affected native checks](104-decimal-number-steps.md) pass.
+The /222 validation-scroll/private-draft repair remains included. Eight original
+native checklist items retain scoped evidence and ten remain open. One additional
+unexplained native exit after restoration is recorded; two repeats did not
+reproduce it. Its cause/lifecycle acceptance stays open, so /223 remains held.
 
-The /221 footer and native Light/Dark inset, /220 manual-step, /219 slider,
-/218 Verify endpoint and /217 numeric wheel repairs remain included.
-[Electronics reference checks](95-gate-common-mode.md) cover seven RC-driven
-MOSFET circuits and active-work preservation. The /207–/222 changes stay held for
-the remaining native acceptance and do not replace /205. Owner review remains
-deferred. Standing run/desktop authorization is saved in `AGENTS.md`; the /222
-ordinary update and reopen proceeded without another owner permission question.
+Earlier footer/theme, manual-step, slider, Verify endpoint and numeric-wheel
+repairs remain included. [Electronics reference checks](95-gate-common-mode.md)
+cover seven RC-driven MOSFET circuits and active-work preservation. The held
+/207–/223 changes do not replace /205. Owner review remains deferred. Standing
+run/desktop authorization is saved in `AGENTS.md`; ordinary updates and reopens
+proceeded without another owner permission question.
 
 ## Historical plan and broader acceptance checklist
 
