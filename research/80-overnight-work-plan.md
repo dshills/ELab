@@ -201,3 +201,27 @@ race-tested routing/temporary-flag cases, staticcheck and vet pass. No product,
 SDK or package changes are needed, and /219's separate native repairs remain
 pending. Continue electronics and shared state-contract checks after this UI
 round, without repeating successful unaffected native paths.
+
+## Checkpoint: manual-step progress
+
+The [manual-step count repair](99-manual-step-progress.md) fixes completed jobs
+showing 1/2 or 3/4 staged samples. It counts the worker's existing bounded target
+grid without changing timing, equations or limits. Seven source cases and eight
+exact /220 agent cases pass, including unit input and the 1,000-sample boundary.
+Five physical traces/results match /219 exactly; sixteen analytical RC readings
+pass. Full quality passes with all 890 recorded inputs unchanged.
+
+The first full run's flasher numerical test hit the existing real 100 ms wall
+budget. That log remains preserved. Its numerical assertions now use the
+existing test clock with the attempt cap retained; production budget code and
+dedicated enforcement tests are unchanged. The failed and final gate scopes
+remain separate. /220 is packaged and held for the inherited native checklist;
+/219 and the /205 download remain intact.
+
+Next, use a normal update of the existing isolated ELab test installation for
+the accumulated native checks, preserving its identity, launcher sandbox,
+saved fixtures and rollback copy. Use the ordinary CUA launch route for that
+already-authorized update; do not switch to a shell/Finder launch or change
+security settings to evade review. Standing permission is already recorded;
+do not ask for it again. Keep a tooling refusal distinct from missing owner
+authorization and continue independent work if that route is unavailable.

@@ -25,3 +25,9 @@ mounted race: 168.829 s. All 890 source/check inputs match. The earlier plot
 routing regression is included. The SDK and 126 production desktop Go sources
 are unchanged. Initial test-fixture command/stale-run mistakes are retained
 separately. /219 and /205 stay preserved; clean packaging follows.
+
+The [clean /220 candidate and matching agent](candidate-report.json) pass
+eight complete-count cases, exact physical comparison with five /219 traces,
+sixteen analytical RC readings and unchanged over-bound refusal. All owned
+workers join and exit 0. The candidate remains held for the unchanged
+[native acceptance list](native-acceptance-pending.json); /205 stays current.

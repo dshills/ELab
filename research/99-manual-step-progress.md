@@ -37,6 +37,11 @@ changing paused settings; those logs are kept separately.
 The [full gate rerun passes](../docs/validation/manual-step-progress-220/README.md):
 lint/staticcheck, 67 Python tests, root/desktop race and vet, configured mounted
 race and offscreen vet. Desktop race takes 187.764 s, mounted race 168.829 s;
-all 890 source/check inputs match. Clean package qualification follows. The SDK
+all 890 source/check inputs match. The clean /220 package and matching agent pass eight count cases, including
+unit input and the 1,000-sample boundary. Five physical traces/results exactly
+match /219; sixteen independent RC voltage/current references pass. The next
+larger duration still refuses without mutation, all owned workers join and
+eight processes exit 0. The bundle remains intact. Native acceptance of the
+earlier UI repairs remains separate. The SDK
 and UI implementation are unchanged; /219 and the qualified /205 download remain
 preserved. Fresh native acceptance of the earlier UI repairs remains separate.
