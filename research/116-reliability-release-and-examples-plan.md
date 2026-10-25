@@ -14,11 +14,11 @@ blocking progress. No new components or electrical model families.
    through keyboard and public agent commands, including refusal/correction,
    interruption, stale actions, Undo and recovery. Fix demonstrated failures;
    distinguish actual keyboard evidence from descriptor/callback checks.
-4. In progress: produce an updated unsigned downloadable release with the current
+4. Complete: produce an updated unsigned downloadable release with the current
    electronics, matching agent, examples, use/model limits, checksum and rollback.
    Preserve the qualified /205 download and /256 development candidate. Test
    archive extraction and offline packaged workflows; retain declared deferrals.
-5. Pending: searchable categorized examples browser with schematic thumbnails
+5. In progress: searchable categorized examples browser with schematic thumbnails
    and short experiment descriptions, retaining existing protected example-load
    commands and their agent equivalents. Verify keyboard, search, selection,
    unsaved-work protection and theme/size containment. Package a final update
@@ -84,3 +84,23 @@ pass across in-process, headless stdio/socket and native socket adapters. All
 45 owned external processes exit normally with code zero. Detailed receipts
 are in docs/validation/reliability-five/workflow. This does not claim participant,
 screen-reader/IME or clean-account acceptance. Full release gates run next.
+
+## Item 4 result
+
+ELab 0.194.5 /260 is an updated unsigned macOS arm64 download with the matching
+agent, all 62 existing paused example projects and SVGs, model notes, Vellum
+notices, usage and rollback instructions. ZIP SHA-256:
+4132046779dd14442187e37baa426de55ccff4c9f5f7b587d691bc31c5ae857a.
+All 374 archived files match a macOS extraction's bytes and modes, including the
+ad-hoc integrity seal. The copied runtime passes complete native smoke and
+extended public suites with source/development paths and outbound IP denied.
+The extracted agent reopens all 62 examples with exact graphs, paused clean
+state and accepted model startup. The /205 ZIP is unchanged. Owner walkthrough
+and separate-account/Gatekeeper testing remain explicitly deferred. No upload
+is performed. Evidence: docs/validation/reliability-five/release-260.
+
+The source/full-suite and later smoke-only correction scopes are kept separate
+in the receipts. The native harness now navigates the appropriate inspector and
+observes stable native publication; semantic bulk fixtures do not flush editors
+that have not mounted. Mounted and actual keyboard settlement remain covered.
+The final ordered item begins from this preserved release.

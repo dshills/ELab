@@ -61,3 +61,11 @@ helper restores those callbacks. No retry silently replays a failed user edit.
 The earlier failed passes are retained rather than relabeled as successes.
 
 A fresh clean package repeats the native/offline checks before ZIP qualification.
+
+Item 4 complete: [qualified /260 archive](release-260/archive.json),
+[copied runtime](release-260/runtime-report.json.gz) and
+[all extracted examples](release-260/offline-examples.json) pass. The unsigned
+ZIP is build/releases/ELab-0.194.5-macos-arm64.zip (38,681,875 bytes), with a
+matching checksum file. The 374 archive members and extracted signature match.
+The /205 alpha remains byte-for-byte preserved. This release is retained while
+the ordered examples-browser work proceeds, with no new component/model work.
