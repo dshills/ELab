@@ -97,7 +97,7 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 		return state.Circuit.Resistance == 2200 && state.Result != nil && !state.Result.Stale && math.Abs(state.Result.Current-0.001345) < 0.000002
 	})
 	if err != nil {
-		return fmt.Errorf("native inspector Apply did not complete: %w; selected=%q draft=%q resistance=%g diagnostic=%+v", err, state.Selected, state.Drawing.Value, state.Circuit.Resistance, state.Diagnostic)
+		return fmt.Errorf("native inspector Apply did not complete: %w; selected=%q draft=%q resistance=%g diagnostics=%+v", err, state.Selected, state.Drawing.Value, state.Circuit.Resistance, state.Diagnostics)
 	}
 	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "refused_native_controls": refusedControls, "invalid_value_preserved_state": true, "focus_requests": focus.Requests, "focus_admissions": focus.Admissions, "observed_focus_id": focus.FocusedID, "observed_focus_generation": focus.Generation, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
 	log.Print(string(evidence))
