@@ -75,10 +75,19 @@ func TestPublishedComponentDomainsMatchRuntimeBounds(t *testing.T) {
 		}
 	}
 	parts := Library()
-	parts[0].ValueDomain.Maximum = 999
-	if Library()[0].ValueDomain.Maximum != 12 {
-		t.Fatal("library metadata is borrowed mutable state")
+	for _, part := range parts {
+		if part.ValueDomain == nil {
+			continue
+		}
+		expected := *part.ValueDomain
+		part.ValueDomain.Maximum = 999
+		for _, fresh := range Library() {
+			if fresh.Kind == part.Kind && *fresh.ValueDomain != expected {
+				t.Fatal("library metadata is borrowed mutable state", part.Kind)
+			}
+		}
 	}
+
 }
 func TestValueCouplingAndLabelContracts(t *testing.T) {
 	sine, err := MakeComponent("V1", "sine-source", Point{}, "")

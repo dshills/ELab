@@ -75,9 +75,21 @@ func TestLinearNegativeRailAndCapacitorStep(t *testing.T) {
 }
 
 func TestNetworkLinearityIsConservativeForEveryPart(t *testing.T) {
-	nonlinear := map[string]bool{"linear-regulator": true, "ldo-regulator": true, "relay": true, "comparator": true, "pushbutton": true, "bouncing-pushbutton": true, "bcd-decoder": true, "seven-segment": true, "led": true, "diode": true, "zener": true, "schottky": true, "npn": true, "pnp": true, "nmos": true, "pmos": true, "opamp": true, "timer555": true, "d-flipflop": true, "jk-flipflop": true, "t-flipflop": true, "binary-counter": true, "decade-counter": true, "logic-not": true, "logic-and": true, "logic-or": true, "logic-nand": true, "logic-nor": true, "logic-xor": true, "logic-xnor": true}
+	nonlinear := map[string]bool{"optocoupler": true, "linear-regulator": true, "ldo-regulator": true, "relay": true, "comparator": true, "pushbutton": true, "bouncing-pushbutton": true, "bcd-decoder": true, "seven-segment": true, "led": true, "diode": true, "zener": true, "schottky": true, "npn": true, "pnp": true, "nmos": true, "pmos": true, "opamp": true, "timer555": true, "d-flipflop": true, "jk-flipflop": true, "t-flipflop": true, "binary-counter": true, "decade-counter": true, "logic-not": true, "logic-and": true, "logic-or": true, "logic-nand": true, "logic-nor": true, "logic-xor": true, "logic-xnor": true}
 	for _, part := range Library() {
-		n := newMixedNetwork(Compiled{MixedGraph: Graph{Components: []Component{{Kind: part.Kind}}}})
+		value := part.DefaultValue
+		if part.Kind == "net-label" {
+			value = "NET"
+		}
+		component, err := MakeComponent("PART", part.Kind, Point{}, value)
+		if err != nil {
+			t.Fatal(part.Kind, err)
+		}
+		pins := map[string]string{}
+		for _, pin := range component.Terminals {
+			pins[component.ID+"."+pin] = "ground"
+		}
+		n := newMixedNetwork(Compiled{Ground: "ground", Nets: []Net{{ID: "ground"}}, TerminalNet: pins, MixedGraph: Graph{Components: []Component{component}}})
 		if n.nonlinear != nonlinear[part.Kind] {
 			t.Fatal("incorrect model linearity", part.Kind)
 		}

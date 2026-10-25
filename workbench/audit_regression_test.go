@@ -8,7 +8,7 @@ import (
 )
 
 func TestHobbyistAliasesAndLibraryMetadataIsolation(t *testing.T) {
-	for _, test := range []struct{ query, kind string }{{" BATTERY ", "dc-source"}, {"power  supply", "dc-source"}, {"VARIABLE RESISTOR", "potentiometer"}, {"square wave", "finite-pulse-source"}, {"light emitting diode", "led"}, {"BJT", "npn"}, {"AC source", "sine-source"}, {"rectifier", "diode"}} {
+	for _, test := range []struct{ query, kind string }{{" BATTERY ", "battery"}, {"power  supply", "dc-source"}, {"VARIABLE RESISTOR", "potentiometer"}, {"square wave", "finite-pulse-source"}, {"light emitting diode", "led"}, {"BJT", "npn"}, {"AC source", "sine-source"}, {"rectifier", "diode"}} {
 		matches := filteredParts(test.query)
 		found := false
 		for _, p := range matches {
@@ -26,8 +26,9 @@ func TestHobbyistAliasesAndLibraryMetadataIsolation(t *testing.T) {
 			t.Fatalf("part metadata incomplete: %s", p.Kind)
 		}
 	}
+	originalAlias := parts[0].Aliases[0]
 	parts[0].Aliases[0] = "corrupted"
-	if Library()[0].Aliases[0] != "battery" {
+	if Library()[0].Aliases[0] != originalAlias {
 		t.Fatal("library alias storage is shared")
 	}
 	s := NewExample()
@@ -36,7 +37,7 @@ func TestHobbyistAliasesAndLibraryMetadataIsolation(t *testing.T) {
 	before := s.Snapshot()
 	call(t, s, "parts.search.set", SearchParams{Query: "battery"}, "search")
 	after := s.Snapshot()
-	if after.ElectricalRevision != before.ElectricalRevision || after.RunID != before.RunID || !reflect.DeepEqual(after.Components, before.Components) || after.MatchingParts[0].Kind != "dc-source" {
+	if after.ElectricalRevision != before.ElectricalRevision || after.RunID != before.RunID || !reflect.DeepEqual(after.Components, before.Components) || after.MatchingParts[0].Kind != "battery" {
 		t.Fatal("alias search changed physics or did not reach shared state")
 	}
 }
