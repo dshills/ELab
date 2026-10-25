@@ -6,7 +6,7 @@
     "desktop/actuation_controls.go": "7440a002d8fb8556463fda10e1f152529a3aa7cd79173455ed4af1a9066ca0e6",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/audio_controls.go": "145150962fa7aea606b0dbec0f3fc674bf2786120ca7054679fa1e9ba89d60a3",
-    "desktop/canvas.go": "4c3923558a642dee92e5aa91502e05fac9488379dbe1dbeabf5db3b65b655b85",
+    "desktop/canvas.go": "3d69863a1db96ab7ece8d3343411cb944ba5200b1a019d22bc137ed5bcbf1a12",
     "desktop/component_inspector.go": "6636a8a17aa5588848b4fa6e5dea819ce3da6421c9413db4a0375aa682a1f053",
     "desktop/component_palette.go": "554968a6746c02a80cc8c8f3fb853e422f0e45e97afa0d68cb95e2eb00da4a9a",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
@@ -20,7 +20,9 @@
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
     "desktop/document_workspace.go": "130574f08669ac76d9dc7667175533f01c1da57081eda473d7ecdbfcbb0da616",
     "desktop/drawing.go": "aae5e8bf06c04ac8ed6dfa11624f86002f541b5560ee34f6eb2ea0d7ce049be9",
+    "desktop/example_browser.go": "eaaff3ce5eeb6f2eb4a43c4410ef9677efdf321bf7dce7a0fe9139f3cce7c386",
     "desktop/example_load.go": "055a905403e3bb6c79ea0e4cc490f130d23e788e2d358358ede818b9eeb2ab5a",
+    "desktop/example_thumbnails.go": "b2f7d3a90d0915813cfbbceaf342e9c961c7e7df3f94f104e5ed42bbf1ee5fed",
     "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
     "desktop/extended_controls.go": "343b8028c73e22f4caf18c6266abf5e5258b702bdf109a010e221c444c0127ff",
     "desktop/field_context.go": "615916cc47caeb68e7b0e69feddf10d4ca5b057f0064eb5e80de4dc7bc68e39c",
@@ -36,9 +38,9 @@
     "desktop/keyboard_workflow.go": "b191362c5d182dac02e265925c30bdfcaf5db3bf6a9ef0a189d0e264917c7349",
     "desktop/layout.go": "1b780e66e228784016e71d4d2d3300620551eb9bb83d47fdc696296a9b2b456d",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
-    "desktop/main.go": "8f780e6158945b16a0078471d46d50c01dc0008a7085f6cbc3186c65dc8460a0",
+    "desktop/main.go": "08f5a52a32753807269ff727d4ba340c88dab5c39572bd69bd2df6b066aea3e9",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
-    "desktop/menus.go": "cdab9ee03978f1b94d64ce7d775166a40def082c43bd010212248efc3744866d",
+    "desktop/menus.go": "fb92050da67ff3e2832fdbc153507c9547d39c779ae426bc21977a2ffdc92d71",
     "desktop/menus_darwin.go": "a8a06e6cd9c12594d7988e98f9a4b9ec24c3f1032186c57f1dab18a437033573",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
     "desktop/motor_controls.go": "b9d2416b6fa95da22b0ccb1d55ef6cfa62c0681de2d4cd55e6d85c04bbc1d09a",
@@ -70,7 +72,7 @@
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
     "desktop/sampling.go": "9caef58d4d66e4b9d90806e682cd5985567dd923262bf41daed39b2d3572faf4",
     "desktop/schematic_keyboard.go": "5d33c95abaed2f59b52101e925dc08dfebffa2947b6c947be59e0be3b1afc97d",
-    "desktop/schematic_pointer_context.go": "8870c59c4b1f77756e1160d0e8911ece436c43e9f9bf780fec2b363cf18a3867",
+    "desktop/schematic_pointer_context.go": "80cd906ba1f61f2cd60079f89d601b08122955fcb1fcd1136f8bbb1b552ac457",
     "desktop/scope.go": "5cd32eff0856f84791f18d20a8ee27418036a17f5731e304edcd7df4f842b92b",
     "desktop/scope_context.go": "f037557aab6d522f55a81c0f76f341e6e974dce853af6f5fa4cc7262d204ff2f",
     "desktop/scope_interval_rejection.go": "5a9ea95402c45cef271466499720e4955f99d765099535fe35b01f4ece948c97",
@@ -87,7 +89,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "2b60e2bef2962b146f8e4f984daf3d6e7a2e92f8c1f056c417ab3f2db07e570a",
+    "desktop/view.go": "38fd47121b77c4e6333e3ff616a941f67fc4f32678b631154bf790aa9551b065",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -140,11 +142,16 @@
     "example.load",
     "example.npn",
     "example.npn-pulse",
+    "example.preview",
     "example.rc",
     "example.rectifier",
     "example.reset",
     "example.switch-npn",
+    "examples.category.set",
     "examples.list",
+    "examples.search.set",
+    "examples.select",
+    "examples.visibility.set",
     "export.page.set",
     "export.schematic.pdf",
     "export.schematic.png",
@@ -459,6 +466,9 @@
     ],
     "example.zener": [
       "example.load"
+    ],
+    "examples.browse": [
+      "examples.visibility.set"
     ],
     "file.open": [
       "project.load",
@@ -1514,6 +1524,155 @@
       "status": "literal-public-route"
     },
     {
+      "file": "desktop/example_browser.go",
+      "line": 16,
+      "function": "*screen.registerExampleBrowserCommand",
+      "kind": "event-or-dispatch-router",
+      "expression": "s.commands.Register(command.Command{ID: \"examples.browse\", Label: \"Browse examples…\", Available: func() error {\n\tif s.fileBusy || s.pendingCommand != \"\" || s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"finish the current operation before browsing examples\")\n\t}\n\treturn nil\n}, Execute: func(context.Context) error {\n\tr := s.invoke(\"examples.visibility.set\", workbench.ScopeVisibilityParams{Visible: true})\n\tif r.Error != nil {\n\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t}\n\ts.requestKeyboardFocus(\"example-search\")\n\treturn nil\n}})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 22,
+      "function": "*screen.registerExampleBrowserCommand",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"examples.visibility.set\", workbench.ScopeVisibilityParams{Visible: true})",
+      "public_commands": [
+        "examples.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 34,
+      "function": "*screen.examplesButton",
+      "kind": "action-factory",
+      "expression": "s.action(\"examples-menu\", \"Examples\", \"examples.visibility.set\", workbench.ScopeVisibilityParams{Visible: true})",
+      "public_commands": [
+        "examples.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 58,
+      "function": "*screen.openBrowserExample",
+      "kind": "domain-ingress",
+      "expression": "s.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: id, ExpectedGeneration: \u0026generation})",
+      "public_commands": [
+        "example.load"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 70,
+      "function": "*screen.exampleSearchNode",
+      "kind": "callback-assignment",
+      "expression": "f.Change = func(e ui.SearchEvent) {\n\tr := s.invoke(\"examples.search.set\", workbench.SearchParams{Query: e.Text})\n\tif r.Error == nil {\n\t\ttarget := \"example-search\"\n\t\tif len(r.Result.(workbench.Snapshot).ExampleBrowser.MatchingIDs) \u003e 0 {\n\t\t\ttarget = \"example-grid\"\n\t\t}\n\t\ts.requestKeyboardFocus(target)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 71,
+      "function": "*screen.exampleSearchNode",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"examples.search.set\", workbench.SearchParams{Query: e.Text})",
+      "public_commands": [
+        "examples.search.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 87,
+      "function": "*screen.exampleSearchNode",
+      "kind": "callback-assignment",
+      "expression": "node.Children[2].Activate = func() {\n\ts.withExampleContext(\u0026origin, func() {\n\t\tclear()\n\t\tif s.fieldAccepted != nil {\n\t\t\ts.requestKeyboardFocus(\"example-search\")\n\t\t}\n\t})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 114,
+      "function": "*screen.exampleCollection",
+      "kind": "callback-assignment",
+      "expression": "f.Change = func(e ui.ListSelectionEvent) { s.invoke(\"examples.select\", workbench.IDParams{ID: e.TargetID}) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 114,
+      "function": "*screen.exampleCollection",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"examples.select\", workbench.IDParams{ID: e.TargetID})",
+      "public_commands": [
+        "examples.select"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 115,
+      "function": "*screen.exampleCollection",
+      "kind": "callback-assignment",
+      "expression": "f.Activate = func(e ui.CollectionEvent) { s.openBrowserExample(e.ItemID) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 124,
+      "function": "*screen.exampleCollection",
+      "kind": "callback-assignment",
+      "expression": "node.Collection.Activate = func(e ui.CollectionEvent) { s.withExampleContext(\u0026origin, func() { activate(e) }) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 158,
+      "function": "*screen.exampleBrowserView",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"examples.visibility.set\", workbench.ScopeVisibilityParams{Visible: false})",
+      "public_commands": [
+        "examples.visibility.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 168,
+      "function": "*screen.exampleBrowserView",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"examples.category.set\", workbench.PartCategoryParams{Category: e.SelectedID})\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 169,
+      "function": "*screen.exampleBrowserView",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"examples.category.set\", workbench.PartCategoryParams{Category: e.SelectedID})",
+      "public_commands": [
+        "examples.category.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 183,
+      "function": "*screen.exampleBrowserView",
+      "kind": "callback-assignment",
+      "expression": "node.Dismiss = func() { s.withExampleContext(\u0026origin, dismiss) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "line": 190,
+      "function": "*screen.exampleBrowserView",
+      "kind": "callback-assignment",
+      "expression": "n.Activate = func() { s.withExampleContext(\u0026origin, action) }",
+      "status": "requires-binding-review"
+    },
+    {
       "file": "desktop/example_load.go",
       "line": 64,
       "function": "*screen.registerExampleLoadCommands",
@@ -1529,6 +1688,25 @@
       "expression": "s.requestReplace(\"example.load\", workbench.ExampleLoadParams{ID: template.id})",
       "public_commands": [
         "example.load"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/example_thumbnails.go",
+      "line": 27,
+      "function": "queryExamplePreview",
+      "kind": "event-or-dispatch-router",
+      "expression": "service.Dispatch(ctx, workbench.Request{Version: 1, ID: \"example-thumbnail-\" + id, Command: \"example.preview\", Params: raw}, \"user\")",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/example_thumbnails.go",
+      "line": 27,
+      "function": "queryExamplePreview",
+      "kind": "request-command-field",
+      "expression": "Command: \"example.preview\"",
+      "public_commands": [
+        "example.preview"
       ],
       "status": "literal-public-route"
     },
@@ -2033,7 +2211,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 274,
+      "line": 278,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -2041,7 +2219,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 300,
+      "line": 304,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -2049,7 +2227,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 304,
+      "line": 308,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -2057,7 +2235,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 339,
+      "line": 344,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -2068,7 +2246,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 339,
+      "line": 344,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -2079,7 +2257,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 340,
+      "line": 345,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -2090,7 +2268,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 340,
+      "line": 345,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -2101,7 +2279,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 341,
+      "line": 346,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -2112,7 +2290,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -2123,7 +2301,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -2134,7 +2312,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -2145,7 +2323,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -2156,7 +2334,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -2167,7 +2345,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -2178,7 +2356,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -2189,7 +2367,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 342,
+      "line": 347,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -2200,7 +2378,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 343,
+      "line": 348,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -2211,7 +2389,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 343,
+      "line": 348,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -2222,7 +2400,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 343,
+      "line": 348,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -2233,7 +2411,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 343,
+      "line": 348,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -2244,7 +2422,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 346,
+      "line": 351,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"simulation.restart\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif part, ok := (workbench.Graph{Components: state.Components}).Component(state.Selected); ok \u0026\u0026 (part.Kind == \"capacitor\" || part.Kind == \"inductor\") {\n\t\t\t\ts.beginComponentStartup(state, part, false)\n\t\t\t\treturn nil\n\t\t\t}\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\ts.continueSimulationFocus(entry.id, r)\n\t\treturn nil\n\t},\n})",
@@ -2252,7 +2430,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 376,
+      "line": 381,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -2260,7 +2438,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 380,
+      "line": 385,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -2268,7 +2446,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 405,
+      "line": 410,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -2276,7 +2454,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 459,
+      "line": 464,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -2284,7 +2462,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 480,
+      "line": 485,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)",
@@ -2292,7 +2470,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 492,
+      "line": 497,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -2300,7 +2478,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 495,
+      "line": 500,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -2381,70 +2559,9 @@
       "line": 20,
       "function": "(package)",
       "kind": "native-menu-group",
-      "expression": "Commands: []string{\"example.buck\", \"example.opamp-slew\", \"example.opamp-bandwidth\", \"example.shift-register\", \"example.555-tone\", \"example.light-alarm\", \"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.pnp\", \"example.emitter-follower\", \"example.bipolar-push-pull\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.opamp-follower\", \"example.opamp-inverting\", \"example.rectifier\", \"example.zener\", \"example.schottky\", \"example.coupled-windings\", \"example.transformer-supply\", \"example.opto-switch\", \"example.ac-rc\", \"example.ac-rlc\", \"example.ac-opamp\", \"example.hbridge-motor\", \"example.motor-dc\", \"example.motor-pwm\", \"example.battery-led\", \"example.battery-regulator\", \"example.night-light\", \"example.thermostat\", \"example.regulator-supply\", \"example.regulator-dropout\", \"example.relay-switch\", \"example.relay-flasher\", \"example.comparator-threshold\", \"example.comparator-counter\", \"example.button-counter\", \"example.button-debounce\", \"example.display-counter\", \"example.d-flipflop\", \"example.jk-flipflop\", \"example.t-flipflop\", \"example.binary-counter\", \"example.decade-counter\", \"example.logic-inverter\", \"example.logic-switches\", \"example.logic-half-adder\", \"example.555-flasher\", \"example.555-oscillator\", \"example.555-one-shot\"}",
+      "expression": "Commands: []string{\"examples.browse\"}",
       "public_commands": [
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.reset",
-        "example.load",
-        "example.rc",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.npn",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.switch-npn",
-        "example.npn-pulse",
-        "example.flasher",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.rectifier",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load"
+        "examples.visibility.set"
       ],
       "status": "declared-native-wrapper"
     },
@@ -4390,78 +4507,6 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 152,
-      "function": "*screen.view",
-      "kind": "command-menu",
-      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.buck\", \"PWM buck converter\"}, {\"example.opamp-slew\", \"Op-amp slew-limited follower\"}, {\"example.opamp-bandwidth\", \"Op-amp bandwidth limit\"}, {\"example.shift-register\", \"Serial shift and parallel latch\"}, {\"example.555-tone\", \"555 piezo tone\"}, {\"example.light-alarm\", \"Light-sensitive buzzer alarm\"}, {\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.pnp\", \"PNP high-side LED\"}, {\"example.emitter-follower\", \"NPN emitter follower\"}, {\"example.bipolar-push-pull\", \"Complementary transistor buffer\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}, {\"example.zener\", \"Zener voltage regulator\"}, {\"example.schottky\", \"Schottky rectifier\"}, {\"example.coupled-windings\", \"Transformer ratio and polarity\"}, {\"example.transformer-supply\", \"AC transformer to 3.3 V\"}, {\"example.opto-switch\", \"Optically isolated LED switch\"}, {\"example.ac-rc\", \"RC filter Bode plot\"}, {\"example.ac-rlc\", \"RLC resonance Bode plot\"}, {\"example.ac-opamp\", \"Op-amp low-pass Bode plot\"}, {\"example.hbridge-motor\", \"Reversible PWM motor driver\"}, {\"example.motor-dc\", \"DC motor startup and load\"}, {\"example.motor-pwm\", \"555 PWM motor controller\"}, {\"example.battery-led\", \"Battery sag and LED fade\"}, {\"example.battery-regulator\", \"Battery and regulator dropout\"}, {\"example.night-light\", \"Automatic night-light\"}, {\"example.thermostat\", \"Thermistor relay thermostat\"}, {\"example.regulator-supply\", \"Regulated supply and load\"}, {\"example.regulator-dropout\", \"Linear versus LDO dropout\"}, {\"example.relay-switch\", \"Pushbutton transistor relay\"}, {\"example.relay-flasher\", \"Relay coil and flyback protection\"}, {\"example.comparator-threshold\", \"Comparator threshold detector\"}, {\"example.comparator-counter\", \"Analog signal to digit counter\"}, {\"example.button-counter\", \"Pushbutton decimal counter\"}, {\"example.button-debounce\", \"Contact bounce and RC debounce\"}, {\"example.display-counter\", \"555-driven digit counter\"}, {\"example.d-flipflop\", \"D flip-flop sampler\"}, {\"example.jk-flipflop\", \"JK flip-flop divider\"}, {\"example.t-flipflop\", \"T flip-flop toggle\"}, {\"example.binary-counter\", \"4-bit binary counter\"}, {\"example.decade-counter\", \"Decade counter\"}, {\"example.logic-inverter\", \"Logic inverter LED\"}, {\"example.logic-switches\", \"AND gate with switches\"}, {\"example.logic-half-adder\", \"Logic half adder\"}, {\"example.555-flasher\", \"555 LED flasher\"}, {\"example.555-oscillator\", \"Adjustable 555 oscillator\"}, {\"example.555-one-shot\", \"555 one-shot timer\"}})",
-      "public_commands": [
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.reset",
-        "example.load",
-        "example.rc",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.npn",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.switch-npn",
-        "example.npn-pulse",
-        "example.flasher",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.rectifier",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load",
-        "example.load"
-      ],
-      "status": "declared-native-wrapper"
-    },
-    {
-      "file": "desktop/view.go",
       "line": 153,
       "function": "*screen.view",
       "kind": "registry-button",
@@ -4888,10 +4933,15 @@
     "example.load",
     "example.npn",
     "example.npn-pulse",
+    "example.preview",
     "example.rc",
     "example.rectifier",
     "example.reset",
     "example.switch-npn",
+    "examples.category.set",
+    "examples.search.set",
+    "examples.select",
+    "examples.visibility.set",
     "export.page.set",
     "export.schematic.pdf",
     "export.schematic.png",

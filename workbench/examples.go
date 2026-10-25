@@ -1,6 +1,10 @@
 package workbench
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+	"sync"
+)
 
 type ExampleInfo struct {
 	ID         string `json:"id"`
@@ -47,14 +51,18 @@ func legacyExampleID(command string) string {
 	}
 }
 
-func ExampleCatalog() []ExampleInfo {
-	return []ExampleInfo{
-		{ID: "buck", Title: "PWM buck converter", Question: "PWM buck converter", Expected: "Duty changes the switched LC output; close SLOAD for a load step. This is an open-loop converter, not a regulated feedback supply.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().PWM},
-		{ID: "opamp-slew", Title: "Op-amp slew-limited follower", Question: "Op-amp slew-limited follower", Expected: "The output takes finite time to follow each input edge. Disable dynamics to compare the original model.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Dynamics},
-		{ID: "opamp-bandwidth", Title: "Op-amp bandwidth limit", Question: "Op-amp bandwidth limit", Expected: "A 1 kHz, 10 mV input is attenuated near the configured 1 kHz gain-bandwidth. Change input frequency or use an AC sweep.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Dynamics},
-		{ID: "shift-register", Title: "Serial shift and parallel latch", Question: "Serial shift and parallel latch", Expected: "SDATA sets data, SLATCH captures the shifted byte, SCLEAR clears only the shift chain, and SOE disables the parallel outputs. D7 shows bit 7.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Shift},
-		{ID: "555-tone", Title: "555 piezo tone", Question: "555 piezo tone", Expected: "The real 555 drives a capacitive piezo through RS. Select BZ1, render a preview, then explicitly Play or export WAV.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Sound},
-		{ID: "light-alarm", Title: "Light-sensitive buzzer alarm", Question: "Light-sensitive buzzer alarm", Expected: "Lower the LDR light level to activate the comparator and buzzer. Audio preview is explicit; simulation never starts playback.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Sound},
+var immutableExampleCatalog = sync.OnceValue(buildExampleCatalog)
+
+func ExampleCatalog() []ExampleInfo { return slices.Clone(immutableExampleCatalog()) }
+
+func buildExampleCatalog() []ExampleInfo {
+	catalog := []ExampleInfo{
+		{ID: "buck", Title: "PWM buck converter", Question: "PWM buck converter", Expected: "Duty changes the switched LC output; close SLOAD for a load step. This is an open-loop converter, not a regulated feedback supply.", Try: "Select PWM and change Duty, then compare C1 voltage and inductor current. Close SLOAD for a load step.", Limitation: ExtendedDeviceModel().PWM},
+		{ID: "opamp-slew", Title: "Op-amp slew-limited follower", Question: "Op-amp slew-limited follower", Expected: "The output takes finite time to follow each input edge. Disable dynamics to compare the original model.", Try: "Select U1 and change slew rate. Compare input and output edges, then disable dynamics to compare the original model.", Limitation: ExtendedDeviceModel().Dynamics},
+		{ID: "opamp-bandwidth", Title: "Op-amp bandwidth limit", Question: "Op-amp bandwidth limit", Expected: "A 1 kHz, 10 mV input is attenuated near the configured 1 kHz gain-bandwidth. Change input frequency or use an AC sweep.", Try: "Change VIN frequency or U1 gain-bandwidth and compare the traces. Run an AC sweep to see the frequency response.", Limitation: ExtendedDeviceModel().Dynamics},
+		{ID: "shift-register", Title: "Serial shift and parallel latch", Question: "Serial shift and parallel latch", Expected: "SDATA sets data, SLATCH captures the shifted byte, SCLEAR clears only the shift chain, and SOE disables the parallel outputs. D7 shows bit 7.", Try: "Toggle SDATA, step a clock edge, then close SLATCH. Compare the displayed bits; try SCLEAR and SOE.", Limitation: ExtendedDeviceModel().Shift},
+		{ID: "555-tone", Title: "555 piezo tone", Question: "555 piezo tone", Expected: "The real 555 drives a capacitive piezo through RS. Select BZ1, render a preview, then explicitly Play or export WAV.", Try: "Select BZ1, render a short preview, then Play. Change RA, RB or C1 and render again to compare the pitch.", Limitation: ExtendedDeviceModel().Sound},
+		{ID: "light-alarm", Title: "Light-sensitive buzzer alarm", Question: "Light-sensitive buzzer alarm", Expected: "Lower the LDR light level to activate the comparator and buzzer. Audio preview is explicit; simulation never starts playback.", Try: "Lower the light level on LDR1, then render and Play a BZ1 preview. Raise the light level and compare.", Limitation: ExtendedDeviceModel().Sound},
 
 		{ID: "hbridge-motor", Title: "Reversible PWM motor driver", Question: "How do direction, PWM, braking and coasting change motor current and speed?", Expected: "S1 closed / S2 open drives forward; reverse those switches for reverse. Both equal brake; open SEN to coast. Flyback clamps carry winding current after disable.", Try: "Select MTR1 for RPM and current. Change PWM high/low times, then compare brake and coast from the same speed. Mode changes preserve shaft speed and winding current at the switching instant.", Limitation: HBridgeDeviceModel().Limitations},
 		{ID: "led", Title: "LED current limiter", Question: "How does resistance change LED current?", Expected: "Increasing the series resistance lowers current and the illustrative LED brightness.", Try: "Change R1 from 1 kΩ to 2 kΩ and compare signed current.", Limitation: "Generic red LED; brightness is illustrative and there is no thermal behavior or physical part rating."},
@@ -113,6 +121,7 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "schottky", Title: "Schottky low-voltage rectifier", Question: "How much of a small AC signal survives rectification?", Expected: "The Schottky branch charges C1 higher than the silicon branch charges C2 from the same 1 V peak input. Both capacitors discharge through identical loads between peaks.", Try: "Compare C1 and C2 voltage and signed diode currents. Increase the capacitors equally and compare ripple; reverse leakage is larger in the Schottky model.", Limitation: SchottkyDeviceModel().Limitations},
 		{ID: "rectifier", Title: "Diode rectifier and smoothing", Question: "How does a diode and capacitor turn AC into a rippling DC voltage?", Expected: "D1 charges C1 during positive peaks. Between peaks the diode blocks and RL drains C1; a larger capacitor reduces ripple.", Try: "Compare input and C1 voltage on the scope. Change C1 from 10 µF to 47 µF, then compare settled ripple after 2 simulated seconds.", Limitation: "A 5 V peak, 10 Hz educational source; no mains, transformer or physical power-supply ratings. Ideal capacitor and generic diode omit ESR, breakdown, reverse recovery and heating."},
 	}
+	return catalog
 }
 
 type exampleDefinition struct {

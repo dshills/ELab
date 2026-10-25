@@ -135,6 +135,12 @@ func schematicSVGWithDisplay(g Graph, run, revision uint64, display CircuitDispl
 	return schematicSVGWithAnnotations(g, run, revision, display, configuredSourceAnnotations(g, settings), settings, readings...)
 }
 func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitDisplay, annotations []SourceAnnotation, settings TransientSettings, readings ...PinnedReading) []byte {
+	return schematicSVGDrawing(g, run, revision, display, annotations, settings, true, readings...)
+}
+
+// Chooser previews share all routes, symbols, labels and source annotations.
+// Printed/exported documents retain their existing report header and parts list.
+func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, annotations []SourceAnnotation, settings TransientSettings, report bool, readings ...PinnedReading) []byte {
 	annotated := map[string]bool{}
 	for _, a := range annotations {
 		annotated[a.ID] = true
@@ -209,13 +215,25 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		minX, minY = math.Min(minX, min.X-25), math.Min(minY, min.Y-25)
 		maxX, maxY = math.Max(maxX, max.X+25), math.Max(maxY, max.Y+25)
 	}
+	if !report {
+		// Leave room around routed endpoints and source captions at icon scale.
+		margin := math.Max(40, (maxX-minX)*0.05)
+		minX, minY = minX-margin, minY-margin
+		maxX, maxY = maxX+margin, maxY+margin
+	}
 	diagramBottom := maxY
 	partLines, partsHeight := schematicPartsList(g.Components, maxX-minX)
-	maxY += partsHeight
-	minY -= 50
+	if report {
+		maxY += partsHeight
+		minY -= 50
+	}
 	width, height := maxX-minX, maxY-minY
 	var b strings.Builder
-	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height)
+	aspect := ""
+	if !report {
+		aspect = ` preserveAspectRatio="xMidYMid meet"`
+	}
+	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"%s><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height, aspect)
 	sources := []Component{}
 	for _, p := range g.Components {
 		if annotated[p.ID] {
@@ -271,7 +289,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	}
 	metadata, _ := json.Marshal(metadataFields)
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
-	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height)
+	strokeWidth := 2.
+	if !report {
+		strokeWidth = 3 // Keep small schematic previews legible after rasterization.
+	}
+	fmt.Fprintf(&b, `<rect x="%g" y="%g" width="%g" height="%g" fill="#ffffff"/><g fill="none" stroke="#426574" stroke-width="%g" stroke-linecap="round" stroke-linejoin="round">`, minX, minY, width, height, strokeWidth)
 	wireDisplays := map[string]WireDisplay{}
 	for _, wire := range display.Wires {
 		wireDisplays[wire.ID] = wire
@@ -506,7 +528,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		}
 	}
 	b.WriteString(`</g><g fill="#1e2c3a" font-family="system-ui,sans-serif" font-size="14">`)
-	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
+	if report {
+		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
+	}
 
 	for _, p := range g.Components {
 		if isExtendedKind(p.Kind) {
@@ -561,9 +585,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			fmt.Fprintf(&b, `<text x="%g" y="%g" text-anchor="end">%s</text>`, max.X, a.Position.Y+float64(i)*SourceAnnotationLineHeight, html.EscapeString(line))
 		}
 	}
-	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="15">Components · generic educational models</text>`, minX+15, diagramBottom+19)
-	for _, line := range partLines {
-		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, minX+line.x, diagramBottom+line.y, html.EscapeString(line.text))
+	if report {
+		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="15">Components · generic educational models</text>`, minX+15, diagramBottom+19)
+		for _, line := range partLines {
+			fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, minX+line.x, diagramBottom+line.y, html.EscapeString(line.text))
+		}
 	}
 	b.WriteString("</g>")
 	for _, marker := range MakeDisplayFrame(g, display, 0).Markers {

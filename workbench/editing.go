@@ -118,6 +118,8 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "examples.visibility.set", "examples.category.set", "examples.search.set", "examples.select":
+		return s.applyExampleBrowserLocked(command, raw)
 	case "simulation.sampling.fit":
 		if err := params(raw, &struct{}{}); err != nil {
 			return err

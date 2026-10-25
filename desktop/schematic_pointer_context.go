@@ -36,7 +36,7 @@ func (c *commandCanvas) routePreparedPointer(phase int, p, delta workbench.Point
 
 func (c *commandCanvas) withPreparedPointer(context *actionContext, apply func()) *actionContext {
 	state := c.screen.service.Snapshot()
-	if context == nil || state.Closed || c.screen.fileBusy || c.screen.pendingCommand != "" || sourcePaneHidden(state) {
+	if context == nil || state.Closed || c.screen.fileBusy || c.screen.pendingCommand != "" || sourcePaneHidden(state) || state.ExampleBrowser.Visible {
 		c.dragID, c.dragging, c.dragGeneration = "", false, 0
 		return nil
 	}

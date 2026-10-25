@@ -197,6 +197,10 @@ func runNative() (runErr error) {
 }
 
 type screen struct {
+	exampleSearch                       ui.SearchBox
+	exampleGrid                         ui.CollectionView
+	exampleSheet                        ui.Sheet
+	exampleThumbnails                   exampleThumbnails
 	partSearch                          ui.SearchBox
 	statusNotice                        ui.InlineNotice
 	systemAppearance                    atomic.Pointer[cogent.SystemAppearance]
@@ -335,6 +339,7 @@ func (s *screen) registerCommands() {
 	s.registerFileCommands()
 	s.registerAppearanceCommands()
 	s.registerExampleLoadCommands()
+	s.registerExampleBrowserCommand()
 	for _, entry := range []struct{ id, label, shortcut string }{
 		{"edit.undo", "Undo", "Meta+Z"}, {"edit.redo", "Redo", "Meta+Shift+Z"},
 		{"project.clear", "New blank", ""}, {"drawing.cancel", "Cancel drawing", "Escape"},

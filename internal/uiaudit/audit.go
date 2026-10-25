@@ -105,6 +105,7 @@ func nativeAliases() map[string][]string {
 		"file.open":                    {"project.load", "project.load.start"},
 		"file.save":                    {"project.save", "project.save.start"},
 		"file.save-as":                 {"project.save", "project.save.start"},
+		"examples.browse":              {"examples.visibility.set"},
 		"appearance.light":             {"appearance.theme.set"},
 		"appearance.dark":              {"appearance.theme.set"},
 		"appearance.system":            {"appearance.theme.set"},

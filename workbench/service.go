@@ -16,6 +16,7 @@ import (
 )
 
 type Snapshot struct {
+	ExampleBrowser         ExampleBrowser         `json:"example_browser"`
 	Audio                  *AudioPreview          `json:"audio_preview,omitempty"`
 	InspectorSection       string                 `json:"inspector_section"`
 	WorkspaceLayout        WorkspaceLayout        `json:"workspace_layout"`
@@ -119,6 +120,7 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	exampleBrowser                   ExampleBrowser
 	audio                            *audioJob
 	audioWorkers                     int
 	audioSerial                      uint64
@@ -309,6 +311,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		appearanceRead:         readAppearance,
 		appearancePublish:      publishPreparedFile,
 	}
+	s.refreshExampleBrowserLocked()
 	for _, c := range graph.Components {
 		s.usedIDs[c.ID] = true
 	}
@@ -380,6 +383,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		Operations:             []OperationSummary{},
 		SelectedOperation:      s.selectedOperation,
 		LastOperation:          s.lastOperation,
+		ExampleBrowser:         s.exampleBrowserLocked(),
 		PartCategory:           browserCategory(s.partCategory),
 		PartCategories:         PartCategories(),
 		PartSearch:             s.partSearch,
@@ -839,6 +843,18 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			out.Result = AudioData{Preview: *s.audioViewLocked(), WAV: append([]byte(nil), s.audio.wav...)}
 			return out
 		}
+		if r.Command == "example.preview" {
+			var p IDParams
+			if err := params(r.Params, &p, "id"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			preview, err := PreviewExample(p.ID)
+			if err != nil {
+				return fail("not-found", err.Error())
+			}
+			out.Result = preview
+			return out
+		}
 		if r.Command == "examples.list" {
 			if err := params(r.Params, &struct{}{}); err != nil {
 				return fail("invalid-params", err.Error())
@@ -1275,6 +1291,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 		state.Verification = &preview
 	}
 	state.LastExport = cloneArtifact(state.LastExport)
+	state.ExampleBrowser = cloneExampleBrowser(state.ExampleBrowser)
 	state.PartCategories = PartCategories()
 	state.MatchingParts = browserParts(state.PartCategory, state.PartSearch)
 	state.Scope = cloneScope(state.Scope)

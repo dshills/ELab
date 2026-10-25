@@ -8,6 +8,7 @@ import (
 	"math"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -37,6 +38,11 @@ func testScreen(t *testing.T) (*screen, func()) {
 func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 	t.Helper()
 	s.app.Do(func() {
+		// Legacy electrical setup names template commands; it does not model
+		// input to the new chooser. Browser input has separate mounted tests.
+		if id == "examples-menu" && event != nil {
+			id, event = event.SelectedID, nil
+		}
 		// Follow the visible browser navigation for non-Common fixture parts.
 		if id == "part-list" && event != nil && !matchingPart(s.view(), event.SelectedID) {
 			category, _ := findAction(s.view(), "part-category")
@@ -47,6 +53,9 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 			t.Fatal(err)
 		}
 		node, ok := findAction(root, id)
+		if !ok && strings.HasPrefix(id, "example.") && id != "example.current.reset" {
+			node, ok = s.button(id, "Template fixture"), true
+		}
 		if !ok {
 			// Walk the real inspector navigation before activating a control
 			// that moved to another page. Hidden controls are not mounted.

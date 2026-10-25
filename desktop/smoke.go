@@ -312,6 +312,12 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 	settleField, settleNumber := s.settleField, s.settleNumber
 	s.settleField, s.settleNumber = nil, nil
 	defer func() { s.settleField, s.settleNumber = settleField, settleNumber }()
+	// Older electrical fixtures name native template commands directly. The
+	// header is now a chooser, so these are command-layer setup (not claims of
+	// chooser input coverage). Dedicated browser tests exercise the real sheet.
+	if id == "examples-menu" && event != nil {
+		id, event = event.SelectedID, nil
+	}
 	// Batch fixtures run before their numeric widgets are mounted. They place
 	// already accepted coordinates through the public command; they do not test
 	// private input settlement. Mounted tests and native replay cover that path.
@@ -331,6 +337,9 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 		}
 	}
 	node, ok := findAction(s.view(), id)
+	if !ok && strings.HasPrefix(id, "example.") && id != "example.current.reset" {
+		node, ok = s.button(id, "Template fixture"), true
+	}
 	if !ok {
 		for _, section := range []string{"component", "simulation", "document"} {
 			page, exists := findAction(s.view(), "inspector-section-"+section)

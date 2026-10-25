@@ -367,7 +367,7 @@ func (c *commandCanvas) routePointer(phase int, p, delta workbench.Point) {
 // Select the rendered pane, then submit its same public semantic command.
 func (s *screen) routeNativePointer(pane string, phase int, p, delta workbench.Point) {
 	state := s.service.Snapshot()
-	if s.fileBusy || s.pendingCommand != "" || previewVisible(state) {
+	if s.fileBusy || s.pendingCommand != "" || previewVisible(state) || state.ExampleBrowser.Visible {
 		return
 	}
 	switch pane {
