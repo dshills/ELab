@@ -26,14 +26,14 @@ instantaneously. Coasting retains a path for winding current through the clamps.
 **Reversible PWM motor driver** (`hbridge-motor`) connects a 12 V supply, default
 brushed DC motor and U1. S1 and S2 connect the actual direction pins to VM;
 external 10 kΩ pulldowns define open inputs. SEN connects a separate 5 V,
-100 Hz finite pulse source to ENABLE. Default duty is 50%, with 100 µs edges.
+100 Hz finite pulse source to ENABLE. Default duty is 50%, with 200 µs edges.
 The example samples at 50 µs with slow playback so switching current is visible.
 
 - S1 closed / S2 open: forward; swap them for reverse.
 - Both direction switches open: brake low. Both closed: brake high.
 - Open SEN: coast, regardless of the direction switches.
-- Scope **Power on** holds ENABLE high for a clean brake/coast comparison;
-  **Power off** holds it low, and **Auto** restores PWM. These use the ordinary
+- Scope **High** holds ENABLE high for a clean brake/coast comparison;
+  **Low** holds it low, and **Auto** restores PWM. These use the ordinary
   `simulation.input.set` command on the primary PWM source.
 - Select PWM and edit high/low phase lengths to change duty. These source
   configuration edits use the usual startup/restart rules.

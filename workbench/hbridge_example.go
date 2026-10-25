@@ -19,7 +19,7 @@ func HBridgeExampleGraph() Graph {
 			resistor, net, pin = "R2", "DIR2", "in2"
 		}
 		b.label(id+"OUT", net, id+".2", -180, y)
-		b.label(id+"IN", net, "U1."+pin, -80, float64(j)*40-40)
+		b.label(id+"IN", net, "U1."+pin, -80, float64(j)*140-140)
 		b.part(resistor, "resistor", "10k", -320, y+110, 90)
 		b.wire(id+".2", resistor+".1")
 		b.ground("GND"+id, resistor+".2", -320, y+230)
@@ -33,7 +33,7 @@ func HBridgeExampleGraph() Graph {
 	b.part("PWM", "finite-pulse-source", "5", -850, 420, 0)
 	for k, p := range b.graph.Components {
 		if p.ID == "PWM" {
-			b.graph.Components[k].Pulse = &PulseWaveform{HighVoltage: 5, LowVoltage: 0, HighSeconds: .005, LowSeconds: .005, RiseSeconds: .0001, FallSeconds: .0001}
+			b.graph.Components[k].Pulse = &PulseWaveform{HighVoltage: 5, LowVoltage: 0, HighSeconds: .005, LowSeconds: .005, RiseSeconds: .0002, FallSeconds: .0002}
 		}
 	}
 	b.ground("GNDP", "PWM.negative", -850, 600)
@@ -46,7 +46,7 @@ func HBridgeExampleGraph() Graph {
 	}
 	b.wire("PWM.positive", "SEN.1")
 	b.label("LENOUT", "ENABLE", "SEN.2", -180, 330)
-	b.label("LENIN", "ENABLE", "U1.enable", -80, 40)
+	b.label("LENIN", "ENABLE", "U1.enable", -80, 140)
 	b.part("REN", "resistor", "10k", -320, 440, 90)
 	b.wire("SEN.2", "REN.1")
 	b.ground("GNDE", "REN.2", -320, 580)

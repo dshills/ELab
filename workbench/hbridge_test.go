@@ -284,6 +284,9 @@ func TestHBridgeCaptureProjectProvenanceAndProbeSigns(t *testing.T) {
 	call(t, s, "simulation.pause", struct{}{}, "pause")
 	call(t, s, "simulation.restart", struct{}{}, "restart")
 	settled(t, s)
+	if warnings := s.Snapshot().SourceWarnings; len(warnings) != 0 {
+		t.Fatal("default driver example hides waveform detail", warnings)
+	}
 	duration, step := .01, .00005
 	_, view := verify(t, s, VerifyParams{Duration: &duration, Step: &step, ProbeIDs: []string{"v:U1", "i:U1.vm", "i:U1.out1", "i:U1.out2", "i:MTR1"}}, "verify")
 	rec := s.operations[view.Operation.ID].record
