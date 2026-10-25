@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "action": "Native keyboard Duty edit and Return commit",
+  "before": {
+    "frequency_hz": 500,
+    "duty_fraction": 0.45
+  },
+  "after": {
+    "frequency_hz": 500,
+    "duty_fraction": 0.5
+  },
+  "component_id": "PWM",
+  "evidence": "native-ui/edited-duty.ax.txt",
+  "save_command": "project.save",
+  "fixture_closed": true
+}

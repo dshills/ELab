@@ -55,7 +55,7 @@ scroll geometry; tagged vet passes. `framework-final-complete.json` keeps exact
 commands and the final source identity. An earlier complete rendered framework
 run also passed at intermediate source `fe1965c`; `framework-complete.json` and its
 raw log retain that scope. It is not presented as a complete rendered run of the
-final focus adjustment. Initial failure logs are labeled separately.
+final focus adjustment. Initial and intermediate failure logs are labeled separately.
 
 ELab's native build, goimports/Staticcheck lint and 67 Python tooling tests pass.
 The final ordinary desktop selection covers UI/command contracts; the rendered
@@ -72,10 +72,19 @@ Raw logs are compressed alongside this file. The initial consumer runs found int
 tab painting failures. Their labeled logs are preserved. The final runs include
 those exact production cases with corrected focus coordination and layout.
 
-## Package follow-up
 
-A clean-source /254 package, matching-agent replay and separately profiled native
-check follow this source checkpoint. Their final receipts are appended at
-closeout. The new bundle uses the current SDK packager to avoid inheriting stale
-version/SDK/source-binary manifest fields from an older bundle. No public upload,
-Developer ID signing, notarization, new installation or physical print claim.
+## Completed package check
+
+ELab **0.193.0 /254** is built from clean source
+`ce3fb5af717a0a796aa3f79dba28a57bd316ea23`, with its matching agent alongside it. Both build-info
+receipts report that revision and `vcs.modified=false`. The current SDK packager
+records matching version, build, SDK release and pre-signing source-binary hash.
+Strict ad-hoc signature verification passes. The qualified unsigned alpha remains
+unchanged.
+
+The packaged replay saves, fresh-reopens and exports all six latest electronics
+examples as SVG/PNG/PDF. Both sound examples render and export matching WAV bytes
+without autoplay. Artifact hashes and replay receipts are retained here.
+The separately profiled native check is described in `native-notes.txt`; its UI
+and state evidence are saved. The owned session was closed normally and its
+endpoint is absent. Owner projects and existing applications were preserved.
