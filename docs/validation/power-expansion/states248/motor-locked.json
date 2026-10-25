@@ -1,0 +1,2641 @@
+{
+  "inspector_section": "component",
+  "workspace_layout": {
+    "schematic_fraction": 0.65
+  },
+  "viewport": {
+    "width_px": 1199,
+    "height_px": 579,
+    "registered": true,
+    "following": true
+  },
+  "pulse_timings": [],
+  "verification_input_modes": [
+    "auto",
+    "high",
+    "low"
+  ],
+  "live_input_modes": [
+    "auto",
+    "high",
+    "low"
+  ],
+  "dc_sweep": {
+    "settings": {
+      "component_id": "V1",
+      "parameter": "voltage",
+      "start": "0 V",
+      "stop": "5 V",
+      "points": 51
+    },
+    "targets": [
+      {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      {
+        "component_id": "V1",
+        "parameter": "frequency",
+        "label": "V1 \u00b7 AC frequency / 1 V excitation",
+        "unit": "Hz",
+        "minimum": 0.01,
+        "maximum": 1000000000
+      }
+    ],
+    "available_probes": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.positive",
+        "label": "MTR1.positive / ground",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.negative",
+        "label": "MTR1.negative / ground",
+        "unit": "V",
+        "positive": "MTR1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1",
+        "label": "MTR1 voltage",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "MTR1.negative"
+      },
+      {
+        "id": "i:MTR1",
+        "label": "MTR1 armature current",
+        "unit": "A",
+        "positive": "MTR1.positive",
+        "reference": "into positive"
+      },
+      {
+        "id": "v:GNDM.reference",
+        "label": "GNDM.reference / ground",
+        "unit": "V",
+        "positive": "GNDM.reference",
+        "reference": "ground"
+      }
+    ],
+    "operations": [],
+    "selected_operation": "",
+    "visible": false,
+    "trace_id": ""
+  },
+  "source_annotations": [],
+  "project_work": {
+    "recovery_configuration_applied": true,
+    "recovery_catalog_applied": true,
+    "cancelable": false,
+    "id": "project-1",
+    "command": "recovery.configure",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "user",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "input_revision": 1,
+    "command_revision": 2,
+    "document_generation": 1,
+    "bytes": 0,
+    "result_document_generation": 1
+  },
+  "input_work": {
+    "requested_motor_load": {
+      "id": "MTR1",
+      "load_n_m_s_per_rad": 0.00010312756121249225
+    },
+    "id": "input-1",
+    "command": "motor.load.set",
+    "status": "completed",
+    "actor": "user",
+    "run_id": 9,
+    "electrical_revision": 6,
+    "actuation_revision": 1,
+    "command_revision": 18,
+    "time_s": 0.04
+  },
+  "example": {
+    "info": {
+      "id": "motor-dc",
+      "title": "DC motor startup and load",
+      "question": "Why does motor current fall as speed rises?",
+      "expected": "Current starts at zero through armature inductance, rises during startup, then back EMF reduces it as the rotor accelerates.",
+      "try": "Select MTR1 to vary mechanical load live. Lock the rotor in startup settings and Restart to measure stall current.",
+      "limitation": "Generic brushed DC motor: armature RL, reciprocal Ke=Kt electromechanical coupling, rotor inertia, viscous friction and load. No brushes, commutation ripple, thermal model, gearbox or hardware ratings."
+    },
+    "modified": true
+  },
+  "diagnostic_presentation": {
+    "details_visible": false,
+    "items": []
+  },
+  "display": {
+    "preferences": {
+      "voltage_color": false,
+      "voltage_range_v": 5,
+      "current_cues": false,
+      "current_motion": false,
+      "reduced_motion": false,
+      "direction": "conventional"
+    },
+    "run_id": 11,
+    "electrical_revision": 7,
+    "time_s": 0.01,
+    "animate": false,
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.negative",
+        "to": "GND.reference",
+        "voltage_v": 0,
+        "state": "live",
+        "current_reason": "Ideal-wire current is not uniquely determined or accepted terminal currents do not balance",
+        "color": "#387d93"
+      },
+      {
+        "id": "W2",
+        "from": "V1.positive",
+        "to": "MTR1.positive",
+        "voltage_v": 12,
+        "current_a": 1.499496806058089,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W3",
+        "from": "MTR1.negative",
+        "to": "GNDM.reference",
+        "voltage_v": 0,
+        "state": "live",
+        "current_reason": "Ideal-wire current is not uniquely determined or accepted terminal currents do not balance",
+        "color": "#387d93"
+      }
+    ]
+  },
+  "measurement_inspection": {
+    "target": {
+      "kind": "object",
+      "id": "MTR1"
+    },
+    "result_kind": "transient",
+    "available": true,
+    "object_ids": [
+      "MTR1"
+    ],
+    "terminal_refs": [
+      "MTR1.positive",
+      "MTR1.negative"
+    ],
+    "wire_ids": [],
+    "nets": [
+      {
+        "id": "net:MTR1.positive",
+        "terminals": [
+          "MTR1.positive",
+          "V1.positive"
+        ]
+      },
+      {
+        "id": "net:GND.reference",
+        "terminals": [
+          "GND.reference",
+          "GNDM.reference",
+          "MTR1.negative",
+          "V1.negative"
+        ]
+      }
+    ],
+    "readings": [
+      {
+        "probe": {
+          "id": "v:MTR1.positive",
+          "label": "MTR1.positive / ground",
+          "unit": "V",
+          "positive": "MTR1.positive",
+          "reference": "ground"
+        },
+        "value": 12,
+        "time_s": 0.01,
+        "run_id": 11,
+        "electrical_revision": 7,
+        "state": "live",
+        "display": "Live v:MTR1.positive \u00b7 12 V",
+        "reference_display": "Voltage: MTR1.positive - ground"
+      },
+      {
+        "probe": {
+          "id": "v:MTR1.negative",
+          "label": "MTR1.negative / ground",
+          "unit": "V",
+          "positive": "MTR1.negative",
+          "reference": "ground"
+        },
+        "value": 0,
+        "time_s": 0.01,
+        "run_id": 11,
+        "electrical_revision": 7,
+        "state": "live",
+        "display": "Live v:MTR1.negative \u00b7 0 V",
+        "reference_display": "Voltage: MTR1.negative - ground"
+      },
+      {
+        "probe": {
+          "id": "v:MTR1",
+          "label": "MTR1 voltage",
+          "unit": "V",
+          "positive": "MTR1.positive",
+          "reference": "MTR1.negative"
+        },
+        "value": 12,
+        "time_s": 0.01,
+        "run_id": 11,
+        "electrical_revision": 7,
+        "state": "live",
+        "display": "Live v:MTR1 \u00b7 12 V",
+        "reference_display": "Voltage: MTR1.positive - MTR1.negative"
+      },
+      {
+        "probe": {
+          "id": "i:MTR1",
+          "label": "MTR1 armature current",
+          "unit": "A",
+          "positive": "MTR1.positive",
+          "reference": "into positive"
+        },
+        "value": 1.499496806058089,
+        "time_s": 0.01,
+        "run_id": 11,
+        "electrical_revision": 7,
+        "state": "live",
+        "display": "Live i:MTR1 \u00b7 1499.5 mA",
+        "reference_display": "Current: MTR1.positive -> into positive"
+      }
+    ]
+  },
+  "pinned_readings": [],
+  "limits": {
+    "timers555": 2,
+    "pnp_transistors": 2,
+    "bipolar_transistors_total": 2,
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 2,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "simulated_component_count": 2,
+  "step_work": {
+    "id": "step-3",
+    "status": "completed",
+    "actor": "agent.socket",
+    "run_id": 11,
+    "electrical_revision": 7,
+    "actuation_revision": 2,
+    "command_revision": 22,
+    "start_time_s": 0,
+    "duration_s": 0.01,
+    "completed_samples": 100,
+    "total_samples": 100,
+    "progress": 1
+  },
+  "undo_entry": {
+    "name": "motor configure",
+    "actor": "user",
+    "command_revision": 20
+  },
+  "actuation_revision": 2,
+  "power_model": {
+    "id": "elab.power-and-isolation.v1",
+    "battery": "Linear charge reservoir: OCV=Vfull*q/Q; Q=3600*capacity_Ah; ESR voltage sag. Equivalent stored energy=Q*Vfull*SOC^2/2. No chemistry, temperature, ageing, self-discharge, protection or physical ratings. Positive delivered current discharges; externally forced charging is an ideal reversible reservoir, not a charger model. Startup SOC is 0..1; live SOC outside that range is reported, not hidden.",
+    "motor": "Generic brushed DC motor: armature RL, reciprocal Ke=Kt electromechanical coupling, rotor inertia, viscous friction and load. No brushes, commutation ripple, thermal model, gearbox or hardware ratings.",
+    "optocoupler": "Generic LED/phototransistor optocoupler: separate conductive input/output ports, CTR and smooth saturation. No isolation-voltage rating, capacitance, propagation delay, temperature or ageing model.",
+    "transformer": "Linear mutually coupled windings with series resistance and dot polarity. No core saturation, hysteresis, losses beyond winding resistance or isolation rating. Coupling below one gives a positive-definite inductance matrix."
+  },
+  "recovery": {
+    "directory": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "enabled": true,
+    "interval_s": 2,
+    "last_snapshot": "rec-8c21c93b4c6b6664c9b8883b-0000000005",
+    "last_saved_at": "2026-10-25T08:27:49.553193Z",
+    "selected": "rec-1d5e82051e5d3248e479020a-0000000003",
+    "candidates": [
+      {
+        "owner_status": "active",
+        "id": "rec-8c21c93b4c6b6664c9b8883b-0000000005",
+        "document_key": "8c21c93b4c6b6664c9b8883b",
+        "saved_at": "2026-10-25T08:27:49.553193Z",
+        "sha256": "611fc1e14adee2c3f2bb57a2be3a064841e84b9393f2a9348797aa4e88b70e88",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 4
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-1d5e82051e5d3248e479020a-0000000003",
+        "document_key": "1d5e82051e5d3248e479020a",
+        "saved_at": "2026-10-25T08:23:58.551263Z",
+        "sha256": "c4b8b03da2ec88ba3d4f91d05c18b64e8ff0229d3e5bafaa8b06c0d84b8a2d87",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 7
+      }
+    ],
+    "problems": []
+  },
+  "verification_settings": {
+    "duration_s": 0.1,
+    "sample_step_s": 0,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "operations": [],
+  "selected_operation": "",
+  "schematic_page": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 10
+  },
+  "part_category": "common",
+  "part_categories": [
+    {
+      "id": "common",
+      "name": "Common",
+      "count": 6
+    },
+    {
+      "id": "all",
+      "name": "All components",
+      "count": 48
+    },
+    {
+      "id": "sources",
+      "name": "Sources",
+      "count": 5
+    },
+    {
+      "id": "motors",
+      "name": "Motors",
+      "count": 1
+    },
+    {
+      "id": "passives",
+      "name": "Passives",
+      "count": 7
+    },
+    {
+      "id": "semiconductors",
+      "name": "Semiconductors",
+      "count": 10
+    },
+    {
+      "id": "amplifiers",
+      "name": "Amplifiers / ICs",
+      "count": 4
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "count": 14
+    },
+    {
+      "id": "switches",
+      "name": "Switches",
+      "count": 4
+    },
+    {
+      "id": "connections",
+      "name": "Connections",
+      "count": 3
+    }
+  ],
+  "part_search": "",
+  "theme": "apollo",
+  "appearance": {
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "status": "ready",
+    "saved_theme": "apollo"
+  },
+  "appearance_work": {
+    "id": "appearance-2",
+    "command": "appearance.theme.set",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "input_revision": 19,
+    "command_revision": 8,
+    "document_generation": 2,
+    "electrical_revision": 2,
+    "input_run_id": 3,
+    "input_theme": "light",
+    "requested_theme": "apollo",
+    "result_theme": "apollo",
+    "source_sha256": "80e13a747ee02e691a894a3cff7006c64cc4920ad358056f39d5b5708d9b62df",
+    "artifact_sha256": "139a5f0558077f28857ecd59ff31a8eed52794697708c8a1926308d10ed2e136",
+    "bytes": 71,
+    "cancelable": false,
+    "superseded": false,
+    "published": true,
+    "current_at_completion": true
+  },
+  "matching_parts": [
+    {
+      "category": "sources",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "voltage",
+        "unit": "V",
+        "minimum": 0,
+        "maximum": 12,
+        "range_text": "0\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+      },
+      "aliases": [
+        "power supply",
+        "voltage supply",
+        "ideal voltage source"
+      ],
+      "limitations": "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity.",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "5 V",
+      "unit": "V",
+      "model": "ideal-dc.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000,
+        "range_text": "10\u2013100000 \u03a9",
+        "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+      },
+      "aliases": [
+        "resistance",
+        "current limiter"
+      ],
+      "limitations": "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2.",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1k",
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1"
+    },
+    {
+      "category": "semiconductors",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "LED",
+        "light emitting diode",
+        "indicator"
+      ],
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness.",
+      "kind": "led",
+      "name": "Red LED",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "model": "elab.generic-red-led.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "capacitance",
+        "unit": "F",
+        "minimum": 1e-12,
+        "maximum": 1,
+        "range_text": "1 pF\u20131 F",
+        "syntax": "Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF"
+      },
+      "aliases": [
+        "cap",
+        "charge storage"
+      ],
+      "limitations": "Ideal capacitor with configurable initial voltage; no ESR, leakage, polarity, heating, ratings or physical part identity. Voltage and current use pin 1 relative to pin 2.",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1uF",
+      "unit": "F",
+      "model": "ideal-capacitor.v1"
+    },
+    {
+      "category": "connections",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "ground",
+        "voltage reference"
+      ],
+      "limitations": "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design.",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "model": "ground.v1"
+    },
+    {
+      "category": "switches",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "toggle",
+        "on/off",
+        "SPST"
+      ],
+      "limitations": "Generic SPST with finite on/off resistance; no contact bounce, arcing, thermal behavior, ratings or named physical part. Actuation is instantaneous; capacitor voltage remains continuous.",
+      "kind": "switch",
+      "name": "SPST switch",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "model": "elab.spst-resistive.v1"
+    }
+  ],
+  "undo_name": "motor configure",
+  "redo_name": "",
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0.01
+    },
+    "window_valid": true,
+    "statistics": [
+      {
+        "probe_id": "v:MTR1",
+        "count": 101,
+        "min": 12,
+        "max": 12,
+        "sample_mean": 12,
+        "sample_rms": 12
+      },
+      {
+        "probe_id": "i:MTR1",
+        "count": 101,
+        "min": 0,
+        "max": 1.499496806058089,
+        "sample_mean": 1.3068915123545641,
+        "sample_rms": 1.3495713070428557
+      }
+    ],
+    "available": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.positive",
+        "label": "MTR1.positive / ground",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.negative",
+        "label": "MTR1.negative / ground",
+        "unit": "V",
+        "positive": "MTR1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1",
+        "label": "MTR1 voltage",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "MTR1.negative"
+      },
+      {
+        "id": "i:MTR1",
+        "label": "MTR1 armature current",
+        "unit": "A",
+        "positive": "MTR1.positive",
+        "reference": "into positive"
+      },
+      {
+        "id": "v:GNDM.reference",
+        "label": "GNDM.reference / ground",
+        "unit": "V",
+        "positive": "GNDM.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [
+      "v:MTR1",
+      "i:MTR1"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:MTR1",
+          "label": "MTR1 voltage",
+          "unit": "V",
+          "positive": "MTR1.positive",
+          "reference": "MTR1.negative"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 12
+          },
+          {
+            "time_s": 0.0001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0002,
+            "value": 12
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0007,
+            "value": 12
+          },
+          {
+            "time_s": 0.0008,
+            "value": 12
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0011,
+            "value": 12
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0014,
+            "value": 12
+          },
+          {
+            "time_s": 0.0015,
+            "value": 12
+          },
+          {
+            "time_s": 0.0016,
+            "value": 12
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0019,
+            "value": 12
+          },
+          {
+            "time_s": 0.002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0022,
+            "value": 12
+          },
+          {
+            "time_s": 0.0023,
+            "value": 12
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0025,
+            "value": 12
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0027,
+            "value": 12
+          },
+          {
+            "time_s": 0.0028,
+            "value": 12
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0032,
+            "value": 12
+          },
+          {
+            "time_s": 0.0033,
+            "value": 12
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0035,
+            "value": 12
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0037,
+            "value": 12
+          },
+          {
+            "time_s": 0.0038,
+            "value": 12
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0041,
+            "value": 12
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0043,
+            "value": 12
+          },
+          {
+            "time_s": 0.0044,
+            "value": 12
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0046,
+            "value": 12
+          },
+          {
+            "time_s": 0.0047,
+            "value": 12
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0049,
+            "value": 12
+          },
+          {
+            "time_s": 0.005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0051,
+            "value": 12
+          },
+          {
+            "time_s": 0.005200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0053,
+            "value": 12
+          },
+          {
+            "time_s": 0.0054,
+            "value": 12
+          },
+          {
+            "time_s": 0.0055000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0056,
+            "value": 12
+          },
+          {
+            "time_s": 0.0057,
+            "value": 12
+          },
+          {
+            "time_s": 0.0058000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0059,
+            "value": 12
+          },
+          {
+            "time_s": 0.006,
+            "value": 12
+          },
+          {
+            "time_s": 0.0061,
+            "value": 12
+          },
+          {
+            "time_s": 0.006200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0063,
+            "value": 12
+          },
+          {
+            "time_s": 0.0064,
+            "value": 12
+          },
+          {
+            "time_s": 0.006500000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0066,
+            "value": 12
+          },
+          {
+            "time_s": 0.0067,
+            "value": 12
+          },
+          {
+            "time_s": 0.0068000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.006900000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.007,
+            "value": 12
+          },
+          {
+            "time_s": 0.0071,
+            "value": 12
+          },
+          {
+            "time_s": 0.007200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0073,
+            "value": 12
+          },
+          {
+            "time_s": 0.0074,
+            "value": 12
+          },
+          {
+            "time_s": 0.007500000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0076,
+            "value": 12
+          },
+          {
+            "time_s": 0.0077,
+            "value": 12
+          },
+          {
+            "time_s": 0.0078000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0079,
+            "value": 12
+          },
+          {
+            "time_s": 0.008,
+            "value": 12
+          },
+          {
+            "time_s": 0.0081,
+            "value": 12
+          },
+          {
+            "time_s": 0.0082,
+            "value": 12
+          },
+          {
+            "time_s": 0.0083,
+            "value": 12
+          },
+          {
+            "time_s": 0.008400000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0085,
+            "value": 12
+          },
+          {
+            "time_s": 0.0086,
+            "value": 12
+          },
+          {
+            "time_s": 0.008700000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0088,
+            "value": 12
+          },
+          {
+            "time_s": 0.0089,
+            "value": 12
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0091,
+            "value": 12
+          },
+          {
+            "time_s": 0.0092,
+            "value": 12
+          },
+          {
+            "time_s": 0.009300000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0094,
+            "value": 12
+          },
+          {
+            "time_s": 0.0095,
+            "value": 12
+          },
+          {
+            "time_s": 0.009600000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0097,
+            "value": 12
+          },
+          {
+            "time_s": 0.0098,
+            "value": 12
+          },
+          {
+            "time_s": 0.0099,
+            "value": 12
+          },
+          {
+            "time_s": 0.01,
+            "value": 12
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "i:MTR1",
+          "label": "MTR1 armature current",
+          "unit": "A",
+          "positive": "MTR1.positive",
+          "reference": "into positive"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.0001,
+            "value": 0.1153254804184815
+          },
+          {
+            "time_s": 0.0002,
+            "value": 0.22178431654779393
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": 0.3200582083961695
+          },
+          {
+            "time_s": 0.0004,
+            "value": 0.41077644438453986
+          },
+          {
+            "time_s": 0.0005,
+            "value": 0.49451993094085955
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": 0.5718249122844952
+          },
+          {
+            "time_s": 0.0007,
+            "value": 0.6431864042199997
+          },
+          {
+            "time_s": 0.0008,
+            "value": 0.7090613639282766
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": 0.7698716160526167
+          },
+          {
+            "time_s": 0.001,
+            "value": 0.8260065538165509
+          },
+          {
+            "time_s": 0.0011,
+            "value": 0.8778256324698936
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": 0.9256606710295433
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": 0.9698179770540407
+          },
+          {
+            "time_s": 0.0014,
+            "value": 1.0105803080576974
+          },
+          {
+            "time_s": 0.0015,
+            "value": 1.0482086821240382
+          },
+          {
+            "time_s": 0.0016,
+            "value": 1.0829440493126676
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": 1.1150088345622697
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": 1.144608361969588
+          },
+          {
+            "time_s": 0.0019,
+            "value": 1.1719321695646334
+          },
+          {
+            "time_s": 0.002,
+            "value": 1.1971552230011717
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": 1.2204390359342503
+          },
+          {
+            "time_s": 0.0022,
+            "value": 1.2419327042590078
+          },
+          {
+            "time_s": 0.0023,
+            "value": 1.2617738608334268
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": 1.2800895567985102
+          },
+          {
+            "time_s": 0.0025,
+            "value": 1.2969970751393454
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": 1.31260468169662
+          },
+          {
+            "time_s": 0.0027,
+            "value": 1.3270123184376277
+          },
+          {
+            "time_s": 0.0028,
+            "value": 1.3403122434260675
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": 1.3525896215886264
+          },
+          {
+            "time_s": 0.003,
+            "value": 1.3639230700612677
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": 1.3743851616073053
+          },
+          {
+            "time_s": 0.0032,
+            "value": 1.3840428893308567
+          },
+          {
+            "time_s": 0.0033,
+            "value": 1.3929580956614287
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": 1.4011878683565986
+          },
+          {
+            "time_s": 0.0035,
+            "value": 1.4087849060585649
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": 1.4157978557453734
+          },
+          {
+            "time_s": 0.0037,
+            "value": 1.4222716242376607
+          },
+          {
+            "time_s": 0.0038,
+            "value": 1.428247665755621
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": 1.4337642473675412
+          },
+          {
+            "time_s": 0.004,
+            "value": 1.4388566940296865
+          },
+          {
+            "time_s": 0.0041,
+            "value": 1.4435576147866203
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": 1.4478971115804191
+          },
+          {
+            "time_s": 0.0043,
+            "value": 1.4519029720058714
+          },
+          {
+            "time_s": 0.0044,
+            "value": 1.455600847245954
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": 1.4590144163269765
+          },
+          {
+            "time_s": 0.0046,
+            "value": 1.462165537745192
+          },
+          {
+            "time_s": 0.0047,
+            "value": 1.4650743894357992
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": 1.467759597980616
+          },
+          {
+            "time_s": 0.0049,
+            "value": 1.4702383578817964
+          },
+          {
+            "time_s": 0.005,
+            "value": 1.4725265416653461
+          },
+          {
+            "time_s": 0.0051,
+            "value": 1.4746388015194802
+          },
+          {
+            "time_s": 0.005200000000000001,
+            "value": 1.4765886631186498
+          },
+          {
+            "time_s": 0.0053,
+            "value": 1.4783886122340368
+          },
+          {
+            "time_s": 0.0054,
+            "value": 1.4800501746851167
+          },
+          {
+            "time_s": 0.0055000000000000005,
+            "value": 1.4815839901442525
+          },
+          {
+            "time_s": 0.0056,
+            "value": 1.4829998802669226
+          },
+          {
+            "time_s": 0.0057,
+            "value": 1.4843069115838485
+          },
+          {
+            "time_s": 0.0058000000000000005,
+            "value": 1.4855134535577434
+          },
+          {
+            "time_s": 0.0059,
+            "value": 1.4866272321764487
+          },
+          {
+            "time_s": 0.006,
+            "value": 1.4876553794256324
+          },
+          {
+            "time_s": 0.0061,
+            "value": 1.4886044789578476
+          },
+          {
+            "time_s": 0.006200000000000001,
+            "value": 1.4894806082503844
+          },
+          {
+            "time_s": 0.0063,
+            "value": 1.4902893775218742
+          },
+          {
+            "time_s": 0.0064,
+            "value": 1.4910359656568424
+          },
+          {
+            "time_s": 0.006500000000000001,
+            "value": 1.4917251533682507
+          },
+          {
+            "time_s": 0.0066,
+            "value": 1.4923613538103813
+          },
+          {
+            "time_s": 0.0067,
+            "value": 1.492948640838091
+          },
+          {
+            "time_s": 0.0068000000000000005,
+            "value": 1.4934907750933912
+          },
+          {
+            "time_s": 0.006900000000000001,
+            "value": 1.4939912280863956
+          },
+          {
+            "time_s": 0.007,
+            "value": 1.4944532044248366
+          },
+          {
+            "time_s": 0.0071,
+            "value": 1.494879662334496
+          },
+          {
+            "time_s": 0.007200000000000001,
+            "value": 1.4952733326019487
+          },
+          {
+            "time_s": 0.0073,
+            "value": 1.4956367360609213
+          },
+          {
+            "time_s": 0.0074,
+            "value": 1.4959721997342326
+          },
+          {
+            "time_s": 0.007500000000000001,
+            "value": 1.4962818717346855
+          },
+          {
+            "time_s": 0.0076,
+            "value": 1.4965677350203221
+          },
+          {
+            "time_s": 0.0077,
+            "value": 1.4968316200921254
+          },
+          {
+            "time_s": 0.0078000000000000005,
+            "value": 1.4970752167154748
+          },
+          {
+            "time_s": 0.0079,
+            "value": 1.4973000847404134
+          },
+          {
+            "time_s": 0.008,
+            "value": 1.4975076640900142
+          },
+          {
+            "time_s": 0.0081,
+            "value": 1.497699283980803
+          },
+          {
+            "time_s": 0.0082,
+            "value": 1.4978761714342832
+          },
+          {
+            "time_s": 0.0083,
+            "value": 1.4980394591340618
+          },
+          {
+            "time_s": 0.008400000000000001,
+            "value": 1.4981901926788914
+          },
+          {
+            "time_s": 0.0085,
+            "value": 1.4983293372780726
+          },
+          {
+            "time_s": 0.0086,
+            "value": 1.4984577839320883
+          },
+          {
+            "time_s": 0.008700000000000001,
+            "value": 1.4985763551380489
+          },
+          {
+            "time_s": 0.0088,
+            "value": 1.4986858101564822
+          },
+          {
+            "time_s": 0.0089,
+            "value": 1.498786849873192
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 1.4988801212873213
+          },
+          {
+            "time_s": 0.0091,
+            "value": 1.4989662216543547
+          },
+          {
+            "time_s": 0.0092,
+            "value": 1.4990457023105932
+          },
+          {
+            "time_s": 0.009300000000000001,
+            "value": 1.4991190722035888
+          },
+          {
+            "time_s": 0.0094,
+            "value": 1.4991868011511453
+          },
+          {
+            "time_s": 0.0095,
+            "value": 1.4992493228497585
+          },
+          {
+            "time_s": 0.009600000000000001,
+            "value": 1.4993070376517523
+          },
+          {
+            "time_s": 0.0097,
+            "value": 1.4993603151289014
+          },
+          {
+            "time_s": 0.0098,
+            "value": 1.499409496438952
+          },
+          {
+            "time_s": 0.0099,
+            "value": 1.4994548965101964
+          },
+          {
+            "time_s": 0.01,
+            "value": 1.499496806058089
+          }
+        ]
+      }
+    ],
+    "run_id": 11,
+    "stale": false,
+    "active_cursor": "a",
+    "readings": []
+  },
+  "scope_visible": true,
+  "mixed": {
+    "motors": [
+      {
+        "id": "MTR1",
+        "model": "elab.power-and-isolation.v1",
+        "state": "locked rotor",
+        "voltage_v": 12,
+        "armature_current_a": 1.499496806058089,
+        "speed_rad_s": 0,
+        "rpm": 0,
+        "back_emf_v": 0,
+        "torque_n_m": 0.029989936121161784,
+        "blocked_rotor_reference_current_a": 1.5,
+        "winding_heat_w": 17.987925371027284,
+        "drag_power_w": 0,
+        "magnetic_energy_j": 0.011242453356892054,
+        "rotational_energy_j": 0,
+        "terminal_power_w": 17.99396167269707
+      }
+    ],
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 11,
+    "electrical_revision": 7,
+    "time_s": 0.01,
+    "nodes_v": {
+      "net:GND.reference": 0,
+      "net:MTR1.positive": 12
+    },
+    "transistors": [],
+    "capacitors": [],
+    "leds": [],
+    "resistors": [],
+    "sources": [
+      {
+        "id": "V1",
+        "current_a": 1.499496806058089,
+        "voltage_v": 12,
+        "power_w": 17.99396167269707
+      }
+    ],
+    "kcl_residual_a": 0,
+    "power_residual_w": -1.1136924715771102e-15,
+    "numerical_damping_w": 0,
+    "stale": false
+  },
+  "transient": {
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 11,
+    "electrical_revision": 7,
+    "source_id": "V1",
+    "resistor_id": "",
+    "capacitor_id": "",
+    "output_net": "net:MTR1.positive",
+    "time_constant_s": 0,
+    "settings": {
+      "step_s": 0.0001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.01
+    },
+    "input_mode": "auto",
+    "sample": {
+      "state": "network",
+      "time_s": 0.01,
+      "input_v": 12,
+      "voltage_v": 12,
+      "current_a": 1.499496806058089,
+      "energy_j": 0.011242453356892054
+    },
+    "samples": [
+      {
+        "state": "network",
+        "time_s": 0,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0,
+        "energy_j": 0
+      },
+      {
+        "state": "network",
+        "time_s": 0.0001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.1153254804184815,
+        "energy_j": 6.649983216876779e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.22178431654779393,
+        "energy_j": 0.0002459414153328603
+      },
+      {
+        "state": "network",
+        "time_s": 0.00030000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3200582083961695,
+        "energy_j": 0.0005121862838088294
+      },
+      {
+        "state": "network",
+        "time_s": 0.0004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.41077644438453986,
+        "energy_j": 0.0008436864363060249
+      },
+      {
+        "state": "network",
+        "time_s": 0.0005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.49451993094085955,
+        "energy_j": 0.0012227498104887627
+      },
+      {
+        "state": "network",
+        "time_s": 0.0006000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5718249122844952,
+        "energy_j": 0.001634918651545853
+      },
+      {
+        "state": "network",
+        "time_s": 0.0007,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6431864042199997,
+        "energy_j": 0.0020684437528672647
+      },
+      {
+        "state": "network",
+        "time_s": 0.0008,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7090613639282766,
+        "energy_j": 0.0025138400890791393
+      },
+      {
+        "state": "network",
+        "time_s": 0.0009000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7698716160526167,
+        "energy_j": 0.002963511526017338
+      },
+      {
+        "state": "network",
+        "time_s": 0.001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8260065538165509,
+        "energy_j": 0.0034114341347394727
+      },
+      {
+        "state": "network",
+        "time_s": 0.0011,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8778256324698936,
+        "energy_j": 0.0038528892051058437
+      },
+      {
+        "state": "network",
+        "time_s": 0.0012000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9256606710295433,
+        "energy_j": 0.004284238389454321
+      },
+      {
+        "state": "network",
+        "time_s": 0.0013000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9698179770540407,
+        "energy_j": 0.004702734543085959
+      },
+      {
+        "state": "network",
+        "time_s": 0.0014,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0105803080576974,
+        "energy_j": 0.005106362795169953
+      },
+      {
+        "state": "network",
+        "time_s": 0.0015,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0482086821240382,
+        "energy_j": 0.005493707206401064
+      },
+      {
+        "state": "network",
+        "time_s": 0.0016,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0829440493126676,
+        "energy_j": 0.005863839069708587
+      },
+      {
+        "state": "network",
+        "time_s": 0.0017000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1150088345622697,
+        "energy_j": 0.006216223505759556
+      },
+      {
+        "state": "network",
+        "time_s": 0.0018000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.144608361969588,
+        "energy_j": 0.006550641511453516
+      },
+      {
+        "state": "network",
+        "time_s": 0.0019,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1719321695646334,
+        "energy_j": 0.006867125050302344
+      },
+      {
+        "state": "network",
+        "time_s": 0.002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1971552230011717,
+        "energy_j": 0.007165903139794926
+      },
+      {
+        "state": "network",
+        "time_s": 0.0021000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2204390359342503,
+        "energy_j": 0.007447357202160611
+      },
+      {
+        "state": "network",
+        "time_s": 0.0022,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2419327042590078,
+        "energy_j": 0.007711984209540461
+      },
+      {
+        "state": "network",
+        "time_s": 0.0023,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2617738608334268,
+        "energy_j": 0.00796036637941246
+      },
+      {
+        "state": "network",
+        "time_s": 0.0024000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2800895567985102,
+        "energy_j": 0.008193146367123032
+      },
+      {
+        "state": "network",
+        "time_s": 0.0025,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2969970751393454,
+        "energy_j": 0.008411007064600084
+      },
+      {
+        "state": "network",
+        "time_s": 0.0026000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.31260468169662,
+        "energy_j": 0.008614655252059426
+      },
+      {
+        "state": "network",
+        "time_s": 0.0027,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3270123184376277,
+        "energy_j": 0.00880480846642604
+      },
+      {
+        "state": "network",
+        "time_s": 0.0028,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3403122434260675,
+        "energy_j": 0.008982184549389089
+      },
+      {
+        "state": "network",
+        "time_s": 0.0029000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3525896215886264,
+        "energy_j": 0.009147493422146317
+      },
+      {
+        "state": "network",
+        "time_s": 0.003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3639230700612677,
+        "energy_j": 0.009301430705226769
+      },
+      {
+        "state": "network",
+        "time_s": 0.0031000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3743851616073053,
+        "energy_j": 0.009444672862231693
+      },
+      {
+        "state": "network",
+        "time_s": 0.0032,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3840428893308567,
+        "energy_j": 0.009577873597536531
+      },
+      {
+        "state": "network",
+        "time_s": 0.0033,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3929580956614287,
+        "energy_j": 0.009701661281343569
+      },
+      {
+        "state": "network",
+        "time_s": 0.0034000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4011878683565986,
+        "energy_j": 0.009816637212148545
+      },
+      {
+        "state": "network",
+        "time_s": 0.0035,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4087849060585649,
+        "energy_j": 0.009923374557692197
+      },
+      {
+        "state": "network",
+        "time_s": 0.0036000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4157978557453734,
+        "energy_j": 0.010022417841665986
+      },
+      {
+        "state": "network",
+        "time_s": 0.0037,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4222716242376607,
+        "energy_j": 0.010114282865558169
+      },
+      {
+        "state": "network",
+        "time_s": 0.0038,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.428247665755621,
+        "energy_j": 0.0101994569736819
+      },
+      {
+        "state": "network",
+        "time_s": 0.0039000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4337642473675412,
+        "energy_j": 0.01027839958514706
+      },
+      {
+        "state": "network",
+        "time_s": 0.004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4388566940296865,
+        "energy_j": 0.010351542929770195
+      },
+      {
+        "state": "network",
+        "time_s": 0.0041,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4435576147866203,
+        "energy_j": 0.010419292936042181
+      },
+      {
+        "state": "network",
+        "time_s": 0.004200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4478971115804191,
+        "energy_j": 0.010482030228614603
+      },
+      {
+        "state": "network",
+        "time_s": 0.0043,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4519029720058714,
+        "energy_j": 0.01054011120059741
+      },
+      {
+        "state": "network",
+        "time_s": 0.0044,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.455600847245954,
+        "energy_j": 0.010593869132515697
+      },
+      {
+        "state": "network",
+        "time_s": 0.0045000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4590144163269765,
+        "energy_j": 0.01064361533524974
+      },
+      {
+        "state": "network",
+        "time_s": 0.0046,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.462165537745192,
+        "energy_j": 0.010689640298848434
+      },
+      {
+        "state": "network",
+        "time_s": 0.0047,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4650743894357992,
+        "energy_j": 0.010732214832903398
+      },
+      {
+        "state": "network",
+        "time_s": 0.0048000000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.467759597980616,
+        "energy_j": 0.010771591187321097
+      },
+      {
+        "state": "network",
+        "time_s": 0.0049,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4702383578817964,
+        "energy_j": 0.010808004144934805
+      },
+      {
+        "state": "network",
+        "time_s": 0.005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4725265416653461,
+        "energy_j": 0.010841672079544522
+      },
+      {
+        "state": "network",
+        "time_s": 0.0051,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4746388015194802,
+        "energy_j": 0.010872797974734045
+      },
+      {
+        "state": "network",
+        "time_s": 0.005200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4765886631186498,
+        "energy_j": 0.010901570400252606
+      },
+      {
+        "state": "network",
+        "time_s": 0.0053,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4783886122340368,
+        "energy_j": 0.010928164443916406
+      },
+      {
+        "state": "network",
+        "time_s": 0.0054,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4800501746851167,
+        "energy_j": 0.010952742597927221
+      },
+      {
+        "state": "network",
+        "time_s": 0.0055000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4815839901442525,
+        "energy_j": 0.010975455599258823
+      },
+      {
+        "state": "network",
+        "time_s": 0.0056,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4829998802669226,
+        "energy_j": 0.010996443224358535
+      },
+      {
+        "state": "network",
+        "time_s": 0.0057,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4843069115838485,
+        "energy_j": 0.011015835038877913
+      },
+      {
+        "state": "network",
+        "time_s": 0.0058000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4855134535577434,
+        "energy_j": 0.01103375110350527
+      },
+      {
+        "state": "network",
+        "time_s": 0.0059,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4866272321764487,
+        "energy_j": 0.011050302637243043
+      },
+      {
+        "state": "network",
+        "time_s": 0.006,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4876553794256324,
+        "energy_j": 0.011065592639670113
+      },
+      {
+        "state": "network",
+        "time_s": 0.0061,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4886044789578476,
+        "energy_j": 0.011079716473866826
+      },
+      {
+        "state": "network",
+        "time_s": 0.006200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4894806082503844,
+        "energy_j": 0.011092762411769676
+      },
+      {
+        "state": "network",
+        "time_s": 0.0063,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4902893775218742,
+        "energy_j": 0.011104812143772676
+      },
+      {
+        "state": "network",
+        "time_s": 0.0064,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4910359656568424,
+        "energy_j": 0.011115941254411163
+      },
+      {
+        "state": "network",
+        "time_s": 0.006500000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4917251533682507,
+        "energy_j": 0.011126219665957655
+      },
+      {
+        "state": "network",
+        "time_s": 0.0066,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4923613538103813,
+        "energy_j": 0.01113571205173377
+      },
+      {
+        "state": "network",
+        "time_s": 0.0067,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.492948640838091,
+        "energy_j": 0.011144478220901515
+      },
+      {
+        "state": "network",
+        "time_s": 0.0068000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4934907750933912,
+        "energy_j": 0.011152573476445294
+      },
+      {
+        "state": "network",
+        "time_s": 0.006900000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4939912280863956,
+        "energy_j": 0.011160048947995483
+      },
+      {
+        "state": "network",
+        "time_s": 0.007,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4944532044248366,
+        "energy_j": 0.011166951901078314
+      },
+      {
+        "state": "network",
+        "time_s": 0.0071,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.494879662334496,
+        "energy_j": 0.011173326024306483
+      },
+      {
+        "state": "network",
+        "time_s": 0.007200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4952733326019487,
+        "energy_j": 0.01117921169595269
+      },
+      {
+        "state": "network",
+        "time_s": 0.0073,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4956367360609213,
+        "energy_j": 0.011184646231274829
+      },
+      {
+        "state": "network",
+        "time_s": 0.0074,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4959721997342326,
+        "energy_j": 0.011189664111888393
+      },
+      {
+        "state": "network",
+        "time_s": 0.007500000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4962818717346855,
+        "energy_j": 0.011194297198409269
+      },
+      {
+        "state": "network",
+        "time_s": 0.0076,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4965677350203221,
+        "energy_j": 0.011198574927519286
+      },
+      {
+        "state": "network",
+        "time_s": 0.0077,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4968316200921254,
+        "energy_j": 0.011202524494538084
+      },
+      {
+        "state": "network",
+        "time_s": 0.0078000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4970752167154748,
+        "energy_j": 0.01120617102251843
+      },
+      {
+        "state": "network",
+        "time_s": 0.0079,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4973000847404134,
+        "energy_j": 0.011209537718818247
+      },
+      {
+        "state": "network",
+        "time_s": 0.008,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4975076640900142,
+        "energy_j": 0.011212646020041654
+      },
+      {
+        "state": "network",
+        "time_s": 0.0081,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.497699283980803,
+        "energy_j": 0.01121551572618305
+      },
+      {
+        "state": "network",
+        "time_s": 0.0082,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4978761714342832,
+        "energy_j": 0.01121816512475313
+      },
+      {
+        "state": "network",
+        "time_s": 0.0083,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4980394591340618,
+        "energy_j": 0.011220611105613362
+      },
+      {
+        "state": "network",
+        "time_s": 0.008400000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4981901926788914,
+        "energy_j": 0.011222869267196069
+      },
+      {
+        "state": "network",
+        "time_s": 0.0085,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4983293372780726,
+        "energy_j": 0.011224954014740742
+      },
+      {
+        "state": "network",
+        "time_s": 0.0086,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4984577839320883,
+        "energy_j": 0.011226878651133325
+      },
+      {
+        "state": "network",
+        "time_s": 0.008700000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4985763551380489,
+        "energy_j": 0.011228655460894198
+      },
+      {
+        "state": "network",
+        "time_s": 0.0088,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4986858101564822,
+        "energy_j": 0.011230295787821956
+      },
+      {
+        "state": "network",
+        "time_s": 0.0089,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.498786849873192,
+        "energy_j": 0.011231810106764032
+      },
+      {
+        "state": "network",
+        "time_s": 0.009000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4988801212873213,
+        "energy_j": 0.011233208089951475
+      },
+      {
+        "state": "network",
+        "time_s": 0.0091,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4989662216543547,
+        "energy_j": 0.01123449866830366
+      },
+      {
+        "state": "network",
+        "time_s": 0.0092,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4990457023105932,
+        "energy_j": 0.011235690088079299
+      },
+      {
+        "state": "network",
+        "time_s": 0.009300000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4991190722035888,
+        "energy_j": 0.011236789963222743
+      },
+      {
+        "state": "network",
+        "time_s": 0.0094,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4991868011511453,
+        "energy_j": 0.01123780532372902
+      },
+      {
+        "state": "network",
+        "time_s": 0.0095,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4992493228497585,
+        "energy_j": 0.011238742660327298
+      },
+      {
+        "state": "network",
+        "time_s": 0.009600000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4993070376517523,
+        "energy_j": 0.011239607965760364
+      },
+      {
+        "state": "network",
+        "time_s": 0.0097,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4993603151289014,
+        "energy_j": 0.011240406772917193
+      },
+      {
+        "state": "network",
+        "time_s": 0.0098,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.499409496438952,
+        "energy_j": 0.011241144190056557
+      },
+      {
+        "state": "network",
+        "time_s": 0.0099,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.4994548965101964,
+        "energy_j": 0.01124182493334202
+      },
+      {
+        "state": "network",
+        "time_s": 0.01,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.499496806058089,
+        "energy_j": 0.011242453356892054
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      }
+    ],
+    "stale": false
+  },
+  "transient_settings": {
+    "step_s": 0.0001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.01
+  },
+  "document": {
+    "preferences_dirty": false,
+    "schematic_dirty": true,
+    "recordings_dirty": false,
+    "recording_count": 0,
+    "path": "",
+    "dirty": true,
+    "format_version": 4,
+    "generation": 3
+  },
+  "command_revision": 22,
+  "revision": 58,
+  "electrical_revision": 7,
+  "circuit": {
+    "voltage_v": 12,
+    "resistance_ohm": 1,
+    "connected": true
+  },
+  "components": [
+    {
+      "id": "V1",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -250,
+        "y": 0
+      },
+      "value": 12,
+      "unit": "V",
+      "model": "ideal-dc.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GND",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": -250,
+        "y": 200
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    },
+    {
+      "power": {
+        "motor": {
+          "locked_rotor": true,
+          "armature_resistance_ohm": 8,
+          "armature_inductance_h": 0.01,
+          "ke_v_s_per_rad": 0.02,
+          "inertia_kg_m2": 1e-06,
+          "friction_n_m_s_per_rad": 1e-05,
+          "load_n_m_s_per_rad": 0.00010312756121249225
+        }
+      },
+      "id": "MTR1",
+      "kind": "dc-motor",
+      "name": "Brushed DC motor",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": 150,
+        "y": 0
+      },
+      "value": 0,
+      "model": "elab.power-and-isolation.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GNDM",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": 150,
+        "y": 200
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "wires": [
+    {
+      "id": "W1",
+      "from": "V1.negative",
+      "to": "GND.reference",
+      "connected": true
+    },
+    {
+      "id": "W2",
+      "from": "V1.positive",
+      "to": "MTR1.positive",
+      "connected": true
+    },
+    {
+      "id": "W3",
+      "from": "MTR1.negative",
+      "to": "GNDM.reference",
+      "connected": true
+    }
+  ],
+  "nets": [
+    {
+      "id": "net:GND.reference",
+      "terminals": [
+        "GND.reference",
+        "GNDM.reference",
+        "MTR1.negative",
+        "V1.negative"
+      ]
+    },
+    {
+      "id": "net:MTR1.positive",
+      "terminals": [
+        "MTR1.positive",
+        "V1.positive"
+      ]
+    }
+  ],
+  "drawing": {
+    "tool": "select",
+    "kind": "dc-source",
+    "position": {
+      "x": -200,
+      "y": 0
+    },
+    "wire_start": "",
+    "from": "",
+    "to": "",
+    "value": ""
+  },
+  "model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "selected": "MTR1",
+  "view": {
+    "center": {
+      "x": -109.75,
+      "y": 84
+    },
+    "zoom": 1.5292553191471503
+  },
+  "status": "paused",
+  "analysis": "RLC network transient",
+  "paused": true,
+  "run_id": 11,
+  "diagnostics": [],
+  "can_undo": true,
+  "can_redo": false,
+  "last_actor": "agent.socket",
+  "closed": false
+}

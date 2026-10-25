@@ -507,3 +507,23 @@ race repetitions in 6.307 s; mounted high-current/browser/wheel/inspector checks
 pass in 6.594 s. Lint passes. Reviewed inventory changes are only scope.go's
 hash and shifted site line numbers; 175/427/143/87 counts/routes remain.
 Packaging this paint-only correction as 0.190.2 /249; /248 remains preserved.
+
+Completed combined qualification: clean-source candidate **0.190.2 /249** is
+available at `build/ELab-0.190.2-249-Power/ELab.app` with its matching agent.
+All ten packaged examples pass electrical/public-command replay, captures,
+fresh reopen and schematic SVG/PNG/PDF export. The final actual native app
+shows complete amp-level current labels; clicking the corrected plot boundary
+selects exactly 40 ms. The disposable fixture was saved clean, the app closed
+normally, both private endpoints disappeared and CUA reports no running ELab.
+No owner projects/window dimensions changed, no repeated permission gate and
+no replacement of the qualified alpha download.
+
+Durable evidence and source-baseline qualifications are recorded in
+[the power-expansion validation report](../docs/validation/power-expansion/README.md).
+This includes complete root, standard desktop and rendered desktop race logs,
+vets/lint, 67 Python tests, the final packaged replay, native snapshots and
+screenshots. Full suites precede the documented string, export-format and scope
+paint repairs; focused checks and the final package/native replay qualify those
+later edits. Component-list thumb dragging remains unqualified by targeted CUA;
+wheel access to all 48 components and inspector wheel/thumb passed. All five
+requested additions and the defects found during qualification are handled.

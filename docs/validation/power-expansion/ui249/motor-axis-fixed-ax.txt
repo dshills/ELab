@@ -1,0 +1,188 @@
+Window: "ELab · Live electronics", App: ELab.
+0 standard window ELab · Live electronics, Secondary Actions: Raise
+	1 container node:cm9vdA
+		2 row node:aGVhZGVy
+			3 container node:ZG9jdW1lbnQtdGl0bGU
+				4 text (settable) DC motor startup and load, ID: node:dGl0bGU
+				5 text (settable) ELab, ID: node:ZG9jdW1lbnQtc3VidGl0bGU
+			6 toolbar node:dG9vbGJhcg
+				7 button File, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZmlsZS1tZW51
+				8 button Save, ID: node:ZmlsZS5zYXZl
+				9 row node:dG9vbGJhci1kaXZpZGVyLWZpbGUuc2F2ZQ
+				10 button Examples, Help: Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:ZXhhbXBsZXMtbWVudQ
+				11 row node:dG9vbGJhci1kaXZpZGVyLWV4YW1wbGVzLW1lbnU
+				12 button Undo agent, Help: Load example · by agent.socket, ID: node:ZWRpdC51bmRv
+				13 button (disabled) Redo, ID: node:ZWRpdC5yZWRv
+				14 row node:dG9vbGJhci1kaXZpZGVyLWVkaXQucmVkbw
+				15 button Appearance theme, Help: Current choice: Apollo. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+			16 text (settable) Ⅱ Paused, ID: node:c3RhdHVz
+			17 toolbar node:c2ltdWxhdGlvbi10b29sYmFy
+				18 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU
+		19 split group Schematic and scope divider, ID: node:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			20 row node:d29ya3NwYWNl
+				21 scroll area node:cGFydHMtc2Nyb2xs
+					22 container node:cGFsZXR0ZQ
+						23 text (settable) Components, ID: node:cGFydHMtdGl0bGU
+						24 button Component category, ID: node:cGFydC1jYXRlZ29yeQ, Help: Common holds six everyday parts. Choosing a category clears search. Current choice: Common · 6 ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						25 text (settable) Search all components, ID: node:cGFydC1zZWFyY2gtbGFiZWw
+						26 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g
+						27 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+							28 row (settable, boolean) DC source, Value: off, ID: option:cGFydC1saXN0:ZGMtc291cmNl
+							29 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
+							30 row (settable, boolean) Red LED, Value: off, ID: option:cGFydC1saXN0:bGVk
+							31 row (settable, boolean) Capacitor, Value: off, ID: option:cGFydC1saXN0:Y2FwYWNpdG9y
+							32 row (settable, boolean) Ground, Value: off, ID: option:cGFydC1saXN0:Z3JvdW5k
+							33 row (settable, boolean) SPST switch, Value: off, ID: option:cGFydC1saXN0:c3dpdGNo
+						34 text (settable) 6 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
+						35 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
+				36 container node:c2NoZW1hdGljLXBhbmVs
+					37 toolbar node:dG9vbHM
+						38 row Drawing mode, ID: node:ZHJhd2luZy1tb2RlLXRhYnM
+							39 button Select, Help: Selected drawing mode., ID: node:dG9vbC1zZWxlY3Q
+							40 button Wire, ID: node:dG9vbC13aXJl
+							41 button Pan, ID: node:dG9vbC1wYW4
+						42 row node:ZHJhd2luZy1hY3Rpb25z
+							43 button Cancel, ID: node:ZHJhd2luZy5jYW5jZWw, Help: Cancel an unfinished wire or component placement and return to Select mode. Existing components and wires are kept. Shortcut: Escape.
+							44 row node:dG9vbC1zcGFjZXI
+							45 button Sweeps, ID: node:c3dlZXAtb3Blbg
+							46 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning. Selected.
+					47 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+				48 container node:aW5zcGVjdG9yLXJhaWw
+					49 row node:aW5zcGVjdG9yLW5hdmlnYXRpb24tdG9wLXNwYWNl
+					50 toolbar Inspector section, ID: node:aW5zcGVjdG9yLW5hdmlnYXRpb24
+						51 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWNvbXBvbmVudA
+							52 button Inspect inspector, Help: Selected inspector section., ID: node:aW5zcGVjdG9yLXNlY3Rpb24tY29tcG9uZW50
+							53 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItY29tcG9uZW50
+						54 container node:aW5zcGVjdG9yLXRhYi1jZWxsLXNpbXVsYXRpb24
+							55 button Simulate inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tc2ltdWxhdGlvbg
+							56 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3Itc2ltdWxhdGlvbg
+						57 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWRvY3VtZW50
+							58 button Document inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tZG9jdW1lbnQ
+							59 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItZG9jdW1lbnQ
+					60 scroll area node:c2lkZWJhci0yLWNvbXBvbmVudA
+						61 container node:c2lkZWJhci1jb250ZW50
+							62 container Object inspector, ID: node:aW5zcGVjdG9yLWdyb3VwLW9iamVjdA
+								63 text (settable) Inspector, ID: node:aW5zcGVjdG9yLXRpdGxl
+								64 button Selected object, ID: node:c2VsZWN0aW9u, Help: Current choice: MTR1 · Brushed DC motor ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								65 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
+									66 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+									67 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+									68 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
+								69 text (settable) MTR1 · Brushed DC motor, ID: node:aW5zcGVjdG9y
+								70 text (settable) Terminals: positive, negative, ID: node:cGFydC10ZXJtaW5hbHM
+								71 text (settable) Model: elab.power-and-isolation.v1, ID: node:cGFydC1tb2RlbC1pZA
+								72 text (settable) Mechanical load, ID: node:bW90b3ItbG9hZC10aXRsZQ
+								73 text (settable) Drag 0 µN·m·s/rad, ID: node:bW90b3ItbG9hZC12YWx1ZQ
+								74 slider (settable, integer) Motor mechanical load, Value: 0, ID: node:bW90b3ItbG9hZC1zbGlkZXI, Help: Logarithmic viscous drag control. Higher load slows the shaft. Live changes preserve winding current and shaft speed.
+								75 stepper (settable, integer) Motor load in micro-newton metre seconds per radian, Value: 0, ID: node:bW90b3ItbG9hZC1leGFjdA
+								76 text (settable) Live motor, ID: node:bW90b3ItcmVhZGluZy10aXRsZQ
+								77 text (settable) 4376.7 RPM · running, ID: node:bW90b3ItcnBt
+								78 text (settable) 0.363303 A · stall reference 1.5 A, ID: node:bW90b3ItY3VycmVudA
+								79 text (settable) Back EMF 9.16652 V · torque 7.26605 mN·m, ID: node:bW90b3ItZW1m
+								80 text (settable) Rotor 105.031 mJ · winding 0.659944 mJ, ID: node:bW90b3ItZW5lcmd5
+								81 text (settable) Winding loss 1.05591 W · drag 2.10063 W, ID: node:bW90b3ItbG9zcw
+								82 text (settable) Motor startup parameters, ID: node:bW90b3Itc3RhcnR1cC10aXRsZQ
+								83 text (settable) ID: node:bW90b3Itc3RhcnR1cC1oZWxw, Parameter edits restart a running circuit; paused readings wait for Restart. Load above changes live.
+								84 text (settable) Winding resistance · Ω, ID: node:bW90b3ItcmVzaXN0YW5jZS10aXRsZQ
+								85 stepper (settable, integer) Winding resistance · Ω, Value: 8, ID: node:bW90b3ItcmVzaXN0YW5jZQ
+								86 text (settable) Winding inductance · mH, ID: node:bW90b3ItaW5kdWN0YW5jZS10aXRsZQ
+								87 stepper (settable, integer) Winding inductance · mH, Value: 10, ID: node:bW90b3ItaW5kdWN0YW5jZQ
+								88 text (settable) Back EMF / torque constant · mV·s/rad, ID: node:bW90b3ItY29uc3RhbnQtdGl0bGU
+								89 stepper (settable, integer) Back EMF / torque constant · mV·s/rad, Value: 20, ID: node:bW90b3ItY29uc3RhbnQ
+								90 text (settable) Rotor inertia · µkg·m², ID: node:bW90b3ItaW5lcnRpYS10aXRsZQ
+								91 stepper (settable, integer) Rotor inertia · µkg·m², Value: 1, ID: node:bW90b3ItaW5lcnRpYQ
+								92 text (settable) Friction · µN·m·s/rad, ID: node:bW90b3ItZnJpY3Rpb24tdGl0bGU
+								93 stepper (settable, integer) Friction · µN·m·s/rad, Value: 10, ID: node:bW90b3ItZnJpY3Rpb24
+								94 checkbox (settable, boolean) Lock the rotor for stall testing, Value: off, ID: node:bW90b3ItbG9ja2Vk
+								95 button Plot voltage, ID: node:cGxvdC12Ok1UUjE
+								96 button Plot current, ID: node:cGxvdC1pOk1UUjE
+								97 text (settable) Adds a trace; replaces the last when six are shown., ID: node:cGxvdC1oZWxw
+								98 text (settable) ID: node:cGFydC1hc3N1bXB0aW9ucw, Generic brushed DC motor: armature RL, reciprocal Ke=Kt electromechanical coupling, rotor inertia, viscous friction and load. No brushes, commutation ripple, thermal model, gearbox or hardware ratings.
+								99 text (settable) Position 150, 0 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
+								100 button Rotate 90°, ID: node:cm90YXRlLXBhcnQ
+								101 button Duplicate, ID: node:ZHVwbGljYXRlLXBhcnQ
+								102 button Delete selected, ID: node:ZGVsZXRlLW9iamVjdA
+							103 container Live measurements, ID: node:aW5zcGVjdG9yLWdyb3VwLW1lYXN1cmVtZW50cw
+								104 text (settable) Live measurements, ID: node:bWVhc3VyZW1lbnQtdGl0bGU
+								105 text (settable) Plot adds a trace, replacing the last if six are shown. Pin keeps a reading on the sheet., ID: node:bWVhc3VyZW1lbnQtaGVscA
+								106 button Inspect named terminal voltage, ID: node:aW5zcGVjdC10ZXJtaW5hbA, Help: Current choice: Measure a terminal… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								107 button Inspect named electrical net, ID: node:aW5zcGVjdC1uZXQ, Help: Current choice: Measure a net… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								108 button Inspect voltage or current probe, ID: node:aW5zcGVjdC1wcm9iZQ, Help: Current choice: Measure voltage/current… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+								109 text (settable) MTR1 · sample 40 ms, ID: node:bWVhc3VyZW1lbnQtc291cmNl
+								110 text (settable) Live v:MTR1.positive · 12 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpNVFIxLnBvc2l0aXZl
+								111 text (settable) Voltage: MTR1.positive - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6TVRSMS5wb3NpdGl2ZQ
+								112 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12Ok1UUjEucG9zaXRpdmU
+									113 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12Ok1UUjEucG9zaXRpdmU
+									114 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6TVRSMS5wb3NpdGl2ZQ
+								115 text (settable) Live v:MTR1.negative · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpNVFIxLm5lZ2F0aXZl
+								116 text (settable) Voltage: MTR1.negative - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6TVRSMS5uZWdhdGl2ZQ
+								117 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12Ok1UUjEubmVnYXRpdmU
+									118 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12Ok1UUjEubmVnYXRpdmU
+									119 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6TVRSMS5uZWdhdGl2ZQ
+								120 text (settable) Live v:MTR1 · 12 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpNVFIx
+								121 text (settable) Voltage: MTR1.positive - MTR1.negative, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6TVRSMQ
+								122 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12Ok1UUjE
+									123 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12Ok1UUjE
+									124 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6TVRSMQ
+								125 text (settable) Live i:MTR1 · 363.3 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpNVFIx
+								126 text (settable) Current: MTR1.positive -> into positive, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6TVRSMQ
+								127 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOk1UUjE
+									128 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOk1UUjE
+									129 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6TVRSMQ
+								130 button Inspect selected object, ID: node:bWVhc3VyZW1lbnQtY2xlYXI
+							131 container Pinned readings, ID: node:aW5zcGVjdG9yLWdyb3VwLXBpbm5lZA
+								132 text (settable) Pinned live readings, ID: node:cGlubmVkLXJlYWRpbmdzLXRpdGxl
+								133 text (settable) ID: node:cGlubmVkLXJlYWRpbmdzLWhlbHA, Pin up to eight voltage/current readings, then drag a card on the sheet or edit X / Y. Readings always follow the live circuit.
+								134 button Pin a live voltage or current reading, ID: node:cGluLXJlYWRpbmctcHJvYmU, Help: Current choice: Pin a reading… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+			135 splitter (settable, float) Schematic and scope divider, Value: 0.65, ID: split:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
+			136 scroll area node:c2NvcGUtc2Nyb2xs
+				137 container node:c2NvcGUtcGFuZWw
+					138 toolbar node:c2NvcGUtdG9vbGJhcg
+						139 button Hide scope, Help: Expand or collapse the dock without changing simulation or recorded measurements, ID: node:c2NvcGUtdmlzaWJpbGl0eQ
+						140 text (settable) Live circuit network, ID: node:c2NvcGUtdGl0bGU
+						141 text (settable) t = 0.04 s · network · run 3 · paused, ID: node:c2NvcGUtY2FwdGlvbg
+						142 button Auto, Help: Selected., ID: node:aW5wdXQtYXV0bw
+						143 button Power on, ID: node:aW5wdXQtaGlnaA
+						144 button Power off, ID: node:aW5wdXQtbG93
+						145 button Step +1 sample, ID: node:dHJhbnNpZW50LXN0ZXA
+						146 button Restart, ID: node:c2ltdWxhdGlvbi5yZXN0YXJ0
+					147 toolbar node:c2NvcGUtdHJhY2Utcm93
+						148 button Export scope CSV, ID: node:ZXhwb3J0LWNzdg
+						149 button Inspect trace source, ID: node:c2NvcGUtdHJhY2UtZm9jdXM, Help: Current choice: Inspect trace… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+						150 text (settable) Amber: MTR1 voltage · Coral: MTR1 armature current, ID: node:c2NvcGUtbGVnZW5k
+					151 text (settable) Step completed · 400/400 staged samples, ID: node:c3RlcC13b3JrLXN0YXR1cw
+					152 toolbar node:c2NvcGUtY3Vyc29ycw
+						153 button A, Help: Selected., ID: node:Y3Vyc29yLXNlbGVjdC1h
+						154 text field (settable) Cursor A time, ID: node:Y3Vyc29yLXRpbWUtYQ, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						155 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWE
+						156 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i
+						157 text field (settable) Cursor B time, ID: node:Y3Vyc29yLXRpbWUtYg, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
+						158 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWI
+						159 text (settable) ms · click / drag plot to place selected cursor, ID: node:Y3Vyc29yLW1lYXN1cmVtZW50
+		160 row node:cmVhZGluZ3M
+			161 container node:Y3VycmVudA
+				162 text (settable) LED current, ID: node:Y3VycmVudC10aXRsZQ
+				163 text (settable) —, ID: node:Y3VycmVudC12YWx1ZQ
+			164 container node:dm9sdGFnZQ
+				165 text (settable) Timing capacitor voltage, ID: node:dm9sdGFnZS10aXRsZQ
+				166 text (settable) —, ID: node:dm9sdGFnZS12YWx1ZQ
+			167 container node:cG93ZXI
+				168 text (settable) Power residual, ID: node:cG93ZXItdGl0bGU
+				169 text (settable) 0 nW, ID: node:cG93ZXItdmFsdWU
+			170 container node:c2ltdWxhdGlvbi1pbmZv
+				171 text (settable) Live simulation, ID: node:c2ltdWxhdGlvbi10aXRsZQ
+				172 text (settable) Network · t = 0.04 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+		173 row node:Zm9vdGVyLXJvdw
+			174 text (settable) 4 components · 3 wires, Help: DC motor startup and load · 4 components · 3 wires · last change: user, ID: node:Zm9vdGVy
+			175 row node:Zm9vdGVyLXNwYWNlcg
+			176 text (settable) 153%, ID: node:em9vbQ
+			177 text (settable) 10-unit snap · local workspace, ID: node:Z3JpZC1pbmZv
+	178 close button
+	179 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	180 minimize button
+	181 text ELab · Live electronics
+182 menu bar
+	183 ELab
+	184 File
+	185 Examples
+	186 Appearance

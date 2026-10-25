@@ -1,0 +1,100 @@
+diff --git a/desktop/dc_sweep.go b/desktop/dc_sweep.go
+index 2345c061..32afca99 100644
+--- a/desktop/dc_sweep.go
++++ b/desktop/dc_sweep.go
+@@ -45,7 +45,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
+ 	s.pruneSweepFieldRejections(state)
+ 	cfg := sweep.Settings
+ 	nodes := []ui.Node{section("sweep-settings-title", "Frequency & DC sweeps"), quiet("sweep-settings-help", "AC response or DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
+-	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
++	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured frequency or DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
+ 	options := []ui.Option{}
+ 	selected := cfg.ComponentID + ":" + cfg.Parameter
+ 	valid := false
+diff --git a/research/13-native-command-inventory.json b/research/13-native-command-inventory.json
+index 54a90321..68d624b2 100644
+--- a/research/13-native-command-inventory.json
++++ b/research/13-native-command-inventory.json
+@@ -11,7 +11,7 @@
+     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
+     "desktop/cursor_actions.go": "fefec629a794097a6ce7c11d1badc9a9e1a35a17704683de58a673d547130486",
+     "desktop/cursor_rejection.go": "d635c20a969208dbaf163fe1b66b3b5de6b624154739529b326aeea4e3b839da",
+-    "desktop/dc_sweep.go": "1eb7d4bad94f6c30af5ef04ab41d6c25a06bd5d45cce1d047f1ce93347071f77",
++    "desktop/dc_sweep.go": "9335c959dba77575f2a0859367f7887e8aeba6403b65056f7de0135d04fa4ee7",
+     "desktop/dc_sweep_actions.go": "a6ee672b0469b3d68547aa423f91a66fc528c2ad7586bb880f0e8098b52631e9",
+     "desktop/dc_sweep_canvas.go": "398b943f9d19556214a7d728ffb5c17f14ba0f1d11d9eff395c9fd94d9b20262",
+     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
+diff --git a/workbench/dc_sweep.go b/workbench/dc_sweep.go
+index 6d062a48..f3918fc1 100644
+--- a/workbench/dc_sweep.go
++++ b/workbench/dc_sweep.go
+@@ -159,7 +159,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
+ 		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper or AC frequency target")
+ 	}
+ 	if settings.Points < 2 || settings.Points > MaxDCSweepPoints {
+-		return plan, fmt.Errorf("DC sweep requires 2–201 points")
++		return plan, fmt.Errorf("sweep requires 2–201 points")
+ 	}
+ 	parse := func(text string) (float64, error) {
+ 		if len(text) == 0 || len(text) > 128 {
+diff --git a/workbench/dc_sweep_worker.go b/workbench/dc_sweep_worker.go
+index f9ef997d..a408456a 100644
+--- a/workbench/dc_sweep_worker.go
++++ b/workbench/dc_sweep_worker.go
+@@ -258,7 +258,7 @@ func cloneSweepState(in *SweepState) *SweepState {
+ }
+ func (s *Service) startDCSweepLocked(p SweepStartParams) error {
+ 	if s.sweepWorkers != 0 {
+-		return &actionError{"busy", "Finish or cancel the active DC sweep before starting another"}
++		return &actionError{"busy", "Finish or cancel the active sweep before starting another"}
+ 	}
+ 	cfg := s.sweepSettingsLocked()
+ 	if p.Settings != nil {
+@@ -343,7 +343,7 @@ func (s *Service) runDCSweep(job *sweepJob, plan sweepPlan, compute func(context
+ 		job.summary.Status = "canceled"
+ 	case errors.Is(err, context.DeadlineExceeded):
+ 		job.summary.Status = "failed"
+-		job.summary.Error = &Failure{Code: "timeout", Message: "DC sweep exceeded its cooperative 30-second budget"}
++		job.summary.Error = &Failure{Code: "timeout", Message: "Sweep exceeded its cooperative 30-second budget"}
+ 	case err != nil:
+ 		job.summary.Status = "failed"
+ 		job.summary.Error = &Failure{Code: "sweep-failed", Message: err.Error()}
+diff --git a/workbench/persistence.go b/workbench/persistence.go
+index 3fa64a13..2096858d 100644
+--- a/workbench/persistence.go
++++ b/workbench/persistence.go
+@@ -226,7 +226,7 @@ func decodeDocument(data []byte) (Document, error) {
+ 	_ = json.Unmarshal(data, &sweepFields)
+ 	_, hasSweepField := sweepFields["dc_sweeps"]
+ 	if d.Version < SweepDocumentVersion && hasSweepField {
+-		return d, fmt.Errorf("DC sweeps require version 5")
++		return d, fmt.Errorf("captured sweeps require version 5")
+ 	}
+ 	if d.Version == SweepDocumentVersion {
+ 		var fields map[string]json.RawMessage
+diff --git a/workbench/recovery_choice_capabilities.go b/workbench/recovery_choice_capabilities.go
+index 2ac39419..43ef7304 100644
+--- a/workbench/recovery_choice_capabilities.go
++++ b/workbench/recovery_choice_capabilities.go
+@@ -20,7 +20,7 @@ func addRecoveryChoiceDetails(id string, schema map[string]any) bool {
+ 		c.Errors = append(c.Errors, commandFailureDetail{"unavailable", "admission", "No store configured or service closed"}, commandFailureDetail{"busy", "admission", "Four shared recovery readers active"}, commandFailureDetail{"invalid-recovery", "read", "Invalid ID, absent/inaccessible/nonregular/oversized file or invalid capsule/document/models/recordings"}, commandFailureDetail{"file-conflict", "read", "Readable valid capsule hash differs from requested exact digest"}, commandFailureDetail{"canceled", "read", "Caller/Close cancellation"}, commandFailureDetail{"timeout", "read", "Cooperative 30-second deadline; OS calls are not forcibly interrupted"})
+ 		if id == "recovery.samples" {
+ 			inputProperty(schema, "recording_index")["minimum"] = 0
+-			inputProperty(schema, "recording_index")["description"] = "Required non-null zero-based embedded Verify index; saved DC sweeps are not this recording list. Validated after reading/hash validation."
++			inputProperty(schema, "recording_index")["description"] = "Required non-null zero-based embedded Verify index; saved frequency/DC sweeps are not this recording list. Validated after reading/hash validation."
+ 			inputProperty(schema, "offset")["minimum"] = 0
+ 			inputProperty(schema, "offset")["description"] = "Optional omitted/null/zero starts at row 0. Total is inclusive: EOF returns no rows."
+ 			p := inputProperty(schema, "limit")
+diff --git a/workbench/verification_capabilities.go b/workbench/verification_capabilities.go
+index 1ffcf02f..58c9d243 100644
+--- a/workbench/verification_capabilities.go
++++ b/workbench/verification_capabilities.go
+@@ -14,7 +14,7 @@ func addVerificationCapabilityDetails(id string, schema map[string]any) bool {
+ 	}
+ 	failure("invalid-params", "admission", "Malformed input or an invalid parameter/relationship")
+ 	schema["x-max-retained-operations"] = MaxVerificationOperations
+-	schema["x-operation-inventory"] = "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)"
++	schema["x-operation-inventory"] = "snapshot.operations (time/DC verification and imported/project recordings; not frequency/DC sweeps)"
+ 	switch id {
+ 	case "verification.settings.set", "simulation.verify":
+ 		starting := id == "simulation.verify"

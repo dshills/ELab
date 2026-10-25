@@ -1,0 +1,155 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "batteries": [
+    {
+      "example": "battery-led",
+      "final_charge_fraction": 0.5466824142310244,
+      "discharge_and_conservation": true,
+      "captures_and_fresh_reopen": true,
+      "exports": {
+        "svg": "283e03c6dba2005e04904ec9e25e1fff84189473d38da380ba2a4c17171188b1",
+        "png": "1e972e884d4f52d8e3cd9363ccc9e031e7b92428d76166a509438c67f1e9a0b9",
+        "pdf": "4f0690267e6a36ba25d67e4ec9e968d6762b5434ab956491c01bcb28b8620a52"
+      }
+    },
+    {
+      "example": "battery-regulator",
+      "final_charge_fraction": 0.5458230086509597,
+      "discharge_and_conservation": true,
+      "captures_and_fresh_reopen": true,
+      "exports": {
+        "svg": "a28b15ea1d6256153fcf1df801604444437e6545e144a49d54806e5751c57096",
+        "png": "feba54feb3f56f46c2042939928d4cf50409ab72981f6b0e89b694be18bf8ec9",
+        "pdf": "9fe952c6feb5e97d7520f517ce6db78bf19ca944a4a6a21a61e56b26dc64af32"
+      }
+    }
+  ],
+  "motors": [
+    {
+      "example": "motor-dc",
+      "startup_and_live_load": true,
+      "captures_and_fresh_reopen": true,
+      "exports": {
+        "svg": "b97759657281073e49d923df81d8064bc5b938f423bb47d1e7e6fe4b11d9af42",
+        "png": "45beb5cc9ba3001d641bfb103c84af38b17e293ccc71357d4865f22bfb5c8d88",
+        "pdf": "96d88a4d2e9d36ced69415797e7875a8b8a0f99805da4cb1d55fcdc89937c61c"
+      }
+    },
+    {
+      "example": "motor-pwm",
+      "startup_and_live_load": true,
+      "captures_and_fresh_reopen": true,
+      "exports": {
+        "svg": "63d3cd0c08830a3ae3f5dabdd5cdb4d0726ff91de73c6b33390e1f8f1a870d8a",
+        "png": "6d296a2fc7227c7671e8b8ab37db72041813f6e0725a0ded93582f0df81beae8",
+        "pdf": "0c3b75725eb5a0b457fe48465327bc6f3f4322303c1e257f61f9478201ad9f29"
+      }
+    }
+  ],
+  "ac_sweeps": [
+    {
+      "example": "ac-rc",
+      "bands": [
+        {
+          "probe_id": "gain:v:C1",
+          "sampled_peak_hz": 1,
+          "sampled_peak_db": -0.00017144920495022439,
+          "half_power_estimates_hz": [
+            159.14370987495784
+          ]
+        }
+      ],
+      "no_live_mutation": true,
+      "gain_phase_cursor_and_exports": true,
+      "fresh_saved_capture": true,
+      "exports": {
+        "svg": "42ca8ae6327198763e6af7ffbbfcd4f3eab5e4f6abedb1d21493f9a5b7627cdf",
+        "png": "d1cac6f427a75224edced7475e510fe6261b3784c80b3e0515d94091f3c3f65d",
+        "pdf": "38e29ed83a8c762659741625e5138a55543dff32945158fd2a9d8725ecfca821"
+      }
+    },
+    {
+      "example": "ac-rlc",
+      "bands": [
+        {
+          "probe_id": "gain:v:C1",
+          "sampled_peak_hz": 149.62356560944338,
+          "sampled_peak_db": 6.299448620551448,
+          "half_power_estimates_hz": [
+            99.45561436232131,
+            185.41689003218318
+          ]
+        }
+      ],
+      "no_live_mutation": true,
+      "gain_phase_cursor_and_exports": true,
+      "fresh_saved_capture": true,
+      "exports": {
+        "svg": "8338bf6b56a120262aea71af943c2998852b8d23e6748c00c5b7effd67954586",
+        "png": "1ec5db535aa92dd9488cd9003ebb0419a1b6961122c055a43cb890f7936891d3",
+        "pdf": "50b5866b0ff90b713fb2481ea1a705145078a2c97b6db2ce0f0ad1f110ee29c6"
+      }
+    },
+    {
+      "example": "ac-opamp",
+      "bands": [
+        {
+          "probe_id": "gain:v:U1",
+          "sampled_peak_hz": 1,
+          "sampled_peak_db": 6.020330353179992,
+          "half_power_estimates_hz": [
+            795.7522540984627
+          ]
+        }
+      ],
+      "no_live_mutation": true,
+      "gain_phase_cursor_and_exports": true,
+      "fresh_saved_capture": true,
+      "exports": {
+        "svg": "1b5d0644888cd3a33d4d23c64ad2e42a2c701f13798362460810322e38018a15",
+        "png": "57411e4bdd4301ff51423aa54f90e59a5dba6d4d3dc8a02ad19da15954efc85b",
+        "pdf": "0d1d35eb910b8c8433a508b6a71663cb2bdcc727b9f79ef8b5b45764aa3fa3ce"
+      }
+    }
+  ],
+  "optocouplers": [
+    {
+      "example": "opto-switch",
+      "independent_ports_and_ctr": true,
+      "output_led_switch": true,
+      "captures_and_fresh_reopen": true,
+      "exports": {
+        "svg": "c305d51f27bdb37f4ae216d9cfa5121cb480126b187b1724848a2f3f82adee07",
+        "png": "916de20487a76c2e379cfb136f61ba75935abf182dd639e43dd7874bccd1cb27",
+        "pdf": "d3a37e3aed40d5d2b3bf0e1d2eb25c3f19fe42225a3f14d5274fd38e150189a1"
+      }
+    }
+  ],
+  "transformers": [
+    {
+      "example": "coupled-windings",
+      "winding_energy_and_conservation": true,
+      "ratio_and_polarity": true,
+      "rectification_and_regulation": false,
+      "captures_and_fresh_reopen": true,
+      "exports": {
+        "svg": "0469e6219a3886468210b5d051b7056b66b313bf7fa6e2f7bac2771f2b5ea722",
+        "png": "e1da9b08eb1bb99847cda2855817ade50f159bc343c73fedb862d11659b10881",
+        "pdf": "5b1bbf539f8ec94e318088d4637101c869b8fbf7822db0075f94df405e1243ff"
+      }
+    },
+    {
+      "example": "transformer-supply",
+      "winding_energy_and_conservation": true,
+      "ratio_and_polarity": false,
+      "rectification_and_regulation": true,
+      "captures_and_fresh_reopen": true,
+      "exports": {
+        "svg": "d2ed4e9c30526a87642012487089ecb0a09f15d9ca696ca027008a8480aae533",
+        "png": "d1ea015af2c41d23b051b8d6e0952e43df55e6ac85364b2c98e5d9af25c24c8b",
+        "pdf": "b39f9cb473129615c12972361e7fec35df75785991b6c63712edeceacdec15d4"
+      }
+    }
+  ]
+}

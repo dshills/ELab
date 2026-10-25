@@ -1,0 +1,155 @@
+The following is a diff from the previous accessibility tree for Window: "ELab · Live electronics" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 18-87
+~				4 text (settable) Battery sag and LED fade, ID: node:dGl0bGU
+~				12 button Undo agent, Help: Load example · by agent.socket, ID: node:ZWRpdC51bmRv
+~				15 button Appearance theme, Help: Current choice: Apollo. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+~			16 text (settable) Ⅱ Paused, ID: node:c3RhdHVz
++				115 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU
++		116 split group Schematic and scope divider, ID: node:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
++			117 row node:d29ya3NwYWNl
++				118 scroll area node:cGFydHMtc2Nyb2xs
++					119 container node:cGFsZXR0ZQ
++						120 text (settable) Components, ID: node:cGFydHMtdGl0bGU
++						121 button Component category, ID: node:cGFydC1jYXRlZ29yeQ, Help: Common holds six everyday parts. Choosing a category clears search. Current choice: Common · 6 ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++						122 text (settable) Search all components, ID: node:cGFydC1zZWFyY2gtbGFiZWw
++						123 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g
++						124 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
++							125 row (settable, boolean) DC source, Value: off, ID: option:cGFydC1saXN0:ZGMtc291cmNl
++							126 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
++							127 row (settable, boolean) Red LED, Value: off, ID: option:cGFydC1saXN0:bGVk
++							128 row (settable, boolean) Capacitor, Value: off, ID: option:cGFydC1saXN0:Y2FwYWNpdG9y
++							129 row (settable, boolean) Ground, Value: off, ID: option:cGFydC1saXN0:Z3JvdW5k
++							130 row (settable, boolean) SPST switch, Value: off, ID: option:cGFydC1saXN0:c3dpdGNo
++						131 text (settable) 6 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
++						132 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
++				133 container node:c2NoZW1hdGljLXBhbmVs
++					134 toolbar node:dG9vbHM
++						135 row Drawing mode, ID: node:ZHJhd2luZy1tb2RlLXRhYnM
++							136 button Select, Help: Selected drawing mode., ID: node:dG9vbC1zZWxlY3Q
++							137 button Wire, ID: node:dG9vbC13aXJl
++							138 button Pan, ID: node:dG9vbC1wYW4
++						139 row node:ZHJhd2luZy1hY3Rpb25z
++							140 button Cancel, ID: node:ZHJhd2luZy5jYW5jZWw, Help: Cancel an unfinished wire or component placement and return to Select mode. Existing components and wires are kept. Shortcut: Escape.
++							141 row node:dG9vbC1zcGFjZXI
++							142 button Sweeps, ID: node:c3dlZXAtb3Blbg
++							143 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning. Selected.
++					144 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
++				145 container node:aW5zcGVjdG9yLXJhaWw
++					146 row node:aW5zcGVjdG9yLW5hdmlnYXRpb24tdG9wLXNwYWNl
++					147 toolbar Inspector section, ID: node:aW5zcGVjdG9yLW5hdmlnYXRpb24
++						148 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWNvbXBvbmVudA
++							149 button Inspect inspector, Help: Selected inspector section., ID: node:aW5zcGVjdG9yLXNlY3Rpb24tY29tcG9uZW50
++							150 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItY29tcG9uZW50
++						151 container node:aW5zcGVjdG9yLXRhYi1jZWxsLXNpbXVsYXRpb24
++							152 button Simulate inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tc2ltdWxhdGlvbg
++							153 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3Itc2ltdWxhdGlvbg
++						154 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWRvY3VtZW50
++							155 button Document inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tZG9jdW1lbnQ
++							156 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItZG9jdW1lbnQ
++					157 scroll area node:c2lkZWJhci0yLWNvbXBvbmVudA
++						158 container node:c2lkZWJhci1jb250ZW50
++							159 container Object inspector, ID: node:aW5zcGVjdG9yLWdyb3VwLW9iamVjdA
++								160 text (settable) Inspector, ID: node:aW5zcGVjdG9yLXRpdGxl
++								161 button Selected object, Help: Current choice: B1 · Battery ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:c2VsZWN0aW9u
++								162 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
++									163 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
++									164 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
++									165 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
++								166 text (settable) B1 · Battery, ID: node:aW5zcGVjdG9y
++								167 text (settable) Terminals: positive, negative, ID: node:cGFydC10ZXJtaW5hbHM
++								168 text (settable) Model: elab.power-and-isolation.v1, ID: node:cGFydC1tb2RlbC1pZA
++								169 text (settable) Battery startup, ID: node:YmF0dGVyeS1zdGFydHVwLXRpdGxl
++								170 text (settable) ID: node:YmF0dGVyeS1zdGFydHVwLWhlbHA, These saved settings restart a running circuit. Paused readings stay stale until Restart. Live charge is shown separately below.
++								171 container node:aW5zcGVjdG9yLWZpZWxkLWJhdHRlcnktY2hhcmdlLXNsaWRlcg
++									172 text (settable) Startup charge · 100%, ID: node:YmF0dGVyeS1jaGFyZ2UtbGFiZWw
++									173 slider (settable, integer) Battery startup charge percent, Value: 100, ID: node:YmF0dGVyeS1jaGFyZ2Utc2xpZGVy
++								174 stepper (settable, integer) Exact battery startup charge percent, Value: 100, ID: node:YmF0dGVyeS1jaGFyZ2UtZXhhY3Q
++								175 text (settable) Capacity · mAh, ID: node:YmF0dGVyeS1jYXBhY2l0eS10aXRsZQ
++								176 stepper (settable, float) Battery capacity in mAh, Value: 0.02, ID: node:YmF0dGVyeS1jYXBhY2l0eQ
++								177 text (settable) Internal resistance · Ω, ID: node:YmF0dGVyeS1lc3ItdGl0bGU
++								178 stepper (settable, integer) Battery internal resistance in ohms, Value: 120, ID: node:YmF0dGVyeS1lc3I
++								179 text (settable) Live battery, ID: node:YmF0dGVyeS1yZWFkaW5nLXRpdGxl
++								180 text (settable) 100% · discharging, ID: node:YmF0dGVyeS1zdGF0ZQ
++								181 text (settable) OCV 9 V · terminals 8.2634 V, ID: node:YmF0dGVyeS12b2x0YWdl
++								182 text (settable) Delivered 6.1385 mA · loss 4.5217 mW, ID: node:YmF0dGVyeS1jdXJyZW50
++								183 text (settable) Remaining 0.02 mAh · 0.324 J, ID: node:YmF0dGVyeS1lbmVyZ3k
++								184 container node:aW5zcGVjdG9yLWZpZWxkLXZhbHVlLWVudHJ5
++									185 text (settable) Full-charge voltage · V, ID: node:dmFsdWUtdGl0bGU
++									186 text field (settable) Component value, Help: Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF, Value: 9 V, ID: node:dmFsdWUtZW50cnk
++								187 button Apply value, Help: Selected., ID: node:YXBwbHktdmFsdWU
++								188 text (settable) 0.1–12 V, ID: node:dmFsdWUtZG9tYWluLXJhbmdl
++								189 text (settable) Bare SI or V; m/u/µ/μ prefixes, for example 500 mV or 1 V, ID: node:dmFsdWUtZG9tYWluLXN5bnRheA
++								190 text (settable) Generic linear OCV/charge model; startup charge and ESR determine actual terminal voltage., ID: node:dmFsdWUtZG9tYWluLXJlbGF0aW9u
++								191 button Plot voltage, ID: node:cGxvdC12OkIx
++								192 button Plot current, ID: node:cGxvdC1pOkIx
++								193 text (settable) Adds a trace; replaces the last when six are shown., ID: node:cGxvdC1oZWxw
++								194 text (settable) ID: node:cGFydC1hc3N1bXB0aW9ucw, Linear charge reservoir: OCV=Vfull*q/Q; Q=3600*capacity_Ah; ESR voltage sag. Equivalent stored energy=Q*Vfull*SOC^2/2. No chemistry, temperature, ageing, self-discharge, protection or physical ratings. Positive delivered current discharges; externally forced charging is an ideal reversible reservoir, not a charger model. Startup SOC is 0..1; live SOC outside that range is reported, not hidden.
++								195 text (settable) ID: node:bWl4ZWQtc2VsZWN0ZWQtcmVhZGluZw, Live · 6.13847 mA · 8.26338 V
+Power 50.7246 mW
++								196 text (settable) Position -400, 0 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
++								197 button Rotate 90°, ID: node:cm90YXRlLXBhcnQ
++								198 button Duplicate, ID: node:ZHVwbGljYXRlLXBhcnQ
++								199 button Delete selected, ID: node:ZGVsZXRlLW9iamVjdA
++							200 container Live measurements, ID: node:aW5zcGVjdG9yLWdyb3VwLW1lYXN1cmVtZW50cw
++								201 text (settable) Live measurements, ID: node:bWVhc3VyZW1lbnQtdGl0bGU
++								202 text (settable) Plot adds a trace, replacing the last if six are shown. Pin keeps a reading on the sheet., ID: node:bWVhc3VyZW1lbnQtaGVscA
++								203 button Inspect named terminal voltage, ID: node:aW5zcGVjdC10ZXJtaW5hbA, Help: Current choice: Measure a terminal… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								204 button Inspect named electrical net, ID: node:aW5zcGVjdC1uZXQ, Help: Current choice: Measure a net… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								205 button Inspect voltage or current probe, ID: node:aW5zcGVjdC1wcm9iZQ, Help: Current choice: Measure voltage/current… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								206 text (settable) B1 · sample 0 ms, ID: node:bWVhc3VyZW1lbnQtc291cmNl
++								207 text (settable) Live v:B1.positive · 8.2634 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpCMS5wb3NpdGl2ZQ
++								208 text (settable) Voltage: B1.positive - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6QjEucG9zaXRpdmU
++								209 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkIxLnBvc2l0aXZl
++									210 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkIxLnBvc2l0aXZl
++									211 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6QjEucG9zaXRpdmU
++								212 text (settable) Live v:B1.negative · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpCMS5uZWdhdGl2ZQ
++								213 text (settable) Voltage: B1.negative - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6QjEubmVnYXRpdmU
++								214 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkIxLm5lZ2F0aXZl
++									215 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkIxLm5lZ2F0aXZl
++									216 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6QjEubmVnYXRpdmU
++								217 text (settable) Live v:B1 · 8.2634 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpCMQ
++								218 text (settable) Voltage: B1.positive - B1.negative, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6QjE
++								219 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkIx
++									220 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkIx
++									221 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6QjE
++								222 text (settable) Live i:B1 · 6.1385 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpCMQ
++								223 text (settable) Current: B1.positive -> out of positive, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6QjE
++								224 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkIx
++									225 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkIx
++									226 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6QjE
++								227 button Inspect selected object, ID: node:bWVhc3VyZW1lbnQtY2xlYXI
++							228 container Pinned readings, ID: node:aW5zcGVjdG9yLWdyb3VwLXBpbm5lZA
++								229 text (settable) Pinned live readings, ID: node:cGlubmVkLXJlYWRpbmdzLXRpdGxl
++								230 text (settable) ID: node:cGlubmVkLXJlYWRpbmdzLWhlbHA, Pin up to eight voltage/current readings, then drag a card on the sheet or edit X / Y. Readings always follow the live circuit.
++								231 button Pin a live voltage or current reading, ID: node:cGluLXJlYWRpbmctcHJvYmU, Help: Current choice: Pin a reading… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++			232 splitter (settable, float) Schematic and scope divider, Value: 0.65, ID: split:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
++			233 scroll area node:c2NvcGUtc2Nyb2xs
++				234 container node:c2NvcGUtcGFuZWw
++					235 toolbar node:c2NvcGUtdG9vbGJhcg
++						236 button Hide scope, Help: Expand or collapse the dock without changing simulation or recorded measurements, ID: node:c2NvcGUtdmlzaWJpbGl0eQ
++						237 text (settable) Live circuit network, ID: node:c2NvcGUtdGl0bGU
++						238 text (settable) t = 0 s · network · run 3 · paused, ID: node:c2NvcGUtY2FwdGlvbg
++						239 button Step +1 sample, ID: node:dHJhbnNpZW50LXN0ZXA
++						240 button Restart, ID: node:c2ltdWxhdGlvbi5yZXN0YXJ0
++					241 toolbar node:c2NvcGUtdHJhY2Utcm93
++						242 button Export scope CSV, ID: node:ZXhwb3J0LWNzdg
++						243 button Inspect trace source, ID: node:c2NvcGUtdHJhY2UtZm9jdXM, Help: Current choice: Inspect trace… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++						244 text (settable) Amber: B1 voltage · Coral: B1 delivered current · Teal: D1 current, ID: node:c2NvcGUtbGVnZW5k
++					245 text (settable) node:c3RlcC13b3JrLXN0YXR1cw
++					246 toolbar node:c2NvcGUtY3Vyc29ycw
++						247 button A, Help: Selected., ID: node:Y3Vyc29yLXNlbGVjdC1h
++						248 text field (settable) Cursor A time, ID: node:Y3Vyc29yLXRpbWUtYQ, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
++						249 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWE
++						250 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i
++						251 text field (settable) Cursor B time, ID: node:Y3Vyc29yLXRpbWUtYg, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
++						252 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWI
++						253 text (settable) ms · click / drag plot to place selected cursor, ID: node:Y3Vyc29yLW1lYXN1cmVtZW50
+~				90 text (settable) D1 current, ID: node:Y3VycmVudC10aXRsZQ
+~				91 text (settable) 6.138 mA, ID: node:Y3VycmVudC12YWx1ZQ
+~				93 text (settable) D1 voltage, ID: node:dm9sdGFnZS10aXRsZQ
+~				94 text (settable) 2.125 V, ID: node:dm9sdGFnZS12YWx1ZQ
+~				96 text (settable) Power residual, ID: node:cG93ZXItdGl0bGU
+~				97 text (settable) -3.47e-08 nW, ID: node:cG93ZXItdmFsdWU
+~				100 text (settable) Network · t = 0 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+~			102 text (settable) 7 components · 7 wires, Help: Battery sag and LED fade · 7 components · 7 wires · last change: user, ID: node:Zm9vdGVy
+~			104 text (settable) 106%, ID: node:em9vbQ

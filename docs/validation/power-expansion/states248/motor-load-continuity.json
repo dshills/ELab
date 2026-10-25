@@ -1,0 +1,7477 @@
+{
+  "inspector_section": "component",
+  "workspace_layout": {
+    "schematic_fraction": 0.65
+  },
+  "viewport": {
+    "width_px": 1199,
+    "height_px": 579,
+    "registered": true,
+    "following": true
+  },
+  "pulse_timings": [],
+  "verification_input_modes": [
+    "auto",
+    "high",
+    "low"
+  ],
+  "live_input_modes": [
+    "auto",
+    "high",
+    "low"
+  ],
+  "dc_sweep": {
+    "settings": {
+      "component_id": "V1",
+      "parameter": "voltage",
+      "start": "0 V",
+      "stop": "5 V",
+      "points": 51
+    },
+    "targets": [
+      {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      {
+        "component_id": "V1",
+        "parameter": "frequency",
+        "label": "V1 \u00b7 AC frequency / 1 V excitation",
+        "unit": "Hz",
+        "minimum": 0.01,
+        "maximum": 1000000000
+      }
+    ],
+    "available_probes": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.positive",
+        "label": "MTR1.positive / ground",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.negative",
+        "label": "MTR1.negative / ground",
+        "unit": "V",
+        "positive": "MTR1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1",
+        "label": "MTR1 voltage",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "MTR1.negative"
+      },
+      {
+        "id": "i:MTR1",
+        "label": "MTR1 armature current",
+        "unit": "A",
+        "positive": "MTR1.positive",
+        "reference": "into positive"
+      },
+      {
+        "id": "v:GNDM.reference",
+        "label": "GNDM.reference / ground",
+        "unit": "V",
+        "positive": "GNDM.reference",
+        "reference": "ground"
+      }
+    ],
+    "operations": [],
+    "selected_operation": "",
+    "visible": false,
+    "trace_id": ""
+  },
+  "source_annotations": [],
+  "project_work": {
+    "recovery_configuration_applied": true,
+    "recovery_catalog_applied": true,
+    "cancelable": false,
+    "id": "project-1",
+    "command": "recovery.configure",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "user",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "input_revision": 1,
+    "command_revision": 2,
+    "document_generation": 1,
+    "bytes": 0,
+    "result_document_generation": 1
+  },
+  "input_work": {
+    "requested_motor_load": {
+      "id": "MTR1",
+      "load_n_m_s_per_rad": 0.00010312756121249225
+    },
+    "id": "input-1",
+    "command": "motor.load.set",
+    "status": "completed",
+    "actor": "user",
+    "run_id": 9,
+    "electrical_revision": 6,
+    "actuation_revision": 1,
+    "command_revision": 18,
+    "time_s": 0.04
+  },
+  "example": {
+    "info": {
+      "id": "motor-dc",
+      "title": "DC motor startup and load",
+      "question": "Why does motor current fall as speed rises?",
+      "expected": "Current starts at zero through armature inductance, rises during startup, then back EMF reduces it as the rotor accelerates.",
+      "try": "Select MTR1 to vary mechanical load live. Lock the rotor in startup settings and Restart to measure stall current.",
+      "limitation": "Generic brushed DC motor: armature RL, reciprocal Ke=Kt electromechanical coupling, rotor inertia, viscous friction and load. No brushes, commutation ripple, thermal model, gearbox or hardware ratings."
+    },
+    "modified": true
+  },
+  "diagnostic_presentation": {
+    "details_visible": false,
+    "items": []
+  },
+  "display": {
+    "preferences": {
+      "voltage_color": false,
+      "voltage_range_v": 5,
+      "current_cues": false,
+      "current_motion": false,
+      "reduced_motion": false,
+      "direction": "conventional"
+    },
+    "run_id": 9,
+    "electrical_revision": 6,
+    "time_s": 0.04,
+    "animate": false,
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.negative",
+        "to": "GND.reference",
+        "voltage_v": 0,
+        "state": "live",
+        "current_reason": "Ideal-wire current is not uniquely determined or accepted terminal currents do not balance",
+        "color": "#387d93"
+      },
+      {
+        "id": "W2",
+        "from": "V1.positive",
+        "to": "MTR1.positive",
+        "voltage_v": 12,
+        "current_a": 0.3633026191644343,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W3",
+        "from": "MTR1.negative",
+        "to": "GNDM.reference",
+        "voltage_v": 0,
+        "state": "live",
+        "current_reason": "Ideal-wire current is not uniquely determined or accepted terminal currents do not balance",
+        "color": "#387d93"
+      }
+    ]
+  },
+  "measurement_inspection": {
+    "target": {
+      "kind": "object",
+      "id": "MTR1"
+    },
+    "result_kind": "transient",
+    "available": true,
+    "object_ids": [
+      "MTR1"
+    ],
+    "terminal_refs": [
+      "MTR1.positive",
+      "MTR1.negative"
+    ],
+    "wire_ids": [],
+    "nets": [
+      {
+        "id": "net:MTR1.positive",
+        "terminals": [
+          "MTR1.positive",
+          "V1.positive"
+        ]
+      },
+      {
+        "id": "net:GND.reference",
+        "terminals": [
+          "GND.reference",
+          "GNDM.reference",
+          "MTR1.negative",
+          "V1.negative"
+        ]
+      }
+    ],
+    "readings": [
+      {
+        "probe": {
+          "id": "v:MTR1.positive",
+          "label": "MTR1.positive / ground",
+          "unit": "V",
+          "positive": "MTR1.positive",
+          "reference": "ground"
+        },
+        "value": 12,
+        "time_s": 0.04,
+        "run_id": 9,
+        "electrical_revision": 6,
+        "state": "live",
+        "display": "Live v:MTR1.positive \u00b7 12 V",
+        "reference_display": "Voltage: MTR1.positive - ground"
+      },
+      {
+        "probe": {
+          "id": "v:MTR1.negative",
+          "label": "MTR1.negative / ground",
+          "unit": "V",
+          "positive": "MTR1.negative",
+          "reference": "ground"
+        },
+        "value": 0,
+        "time_s": 0.04,
+        "run_id": 9,
+        "electrical_revision": 6,
+        "state": "live",
+        "display": "Live v:MTR1.negative \u00b7 0 V",
+        "reference_display": "Voltage: MTR1.negative - ground"
+      },
+      {
+        "probe": {
+          "id": "v:MTR1",
+          "label": "MTR1 voltage",
+          "unit": "V",
+          "positive": "MTR1.positive",
+          "reference": "MTR1.negative"
+        },
+        "value": 12,
+        "time_s": 0.04,
+        "run_id": 9,
+        "electrical_revision": 6,
+        "state": "live",
+        "display": "Live v:MTR1 \u00b7 12 V",
+        "reference_display": "Voltage: MTR1.positive - MTR1.negative"
+      },
+      {
+        "probe": {
+          "id": "i:MTR1",
+          "label": "MTR1 armature current",
+          "unit": "A",
+          "positive": "MTR1.positive",
+          "reference": "into positive"
+        },
+        "value": 0.3633026191644343,
+        "time_s": 0.04,
+        "run_id": 9,
+        "electrical_revision": 6,
+        "state": "live",
+        "display": "Live i:MTR1 \u00b7 363.3 mA",
+        "reference_display": "Current: MTR1.positive -> into positive"
+      }
+    ]
+  },
+  "pinned_readings": [],
+  "limits": {
+    "timers555": 2,
+    "pnp_transistors": 2,
+    "bipolar_transistors_total": 2,
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 2,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "simulated_component_count": 2,
+  "step_work": {
+    "id": "step-1",
+    "status": "completed",
+    "actor": "agent.socket",
+    "run_id": 9,
+    "electrical_revision": 6,
+    "actuation_revision": 0,
+    "command_revision": 17,
+    "start_time_s": 0,
+    "duration_s": 0.04,
+    "completed_samples": 400,
+    "total_samples": 400,
+    "progress": 1
+  },
+  "undo_entry": {
+    "name": "Change motor load",
+    "actor": "user",
+    "command_revision": 18
+  },
+  "actuation_revision": 2,
+  "power_model": {
+    "id": "elab.power-and-isolation.v1",
+    "battery": "Linear charge reservoir: OCV=Vfull*q/Q; Q=3600*capacity_Ah; ESR voltage sag. Equivalent stored energy=Q*Vfull*SOC^2/2. No chemistry, temperature, ageing, self-discharge, protection or physical ratings. Positive delivered current discharges; externally forced charging is an ideal reversible reservoir, not a charger model. Startup SOC is 0..1; live SOC outside that range is reported, not hidden.",
+    "motor": "Generic brushed DC motor: armature RL, reciprocal Ke=Kt electromechanical coupling, rotor inertia, viscous friction and load. No brushes, commutation ripple, thermal model, gearbox or hardware ratings.",
+    "optocoupler": "Generic LED/phototransistor optocoupler: separate conductive input/output ports, CTR and smooth saturation. No isolation-voltage rating, capacitance, propagation delay, temperature or ageing model.",
+    "transformer": "Linear mutually coupled windings with series resistance and dot polarity. No core saturation, hysteresis, losses beyond winding resistance or isolation rating. Coupling below one gives a positive-definite inductance matrix."
+  },
+  "recovery": {
+    "directory": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "enabled": true,
+    "interval_s": 2,
+    "last_snapshot": "rec-8c21c93b4c6b6664c9b8883b-0000000004",
+    "last_saved_at": "2026-10-25T08:26:34.053598Z",
+    "selected": "rec-1d5e82051e5d3248e479020a-0000000003",
+    "candidates": [
+      {
+        "owner_status": "active",
+        "id": "rec-8c21c93b4c6b6664c9b8883b-0000000004",
+        "document_key": "8c21c93b4c6b6664c9b8883b",
+        "saved_at": "2026-10-25T08:26:34.053598Z",
+        "sha256": "87b0c9bb8864db92357338f553e845d0057e9e26ba868e249e92b9904d8f1c80",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 4
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-1d5e82051e5d3248e479020a-0000000003",
+        "document_key": "1d5e82051e5d3248e479020a",
+        "saved_at": "2026-10-25T08:23:58.551263Z",
+        "sha256": "c4b8b03da2ec88ba3d4f91d05c18b64e8ff0229d3e5bafaa8b06c0d84b8a2d87",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 7
+      }
+    ],
+    "problems": []
+  },
+  "verification_settings": {
+    "duration_s": 0.1,
+    "sample_step_s": 0,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "operations": [],
+  "selected_operation": "",
+  "schematic_page": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 10
+  },
+  "part_category": "common",
+  "part_categories": [
+    {
+      "id": "common",
+      "name": "Common",
+      "count": 6
+    },
+    {
+      "id": "all",
+      "name": "All components",
+      "count": 48
+    },
+    {
+      "id": "sources",
+      "name": "Sources",
+      "count": 5
+    },
+    {
+      "id": "motors",
+      "name": "Motors",
+      "count": 1
+    },
+    {
+      "id": "passives",
+      "name": "Passives",
+      "count": 7
+    },
+    {
+      "id": "semiconductors",
+      "name": "Semiconductors",
+      "count": 10
+    },
+    {
+      "id": "amplifiers",
+      "name": "Amplifiers / ICs",
+      "count": 4
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "count": 14
+    },
+    {
+      "id": "switches",
+      "name": "Switches",
+      "count": 4
+    },
+    {
+      "id": "connections",
+      "name": "Connections",
+      "count": 3
+    }
+  ],
+  "part_search": "",
+  "theme": "apollo",
+  "appearance": {
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "status": "ready",
+    "saved_theme": "apollo"
+  },
+  "appearance_work": {
+    "id": "appearance-2",
+    "command": "appearance.theme.set",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "input_revision": 19,
+    "command_revision": 8,
+    "document_generation": 2,
+    "electrical_revision": 2,
+    "input_run_id": 3,
+    "input_theme": "light",
+    "requested_theme": "apollo",
+    "result_theme": "apollo",
+    "source_sha256": "80e13a747ee02e691a894a3cff7006c64cc4920ad358056f39d5b5708d9b62df",
+    "artifact_sha256": "139a5f0558077f28857ecd59ff31a8eed52794697708c8a1926308d10ed2e136",
+    "bytes": 71,
+    "cancelable": false,
+    "superseded": false,
+    "published": true,
+    "current_at_completion": true
+  },
+  "matching_parts": [
+    {
+      "category": "sources",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "voltage",
+        "unit": "V",
+        "minimum": 0,
+        "maximum": 12,
+        "range_text": "0\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+      },
+      "aliases": [
+        "power supply",
+        "voltage supply",
+        "ideal voltage source"
+      ],
+      "limitations": "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity.",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "5 V",
+      "unit": "V",
+      "model": "ideal-dc.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000,
+        "range_text": "10\u2013100000 \u03a9",
+        "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+      },
+      "aliases": [
+        "resistance",
+        "current limiter"
+      ],
+      "limitations": "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2.",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1k",
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1"
+    },
+    {
+      "category": "semiconductors",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "LED",
+        "light emitting diode",
+        "indicator"
+      ],
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness.",
+      "kind": "led",
+      "name": "Red LED",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "model": "elab.generic-red-led.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "capacitance",
+        "unit": "F",
+        "minimum": 1e-12,
+        "maximum": 1,
+        "range_text": "1 pF\u20131 F",
+        "syntax": "Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF"
+      },
+      "aliases": [
+        "cap",
+        "charge storage"
+      ],
+      "limitations": "Ideal capacitor with configurable initial voltage; no ESR, leakage, polarity, heating, ratings or physical part identity. Voltage and current use pin 1 relative to pin 2.",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1uF",
+      "unit": "F",
+      "model": "ideal-capacitor.v1"
+    },
+    {
+      "category": "connections",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "ground",
+        "voltage reference"
+      ],
+      "limitations": "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design.",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "model": "ground.v1"
+    },
+    {
+      "category": "switches",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "toggle",
+        "on/off",
+        "SPST"
+      ],
+      "limitations": "Generic SPST with finite on/off resistance; no contact bounce, arcing, thermal behavior, ratings or named physical part. Actuation is instantaneous; capacitor voltage remains continuous.",
+      "kind": "switch",
+      "name": "SPST switch",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "model": "elab.spst-resistive.v1"
+    }
+  ],
+  "undo_name": "Change motor load",
+  "redo_name": "",
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0.04
+    },
+    "window_valid": true,
+    "statistics": [
+      {
+        "probe_id": "v:MTR1",
+        "count": 403,
+        "min": 12,
+        "max": 12,
+        "sample_mean": 12,
+        "sample_rms": 12
+      },
+      {
+        "probe_id": "i:MTR1",
+        "count": 403,
+        "min": 0,
+        "max": 1.312768674363356,
+        "sample_mean": 0.7223584284657386,
+        "sample_rms": 0.7841218810584683
+      }
+    ],
+    "available": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.positive",
+        "label": "MTR1.positive / ground",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1.negative",
+        "label": "MTR1.negative / ground",
+        "unit": "V",
+        "positive": "MTR1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:MTR1",
+        "label": "MTR1 voltage",
+        "unit": "V",
+        "positive": "MTR1.positive",
+        "reference": "MTR1.negative"
+      },
+      {
+        "id": "i:MTR1",
+        "label": "MTR1 armature current",
+        "unit": "A",
+        "positive": "MTR1.positive",
+        "reference": "into positive"
+      },
+      {
+        "id": "v:GNDM.reference",
+        "label": "GNDM.reference / ground",
+        "unit": "V",
+        "positive": "GNDM.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [
+      "v:MTR1",
+      "i:MTR1"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:MTR1",
+          "label": "MTR1 voltage",
+          "unit": "V",
+          "positive": "MTR1.positive",
+          "reference": "MTR1.negative"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 12
+          },
+          {
+            "time_s": 0.0001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0002,
+            "value": 12
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0007,
+            "value": 12
+          },
+          {
+            "time_s": 0.0008,
+            "value": 12
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0011,
+            "value": 12
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0014,
+            "value": 12
+          },
+          {
+            "time_s": 0.0015,
+            "value": 12
+          },
+          {
+            "time_s": 0.0016,
+            "value": 12
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0019,
+            "value": 12
+          },
+          {
+            "time_s": 0.002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0022,
+            "value": 12
+          },
+          {
+            "time_s": 0.0023,
+            "value": 12
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0025,
+            "value": 12
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0027,
+            "value": 12
+          },
+          {
+            "time_s": 0.0028,
+            "value": 12
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0032,
+            "value": 12
+          },
+          {
+            "time_s": 0.0033,
+            "value": 12
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0035,
+            "value": 12
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.0037,
+            "value": 12
+          },
+          {
+            "time_s": 0.0038,
+            "value": 12
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0041,
+            "value": 12
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0043,
+            "value": 12
+          },
+          {
+            "time_s": 0.0044,
+            "value": 12
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0046,
+            "value": 12
+          },
+          {
+            "time_s": 0.0047,
+            "value": 12
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0049,
+            "value": 12
+          },
+          {
+            "time_s": 0.005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0051,
+            "value": 12
+          },
+          {
+            "time_s": 0.005200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0053,
+            "value": 12
+          },
+          {
+            "time_s": 0.0054,
+            "value": 12
+          },
+          {
+            "time_s": 0.0055000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0056,
+            "value": 12
+          },
+          {
+            "time_s": 0.0057,
+            "value": 12
+          },
+          {
+            "time_s": 0.0058000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0059,
+            "value": 12
+          },
+          {
+            "time_s": 0.006,
+            "value": 12
+          },
+          {
+            "time_s": 0.0061,
+            "value": 12
+          },
+          {
+            "time_s": 0.006200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0063,
+            "value": 12
+          },
+          {
+            "time_s": 0.0064,
+            "value": 12
+          },
+          {
+            "time_s": 0.006500000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0066,
+            "value": 12
+          },
+          {
+            "time_s": 0.0067,
+            "value": 12
+          },
+          {
+            "time_s": 0.0068000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.006900000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.007,
+            "value": 12
+          },
+          {
+            "time_s": 0.0071,
+            "value": 12
+          },
+          {
+            "time_s": 0.007200000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0073,
+            "value": 12
+          },
+          {
+            "time_s": 0.0074,
+            "value": 12
+          },
+          {
+            "time_s": 0.007500000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0076,
+            "value": 12
+          },
+          {
+            "time_s": 0.0077,
+            "value": 12
+          },
+          {
+            "time_s": 0.0078000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0079,
+            "value": 12
+          },
+          {
+            "time_s": 0.008,
+            "value": 12
+          },
+          {
+            "time_s": 0.0081,
+            "value": 12
+          },
+          {
+            "time_s": 0.0082,
+            "value": 12
+          },
+          {
+            "time_s": 0.0083,
+            "value": 12
+          },
+          {
+            "time_s": 0.008400000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0085,
+            "value": 12
+          },
+          {
+            "time_s": 0.0086,
+            "value": 12
+          },
+          {
+            "time_s": 0.008700000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0088,
+            "value": 12
+          },
+          {
+            "time_s": 0.0089,
+            "value": 12
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0091,
+            "value": 12
+          },
+          {
+            "time_s": 0.0092,
+            "value": 12
+          },
+          {
+            "time_s": 0.009300000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0094,
+            "value": 12
+          },
+          {
+            "time_s": 0.0095,
+            "value": 12
+          },
+          {
+            "time_s": 0.009600000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0097,
+            "value": 12
+          },
+          {
+            "time_s": 0.0098,
+            "value": 12
+          },
+          {
+            "time_s": 0.0099,
+            "value": 12
+          },
+          {
+            "time_s": 0.01,
+            "value": 12
+          },
+          {
+            "time_s": 0.010100000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0102,
+            "value": 12
+          },
+          {
+            "time_s": 0.0103,
+            "value": 12
+          },
+          {
+            "time_s": 0.010400000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0105,
+            "value": 12
+          },
+          {
+            "time_s": 0.0106,
+            "value": 12
+          },
+          {
+            "time_s": 0.010700000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0108,
+            "value": 12
+          },
+          {
+            "time_s": 0.0109,
+            "value": 12
+          },
+          {
+            "time_s": 0.011000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0111,
+            "value": 12
+          },
+          {
+            "time_s": 0.0112,
+            "value": 12
+          },
+          {
+            "time_s": 0.011300000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0114,
+            "value": 12
+          },
+          {
+            "time_s": 0.0115,
+            "value": 12
+          },
+          {
+            "time_s": 0.011600000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0117,
+            "value": 12
+          },
+          {
+            "time_s": 0.0118,
+            "value": 12
+          },
+          {
+            "time_s": 0.0119,
+            "value": 12
+          },
+          {
+            "time_s": 0.012,
+            "value": 12
+          },
+          {
+            "time_s": 0.012100000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0122,
+            "value": 12
+          },
+          {
+            "time_s": 0.0123,
+            "value": 12
+          },
+          {
+            "time_s": 0.012400000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0125,
+            "value": 12
+          },
+          {
+            "time_s": 0.0126,
+            "value": 12
+          },
+          {
+            "time_s": 0.012700000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0128,
+            "value": 12
+          },
+          {
+            "time_s": 0.0129,
+            "value": 12
+          },
+          {
+            "time_s": 0.013000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0131,
+            "value": 12
+          },
+          {
+            "time_s": 0.0132,
+            "value": 12
+          },
+          {
+            "time_s": 0.013300000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0134,
+            "value": 12
+          },
+          {
+            "time_s": 0.0135,
+            "value": 12
+          },
+          {
+            "time_s": 0.013600000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0137,
+            "value": 12
+          },
+          {
+            "time_s": 0.013800000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.013900000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.014,
+            "value": 12
+          },
+          {
+            "time_s": 0.014100000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0142,
+            "value": 12
+          },
+          {
+            "time_s": 0.0143,
+            "value": 12
+          },
+          {
+            "time_s": 0.014400000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0145,
+            "value": 12
+          },
+          {
+            "time_s": 0.0146,
+            "value": 12
+          },
+          {
+            "time_s": 0.014700000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0148,
+            "value": 12
+          },
+          {
+            "time_s": 0.0149,
+            "value": 12
+          },
+          {
+            "time_s": 0.015000000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0151,
+            "value": 12
+          },
+          {
+            "time_s": 0.0152,
+            "value": 12
+          },
+          {
+            "time_s": 0.015300000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.0154,
+            "value": 12
+          },
+          {
+            "time_s": 0.0155,
+            "value": 12
+          },
+          {
+            "time_s": 0.015600000000000001,
+            "value": 12
+          },
+          {
+            "time_s": 0.015700000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0158,
+            "value": 12
+          },
+          {
+            "time_s": 0.0159,
+            "value": 12
+          },
+          {
+            "time_s": 0.016,
+            "value": 12
+          },
+          {
+            "time_s": 0.0161,
+            "value": 12
+          },
+          {
+            "time_s": 0.0162,
+            "value": 12
+          },
+          {
+            "time_s": 0.016300000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0164,
+            "value": 12
+          },
+          {
+            "time_s": 0.0165,
+            "value": 12
+          },
+          {
+            "time_s": 0.0166,
+            "value": 12
+          },
+          {
+            "time_s": 0.0167,
+            "value": 12
+          },
+          {
+            "time_s": 0.016800000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.016900000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.017,
+            "value": 12
+          },
+          {
+            "time_s": 0.0171,
+            "value": 12
+          },
+          {
+            "time_s": 0.0172,
+            "value": 12
+          },
+          {
+            "time_s": 0.0173,
+            "value": 12
+          },
+          {
+            "time_s": 0.017400000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0175,
+            "value": 12
+          },
+          {
+            "time_s": 0.0176,
+            "value": 12
+          },
+          {
+            "time_s": 0.0177,
+            "value": 12
+          },
+          {
+            "time_s": 0.0178,
+            "value": 12
+          },
+          {
+            "time_s": 0.0179,
+            "value": 12
+          },
+          {
+            "time_s": 0.018000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0181,
+            "value": 12
+          },
+          {
+            "time_s": 0.0182,
+            "value": 12
+          },
+          {
+            "time_s": 0.0183,
+            "value": 12
+          },
+          {
+            "time_s": 0.0184,
+            "value": 12
+          },
+          {
+            "time_s": 0.018500000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.018600000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0187,
+            "value": 12
+          },
+          {
+            "time_s": 0.0188,
+            "value": 12
+          },
+          {
+            "time_s": 0.0189,
+            "value": 12
+          },
+          {
+            "time_s": 0.019,
+            "value": 12
+          },
+          {
+            "time_s": 0.019100000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.019200000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0193,
+            "value": 12
+          },
+          {
+            "time_s": 0.0194,
+            "value": 12
+          },
+          {
+            "time_s": 0.0195,
+            "value": 12
+          },
+          {
+            "time_s": 0.0196,
+            "value": 12
+          },
+          {
+            "time_s": 0.019700000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0198,
+            "value": 12
+          },
+          {
+            "time_s": 0.0199,
+            "value": 12
+          },
+          {
+            "time_s": 0.02,
+            "value": 12
+          },
+          {
+            "time_s": 0.0201,
+            "value": 12
+          },
+          {
+            "time_s": 0.020200000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.020300000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0204,
+            "value": 12
+          },
+          {
+            "time_s": 0.0205,
+            "value": 12
+          },
+          {
+            "time_s": 0.0206,
+            "value": 12
+          },
+          {
+            "time_s": 0.0207,
+            "value": 12
+          },
+          {
+            "time_s": 0.020800000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.020900000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.021,
+            "value": 12
+          },
+          {
+            "time_s": 0.0211,
+            "value": 12
+          },
+          {
+            "time_s": 0.0212,
+            "value": 12
+          },
+          {
+            "time_s": 0.0213,
+            "value": 12
+          },
+          {
+            "time_s": 0.021400000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.021500000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0216,
+            "value": 12
+          },
+          {
+            "time_s": 0.0217,
+            "value": 12
+          },
+          {
+            "time_s": 0.0218,
+            "value": 12
+          },
+          {
+            "time_s": 0.0219,
+            "value": 12
+          },
+          {
+            "time_s": 0.022000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0221,
+            "value": 12
+          },
+          {
+            "time_s": 0.0222,
+            "value": 12
+          },
+          {
+            "time_s": 0.0223,
+            "value": 12
+          },
+          {
+            "time_s": 0.0224,
+            "value": 12
+          },
+          {
+            "time_s": 0.022500000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.022600000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0227,
+            "value": 12
+          },
+          {
+            "time_s": 0.0228,
+            "value": 12
+          },
+          {
+            "time_s": 0.0229,
+            "value": 12
+          },
+          {
+            "time_s": 0.023,
+            "value": 12
+          },
+          {
+            "time_s": 0.023100000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.023200000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0233,
+            "value": 12
+          },
+          {
+            "time_s": 0.0234,
+            "value": 12
+          },
+          {
+            "time_s": 0.0235,
+            "value": 12
+          },
+          {
+            "time_s": 0.0236,
+            "value": 12
+          },
+          {
+            "time_s": 0.023700000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0238,
+            "value": 12
+          },
+          {
+            "time_s": 0.0239,
+            "value": 12
+          },
+          {
+            "time_s": 0.024,
+            "value": 12
+          },
+          {
+            "time_s": 0.0241,
+            "value": 12
+          },
+          {
+            "time_s": 0.024200000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.024300000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0244,
+            "value": 12
+          },
+          {
+            "time_s": 0.0245,
+            "value": 12
+          },
+          {
+            "time_s": 0.0246,
+            "value": 12
+          },
+          {
+            "time_s": 0.0247,
+            "value": 12
+          },
+          {
+            "time_s": 0.024800000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.024900000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.025,
+            "value": 12
+          },
+          {
+            "time_s": 0.0251,
+            "value": 12
+          },
+          {
+            "time_s": 0.0252,
+            "value": 12
+          },
+          {
+            "time_s": 0.0253,
+            "value": 12
+          },
+          {
+            "time_s": 0.025400000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.025500000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0256,
+            "value": 12
+          },
+          {
+            "time_s": 0.0257,
+            "value": 12
+          },
+          {
+            "time_s": 0.0258,
+            "value": 12
+          },
+          {
+            "time_s": 0.025900000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.026000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0261,
+            "value": 12
+          },
+          {
+            "time_s": 0.0262,
+            "value": 12
+          },
+          {
+            "time_s": 0.0263,
+            "value": 12
+          },
+          {
+            "time_s": 0.0264,
+            "value": 12
+          },
+          {
+            "time_s": 0.026500000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.026600000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0267,
+            "value": 12
+          },
+          {
+            "time_s": 0.0268,
+            "value": 12
+          },
+          {
+            "time_s": 0.0269,
+            "value": 12
+          },
+          {
+            "time_s": 0.027,
+            "value": 12
+          },
+          {
+            "time_s": 0.027100000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.027200000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0273,
+            "value": 12
+          },
+          {
+            "time_s": 0.0274,
+            "value": 12
+          },
+          {
+            "time_s": 0.0275,
+            "value": 12
+          },
+          {
+            "time_s": 0.027600000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.027700000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.027800000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0279,
+            "value": 12
+          },
+          {
+            "time_s": 0.028,
+            "value": 12
+          },
+          {
+            "time_s": 0.0281,
+            "value": 12
+          },
+          {
+            "time_s": 0.028200000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.028300000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0284,
+            "value": 12
+          },
+          {
+            "time_s": 0.0285,
+            "value": 12
+          },
+          {
+            "time_s": 0.0286,
+            "value": 12
+          },
+          {
+            "time_s": 0.0287,
+            "value": 12
+          },
+          {
+            "time_s": 0.028800000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.028900000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.029,
+            "value": 12
+          },
+          {
+            "time_s": 0.0291,
+            "value": 12
+          },
+          {
+            "time_s": 0.0292,
+            "value": 12
+          },
+          {
+            "time_s": 0.029300000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.029400000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.029500000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0296,
+            "value": 12
+          },
+          {
+            "time_s": 0.0297,
+            "value": 12
+          },
+          {
+            "time_s": 0.0298,
+            "value": 12
+          },
+          {
+            "time_s": 0.029900000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.030000000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.030100000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0302,
+            "value": 12
+          },
+          {
+            "time_s": 0.0303,
+            "value": 12
+          },
+          {
+            "time_s": 0.0304,
+            "value": 12
+          },
+          {
+            "time_s": 0.030500000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.030600000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0307,
+            "value": 12
+          },
+          {
+            "time_s": 0.0308,
+            "value": 12
+          },
+          {
+            "time_s": 0.0309,
+            "value": 12
+          },
+          {
+            "time_s": 0.031,
+            "value": 12
+          },
+          {
+            "time_s": 0.031100000000000003,
+            "value": 12
+          },
+          {
+            "time_s": 0.031200000000000002,
+            "value": 12
+          },
+          {
+            "time_s": 0.0313,
+            "value": 12
+          },
+          {
+            "time_s": 0.031400000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0315,
+            "value": 12
+          },
+          {
+            "time_s": 0.0316,
+            "value": 12
+          },
+          {
+            "time_s": 0.0317,
+            "value": 12
+          },
+          {
+            "time_s": 0.0318,
+            "value": 12
+          },
+          {
+            "time_s": 0.031900000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.032,
+            "value": 12
+          },
+          {
+            "time_s": 0.032100000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0322,
+            "value": 12
+          },
+          {
+            "time_s": 0.0323,
+            "value": 12
+          },
+          {
+            "time_s": 0.0324,
+            "value": 12
+          },
+          {
+            "time_s": 0.0325,
+            "value": 12
+          },
+          {
+            "time_s": 0.032600000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0327,
+            "value": 12
+          },
+          {
+            "time_s": 0.0328,
+            "value": 12
+          },
+          {
+            "time_s": 0.0329,
+            "value": 12
+          },
+          {
+            "time_s": 0.033,
+            "value": 12
+          },
+          {
+            "time_s": 0.033100000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0332,
+            "value": 12
+          },
+          {
+            "time_s": 0.0333,
+            "value": 12
+          },
+          {
+            "time_s": 0.0334,
+            "value": 12
+          },
+          {
+            "time_s": 0.0335,
+            "value": 12
+          },
+          {
+            "time_s": 0.033600000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0337,
+            "value": 12
+          },
+          {
+            "time_s": 0.033800000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0339,
+            "value": 12
+          },
+          {
+            "time_s": 0.034,
+            "value": 12
+          },
+          {
+            "time_s": 0.0341,
+            "value": 12
+          },
+          {
+            "time_s": 0.0342,
+            "value": 12
+          },
+          {
+            "time_s": 0.034300000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0344,
+            "value": 12
+          },
+          {
+            "time_s": 0.0345,
+            "value": 12
+          },
+          {
+            "time_s": 0.0346,
+            "value": 12
+          },
+          {
+            "time_s": 0.0347,
+            "value": 12
+          },
+          {
+            "time_s": 0.034800000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0349,
+            "value": 12
+          },
+          {
+            "time_s": 0.035,
+            "value": 12
+          },
+          {
+            "time_s": 0.0351,
+            "value": 12
+          },
+          {
+            "time_s": 0.0352,
+            "value": 12
+          },
+          {
+            "time_s": 0.035300000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0354,
+            "value": 12
+          },
+          {
+            "time_s": 0.035500000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0356,
+            "value": 12
+          },
+          {
+            "time_s": 0.0357,
+            "value": 12
+          },
+          {
+            "time_s": 0.0358,
+            "value": 12
+          },
+          {
+            "time_s": 0.0359,
+            "value": 12
+          },
+          {
+            "time_s": 0.036000000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0361,
+            "value": 12
+          },
+          {
+            "time_s": 0.0362,
+            "value": 12
+          },
+          {
+            "time_s": 0.0363,
+            "value": 12
+          },
+          {
+            "time_s": 0.0364,
+            "value": 12
+          },
+          {
+            "time_s": 0.036500000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0366,
+            "value": 12
+          },
+          {
+            "time_s": 0.0367,
+            "value": 12
+          },
+          {
+            "time_s": 0.0368,
+            "value": 12
+          },
+          {
+            "time_s": 0.0369,
+            "value": 12
+          },
+          {
+            "time_s": 0.037000000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0371,
+            "value": 12
+          },
+          {
+            "time_s": 0.037200000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0373,
+            "value": 12
+          },
+          {
+            "time_s": 0.0374,
+            "value": 12
+          },
+          {
+            "time_s": 0.0375,
+            "value": 12
+          },
+          {
+            "time_s": 0.0376,
+            "value": 12
+          },
+          {
+            "time_s": 0.037700000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0378,
+            "value": 12
+          },
+          {
+            "time_s": 0.0379,
+            "value": 12
+          },
+          {
+            "time_s": 0.038,
+            "value": 12
+          },
+          {
+            "time_s": 0.0381,
+            "value": 12
+          },
+          {
+            "time_s": 0.038200000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0383,
+            "value": 12
+          },
+          {
+            "time_s": 0.038400000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0385,
+            "value": 12
+          },
+          {
+            "time_s": 0.0386,
+            "value": 12
+          },
+          {
+            "time_s": 0.038700000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.0388,
+            "value": 12
+          },
+          {
+            "time_s": 0.038900000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.039,
+            "value": 12
+          },
+          {
+            "time_s": 0.0391,
+            "value": 12
+          },
+          {
+            "time_s": 0.0392,
+            "value": 12
+          },
+          {
+            "time_s": 0.0393,
+            "value": 12
+          },
+          {
+            "time_s": 0.039400000000000004,
+            "value": 12
+          },
+          {
+            "time_s": 0.0395,
+            "value": 12
+          },
+          {
+            "time_s": 0.0396,
+            "value": 12
+          },
+          {
+            "time_s": 0.0397,
+            "value": 12
+          },
+          {
+            "time_s": 0.0398,
+            "value": 12
+          },
+          {
+            "time_s": 0.039900000000000005,
+            "value": 12
+          },
+          {
+            "time_s": 0.04,
+            "value": 12
+          },
+          {
+            "time_s": 0.04,
+            "value": 12
+          },
+          {
+            "time_s": 0.04,
+            "value": 12
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "i:MTR1",
+          "label": "MTR1 armature current",
+          "unit": "A",
+          "positive": "MTR1.positive",
+          "reference": "into positive"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.0001,
+            "value": 0.11531779496401906
+          },
+          {
+            "time_s": 0.0002,
+            "value": 0.22172523402730424
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": 0.31986653930426123
+          },
+          {
+            "time_s": 0.0004,
+            "value": 0.41033961951510145
+          },
+          {
+            "time_s": 0.0005,
+            "value": 0.4936993977906898
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": 0.5704609003719445
+          },
+          {
+            "time_s": 0.0007,
+            "value": 0.6411021233836385
+          },
+          {
+            "time_s": 0.0008,
+            "value": 0.7060666936280698
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": 0.7657663381983808
+          },
+          {
+            "time_s": 0.001,
+            "value": 0.8205831766479327
+          },
+          {
+            "time_s": 0.0011,
+            "value": 0.8708718484651765
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": 0.9169614876874049
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": 0.9591575556365394
+          },
+          {
+            "time_s": 0.0014,
+            "value": 0.9977435419709564
+          },
+          {
+            "time_s": 0.0015,
+            "value": 1.0329825435149194
+          },
+          {
+            "time_s": 0.0016,
+            "value": 1.0651187296473572
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": 1.0943787024007638
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": 1.1209727588353529
+          },
+          {
+            "time_s": 0.0019,
+            "value": 1.145096062710045
+          },
+          {
+            "time_s": 0.002,
+            "value": 1.16692973196736
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": 1.1866418480810292
+          },
+          {
+            "time_s": 0.0022,
+            "value": 1.2043883928805421
+          },
+          {
+            "time_s": 0.0023,
+            "value": 1.2203141180634431
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": 1.2345533522318068
+          },
+          {
+            "time_s": 0.0025,
+            "value": 1.2472307499418156
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": 1.2584619869328302
+          },
+          {
+            "time_s": 0.0027,
+            "value": 1.26835440540299
+          },
+          {
+            "time_s": 0.0028,
+            "value": 1.2770076129205314
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": 1.2845140383021225
+          },
+          {
+            "time_s": 0.003,
+            "value": 1.2909594475501645
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": 1.2964234227188458
+          },
+          {
+            "time_s": 0.0032,
+            "value": 1.3009798063725433
+          },
+          {
+            "time_s": 0.0033,
+            "value": 1.3046971141087806
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": 1.3076389174403298
+          },
+          {
+            "time_s": 0.0035,
+            "value": 1.3098641991661686
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": 1.311427683207989
+          },
+          {
+            "time_s": 0.0037,
+            "value": 1.3123801407469269
+          },
+          {
+            "time_s": 0.0038,
+            "value": 1.312768674363356
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": 1.3126369817602455
+          },
+          {
+            "time_s": 0.004,
+            "value": 1.312025600537013
+          },
+          {
+            "time_s": 0.0041,
+            "value": 1.3109721353754151
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": 1.3095114689011806
+          },
+          {
+            "time_s": 0.0043,
+            "value": 1.3076759573942975
+          },
+          {
+            "time_s": 0.0044,
+            "value": 1.3054956124365935
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": 1.302998269507025
+          },
+          {
+            "time_s": 0.0046,
+            "value": 1.3002097444624956
+          },
+          {
+            "time_s": 0.0047,
+            "value": 1.2971539787746351
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": 1.2938531743304424
+          },
+          {
+            "time_s": 0.0049,
+            "value": 1.2903279185466296
+          },
+          {
+            "time_s": 0.005,
+            "value": 1.2865973004936444
+          },
+          {
+            "time_s": 0.0051,
+            "value": 1.2826790186753312
+          },
+          {
+            "time_s": 0.005200000000000001,
+            "value": 1.2785894810637848
+          },
+          {
+            "time_s": 0.0053,
+            "value": 1.2743438979458683
+          },
+          {
+            "time_s": 0.0054,
+            "value": 1.2699563680978858
+          },
+          {
+            "time_s": 0.0055000000000000005,
+            "value": 1.2654399587677905
+          },
+          {
+            "time_s": 0.0056,
+            "value": 1.260806779909866
+          },
+          {
+            "time_s": 0.0057,
+            "value": 1.2560680530848447
+          },
+          {
+            "time_s": 0.0058000000000000005,
+            "value": 1.2512341754087641
+          },
+          {
+            "time_s": 0.0059,
+            "value": 1.2463147789063123
+          },
+          {
+            "time_s": 0.006,
+            "value": 1.241318785598858
+          },
+          {
+            "time_s": 0.0061,
+            "value": 1.2362544586336386
+          },
+          {
+            "time_s": 0.006200000000000001,
+            "value": 1.2311294497385485
+          },
+          {
+            "time_s": 0.0063,
+            "value": 1.2259508432665478
+          },
+          {
+            "time_s": 0.0064,
+            "value": 1.2207251970747273
+          },
+          {
+            "time_s": 0.006500000000000001,
+            "value": 1.2154585804654696
+          },
+          {
+            "time_s": 0.0066,
+            "value": 1.2101566094008
+          },
+          {
+            "time_s": 0.0067,
+            "value": 1.2048244791858522
+          },
+          {
+            "time_s": 0.0068000000000000005,
+            "value": 1.1994669948033023
+          },
+          {
+            "time_s": 0.006900000000000001,
+            "value": 1.1940885990675525
+          },
+          {
+            "time_s": 0.007,
+            "value": 1.1886933987553208
+          },
+          {
+            "time_s": 0.0071,
+            "value": 1.1832851888580396
+          },
+          {
+            "time_s": 0.007200000000000001,
+            "value": 1.1778674750910139
+          },
+          {
+            "time_s": 0.0073,
+            "value": 1.1724434947845979
+          },
+          {
+            "time_s": 0.0074,
+            "value": 1.167016236273647
+          },
+          {
+            "time_s": 0.007500000000000001,
+            "value": 1.161588456893148
+          },
+          {
+            "time_s": 0.0076,
+            "value": 1.1561626996801817
+          },
+          {
+            "time_s": 0.0077,
+            "value": 1.1507413088751681
+          },
+          {
+            "time_s": 0.0078000000000000005,
+            "value": 1.1453264443086757
+          },
+          {
+            "time_s": 0.0079,
+            "value": 1.1399200947538675
+          },
+          {
+            "time_s": 0.008,
+            "value": 1.1345240903189115
+          },
+          {
+            "time_s": 0.0081,
+            "value": 1.129140113948336
+          },
+          {
+            "time_s": 0.0082,
+            "value": 1.1237697120973555
+          },
+          {
+            "time_s": 0.0083,
+            "value": 1.1184143046386013
+          },
+          {
+            "time_s": 0.008400000000000001,
+            "value": 1.1130751940564012
+          },
+          {
+            "time_s": 0.0085,
+            "value": 1.1077535739798137
+          },
+          {
+            "time_s": 0.0086,
+            "value": 1.1024505371019238
+          },
+          {
+            "time_s": 0.008700000000000001,
+            "value": 1.0971670825295068
+          },
+          {
+            "time_s": 0.0088,
+            "value": 1.0919041226039885
+          },
+          {
+            "time_s": 0.0089,
+            "value": 1.0866624892316967
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 1.0814429397586642
+          },
+          {
+            "time_s": 0.0091,
+            "value": 1.0762461624227107
+          },
+          {
+            "time_s": 0.0092,
+            "value": 1.0710727814131815
+          },
+          {
+            "time_s": 0.009300000000000001,
+            "value": 1.065923361566537
+          },
+          {
+            "time_s": 0.0094,
+            "value": 1.0607984127239611
+          },
+          {
+            "time_s": 0.0095,
+            "value": 1.055698393775273
+          },
+          {
+            "time_s": 0.009600000000000001,
+            "value": 1.0506237164116934
+          },
+          {
+            "time_s": 0.0097,
+            "value": 1.0455747486083788
+          },
+          {
+            "time_s": 0.0098,
+            "value": 1.0405518178561515
+          },
+          {
+            "time_s": 0.0099,
+            "value": 1.0355552141604425
+          },
+          {
+            "time_s": 0.01,
+            "value": 1.0305851928241851
+          },
+          {
+            "time_s": 0.010100000000000001,
+            "value": 1.0256419770301775
+          },
+          {
+            "time_s": 0.0102,
+            "value": 1.0207257602373325
+          },
+          {
+            "time_s": 0.0103,
+            "value": 1.0158367084041882
+          },
+          {
+            "time_s": 0.010400000000000001,
+            "value": 1.0109749620520945
+          },
+          {
+            "time_s": 0.0105,
+            "value": 1.0061406381795985
+          },
+          {
+            "time_s": 0.0106,
+            "value": 1.0013338320387237
+          },
+          {
+            "time_s": 0.010700000000000001,
+            "value": 0.9965546187830707
+          },
+          {
+            "time_s": 0.0108,
+            "value": 0.9918030549969513
+          },
+          {
+            "time_s": 0.0109,
+            "value": 0.9870791801141073
+          },
+          {
+            "time_s": 0.011000000000000001,
+            "value": 0.9823830177339524
+          },
+          {
+            "time_s": 0.0111,
+            "value": 0.9777145768427018
+          },
+          {
+            "time_s": 0.0112,
+            "value": 0.9730738529462283
+          },
+          {
+            "time_s": 0.011300000000000001,
+            "value": 0.9684608291209897
+          },
+          {
+            "time_s": 0.0114,
+            "value": 0.9638754769889192
+          },
+          {
+            "time_s": 0.0115,
+            "value": 0.9593177576217424
+          },
+          {
+            "time_s": 0.011600000000000001,
+            "value": 0.9547876223797991
+          },
+          {
+            "time_s": 0.0117,
+            "value": 0.9502850136900755
+          },
+          {
+            "time_s": 0.0118,
+            "value": 0.9458098657678199
+          },
+          {
+            "time_s": 0.0119,
+            "value": 0.9413621052857981
+          },
+          {
+            "time_s": 0.012,
+            "value": 0.9369416519949547
+          },
+          {
+            "time_s": 0.012100000000000001,
+            "value": 0.9325484192999728
+          },
+          {
+            "time_s": 0.0122,
+            "value": 0.928182314792979
+          },
+          {
+            "time_s": 0.0123,
+            "value": 0.9238432407484022
+          },
+          {
+            "time_s": 0.012400000000000001,
+            "value": 0.9195310945817807
+          },
+          {
+            "time_s": 0.0125,
+            "value": 0.9152457692751124
+          },
+          {
+            "time_s": 0.0126,
+            "value": 0.9109871537711524
+          },
+          {
+            "time_s": 0.012700000000000001,
+            "value": 0.9067551333388961
+          },
+          {
+            "time_s": 0.0128,
+            "value": 0.902549589912318
+          },
+          {
+            "time_s": 0.0129,
+            "value": 0.8983704024042924
+          },
+          {
+            "time_s": 0.013000000000000001,
+            "value": 0.8942174469974818
+          },
+          {
+            "time_s": 0.0131,
+            "value": 0.8900905974138519
+          },
+          {
+            "time_s": 0.0132,
+            "value": 0.8859897251643497
+          },
+          {
+            "time_s": 0.013300000000000001,
+            "value": 0.8819146997801762
+          },
+          {
+            "time_s": 0.0134,
+            "value": 0.8778653890269763
+          },
+          {
+            "time_s": 0.0135,
+            "value": 0.8738416591031772
+          },
+          {
+            "time_s": 0.013600000000000001,
+            "value": 0.8698433748236183
+          },
+          {
+            "time_s": 0.0137,
+            "value": 0.8658703997895311
+          },
+          {
+            "time_s": 0.013800000000000002,
+            "value": 0.8619225965458522
+          },
+          {
+            "time_s": 0.013900000000000001,
+            "value": 0.8579998267267855
+          },
+          {
+            "time_s": 0.014,
+            "value": 0.8541019511904562
+          },
+          {
+            "time_s": 0.014100000000000001,
+            "value": 0.8502288301434471
+          },
+          {
+            "time_s": 0.0142,
+            "value": 0.8463803232559458
+          },
+          {
+            "time_s": 0.0143,
+            "value": 0.8425562897681788
+          },
+          {
+            "time_s": 0.014400000000000001,
+            "value": 0.8387565885887637
+          },
+          {
+            "time_s": 0.0145,
+            "value": 0.8349810783855616
+          },
+          {
+            "time_s": 0.0146,
+            "value": 0.8312296176695713
+          },
+          {
+            "time_s": 0.014700000000000001,
+            "value": 0.8275020648723683
+          },
+          {
+            "time_s": 0.0148,
+            "value": 0.8237982784175564
+          },
+          {
+            "time_s": 0.0149,
+            "value": 0.820118116786661
+          },
+          {
+            "time_s": 0.015000000000000001,
+            "value": 0.8164614385798719
+          },
+          {
+            "time_s": 0.0151,
+            "value": 0.8128281025720028
+          },
+          {
+            "time_s": 0.0152,
+            "value": 0.8092179677640173
+          },
+          {
+            "time_s": 0.015300000000000001,
+            "value": 0.8056308934304417
+          },
+          {
+            "time_s": 0.0154,
+            "value": 0.8020667391629623
+          },
+          {
+            "time_s": 0.0155,
+            "value": 0.7985253649104845
+          },
+          {
+            "time_s": 0.015600000000000001,
+            "value": 0.7950066310159101
+          },
+          {
+            "time_s": 0.015700000000000002,
+            "value": 0.7915103982498716
+          },
+          {
+            "time_s": 0.0158,
+            "value": 0.7880365278416451
+          },
+          {
+            "time_s": 0.0159,
+            "value": 0.7845848815074457
+          },
+          {
+            "time_s": 0.016,
+            "value": 0.7811553214762965
+          },
+          {
+            "time_s": 0.0161,
+            "value": 0.7777477105136505
+          },
+          {
+            "time_s": 0.0162,
+            "value": 0.7743619119429243
+          },
+          {
+            "time_s": 0.016300000000000002,
+            "value": 0.770997789665101
+          },
+          {
+            "time_s": 0.0164,
+            "value": 0.7676552081765421
+          },
+          {
+            "time_s": 0.0165,
+            "value": 0.7643340325851367
+          },
+          {
+            "time_s": 0.0166,
+            "value": 0.7610341286249143
+          },
+          {
+            "time_s": 0.0167,
+            "value": 0.7577553626692313
+          },
+          {
+            "time_s": 0.016800000000000002,
+            "value": 0.7544976017426362
+          },
+          {
+            "time_s": 0.016900000000000002,
+            "value": 0.751260713531513
+          },
+          {
+            "time_s": 0.017,
+            "value": 0.7480445663935886
+          },
+          {
+            "time_s": 0.0171,
+            "value": 0.7448490293663939
+          },
+          {
+            "time_s": 0.0172,
+            "value": 0.7416739721747508
+          },
+          {
+            "time_s": 0.0173,
+            "value": 0.7385192652373619
+          },
+          {
+            "time_s": 0.017400000000000002,
+            "value": 0.7353847796725651
+          },
+          {
+            "time_s": 0.0175,
+            "value": 0.7322703873033205
+          },
+          {
+            "time_s": 0.0176,
+            "value": 0.7291759606614822
+          },
+          {
+            "time_s": 0.0177,
+            "value": 0.7261013729914121
+          },
+          {
+            "time_s": 0.0178,
+            "value": 0.723046498252984
+          },
+          {
+            "time_s": 0.0179,
+            "value": 0.7200112111240236
+          },
+          {
+            "time_s": 0.018000000000000002,
+            "value": 0.7169953870022278
+          },
+          {
+            "time_s": 0.0181,
+            "value": 0.7139989020066029
+          },
+          {
+            "time_s": 0.0182,
+            "value": 0.7110216329784584
+          },
+          {
+            "time_s": 0.0183,
+            "value": 0.7080634574819901
+          },
+          {
+            "time_s": 0.0184,
+            "value": 0.7051242538044844
+          },
+          {
+            "time_s": 0.018500000000000003,
+            "value": 0.7022039009561746
+          },
+          {
+            "time_s": 0.018600000000000002,
+            "value": 0.6993022786697733
+          },
+          {
+            "time_s": 0.0187,
+            "value": 0.6964192673997094
+          },
+          {
+            "time_s": 0.0188,
+            "value": 0.6935547483210907
+          },
+          {
+            "time_s": 0.0189,
+            "value": 0.6907086033284159
+          },
+          {
+            "time_s": 0.019,
+            "value": 0.6878807150340547
+          },
+          {
+            "time_s": 0.019100000000000002,
+            "value": 0.6850709667665148
+          },
+          {
+            "time_s": 0.019200000000000002,
+            "value": 0.6822792425685145
+          },
+          {
+            "time_s": 0.0193,
+            "value": 0.6795054271948747
+          },
+          {
+            "time_s": 0.0194,
+            "value": 0.6767494061102481
+          },
+          {
+            "time_s": 0.0195,
+            "value": 0.6740110654866963
+          },
+          {
+            "time_s": 0.0196,
+            "value": 0.6712902922011303
+          },
+          {
+            "time_s": 0.019700000000000002,
+            "value": 0.668586973832625
+          },
+          {
+            "time_s": 0.0198,
+            "value": 0.6659009986596185
+          },
+          {
+            "time_s": 0.0199,
+            "value": 0.6632322556570073
+          },
+          {
+            "time_s": 0.02,
+            "value": 0.660580634493146
+          },
+          {
+            "time_s": 0.0201,
+            "value": 0.6579460255267611
+          },
+          {
+            "time_s": 0.020200000000000003,
+            "value": 0.6553283198037864
+          },
+          {
+            "time_s": 0.020300000000000002,
+            "value": 0.6527274090541283
+          },
+          {
+            "time_s": 0.0204,
+            "value": 0.6501431856883663
+          },
+          {
+            "time_s": 0.0205,
+            "value": 0.6475755427943974
+          },
+          {
+            "time_s": 0.0206,
+            "value": 0.6450243741340292
+          },
+          {
+            "time_s": 0.0207,
+            "value": 0.6424895741395268
+          },
+          {
+            "time_s": 0.020800000000000003,
+            "value": 0.6399710379101197
+          },
+          {
+            "time_s": 0.020900000000000002,
+            "value": 0.6374686612084731
+          },
+          {
+            "time_s": 0.021,
+            "value": 0.6349823404571276
+          },
+          {
+            "time_s": 0.0211,
+            "value": 0.6325119727349113
+          },
+          {
+            "time_s": 0.0212,
+            "value": 0.6300574557733297
+          },
+          {
+            "time_s": 0.0213,
+            "value": 0.6276186879529342
+          },
+          {
+            "time_s": 0.021400000000000002,
+            "value": 0.6251955682996744
+          },
+          {
+            "time_s": 0.021500000000000002,
+            "value": 0.6227879964812373
+          },
+          {
+            "time_s": 0.0216,
+            "value": 0.6203958728033744
+          },
+          {
+            "time_s": 0.0217,
+            "value": 0.6180190982062211
+          },
+          {
+            "time_s": 0.0218,
+            "value": 0.61565757426061
+          },
+          {
+            "time_s": 0.0219,
+            "value": 0.6133112031643791
+          },
+          {
+            "time_s": 0.022000000000000002,
+            "value": 0.6109798877386804
+          },
+          {
+            "time_s": 0.0221,
+            "value": 0.6086635314242863
+          },
+          {
+            "time_s": 0.0222,
+            "value": 0.6063620382778984
+          },
+          {
+            "time_s": 0.0223,
+            "value": 0.6040753129684596
+          },
+          {
+            "time_s": 0.0224,
+            "value": 0.601803260773471
+          },
+          {
+            "time_s": 0.022500000000000003,
+            "value": 0.5995457875753145
+          },
+          {
+            "time_s": 0.022600000000000002,
+            "value": 0.5973027998575829
+          },
+          {
+            "time_s": 0.0227,
+            "value": 0.5950742047014178
+          },
+          {
+            "time_s": 0.0228,
+            "value": 0.5928599097818578
+          },
+          {
+            "time_s": 0.0229,
+            "value": 0.590659823364196
+          },
+          {
+            "time_s": 0.023,
+            "value": 0.58847385430035
+          },
+          {
+            "time_s": 0.023100000000000002,
+            "value": 0.5863019120252427
+          },
+          {
+            "time_s": 0.023200000000000002,
+            "value": 0.5841439065531966
+          },
+          {
+            "time_s": 0.0233,
+            "value": 0.581999748474341
+          },
+          {
+            "time_s": 0.0234,
+            "value": 0.5798693489510337
+          },
+          {
+            "time_s": 0.0235,
+            "value": 0.5777526197142974
+          },
+          {
+            "time_s": 0.0236,
+            "value": 0.5756494730602706
+          },
+          {
+            "time_s": 0.023700000000000002,
+            "value": 0.5735598218466744
+          },
+          {
+            "time_s": 0.0238,
+            "value": 0.5714835794892958
+          },
+          {
+            "time_s": 0.0239,
+            "value": 0.5694206599584861
+          },
+          {
+            "time_s": 0.024,
+            "value": 0.5673709777756772
+          },
+          {
+            "time_s": 0.0241,
+            "value": 0.5653344480099144
+          },
+          {
+            "time_s": 0.024200000000000003,
+            "value": 0.5633109862744065
+          },
+          {
+            "time_s": 0.024300000000000002,
+            "value": 0.5613005087230936
+          },
+          {
+            "time_s": 0.0244,
+            "value": 0.5593029320472324
+          },
+          {
+            "time_s": 0.0245,
+            "value": 0.5573181734719995
+          },
+          {
+            "time_s": 0.0246,
+            "value": 0.5553461507531132
+          },
+          {
+            "time_s": 0.0247,
+            "value": 0.5533867821734729
+          },
+          {
+            "time_s": 0.024800000000000003,
+            "value": 0.5514399865398173
+          },
+          {
+            "time_s": 0.024900000000000002,
+            "value": 0.5495056831794013
+          },
+          {
+            "time_s": 0.025,
+            "value": 0.5475837919366908
+          },
+          {
+            "time_s": 0.0251,
+            "value": 0.545674233170077
+          },
+          {
+            "time_s": 0.0252,
+            "value": 0.5437769277486086
+          },
+          {
+            "time_s": 0.0253,
+            "value": 0.5418917970487438
+          },
+          {
+            "time_s": 0.025400000000000002,
+            "value": 0.5400187629511197
+          },
+          {
+            "time_s": 0.025500000000000002,
+            "value": 0.5381577478373423
+          },
+          {
+            "time_s": 0.0256,
+            "value": 0.5363086745867937
+          },
+          {
+            "time_s": 0.0257,
+            "value": 0.5344714665734591
+          },
+          {
+            "time_s": 0.0258,
+            "value": 0.5326460476627727
+          },
+          {
+            "time_s": 0.025900000000000003,
+            "value": 0.5308323422084814
+          },
+          {
+            "time_s": 0.026000000000000002,
+            "value": 0.5290302750495295
+          },
+          {
+            "time_s": 0.0261,
+            "value": 0.5272397715069592
+          },
+          {
+            "time_s": 0.0262,
+            "value": 0.5254607573808328
+          },
+          {
+            "time_s": 0.0263,
+            "value": 0.5236931589471711
+          },
+          {
+            "time_s": 0.0264,
+            "value": 0.5219369029549127
+          },
+          {
+            "time_s": 0.026500000000000003,
+            "value": 0.5201919166228905
+          },
+          {
+            "time_s": 0.026600000000000002,
+            "value": 0.518458127636827
+          },
+          {
+            "time_s": 0.0267,
+            "value": 0.5167354641463481
+          },
+          {
+            "time_s": 0.0268,
+            "value": 0.5150238547620161
+          },
+          {
+            "time_s": 0.0269,
+            "value": 0.5133232285523801
+          },
+          {
+            "time_s": 0.027,
+            "value": 0.511633515041045
+          },
+          {
+            "time_s": 0.027100000000000003,
+            "value": 0.5099546442037595
+          },
+          {
+            "time_s": 0.027200000000000002,
+            "value": 0.5082865464655206
+          },
+          {
+            "time_s": 0.0273,
+            "value": 0.5066291526976979
+          },
+          {
+            "time_s": 0.0274,
+            "value": 0.5049823942151751
+          },
+          {
+            "time_s": 0.0275,
+            "value": 0.5033462027735092
+          },
+          {
+            "time_s": 0.027600000000000003,
+            "value": 0.5017205105661078
+          },
+          {
+            "time_s": 0.027700000000000002,
+            "value": 0.5001052502214248
+          },
+          {
+            "time_s": 0.027800000000000002,
+            "value": 0.49850035480017274
+          },
+          {
+            "time_s": 0.0279,
+            "value": 0.49690575779255264
+          },
+          {
+            "time_s": 0.028,
+            "value": 0.4953213931155026
+          },
+          {
+            "time_s": 0.0281,
+            "value": 0.49374719510996257
+          },
+          {
+            "time_s": 0.028200000000000003,
+            "value": 0.4921830985381567
+          },
+          {
+            "time_s": 0.028300000000000002,
+            "value": 0.49062903858089363
+          },
+          {
+            "time_s": 0.0284,
+            "value": 0.4890849508348824
+          },
+          {
+            "time_s": 0.0285,
+            "value": 0.48755077131006697
+          },
+          {
+            "time_s": 0.0286,
+            "value": 0.48602643642697674
+          },
+          {
+            "time_s": 0.0287,
+            "value": 0.484511883014094
+          },
+          {
+            "time_s": 0.028800000000000003,
+            "value": 0.4830070483052382
+          },
+          {
+            "time_s": 0.028900000000000002,
+            "value": 0.4815118699369672
+          },
+          {
+            "time_s": 0.029,
+            "value": 0.4800262859459944
+          },
+          {
+            "time_s": 0.0291,
+            "value": 0.47855023476662273
+          },
+          {
+            "time_s": 0.0292,
+            "value": 0.477083655228195
+          },
+          {
+            "time_s": 0.029300000000000003,
+            "value": 0.47562648655256035
+          },
+          {
+            "time_s": 0.029400000000000003,
+            "value": 0.47417866835155686
+          },
+          {
+            "time_s": 0.029500000000000002,
+            "value": 0.4727401406245104
+          },
+          {
+            "time_s": 0.0296,
+            "value": 0.4713108437557491
+          },
+          {
+            "time_s": 0.0297,
+            "value": 0.46989071851213415
+          },
+          {
+            "time_s": 0.0298,
+            "value": 0.46847970604060596
+          },
+          {
+            "time_s": 0.029900000000000003,
+            "value": 0.4670777478657461
+          },
+          {
+            "time_s": 0.030000000000000002,
+            "value": 0.4656847858873551
+          },
+          {
+            "time_s": 0.030100000000000002,
+            "value": 0.4643007623780453
+          },
+          {
+            "time_s": 0.0302,
+            "value": 0.46292561998084936
+          },
+          {
+            "time_s": 0.0303,
+            "value": 0.4615593017068439
+          },
+          {
+            "time_s": 0.0304,
+            "value": 0.46020175093278864
+          },
+          {
+            "time_s": 0.030500000000000003,
+            "value": 0.4588529113987802
+          },
+          {
+            "time_s": 0.030600000000000002,
+            "value": 0.45751272720592145
+          },
+          {
+            "time_s": 0.0307,
+            "value": 0.4561811428140052
+          },
+          {
+            "time_s": 0.0308,
+            "value": 0.45485810303921304
+          },
+          {
+            "time_s": 0.0309,
+            "value": 0.4535435530518291
+          },
+          {
+            "time_s": 0.031,
+            "value": 0.4522374383739679
+          },
+          {
+            "time_s": 0.031100000000000003,
+            "value": 0.4509397048773172
+          },
+          {
+            "time_s": 0.031200000000000002,
+            "value": 0.4496502987808954
+          },
+          {
+            "time_s": 0.0313,
+            "value": 0.4483691666488227
+          },
+          {
+            "time_s": 0.031400000000000004,
+            "value": 0.4470962553881071
+          },
+          {
+            "time_s": 0.0315,
+            "value": 0.44583151224644463
+          },
+          {
+            "time_s": 0.0316,
+            "value": 0.4445748848100329
+          },
+          {
+            "time_s": 0.0317,
+            "value": 0.44332632100139985
+          },
+          {
+            "time_s": 0.0318,
+            "value": 0.44208576907724517
+          },
+          {
+            "time_s": 0.031900000000000005,
+            "value": 0.4408531776262968
+          },
+          {
+            "time_s": 0.032,
+            "value": 0.43962849556718003
+          },
+          {
+            "time_s": 0.032100000000000004,
+            "value": 0.43841167214630095
+          },
+          {
+            "time_s": 0.0322,
+            "value": 0.43720265693574334
+          },
+          {
+            "time_s": 0.0323,
+            "value": 0.4360013998311788
+          },
+          {
+            "time_s": 0.0324,
+            "value": 0.43480785104979086
+          },
+          {
+            "time_s": 0.0325,
+            "value": 0.4336219611282114
+          },
+          {
+            "time_s": 0.032600000000000004,
+            "value": 0.4324436809204715
+          },
+          {
+            "time_s": 0.0327,
+            "value": 0.4312729615959645
+          },
+          {
+            "time_s": 0.0328,
+            "value": 0.4301097546374225
+          },
+          {
+            "time_s": 0.0329,
+            "value": 0.42895401183890614
+          },
+          {
+            "time_s": 0.033,
+            "value": 0.42780568530380614
+          },
+          {
+            "time_s": 0.033100000000000004,
+            "value": 0.4266647274428594
+          },
+          {
+            "time_s": 0.0332,
+            "value": 0.42553109097217634
+          },
+          {
+            "time_s": 0.0333,
+            "value": 0.4244047289112813
+          },
+          {
+            "time_s": 0.0334,
+            "value": 0.4232855945811662
+          },
+          {
+            "time_s": 0.0335,
+            "value": 0.4221736416023555
+          },
+          {
+            "time_s": 0.033600000000000005,
+            "value": 0.42106882389298456
+          },
+          {
+            "time_s": 0.0337,
+            "value": 0.41997109566689006
+          },
+          {
+            "time_s": 0.033800000000000004,
+            "value": 0.41888041143171195
+          },
+          {
+            "time_s": 0.0339,
+            "value": 0.41779672598700907
+          },
+          {
+            "time_s": 0.034,
+            "value": 0.4167199944223852
+          },
+          {
+            "time_s": 0.0341,
+            "value": 0.41565017211562855
+          },
+          {
+            "time_s": 0.0342,
+            "value": 0.414587214730862
+          },
+          {
+            "time_s": 0.034300000000000004,
+            "value": 0.4135310782167062
+          },
+          {
+            "time_s": 0.0344,
+            "value": 0.4124817188044538
+          },
+          {
+            "time_s": 0.0345,
+            "value": 0.4114390930062555
+          },
+          {
+            "time_s": 0.0346,
+            "value": 0.4104031576133182
+          },
+          {
+            "time_s": 0.0347,
+            "value": 0.40937386969411393
+          },
+          {
+            "time_s": 0.034800000000000005,
+            "value": 0.4083511865926011
+          },
+          {
+            "time_s": 0.0349,
+            "value": 0.40733506592645646
+          },
+          {
+            "time_s": 0.035,
+            "value": 0.4063254655853188
+          },
+          {
+            "time_s": 0.0351,
+            "value": 0.40532234372904385
+          },
+          {
+            "time_s": 0.0352,
+            "value": 0.4043256587859702
+          },
+          {
+            "time_s": 0.035300000000000005,
+            "value": 0.4033353694511969
+          },
+          {
+            "time_s": 0.0354,
+            "value": 0.4023514346848713
+          },
+          {
+            "time_s": 0.035500000000000004,
+            "value": 0.40137381371048814
+          },
+          {
+            "time_s": 0.0356,
+            "value": 0.4004024660132004
+          },
+          {
+            "time_s": 0.0357,
+            "value": 0.3994373513381395
+          },
+          {
+            "time_s": 0.0358,
+            "value": 0.3984784296887477
+          },
+          {
+            "time_s": 0.0359,
+            "value": 0.3975256613251199
+          },
+          {
+            "time_s": 0.036000000000000004,
+            "value": 0.3965790067623574
+          },
+          {
+            "time_s": 0.0361,
+            "value": 0.39563842676893124
+          },
+          {
+            "time_s": 0.0362,
+            "value": 0.39470388236505616
+          },
+          {
+            "time_s": 0.0363,
+            "value": 0.39377533482107574
+          },
+          {
+            "time_s": 0.0364,
+            "value": 0.3928527456558567
+          },
+          {
+            "time_s": 0.036500000000000005,
+            "value": 0.3919360766351949
+          },
+          {
+            "time_s": 0.0366,
+            "value": 0.39102528977023027
+          },
+          {
+            "time_s": 0.0367,
+            "value": 0.3901203473158725
+          },
+          {
+            "time_s": 0.0368,
+            "value": 0.3892212117692372
+          },
+          {
+            "time_s": 0.0369,
+            "value": 0.3883278458680912
+          },
+          {
+            "time_s": 0.037000000000000005,
+            "value": 0.38744021258930883
+          },
+          {
+            "time_s": 0.0371,
+            "value": 0.38655827514733726
+          },
+          {
+            "time_s": 0.037200000000000004,
+            "value": 0.3856819969926719
+          },
+          {
+            "time_s": 0.0373,
+            "value": 0.3848113418103423
+          },
+          {
+            "time_s": 0.0374,
+            "value": 0.38394627351840643
+          },
+          {
+            "time_s": 0.0375,
+            "value": 0.38308675626645605
+          },
+          {
+            "time_s": 0.0376,
+            "value": 0.3822327544341303
+          },
+          {
+            "time_s": 0.037700000000000004,
+            "value": 0.3813842326296403
+          },
+          {
+            "time_s": 0.0378,
+            "value": 0.3805411556883018
+          },
+          {
+            "time_s": 0.0379,
+            "value": 0.3797034886710781
+          },
+          {
+            "time_s": 0.038,
+            "value": 0.37887119686313225
+          },
+          {
+            "time_s": 0.0381,
+            "value": 0.378044245772388
+          },
+          {
+            "time_s": 0.038200000000000005,
+            "value": 0.37722260112810074
+          },
+          {
+            "time_s": 0.0383,
+            "value": 0.3764062288794372
+          },
+          {
+            "time_s": 0.038400000000000004,
+            "value": 0.37559509519406403
+          },
+          {
+            "time_s": 0.0385,
+            "value": 0.3747891664567462
+          },
+          {
+            "time_s": 0.0386,
+            "value": 0.3739884092679533
+          },
+          {
+            "time_s": 0.038700000000000005,
+            "value": 0.37319279044247583
+          },
+          {
+            "time_s": 0.0388,
+            "value": 0.37240227700804984
+          },
+          {
+            "time_s": 0.038900000000000004,
+            "value": 0.37161683620399033
+          },
+          {
+            "time_s": 0.039,
+            "value": 0.37083643547983397
+          },
+          {
+            "time_s": 0.0391,
+            "value": 0.37006104249398947
+          },
+          {
+            "time_s": 0.0392,
+            "value": 0.36929062511239796
+          },
+          {
+            "time_s": 0.0393,
+            "value": 0.3685251514072008
+          },
+          {
+            "time_s": 0.039400000000000004,
+            "value": 0.36776458965541675
+          },
+          {
+            "time_s": 0.0395,
+            "value": 0.3670089083376271
+          },
+          {
+            "time_s": 0.0396,
+            "value": 0.36625807613666933
+          },
+          {
+            "time_s": 0.0397,
+            "value": 0.36551206193633956
+          },
+          {
+            "time_s": 0.0398,
+            "value": 0.3647708348201028
+          },
+          {
+            "time_s": 0.039900000000000005,
+            "value": 0.3640343640698119
+          },
+          {
+            "time_s": 0.04,
+            "value": 0.3633026191644343
+          },
+          {
+            "time_s": 0.04,
+            "value": 0.3633026191644343
+          },
+          {
+            "time_s": 0.04,
+            "value": 0.3633026191644343
+          }
+        ]
+      }
+    ],
+    "run_id": 9,
+    "stale": false,
+    "active_cursor": "a",
+    "readings": []
+  },
+  "scope_visible": true,
+  "mixed": {
+    "motors": [
+      {
+        "id": "MTR1",
+        "model": "elab.power-and-isolation.v1",
+        "state": "running",
+        "voltage_v": 12,
+        "armature_current_a": 0.3633026191644343,
+        "speed_rad_s": 458.3259128720919,
+        "rpm": 4376.690074841927,
+        "back_emf_v": 9.166518257441838,
+        "torque_n_m": 0.007266052383288686,
+        "blocked_rotor_reference_current_a": 1.5,
+        "winding_heat_w": 1.0559103447339038,
+        "drag_power_w": 23.763874437699265,
+        "magnetic_energy_j": 0.0006599439654586898,
+        "rotational_energy_j": 0.1050313212050182,
+        "terminal_power_w": 4.359631429973211
+      }
+    ],
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 9,
+    "electrical_revision": 6,
+    "time_s": 0.04,
+    "nodes_v": {
+      "net:GND.reference": 0,
+      "net:MTR1.positive": 12
+    },
+    "transistors": [],
+    "capacitors": [],
+    "leds": [],
+    "resistors": [],
+    "sources": [
+      {
+        "id": "V1",
+        "current_a": 0.3633026191644343,
+        "voltage_v": 12,
+        "power_w": 4.359631429973211
+      }
+    ],
+    "kcl_residual_a": 1.1102230246251565e-16,
+    "power_residual_w": 3.552713678800501e-15,
+    "numerical_damping_w": 0,
+    "stale": false
+  },
+  "transient": {
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 9,
+    "electrical_revision": 6,
+    "source_id": "V1",
+    "resistor_id": "",
+    "capacitor_id": "",
+    "output_net": "net:MTR1.positive",
+    "time_constant_s": 0,
+    "settings": {
+      "step_s": 0.0001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.01
+    },
+    "input_mode": "auto",
+    "sample": {
+      "state": "network",
+      "time_s": 0.04,
+      "input_v": 12,
+      "voltage_v": 12,
+      "current_a": 0.3633026191644343,
+      "energy_j": 0.10569126517047689
+    },
+    "samples": [
+      {
+        "state": "network",
+        "time_s": 0,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0,
+        "energy_j": 0
+      },
+      {
+        "state": "network",
+        "time_s": 0.0001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.11531779496401906,
+        "energy_j": 6.649779262295109e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.22172523402730424,
+        "energy_j": 0.00024591392072975654
+      },
+      {
+        "state": "network",
+        "time_s": 0.00030000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.31986653930426123,
+        "energy_j": 0.000512070251746438
+      },
+      {
+        "state": "network",
+        "time_s": 0.0004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.41033961951510145,
+        "energy_j": 0.0008433848382504517
+      },
+      {
+        "state": "network",
+        "time_s": 0.0005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4936993977906898,
+        "energy_j": 0.0012221548158230253
+      },
+      {
+        "state": "network",
+        "time_s": 0.0006000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5704609003719445,
+        "energy_j": 0.0016339451341351235
+      },
+      {
+        "state": "network",
+        "time_s": 0.0007,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6411021233836385,
+        "energy_j": 0.002067067939476958
+      },
+      {
+        "state": "network",
+        "time_s": 0.0008,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7060666936280698,
+        "energy_j": 0.002512139571707087
+      },
+      {
+        "state": "network",
+        "time_s": 0.0009000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7657663381983808,
+        "energy_j": 0.002961703982925559
+      },
+      {
+        "state": "network",
+        "time_s": 0.001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8205831766479327,
+        "energy_j": 0.003409912970951115
+      },
+      {
+        "state": "network",
+        "time_s": 0.0011,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8708718484651765,
+        "energy_j": 0.0038522549839663605
+      },
+      {
+        "state": "network",
+        "time_s": 0.0012000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9169614876874049,
+        "energy_j": 0.00428532542453337
+      },
+      {
+        "state": "network",
+        "time_s": 0.0013000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9591575556365394,
+        "energy_j": 0.004706632388302915
+      },
+      {
+        "state": "network",
+        "time_s": 0.0014,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9977435419709564,
+        "energy_j": 0.005114432638151689
+      },
+      {
+        "state": "network",
+        "time_s": 0.0015,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0329825435149194,
+        "energy_j": 0.005507593357989736
+      },
+      {
+        "state": "network",
+        "time_s": 0.0016,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0651187296473572,
+        "energy_j": 0.005885475869132707
+      },
+      {
+        "state": "network",
+        "time_s": 0.0017000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0943787024007638,
+        "energy_j": 0.0062478380406045895
+      },
+      {
+        "state": "network",
+        "time_s": 0.0018000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1209727588353529,
+        "energy_j": 0.006594752595655119
+      },
+      {
+        "state": "network",
+        "time_s": 0.0019,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.145096062710045,
+        "energy_j": 0.006926538921011065
+      },
+      {
+        "state": "network",
+        "time_s": 0.002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.16692973196736,
+        "energy_j": 0.007243706332285105
+      },
+      {
+        "state": "network",
+        "time_s": 0.0021000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1866418480810292,
+        "energy_j": 0.0075469070465882335
+      },
+      {
+        "state": "network",
+        "time_s": 0.0022,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2043883928805421,
+        "energy_j": 0.00783689736865652
+      },
+      {
+        "state": "network",
+        "time_s": 0.0023,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2203141180634431,
+        "energy_j": 0.008114505815668197
+      },
+      {
+        "state": "network",
+        "time_s": 0.0024000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2345533522318068,
+        "energy_j": 0.008380607093517812
+      },
+      {
+        "state": "network",
+        "time_s": 0.0025,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2472307499418156,
+        "energy_j": 0.00863610099803922
+      },
+      {
+        "state": "network",
+        "time_s": 0.0026000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2584619869328302,
+        "energy_j": 0.008881895452320253
+      },
+      {
+        "state": "network",
+        "time_s": 0.0027,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.26835440540299,
+        "energy_j": 0.009118893009090058
+      },
+      {
+        "state": "network",
+        "time_s": 0.0028,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2770076129205314,
+        "energy_j": 0.009347980247989388
+      },
+      {
+        "state": "network",
+        "time_s": 0.0029000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2845140383021225,
+        "energy_j": 0.009570019583765424
+      },
+      {
+        "state": "network",
+        "time_s": 0.003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2909594475501645,
+        "energy_j": 0.009785843075138696
+      },
+      {
+        "state": "network",
+        "time_s": 0.0031000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2964234227188458,
+        "energy_j": 0.009996247887051585
+      },
+      {
+        "state": "network",
+        "time_s": 0.0032,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3009798063725433,
+        "energy_j": 0.010201993112756852
+      },
+      {
+        "state": "network",
+        "time_s": 0.0033,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3046971141087806,
+        "energy_j": 0.010403797708056241
+      },
+      {
+        "state": "network",
+        "time_s": 0.0034000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3076389174403298,
+        "energy_j": 0.010602339329083069
+      },
+      {
+        "state": "network",
+        "time_s": 0.0035,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3098641991661686,
+        "energy_j": 0.01079825389831039
+      },
+      {
+        "state": "network",
+        "time_s": 0.0036000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.311427683207989,
+        "energy_j": 0.010992135751790281
+      },
+      {
+        "state": "network",
+        "time_s": 0.0037,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3123801407469269,
+        "energy_j": 0.011184538244706974
+      },
+      {
+        "state": "network",
+        "time_s": 0.0038,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.312768674363356,
+        "energy_j": 0.011375974712769873
+      },
+      {
+        "state": "network",
+        "time_s": 0.0039000000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3126369817602455,
+        "energy_j": 0.011566919704310322
+      },
+      {
+        "state": "network",
+        "time_s": 0.004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.312025600537013,
+        "energy_j": 0.011757810412629521
+      },
+      {
+        "state": "network",
+        "time_s": 0.0041,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3109721353754151,
+        "energy_j": 0.011949048250562854
+      },
+      {
+        "state": "network",
+        "time_s": 0.004200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3095114689011806,
+        "energy_j": 0.012141000519709722
+      },
+      {
+        "state": "network",
+        "time_s": 0.0043,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3076759573942975,
+        "energy_j": 0.01233400213561361
+      },
+      {
+        "state": "network",
+        "time_s": 0.0044,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3054956124365935,
+        "energy_j": 0.012528357377607827
+      },
+      {
+        "state": "network",
+        "time_s": 0.0045000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.302998269507025,
+        "energy_j": 0.012724341638277787
+      },
+      {
+        "state": "network",
+        "time_s": 0.0046,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.3002097444624956,
+        "energy_j": 0.012922203152709418
+      },
+      {
+        "state": "network",
+        "time_s": 0.0047,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2971539787746351,
+        "energy_j": 0.013122164692048431
+      },
+      {
+        "state": "network",
+        "time_s": 0.0048000000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2938531743304424,
+        "energy_j": 0.013324425209517883
+      },
+      {
+        "state": "network",
+        "time_s": 0.0049,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2903279185466296,
+        "energy_j": 0.01352916143004301
+      },
+      {
+        "state": "network",
+        "time_s": 0.005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2865973004936444,
+        "energy_j": 0.013736529377109074
+      },
+      {
+        "state": "network",
+        "time_s": 0.0051,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2826790186753312,
+        "energy_j": 0.013946665832510554
+      },
+      {
+        "state": "network",
+        "time_s": 0.005200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2785894810637848,
+        "energy_j": 0.014159689726308695
+      },
+      {
+        "state": "network",
+        "time_s": 0.0053,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2743438979458683,
+        "energy_j": 0.014375703455658162
+      },
+      {
+        "state": "network",
+        "time_s": 0.0054,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2699563680978858,
+        "energy_j": 0.01459479413224269
+      },
+      {
+        "state": "network",
+        "time_s": 0.0055000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2654399587677905,
+        "energy_j": 0.014817034758917342
+      },
+      {
+        "state": "network",
+        "time_s": 0.0056,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.260806779909866,
+        "energy_j": 0.015042485336827635
+      },
+      {
+        "state": "network",
+        "time_s": 0.0057,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2560680530848447,
+        "energy_j": 0.015271193904794263
+      },
+      {
+        "state": "network",
+        "time_s": 0.0058000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2512341754087641,
+        "energy_j": 0.015503197513142775
+      },
+      {
+        "state": "network",
+        "time_s": 0.0059,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2463147789063123,
+        "energy_j": 0.01573852313444262
+      },
+      {
+        "state": "network",
+        "time_s": 0.006,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.241318785598858,
+        "energy_j": 0.015977188513818026
+      },
+      {
+        "state": "network",
+        "time_s": 0.0061,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2362544586336386,
+        "energy_j": 0.016219202961620244
+      },
+      {
+        "state": "network",
+        "time_s": 0.006200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2311294497385485,
+        "energy_j": 0.016464568091320207
+      },
+      {
+        "state": "network",
+        "time_s": 0.0063,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2259508432665478,
+        "energy_j": 0.01671327850550342
+      },
+      {
+        "state": "network",
+        "time_s": 0.0064,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2207251970747273,
+        "energy_j": 0.016965322432834933
+      },
+      {
+        "state": "network",
+        "time_s": 0.006500000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2154585804654696,
+        "energy_j": 0.017220682318818698
+      },
+      {
+        "state": "network",
+        "time_s": 0.0066,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2101566094008,
+        "energy_j": 0.017479335373109924
+      },
+      {
+        "state": "network",
+        "time_s": 0.0067,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.2048244791858522,
+        "energy_j": 0.017741254076055427
+      },
+      {
+        "state": "network",
+        "time_s": 0.0068000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1994669948033023,
+        "energy_j": 0.01800640664704157
+      },
+      {
+        "state": "network",
+        "time_s": 0.006900000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1940885990675525,
+        "energy_j": 0.018274757477124034
+      },
+      {
+        "state": "network",
+        "time_s": 0.007,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1886933987553208,
+        "energy_j": 0.018546267528303212
+      },
+      {
+        "state": "network",
+        "time_s": 0.0071,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1832851888580396,
+        "energy_j": 0.018820894701694492
+      },
+      {
+        "state": "network",
+        "time_s": 0.007200000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1778674750910139,
+        "energy_j": 0.019098594176726963
+      },
+      {
+        "state": "network",
+        "time_s": 0.0073,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1724434947845979,
+        "energy_j": 0.019379318723388522
+      },
+      {
+        "state": "network",
+        "time_s": 0.0074,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.167016236273647,
+        "energy_j": 0.019663018989421015
+      },
+      {
+        "state": "network",
+        "time_s": 0.007500000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.161588456893148,
+        "energy_j": 0.01994964376425727
+      },
+      {
+        "state": "network",
+        "time_s": 0.0076,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1561626996801817,
+        "energy_j": 0.020239140221382963
+      },
+      {
+        "state": "network",
+        "time_s": 0.0077,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1507413088751681,
+        "energy_j": 0.02053145414070157
+      },
+      {
+        "state": "network",
+        "time_s": 0.0078000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1453264443086757,
+        "energy_j": 0.020826530112379362
+      },
+      {
+        "state": "network",
+        "time_s": 0.0079,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1399200947538675,
+        "energy_j": 0.021124311723551156
+      },
+      {
+        "state": "network",
+        "time_s": 0.008,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1345240903189115,
+        "energy_j": 0.021424741729175436
+      },
+      {
+        "state": "network",
+        "time_s": 0.0081,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.129140113948336,
+        "energy_j": 0.0217277622082401
+      },
+      {
+        "state": "network",
+        "time_s": 0.0082,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1237697120973555,
+        "energy_j": 0.022033314706437407
+      },
+      {
+        "state": "network",
+        "time_s": 0.0083,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1184143046386013,
+        "energy_j": 0.022341340366348692
+      },
+      {
+        "state": "network",
+        "time_s": 0.008400000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1130751940564012,
+        "energy_j": 0.022651780046105793
+      },
+      {
+        "state": "network",
+        "time_s": 0.0085,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1077535739798137,
+        "energy_j": 0.022964574427426932
+      },
+      {
+        "state": "network",
+        "time_s": 0.0086,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.1024505371019238,
+        "energy_j": 0.023279664113860038
+      },
+      {
+        "state": "network",
+        "time_s": 0.008700000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0971670825295068,
+        "energy_j": 0.023596989720005672
+      },
+      {
+        "state": "network",
+        "time_s": 0.0088,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0919041226039885,
+        "energy_j": 0.023916491952434712
+      },
+      {
+        "state": "network",
+        "time_s": 0.0089,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0866624892316967,
+        "energy_j": 0.024238111682963286
+      },
+      {
+        "state": "network",
+        "time_s": 0.009000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0814429397586642,
+        "energy_j": 0.024561790014897434
+      },
+      {
+        "state": "network",
+        "time_s": 0.0091,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0762461624227107,
+        "energy_j": 0.02488746834281415
+      },
+      {
+        "state": "network",
+        "time_s": 0.0092,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0710727814131815,
+        "energy_j": 0.025215088406402495
+      },
+      {
+        "state": "network",
+        "time_s": 0.009300000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.065923361566537,
+        "energy_j": 0.025544592338848367
+      },
+      {
+        "state": "network",
+        "time_s": 0.0094,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0607984127239611,
+        "energy_j": 0.02587592271020968
+      },
+      {
+        "state": "network",
+        "time_s": 0.0095,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.055698393775273,
+        "energy_j": 0.026209022566194066
+      },
+      {
+        "state": "network",
+        "time_s": 0.009600000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0506237164116934,
+        "energy_j": 0.026543835462719368
+      },
+      {
+        "state": "network",
+        "time_s": 0.0097,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0455747486083788,
+        "energy_j": 0.026880305496607613
+      },
+      {
+        "state": "network",
+        "time_s": 0.0098,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0405518178561515,
+        "energy_j": 0.02721837733273574
+      },
+      {
+        "state": "network",
+        "time_s": 0.0099,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0355552141604425,
+        "energy_j": 0.027557996227940886
+      },
+      {
+        "state": "network",
+        "time_s": 0.01,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0305851928241851,
+        "energy_j": 0.02789910805195464
+      },
+      {
+        "state": "network",
+        "time_s": 0.010100000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0256419770301775,
+        "energy_j": 0.028241659305619022
+      },
+      {
+        "state": "network",
+        "time_s": 0.0102,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0207257602373325,
+        "energy_j": 0.02858559713661669
+      },
+      {
+        "state": "network",
+        "time_s": 0.0103,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0158367084041882,
+        "energy_j": 0.028930869352929545
+      },
+      {
+        "state": "network",
+        "time_s": 0.010400000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0109749620520945,
+        "energy_j": 0.029277424434222585
+      },
+      {
+        "state": "network",
+        "time_s": 0.0105,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0061406381795985,
+        "energy_j": 0.02962521154133424
+      },
+      {
+        "state": "network",
+        "time_s": 0.0106,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 1.0013338320387237,
+        "energy_j": 0.029974180524039728
+      },
+      {
+        "state": "network",
+        "time_s": 0.010700000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9965546187830707,
+        "energy_j": 0.030324281927240553
+      },
+      {
+        "state": "network",
+        "time_s": 0.0108,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9918030549969513,
+        "energy_j": 0.030675466995720716
+      },
+      {
+        "state": "network",
+        "time_s": 0.0109,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9870791801141073,
+        "energy_j": 0.031027687677599232
+      },
+      {
+        "state": "network",
+        "time_s": 0.011000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9823830177339524,
+        "energy_j": 0.03138089662659735
+      },
+      {
+        "state": "network",
+        "time_s": 0.0111,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9777145768427018,
+        "energy_j": 0.03173504720322965
+      },
+      {
+        "state": "network",
+        "time_s": 0.0112,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9730738529462283,
+        "energy_j": 0.03209009347501919
+      },
+      {
+        "state": "network",
+        "time_s": 0.011300000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9684608291209897,
+        "energy_j": 0.03244599021582835
+      },
+      {
+        "state": "network",
+        "time_s": 0.0114,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9638754769889192,
+        "energy_j": 0.03280269290438983
+      },
+      {
+        "state": "network",
+        "time_s": 0.0115,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9593177576217424,
+        "energy_j": 0.03316015772211503
+      },
+      {
+        "state": "network",
+        "time_s": 0.011600000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9547876223797991,
+        "energy_j": 0.033518341550250685
+      },
+      {
+        "state": "network",
+        "time_s": 0.0117,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9502850136900755,
+        "energy_j": 0.03387720196644865
+      },
+      {
+        "state": "network",
+        "time_s": 0.0118,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9458098657678199,
+        "energy_j": 0.034236697240808585
+      },
+      {
+        "state": "network",
+        "time_s": 0.0119,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9413621052857981,
+        "energy_j": 0.03459678633144787
+      },
+      {
+        "state": "network",
+        "time_s": 0.012,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9369416519949547,
+        "energy_j": 0.034957428879648776
+      },
+      {
+        "state": "network",
+        "time_s": 0.012100000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9325484192999728,
+        "energy_j": 0.03531858520462876
+      },
+      {
+        "state": "network",
+        "time_s": 0.0122,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.928182314792979,
+        "energy_j": 0.03568021629797536
+      },
+      {
+        "state": "network",
+        "time_s": 0.0123,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9238432407484022,
+        "energy_j": 0.03604228381778453
+      },
+      {
+        "state": "network",
+        "time_s": 0.012400000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9195310945817807,
+        "energy_j": 0.03640475008253687
+      },
+      {
+        "state": "network",
+        "time_s": 0.0125,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9152457692751124,
+        "energy_j": 0.03676757806474412
+      },
+      {
+        "state": "network",
+        "time_s": 0.0126,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9109871537711524,
+        "energy_j": 0.037130731384395
+      },
+      {
+        "state": "network",
+        "time_s": 0.012700000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.9067551333388961,
+        "energy_j": 0.037494174302227144
+      },
+      {
+        "state": "network",
+        "time_s": 0.0128,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.902549589912318,
+        "energy_j": 0.037857871712849406
+      },
+      {
+        "state": "network",
+        "time_s": 0.0129,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8983704024042924,
+        "energy_j": 0.03822178913773702
+      },
+      {
+        "state": "network",
+        "time_s": 0.013000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8942174469974818,
+        "energy_j": 0.038585892718119526
+      },
+      {
+        "state": "network",
+        "time_s": 0.0131,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8900905974138519,
+        "energy_j": 0.038950149207780185
+      },
+      {
+        "state": "network",
+        "time_s": 0.0132,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8859897251643497,
+        "energy_j": 0.03931452596578362
+      },
+      {
+        "state": "network",
+        "time_s": 0.013300000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8819146997801762,
+        "energy_j": 0.03967899094914706
+      },
+      {
+        "state": "network",
+        "time_s": 0.0134,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8778653890269763,
+        "energy_j": 0.040043512705468805
+      },
+      {
+        "state": "network",
+        "time_s": 0.0135,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8738416591031772,
+        "energy_j": 0.040408060365527035
+      },
+      {
+        "state": "network",
+        "time_s": 0.013600000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8698433748236183,
+        "energy_j": 0.04077260363586001
+      },
+      {
+        "state": "network",
+        "time_s": 0.0137,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8658703997895311,
+        "energy_j": 0.041137112791338165
+      },
+      {
+        "state": "network",
+        "time_s": 0.013800000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8619225965458522,
+        "energy_j": 0.04150155866773767
+      },
+      {
+        "state": "network",
+        "time_s": 0.013900000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8579998267267855,
+        "energy_j": 0.041865912654323795
+      },
+      {
+        "state": "network",
+        "time_s": 0.014,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8541019511904562,
+        "energy_j": 0.042230146686451836
+      },
+      {
+        "state": "network",
+        "time_s": 0.014100000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8502288301434471,
+        "energy_j": 0.04259423323819251
+      },
+      {
+        "state": "network",
+        "time_s": 0.0142,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8463803232559458,
+        "energy_j": 0.04295814531498809
+      },
+      {
+        "state": "network",
+        "time_s": 0.0143,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8425562897681788,
+        "energy_j": 0.04332185644634503
+      },
+      {
+        "state": "network",
+        "time_s": 0.014400000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8387565885887637,
+        "energy_j": 0.04368534067856775
+      },
+      {
+        "state": "network",
+        "time_s": 0.0145,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8349810783855616,
+        "energy_j": 0.04404857256753839
+      },
+      {
+        "state": "network",
+        "time_s": 0.0146,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8312296176695713,
+        "energy_j": 0.04441152717154673
+      },
+      {
+        "state": "network",
+        "time_s": 0.014700000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8275020648723683,
+        "energy_j": 0.04477418004417321
+      },
+      {
+        "state": "network",
+        "time_s": 0.0148,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8237982784175564,
+        "energy_j": 0.04513650722722892
+      },
+      {
+        "state": "network",
+        "time_s": 0.0149,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.820118116786661,
+        "energy_j": 0.045498485243754994
+      },
+      {
+        "state": "network",
+        "time_s": 0.015000000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8164614385798719,
+        "energy_j": 0.04586009109108391
+      },
+      {
+        "state": "network",
+        "time_s": 0.0151,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8128281025720028,
+        "energy_j": 0.04622130223396496
+      },
+      {
+        "state": "network",
+        "time_s": 0.0152,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8092179677640173,
+        "energy_j": 0.04658209659775573
+      },
+      {
+        "state": "network",
+        "time_s": 0.015300000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8056308934304417,
+        "energy_j": 0.046942452561681274
+      },
+      {
+        "state": "network",
+        "time_s": 0.0154,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.8020667391629623,
+        "energy_j": 0.04730234895216204
+      },
+      {
+        "state": "network",
+        "time_s": 0.0155,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7985253649104845,
+        "energy_j": 0.04766176503621238
+      },
+      {
+        "state": "network",
+        "time_s": 0.015600000000000001,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7950066310159101,
+        "energy_j": 0.04802068051490995
+      },
+      {
+        "state": "network",
+        "time_s": 0.015700000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7915103982498716,
+        "energy_j": 0.04837907551693723
+      },
+      {
+        "state": "network",
+        "time_s": 0.0158,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7880365278416451,
+        "energy_j": 0.04873693059219564
+      },
+      {
+        "state": "network",
+        "time_s": 0.0159,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7845848815074457,
+        "energy_j": 0.04909422670549286
+      },
+      {
+        "state": "network",
+        "time_s": 0.016,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7811553214762965,
+        "energy_j": 0.049450945230303675
+      },
+      {
+        "state": "network",
+        "time_s": 0.0161,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7777477105136505,
+        "energy_j": 0.04980706794260444
+      },
+      {
+        "state": "network",
+        "time_s": 0.0162,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7743619119429243,
+        "energy_j": 0.05016257701478175
+      },
+      {
+        "state": "network",
+        "time_s": 0.016300000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.770997789665101,
+        "energy_j": 0.050517455009614735
+      },
+      {
+        "state": "network",
+        "time_s": 0.0164,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7676552081765421,
+        "energy_j": 0.050871684874331455
+      },
+      {
+        "state": "network",
+        "time_s": 0.0165,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7643340325851367,
+        "energy_j": 0.051225249934739196
+      },
+      {
+        "state": "network",
+        "time_s": 0.0166,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7610341286249143,
+        "energy_j": 0.05157813388942808
+      },
+      {
+        "state": "network",
+        "time_s": 0.0167,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7577553626692313,
+        "energy_j": 0.05193032080404817
+      },
+      {
+        "state": "network",
+        "time_s": 0.016800000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7544976017426362,
+        "energy_j": 0.05228179510565967
+      },
+      {
+        "state": "network",
+        "time_s": 0.016900000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.751260713531513,
+        "energy_j": 0.052632541577155495
+      },
+      {
+        "state": "network",
+        "time_s": 0.017,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7480445663935886,
+        "energy_j": 0.05298254535175633
+      },
+      {
+        "state": "network",
+        "time_s": 0.0171,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7448490293663939,
+        "energy_j": 0.053331791907577274
+      },
+      {
+        "state": "network",
+        "time_s": 0.0172,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7416739721747508,
+        "energy_j": 0.05368026706226584
+      },
+      {
+        "state": "network",
+        "time_s": 0.0173,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7385192652373619,
+        "energy_j": 0.05402795696771053
+      },
+      {
+        "state": "network",
+        "time_s": 0.017400000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7353847796725651,
+        "energy_j": 0.05437484810481974
+      },
+      {
+        "state": "network",
+        "time_s": 0.0175,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7322703873033205,
+        "energy_j": 0.05472092727837009
+      },
+      {
+        "state": "network",
+        "time_s": 0.0176,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7291759606614822,
+        "energy_j": 0.0550661816119238
+      },
+      {
+        "state": "network",
+        "time_s": 0.0177,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7261013729914121,
+        "energy_j": 0.055410598542814306
+      },
+      {
+        "state": "network",
+        "time_s": 0.0178,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.723046498252984,
+        "energy_j": 0.055754165817199705
+      },
+      {
+        "state": "network",
+        "time_s": 0.0179,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7200112111240236,
+        "energy_j": 0.056096871485182886
+      },
+      {
+        "state": "network",
+        "time_s": 0.018000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7169953870022278,
+        "energy_j": 0.05643870389599849
+      },
+      {
+        "state": "network",
+        "time_s": 0.0181,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7139989020066029,
+        "energy_j": 0.05677965169326501
+      },
+      {
+        "state": "network",
+        "time_s": 0.0182,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7110216329784584,
+        "energy_j": 0.05711970381030214
+      },
+      {
+        "state": "network",
+        "time_s": 0.0183,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7080634574819901,
+        "energy_j": 0.057458849465512336
+      },
+      {
+        "state": "network",
+        "time_s": 0.0184,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7051242538044844,
+        "energy_j": 0.05779707815782587
+      },
+      {
+        "state": "network",
+        "time_s": 0.018500000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.7022039009561746,
+        "energy_j": 0.05813437966220876
+      },
+      {
+        "state": "network",
+        "time_s": 0.018600000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6993022786697733,
+        "energy_j": 0.058470744025232606
+      },
+      {
+        "state": "network",
+        "time_s": 0.0187,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6964192673997094,
+        "energy_j": 0.05880616156070627
+      },
+      {
+        "state": "network",
+        "time_s": 0.0188,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6935547483210907,
+        "energy_j": 0.05914062284536774
+      },
+      {
+        "state": "network",
+        "time_s": 0.0189,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6907086033284159,
+        "energy_j": 0.059474118714636294
+      },
+      {
+        "state": "network",
+        "time_s": 0.019,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6878807150340547,
+        "energy_j": 0.05980664025842368
+      },
+      {
+        "state": "network",
+        "time_s": 0.019100000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6850709667665148,
+        "energy_j": 0.06013817881700405
+      },
+      {
+        "state": "network",
+        "time_s": 0.019200000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6822792425685145,
+        "energy_j": 0.06046872597694147
+      },
+      {
+        "state": "network",
+        "time_s": 0.0193,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6795054271948747,
+        "energy_j": 0.06079827356707468
+      },
+      {
+        "state": "network",
+        "time_s": 0.0194,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6767494061102481,
+        "energy_j": 0.06112681365455827
+      },
+      {
+        "state": "network",
+        "time_s": 0.0195,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6740110654866963,
+        "energy_j": 0.061454338540959386
+      },
+      {
+        "state": "network",
+        "time_s": 0.0196,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6712902922011303,
+        "energy_j": 0.0617808407584096
+      },
+      {
+        "state": "network",
+        "time_s": 0.019700000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.668586973832625,
+        "energy_j": 0.06210631306581094
+      },
+      {
+        "state": "network",
+        "time_s": 0.0198,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6659009986596185,
+        "energy_j": 0.06243074844509564
+      },
+      {
+        "state": "network",
+        "time_s": 0.0199,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6632322556570073,
+        "energy_j": 0.06275414009753878
+      },
+      {
+        "state": "network",
+        "time_s": 0.02,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.660580634493146,
+        "energy_j": 0.0630764814401231
+      },
+      {
+        "state": "network",
+        "time_s": 0.0201,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6579460255267611,
+        "energy_j": 0.06339776610195542
+      },
+      {
+        "state": "network",
+        "time_s": 0.020200000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6553283198037864,
+        "energy_j": 0.06371798792073409
+      },
+      {
+        "state": "network",
+        "time_s": 0.020300000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6527274090541283,
+        "energy_j": 0.06403714093926637
+      },
+      {
+        "state": "network",
+        "time_s": 0.0204,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6501431856883663,
+        "energy_j": 0.0643552194020359
+      },
+      {
+        "state": "network",
+        "time_s": 0.0205,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6475755427943974,
+        "energy_j": 0.06467221775181851
+      },
+      {
+        "state": "network",
+        "time_s": 0.0206,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6450243741340292,
+        "energy_j": 0.0649881306263469
+      },
+      {
+        "state": "network",
+        "time_s": 0.0207,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6424895741395268,
+        "energy_j": 0.06530295285502244
+      },
+      {
+        "state": "network",
+        "time_s": 0.020800000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6399710379101197,
+        "energy_j": 0.06561667945567458
+      },
+      {
+        "state": "network",
+        "time_s": 0.020900000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6374686612084731,
+        "energy_j": 0.0659293056313661
+      },
+      {
+        "state": "network",
+        "time_s": 0.021,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6349823404571276,
+        "energy_j": 0.06624082676724474
+      },
+      {
+        "state": "network",
+        "time_s": 0.0211,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6325119727349113,
+        "energy_j": 0.06655123842743943
+      },
+      {
+        "state": "network",
+        "time_s": 0.0212,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6300574557733297,
+        "energy_j": 0.06686053635200163
+      },
+      {
+        "state": "network",
+        "time_s": 0.0213,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6276186879529342,
+        "energy_j": 0.06716871645389037
+      },
+      {
+        "state": "network",
+        "time_s": 0.021400000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6251955682996744,
+        "energy_j": 0.06747577481600082
+      },
+      {
+        "state": "network",
+        "time_s": 0.021500000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6227879964812373,
+        "energy_j": 0.06778170768823562
+      },
+      {
+        "state": "network",
+        "time_s": 0.0216,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6203958728033744,
+        "energy_j": 0.06808651148461857
+      },
+      {
+        "state": "network",
+        "time_s": 0.0217,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6180190982062211,
+        "energy_j": 0.06839018278044987
+      },
+      {
+        "state": "network",
+        "time_s": 0.0218,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.61565757426061,
+        "energy_j": 0.06869271830950266
+      },
+      {
+        "state": "network",
+        "time_s": 0.0219,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6133112031643791,
+        "energy_j": 0.06899411496126015
+      },
+      {
+        "state": "network",
+        "time_s": 0.022000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6109798877386804,
+        "energy_j": 0.06929436977819252
+      },
+      {
+        "state": "network",
+        "time_s": 0.0221,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6086635314242863,
+        "energy_j": 0.06959347995307359
+      },
+      {
+        "state": "network",
+        "time_s": 0.0222,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6063620382778984,
+        "energy_j": 0.06989144282633651
+      },
+      {
+        "state": "network",
+        "time_s": 0.0223,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.6040753129684596,
+        "energy_j": 0.07018825588346753
+      },
+      {
+        "state": "network",
+        "time_s": 0.0224,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.601803260773471,
+        "energy_j": 0.07048391675243804
+      },
+      {
+        "state": "network",
+        "time_s": 0.022500000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5995457875753145,
+        "energy_j": 0.07077842320117399
+      },
+      {
+        "state": "network",
+        "time_s": 0.022600000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5973027998575829,
+        "energy_j": 0.0710717731350619
+      },
+      {
+        "state": "network",
+        "time_s": 0.0227,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5950742047014178,
+        "energy_j": 0.07136396459449182
+      },
+      {
+        "state": "network",
+        "time_s": 0.0228,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5928599097818578,
+        "energy_j": 0.07165499575243556
+      },
+      {
+        "state": "network",
+        "time_s": 0.0229,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.590659823364196,
+        "energy_j": 0.07194486491206088
+      },
+      {
+        "state": "network",
+        "time_s": 0.023,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.58847385430035,
+        "energy_j": 0.07223357050438038
+      },
+      {
+        "state": "network",
+        "time_s": 0.023100000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5863019120252427,
+        "energy_j": 0.07252111108593484
+      },
+      {
+        "state": "network",
+        "time_s": 0.023200000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5841439065531966,
+        "energy_j": 0.07280748533651071
+      },
+      {
+        "state": "network",
+        "time_s": 0.0233,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.581999748474341,
+        "energy_j": 0.07309269205689096
+      },
+      {
+        "state": "network",
+        "time_s": 0.0234,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5798693489510337,
+        "energy_j": 0.07337673016663925
+      },
+      {
+        "state": "network",
+        "time_s": 0.0235,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5777526197142974,
+        "energy_j": 0.07365959870191632
+      },
+      {
+        "state": "network",
+        "time_s": 0.0236,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5756494730602706,
+        "energy_j": 0.07394129681332917
+      },
+      {
+        "state": "network",
+        "time_s": 0.023700000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5735598218466744,
+        "energy_j": 0.07422182376381153
+      },
+      {
+        "state": "network",
+        "time_s": 0.0238,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5714835794892958,
+        "energy_j": 0.07450117892653564
+      },
+      {
+        "state": "network",
+        "time_s": 0.0239,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5694206599584861,
+        "energy_j": 0.07477936178285523
+      },
+      {
+        "state": "network",
+        "time_s": 0.024,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5673709777756772,
+        "energy_j": 0.07505637192027884
+      },
+      {
+        "state": "network",
+        "time_s": 0.0241,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5653344480099144,
+        "energy_j": 0.07533220903047293
+      },
+      {
+        "state": "network",
+        "time_s": 0.024200000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5633109862744065,
+        "energy_j": 0.0756068729072951
+      },
+      {
+        "state": "network",
+        "time_s": 0.024300000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5613005087230936,
+        "energy_j": 0.07588036344485619
+      },
+      {
+        "state": "network",
+        "time_s": 0.0244,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5593029320472324,
+        "energy_j": 0.07615268063561123
+      },
+      {
+        "state": "network",
+        "time_s": 0.0245,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5573181734719995,
+        "energy_j": 0.07642382456847914
+      },
+      {
+        "state": "network",
+        "time_s": 0.0246,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5553461507531132,
+        "energy_j": 0.07669379542699017
+      },
+      {
+        "state": "network",
+        "time_s": 0.0247,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5533867821734729,
+        "energy_j": 0.07696259348746108
+      },
+      {
+        "state": "network",
+        "time_s": 0.024800000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5514399865398173,
+        "energy_j": 0.07723021911719762
+      },
+      {
+        "state": "network",
+        "time_s": 0.024900000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5495056831794013,
+        "energy_j": 0.0774966727727241
+      },
+      {
+        "state": "network",
+        "time_s": 0.025,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5475837919366908,
+        "energy_j": 0.07776195499803917
+      },
+      {
+        "state": "network",
+        "time_s": 0.0251,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.545674233170077,
+        "energy_j": 0.07802606642289812
+      },
+      {
+        "state": "network",
+        "time_s": 0.0252,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5437769277486086,
+        "energy_j": 0.07828900776112066
+      },
+      {
+        "state": "network",
+        "time_s": 0.0253,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5418917970487438,
+        "energy_j": 0.07855077980892451
+      },
+      {
+        "state": "network",
+        "time_s": 0.025400000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5400187629511197,
+        "energy_j": 0.07881138344328381
+      },
+      {
+        "state": "network",
+        "time_s": 0.025500000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5381577478373423,
+        "energy_j": 0.07907081962031264
+      },
+      {
+        "state": "network",
+        "time_s": 0.0256,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5363086745867937,
+        "energy_j": 0.07932908937367238
+      },
+      {
+        "state": "network",
+        "time_s": 0.0257,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5344714665734591,
+        "energy_j": 0.079586193813004
+      },
+      {
+        "state": "network",
+        "time_s": 0.0258,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5326460476627727,
+        "energy_j": 0.07984213412238331
+      },
+      {
+        "state": "network",
+        "time_s": 0.025900000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5308323422084814,
+        "energy_j": 0.08009691155880008
+      },
+      {
+        "state": "network",
+        "time_s": 0.026000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5290302750495295,
+        "energy_j": 0.08035052745066028
+      },
+      {
+        "state": "network",
+        "time_s": 0.0261,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5272397715069592,
+        "energy_j": 0.08060298319631082
+      },
+      {
+        "state": "network",
+        "time_s": 0.0262,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5254607573808328,
+        "energy_j": 0.08085428026258704
+      },
+      {
+        "state": "network",
+        "time_s": 0.0263,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5236931589471711,
+        "energy_j": 0.08110442018338233
+      },
+      {
+        "state": "network",
+        "time_s": 0.0264,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5219369029549127,
+        "energy_j": 0.0813534045582394
+      },
+      {
+        "state": "network",
+        "time_s": 0.026500000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5201919166228905,
+        "energy_j": 0.08160123505096342
+      },
+      {
+        "state": "network",
+        "time_s": 0.026600000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.518458127636827,
+        "energy_j": 0.08184791338825605
+      },
+      {
+        "state": "network",
+        "time_s": 0.0267,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5167354641463481,
+        "energy_j": 0.08209344135837078
+      },
+      {
+        "state": "network",
+        "time_s": 0.0268,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5150238547620161,
+        "energy_j": 0.08233782080978874
+      },
+      {
+        "state": "network",
+        "time_s": 0.0269,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5133232285523801,
+        "energy_j": 0.08258105364991494
+      },
+      {
+        "state": "network",
+        "time_s": 0.027,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.511633515041045,
+        "energy_j": 0.08282314184379465
+      },
+      {
+        "state": "network",
+        "time_s": 0.027100000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5099546442037595,
+        "energy_j": 0.08306408741284954
+      },
+      {
+        "state": "network",
+        "time_s": 0.027200000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5082865464655206,
+        "energy_j": 0.08330389243363337
+      },
+      {
+        "state": "network",
+        "time_s": 0.0273,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5066291526976979,
+        "energy_j": 0.08354255903660697
+      },
+      {
+        "state": "network",
+        "time_s": 0.0274,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5049823942151751,
+        "energy_j": 0.0837800894049324
+      },
+      {
+        "state": "network",
+        "time_s": 0.0275,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5033462027735092,
+        "energy_j": 0.08401648577328545
+      },
+      {
+        "state": "network",
+        "time_s": 0.027600000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5017205105661078,
+        "energy_j": 0.084251750426687
+      },
+      {
+        "state": "network",
+        "time_s": 0.027700000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.5001052502214248,
+        "energy_j": 0.08448588569935249
+      },
+      {
+        "state": "network",
+        "time_s": 0.027800000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.49850035480017274,
+        "energy_j": 0.08471889397355922
+      },
+      {
+        "state": "network",
+        "time_s": 0.0279,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.49690575779255264,
+        "energy_j": 0.08495077767853158
+      },
+      {
+        "state": "network",
+        "time_s": 0.028,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4953213931155026,
+        "energy_j": 0.08518153928934366
+      },
+      {
+        "state": "network",
+        "time_s": 0.0281,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.49374719510996257,
+        "energy_j": 0.08541118132583893
+      },
+      {
+        "state": "network",
+        "time_s": 0.028200000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4921830985381567,
+        "energy_j": 0.08563970635156727
+      },
+      {
+        "state": "network",
+        "time_s": 0.028300000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.49062903858089363,
+        "energy_j": 0.08586711697273838
+      },
+      {
+        "state": "network",
+        "time_s": 0.0284,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4890849508348824,
+        "energy_j": 0.08609341583719199
+      },
+      {
+        "state": "network",
+        "time_s": 0.0285,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.48755077131006697,
+        "energy_j": 0.08631860563338405
+      },
+      {
+        "state": "network",
+        "time_s": 0.0286,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.48602643642697674,
+        "energy_j": 0.08654268908938932
+      },
+      {
+        "state": "network",
+        "time_s": 0.0287,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.484511883014094,
+        "energy_j": 0.08676566897191952
+      },
+      {
+        "state": "network",
+        "time_s": 0.028800000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4830070483052382,
+        "energy_j": 0.08698754808535718
+      },
+      {
+        "state": "network",
+        "time_s": 0.028900000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4815118699369672,
+        "energy_j": 0.087208329270805
+      },
+      {
+        "state": "network",
+        "time_s": 0.029,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4800262859459944,
+        "energy_j": 0.08742801540515012
+      },
+      {
+        "state": "network",
+        "time_s": 0.0291,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.47855023476662273,
+        "energy_j": 0.08764660940014346
+      },
+      {
+        "state": "network",
+        "time_s": 0.0292,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.477083655228195,
+        "energy_j": 0.08786411420149405
+      },
+      {
+        "state": "network",
+        "time_s": 0.029300000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.47562648655256035,
+        "energy_j": 0.08808053278797758
+      },
+      {
+        "state": "network",
+        "time_s": 0.029400000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.47417866835155686,
+        "energy_j": 0.08829586817055923
+      },
+      {
+        "state": "network",
+        "time_s": 0.029500000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4727401406245104,
+        "energy_j": 0.08851012339153114
+      },
+      {
+        "state": "network",
+        "time_s": 0.0296,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4713108437557491,
+        "energy_j": 0.08872330152366306
+      },
+      {
+        "state": "network",
+        "time_s": 0.0297,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.46989071851213415,
+        "energy_j": 0.08893540566936758
+      },
+      {
+        "state": "network",
+        "time_s": 0.0298,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.46847970604060596,
+        "energy_j": 0.08914643895987812
+      },
+      {
+        "state": "network",
+        "time_s": 0.029900000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4670777478657461,
+        "energy_j": 0.08935640455444083
+      },
+      {
+        "state": "network",
+        "time_s": 0.030000000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4656847858873551,
+        "energy_j": 0.0895653056395192
+      },
+      {
+        "state": "network",
+        "time_s": 0.030100000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4643007623780453,
+        "energy_j": 0.08977314542801222
+      },
+      {
+        "state": "network",
+        "time_s": 0.0302,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.46292561998084936,
+        "energy_j": 0.08997992715848478
+      },
+      {
+        "state": "network",
+        "time_s": 0.0303,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4615593017068439,
+        "energy_j": 0.09018565409441094
+      },
+      {
+        "state": "network",
+        "time_s": 0.0304,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.46020175093278864,
+        "energy_j": 0.09039032952342953
+      },
+      {
+        "state": "network",
+        "time_s": 0.030500000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4588529113987802,
+        "energy_j": 0.09059395675661217
+      },
+      {
+        "state": "network",
+        "time_s": 0.030600000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.45751272720592145,
+        "energy_j": 0.09079653912774321
+      },
+      {
+        "state": "network",
+        "time_s": 0.0307,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4561811428140052,
+        "energy_j": 0.09099807999261163
+      },
+      {
+        "state": "network",
+        "time_s": 0.0308,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.45485810303921304,
+        "energy_j": 0.09119858272831463
+      },
+      {
+        "state": "network",
+        "time_s": 0.0309,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4535435530518291,
+        "energy_j": 0.09139805073257287
+      },
+      {
+        "state": "network",
+        "time_s": 0.031,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4522374383739679,
+        "energy_j": 0.09159648742305722
+      },
+      {
+        "state": "network",
+        "time_s": 0.031100000000000003,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4509397048773172,
+        "energy_j": 0.0917938962367263
+      },
+      {
+        "state": "network",
+        "time_s": 0.031200000000000002,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4496502987808954,
+        "energy_j": 0.0919902806291758
+      },
+      {
+        "state": "network",
+        "time_s": 0.0313,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4483691666488227,
+        "energy_j": 0.09218564407399792
+      },
+      {
+        "state": "network",
+        "time_s": 0.031400000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4470962553881071,
+        "energy_j": 0.09237999006215236
+      },
+      {
+        "state": "network",
+        "time_s": 0.0315,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.44583151224644463,
+        "energy_j": 0.0925733221013474
+      },
+      {
+        "state": "network",
+        "time_s": 0.0316,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4445748848100329,
+        "energy_j": 0.09276564371543167
+      },
+      {
+        "state": "network",
+        "time_s": 0.0317,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.44332632100139985,
+        "energy_j": 0.09295695844379592
+      },
+      {
+        "state": "network",
+        "time_s": 0.0318,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.44208576907724517,
+        "energy_j": 0.09314726984078556
+      },
+      {
+        "state": "network",
+        "time_s": 0.031900000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4408531776262968,
+        "energy_j": 0.09333658147512255
+      },
+      {
+        "state": "network",
+        "time_s": 0.032,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.43962849556718003,
+        "energy_j": 0.09352489692933774
+      },
+      {
+        "state": "network",
+        "time_s": 0.032100000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.43841167214630095,
+        "energy_j": 0.09371221979921232
+      },
+      {
+        "state": "network",
+        "time_s": 0.0322,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.43720265693574334,
+        "energy_j": 0.0938985536932294
+      },
+      {
+        "state": "network",
+        "time_s": 0.0323,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4360013998311788,
+        "energy_j": 0.0940839022320349
+      },
+      {
+        "state": "network",
+        "time_s": 0.0324,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.43480785104979086,
+        "energy_j": 0.09426826904790761
+      },
+      {
+        "state": "network",
+        "time_s": 0.0325,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4336219611282114,
+        "energy_j": 0.09445165778423843
+      },
+      {
+        "state": "network",
+        "time_s": 0.032600000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4324436809204715,
+        "energy_j": 0.09463407209501891
+      },
+      {
+        "state": "network",
+        "time_s": 0.0327,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4312729615959645,
+        "energy_j": 0.09481551564433838
+      },
+      {
+        "state": "network",
+        "time_s": 0.0328,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4301097546374225,
+        "energy_j": 0.09499599210589016
+      },
+      {
+        "state": "network",
+        "time_s": 0.0329,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.42895401183890614,
+        "energy_j": 0.09517550516248627
+      },
+      {
+        "state": "network",
+        "time_s": 0.033,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.42780568530380614,
+        "energy_j": 0.09535405850558062
+      },
+      {
+        "state": "network",
+        "time_s": 0.033100000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4266647274428594,
+        "energy_j": 0.09553165583480064
+      },
+      {
+        "state": "network",
+        "time_s": 0.0332,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.42553109097217634,
+        "energy_j": 0.09570830085748745
+      },
+      {
+        "state": "network",
+        "time_s": 0.0333,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4244047289112813,
+        "energy_j": 0.0958839972882438
+      },
+      {
+        "state": "network",
+        "time_s": 0.0334,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4232855945811662,
+        "energy_j": 0.09605874884849037
+      },
+      {
+        "state": "network",
+        "time_s": 0.0335,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4221736416023555,
+        "energy_j": 0.0962325592660298
+      },
+      {
+        "state": "network",
+        "time_s": 0.033600000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.42106882389298456,
+        "energy_j": 0.09640543227461862
+      },
+      {
+        "state": "network",
+        "time_s": 0.0337,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.41997109566689006,
+        "energy_j": 0.09657737161354689
+      },
+      {
+        "state": "network",
+        "time_s": 0.033800000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.41888041143171195,
+        "energy_j": 0.09674838102722544
+      },
+      {
+        "state": "network",
+        "time_s": 0.0339,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.41779672598700907,
+        "energy_j": 0.09691846426478042
+      },
+      {
+        "state": "network",
+        "time_s": 0.034,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4167199944223852,
+        "energy_j": 0.09708762507965545
+      },
+      {
+        "state": "network",
+        "time_s": 0.0341,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.41565017211562855,
+        "energy_j": 0.09725586722922097
+      },
+      {
+        "state": "network",
+        "time_s": 0.0342,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.414587214730862,
+        "energy_j": 0.09742319447439059
+      },
+      {
+        "state": "network",
+        "time_s": 0.034300000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4135310782167062,
+        "energy_j": 0.09758961057924466
+      },
+      {
+        "state": "network",
+        "time_s": 0.0344,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4124817188044538,
+        "energy_j": 0.09775511931066054
+      },
+      {
+        "state": "network",
+        "time_s": 0.0345,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4114390930062555,
+        "energy_j": 0.09791972443795027
+      },
+      {
+        "state": "network",
+        "time_s": 0.0346,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4104031576133182,
+        "energy_j": 0.09808342973250417
+      },
+      {
+        "state": "network",
+        "time_s": 0.0347,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.40937386969411393,
+        "energy_j": 0.09824623896744163
+      },
+      {
+        "state": "network",
+        "time_s": 0.034800000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4083511865926011,
+        "energy_j": 0.09840815591726848
+      },
+      {
+        "state": "network",
+        "time_s": 0.0349,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.40733506592645646,
+        "energy_j": 0.0985691843575404
+      },
+      {
+        "state": "network",
+        "time_s": 0.035,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4063254655853188,
+        "energy_j": 0.09872932806453315
+      },
+      {
+        "state": "network",
+        "time_s": 0.0351,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.40532234372904385,
+        "energy_j": 0.09888859081491841
+      },
+      {
+        "state": "network",
+        "time_s": 0.0352,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4043256587859702,
+        "energy_j": 0.09904697638544663
+      },
+      {
+        "state": "network",
+        "time_s": 0.035300000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4033353694511969,
+        "energy_j": 0.09920448855263525
+      },
+      {
+        "state": "network",
+        "time_s": 0.0354,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4023514346848713,
+        "energy_j": 0.09936113109246321
+      },
+      {
+        "state": "network",
+        "time_s": 0.035500000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.40137381371048814,
+        "energy_j": 0.09951690778007118
+      },
+      {
+        "state": "network",
+        "time_s": 0.0356,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.4004024660132004,
+        "energy_j": 0.09967182238946798
+      },
+      {
+        "state": "network",
+        "time_s": 0.0357,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3994373513381395,
+        "energy_j": 0.09982587869324204
+      },
+      {
+        "state": "network",
+        "time_s": 0.0358,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3984784296887477,
+        "energy_j": 0.0999790804622792
+      },
+      {
+        "state": "network",
+        "time_s": 0.0359,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3975256613251199,
+        "energy_j": 0.10013143146548564
+      },
+      {
+        "state": "network",
+        "time_s": 0.036000000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3965790067623574,
+        "energy_j": 0.10028293546951626
+      },
+      {
+        "state": "network",
+        "time_s": 0.0361,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.39563842676893124,
+        "energy_j": 0.10043359623850867
+      },
+      {
+        "state": "network",
+        "time_s": 0.0362,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.39470388236505616,
+        "energy_j": 0.1005834175338222
+      },
+      {
+        "state": "network",
+        "time_s": 0.0363,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.39377533482107574,
+        "energy_j": 0.10073240311378248
+      },
+      {
+        "state": "network",
+        "time_s": 0.0364,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3928527456558567,
+        "energy_j": 0.10088055673343074
+      },
+      {
+        "state": "network",
+        "time_s": 0.036500000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3919360766351949,
+        "energy_j": 0.10102788214427859
+      },
+      {
+        "state": "network",
+        "time_s": 0.0366,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.39102528977023027,
+        "energy_j": 0.10117438309406743
+      },
+      {
+        "state": "network",
+        "time_s": 0.0367,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3901203473158725,
+        "energy_j": 0.10132006332653293
+      },
+      {
+        "state": "network",
+        "time_s": 0.0368,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3892212117692372,
+        "energy_j": 0.10146492658117434
+      },
+      {
+        "state": "network",
+        "time_s": 0.0369,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3883278458680912,
+        "energy_j": 0.10160897659302877
+      },
+      {
+        "state": "network",
+        "time_s": 0.037000000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.38744021258930883,
+        "energy_j": 0.10175221709244944
+      },
+      {
+        "state": "network",
+        "time_s": 0.0371,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.38655827514733726,
+        "energy_j": 0.10189465180488957
+      },
+      {
+        "state": "network",
+        "time_s": 0.037200000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3856819969926719,
+        "energy_j": 0.10203628445069005
+      },
+      {
+        "state": "network",
+        "time_s": 0.0373,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3848113418103423,
+        "energy_j": 0.1021771187448717
+      },
+      {
+        "state": "network",
+        "time_s": 0.0374,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.38394627351840643,
+        "energy_j": 0.10231715839693241
+      },
+      {
+        "state": "network",
+        "time_s": 0.0375,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.38308675626645605,
+        "energy_j": 0.10245640711064793
+      },
+      {
+        "state": "network",
+        "time_s": 0.0376,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3822327544341303,
+        "energy_j": 0.10259486858387752
+      },
+      {
+        "state": "network",
+        "time_s": 0.037700000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3813842326296403,
+        "energy_j": 0.1027325465083734
+      },
+      {
+        "state": "network",
+        "time_s": 0.0378,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3805411556883018,
+        "energy_j": 0.10286944456959465
+      },
+      {
+        "state": "network",
+        "time_s": 0.0379,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3797034886710781,
+        "energy_j": 0.10300556644652498
+      },
+      {
+        "state": "network",
+        "time_s": 0.038,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37887119686313225,
+        "energy_j": 0.10314091581149457
+      },
+      {
+        "state": "network",
+        "time_s": 0.0381,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.378044245772388,
+        "energy_j": 0.10327549633000585
+      },
+      {
+        "state": "network",
+        "time_s": 0.038200000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37722260112810074,
+        "energy_j": 0.1034093116605633
+      },
+      {
+        "state": "network",
+        "time_s": 0.0383,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3764062288794372,
+        "energy_j": 0.10354236545450698
+      },
+      {
+        "state": "network",
+        "time_s": 0.038400000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37559509519406403,
+        "energy_j": 0.1036746613558497
+      },
+      {
+        "state": "network",
+        "time_s": 0.0385,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3747891664567462,
+        "energy_j": 0.10380620300111809
+      },
+      {
+        "state": "network",
+        "time_s": 0.0386,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3739884092679533,
+        "energy_j": 0.10393699401919745
+      },
+      {
+        "state": "network",
+        "time_s": 0.038700000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37319279044247583,
+        "energy_j": 0.10406703803117973
+      },
+      {
+        "state": "network",
+        "time_s": 0.0388,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37240227700804984,
+        "energy_j": 0.10419633865021559
+      },
+      {
+        "state": "network",
+        "time_s": 0.038900000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37161683620399033,
+        "energy_j": 0.10432489948136958
+      },
+      {
+        "state": "network",
+        "time_s": 0.039,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37083643547983397,
+        "energy_j": 0.10445272412147888
+      },
+      {
+        "state": "network",
+        "time_s": 0.0391,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.37006104249398947,
+        "energy_j": 0.10457981615901538
+      },
+      {
+        "state": "network",
+        "time_s": 0.0392,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.36929062511239796,
+        "energy_j": 0.10470617917395122
+      },
+      {
+        "state": "network",
+        "time_s": 0.0393,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3685251514072008,
+        "energy_j": 0.10483181673762734
+      },
+      {
+        "state": "network",
+        "time_s": 0.039400000000000004,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.36776458965541675,
+        "energy_j": 0.10495673241262567
+      },
+      {
+        "state": "network",
+        "time_s": 0.0395,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3670089083376271,
+        "energy_j": 0.10508092975264383
+      },
+      {
+        "state": "network",
+        "time_s": 0.0396,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.36625807613666933,
+        "energy_j": 0.1052044123023737
+      },
+      {
+        "state": "network",
+        "time_s": 0.0397,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.36551206193633956,
+        "energy_j": 0.1053271835973825
+      },
+      {
+        "state": "network",
+        "time_s": 0.0398,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3647708348201028,
+        "energy_j": 0.10544924716399712
+      },
+      {
+        "state": "network",
+        "time_s": 0.039900000000000005,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3640343640698119,
+        "energy_j": 0.10557060651919159
+      },
+      {
+        "state": "network",
+        "time_s": 0.04,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3633026191644343,
+        "energy_j": 0.10569126517047689
+      },
+      {
+        "state": "network",
+        "time_s": 0.04,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3633026191644343,
+        "energy_j": 0.10569126517047689
+      },
+      {
+        "state": "network",
+        "time_s": 0.04,
+        "input_v": 12,
+        "voltage_v": 12,
+        "current_a": 0.3633026191644343,
+        "energy_j": 0.10569126517047689
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      },
+      {
+        "time_s": 0.04,
+        "mode": "motor-load:MTR1:0.00010312756121249225"
+      }
+    ],
+    "stale": false
+  },
+  "transient_settings": {
+    "step_s": 0.0001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.01
+  },
+  "document": {
+    "preferences_dirty": false,
+    "schematic_dirty": true,
+    "recordings_dirty": false,
+    "recording_count": 0,
+    "path": "",
+    "dirty": true,
+    "format_version": 4,
+    "generation": 3
+  },
+  "command_revision": 18,
+  "revision": 46,
+  "electrical_revision": 6,
+  "circuit": {
+    "voltage_v": 12,
+    "resistance_ohm": 1,
+    "connected": true
+  },
+  "components": [
+    {
+      "id": "V1",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -250,
+        "y": 0
+      },
+      "value": 12,
+      "unit": "V",
+      "model": "ideal-dc.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GND",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": -250,
+        "y": 200
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    },
+    {
+      "power": {
+        "motor": {
+          "locked_rotor": false,
+          "armature_resistance_ohm": 8,
+          "armature_inductance_h": 0.01,
+          "ke_v_s_per_rad": 0.02,
+          "inertia_kg_m2": 1e-06,
+          "friction_n_m_s_per_rad": 1e-05,
+          "load_n_m_s_per_rad": 0.00010312756121249225
+        }
+      },
+      "id": "MTR1",
+      "kind": "dc-motor",
+      "name": "Brushed DC motor",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": 150,
+        "y": 0
+      },
+      "value": 0,
+      "model": "elab.power-and-isolation.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GNDM",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": 150,
+        "y": 200
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "wires": [
+    {
+      "id": "W1",
+      "from": "V1.negative",
+      "to": "GND.reference",
+      "connected": true
+    },
+    {
+      "id": "W2",
+      "from": "V1.positive",
+      "to": "MTR1.positive",
+      "connected": true
+    },
+    {
+      "id": "W3",
+      "from": "MTR1.negative",
+      "to": "GNDM.reference",
+      "connected": true
+    }
+  ],
+  "nets": [
+    {
+      "id": "net:GND.reference",
+      "terminals": [
+        "GND.reference",
+        "GNDM.reference",
+        "MTR1.negative",
+        "V1.negative"
+      ]
+    },
+    {
+      "id": "net:MTR1.positive",
+      "terminals": [
+        "MTR1.positive",
+        "V1.positive"
+      ]
+    }
+  ],
+  "drawing": {
+    "tool": "select",
+    "kind": "dc-source",
+    "position": {
+      "x": -200,
+      "y": 0
+    },
+    "wire_start": "",
+    "from": "",
+    "to": "",
+    "value": ""
+  },
+  "model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "selected": "MTR1",
+  "view": {
+    "center": {
+      "x": -109.75,
+      "y": 84
+    },
+    "zoom": 1.5292553191471503
+  },
+  "status": "paused",
+  "analysis": "RLC network transient",
+  "paused": true,
+  "run_id": 9,
+  "diagnostics": [],
+  "can_undo": true,
+  "can_redo": false,
+  "last_actor": "user",
+  "closed": false
+}

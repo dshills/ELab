@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "qualification_scope": "New power/isolation/AC controls, electrical readings and repaired scope paint; not an assertion that every UI gesture is qualified",
+  "closed_normally": true,
+  "owned_sessions_running": false,
+  "private_endpoints_removed": true,
+  "core_controls_receipt": "native-checks-248.json",
+  "core_app": "ELab 0.190.1 /248",
+  "core_source_commit": "cc3a80155b72bbc3cb6d61143b5e8e881470eb6a",
+  "final_app": "ELab 0.190.2 /249",
+  "final_source_commit": "4ce8e7e336e37addeaff677e1aa5b3074f7d4514",
+  "final_scope": {
+    "amp_level_current_labels_complete": true,
+    "native_click_at_corrected_plot_right_s": 0.04,
+    "snapshot": "states249/native-final.json",
+    "image": "ui249/motor-axis-cursor-final.png",
+    "clean_saved_fixture": true
+  },
+  "themes_exercised": [
+    "apollo",
+    "dark",
+    "light"
+  ],
+  "method": "Actual packaged executable, fixed argument-only launcher; CUA pointer/keyboard input and matching public agent snapshot checks",
+  "method_limitations": [
+    "First CUA launcher lookup stalled several hours because the exec target registered as com.dshills.elab rather than the launcher ID; actual app was found and reused",
+    "Terminal is blocked by CUA; no Terminal app was launched",
+    "Clipboard helper reported conflict but inspection showed the intended 50, which was then committed with Return",
+    "Screenshots contain a persistent automation tooltip overlay; no ordinary-hardware conclusion",
+    "Not qualified: targeted CUA thumb gestures select a list row; no conclusion about ordinary hardware dragging"
+  ],
+  "window_resized": false,
+  "user_projects_untouched": true,
+  "shutdown_verification": "CUA running-app inventory contains no ELab; both owned private socket files absent after normal Command-Q. Synthetic projects saved before closing."
+}

@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "app_version": "0.190.2",
+  "build_number": 249,
+  "source_commit": "4ce8e7e336e37addeaff677e1aa5b3074f7d4514",
+  "suite_results": {
+    "root": {
+      "log": "root-race-final.jsonl",
+      "passed": true,
+      "top_level_passed": 835,
+      "passed_including_subtests": 1858,
+      "failed": [],
+      "skipped": [],
+      "packages": [
+        {
+          "package": "github.com/dshills/elab/cmd/elab-conformance",
+          "elapsed": 3.529
+        },
+        {
+          "package": "github.com/dshills/elab/internal/conformance",
+          "elapsed": 117.814
+        },
+        {
+          "package": "github.com/dshills/elab/internal/printspool",
+          "elapsed": 1.2690000000000001
+        },
+        {
+          "package": "github.com/dshills/elab/internal/schematicpdf",
+          "elapsed": 1.2650000000000001
+        },
+        {
+          "package": "github.com/dshills/elab/internal/uiaudit",
+          "elapsed": 1.499
+        },
+        {
+          "package": "github.com/dshills/elab/transport",
+          "elapsed": 1.433
+        },
+        {
+          "package": "github.com/dshills/elab/workbench",
+          "elapsed": 197.687
+        }
+      ]
+    },
+    "desktop_standard": {
+      "log": "desktop-race-final.jsonl",
+      "passed": true,
+      "top_level_passed": 321,
+      "passed_including_subtests": 744,
+      "failed": [],
+      "skipped": [],
+      "packages": [
+        {
+          "package": "github.com/dshills/elab/desktop",
+          "elapsed": 627.99
+        }
+      ]
+    },
+    "desktop_mounted": {
+      "log": "desktop-offscreen-race-final.jsonl",
+      "passed": true,
+      "top_level_passed": 437,
+      "passed_including_subtests": 1288,
+      "failed": [],
+      "skipped": [],
+      "packages": [
+        {
+          "package": "github.com/dshills/elab/desktop",
+          "elapsed": 932.227
+        }
+      ]
+    }
+  },
+  "root_suite_source_commit": "d691c086",
+  "desktop_suites_source_commit": "0baca004",
+  "post_suite_change_scope": "Seven error/help/accessibility strings, then motor parameters and bounded parts-list layout in schematic exports; focused AC/DC/discovery/native, export/render/ownership and lint checks afterward. Simulation/models unchanged; scope paint additionally reserves the measured width of amp-level current labels",
+  "packaged_agent_examples": 10,
+  "components": 48,
+  "public_commands": 175,
+  "test_process_GOMAXPROCS": 2,
+  "desktop_runner_timeout": "30m",
+  "production_limits_unchanged": true,
+  "preserved_alpha_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+  "qualified_release_promoted": false,
+  "native_source_inventory": {
+    "sites": 427,
+    "routes": 143,
+    "production_sources": 87
+  },
+  "native": "native-checks.json",
+  "packaged_agent": "final-stdio.json",
+  "model_contracts": [
+    "../../batteries.md",
+    "../../dc-motors.md",
+    "../../ac-frequency-sweeps.md",
+    "../../optocouplers.md",
+    "../../transformers.md"
+  ]
+}

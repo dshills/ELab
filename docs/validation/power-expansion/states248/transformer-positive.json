@@ -1,0 +1,2728 @@
+{
+  "inspector_section": "component",
+  "workspace_layout": {
+    "schematic_fraction": 0.65
+  },
+  "viewport": {
+    "width_px": 1198,
+    "height_px": 579,
+    "registered": true,
+    "following": true
+  },
+  "pulse_timings": [],
+  "verification_input_modes": [
+    "auto",
+    "high",
+    "low"
+  ],
+  "live_input_modes": [
+    "auto",
+    "high",
+    "low"
+  ],
+  "dc_sweep": {
+    "settings": {
+      "component_id": "VIN",
+      "parameter": "voltage",
+      "start": "0 V",
+      "stop": "5 V",
+      "points": 51
+    },
+    "targets": [
+      {
+        "component_id": "VIN",
+        "parameter": "voltage",
+        "label": "VIN \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      {
+        "component_id": "VIN",
+        "parameter": "frequency",
+        "label": "VIN \u00b7 AC frequency / 1 V excitation",
+        "unit": "Hz",
+        "minimum": 0.01,
+        "maximum": 1000000000
+      },
+      {
+        "component_id": "RL",
+        "parameter": "resistance",
+        "label": "RL \u00b7 Resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000
+      }
+    ],
+    "available_probes": [
+      {
+        "id": "v:VIN.positive",
+        "label": "VIN.positive / ground",
+        "unit": "V",
+        "positive": "VIN.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VIN.negative",
+        "label": "VIN.negative / ground",
+        "unit": "V",
+        "positive": "VIN.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VIN",
+        "label": "VIN voltage",
+        "unit": "V",
+        "positive": "VIN.positive",
+        "reference": "VIN.negative"
+      },
+      {
+        "id": "i:VIN",
+        "label": "VIN delivered current",
+        "unit": "A",
+        "positive": "VIN.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GNDIN.reference",
+        "label": "GNDIN.reference / ground",
+        "unit": "V",
+        "positive": "GNDIN.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.primary1",
+        "label": "T1.primary1 / ground",
+        "unit": "V",
+        "positive": "T1.primary1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.primary2",
+        "label": "T1.primary2 / ground",
+        "unit": "V",
+        "positive": "T1.primary2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.secondary1",
+        "label": "T1.secondary1 / ground",
+        "unit": "V",
+        "positive": "T1.secondary1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.secondary2",
+        "label": "T1.secondary2 / ground",
+        "unit": "V",
+        "positive": "T1.secondary2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1",
+        "label": "T1 primary voltage",
+        "unit": "V",
+        "positive": "T1.primary1",
+        "reference": "T1.primary2"
+      },
+      {
+        "id": "v:T1.secondary",
+        "label": "T1 secondary voltage",
+        "unit": "V",
+        "positive": "T1.secondary1",
+        "reference": "T1.secondary2"
+      },
+      {
+        "id": "i:T1.primary1",
+        "label": "T1.primary1 current into winding",
+        "unit": "A",
+        "positive": "T1.primary1",
+        "reference": "into winding"
+      },
+      {
+        "id": "i:T1.primary2",
+        "label": "T1.primary2 current into winding",
+        "unit": "A",
+        "positive": "T1.primary2",
+        "reference": "into winding"
+      },
+      {
+        "id": "i:T1.secondary1",
+        "label": "T1.secondary1 current into winding",
+        "unit": "A",
+        "positive": "T1.secondary1",
+        "reference": "into winding"
+      },
+      {
+        "id": "i:T1.secondary2",
+        "label": "T1.secondary2 current into winding",
+        "unit": "A",
+        "positive": "T1.secondary2",
+        "reference": "into winding"
+      },
+      {
+        "id": "v:GNDP.reference",
+        "label": "GNDP.reference / ground",
+        "unit": "V",
+        "positive": "GNDP.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL.1",
+        "label": "RL.1 / ground",
+        "unit": "V",
+        "positive": "RL.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL.2",
+        "label": "RL.2 / ground",
+        "unit": "V",
+        "positive": "RL.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL",
+        "label": "RL voltage",
+        "unit": "V",
+        "positive": "RL.1",
+        "reference": "RL.2"
+      },
+      {
+        "id": "i:RL",
+        "label": "RL current",
+        "unit": "A",
+        "positive": "RL.1",
+        "reference": "RL.2"
+      },
+      {
+        "id": "v:GNDS.reference",
+        "label": "GNDS.reference / ground",
+        "unit": "V",
+        "positive": "GNDS.reference",
+        "reference": "ground"
+      }
+    ],
+    "operations": [],
+    "selected_operation": "",
+    "visible": false,
+    "trace_id": ""
+  },
+  "source_annotations": [
+    {
+      "id": "VIN",
+      "position": {
+        "x": -884,
+        "y": -13
+      },
+      "lines": [
+        "VIN | sine",
+        "12 Vpk | 50 Hz",
+        "offset 0 V | phase 0 deg"
+      ],
+      "state": "current",
+      "input_mode": "auto"
+    }
+  ],
+  "project_work": {
+    "recovery_configuration_applied": true,
+    "recovery_catalog_applied": true,
+    "cancelable": false,
+    "id": "project-1",
+    "command": "recovery.configure",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "user",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "input_revision": 1,
+    "command_revision": 2,
+    "document_generation": 1,
+    "bytes": 0,
+    "result_document_generation": 1
+  },
+  "input_work": {
+    "id": "input-2",
+    "command": "potentiometer.wiper.set",
+    "status": "completed",
+    "actor": "user",
+    "run_id": 13,
+    "electrical_revision": 8,
+    "actuation_revision": 3,
+    "command_revision": 28,
+    "time_s": 0.04,
+    "requested_wiper": {
+      "id": "P1",
+      "position": 0.7
+    }
+  },
+  "example": {
+    "info": {
+      "id": "coupled-windings",
+      "title": "Transformer ratio and winding polarity",
+      "question": "How do turns, coupling and dots change the secondary signal?",
+      "expected": "The loaded secondary follows the primary with winding losses and leakage; reversing its dot reverses the signal.",
+      "try": "Select T1 for ratio, coupling, winding L/R and dot polarity. Inspect both winding voltages/currents and stored magnetic energy.",
+      "limitation": "Linear mutually coupled windings with series resistance and dot polarity. No core saturation, hysteresis, losses beyond winding resistance or isolation rating. Coupling below one gives a positive-definite inductance matrix."
+    },
+    "modified": true
+  },
+  "diagnostic_presentation": {
+    "details_visible": false,
+    "items": []
+  },
+  "display": {
+    "preferences": {
+      "voltage_color": false,
+      "voltage_range_v": 5,
+      "current_cues": false,
+      "current_motion": false,
+      "reduced_motion": false,
+      "direction": "conventional"
+    },
+    "run_id": 22,
+    "electrical_revision": 13,
+    "time_s": 0.005,
+    "animate": false,
+    "wires": [
+      {
+        "id": "W1",
+        "from": "VIN.negative",
+        "to": "GNDIN.reference",
+        "voltage_v": 0,
+        "state": "live",
+        "current_reason": "Ideal-wire current is not uniquely determined or accepted terminal currents do not balance",
+        "color": "#387d93"
+      },
+      {
+        "id": "W2",
+        "from": "VIN.positive",
+        "to": "T1.primary1",
+        "voltage_v": 12,
+        "current_a": 0.43504324363113045,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W3",
+        "from": "T1.primary2",
+        "to": "GNDP.reference",
+        "voltage_v": 0,
+        "state": "live",
+        "current_reason": "Ideal-wire current is not uniquely determined or accepted terminal currents do not balance",
+        "color": "#387d93"
+      },
+      {
+        "id": "W4",
+        "from": "T1.secondary1",
+        "to": "RL.1",
+        "voltage_v": 8.417514201966268,
+        "current_a": 0.08417514201966268,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W5",
+        "from": "T1.secondary2",
+        "to": "RL.2",
+        "voltage_v": 0,
+        "current_a": -0.08417514201966268,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W6",
+        "from": "T1.secondary2",
+        "to": "GNDS.reference",
+        "voltage_v": 0,
+        "current_a": 0,
+        "state": "live",
+        "color": "#387d93"
+      }
+    ]
+  },
+  "measurement_inspection": {
+    "target": {
+      "kind": "object",
+      "id": "T1"
+    },
+    "result_kind": "transient",
+    "available": true,
+    "object_ids": [
+      "T1"
+    ],
+    "terminal_refs": [
+      "T1.primary1",
+      "T1.primary2",
+      "T1.secondary1",
+      "T1.secondary2"
+    ],
+    "wire_ids": [],
+    "nets": [
+      {
+        "id": "net:T1.primary1",
+        "terminals": [
+          "T1.primary1",
+          "VIN.positive"
+        ]
+      },
+      {
+        "id": "net:GNDIN.reference",
+        "terminals": [
+          "GNDIN.reference",
+          "GNDP.reference",
+          "GNDS.reference",
+          "RL.2",
+          "T1.primary2",
+          "T1.secondary2",
+          "VIN.negative"
+        ]
+      },
+      {
+        "id": "net:RL.1",
+        "terminals": [
+          "RL.1",
+          "T1.secondary1"
+        ]
+      }
+    ],
+    "readings": [
+      {
+        "probe": {
+          "id": "v:T1.primary1",
+          "label": "T1.primary1 / ground",
+          "unit": "V",
+          "positive": "T1.primary1",
+          "reference": "ground"
+        },
+        "value": 12,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live v:T1.primary1 \u00b7 12 V",
+        "reference_display": "Voltage: T1.primary1 - ground"
+      },
+      {
+        "probe": {
+          "id": "v:T1.primary2",
+          "label": "T1.primary2 / ground",
+          "unit": "V",
+          "positive": "T1.primary2",
+          "reference": "ground"
+        },
+        "value": 0,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live v:T1.primary2 \u00b7 0 V",
+        "reference_display": "Voltage: T1.primary2 - ground"
+      },
+      {
+        "probe": {
+          "id": "v:T1.secondary1",
+          "label": "T1.secondary1 / ground",
+          "unit": "V",
+          "positive": "T1.secondary1",
+          "reference": "ground"
+        },
+        "value": 8.417514201966268,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live v:T1.secondary1 \u00b7 8.4175 V",
+        "reference_display": "Voltage: T1.secondary1 - ground"
+      },
+      {
+        "probe": {
+          "id": "v:T1.secondary2",
+          "label": "T1.secondary2 / ground",
+          "unit": "V",
+          "positive": "T1.secondary2",
+          "reference": "ground"
+        },
+        "value": 0,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live v:T1.secondary2 \u00b7 0 V",
+        "reference_display": "Voltage: T1.secondary2 - ground"
+      },
+      {
+        "probe": {
+          "id": "v:T1",
+          "label": "T1 primary voltage",
+          "unit": "V",
+          "positive": "T1.primary1",
+          "reference": "T1.primary2"
+        },
+        "value": 12,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live v:T1 \u00b7 12 V",
+        "reference_display": "Voltage: T1.primary1 - T1.primary2"
+      },
+      {
+        "probe": {
+          "id": "v:T1.secondary",
+          "label": "T1 secondary voltage",
+          "unit": "V",
+          "positive": "T1.secondary1",
+          "reference": "T1.secondary2"
+        },
+        "value": 8.417514201966268,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live v:T1.secondary \u00b7 8.4175 V",
+        "reference_display": "Voltage: T1.secondary1 - T1.secondary2"
+      },
+      {
+        "probe": {
+          "id": "i:T1.primary1",
+          "label": "T1.primary1 current into winding",
+          "unit": "A",
+          "positive": "T1.primary1",
+          "reference": "into winding"
+        },
+        "value": 0.43504324363113045,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live i:T1.primary1 \u00b7 435.04 mA",
+        "reference_display": "Current: T1.primary1 -> into winding"
+      },
+      {
+        "probe": {
+          "id": "i:T1.primary2",
+          "label": "T1.primary2 current into winding",
+          "unit": "A",
+          "positive": "T1.primary2",
+          "reference": "into winding"
+        },
+        "value": -0.43504324363113045,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live i:T1.primary2 \u00b7 -435.04 mA",
+        "reference_display": "Current: T1.primary2 -> into winding"
+      },
+      {
+        "probe": {
+          "id": "i:T1.secondary1",
+          "label": "T1.secondary1 current into winding",
+          "unit": "A",
+          "positive": "T1.secondary1",
+          "reference": "into winding"
+        },
+        "value": -0.0841751420196627,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live i:T1.secondary1 \u00b7 -84.175 mA",
+        "reference_display": "Current: T1.secondary1 -> into winding"
+      },
+      {
+        "probe": {
+          "id": "i:T1.secondary2",
+          "label": "T1.secondary2 current into winding",
+          "unit": "A",
+          "positive": "T1.secondary2",
+          "reference": "into winding"
+        },
+        "value": 0.0841751420196627,
+        "time_s": 0.005,
+        "run_id": 22,
+        "electrical_revision": 13,
+        "state": "live",
+        "display": "Live i:T1.secondary2 \u00b7 84.175 mA",
+        "reference_display": "Current: T1.secondary2 -> into winding"
+      }
+    ]
+  },
+  "pinned_readings": [],
+  "limits": {
+    "timers555": 2,
+    "pnp_transistors": 2,
+    "bipolar_transistors_total": 2,
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 2,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "simulated_component_count": 3,
+  "step_work": {
+    "id": "step-7",
+    "status": "completed",
+    "actor": "agent.socket",
+    "run_id": 22,
+    "electrical_revision": 13,
+    "actuation_revision": 4,
+    "command_revision": 47,
+    "start_time_s": 0,
+    "duration_s": 0.005,
+    "completed_samples": 50,
+    "total_samples": 50,
+    "progress": 1
+  },
+  "undo_entry": {
+    "name": "transformer configure",
+    "actor": "user",
+    "command_revision": 45
+  },
+  "actuation_revision": 4,
+  "source_sampling": [
+    {
+      "id": "VIN",
+      "source_kind": "sine-source",
+      "target_step_s": 0.000625,
+      "recommended_step_s": 0.0001,
+      "minimum_step_s": 1e-06,
+      "unresolved": false,
+      "minimum_limited": false,
+      "can_fit": false
+    }
+  ],
+  "waveform_model": {
+    "id": "elab.source-waveforms.v1",
+    "sine_model_id": "elab.ideal-sine-source.v1",
+    "pulse_model_id": "elab.finite-pulse-source.v1",
+    "minimum_transition_s": 1e-06,
+    "maximum_frequency_hz": 1000,
+    "maximum_magnitude_v": 12,
+    "limitations": "Ideal grounded voltage sources with per-component periodic sine or linear pulse ramps. No output resistance, current limit, battery discharge, noise or physical generator identity. Finite pulse high/low phase lengths include rise/fall respectively. Output sampling can alias; internal integration resolves waveform features within its work budget."
+  },
+  "power_model": {
+    "id": "elab.power-and-isolation.v1",
+    "battery": "Linear charge reservoir: OCV=Vfull*q/Q; Q=3600*capacity_Ah; ESR voltage sag. Equivalent stored energy=Q*Vfull*SOC^2/2. No chemistry, temperature, ageing, self-discharge, protection or physical ratings. Positive delivered current discharges; externally forced charging is an ideal reversible reservoir, not a charger model. Startup SOC is 0..1; live SOC outside that range is reported, not hidden.",
+    "motor": "Generic brushed DC motor: armature RL, reciprocal Ke=Kt electromechanical coupling, rotor inertia, viscous friction and load. No brushes, commutation ripple, thermal model, gearbox or hardware ratings.",
+    "optocoupler": "Generic LED/phototransistor optocoupler: separate conductive input/output ports, CTR and smooth saturation. No isolation-voltage rating, capacitance, propagation delay, temperature or ageing model.",
+    "transformer": "Linear mutually coupled windings with series resistance and dot polarity. No core saturation, hysteresis, losses beyond winding resistance or isolation rating. Coupling below one gives a positive-definite inductance matrix."
+  },
+  "recovery": {
+    "directory": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "enabled": true,
+    "interval_s": 2,
+    "last_snapshot": "rec-3ffb2a3e7e46ae066f2edce0-0000000011",
+    "last_saved_at": "2026-10-25T08:35:17.058999Z",
+    "selected": "rec-1d5e82051e5d3248e479020a-0000000003",
+    "candidates": [
+      {
+        "owner_status": "active",
+        "id": "rec-3ffb2a3e7e46ae066f2edce0-0000000011",
+        "document_key": "3ffb2a3e7e46ae066f2edce0",
+        "saved_at": "2026-10-25T08:35:17.058999Z",
+        "sha256": "c296065e9a9c9fb730109d4fe87789cf7980e1a0460bd8b10b99d1823e9a1036",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 6
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-6e8a331bb96830ccb94dfda3-0000000010",
+        "document_key": "6e8a331bb96830ccb94dfda3",
+        "saved_at": "2026-10-25T08:33:40.557542Z",
+        "sha256": "3ee46806125d23a44db2b2b3d5ea0e4fd9cc02f1c17056ae55265c979b296011",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 11
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-893e138d9922719a292291fb-0000000006",
+        "document_key": "893e138d9922719a292291fb",
+        "saved_at": "2026-10-25T08:30:58.055835Z",
+        "sha256": "83683b1339bf86dc48b3a57e071ae56cb4fe8adb1efd38abc75738d05e45d1e6",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 21
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-8c21c93b4c6b6664c9b8883b-0000000005",
+        "document_key": "8c21c93b4c6b6664c9b8883b",
+        "saved_at": "2026-10-25T08:27:49.553193Z",
+        "sha256": "611fc1e14adee2c3f2bb57a2be3a064841e84b9393f2a9348797aa4e88b70e88",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 4
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-1d5e82051e5d3248e479020a-0000000003",
+        "document_key": "1d5e82051e5d3248e479020a",
+        "saved_at": "2026-10-25T08:23:58.551263Z",
+        "sha256": "c4b8b03da2ec88ba3d4f91d05c18b64e8ff0229d3e5bafaa8b06c0d84b8a2d87",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 7
+      }
+    ],
+    "problems": []
+  },
+  "verification_settings": {
+    "duration_s": 0.1,
+    "sample_step_s": 0,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "operations": [],
+  "selected_operation": "",
+  "schematic_page": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 10
+  },
+  "part_category": "common",
+  "part_categories": [
+    {
+      "id": "common",
+      "name": "Common",
+      "count": 6
+    },
+    {
+      "id": "all",
+      "name": "All components",
+      "count": 48
+    },
+    {
+      "id": "sources",
+      "name": "Sources",
+      "count": 5
+    },
+    {
+      "id": "motors",
+      "name": "Motors",
+      "count": 1
+    },
+    {
+      "id": "passives",
+      "name": "Passives",
+      "count": 7
+    },
+    {
+      "id": "semiconductors",
+      "name": "Semiconductors",
+      "count": 10
+    },
+    {
+      "id": "amplifiers",
+      "name": "Amplifiers / ICs",
+      "count": 4
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "count": 14
+    },
+    {
+      "id": "switches",
+      "name": "Switches",
+      "count": 4
+    },
+    {
+      "id": "connections",
+      "name": "Connections",
+      "count": 3
+    }
+  ],
+  "part_search": "",
+  "theme": "light",
+  "appearance": {
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "status": "ready",
+    "saved_theme": "light"
+  },
+  "appearance_work": {
+    "id": "appearance-4",
+    "command": "appearance.theme.set",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "input_revision": 164,
+    "command_revision": 42,
+    "document_generation": 6,
+    "electrical_revision": 12,
+    "input_run_id": 20,
+    "input_theme": "dark",
+    "requested_theme": "light",
+    "result_theme": "light",
+    "source_sha256": "18b9ff907d7515437137168d5429a07a73fcbac35a32c37fe35962e445411e0b",
+    "artifact_sha256": "80e13a747ee02e691a894a3cff7006c64cc4920ad358056f39d5b5708d9b62df",
+    "bytes": 70,
+    "cancelable": false,
+    "superseded": false,
+    "published": true,
+    "current_at_completion": true
+  },
+  "matching_parts": [
+    {
+      "category": "sources",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "voltage",
+        "unit": "V",
+        "minimum": 0,
+        "maximum": 12,
+        "range_text": "0\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+      },
+      "aliases": [
+        "power supply",
+        "voltage supply",
+        "ideal voltage source"
+      ],
+      "limitations": "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity.",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "5 V",
+      "unit": "V",
+      "model": "ideal-dc.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000,
+        "range_text": "10\u2013100000 \u03a9",
+        "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+      },
+      "aliases": [
+        "resistance",
+        "current limiter"
+      ],
+      "limitations": "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2.",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1k",
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1"
+    },
+    {
+      "category": "semiconductors",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "LED",
+        "light emitting diode",
+        "indicator"
+      ],
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness.",
+      "kind": "led",
+      "name": "Red LED",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "model": "elab.generic-red-led.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "capacitance",
+        "unit": "F",
+        "minimum": 1e-12,
+        "maximum": 1,
+        "range_text": "1 pF\u20131 F",
+        "syntax": "Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF"
+      },
+      "aliases": [
+        "cap",
+        "charge storage"
+      ],
+      "limitations": "Ideal capacitor with configurable initial voltage; no ESR, leakage, polarity, heating, ratings or physical part identity. Voltage and current use pin 1 relative to pin 2.",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1uF",
+      "unit": "F",
+      "model": "ideal-capacitor.v1"
+    },
+    {
+      "category": "connections",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "ground",
+        "voltage reference"
+      ],
+      "limitations": "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design.",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "model": "ground.v1"
+    },
+    {
+      "category": "switches",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "toggle",
+        "on/off",
+        "SPST"
+      ],
+      "limitations": "Generic SPST with finite on/off resistance; no contact bounce, arcing, thermal behavior, ratings or named physical part. Actuation is instantaneous; capacitor voltage remains continuous.",
+      "kind": "switch",
+      "name": "SPST switch",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "model": "elab.spst-resistive.v1"
+    }
+  ],
+  "undo_name": "transformer configure",
+  "redo_name": "",
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0.005
+    },
+    "window_valid": true,
+    "statistics": [
+      {
+        "probe_id": "v:VIN",
+        "count": 51,
+        "min": 0,
+        "max": 12,
+        "sample_mean": 7.606675430926067,
+        "sample_rms": 8.48528137423857
+      },
+      {
+        "probe_id": "v:T1.secondary",
+        "count": 51,
+        "min": 0,
+        "max": 8.419722563220587,
+        "sample_mean": 5.370863975103034,
+        "sample_rms": 5.99322885970956
+      },
+      {
+        "probe_id": "i:T1.primary1",
+        "count": 51,
+        "min": 0,
+        "max": 0.43504324363113045,
+        "sample_mean": 0.1767802265786945,
+        "sample_rms": 0.22253194514772318
+      },
+      {
+        "probe_id": "i:T1.secondary1",
+        "count": 51,
+        "min": -0.08419722563220587,
+        "max": 0,
+        "sample_mean": -0.05370863975103034,
+        "sample_rms": 0.059932288597095595
+      }
+    ],
+    "available": [
+      {
+        "id": "v:VIN.positive",
+        "label": "VIN.positive / ground",
+        "unit": "V",
+        "positive": "VIN.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VIN.negative",
+        "label": "VIN.negative / ground",
+        "unit": "V",
+        "positive": "VIN.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:VIN",
+        "label": "VIN voltage",
+        "unit": "V",
+        "positive": "VIN.positive",
+        "reference": "VIN.negative"
+      },
+      {
+        "id": "i:VIN",
+        "label": "VIN delivered current",
+        "unit": "A",
+        "positive": "VIN.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GNDIN.reference",
+        "label": "GNDIN.reference / ground",
+        "unit": "V",
+        "positive": "GNDIN.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.primary1",
+        "label": "T1.primary1 / ground",
+        "unit": "V",
+        "positive": "T1.primary1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.primary2",
+        "label": "T1.primary2 / ground",
+        "unit": "V",
+        "positive": "T1.primary2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.secondary1",
+        "label": "T1.secondary1 / ground",
+        "unit": "V",
+        "positive": "T1.secondary1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1.secondary2",
+        "label": "T1.secondary2 / ground",
+        "unit": "V",
+        "positive": "T1.secondary2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:T1",
+        "label": "T1 primary voltage",
+        "unit": "V",
+        "positive": "T1.primary1",
+        "reference": "T1.primary2"
+      },
+      {
+        "id": "v:T1.secondary",
+        "label": "T1 secondary voltage",
+        "unit": "V",
+        "positive": "T1.secondary1",
+        "reference": "T1.secondary2"
+      },
+      {
+        "id": "i:T1.primary1",
+        "label": "T1.primary1 current into winding",
+        "unit": "A",
+        "positive": "T1.primary1",
+        "reference": "into winding"
+      },
+      {
+        "id": "i:T1.primary2",
+        "label": "T1.primary2 current into winding",
+        "unit": "A",
+        "positive": "T1.primary2",
+        "reference": "into winding"
+      },
+      {
+        "id": "i:T1.secondary1",
+        "label": "T1.secondary1 current into winding",
+        "unit": "A",
+        "positive": "T1.secondary1",
+        "reference": "into winding"
+      },
+      {
+        "id": "i:T1.secondary2",
+        "label": "T1.secondary2 current into winding",
+        "unit": "A",
+        "positive": "T1.secondary2",
+        "reference": "into winding"
+      },
+      {
+        "id": "v:GNDP.reference",
+        "label": "GNDP.reference / ground",
+        "unit": "V",
+        "positive": "GNDP.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL.1",
+        "label": "RL.1 / ground",
+        "unit": "V",
+        "positive": "RL.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL.2",
+        "label": "RL.2 / ground",
+        "unit": "V",
+        "positive": "RL.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL",
+        "label": "RL voltage",
+        "unit": "V",
+        "positive": "RL.1",
+        "reference": "RL.2"
+      },
+      {
+        "id": "i:RL",
+        "label": "RL current",
+        "unit": "A",
+        "positive": "RL.1",
+        "reference": "RL.2"
+      },
+      {
+        "id": "v:GNDS.reference",
+        "label": "GNDS.reference / ground",
+        "unit": "V",
+        "positive": "GNDS.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [
+      "v:VIN",
+      "v:T1.secondary",
+      "i:T1.primary1",
+      "i:T1.secondary1"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:VIN",
+          "label": "VIN voltage",
+          "unit": "V",
+          "positive": "VIN.positive",
+          "reference": "VIN.negative"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.0001,
+            "value": 0.3769291089375395
+          },
+          {
+            "time_s": 0.0002,
+            "value": 0.7534862343517605
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": 1.129299759822172
+          },
+          {
+            "time_s": 0.0004,
+            "value": 1.503998802771651
+          },
+          {
+            "time_s": 0.0005,
+            "value": 1.8772135804827705
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": 2.2485757750286957
+          },
+          {
+            "time_s": 0.0007,
+            "value": 2.61771889675851
+          },
+          {
+            "time_s": 0.0008,
+            "value": 2.9842786459782573
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": 3.3478932724707513
+          },
+          {
+            "time_s": 0.001,
+            "value": 3.7082039324993685
+          },
+          {
+            "time_s": 0.0011,
+            "value": 4.064855042943496
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": 4.417494632216136
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": 4.765774687617368
+          },
+          {
+            "time_s": 0.0014,
+            "value": 5.109351498780871
+          },
+          {
+            "time_s": 0.0015,
+            "value": 5.447885996874562
+          },
+          {
+            "time_s": 0.0016,
+            "value": 5.781044089220584
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": 6.108496989004456
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": 6.42992153974796
+          },
+          {
+            "time_s": 0.0019,
+            "value": 6.745000534225567
+          },
+          {
+            "time_s": 0.002,
+            "value": 7.053423027509678
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": 7.354884643835717
+          },
+          {
+            "time_s": 0.0022,
+            "value": 7.649087876984275
+          },
+          {
+            "time_s": 0.0023,
+            "value": 7.935742383883822
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": 8.214565271144265
+          },
+          {
+            "time_s": 0.0025,
+            "value": 8.48528137423857
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": 8.747623529056938
+          },
+          {
+            "time_s": 0.0027,
+            "value": 9.001332835565513
+          },
+          {
+            "time_s": 0.0028,
+            "value": 9.24615891330947
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": 9.481860148508284
+          },
+          {
+            "time_s": 0.003,
+            "value": 9.70820393249937
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": 9.924966891294744
+          },
+          {
+            "time_s": 0.0032,
+            "value": 10.13193510602418
+          },
+          {
+            "time_s": 0.0033,
+            "value": 10.328904324047324
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": 10.515680160526363
+          },
+          {
+            "time_s": 0.0035,
+            "value": 10.692078290260413
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": 10.857924629592233
+          },
+          {
+            "time_s": 0.0037,
+            "value": 11.013055508207774
+          },
+          {
+            "time_s": 0.0038,
+            "value": 11.157317830659016
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": 11.290569227450705
+          },
+          {
+            "time_s": 0.004,
+            "value": 11.412678195541842
+          },
+          {
+            "time_s": 0.0041,
+            "value": 11.523524228123318
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": 11.622997933543575
+          },
+          {
+            "time_s": 0.0043,
+            "value": 11.71100114326497
+          },
+          {
+            "time_s": 0.0044,
+            "value": 11.787447008744264
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": 11.852260087141653
+          },
+          {
+            "time_s": 0.0046,
+            "value": 11.905376415773734
+          },
+          {
+            "time_s": 0.0047,
+            "value": 11.94674357523696
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": 11.976320741139258
+          },
+          {
+            "time_s": 0.0049,
+            "value": 11.994078724388778
+          },
+          {
+            "time_s": 0.005,
+            "value": 12
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "v:T1.secondary",
+          "label": "T1 secondary voltage",
+          "unit": "V",
+          "positive": "T1.secondary1",
+          "reference": "T1.secondary2"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.0001,
+            "value": 0.213534737826849
+          },
+          {
+            "time_s": 0.0002,
+            "value": 0.48521330286226083
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": 0.7567563680084326
+          },
+          {
+            "time_s": 0.0004,
+            "value": 1.027288383634364
+          },
+          {
+            "time_s": 0.0005,
+            "value": 1.2965362674624044
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": 1.5642345041678383
+          },
+          {
+            "time_s": 0.0007,
+            "value": 1.830119175715411
+          },
+          {
+            "time_s": 0.0008,
+            "value": 2.0939281543119423
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": 2.3554013603638833
+          },
+          {
+            "time_s": 0.001,
+            "value": 2.6142810191368078
+          },
+          {
+            "time_s": 0.0011,
+            "value": 2.870311915148134
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": 3.1232416440342656
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": 3.37282086164349
+          },
+          {
+            "time_s": 0.0014,
+            "value": 3.6188035301087944
+          },
+          {
+            "time_s": 0.0015,
+            "value": 3.860947160657836
+          },
+          {
+            "time_s": 0.0016,
+            "value": 4.099013052920313
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": 4.3327665304967
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": 4.561977172555771
+          },
+          {
+            "time_s": 0.0019,
+            "value": 4.786419041232417
+          },
+          {
+            "time_s": 0.002,
+            "value": 5.005870904601275
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": 5.220116455006221
+          },
+          {
+            "time_s": 0.0022,
+            "value": 5.428944522530174
+          },
+          {
+            "time_s": 0.0023,
+            "value": 5.632149283394535
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": 5.829530463082714
+          },
+          {
+            "time_s": 0.0025,
+            "value": 6.020893533987131
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": 6.206049907384741
+          },
+          {
+            "time_s": 0.0027,
+            "value": 6.3848171195516255
+          },
+          {
+            "time_s": 0.0028,
+            "value": 6.557019011832872
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": 6.722485904490189
+          },
+          {
+            "time_s": 0.003,
+            "value": 6.88105476415559
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": 7.032569364725873
+          },
+          {
+            "time_s": 0.0032,
+            "value": 7.176880441539213
+          },
+          {
+            "time_s": 0.0033,
+            "value": 7.313845838681604
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": 7.443330649277832
+          },
+          {
+            "time_s": 0.0035,
+            "value": 7.565207348628581
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": 7.679355920062104
+          },
+          {
+            "time_s": 0.0037,
+            "value": 7.785663973376496
+          },
+          {
+            "time_s": 0.0038,
+            "value": 7.884026855755507
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": 7.97434775504847
+          },
+          {
+            "time_s": 0.004,
+            "value": 8.056537795312478
+          },
+          {
+            "time_s": 0.0041,
+            "value": 8.130516124522483
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": 8.196209994362697
+          },
+          {
+            "time_s": 0.0043,
+            "value": 8.2535548320207
+          },
+          {
+            "time_s": 0.0044,
+            "value": 8.302494303913253
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": 8.342980371280962
+          },
+          {
+            "time_s": 0.0046,
+            "value": 8.374973337597053
+          },
+          {
+            "time_s": 0.0047,
+            "value": 8.398441887743257
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": 8.413363118914324
+          },
+          {
+            "time_s": 0.0049,
+            "value": 8.419722563220587
+          },
+          {
+            "time_s": 0.005,
+            "value": 8.417514201966268
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "i:T1.primary1",
+          "label": "T1.primary1 current into winding",
+          "unit": "A",
+          "positive": "T1.primary1",
+          "reference": "into winding"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.0001,
+            "value": 0.0017572396168243835
+          },
+          {
+            "time_s": 0.0002,
+            "value": 0.0043163265680833
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": 0.007247886967975452
+          },
+          {
+            "time_s": 0.0004,
+            "value": 0.010544189072722747
+          },
+          {
+            "time_s": 0.0005,
+            "value": 0.01420156332373342
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": 0.01821603051003458
+          },
+          {
+            "time_s": 0.0007,
+            "value": 0.02258325988189704
+          },
+          {
+            "time_s": 0.0008,
+            "value": 0.027298572928142324
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": 0.03235694798752822
+          },
+          {
+            "time_s": 0.001,
+            "value": 0.037753025204099545
+          },
+          {
+            "time_s": 0.0011,
+            "value": 0.043481111816354286
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": 0.04953518777494838
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": 0.055908911683394374
+          },
+          {
+            "time_s": 0.0014,
+            "value": 0.06259562705589117
+          },
+          {
+            "time_s": 0.0015,
+            "value": 0.0695883688861096
+          },
+          {
+            "time_s": 0.0016,
+            "value": 0.0768798705204504
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": 0.08446257082899232
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": 0.09232862166705309
+          },
+          {
+            "time_s": 0.0019,
+            "value": 0.10046989561999967
+          },
+          {
+            "time_s": 0.002,
+            "value": 0.10887799402366435
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": 0.11754425525245228
+          },
+          {
+            "time_s": 0.0022,
+            "value": 0.12645976326695996
+          },
+          {
+            "time_s": 0.0023,
+            "value": 0.13561535641267009
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": 0.14500163646103942
+          },
+          {
+            "time_s": 0.0025,
+            "value": 0.15460897788405642
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": 0.16442753735311702
+          },
+          {
+            "time_s": 0.0027,
+            "value": 0.1744472634528433
+          },
+          {
+            "time_s": 0.0028,
+            "value": 0.184657906600259
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": 0.19504902915953304
+          },
+          {
+            "time_s": 0.003,
+            "value": 0.2056100157423088
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": 0.2163300836834541
+          },
+          {
+            "time_s": 0.0032,
+            "value": 0.22719829368189332
+          },
+          {
+            "time_s": 0.0033,
+            "value": 0.23820356059602096
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": 0.24933466438304216
+          },
+          {
+            "time_s": 0.0035,
+            "value": 0.26058026117144517
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": 0.2719288944556778
+          },
+          {
+            "time_s": 0.0037,
+            "value": 0.2833690064019805
+          },
+          {
+            "time_s": 0.0038,
+            "value": 0.29488894925421905
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": 0.3064769968284592
+          },
+          {
+            "time_s": 0.004,
+            "value": 0.3181213560849408
+          },
+          {
+            "time_s": 0.0041,
+            "value": 0.32981017876603175
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": 0.34153157308867393
+          },
+          {
+            "time_s": 0.0043,
+            "value": 0.3532736154797855
+          },
+          {
+            "time_s": 0.0044,
+            "value": 0.3650243623430358
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": 0.37677186184538064
+          },
+          {
+            "time_s": 0.0046,
+            "value": 0.38850416571172747
+          },
+          {
+            "time_s": 0.0047,
+            "value": 0.40020934101608924
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": 0.41187548195759044
+          },
+          {
+            "time_s": 0.0049,
+            "value": 0.423490721609705
+          },
+          {
+            "time_s": 0.005,
+            "value": 0.43504324363113045
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "i:T1.secondary1",
+          "label": "T1.secondary1 current into winding",
+          "unit": "A",
+          "positive": "T1.secondary1",
+          "reference": "into winding"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.0001,
+            "value": -0.0021353473782684904
+          },
+          {
+            "time_s": 0.0002,
+            "value": -0.004852133028622608
+          },
+          {
+            "time_s": 0.00030000000000000003,
+            "value": -0.007567563680084325
+          },
+          {
+            "time_s": 0.0004,
+            "value": -0.010272883836343642
+          },
+          {
+            "time_s": 0.0005,
+            "value": -0.012965362674624044
+          },
+          {
+            "time_s": 0.0006000000000000001,
+            "value": -0.015642345041678385
+          },
+          {
+            "time_s": 0.0007,
+            "value": -0.01830119175715411
+          },
+          {
+            "time_s": 0.0008,
+            "value": -0.020939281543119425
+          },
+          {
+            "time_s": 0.0009000000000000001,
+            "value": -0.023554013603638835
+          },
+          {
+            "time_s": 0.001,
+            "value": -0.02614281019136808
+          },
+          {
+            "time_s": 0.0011,
+            "value": -0.02870311915148134
+          },
+          {
+            "time_s": 0.0012000000000000001,
+            "value": -0.031232416440342657
+          },
+          {
+            "time_s": 0.0013000000000000002,
+            "value": -0.0337282086164349
+          },
+          {
+            "time_s": 0.0014,
+            "value": -0.03618803530108794
+          },
+          {
+            "time_s": 0.0015,
+            "value": -0.038609471606578356
+          },
+          {
+            "time_s": 0.0016,
+            "value": -0.040990130529203125
+          },
+          {
+            "time_s": 0.0017000000000000001,
+            "value": -0.043327665304967004
+          },
+          {
+            "time_s": 0.0018000000000000002,
+            "value": -0.045619771725557715
+          },
+          {
+            "time_s": 0.0019,
+            "value": -0.047864190412324176
+          },
+          {
+            "time_s": 0.002,
+            "value": -0.05005870904601274
+          },
+          {
+            "time_s": 0.0021000000000000003,
+            "value": -0.05220116455006221
+          },
+          {
+            "time_s": 0.0022,
+            "value": -0.054289445225301734
+          },
+          {
+            "time_s": 0.0023,
+            "value": -0.056321492833945344
+          },
+          {
+            "time_s": 0.0024000000000000002,
+            "value": -0.05829530463082713
+          },
+          {
+            "time_s": 0.0025,
+            "value": -0.06020893533987131
+          },
+          {
+            "time_s": 0.0026000000000000003,
+            "value": -0.06206049907384741
+          },
+          {
+            "time_s": 0.0027,
+            "value": -0.06384817119551625
+          },
+          {
+            "time_s": 0.0028,
+            "value": -0.06557019011832871
+          },
+          {
+            "time_s": 0.0029000000000000002,
+            "value": -0.06722485904490189
+          },
+          {
+            "time_s": 0.003,
+            "value": -0.0688105476415559
+          },
+          {
+            "time_s": 0.0031000000000000003,
+            "value": -0.07032569364725874
+          },
+          {
+            "time_s": 0.0032,
+            "value": -0.07176880441539213
+          },
+          {
+            "time_s": 0.0033,
+            "value": -0.07313845838681604
+          },
+          {
+            "time_s": 0.0034000000000000002,
+            "value": -0.07443330649277832
+          },
+          {
+            "time_s": 0.0035,
+            "value": -0.07565207348628582
+          },
+          {
+            "time_s": 0.0036000000000000003,
+            "value": -0.07679355920062104
+          },
+          {
+            "time_s": 0.0037,
+            "value": -0.07785663973376496
+          },
+          {
+            "time_s": 0.0038,
+            "value": -0.07884026855755508
+          },
+          {
+            "time_s": 0.0039000000000000003,
+            "value": -0.07974347755048469
+          },
+          {
+            "time_s": 0.004,
+            "value": -0.08056537795312477
+          },
+          {
+            "time_s": 0.0041,
+            "value": -0.08130516124522483
+          },
+          {
+            "time_s": 0.004200000000000001,
+            "value": -0.08196209994362696
+          },
+          {
+            "time_s": 0.0043,
+            "value": -0.08253554832020701
+          },
+          {
+            "time_s": 0.0044,
+            "value": -0.08302494303913255
+          },
+          {
+            "time_s": 0.0045000000000000005,
+            "value": -0.08342980371280963
+          },
+          {
+            "time_s": 0.0046,
+            "value": -0.08374973337597054
+          },
+          {
+            "time_s": 0.0047,
+            "value": -0.08398441887743256
+          },
+          {
+            "time_s": 0.0048000000000000004,
+            "value": -0.08413363118914324
+          },
+          {
+            "time_s": 0.0049,
+            "value": -0.08419722563220587
+          },
+          {
+            "time_s": 0.005,
+            "value": -0.0841751420196627
+          }
+        ]
+      }
+    ],
+    "run_id": 22,
+    "stale": false,
+    "active_cursor": "a",
+    "readings": []
+  },
+  "scope_visible": true,
+  "mixed": {
+    "transformers": [
+      {
+        "id": "T1",
+        "model": "elab.power-and-isolation.v1",
+        "primary_voltage_v": 12,
+        "secondary_voltage_v": 8.417514201966268,
+        "primary_current_a": 0.43504324363113045,
+        "secondary_current_a": -0.0841751420196627,
+        "primary_flux_linkage_wb_turn": 0.03731745142466784,
+        "secondary_flux_linkage_wb_turn": 0.027240826668282064,
+        "magnetic_energy_j": 0.006970852329149494,
+        "winding_loss_w": 0.1963480783631255,
+        "primary_power_w": 5.220518923573565,
+        "secondary_power_w": -0.7085454534030383,
+        "terminal_power_w": 4.511973470170527
+      }
+    ],
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 22,
+    "electrical_revision": 13,
+    "time_s": 0.005,
+    "nodes_v": {
+      "net:GNDIN.reference": 0,
+      "net:RL.1": 8.417514201966268,
+      "net:T1.primary1": 12
+    },
+    "transistors": [],
+    "capacitors": [],
+    "leds": [],
+    "resistors": [
+      {
+        "id": "RL",
+        "current_a": 0.08417514201966268,
+        "voltage_v": 8.417514201966268,
+        "power_w": 0.7085454534030382
+      }
+    ],
+    "sources": [
+      {
+        "id": "VIN",
+        "current_a": 0.43504324363113045,
+        "voltage_v": 12,
+        "power_w": 5.220518923573565
+      }
+    ],
+    "kcl_residual_a": 1.3877787807814457e-17,
+    "power_residual_w": -8.881784197001252e-16,
+    "numerical_damping_w": 0,
+    "stale": false
+  },
+  "transient": {
+    "engine": "elab.rlc-mna-radau5.v1",
+    "run_id": 22,
+    "electrical_revision": 13,
+    "source_id": "VIN",
+    "resistor_id": "",
+    "capacitor_id": "",
+    "output_net": "net:GNDIN.reference",
+    "time_constant_s": 0,
+    "settings": {
+      "step_s": 0.0001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.01
+    },
+    "input_mode": "auto",
+    "sample": {
+      "state": "network",
+      "time_s": 0.005,
+      "input_v": 12,
+      "voltage_v": 0,
+      "current_a": 0.08417514201966268,
+      "energy_j": 0.006970852329149494
+    },
+    "samples": [
+      {
+        "state": "network",
+        "time_s": 0,
+        "input_v": 0,
+        "voltage_v": 0,
+        "current_a": 0,
+        "energy_j": 0
+      },
+      {
+        "state": "network",
+        "time_s": 0.0001,
+        "input_v": 0.3769291089375395,
+        "voltage_v": 0,
+        "current_a": 0.00213534737826849,
+        "energy_j": 6.841052879679969e-09
+      },
+      {
+        "state": "network",
+        "time_s": 0.0002,
+        "input_v": 0.7534862343517605,
+        "voltage_v": 0,
+        "current_a": 0.004852133028622608,
+        "energy_j": 5.4346892757739074e-08
+      },
+      {
+        "state": "network",
+        "time_s": 0.00030000000000000003,
+        "input_v": 1.129299759822172,
+        "voltage_v": 0,
+        "current_a": 0.007567563680084326,
+        "energy_j": 2.058661450423618e-07
+      },
+      {
+        "state": "network",
+        "time_s": 0.0004,
+        "input_v": 1.503998802771651,
+        "voltage_v": 0,
+        "current_a": 0.01027288383634364,
+        "energy_j": 5.656242949753883e-07
+      },
+      {
+        "state": "network",
+        "time_s": 0.0005,
+        "input_v": 1.8772135804827705,
+        "voltage_v": 0,
+        "current_a": 0.012965362674624044,
+        "energy_j": 1.2786114411730745e-06
+      },
+      {
+        "state": "network",
+        "time_s": 0.0006000000000000001,
+        "input_v": 2.2485757750286957,
+        "voltage_v": 0,
+        "current_a": 0.01564234504167838,
+        "energy_j": 2.5297011444216026e-06
+      },
+      {
+        "state": "network",
+        "time_s": 0.0007,
+        "input_v": 2.61771889675851,
+        "voltage_v": 0,
+        "current_a": 0.018301191757154108,
+        "energy_j": 4.542597534013168e-06
+      },
+      {
+        "state": "network",
+        "time_s": 0.0008,
+        "input_v": 2.9842786459782573,
+        "voltage_v": 0,
+        "current_a": 0.020939281543119425,
+        "energy_j": 7.578590144094974e-06
+      },
+      {
+        "state": "network",
+        "time_s": 0.0009000000000000001,
+        "input_v": 3.3478932724707513,
+        "voltage_v": 0,
+        "current_a": 0.023554013603638832,
+        "energy_j": 1.1935121198836837e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.001,
+        "input_v": 3.7082039324993685,
+        "voltage_v": 0,
+        "current_a": 0.026142810191368077,
+        "energy_j": 1.794417146384752e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0011,
+        "input_v": 4.064855042943496,
+        "voltage_v": 0,
+        "current_a": 0.02870311915148134,
+        "energy_j": 2.5970471545297032e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0012000000000000001,
+        "input_v": 4.417494632216136,
+        "voltage_v": 0,
+        "current_a": 0.031232416440342657,
+        "energy_j": 3.640954624396601e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0013000000000000002,
+        "input_v": 4.765774687617368,
+        "voltage_v": 0,
+        "current_a": 0.0337282086164349,
+        "energy_j": 4.968560026641496e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0014,
+        "input_v": 5.109351498780871,
+        "voltage_v": 0,
+        "current_a": 0.03618803530108795,
+        "energy_j": 6.624925425702195e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0015,
+        "input_v": 5.447885996874562,
+        "voltage_v": 0,
+        "current_a": 0.038609471606578356,
+        "energy_j": 8.65751407401361e-05
+      },
+      {
+        "state": "network",
+        "time_s": 0.0016,
+        "input_v": 5.781044089220584,
+        "voltage_v": 0,
+        "current_a": 0.040990130529203125,
+        "energy_j": 0.00011115937014853206
+      },
+      {
+        "state": "network",
+        "time_s": 0.0017000000000000001,
+        "input_v": 6.108496989004456,
+        "voltage_v": 0,
+        "current_a": 0.043327665304967004,
+        "energy_j": 0.00014051687766038318
+      },
+      {
+        "state": "network",
+        "time_s": 0.0018000000000000002,
+        "input_v": 6.42992153974796,
+        "voltage_v": 0,
+        "current_a": 0.045619771725557715,
+        "energy_j": 0.00017517866206990734
+      },
+      {
+        "state": "network",
+        "time_s": 0.0019,
+        "input_v": 6.745000534225567,
+        "voltage_v": 0,
+        "current_a": 0.04786419041232417,
+        "energy_j": 0.0002156889283746652
+      },
+      {
+        "state": "network",
+        "time_s": 0.002,
+        "input_v": 7.053423027509678,
+        "voltage_v": 0,
+        "current_a": 0.05005870904601275,
+        "energy_j": 0.0002626021461733743
+      },
+      {
+        "state": "network",
+        "time_s": 0.0021000000000000003,
+        "input_v": 7.354884643835717,
+        "voltage_v": 0,
+        "current_a": 0.05220116455006221,
+        "energy_j": 0.00031648003633038386
+      },
+      {
+        "state": "network",
+        "time_s": 0.0022,
+        "input_v": 7.649087876984275,
+        "voltage_v": 0,
+        "current_a": 0.05428944522530174,
+        "energy_j": 0.0003778884986751865
+      },
+      {
+        "state": "network",
+        "time_s": 0.0023,
+        "input_v": 7.935742383883822,
+        "voltage_v": 0,
+        "current_a": 0.056321492833945344,
+        "energy_j": 0.00044739449376626176
+      },
+      {
+        "state": "network",
+        "time_s": 0.0024000000000000002,
+        "input_v": 8.214565271144265,
+        "voltage_v": 0,
+        "current_a": 0.05829530463082713,
+        "energy_j": 0.0005255628919570894
+      },
+      {
+        "state": "network",
+        "time_s": 0.0025,
+        "input_v": 8.48528137423857,
+        "voltage_v": 0,
+        "current_a": 0.06020893533987131,
+        "energy_j": 0.000612953303157501
+      },
+      {
+        "state": "network",
+        "time_s": 0.0026000000000000003,
+        "input_v": 8.747623529056938,
+        "voltage_v": 0,
+        "current_a": 0.062060499073847405,
+        "energy_j": 0.0007101169007850243
+      },
+      {
+        "state": "network",
+        "time_s": 0.0027,
+        "input_v": 9.001332835565513,
+        "voltage_v": 0,
+        "current_a": 0.06384817119551625,
+        "energy_j": 0.000817593253448052
+      },
+      {
+        "state": "network",
+        "time_s": 0.0028,
+        "input_v": 9.24615891330947,
+        "voltage_v": 0,
+        "current_a": 0.06557019011832872,
+        "energy_j": 0.0009359071778954031
+      },
+      {
+        "state": "network",
+        "time_s": 0.0029000000000000002,
+        "input_v": 9.481860148508284,
+        "voltage_v": 0,
+        "current_a": 0.06722485904490189,
+        "energy_j": 0.0010655656267050627
+      },
+      {
+        "state": "network",
+        "time_s": 0.003,
+        "input_v": 9.70820393249937,
+        "voltage_v": 0,
+        "current_a": 0.0688105476415559,
+        "energy_j": 0.0012070546240688645
+      },
+      {
+        "state": "network",
+        "time_s": 0.0031000000000000003,
+        "input_v": 9.924966891294744,
+        "voltage_v": 0,
+        "current_a": 0.07032569364725873,
+        "energy_j": 0.00136083626286007
+      },
+      {
+        "state": "network",
+        "time_s": 0.0032,
+        "input_v": 10.13193510602418,
+        "voltage_v": 0,
+        "current_a": 0.07176880441539213,
+        "energy_j": 0.0015273457759477618
+      },
+      {
+        "state": "network",
+        "time_s": 0.0033,
+        "input_v": 10.328904324047324,
+        "voltage_v": 0,
+        "current_a": 0.07313845838681604,
+        "energy_j": 0.0017069886944467154
+      },
+      {
+        "state": "network",
+        "time_s": 0.0034000000000000002,
+        "input_v": 10.515680160526363,
+        "voltage_v": 0,
+        "current_a": 0.07443330649277832,
+        "energy_j": 0.0019001381052648556
+      },
+      {
+        "state": "network",
+        "time_s": 0.0035,
+        "input_v": 10.692078290260413,
+        "voltage_v": 0,
+        "current_a": 0.07565207348628582,
+        "energy_j": 0.0021071320199339562
+      },
+      {
+        "state": "network",
+        "time_s": 0.0036000000000000003,
+        "input_v": 10.857924629592233,
+        "voltage_v": 0,
+        "current_a": 0.07679355920062104,
+        "energy_j": 0.0023282708662842734
+      },
+      {
+        "state": "network",
+        "time_s": 0.0037,
+        "input_v": 11.013055508207774,
+        "voltage_v": 0,
+        "current_a": 0.07785663973376496,
+        "energy_j": 0.002563815114052029
+      },
+      {
+        "state": "network",
+        "time_s": 0.0038,
+        "input_v": 11.157317830659016,
+        "voltage_v": 0,
+        "current_a": 0.07884026855755506,
+        "energy_j": 0.002813983044991962
+      },
+      {
+        "state": "network",
+        "time_s": 0.0039000000000000003,
+        "input_v": 11.290569227450705,
+        "voltage_v": 0,
+        "current_a": 0.07974347755048469,
+        "energy_j": 0.00307894867750743
+      },
+      {
+        "state": "network",
+        "time_s": 0.004,
+        "input_v": 11.412678195541842,
+        "voltage_v": 0,
+        "current_a": 0.08056537795312478,
+        "energy_j": 0.0033588398552102396
+      },
+      {
+        "state": "network",
+        "time_s": 0.0041,
+        "input_v": 11.523524228123318,
+        "voltage_v": 0,
+        "current_a": 0.08130516124522483,
+        "energy_j": 0.003653736508183552
+      },
+      {
+        "state": "network",
+        "time_s": 0.004200000000000001,
+        "input_v": 11.622997933543575,
+        "voltage_v": 0,
+        "current_a": 0.08196209994362696,
+        "energy_j": 0.003963669095046587
+      },
+      {
+        "state": "network",
+        "time_s": 0.0043,
+        "input_v": 11.71100114326497,
+        "voltage_v": 0,
+        "current_a": 0.082535548320207,
+        "energy_j": 0.004288617233212087
+      },
+      {
+        "state": "network",
+        "time_s": 0.0044,
+        "input_v": 11.787447008744264,
+        "voltage_v": 0,
+        "current_a": 0.08302494303913253,
+        "energy_j": 0.004628508523989231
+      },
+      {
+        "state": "network",
+        "time_s": 0.0045000000000000005,
+        "input_v": 11.852260087141653,
+        "voltage_v": 0,
+        "current_a": 0.08342980371280963,
+        "energy_j": 0.0049832175784189576
+      },
+      {
+        "state": "network",
+        "time_s": 0.0046,
+        "input_v": 11.905376415773734,
+        "voltage_v": 0,
+        "current_a": 0.08374973337597053,
+        "energy_j": 0.005352565248938518
+      },
+      {
+        "state": "network",
+        "time_s": 0.0047,
+        "input_v": 11.94674357523696,
+        "voltage_v": 0,
+        "current_a": 0.08398441887743256,
+        "energy_j": 0.005736318071160532
+      },
+      {
+        "state": "network",
+        "time_s": 0.0048000000000000004,
+        "input_v": 11.976320741139258,
+        "voltage_v": 0,
+        "current_a": 0.08413363118914324,
+        "energy_j": 0.006134187919222002
+      },
+      {
+        "state": "network",
+        "time_s": 0.0049,
+        "input_v": 11.994078724388778,
+        "voltage_v": 0,
+        "current_a": 0.08419722563220587,
+        "energy_j": 0.006545831877314377
+      },
+      {
+        "state": "network",
+        "time_s": 0.005,
+        "input_v": 12,
+        "voltage_v": 0,
+        "current_a": 0.08417514201966268,
+        "energy_j": 0.006970852329149494
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      }
+    ],
+    "stale": false
+  },
+  "transient_settings": {
+    "step_s": 0.0001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.01
+  },
+  "document": {
+    "preferences_dirty": false,
+    "schematic_dirty": true,
+    "recordings_dirty": false,
+    "recording_count": 0,
+    "path": "",
+    "dirty": true,
+    "format_version": 4,
+    "generation": 6
+  },
+  "command_revision": 47,
+  "revision": 182,
+  "electrical_revision": 13,
+  "circuit": {
+    "voltage_v": 12,
+    "resistance_ohm": 100,
+    "connected": true
+  },
+  "components": [
+    {
+      "sine": {
+        "amplitude_v": 12,
+        "offset_v": 0,
+        "frequency_hz": 50,
+        "phase_degrees": 0
+      },
+      "id": "VIN",
+      "kind": "sine-source",
+      "name": "Sine source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -500,
+        "y": 0
+      },
+      "value": 12,
+      "unit": "V",
+      "model": "elab.ideal-sine-source.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GNDIN",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": -500,
+        "y": 240
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    },
+    {
+      "power": {
+        "transformer": {
+          "primary_inductance_h": 0.1,
+          "secondary_primary_turns_ratio": 0.75,
+          "coupling": 0.98,
+          "primary_resistance_ohm": 1,
+          "secondary_resistance_ohm": 1,
+          "reversed_secondary": false
+        }
+      },
+      "id": "T1",
+      "kind": "transformer",
+      "name": "Transformer / coupled inductors",
+      "terminals": [
+        "primary1",
+        "primary2",
+        "secondary1",
+        "secondary2"
+      ],
+      "position": {
+        "x": -100,
+        "y": 0
+      },
+      "value": 0,
+      "model": "elab.power-and-isolation.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GNDP",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": -230,
+        "y": 240
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    },
+    {
+      "id": "RL",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "value": 100,
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1",
+      "rotation": 90
+    },
+    {
+      "id": "GNDS",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": 20,
+        "y": 240
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "wires": [
+    {
+      "id": "W1",
+      "from": "VIN.negative",
+      "to": "GNDIN.reference",
+      "connected": true
+    },
+    {
+      "id": "W2",
+      "from": "VIN.positive",
+      "to": "T1.primary1",
+      "connected": true
+    },
+    {
+      "id": "W3",
+      "from": "T1.primary2",
+      "to": "GNDP.reference",
+      "connected": true
+    },
+    {
+      "id": "W4",
+      "from": "T1.secondary1",
+      "to": "RL.1",
+      "connected": true
+    },
+    {
+      "id": "W5",
+      "from": "T1.secondary2",
+      "to": "RL.2",
+      "connected": true
+    },
+    {
+      "id": "W6",
+      "from": "T1.secondary2",
+      "to": "GNDS.reference",
+      "connected": true
+    }
+  ],
+  "nets": [
+    {
+      "id": "net:GNDIN.reference",
+      "terminals": [
+        "GNDIN.reference",
+        "GNDP.reference",
+        "GNDS.reference",
+        "RL.2",
+        "T1.primary2",
+        "T1.secondary2",
+        "VIN.negative"
+      ]
+    },
+    {
+      "id": "net:RL.1",
+      "terminals": [
+        "RL.1",
+        "T1.secondary1"
+      ]
+    },
+    {
+      "id": "net:T1.primary1",
+      "terminals": [
+        "T1.primary1",
+        "VIN.positive"
+      ]
+    }
+  ],
+  "drawing": {
+    "tool": "select",
+    "kind": "dc-source",
+    "position": {
+      "x": -200,
+      "y": 0
+    },
+    "wire_start": "",
+    "from": "",
+    "to": "",
+    "value": ""
+  },
+  "model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "selected": "T1",
+  "view": {
+    "center": {
+      "x": -256,
+      "y": 88.5
+    },
+    "zoom": 0.9170506912429484
+  },
+  "status": "paused",
+  "analysis": "RLC network transient",
+  "paused": true,
+  "run_id": 22,
+  "diagnostics": [],
+  "can_undo": true,
+  "can_redo": false,
+  "last_actor": "agent.socket",
+  "closed": false
+}

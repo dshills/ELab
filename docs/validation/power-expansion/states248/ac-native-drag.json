@@ -1,0 +1,4385 @@
+{
+  "inspector_section": "component",
+  "workspace_layout": {
+    "schematic_fraction": 0.65
+  },
+  "viewport": {
+    "width_px": 1199,
+    "height_px": 579,
+    "registered": true,
+    "following": true
+  },
+  "pulse_timings": [],
+  "verification_input_modes": [
+    "auto",
+    "charge",
+    "discharge"
+  ],
+  "live_input_modes": [
+    "auto",
+    "charge",
+    "discharge"
+  ],
+  "dc_sweep": {
+    "settings": {
+      "component_id": "V1",
+      "parameter": "frequency",
+      "spacing": "logarithmic",
+      "start": "1 Hz",
+      "stop": "100 kHz",
+      "points": 201,
+      "probe_ids": [
+        "v:C1"
+      ]
+    },
+    "targets": [
+      {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      {
+        "component_id": "V1",
+        "parameter": "frequency",
+        "label": "V1 \u00b7 AC frequency / 1 V excitation",
+        "unit": "Hz",
+        "minimum": 0.01,
+        "maximum": 1000000000
+      },
+      {
+        "component_id": "R1",
+        "parameter": "resistance",
+        "label": "R1 \u00b7 Resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000
+      }
+    ],
+    "available_probes": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.1",
+        "label": "R1.1 / ground",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.2",
+        "label": "R1.2 / ground",
+        "unit": "V",
+        "positive": "R1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1",
+        "label": "R1 voltage",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "i:R1",
+        "label": "R1 current",
+        "unit": "A",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1.2",
+        "label": "C1.2 / ground",
+        "unit": "V",
+        "positive": "C1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "v:GNDC.reference",
+        "label": "GNDC.reference / ground",
+        "unit": "V",
+        "positive": "GNDC.reference",
+        "reference": "ground"
+      }
+    ],
+    "operations": [
+      {
+        "kind": "ac-sweep",
+        "id": "sweep-1",
+        "status": "completed",
+        "actor": "user",
+        "completed_points": 201,
+        "total_points": 201,
+        "source_unchanged": true,
+        "kept_in_project": true
+      }
+    ],
+    "selected_operation": "sweep-1",
+    "visible": false,
+    "trace_id": "phase:v:C1",
+    "cursor_index": 138,
+    "result": {
+      "ac_bands": [
+        {
+          "probe_id": "gain:v:C1",
+          "sampled_peak_hz": 1,
+          "sampled_peak_db": -0.00017144920495022439,
+          "half_power_estimates_hz": [
+            159.14370987495784
+          ]
+        }
+      ],
+      "target": {
+        "component_id": "V1",
+        "parameter": "frequency",
+        "label": "V1 \u00b7 AC frequency / 1 V excitation",
+        "unit": "Hz",
+        "minimum": 0.01,
+        "maximum": 1000000000
+      },
+      "spacing": "logarithmic",
+      "start_si": 1,
+      "stop_si": 100000,
+      "probes": [
+        {
+          "id": "gain:v:C1",
+          "label": "C1 voltage gain",
+          "unit": "dB",
+          "positive": "",
+          "reference": ""
+        },
+        {
+          "id": "phase:v:C1",
+          "label": "C1 voltage phase",
+          "unit": "\u00b0",
+          "positive": "",
+          "reference": ""
+        }
+      ],
+      "points": [
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9999605231408795,
+              "imaginary_v_per_v": -0.006282937266758386,
+              "phase_defined": true
+            }
+          ],
+          "input": 1,
+          "values": [
+            -0.00017144920495022439,
+            -0.3599952627020996
+          ],
+          "kcl_residual_a": 2.1684208885201515e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.999955706448907,
+              "imaginary_v_per_v": -0.006655192647436093,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.0592537251772884,
+          "values": [
+            -0.0001923687086126883,
+            -0.38132571079098954
+          ],
+          "kcl_residual_a": 2.16840443302765e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9999503020868657,
+              "imaginary_v_per_v": -0.0070494995036281686,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.1220184543019627,
+          "values": [
+            -0.0002158406578225246,
+            -0.4039199519786013
+          ],
+          "kcl_residual_a": 8.470329472543003e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.999944238362465,
+              "imaginary_v_per_v": -0.007467163328508143,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.1885022274370172,
+          "values": [
+            -0.00024217646697512012,
+            -0.4278528489602875
+          ],
+          "kcl_residual_a": 2.168418026413551e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9999374348393341,
+              "imaginary_v_per_v": -0.007909566755942102,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.258925411794168,
+          "values": [
+            -0.00027172554073153204,
+            -0.45320369622487233
+          ],
+          "kcl_residual_a": 1.6940658945086007e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9999298012710407,
+              "imaginary_v_per_v": -0.008378174090916119,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.3335214321633246,
+          "values": [
+            -0.00030487990745401604,
+            -0.4800564818822073
+          ],
+          "kcl_residual_a": 7.443921096299945e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9999212364052918,
+              "imaginary_v_per_v": -0.008874536100789223,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.4125375446227544,
+          "values": [
+            -0.0003420794174456164,
+            -0.5085001648593893
+          ],
+          "kcl_residual_a": 2.168407050707192e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9999116266425324,
+              "imaginary_v_per_v": -0.009400295081391837,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.4962356560944332,
+          "values": [
+            -0.00038381757482823655,
+            -0.5386289683488505
+          ],
+          "kcl_residual_a": 2.168470518410302e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.999900844531264,
+              "imaginary_v_per_v": -0.009957190212550914,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.5848931924611132,
+          "values": [
+            -0.00043064808013511485,
+            -0.5705426904387175
+          ],
+          "kcl_residual_a": 2.779768066826693e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9998887470802599,
+              "imaginary_v_per_v": -0.010547063218166248,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.6788040181225594,
+          "values": [
+            -0.00048319217015612835,
+            -0.6043470329048276
+          ],
+          "kcl_residual_a": 1.1496229751272408e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9998751738654599,
+              "imaginary_v_per_v": -0.011171864346477727,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.7782794100389245,
+          "values": [
+            -0.0005421468520325267,
+            -0.6401539491945296
+          ],
+          "kcl_residual_a": 2.1684059812734814e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9998599449066591,
+              "imaginary_v_per_v": -0.011833658686637796,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.8836490894898017,
+          "values": [
+            -0.000608294140343726,
+            -0.6780820126847684
+          ],
+          "kcl_residual_a": 2.168404344971009e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9998428582860953,
+              "imaginary_v_per_v": -0.012534632838121418,
+              "phase_defined": true
+            }
+          ],
+          "input": 1.9952623149688806,
+          "values": [
+            -0.0006825114191668698,
+            -0.7182568063508388
+          ],
+          "kcl_residual_a": 1.0464967920242778e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9998236874777079,
+              "imaginary_v_per_v": -0.013277101949847006,
+              "phase_defined": true
+            }
+          ],
+          "input": 2.1134890398366433,
+          "values": [
+            -0.0007657830657743662,
+            -0.7608113350372528
+          ],
+          "kcl_residual_a": 1.6940658945086007e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9998021783520763,
+              "imaginary_v_per_v": -0.014063517146125297,
+              "phase_defined": true
+            }
+          ],
+          "input": 2.2387211385683394,
+          "values": [
+            -0.000859213489259234,
+            -0.8058864615783206
+          ],
+          "kcl_residual_a": 6.188266570967399e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9997780458178751,
+              "imaginary_v_per_v": -0.014896473356667191,
+              "phase_defined": true
+            }
+          ],
+          "input": 2.3713737056616546,
+          "values": [
+            -0.0009640417558294333,
+            -0.85363136807264
+          ],
+          "kcl_residual_a": 1.6940658945086007e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9997509700560014,
+              "imaginary_v_per_v": -0.01577871756783714,
+              "phase_defined": true
+            }
+          ],
+          "input": 2.5118864315095792,
+          "values": [
+            -0.0010816579932778124,
+            -0.9042040436726072
+          ],
+          "kcl_residual_a": 4.178146607493101e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9997205922973118,
+              "imaginary_v_per_v": -0.01671315751208873,
+              "phase_defined": true
+            }
+          ],
+          "input": 2.660725059798808,
+          "values": [
+            -0.0012136217903216176,
+            -0.9577718003062814
+          ],
+          "kcl_residual_a": 2.168669026613126e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9996865100890886,
+              "imaginary_v_per_v": -0.017702870812021234,
+              "phase_defined": true
+            }
+          ],
+          "input": 2.818382931264451,
+          "values": [
+            -0.0013616828324809946,
+            -1.014511817804135
+          ],
+          "kcl_residual_a": 2.168404344971009e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9996482719888631,
+              "imaginary_v_per_v": -0.01875111459468639,
+              "phase_defined": true
+            }
+          ],
+          "input": 2.985382618917956,
+          "values": [
+            -0.0015278040451683073,
+            -1.0746117199561633
+          ],
+          "kcl_residual_a": 5.429263631073287e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9996053716169975,
+              "imaginary_v_per_v": -0.019861335590585952,
+              "phase_defined": true
+            }
+          ],
+          "input": 3.1622776601683804,
+          "values": [
+            -0.001714187547184543,
+            -1.1382701830745396
+          ],
+          "kcl_residual_a": 4.235606660942224e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9995572409913873,
+              "imaginary_v_per_v": -0.021037180730148278,
+              "phase_defined": true
+            }
+          ],
+          "input": 3.3496543915782766,
+          "values": [
+            -0.0019233037539922327,
+            -1.205697578682027
+          ],
+          "kcl_residual_a": 1.0804858948285124e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9995032430587077,
+              "imaginary_v_per_v": -0.022282508248257445,
+              "phase_defined": true
+            }
+          ],
+          "input": 3.548133892335754,
+          "values": [
+            -0.002157924010755609,
+            -1.2771166519851083
+          ],
+          "kcl_residual_a": 2.168548177514738e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9994426633267016,
+              "imaginary_v_per_v": -0.02360139930450988,
+              "phase_defined": true
+            }
+          ],
+          "input": 3.7583740428844408,
+          "values": [
+            -0.002421157180291452,
+            -1.35276323782101
+          ],
+          "kcl_residual_a": 2.168669026613126e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9993747004910177,
+              "imaginary_v_per_v": -0.024998170123155153,
+              "phase_defined": true
+            }
+          ],
+          "input": 3.98107170553497,
+          "values": [
+            -0.0027164906615559595,
+            -1.4328870157873044
+          ],
+          "kcl_residual_a": 2.168920893949621e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9992984559379208,
+              "imaginary_v_per_v": -0.026477384651966925,
+              "phase_defined": true
+            }
+          ],
+          "input": 4.216965034285819,
+          "values": [
+            -0.003047836370531369,
+            -1.517752306268307
+          ],
+          "kcl_residual_a": 9.637803270504918e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9992129219907594,
+              "imaginary_v_per_v": -0.028043867733393783,
+              "phase_defined": true
+            }
+          ],
+          "input": 4.4668359215096345,
+          "values": [
+            -0.0034195822780148646,
+            -1.6076389090606598
+          ],
+          "kcl_residual_a": 2.168404344971009e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9991169687532487,
+              "imaginary_v_per_v": -0.029702718774020347,
+              "phase_defined": true
+            }
+          ],
+          "input": 4.731512589614807,
+          "values": [
+            -0.0038366501685236963,
+            -1.7028429862668648
+          ],
+          "kcl_residual_a": 9.822629972905406e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9990093293863227,
+              "imaginary_v_per_v": -0.03145932588935494,
+              "phase_defined": true
+            }
+          ],
+          "input": 5.011872336272724,
+          "values": [
+            -0.004304560361990663,
+            -1.8036779910651972
+          ],
+          "kcl_residual_a": 2.169462877787276e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.998888583637437,
+              "imaginary_v_per_v": -0.03331938048991983,
+              "phase_defined": true
+            }
+          ],
+          "input": 5.3088444423098835,
+          "values": [
+            -0.004829504226001762,
+            -1.9104756438708923
+          ],
+          "kcl_residual_a": 1.240859344845422e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9987531394216771,
+              "imaginary_v_per_v": -0.03528889226117964,
+              "phase_defined": true
+            }
+          ],
+          "input": 5.623413251903489,
+          "values": [
+            -0.005418425401620956,
+            -2.023586957269945
+          ],
+          "kcl_residual_a": 1.244986437970126e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9986012122327518,
+              "imaginary_v_per_v": -0.03737420447354735,
+              "phase_defined": true
+            }
+          ],
+          "input": 5.956621435290101,
+          "values": [
+            -0.006079110771485167,
+            -2.1433833109242384
+          ],
+          "kcl_residual_a": 6.776263578034403e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9984308021389244,
+              "imaginary_v_per_v": -0.03958200953903552,
+              "phase_defined": true
+            }
+          ],
+          "input": 6.309573444801939,
+          "values": [
+            -0.00682029231546433,
+            -2.2702575774050024
+          ],
+          "kcl_residual_a": 1.2284538993256774e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.998239668094104,
+              "imaginary_v_per_v": -0.0419193647074592,
+              "phase_defined": true
+            }
+          ],
+          "input": 6.683439175686152,
+          "values": [
+            -0.007651761127773956,
+            -2.4046252995985684
+          ],
+          "kcl_residual_a": 6.776263578034403e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9980252992677396,
+              "imaginary_v_per_v": -0.04439370776673626,
+              "phase_defined": true
+            }
+          ],
+          "input": 7.079457843841382,
+          "values": [
+            -0.008584495010921721,
+            -2.546925919929885
+          ],
+          "kcl_residual_a": 2.169462877787276e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9977848830689522,
+              "imaginary_v_per_v": -0.04701287257794076,
+              "phase_defined": true
+            }
+          ],
+          "input": 7.498942093324561,
+          "values": [
+            -0.009630801217019837,
+            -2.6976240611481104
+          ],
+          "kcl_residual_a": 6.952666894061148e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9975152695106657,
+              "imaginary_v_per_v": -0.049785104235400314,
+              "phase_defined": true
+            }
+          ],
+          "input": 7.943282347242802,
+          "values": [
+            -0.010804476076629103,
+            -2.8572108577955713
+          ],
+          "kcl_residual_a": 8.242977229634524e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.997212931528707,
+              "imaginary_v_per_v": -0.05271907359418631,
+              "phase_defined": true
+            }
+          ],
+          "input": 8.41395141645195,
+          "values": [
+            -0.012120983440103317,
+            -3.0262053367128314
+          ],
+          "kcl_residual_a": 2.1687088364234566e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9968739208393844,
+              "imaginary_v_per_v": -0.05582389085057638,
+              "phase_defined": true
+            }
+          ],
+          "input": 8.912509381337452,
+          "values": [
+            -0.013597654056757044,
+            -3.20515584399173
+          ],
+          "kcl_residual_a": 2.169462877787276e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9964938188876153,
+              "imaginary_v_per_v": -0.05910911779405835,
+              "phase_defined": true
+            }
+          ],
+          "input": 9.440608762859245,
+          "values": [
+            -0.01525390823329026,
+            -3.3946415146440128
+          ],
+          "kcl_residual_a": 2.168543478923496e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9960676824071726,
+              "imaginary_v_per_v": -0.06258477827057163,
+              "phase_defined": true
+            }
+          ],
+          "input": 9.999999999999991,
+          "values": [
+            -0.017111504344580936,
+            -3.595273779868172
+          ],
+          "kcl_residual_a": 2.168801528968694e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9955899830863237,
+              "imaginary_v_per_v": -0.06626136630418511,
+              "phase_defined": true
+            }
+          ],
+          "input": 10.592537251772876,
+          "values": [
+            -0.019194816016323273,
+            -3.807697905130846
+          ],
+          "kcl_residual_a": 7.193391731466005e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9950545408077109,
+              "imaginary_v_per_v": -0.07014985121628121,
+              "phase_defined": true
+            }
+          ],
+          "input": 11.22018454301962,
+          "values": [
+            -0.021531141058752593,
+            -4.032594550281669
+          ],
+          "kcl_residual_a": 2.1685804717195844e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.994454449912951,
+              "imaginary_v_per_v": -0.07426167895544199,
+              "phase_defined": true
+            }
+          ],
+          "input": 11.885022274370186,
+          "values": [
+            -0.024151045501041468,
+            -4.27068134053867
+          ],
+          "kcl_residual_a": 2.1726353818624857e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9937819979329331,
+              "imaginary_v_per_v": -0.07860876870528424,
+              "phase_defined": true
+            }
+          ],
+          "input": 12.589254117941671,
+          "values": [
+            -0.027088746353660497,
+            -4.522714434350969
+          ],
+          "kcl_residual_a": 1.3552527156068805e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9930285762277723,
+              "imaginary_v_per_v": -0.0832035036691109,
+              "phase_defined": true
+            }
+          ],
+          "input": 13.335214321633236,
+          "values": [
+            -0.03038253700524232,
+            -4.789490070798365
+          ],
+          "kcl_residual_a": 1.3552527156068805e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9921845820003578,
+              "imaginary_v_per_v": -0.08805871473700441,
+              "phase_defined": true
+            }
+          ],
+          "input": 14.125375446227535,
+          "values": [
+            -0.03407525943445508,
+            -5.071846075243683
+          ],
+          "kcl_residual_a": 2.168404344971009e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9912393111901467,
+              "imaginary_v_per_v": -0.09318765552062251,
+              "phase_defined": true
+            }
+          ],
+          "input": 14.962356560944322,
+          "values": [
+            -0.03821482767571324,
+            -5.370663297329364
+          ],
+          "kcl_residual_a": 3.796922348348915e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.990180841826309,
+              "imaginary_v_per_v": -0.0986039669914497,
+              "phase_defined": true
+            }
+          ],
+          "input": 15.84893192461112,
+          "values": [
+            -0.042854807207616336,
+            -5.68686695001037
+          ],
+          "kcl_residual_a": 2.1684135464320206e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9889959075302045,
+              "imaginary_v_per_v": -0.10432162967818152,
+              "phase_defined": true
+            }
+          ],
+          "input": 16.78804018122561,
+          "values": [
+            -0.04805505511745775,
+            -6.021427812043416
+          ],
+          "kcl_residual_a": 1.3552527156068805e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.987669761016954,
+              "imaginary_v_per_v": -0.11035490106772264,
+              "phase_defined": true
+            }
+          ],
+          "input": 17.782794100389236,
+          "values": [
+            -0.053882426012551686,
+            -6.375363249105157
+          ],
+          "kcl_residual_a": 1.6315218230172176e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9861860276671631,
+              "imaginary_v_per_v": -0.11671823551281274,
+              "phase_defined": true
+            }
+          ],
+          "input": 18.836490894898006,
+          "values": [
+            -0.06041154867177509,
+            -6.749738000388063
+          ],
+          "kcl_residual_a": 2.17185068542873e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9845265495375671,
+              "imaginary_v_per_v": -0.12342618358038808,
+              "phase_defined": true
+            }
+          ],
+          "input": 19.952623149688794,
+          "values": [
+            -0.06772567832421489,
+            -7.145664668025802
+          ],
+          "kcl_residual_a": 2.1688580151664962e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9826712205709145,
+              "imaginary_v_per_v": -0.13049326738412104,
+              "phase_defined": true
+            }
+          ],
+          "input": 21.13489039836646,
+          "values": [
+            -0.07591762916396869,
+            -7.5643038359488735
+          ],
+          "kcl_residual_a": 2.710505431213761e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9805978142707001,
+              "imaginary_v_per_v": -0.13793382804165735,
+              "phase_defined": true
+            }
+          ],
+          "input": 22.38721138568338,
+          "values": [
+            -0.08509079120874388,
+            -8.006863732707862
+          ],
+          "kcl_residual_a": 2.1684389652565005e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.978281805747721,
+              "imaginary_v_per_v": -0.1457618409965355,
+              "phase_defined": true
+            }
+          ],
+          "input": 23.713737056616573,
+          "values": [
+            -0.09536023482297361,
+            -8.474599339408575
+          ],
+          "kcl_residual_a": 2.168404344971009e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9756961908471387,
+              "imaginary_v_per_v": -0.15399069456796,
+              "phase_defined": true
+            }
+          ],
+          "input": 25.118864315095816,
+          "values": [
+            -0.10685390507945,
+            -8.968810829221324
+          ],
+          "kcl_residual_a": 2.2015060577147304e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9728113060521696,
+              "imaginary_v_per_v": -0.16263292676835633,
+              "phase_defined": true
+            }
+          ],
+          "input": 26.607250597988063,
+          "values": [
+            -0.11971390654053876,
+            -9.490841209080816
+          ],
+          "kcl_residual_a": 1.1175700191704681e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9695946540587103,
+              "imaginary_v_per_v": -0.17169991519939723,
+              "phase_defined": true
+            }
+          ],
+          "input": 28.183829312644544,
+          "values": [
+            -0.13409787690168473,
+            -10.042073017422995
+          ],
+          "kcl_residual_a": 2.402258546446321e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.966010741346584,
+              "imaginary_v_per_v": -0.18120151475527763,
+              "phase_defined": true
+            }
+          ],
+          "input": 29.853826189179596,
+          "values": [
+            -0.15018044514512613,
+            -10.623923914505502
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9620209357541626,
+              "imaginary_v_per_v": -0.19114563799586967,
+              "phase_defined": true
+            }
+          ],
+          "input": 31.622776601683782,
+          "values": [
+            -0.1681547662791224,
+            -11.237840984624148
+          ],
+          "kcl_residual_a": 2.710505431213761e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9575833539997785,
+              "imaginary_v_per_v": -0.20153777348753613,
+              "phase_defined": true
+            }
+          ],
+          "input": 33.496543915782745,
+          "values": [
+            -0.1882341202611958,
+            -11.885293553213971
+          ],
+          "kcl_residual_a": 1.1175700191704681e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9526527912746883,
+              "imaginary_v_per_v": -0.21238043824993255,
+              "phase_defined": true
+            }
+          ],
+          "input": 35.48133892335755,
+          "values": [
+            -0.21065355719632053,
+            -12.56776430757427
+          ],
+          "kcl_residual_a": 2.1700144316989442e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9471807074224698,
+              "imaginary_v_per_v": -0.2236725618155688,
+              "phase_defined": true
+            }
+          ],
+          "input": 37.58374042884438,
+          "values": [
+            -0.2356715642488488,
+            -13.286738499313154
+          ],
+          "kcl_residual_a": 2.710505431213761e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9411152867478171,
+              "imaginary_v_per_v": -0.2354088014441921,
+              "phase_defined": true
+            }
+          ],
+          "input": 39.81071705534975,
+          "values": [
+            -0.2635717218209958,
+            -14.04369100153725
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9344015910461343,
+              "imaginary_v_per_v": -0.24757879088602688,
+              "phase_defined": true
+            }
+          ],
+          "input": 42.1696503428582,
+          "values": [
+            -0.2946643073898704,
+            -14.840070996758778
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9269818278368043,
+              "imaginary_v_per_v": -0.2601663289073774,
+              "phase_defined": true
+            }
+          ],
+          "input": 44.66835921509635,
+          "values": [
+            -0.3292877949903704,
+            -15.67728408540246
+          ],
+          "kcl_residual_a": 1.1989007555961556e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9187957577676084,
+              "imaginary_v_per_v": -0.27314851871437035,
+              "phase_defined": true
+            }
+          ],
+          "input": 47.31512589614804,
+          "values": [
+            -0.3678101868203101,
+            -16.556671633084758
+          ],
+          "kcl_residual_a": 1.4110315828975381e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.9097812664019547,
+              "imaginary_v_per_v": -0.28649487553185,
+              "phase_defined": true
+            }
+          ],
+          "input": 50.11872336272725,
+          "values": [
+            -0.41063010111054893,
+            -17.479487221325144
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.8998751256817661,
+              "imaginary_v_per_v": -0.3001664269384432,
+              "phase_defined": true
+            }
+          ],
+          "input": 53.08844442309879,
+          "values": [
+            -0.45817752771818043,
+            -18.44687013504476
+          ],
+          "kcl_residual_a": 1.21217487951527e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.8890139687692372,
+              "imaginary_v_per_v": -0.3141148390356732,
+              "phase_defined": true
+            }
+          ],
+          "input": 56.23413251903491,
+          "values": [
+            -0.5109141505707816,
+            -19.459815915042324
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.877135498136503,
+              "imaginary_v_per_v": -0.32828161088512353,
+              "phase_defined": true
+            }
+          ],
+          "input": 59.566214352901035,
+          "values": [
+            -0.5693331250905189,
+            -20.51914412797288
+          ],
+          "kcl_residual_a": 1.21217487951527e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.8641799400944489,
+              "imaginary_v_per_v": -0.34259738941329315,
+              "phase_defined": true
+            }
+          ],
+          "input": 63.0957344480193,
+          "values": [
+            -0.6339581903312109,
+            -21.625463662391553
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.850091748874351,
+              "imaginary_v_per_v": -0.3569814664238165,
+              "phase_defined": true
+            }
+          ],
+          "input": 66.83439175686146,
+          "values": [
+            -0.7053419913333193,
+            -22.779136047372187
+          ],
+          "kcl_residual_a": 2.17280598592005e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.8348215494852828,
+              "imaginary_v_per_v": -0.37134152743838705,
+              "phase_defined": true
+            }
+          ],
+          "input": 70.7945784384138,
+          "values": [
+            -0.784063488953304,
+            -23.98023750738141
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.818328290726516,
+              "imaginary_v_per_v": -0.3855737274804064,
+              "phase_defined": true
+            }
+          ],
+          "input": 74.98942093324555,
+          "values": [
+            -0.8707243441105706,
+            -25.228520706882797
+          ],
+          "kcl_residual_a": 3.725134521858174e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.800581558225436,
+              "imaginary_v_per_v": -0.39956317004294695,
+              "phase_defined": true
+            }
+          ],
+          "input": 79.43282347242817,
+          "values": [
+            -0.9659441829433646,
+            -26.5233773891509
+          ],
+          "kcl_residual_a": 2.2391472632352514e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.7815639730716986,
+              "imaginary_v_per_v": -0.41318486064724086,
+              "phase_defined": true
+            }
+          ],
+          "input": 84.13951416451951,
+          "values": [
+            -1.0703546804154933,
+            -27.863803359132714
+          ],
+          "kcl_residual_a": 1.2478021101890629e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.7612735761181851,
+              "imaginary_v_per_v": -0.4263051939894879,
+              "phase_defined": true
+            }
+          ],
+          "input": 89.12509381337453,
+          "values": [
+            -1.1845924434989414,
+            -29.24836747752253
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.7397260736859085,
+              "imaginary_v_per_v": -0.43878401246528836,
+              "phase_defined": true
+            }
+          ],
+          "input": 94.40608762859239,
+          "values": [
+            -1.3092907312133955,
+            -30.67518649535989
+          ],
+          "kcl_residual_a": 1.21217487951527e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.7169568003248977,
+              "imaginary_v_per_v": -0.4504772433683886,
+              "phase_defined": true
+            }
+          ],
+          "input": 100.00000000000003,
+          "values": [
+            -1.445070116205287,
+            -32.14190763534206
+          ],
+          "kcl_residual_a": 4.242131262542811e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.6930222420123273,
+              "imaginary_v_per_v": -0.46124008291619073,
+              "phase_defined": true
+            }
+          ],
+          "input": 105.92537251772889,
+          "values": [
+            -1.592528268193475,
+            -33.645700787729204
+          ],
+          "kcl_residual_a": 3.6431782217424504e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.6680009623407712,
+              "imaginary_v_per_v": -0.47093064951495217,
+              "phase_defined": true
+            }
+          ],
+          "input": 112.20184543019622,
+          "values": [
+            -1.752229118672903,
+            -35.183262009643705
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.6419937879528993,
+              "imaginary_v_per_v": -0.4794139799617728,
+              "phase_defined": true
+            }
+          ],
+          "input": 118.8502227437019,
+          "values": [
+            -1.9246917422215852,
+            -36.75082968051893
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.6151231395586015,
+              "imaginary_v_per_v": -0.48656619563854897,
+              "phase_defined": true
+            }
+          ],
+          "input": 125.89254117941663,
+          "values": [
+            -2.110379354805698,
+            -38.34421417159505
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.5875314412429508,
+              "imaginary_v_per_v": -0.4922786271959528,
+              "phase_defined": true
+            }
+          ],
+          "input": 133.3521432163325,
+          "values": [
+            -2.309688875363115,
+            -39.95884125028299
+          ],
+          "kcl_residual_a": 6.820430036286533e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.5593786009437447,
+              "imaginary_v_per_v": -0.49646166191354946,
+              "phase_defined": true
+            }
+          ],
+          "input": 141.25375446227525,
+          "values": [
+            -2.522941516037638,
+            -41.589808697831394
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.5308386239313388,
+              "imaginary_v_per_v": -0.49904807310921606,
+              "phase_defined": true
+            }
+          ],
+          "input": 149.62356560944338,
+          "values": [
+            -2.7503748529895593,
+            -43.23195482710328
+          ],
+          "kcl_residual_a": 5.514824866681449e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.502095491724172,
+              "imaginary_v_per_v": -0.4999956088951521,
+              "phase_defined": true
+            }
+          ],
+          "input": 158.48931924611122,
+          "values": [
+            -2.992136781040538,
+            -44.8799368167268
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.47333850277700623,
+              "imaginary_v_per_v": -0.49928865855918286,
+              "phase_defined": true
+            }
+          ],
+          "input": 167.88040181225614,
+          "values": [
+            -3.248281672761788,
+            -46.52831610486181
+          ],
+          "kcl_residual_a": 6.774440769994927e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.4447573202504232,
+              "imaginary_v_per_v": -0.49693887585304264,
+              "phase_defined": true
+            }
+          ],
+          "input": 177.82794100389222,
+          "values": [
+            -3.518768951424025,
+            -48.17164758226712
+          ],
+          "kcl_residual_a": 3.9907726810769784e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.4165369995355945,
+              "imaginary_v_per_v": -0.49298471330608074,
+              "phase_defined": true
+            }
+          ],
+          "input": 188.36490894898012,
+          "values": [
+            -3.80346415672662,
+            -49.804569046895445
+          ],
+          "kcl_residual_a": 1.0842021724855044e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.3888532701177225,
+              "imaginary_v_per_v": -0.4874899018815426,
+              "phase_defined": true
+            }
+          ],
+          "input": 199.52623149688782,
+          "values": [
+            -4.1021424443134515,
+            -51.42188736297681
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.3618683225428338,
+              "imaginary_v_per_v": -0.4805409864755237,
+              "phase_defined": true
+            }
+          ],
+          "input": 211.34890398366483,
+          "values": [
+            -4.414494327718227,
+            -53.01865800874673
+          ],
+          "kcl_residual_a": 2.6469004811617145e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.3357273050670979,
+              "imaginary_v_per_v": -0.4722440912277057,
+              "phase_defined": true
+            }
+          ],
+          "input": 223.87211385683386,
+          "values": [
+            -4.740133356726737,
+            -54.590255170628254
+          ],
+          "kcl_residual_a": 2.1728946877404016e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.31055567234730985,
+              "imaginary_v_per_v": -0.46272113277893434,
+              "phase_defined": true
+            }
+          ],
+          "input": 237.13737056616537,
+          "values": [
+            -5.078605338902124,
+            -56.13243019425994
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.2864574583735098,
+              "imaginary_v_per_v": -0.45210572094997725,
+              "phase_defined": true
+            }
+          ],
+          "input": 251.188643150958,
+          "values": [
+            -5.429398657226566,
+            -57.64135696386774
+          ],
+          "kcl_residual_a": 4.018573451278054e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.2635144761658504,
+              "imaginary_v_per_v": -0.4405389846731931,
+              "phase_defined": true
+            }
+          ],
+          "input": 266.0725059798809,
+          "values": [
+            -5.791955218318564,
+            -59.11366357466645
+          ],
+          "kcl_residual_a": 1.21217487951527e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.24178638493931476,
+              "imaginary_v_per_v": -0.42816553924538614,
+              "phase_defined": true
+            }
+          ],
+          "input": 281.8382931264452,
+          "values": [
+            -6.165681580335722,
+            -60.546450416426396
+          ],
+          "kcl_residual_a": 5.421010862427522e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.22131151684228662,
+              "imaginary_v_per_v": -0.41512977411317165,
+              "phase_defined": true
+            }
+          ],
+          "input": 298.538261891796,
+          "values": [
+            -6.549959852100676,
+            -61.93729544153435
+          ],
+          "kcl_residual_a": 2.401208371488854e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.20210832286437813,
+              "imaginary_v_per_v": -0.4015725945496361,
+              "phase_defined": true
+            }
+          ],
+          "input": 316.2277660168379,
+          "values": [
+            -6.944158017759005,
+            -63.28424790794933
+          ],
+          "kcl_residual_a": 5.815460562275618e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.1841772814968421,
+              "imaginary_v_per_v": -0.38762870182337517,
+              "phase_defined": true
+            }
+          ],
+          "input": 334.9654391578276,
+          "values": [
+            -7.347639416150522,
+            -64.58581224691244
+          ],
+          "kcl_residual_a": 1.2748381205188464e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.167503112611946,
+              "imaginary_v_per_v": -0.3734244500260471,
+              "phase_defined": true
+            }
+          ],
+          "input": 354.8133892335756,
+          "values": [
+            -7.759771183129114,
+            -65.84092390648132
+          ],
+          "kcl_residual_a": 9.295694814584074e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.15205714985251245,
+              "imaginary_v_per_v": -0.35907627745542176,
+              "phase_defined": true
+            }
+          ],
+          "input": 375.8374042884442,
+          "values": [
+            -8.179931541552433,
+            -67.0489190793453
+          ],
+          "kcl_residual_a": 3.7348448555493785e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.1377997439989841,
+              "imaginary_v_per_v": -0.3446896786281808,
+              "phase_defined": true
+            }
+          ],
+          "input": 398.10717055349716,
+          "values": [
+            -8.607515892493788,
+            -68.20950016146013
+          ],
+          "kcl_residual_a": 2.4664603850560154e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.1246825937027977,
+              "imaginary_v_per_v": -0.3303586604439798,
+              "phase_defined": true
+            }
+          ],
+          "input": 421.69650342858245,
+          "values": [
+            -9.041941719141551,
+            -69.3226986364044
+          ],
+          "kcl_residual_a": 7.350142076901157e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.11265092547072157,
+              "imaginary_v_per_v": -0.316165612395326,
+              "phase_defined": true
+            }
+          ],
+          "input": 446.68359215096325,
+          "values": [
+            -9.48265236029129,
+            -70.38883686928226
+          ],
+          "kcl_residual_a": 6.541498755684755e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.10164546937658152,
+              "imaginary_v_per_v": -0.3021815148744144,
+              "phase_defined": true
+            }
+          ],
+          "input": 473.1512589614805,
+          "values": [
+            -9.929119743166543,
+            -71.40849005120326
+          ],
+          "kcl_residual_a": 4.853205474889206e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0916041989621075,
+              "imaginary_v_per_v": -0.2884664099936388,
+              "phase_defined": true
+            }
+          ],
+          "input": 501.18723362727263,
+          "values": [
+            -10.380846186435306,
+            -72.38244928400344
+          ],
+          "kcl_residual_a": 2.2111392145755138e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.08246382219612566,
+              "imaginary_v_per_v": -0.275070064210796,
+              "phase_defined": true
+            }
+          ],
+          "input": 530.8844442309886,
+          "values": [
+            -10.837365395296153,
+            -73.31168655261177
+          ],
+          "kcl_residual_a": 3.911591998870088e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.07416102482735974,
+              "imaginary_v_per_v": -0.2620327598295974,
+              "phase_defined": true
+            }
+          ],
+          "input": 562.3413251903492,
+          "values": [
+            -11.298242773291474,
+            -74.19732211148623
+          ],
+          "kcl_residual_a": 2.2345701658486608e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.06663347807810756,
+              "imaginary_v_per_v": -0.24938616175987374,
+              "phase_defined": true
+            }
+          ],
+          "input": 595.662143529011,
+          "values": [
+            -11.763075172030195,
+            -75.0405946190897
+          ],
+          "kcl_residual_a": 2.21910823550153e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.059820629766433465,
+              "imaginary_v_per_v": -0.23715421569261794,
+              "phase_defined": true
+            }
+          ],
+          "input": 630.9573444801937,
+          "values": [
+            -12.231490192109648,
+            -75.84283419365032
+          ],
+          "kcl_residual_a": 2.877719398652978e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.05366430215562124,
+              "imaginary_v_per_v": -0.2253540432958136,
+              "phase_defined": true
+            }
+          ],
+          "input": 668.3439175686142,
+          "values": [
+            -12.703145137820147,
+            -76.60543843459602
+          ],
+          "kcl_residual_a": 2.4293216664971957e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.04810912170923881,
+              "imaginary_v_per_v": -0.21399680866219584,
+              "phase_defined": true
+            }
+          ],
+          "input": 707.9457843841374,
+          "values": [
+            -13.17772571601133,
+            -77.32985135511386
+          ],
+          "kcl_residual_a": 2.9130271182026054e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.04310280605881762,
+              "imaginary_v_per_v": -0.2030885377579778,
+              "phase_defined": true
+            }
+          ],
+          "input": 749.8942093324551,
+          "values": [
+            -13.654944556816968,
+            -78.01754509901808
+          ],
+          "kcl_residual_a": 4.4616270716723914e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.03859633238788692,
+              "imaginary_v_per_v": -0.1926308789215547,
+              "phase_defined": true
+            }
+          ],
+          "input": 794.3282347242812,
+          "values": [
+            -14.134539621515357,
+            -78.67000426564339
+          ],
+          "kcl_residual_a": 2.1725549383353656e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.03454400953649489,
+              "imaginary_v_per_v": -0.18262179755340663,
+              "phase_defined": true
+            }
+          ],
+          "input": 841.3951416451945,
+          "values": [
+            -14.61627255115028,
+            -79.2887126357829
+          ],
+          "kcl_residual_a": 2.1698695316709103e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.030903473780679043,
+              "imaginary_v_per_v": -0.17305620211066094,
+              "phase_defined": true
+            }
+          ],
+          "input": 891.2509381337449,
+          "values": [
+            -15.099926998960173,
+            -79.87514207591096
+          ],
+          "kcl_residual_a": 2.1724537739212925e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0276356257031544,
+              "imaginary_v_per_v": -0.1639265015034163,
+              "phase_defined": true
+            }
+          ],
+          "input": 944.0608762859232,
+          "values": [
+            -15.585306980316906,
+            -80.43074339358172
+          ],
+          "kcl_residual_a": 2.185561166004505e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.024704523031857665,
+              "imaginary_v_per_v": -0.1552230961346477,
+              "phase_defined": true
+            }
+          ],
+          "input": 999.9999999999995,
+          "values": [
+            -16.072235265805514,
+            -80.95693892096232
+          ],
+          "kcl_residual_a": 1.2905152207068008e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.022077241907390417,
+              "imaginary_v_per_v": -0.14693480628208205,
+              "phase_defined": true
+            }
+          ],
+          "input": 1059.253725177288,
+          "values": [
+            -16.560551836248784,
+            -81.45511661342314
+          ],
+          "kcl_residual_a": 2.710505431213761e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.019723716825721004,
+              "imaginary_v_per_v": -0.13904924242979452,
+              "phase_defined": true
+            }
+          ],
+          "input": 1122.0184543019634,
+          "values": [
+            -17.050112412813178,
+            -81.92662546393913
+          ],
+          "kcl_residual_a": 1.5532658305419824e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.01761656752903582,
+              "imaginary_v_per_v": -0.13155312264454513,
+              "phase_defined": true
+            }
+          ],
+          "input": 1188.502227437018,
+          "values": [
+            -17.540787070713264,
+            -82.37277205015587
+          ],
+          "kcl_residual_a": 2.174277983047023e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.01573091939939291,
+              "imaginary_v_per_v": -0.12443254226384155,
+              "phase_defined": true
+            }
+          ],
+          "input": 1258.9254117941666,
+          "values": [
+            -18.032458941335822,
+            -82.7948180481373
+          ],
+          "kcl_residual_a": 8.257357998051587e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.014044222442931098,
+              "imaginary_v_per_v": -0.11767320110757831,
+              "phase_defined": true
+            }
+          ],
+          "input": 1333.5214321633243,
+          "values": [
+            -18.525023004703968,
+            -83.19397856414342
+          ],
+          "kcl_residual_a": 1.3552527156068805e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.012536072721536588,
+              "imaginary_v_per_v": -0.11126059321366633,
+              "phase_defined": true
+            }
+          ],
+          "input": 1412.5375446227542,
+          "values": [
+            -19.018384971975347,
+            -83.5714211526625
+          ],
+          "kcl_residual_a": 2.575273537699217e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.011188039072272355,
+              "imaginary_v_per_v": -0.10518016378571418,
+              "phase_defined": true
+            }
+          ],
+          "input": 1496.235656094433,
+          "values": [
+            -19.51246025600238,
+            -83.92826540492091
+          ],
+          "kcl_residual_a": 2.304206688474083e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00998349712771294,
+              "imaginary_v_per_v": -0.09941743766972617,
+              "phase_defined": true
+            }
+          ],
+          "input": 1584.893192461114,
+          "values": [
+            -20.007173026776357,
+            -84.26558300695537
+          ],
+          "kcl_residual_a": 1.3552527156068805e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.008907471987162262,
+              "imaginary_v_per_v": -0.09395812327819336,
+              "phase_defined": true
+            }
+          ],
+          "input": 1678.8040181225604,
+          "values": [
+            -20.502455347743066,
+            -84.58439817991699
+          ],
+          "kcl_residual_a": 1.3552527156068805e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.007946490365064509,
+              "imaginary_v_per_v": -0.08878819547632695,
+              "phase_defined": true
+            }
+          ],
+          "input": 1778.2794100389226,
+          "values": [
+            -20.998246388438698,
+            -84.88568842753436
+          ],
+          "kcl_residual_a": 1.3552527156068805e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.007088442636111925,
+              "imaginary_v_per_v": -0.08389396055203542,
+              "phase_defined": true
+            }
+          ],
+          "input": 1883.6490894898006,
+          "values": [
+            -21.494491708587656,
+            -85.17038552660111
+          ],
+          "kcl_residual_a": 2.169905194973914e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.006322454886315691,
+              "imaginary_v_per_v": -0.07926210601874135,
+              "phase_defined": true
+            }
+          ],
+          "input": 1995.2623149688802,
+          "values": [
+            -21.991142608675524,
+            -85.43937670602962
+          ],
+          "kcl_residual_a": 1.390373625586538e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0056387708478719736,
+              "imaginary_v_per_v": -0.07487973765443602,
+              "phase_defined": true
+            }
+          ],
+          "input": 2113.489039836648,
+          "values": [
+            -22.488155542016557,
+            -85.69350596850006
+          ],
+          "kcl_residual_a": 2.1686445237761204e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.005028643427752154,
+              "imaginary_v_per_v": -0.07073440586467578,
+              "phase_defined": true
+            }
+          ],
+          "input": 2238.72113856834,
+          "values": [
+            -22.985491583440442,
+            -85.93357551613346
+          ],
+          "kcl_residual_a": 4.784643512967162e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.004484235422651932,
+              "imaginary_v_per_v": -0.06681412317262098,
+              "phase_defined": true
+            }
+          ],
+          "input": 2371.3737056616565,
+          "values": [
+            -23.483115949899265,
+            -86.16034724802341
+          ],
+          "kcl_residual_a": 1.3435097018630327e-20,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.003998528935458679,
+              "imaginary_v_per_v": -0.06310737438533613,
+              "phase_defined": true
+            }
+          ],
+          "input": 2511.8864315095816,
+          "values": [
+            -23.980997568520284,
+            -86.37454430298264
+          ],
+          "kcl_residual_a": 2.1685979168489496e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.003565242961835697,
+              "imaginary_v_per_v": -0.05960312076107071,
+              "phase_defined": true
+            }
+          ],
+          "input": 2660.7250597988104,
+          "values": [
+            -24.479108687885184,
+            -86.5768526255916
+          ],
+          "kcl_residual_a": 6.776263578034403e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0031787585926074807,
+              "imaginary_v_per_v": -0.056290799305192006,
+              "phase_defined": true
+            }
+          ],
+          "input": 2818.382931264452,
+          "values": [
+            -24.977424528588706,
+            -86.76792253767292
+          ],
+          "kcl_residual_a": 6.776263578034403e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0028340512724864264,
+              "imaginary_v_per_v": -0.05316031815058432,
+              "phase_defined": true
+            }
+          ],
+          "input": 2985.382618917958,
+          "values": [
+            -25.475922969408863,
+            -86.94837030074552
+          ],
+          "kcl_residual_a": 4.1107294095734594e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.002526629563608186,
+              "imaginary_v_per_v": -0.05020204882927077,
+              "phase_defined": true
+            }
+          ],
+          "input": 3162.277660168377,
+          "values": [
+            -25.9745842656988,
+            -87.11877965791268
+          ],
+          "kcl_residual_a": 6.776263578034403e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0022524798796134207,
+              "imaginary_v_per_v": -0.04740681611335397,
+              "phase_defined": true
+            }
+          ],
+          "input": 3349.6543915782745,
+          "values": [
+            -26.47339079688252,
+            -87.27970334608123
+          ],
+          "kcl_residual_a": 6.776263578034403e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0020080166797067775,
+              "imaginary_v_per_v": -0.044765885992804795,
+              "phase_defined": true
+            }
+          ],
+          "input": 3548.133892335753,
+          "values": [
+            -26.972326840197837,
+            -87.43166457145948
+          ],
+          "kcl_residual_a": 8.696248157699947e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.001790037639971245,
+              "imaginary_v_per_v": -0.04227095226297523,
+              "phase_defined": true
+            }
+          ],
+          "input": 3758.3740428844394,
+          "values": [
+            -27.471378368078483,
+            -87.57515844299238
+          ],
+          "kcl_residual_a": 3.5703543749997254e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0015956833494811691,
+              "imaginary_v_per_v": -0.039914122113975624,
+              "phase_defined": true
+            }
+          ],
+          "input": 3981.0717055349705,
+          "values": [
+            -27.970532866801165,
+            -87.71065335981565
+          ],
+          "kcl_residual_a": 2.168674699413785e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0014224011101274434,
+              "imaginary_v_per_v": -0.037687901045419754,
+              "phase_defined": true
+            }
+          ],
+          "input": 4216.965034285821,
+          "values": [
+            -28.469779174241747,
+            -87.8385923499877
+          ],
+          "kcl_residual_a": 2.1684883092154257e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0012679124505700589,
+              "imaginary_v_per_v": -0.035585177371874215,
+              "phase_defined": true
+            }
+          ],
+          "input": 4466.835921509629,
+          "values": [
+            -28.96910733478738,
+            -87.95939435872643
+          ],
+          "kcl_residual_a": 7.933803319210419e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0011301839956592984,
+              "imaginary_v_per_v": -0.03359920653520339,
+              "phase_defined": true
+            }
+          ],
+          "input": 4731.512589614804,
+          "values": [
+            -29.468508469638554,
+            -88.07345548516999
+          ],
+          "kcl_residual_a": 6.776263578034403e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0010074013625195458,
+              "imaginary_v_per_v": -0.03172359539860417,
+              "phase_defined": true
+            }
+          ],
+          "input": 5011.872336272722,
+          "values": [
+            -29.967974660906556,
+            -88.18115016732317
+          ],
+          "kcl_residual_a": 2.168418309364053e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0008979457829329457,
+              "imaginary_v_per_v": -0.02995228666235449,
+              "phase_defined": true
+            }
+          ],
+          "input": 5308.844442309882,
+          "values": [
+            -30.46749884806949,
+            -88.28283231536878
+          ],
+          "kcl_residual_a": 3.3881317890172014e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0008003731784825923,
+              "imaginary_v_per_v": -0.028279543512188417,
+              "phase_defined": true
+            }
+          ],
+          "input": 5623.41325190349,
+          "values": [
+            -30.967074735492957,
+            -88.37883639393543
+          ],
+          "kcl_residual_a": 2.168405262371252e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0007133954399991607,
+              "imaginary_v_per_v": -0.026699934586911427,
+              "phase_defined": true
+            }
+          ],
+          "input": 5956.621435290105,
+          "values": [
+            -31.46669670985233,
+            -88.46947845423821
+          ],
+          "kcl_residual_a": 3.3881317890172014e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0006358636861541702,
+              "imaginary_v_per_v": -0.025208319331657174,
+              "phase_defined": true
+            }
+          ],
+          "input": 6309.573444801932,
+          "values": [
+            -31.96635976641148,
+            -88.55505711725952
+          ],
+          "kcl_residual_a": 2.168404441160915e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.000566753297562204,
+              "imaginary_v_per_v": -0.02379983378643444,
+              "phase_defined": true
+            }
+          ],
+          "input": 6683.439175686147,
+          "values": [
+            -32.4660594432204,
+            -88.63585450932814
+          ],
+          "kcl_residual_a": 1.1928438888981148e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0005051505425353866,
+              "imaginary_v_per_v": -0.0224698768457854,
+              "phase_defined": true
+            }
+          ],
+          "input": 7079.457843841382,
+          "values": [
+            -32.96579176239048,
+            -88.71213715159452
+          ],
+          "kcl_residual_a": 5.507008100574245e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00045024062874371017,
+              "imaginary_v_per_v": -0.021214097014012605,
+              "phase_defined": true
+            }
+          ],
+          "input": 7498.942093324559,
+          "values": [
+            -33.46555317769395,
+            -88.78415680499965
+          ],
+          "kcl_residual_a": 2.168869758716987e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0004012970315590304,
+              "imaginary_v_per_v": -0.020028379671143952,
+              "phase_defined": true
+            }
+          ],
+          "input": 7943.282347242816,
+          "values": [
+            -33.9653405278124,
+            -88.85215127239898
+          ],
+          "kcl_residual_a": 1.5737615484623118e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.000357671964893504,
+              "imaginary_v_per_v": -0.018908834857257417,
+              "phase_defined": true
+            }
+          ],
+          "input": 8413.951416451955,
+          "values": [
+            -34.46515099463021,
+            -88.9163451595404
+          ],
+          "kcl_residual_a": 3.8707279527715546e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.0003187878739850316,
+              "imaginary_v_per_v": -0.017851785576698812,
+              "phase_defined": true
+            }
+          ],
+          "input": 8912.509381337457,
+          "values": [
+            -34.96498206603233,
+            -88.97695059661011
+          ],
+          "kcl_residual_a": 5.219267969212756e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00028412984193471974,
+              "imaginary_v_per_v": -0.01685375661885628,
+              "phase_defined": true
+            }
+          ],
+          "input": 9440.60876285924,
+          "values": [
+            -35.464831502722944,
+            -89.03416792205671
+          ],
+          "kcl_residual_a": 2.168446795581877e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00025323881296515974,
+              "imaginary_v_per_v": -0.015911463888302915,
+              "phase_defined": true
+            }
+          ],
+          "input": 10000.000000000005,
+          "values": [
+            -35.96469730863286,
+            -89.08818633038616
+          ],
+          "kcl_residual_a": 4.581045418863205e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00022570554544118276,
+              "imaginary_v_per_v": -0.01502180423411049,
+              "phase_defined": true
+            }
+          ],
+          "input": 10592.537251772894,
+          "values": [
+            -36.46457770452946,
+            -89.13918448559184
+          ],
+          "kcl_residual_a": 1.694641824041084e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00020116521677026374,
+              "imaginary_v_per_v": -0.01418184576583124,
+              "phase_defined": true
+            }
+          ],
+          "input": 11220.18454301964,
+          "values": [
+            -36.96447110448397,
+            -89.18733110184549
+          ],
+          "kcl_residual_a": 1.3394412645128523e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00017929261046629753,
+              "imaginary_v_per_v": -0.01338881864191646,
+              "phase_defined": true
+            }
+          ],
+          "input": 11885.022274370178,
+          "values": [
+            -37.46437609488816,
+            -89.23278549303186
+          ],
+          "kcl_residual_a": 3.3881317890172014e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00015979782300101842,
+              "imaginary_v_per_v": -0.012640106315090176,
+              "phase_defined": true
+            }
+          ],
+          "input": 12589.254117941662,
+          "values": [
+            -37.964291415744995,
+            -89.27569809265918
+          ],
+          "kcl_residual_a": 1.6940658945086007e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00014242243465899384,
+              "imaginary_v_per_v": -0.011933237218336844,
+              "phase_defined": true
+            }
+          ],
+          "input": 13335.214321633232,
+          "values": [
+            -38.46421594398766,
+            -89.31621094562661
+          ],
+          "kcl_residual_a": 2.1684119596534634e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00012693609452621484,
+              "imaginary_v_per_v": -0.011265876874621045,
+              "phase_defined": true
+            }
+          ],
+          "input": 14125.375446227537,
+          "values": [
+            -38.96414867860776,
+            -89.35445817327331
+          ],
+          "kcl_residual_a": 2.4334777604040687e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00011313347504451165,
+              "imaginary_v_per_v": -0.010635820413176221,
+              "phase_defined": true
+            }
+          ],
+          "input": 14962.356560944329,
+          "values": [
+            -39.46408872739676,
+            -89.39056641307951
+          ],
+          "kcl_residual_a": 2.0984709459589187e-23,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 0.00010083155631444916,
+              "imaginary_v_per_v": -0.010040985475126451,
+              "phase_defined": true
+            }
+          ],
+          "input": 15848.931924611128,
+          "values": [
+            -39.96403529512624,
+            -89.42465523433101
+          ],
+          "kcl_residual_a": 4.28134916259339e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 8.986720458293588e-05,
+              "imaginary_v_per_v": -0.009479405491299353,
+              "phase_defined": true
+            }
+          ],
+          "input": 16788.0401812256,
+          "values": [
+            -40.46398767301095,
+            -89.45683753100364
+          ],
+          "kcl_residual_a": 2.590276688545768e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 8.00950131584953e-05,
+              "imaginary_v_per_v": -0.008949223315314152,
+              "phase_defined": true
+            }
+          ],
+          "input": 17782.79410038922,
+          "values": [
+            -40.963945229315925,
+            -89.48721989306705
+          ],
+          "kcl_residual_a": 1.1492763316087563e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 7.138537740236543e-05,
+              "imaginary_v_per_v": -0.008448685195357828,
+              "phase_defined": true
+            }
+          ],
+          "input": 18836.490894898,
+          "values": [
+            -41.46390740098332,
+            -89.515902957352
+          ],
+          "kcl_residual_a": 2.168408062396743e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 6.362277848842473e-05,
+              "imaginary_v_per_v": -0.007976135068470327,
+              "phase_defined": true
+            }
+          ],
+          "input": 19952.623149688792,
+          "values": [
+            -41.96387368616869,
+            -89.54298173907152
+          ],
+          "kcl_residual_a": 1.6940658945086007e-21,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 5.670425334653339e-05,
+              "imaginary_v_per_v": -0.0075300091616269495,
+              "phase_defined": true
+            }
+          ],
+          "input": 21134.890398366464,
+          "values": [
+            -42.463843637587935,
+            -89.56854594503392
+          ],
+          "kcl_residual_a": 2.1684108180107817e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 5.053803063577359e-05,
+              "imaginary_v_per_v": -0.007108830884416442,
+              "phase_defined": true
+            }
+          ],
+          "input": 22387.211385683397,
+          "values": [
+            -42.96381685658694,
+            -89.59268026953355
+          ],
+          "kcl_residual_a": 5.440097686444767e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 4.504231476647952e-05,
+              "imaginary_v_per_v": -0.006711205998653297,
+              "phase_defined": true
+            }
+          ],
+          "input": 23713.737056616552,
+          "values": [
+            -43.46379298785549,
+            -89.61546467385747
+          ],
+          "kcl_residual_a": 2.1684097341379676e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 4.0144201930065e-05,
+              "imaginary_v_per_v": -0.006335818050821567,
+              "phase_defined": true
+            }
+          ],
+          "input": 25118.8643150958,
+          "values": [
+            -43.963771714715634,
+            -89.63697465029783
+          ],
+          "kcl_residual_a": 8.470329472543003e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 3.577871382793901e-05,
+              "imaginary_v_per_v": -0.005981424053816601,
+              "phase_defined": true
+            }
+          ],
+          "input": 26607.250597988103,
+          "values": [
+            -44.463752754921956,
+            -89.65728147151384
+          ],
+          "kcl_residual_a": 2.1684368414470386e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 3.18879363371908e-05,
+              "imaginary_v_per_v": -0.00564685040502287,
+              "phase_defined": true
+            }
+          ],
+          "input": 28183.829312644542,
+          "values": [
+            -44.96373585691829,
+            -89.67645242604492
+          ],
+          "kcl_residual_a": 2.671659526939823e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 2.8420251730940867e-05,
+              "imaginary_v_per_v": -0.0053309890283354,
+              "phase_defined": true
+            }
+          ],
+          "input": 29853.8261891796,
+          "values": [
+            -45.46372079650126,
+            -89.69455104073303
+          ],
+          "kcl_residual_a": 4.340594860676993e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 2.532965430294562e-05,
+              "imaginary_v_per_v": -0.0050327937282943075,
+              "phase_defined": true
+            }
+          ],
+          "input": 31622.776601683807,
+          "values": [
+            -45.963707373846454,
+            -89.7116372907739
+          ],
+          "kcl_residual_a": 9.041545569317247e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 2.2575140345046768e-05,
+              "imaginary_v_per_v": -0.004751276745053393,
+              "phase_defined": true
+            }
+          ],
+          "input": 33496.54391578278,
+          "values": [
+            -46.46369541085778,
+            -89.72776779807734
+          ],
+          "kcl_residual_a": 2.1684109417745793e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 2.0120164406537247e-05,
+              "imaginary_v_per_v": -0.004485505499441674,
+              "phase_defined": true
+            }
+          ],
+          "input": 35481.33892335756,
+          "values": [
+            -46.96368474880514,
+            -89.74299601858179
+          ],
+          "kcl_residual_a": 8.470329472543003e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 1.7932154639164603e-05,
+              "imaginary_v_per_v": -0.004234599517899491,
+              "phase_defined": true
+            }
+          ],
+          "input": 37583.74042884443,
+          "values": [
+            -47.46367524621866,
+            -89.75737241913242
+          ],
+          "kcl_residual_a": 8.470329472543003e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 1.5982080811650463e-05,
+              "imaginary_v_per_v": -0.003997727527576559,
+              "phase_defined": true
+            }
+          ],
+          "input": 39810.71705534974,
+          "values": [
+            -47.963666777012016,
+            -89.77094464450059
+          ],
+          "kcl_residual_a": 8.470329472543003e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 1.4244069273422195e-05,
+              "imaginary_v_per_v": -0.0037741047123672562,
+              "phase_defined": true
+            }
+          ],
+          "input": 42169.650342858244,
+          "values": [
+            -48.46365922880974,
+            -89.78375767508993
+          ],
+          "kcl_residual_a": 2.1684083052061924e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 1.269505976779748e-05,
+              "imaginary_v_per_v": -0.0035629901211278953,
+              "phase_defined": true
+            }
+          ],
+          "input": 44668.35921509634,
+          "values": [
+            -48.963652501456316,
+            -89.79585397584566
+          ],
+          "kcl_residual_a": 4.624977298358798e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 1.1314499548238198e-05,
+              "imaginary_v_per_v": -0.003363684219771257,
+              "phase_defined": true
+            }
+          ],
+          "input": 47315.12589614808,
+          "values": [
+            -49.46364650568748,
+            -89.80727363685526
+          ],
+          "kcl_residual_a": 4.235164736271502e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 1.008407074473738e-05,
+              "imaginary_v_per_v": -0.00317552657936516,
+              "phase_defined": true
+            }
+          ],
+          "input": 50118.7233627272,
+          "values": [
+            -49.96364116194591,
+            -89.81805450610163
+          ],
+          "kcl_residual_a": 2.2540157693094233e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 8.987447367387715e-06,
+              "imaginary_v_per_v": -0.0029978936927745675,
+              "phase_defined": true
+            }
+          ],
+          "input": 53088.4444230988,
+          "values": [
+            -50.46363639932568,
+            -89.82823231480522
+          ],
+          "kcl_residual_a": 1.1591776666872426e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 8.010078726474427e-06,
+              "imaginary_v_per_v": -0.002830196912780668,
+              "phase_defined": true
+            }
+          ],
+          "input": 56234.13251903489,
+          "values": [
+            -50.963632154631526,
+            -89.83784079576714
+          ],
+          "kcl_residual_a": 2.168404454964361e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 7.1389963981934916e-06,
+              "imaginary_v_per_v": -0.0026718805049859395,
+              "phase_defined": true
+            }
+          ],
+          "input": 59566.21435290101,
+          "values": [
+            -51.46362837154038,
+            -89.8469117951029
+          ],
+          "kcl_residual_a": 4.820144746214574e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 6.362642176918918e-06,
+              "imaginary_v_per_v": -0.0025224198091720273,
+              "phase_defined": true
+            }
+          ],
+          "input": 63095.734448019306,
+          "values": [
+            -51.96362499985408,
+            -89.85547537773475
+          ],
+          "kcl_residual_a": 3.620496310293378e-23,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 5.670714732933724e-06,
+              "imaginary_v_per_v": -0.0023813195031175765,
+              "phase_defined": true
+            }
+          ],
+          "input": 66834.39175686143,
+          "values": [
+            -52.46362199483329,
+            -89.86355992699029
+          ],
+          "kcl_residual_a": 2.168412655188824e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 5.054032942361871e-06,
+              "imaginary_v_per_v": -0.002248111963206657,
+              "phase_defined": true
+            }
+          ],
+          "input": 70794.57843841377,
+          "values": [
+            -52.96361931660394,
+            -89.87119223863598
+          ],
+          "kcl_residual_a": 2.533265326138854e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 4.504414076960978e-06,
+              "imaginary_v_per_v": -0.002122355716465739,
+              "phase_defined": true
+            }
+          ],
+          "input": 74989.42093324556,
+          "values": [
+            -53.46361692962813,
+            -89.8783976096558
+          ],
+          "kcl_residual_a": 4.235164736271502e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 4.014565238372334e-06,
+              "imaginary_v_per_v": -0.002003633978958802,
+              "phase_defined": true
+            }
+          ],
+          "input": 79432.82347242812,
+          "values": [
+            -53.9636148022326,
+            -89.88519992206822
+          ],
+          "kcl_residual_a": 2.168406388942116e-19,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 3.5779865969765824e-06,
+              "imaginary_v_per_v": -0.0018915532757468117,
+              "phase_defined": true
+            }
+          ],
+          "input": 84139.5141645195,
+          "values": [
+            -54.46361290618845,
+            -89.89162172205809
+          ],
+          "kcl_residual_a": 7.843159108079615e-23,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 3.1888851519891233e-06,
+              "imaginary_v_per_v": -0.0017857421378801057,
+              "phase_defined": true
+            }
+          ],
+          "input": 89125.09381337455,
+          "values": [
+            -54.96361121633662,
+            -89.89768429468536
+          ],
+          "kcl_residual_a": 1.6494096377977949e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 2.842097868917278e-06,
+              "imaginary_v_per_v": -0.0016858498721407495,
+              "phase_defined": true
+            }
+          ],
+          "input": 94406.08762859233,
+          "values": [
+            -55.46360971025406,
+            -89.90340773441716
+          ],
+          "kcl_residual_a": 2.117582368135751e-22,
+          "power_residual_w": 0
+        },
+        {
+          "ac_response": [
+            {
+              "real_v_per_v": 2.533023174835789e-06,
+              "imaginary_v_per_v": -0.0015915453994873614,
+              "phase_defined": true
+            }
+          ],
+          "input": 100000,
+          "values": [
+            -55.963608367956105,
+            -89.90881101171665
+          ],
+          "kcl_residual_a": 2.4078145183406737e-22,
+          "power_residual_w": 0
+        }
+      ],
+      "statistics": [
+        {
+          "probe_id": "gain:v:C1",
+          "minimum": -55.963608367956105,
+          "maximum": -0.00017144920495022439
+        },
+        {
+          "probe_id": "phase:v:C1",
+          "minimum": -89.90881101171665,
+          "maximum": -0.3599952627020996
+        }
+      ]
+    }
+  },
+  "source_annotations": [],
+  "project_work": {
+    "recovery_configuration_applied": true,
+    "recovery_catalog_applied": true,
+    "cancelable": false,
+    "id": "project-1",
+    "command": "recovery.configure",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "user",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "input_revision": 1,
+    "command_revision": 2,
+    "document_generation": 1,
+    "bytes": 0,
+    "result_document_generation": 1
+  },
+  "input_work": {
+    "id": "input-2",
+    "command": "potentiometer.wiper.set",
+    "status": "completed",
+    "actor": "user",
+    "run_id": 13,
+    "electrical_revision": 8,
+    "actuation_revision": 3,
+    "command_revision": 28,
+    "time_s": 0.04,
+    "requested_wiper": {
+      "id": "P1",
+      "position": 0.7
+    }
+  },
+  "example": {
+    "info": {
+      "id": "ac-rc",
+      "title": "RC filter Bode plot",
+      "question": "Where does a low-pass filter begin to attenuate?",
+      "expected": "A 1 k\u03a9 /1 \u00b5F low-pass crosses about 159 Hz at \u22123 dB and \u221245\u00b0. Gain rolls off above it.",
+      "try": "Open Sweeps and run the prepared AC range. Select gain or phase, click a point and compare half-power estimates.",
+      "limitation": "Normalized small-signal response around DC bias; captured sweep leaves the live circuit unchanged."
+    },
+    "modified": false
+  },
+  "diagnostic_presentation": {
+    "details_visible": false,
+    "items": []
+  },
+  "display": {
+    "preferences": {
+      "voltage_color": false,
+      "voltage_range_v": 5,
+      "current_cues": false,
+      "current_motion": false,
+      "reduced_motion": false,
+      "direction": "conventional"
+    },
+    "run_id": 26,
+    "electrical_revision": 15,
+    "time_s": 0,
+    "animate": false,
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.negative",
+        "to": "GND.reference",
+        "voltage_v": 0,
+        "current_a": 0,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W2",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "voltage_v": 0,
+        "current_a": 0,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W3",
+        "from": "R1.2",
+        "to": "C1.1",
+        "voltage_v": 0,
+        "current_a": 0,
+        "state": "live",
+        "color": "#387d93"
+      },
+      {
+        "id": "W4",
+        "from": "C1.2",
+        "to": "GNDC.reference",
+        "voltage_v": 0,
+        "current_a": 0,
+        "state": "live",
+        "color": "#387d93"
+      }
+    ]
+  },
+  "measurement_inspection": {
+    "target": {
+      "kind": "object",
+      "id": "C1"
+    },
+    "result_kind": "transient",
+    "available": true,
+    "object_ids": [
+      "C1"
+    ],
+    "terminal_refs": [
+      "C1.1",
+      "C1.2"
+    ],
+    "wire_ids": [],
+    "nets": [
+      {
+        "id": "net:C1.1",
+        "terminals": [
+          "C1.1",
+          "R1.2"
+        ]
+      },
+      {
+        "id": "net:C1.2",
+        "terminals": [
+          "C1.2",
+          "GND.reference",
+          "GNDC.reference",
+          "V1.negative"
+        ]
+      }
+    ],
+    "readings": [
+      {
+        "probe": {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        "value": 0,
+        "time_s": 0,
+        "run_id": 26,
+        "electrical_revision": 15,
+        "state": "live",
+        "display": "Live v:C1.1 \u00b7 0 V",
+        "reference_display": "Voltage: C1.1 - ground"
+      },
+      {
+        "probe": {
+          "id": "v:C1.2",
+          "label": "C1.2 / ground",
+          "unit": "V",
+          "positive": "C1.2",
+          "reference": "ground"
+        },
+        "value": 0,
+        "time_s": 0,
+        "run_id": 26,
+        "electrical_revision": 15,
+        "state": "live",
+        "display": "Live v:C1.2 \u00b7 0 V",
+        "reference_display": "Voltage: C1.2 - ground"
+      },
+      {
+        "probe": {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "value": 0,
+        "time_s": 0,
+        "run_id": 26,
+        "electrical_revision": 15,
+        "state": "live",
+        "display": "Live v:C1 \u00b7 0 V",
+        "reference_display": "Voltage: C1.1 - C1.2"
+      },
+      {
+        "probe": {
+          "id": "i:C1",
+          "label": "C1 current",
+          "unit": "A",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "value": 0,
+        "time_s": 0,
+        "run_id": 26,
+        "electrical_revision": 15,
+        "state": "live",
+        "display": "Live i:C1 \u00b7 0 mA",
+        "reference_display": "Current: C1.1 -> C1.2"
+      }
+    ]
+  },
+  "pinned_readings": [],
+  "limits": {
+    "timers555": 2,
+    "pnp_transistors": 2,
+    "bipolar_transistors_total": 2,
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 2,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "simulated_component_count": 3,
+  "step_work": {
+    "id": "step-8",
+    "status": "completed",
+    "actor": "agent.socket",
+    "run_id": 24,
+    "electrical_revision": 14,
+    "actuation_revision": 4,
+    "command_revision": 50,
+    "start_time_s": 0,
+    "duration_s": 0.005,
+    "completed_samples": 50,
+    "total_samples": 50,
+    "progress": 1
+  },
+  "undo_entry": {
+    "name": "Load example",
+    "actor": "agent.socket",
+    "command_revision": 51
+  },
+  "actuation_revision": 4,
+  "recovery": {
+    "directory": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/recovery",
+    "enabled": true,
+    "interval_s": 2,
+    "last_snapshot": "rec-2f2422e342b1807287fc6e9c-0000000015",
+    "last_saved_at": "2026-10-25T08:39:40.560685Z",
+    "selected": "rec-1d5e82051e5d3248e479020a-0000000003",
+    "candidates": [
+      {
+        "owner_status": "active",
+        "id": "rec-2f2422e342b1807287fc6e9c-0000000015",
+        "document_key": "2f2422e342b1807287fc6e9c",
+        "saved_at": "2026-10-25T08:39:40.560685Z",
+        "sha256": "760ec2d856d00fd3148d705d640d1685149c943ffc9c820d4bfbb1aca324792b",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 1,
+        "components": 5
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-3ffb2a3e7e46ae066f2edce0-0000000012",
+        "document_key": "3ffb2a3e7e46ae066f2edce0",
+        "saved_at": "2026-10-25T08:36:15.058234Z",
+        "sha256": "eb67e0f8d3fc8e202ada572b6082f087dba26ac5a34c0c74f765363fe2f5c415",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 6
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-6e8a331bb96830ccb94dfda3-0000000010",
+        "document_key": "6e8a331bb96830ccb94dfda3",
+        "saved_at": "2026-10-25T08:33:40.557542Z",
+        "sha256": "3ee46806125d23a44db2b2b3d5ea0e4fd9cc02f1c17056ae55265c979b296011",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 11
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-893e138d9922719a292291fb-0000000006",
+        "document_key": "893e138d9922719a292291fb",
+        "saved_at": "2026-10-25T08:30:58.055835Z",
+        "sha256": "83683b1339bf86dc48b3a57e071ae56cb4fe8adb1efd38abc75738d05e45d1e6",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 21
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-8c21c93b4c6b6664c9b8883b-0000000005",
+        "document_key": "8c21c93b4c6b6664c9b8883b",
+        "saved_at": "2026-10-25T08:27:49.553193Z",
+        "sha256": "611fc1e14adee2c3f2bb57a2be3a064841e84b9393f2a9348797aa4e88b70e88",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 4
+      },
+      {
+        "owner_status": "active",
+        "id": "rec-1d5e82051e5d3248e479020a-0000000003",
+        "document_key": "1d5e82051e5d3248e479020a",
+        "saved_at": "2026-10-25T08:23:58.551263Z",
+        "sha256": "c4b8b03da2ec88ba3d4f91d05c18b64e8ff0229d3e5bafaa8b06c0d84b8a2d87",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 7
+      }
+    ],
+    "problems": []
+  },
+  "verification_settings": {
+    "duration_s": 0.1,
+    "sample_step_s": 0,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "operations": [],
+  "selected_operation": "",
+  "schematic_page": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 10
+  },
+  "part_category": "common",
+  "part_categories": [
+    {
+      "id": "common",
+      "name": "Common",
+      "count": 6
+    },
+    {
+      "id": "all",
+      "name": "All components",
+      "count": 48
+    },
+    {
+      "id": "sources",
+      "name": "Sources",
+      "count": 5
+    },
+    {
+      "id": "motors",
+      "name": "Motors",
+      "count": 1
+    },
+    {
+      "id": "passives",
+      "name": "Passives",
+      "count": 7
+    },
+    {
+      "id": "semiconductors",
+      "name": "Semiconductors",
+      "count": 10
+    },
+    {
+      "id": "amplifiers",
+      "name": "Amplifiers / ICs",
+      "count": 4
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "count": 14
+    },
+    {
+      "id": "switches",
+      "name": "Switches",
+      "count": 4
+    },
+    {
+      "id": "connections",
+      "name": "Connections",
+      "count": 3
+    }
+  ],
+  "part_search": "",
+  "theme": "apollo",
+  "appearance": {
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "status": "ready",
+    "saved_theme": "apollo"
+  },
+  "appearance_work": {
+    "id": "appearance-5",
+    "command": "appearance.theme.set",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "agent.socket",
+    "path": "/Users/dshills/Development/projects/ELab/build/power-expansion/native/appearance.json",
+    "input_revision": 193,
+    "command_revision": 54,
+    "document_generation": 7,
+    "electrical_revision": 15,
+    "input_run_id": 26,
+    "input_theme": "light",
+    "requested_theme": "apollo",
+    "result_theme": "apollo",
+    "source_sha256": "80e13a747ee02e691a894a3cff7006c64cc4920ad358056f39d5b5708d9b62df",
+    "artifact_sha256": "139a5f0558077f28857ecd59ff31a8eed52794697708c8a1926308d10ed2e136",
+    "bytes": 71,
+    "cancelable": false,
+    "superseded": false,
+    "published": true,
+    "current_at_completion": true
+  },
+  "matching_parts": [
+    {
+      "category": "sources",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "voltage",
+        "unit": "V",
+        "minimum": 0,
+        "maximum": 12,
+        "range_text": "0\u201312 V",
+        "syntax": "Bare SI or V; m/u/\u00b5/\u03bc prefixes, for example 500 mV or 1 V"
+      },
+      "aliases": [
+        "power supply",
+        "voltage supply",
+        "ideal voltage source"
+      ],
+      "limitations": "Ideal DC voltage source; positive minus negative sets its voltage, and either terminal may be above/below ground in a referenced network. No output resistance, current limit, battery discharge, noise, heating, ratings or physical part identity.",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "default_value": "5 V",
+      "unit": "V",
+      "model": "ideal-dc.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000,
+        "range_text": "10\u2013100000 \u03a9",
+        "syntax": "Bare SI or \u03a9/ohm; k/K/M prefixes, for example 2.2k or 0.1M \u03a9"
+      },
+      "aliases": [
+        "resistance",
+        "current limiter"
+      ],
+      "limitations": "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2.",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1k",
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1"
+    },
+    {
+      "category": "semiconductors",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "LED",
+        "light emitting diode",
+        "indicator"
+      ],
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness.",
+      "kind": "led",
+      "name": "Red LED",
+      "terminals": [
+        "anode",
+        "cathode"
+      ],
+      "model": "elab.generic-red-led.v1"
+    },
+    {
+      "category": "passives",
+      "common": true,
+      "value_type": "number",
+      "value_domain": {
+        "parameter": "capacitance",
+        "unit": "F",
+        "minimum": 1e-12,
+        "maximum": 1,
+        "range_text": "1 pF\u20131 F",
+        "syntax": "Bare SI or F; p/n/u/\u00b5/\u03bc/m prefixes, for example 1 \u00b5F or 100nF"
+      },
+      "aliases": [
+        "cap",
+        "charge storage"
+      ],
+      "limitations": "Ideal capacitor with configurable initial voltage; no ESR, leakage, polarity, heating, ratings or physical part identity. Voltage and current use pin 1 relative to pin 2.",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "default_value": "1uF",
+      "unit": "F",
+      "model": "ideal-capacitor.v1"
+    },
+    {
+      "category": "connections",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "ground",
+        "voltage reference"
+      ],
+      "limitations": "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design.",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "model": "ground.v1"
+    },
+    {
+      "category": "switches",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "toggle",
+        "on/off",
+        "SPST"
+      ],
+      "limitations": "Generic SPST with finite on/off resistance; no contact bounce, arcing, thermal behavior, ratings or named physical part. Actuation is instantaneous; capacitor voltage remains continuous.",
+      "kind": "switch",
+      "name": "SPST switch",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "model": "elab.spst-resistive.v1"
+    }
+  ],
+  "undo_name": "Load example",
+  "redo_name": "",
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0
+    },
+    "window_valid": true,
+    "statistics": [
+      {
+        "probe_id": "v:C1",
+        "count": 1,
+        "min": 0,
+        "max": 0,
+        "sample_mean": 0,
+        "sample_rms": 0
+      }
+    ],
+    "available": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.1",
+        "label": "R1.1 / ground",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.2",
+        "label": "R1.2 / ground",
+        "unit": "V",
+        "positive": "R1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1",
+        "label": "R1 voltage",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "i:R1",
+        "label": "R1 current",
+        "unit": "A",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1.2",
+        "label": "C1.2 / ground",
+        "unit": "V",
+        "positive": "C1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "v:GNDC.reference",
+        "label": "GNDC.reference / ground",
+        "unit": "V",
+        "positive": "GNDC.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [
+      "v:C1"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:C1",
+          "label": "C1 voltage",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "C1.2"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          }
+        ]
+      }
+    ],
+    "run_id": 26,
+    "stale": false,
+    "active_cursor": "a",
+    "readings": []
+  },
+  "scope_visible": true,
+  "transient": {
+    "engine": "elab.ideal-rc-exact.v1",
+    "run_id": 26,
+    "electrical_revision": 15,
+    "source_id": "V1",
+    "resistor_id": "R1",
+    "capacitor_id": "C1",
+    "output_net": "net:C1.1",
+    "time_constant_s": 0.001,
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "sample": {
+      "time_s": 0,
+      "input_v": 0,
+      "voltage_v": 0,
+      "current_a": 0,
+      "energy_j": 0
+    },
+    "samples": [
+      {
+        "time_s": 0,
+        "input_v": 0,
+        "voltage_v": 0,
+        "current_a": 0,
+        "energy_j": 0
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      }
+    ],
+    "stale": false
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  },
+  "document": {
+    "preferences_dirty": false,
+    "schematic_dirty": false,
+    "recordings_dirty": true,
+    "recording_count": 1,
+    "path": "",
+    "dirty": true,
+    "format_version": 5,
+    "generation": 7
+  },
+  "command_revision": 63,
+  "revision": 213,
+  "electrical_revision": 15,
+  "circuit": {
+    "voltage_v": 0,
+    "resistance_ohm": 1000,
+    "connected": true
+  },
+  "components": [
+    {
+      "id": "V1",
+      "kind": "dc-source",
+      "name": "DC source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -250,
+        "y": 0
+      },
+      "value": 0,
+      "unit": "V",
+      "model": "ideal-dc.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GND",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": -250,
+        "y": 180
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    },
+    {
+      "id": "R1",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 0,
+        "y": -100
+      },
+      "value": 1000,
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "C1",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "value": 1e-06,
+      "unit": "F",
+      "model": "ideal-capacitor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GNDC",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": 200,
+        "y": 180
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "wires": [
+    {
+      "id": "W1",
+      "from": "V1.negative",
+      "to": "GND.reference",
+      "connected": true
+    },
+    {
+      "id": "W2",
+      "from": "V1.positive",
+      "to": "R1.1",
+      "connected": true
+    },
+    {
+      "id": "W3",
+      "from": "R1.2",
+      "to": "C1.1",
+      "connected": true
+    },
+    {
+      "id": "W4",
+      "from": "C1.2",
+      "to": "GNDC.reference",
+      "connected": true
+    }
+  ],
+  "nets": [
+    {
+      "id": "net:C1.1",
+      "terminals": [
+        "C1.1",
+        "R1.2"
+      ]
+    },
+    {
+      "id": "net:C1.2",
+      "terminals": [
+        "C1.2",
+        "GND.reference",
+        "GNDC.reference",
+        "V1.negative"
+      ]
+    },
+    {
+      "id": "net:R1.1",
+      "terminals": [
+        "R1.1",
+        "V1.positive"
+      ]
+    }
+  ],
+  "drawing": {
+    "tool": "select",
+    "kind": "dc-source",
+    "position": {
+      "x": -200,
+      "y": 0
+    },
+    "wire_start": "",
+    "from": "",
+    "to": "",
+    "value": "1 \u00b5F"
+  },
+  "model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "selected": "C1",
+  "view": {
+    "center": {
+      "x": -17,
+      "y": 31
+    },
+    "zoom": 1.30090497737443
+  },
+  "status": "paused",
+  "analysis": "RC transient",
+  "paused": true,
+  "run_id": 26,
+  "diagnostics": [],
+  "can_undo": true,
+  "can_redo": false,
+  "last_actor": "user",
+  "closed": false
+}

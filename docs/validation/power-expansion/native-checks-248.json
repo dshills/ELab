@@ -1,0 +1,76 @@
+{
+  "app": "ELab 0.190.1 /248",
+  "source_commit": "cc3a80155b72bbc3cb6d61143b5e8e881470eb6a",
+  "method": "Actual packaged executable, fixed argument-only launcher; CUA pointer/keyboard input and matching public agent snapshot checks",
+  "closed_normally": true,
+  "fixtures_disposable": true,
+  "themes": [
+    "apollo",
+    "dark",
+    "light"
+  ],
+  "battery": {
+    "slider_drag": true,
+    "keyboard_charge_percent": 50,
+    "keyboard_esr_ohm": 200,
+    "ocv_v": 4.5,
+    "terminal_v": 4.093928727889965,
+    "file": "battery-native-final.json"
+  },
+  "motor": {
+    "load_drag": true,
+    "before_rpm": 4376.690074841927,
+    "immediate_rpm": 4376.690074841927,
+    "after_40ms_rpm": 1758.3962957569101,
+    "current_and_time_continuity": true,
+    "locked_rpm": 0,
+    "locked_current_a": 1.499496806058089,
+    "inspector_wheel_and_thumb": true
+  },
+  "pwm": {
+    "native_wiper_percent": 70,
+    "current_speed_and_time_continuity": true,
+    "continued_rpm": 2742.048244635359,
+    "continued_time_s": 0.06
+  },
+  "optocoupler": {
+    "native_ctr_percent": 1,
+    "input_ma_observed": 2.9139,
+    "output_ma_observed": 0.029128,
+    "resume_applies_startup": true
+  },
+  "transformer": {
+    "native_turns_ratio": 0.75,
+    "derived_secondary_h": 0.05625,
+    "native_dot_checkbox": true,
+    "positive_secondary_v": 8.417514201966268,
+    "reversed_secondary_v": -8.417514201966268
+  },
+  "ac_sweep": {
+    "native_run_button": true,
+    "half_power_hz_observed": 159.14,
+    "native_phase_menu": true,
+    "click_point_hz": 167.880402,
+    "click_gain_db": -3.24828167,
+    "click_phase_deg": -46.5283161,
+    "drag_point_hz": 2818.38293,
+    "complete_rc_transient_and_run_preserved": true,
+    "correct_import_accessibility_label": true
+  },
+  "browser": {
+    "all_components": 48,
+    "wheel_top_and_bottom": true,
+    "thumb_drag": "Not qualified: targeted CUA thumb gestures select a list row; no conclusion about ordinary hardware dragging"
+  },
+  "held_for_repair": [
+    "Scientific-notation current-axis labels clip at the right edge; reproduced at x240.5 on a240px canvas"
+  ],
+  "method_limitations": [
+    "First CUA launcher lookup stalled several hours because the exec target registered as com.dshills.elab rather than the launcher ID; actual app was found and reused",
+    "Terminal is blocked by CUA; no Terminal app was launched",
+    "Clipboard helper reported conflict but inspection showed the intended 50, which was then committed with Return",
+    "Screenshots contain a persistent automation tooltip overlay; no ordinary-hardware conclusion"
+  ],
+  "window_resized": false,
+  "user_projects_untouched": true
+}

@@ -1,0 +1,12 @@
+--- FAIL: TestMotorExportRetainsParametersAndPartsStayWithinColumns (0.00s)
+    --- FAIL: TestMotorExportRetainsParametersAndPartsStayWithinColumns/pwm=false/locked=false (0.00s)
+        export_parts_test.go:94: printed motor configuration missing "R 7.3 Ω"
+    --- FAIL: TestMotorExportRetainsParametersAndPartsStayWithinColumns/pwm=false/locked=true (0.00s)
+        export_parts_test.go:94: printed motor configuration missing "R 7.3 Ω"
+    --- FAIL: TestMotorExportRetainsParametersAndPartsStayWithinColumns/pwm=true/locked=false (0.00s)
+        export_parts_test.go:94: printed motor configuration missing "R 7.3 Ω"
+    --- FAIL: TestMotorExportRetainsParametersAndPartsStayWithinColumns/pwm=true/locked=true (0.00s)
+        export_parts_test.go:94: printed motor configuration missing "R 7.3 Ω"
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.305s
+FAIL
