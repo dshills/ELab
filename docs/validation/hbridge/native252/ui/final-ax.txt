@@ -1,0 +1,205 @@
+The following is a diff from the previous accessibility tree for Window: "ELab · Live electronics" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 18-87
+~				4 text (settable) Reversible PWM motor driver, ID: node:dGl0bGU
+~				12 button Undo agent, Help: Load example · by agent.socket, ID: node:ZWRpdC51bmRv
+~				15 button Appearance theme, Help: Current choice: Apollo. Opens a native menu. Use arrow keys to choose and Escape to dismiss., ID: node:dGhlbWUtbWVudQ
+~			16 text (settable) Ⅱ Paused, ID: node:c3RhdHVz
++				115 button Resume, ID: node:c2ltdWxhdGlvbi5yZXN1bWU
++		116 split group Schematic and scope divider, ID: node:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
++			117 row node:d29ya3NwYWNl
++				118 scroll area node:cGFydHMtc2Nyb2xs
++					119 container node:cGFsZXR0ZQ
++						120 text (settable) Components, ID: node:cGFydHMtdGl0bGU
++						121 button Component category, ID: node:cGFydC1jYXRlZ29yeQ, Help: Common holds six everyday parts. Choosing a category clears search. Current choice: Common · 6 ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++						122 text (settable) Search all components, ID: node:cGFydC1zZWFyY2gtbGFiZWw
++						123 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g
++						124 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
++							125 row (settable, boolean) DC source, Value: off, ID: option:cGFydC1saXN0:ZGMtc291cmNl
++							126 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
++							127 row (settable, boolean) Red LED, Value: off, ID: option:cGFydC1saXN0:bGVk
++							128 row (settable, boolean) Capacitor, Value: off, ID: option:cGFydC1saXN0:Y2FwYWNpdG9y
++							129 row (settable, boolean) Ground, Value: off, ID: option:cGFydC1saXN0:Z3JvdW5k
++							130 row (settable, boolean) SPST switch, Value: off, ID: option:cGFydC1saXN0:c3dpdGNo
++						131 text (settable) 6 matches · arrows choose · Tab to position, ID: node:cGxhY2VtZW50LWhlbHA
++						132 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
++				133 container node:c2NoZW1hdGljLXBhbmVs
++					134 toolbar node:dG9vbHM
++						135 row Drawing mode, ID: node:ZHJhd2luZy1tb2RlLXRhYnM
++							136 button Select, Help: Selected drawing mode., ID: node:dG9vbC1zZWxlY3Q
++							137 button Wire, ID: node:dG9vbC13aXJl
++							138 button Pan, ID: node:dG9vbC1wYW4
++						139 row node:ZHJhd2luZy1hY3Rpb25z
++							140 button Cancel, ID: node:ZHJhd2luZy5jYW5jZWw, Help: Cancel an unfinished wire or component placement and return to Select mode. Existing components and wires are kept. Shortcut: Escape.
++							141 row node:dG9vbC1zcGFjZXI
++							142 button Sweeps, ID: node:c3dlZXAtb3Blbg
++							143 button Fit, ID: node:dmlldy5maXQ, Help: Fit the complete schematic and follow workspace resizing. Pan, zoom or center an object to return to manual positioning. Selected.
++					144 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
++				145 container node:aW5zcGVjdG9yLXJhaWw
++					146 row node:aW5zcGVjdG9yLW5hdmlnYXRpb24tdG9wLXNwYWNl
++					147 toolbar Inspector section, ID: node:aW5zcGVjdG9yLW5hdmlnYXRpb24
++						148 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWNvbXBvbmVudA
++							149 button Inspect inspector, Help: Selected inspector section., ID: node:aW5zcGVjdG9yLXNlY3Rpb24tY29tcG9uZW50
++							150 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItY29tcG9uZW50
++						151 container node:aW5zcGVjdG9yLXRhYi1jZWxsLXNpbXVsYXRpb24
++							152 button Simulate inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tc2ltdWxhdGlvbg
++							153 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3Itc2ltdWxhdGlvbg
++						154 container node:aW5zcGVjdG9yLXRhYi1jZWxsLWRvY3VtZW50
++							155 button Document inspector, ID: node:aW5zcGVjdG9yLXNlY3Rpb24tZG9jdW1lbnQ
++							156 row node:aW5zcGVjdG9yLXRhYi1pbmRpY2F0b3ItZG9jdW1lbnQ
++					157 scroll area node:c2lkZWJhci0yLWNvbXBvbmVudA
++						158 container node:c2lkZWJhci1jb250ZW50
++							159 container Object inspector, ID: node:aW5zcGVjdG9yLWdyb3VwLW9iamVjdA
++								160 text (settable) Inspector, ID: node:aW5zcGVjdG9yLXRpdGxl
++								161 button Selected object, ID: node:c2VsZWN0aW9u, Help: Current choice: U1 · H-bridge motor driver ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								162 row node:c2VsZWN0aW9uLW5hdmlnYXRpb24
++									163 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
++									164 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
++									165 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
++								166 text (settable) U1 · H-bridge motor driver, ID: node:aW5zcGVjdG9y
++								167 text (settable) Terminals: in1, in2, enable, out1, out2, vm, gnd, ID: node:cGFydC10ZXJtaW5hbHM
++								168 text (settable) Model: elab.generic-hbridge.v1, ID: node:cGFydC1tb2RlbC1pZA
++								169 text (settable) Motor driver, ID: node:aGJyaWRnZS10aXRsZQ
++								170 text (settable) Wire IN1 / IN2 for direction and ENABLE for PWM. Inputs: low ≤0.8 V, high ≥2 V relative to GND., ID: node:aGJyaWRnZS1jb250cm9scy1oZWxw
++								171 text (settable) ID: node:aGJyaWRnZS10cnV0aC10YWJsZQ, Enabled: 10 forward · 01 reverse
+00 brake low · 11 brake high
+ENABLE low: coast; flyback clamps remain active.
++								172 text (settable) ID: node:aGJyaWRnZS1saXZlLWhlbHA, Use connected switches or sources to change modes. Motor speed and winding current remain continuous.
++								173 text (settable) Live bridge, ID: node:aGJyaWRnZS1yZWFkaW5nLXRpdGxl
++								174 text (settable) forward, ID: node:aGJyaWRnZS1zdGF0ZQ
++								175 text (settable) IN1 high · IN2 low · EN high, ID: node:aGJyaWRnZS1pbnB1dHM
++								176 text (settable) OUT1 − OUT2 11.3767 V · VM 12 V, ID: node:aGJyaWRnZS12b2x0YWdl
++								177 text (settable) Into VM 1.24679 A · negative returns energy, ID: node:aGJyaWRnZS1jdXJyZW50
++								178 text (settable) Driver dissipation 0.778705 W, ID: node:aGJyaWRnZS1sb3Nz
++								179 text (settable) Clamp currents A: 0 / 0 / 0 / 0, ID: node:aGJyaWRnZS1jbGFtcHM
++								180 button Plot U1.enable / ground, ID: node:cGxvdC12OlUxLmVuYWJsZQ
++								181 button Plot U1 motor output voltage, ID: node:cGxvdC12OlUx
++								182 button Plot U1.out1 current into driver, ID: node:cGxvdC1pOlUxLm91dDE
++								183 button Plot U1.out2 current into driver, ID: node:cGxvdC1pOlUxLm91dDI
++								184 button Plot U1.vm current into driver, ID: node:cGxvdC1pOlUxLnZt
++								185 text (settable) Adds a trace; replaces the last when six are shown., ID: node:cGxvdC1oZWxw
++								186 text (settable) ID: node:cGFydC1hc3N1bXB0aW9ucw, Generic single H-bridge with IN1/IN2 and active-high ENABLE/PWM. Enabled 10 drives forward, 01 reverse, 00 brakes to GND and 11 brakes to VM; ENABLE low coasts. Inputs are local to GND: <=0.8 V low, >=2 V high. Intermediate levels use a smooth nonoverlapping conductance transition, not a valid digital state. Each active leg is 0.25 ohm with a 1 Gohm off path; four passive piecewise-linear clamp diodes remain active during coast and power-off (0.65 V knee plus 0.25 ohm). Input pulldowns are 1 Mohm; supply lo
++								187 text (settable) Position 200, 0 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
++								188 button Rotate 90°, ID: node:cm90YXRlLXBhcnQ
++								189 button Duplicate, ID: node:ZHVwbGljYXRlLXBhcnQ
++								190 button Delete selected, ID: node:ZGVsZXRlLW9iamVjdA
++							191 container Live measurements, ID: node:aW5zcGVjdG9yLWdyb3VwLW1lYXN1cmVtZW50cw
++								192 text (settable) Live measurements, ID: node:bWVhc3VyZW1lbnQtdGl0bGU
++								193 text (settable) Plot adds a trace, replacing the last if six are shown. Pin keeps a reading on the sheet., ID: node:bWVhc3VyZW1lbnQtaGVscA
++								194 button Inspect named terminal voltage, ID: node:aW5zcGVjdC10ZXJtaW5hbA, Help: Current choice: Measure a terminal… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								195 button Inspect named electrical net, ID: node:aW5zcGVjdC1uZXQ, Help: Current choice: Measure a net… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								196 button Inspect voltage or current probe, ID: node:aW5zcGVjdC1wcm9iZQ, Help: Current choice: Measure voltage/current… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								197 text (settable) U1 · sample 4 ms, ID: node:bWVhc3VyZW1lbnQtc291cmNl
++								198 text (settable) Live v:U1.in1 · 11.999 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMS5pbjE
++								199 text (settable) Voltage: U1.in1 - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTEuaW4x
++								200 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmluMQ
++									201 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmluMQ
++									202 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuaW4x
++								203 text (settable) Live v:U1.in2 · 0.00011881 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMS5pbjI
++								204 text (settable) Voltage: U1.in2 - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTEuaW4y
++								205 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmluMg
++									206 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmluMg
++									207 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuaW4y
++								208 text (settable) Live v:U1.enable · 4.9995 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMS5lbmFibGU
++								209 text (settable) Voltage: U1.enable - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTEuZW5hYmxl
++								210 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmVuYWJsZQ
++									211 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmVuYWJsZQ
++									212 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuZW5hYmxl
++								213 text (settable) Live v:U1.out1 · 11.688 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMS5vdXQx
++								214 text (settable) Voltage: U1.out1 - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTEub3V0MQ
++								215 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLm91dDE
++									216 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLm91dDE
++									217 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEub3V0MQ
++								218 text (settable) Live v:U1.out2 · 0.31167 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMS5vdXQy
++								219 text (settable) Voltage: U1.out2 - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTEub3V0Mg
++								220 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLm91dDI
++									221 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLm91dDI
++									222 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEub3V0Mg
++								223 text (settable) Live v:U1.vm · 12 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMS52bQ
++								224 text (settable) Voltage: U1.vm - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTEudm0
++								225 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnZt
++									226 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnZt
++									227 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEudm0
++								228 text (settable) Live v:U1.gnd · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMS5nbmQ
++								229 text (settable) Voltage: U1.gnd - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTEuZ25k
++								230 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmduZA
++									231 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmduZA
++									232 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuZ25k
++								233 text (settable) Live v:U1 · 11.377 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpVMQ
++								234 text (settable) Voltage: U1.out1 - U1.out2, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6VTE
++								235 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUx
++									236 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUx
++									237 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTE
++								238 text (settable) Live i:U1.in1 · 0.011999 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpVMS5pbjE
++								239 text (settable) Current: U1.in1 -> into driver, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6VTEuaW4x
++								240 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmluMQ
++									241 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmluMQ
++									242 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuaW4x
++								243 text (settable) Live i:U1.in2 · 1.1881e-07 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpVMS5pbjI
++								244 text (settable) Current: U1.in2 -> into driver, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6VTEuaW4y
++								245 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmluMg
++									246 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmluMg
++									247 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuaW4y
++								248 text (settable) Live i:U1.enable · 0.0049995 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpVMS5lbmFibGU
++								249 text (settable) Current: U1.enable -> into driver, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6VTEuZW5hYmxl
++								250 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmVuYWJsZQ
++									251 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmVuYWJsZQ
++									252 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuZW5hYmxl
++								253 text (settable) Live i:U1.out1 · -1246.7 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpVMS5vdXQx
++								254 text (settable) Current: U1.out1 -> into driver, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6VTEub3V0MQ
++								255 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLm91dDE
++									256 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLm91dDE
++									257 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEub3V0MQ
++								258 text (settable) Live i:U1.out2 · 1246.7 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpVMS5vdXQy
++								259 text (settable) Current: U1.out2 -> into driver, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6VTEub3V0Mg
++								260 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLm91dDI
++									261 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLm91dDI
++									262 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEub3V0Mg
++								263 text (settable) Live i:U1.vm · 1246.8 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpVMS52bQ
++								264 text (settable) Current: U1.vm -> into driver, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6VTEudm0
++								265 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnZt
++									266 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnZt
++									267 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEudm0
++								268 text (settable) Live i:U1.gnd · -1246.8 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpVMS5nbmQ
++								269 text (settable) Current: U1.gnd -> into driver, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6VTEuZ25k
++								270 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmduZA
++									271 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmduZA
++									272 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuZ25k
++								273 button Inspect selected object, ID: node:bWVhc3VyZW1lbnQtY2xlYXI
++							274 container Pinned readings, ID: node:aW5zcGVjdG9yLWdyb3VwLXBpbm5lZA
++								275 text (settable) Pinned live readings, ID: node:cGlubmVkLXJlYWRpbmdzLXRpdGxl
++								276 text (settable) ID: node:cGlubmVkLXJlYWRpbmdzLWhlbHA, Pin up to eight voltage/current readings, then drag a card on the sheet or edit X / Y. Readings always follow the live circuit.
++								277 button Pin a live voltage or current reading, ID: node:cGluLXJlYWRpbmctcHJvYmU, Help: Current choice: Pin a reading… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++			278 splitter (settable, float) Schematic and scope divider, Value: 0.65, ID: split:d29ya3NwYWNlLXNwbGl0, Help: Drag to resize; Up/Down adjusts the schematic share, Home/End selects its limits. Scope controls scroll when space is limited.
++			279 scroll area node:c2NvcGUtc2Nyb2xs
++				280 container node:c2NvcGUtcGFuZWw
++					281 toolbar node:c2NvcGUtdG9vbGJhcg
++						282 button Hide scope, Help: Expand or collapse the dock without changing simulation or recorded measurements, ID: node:c2NvcGUtdmlzaWJpbGl0eQ
++						283 text (settable) Live circuit network, ID: node:c2NvcGUtdGl0bGU
++						284 text (settable) t = 0.004 s · U1 forward · run 3 · paused, ID: node:c2NvcGUtY2FwdGlvbg
++						285 button Auto, Help: Selected., ID: node:aW5wdXQtYXV0bw
++						286 button High, ID: node:aW5wdXQtaGlnaA
++						287 button Low, ID: node:aW5wdXQtbG93
++						288 button Step +1 sample, ID: node:dHJhbnNpZW50LXN0ZXA
++						289 button Restart, ID: node:c2ltdWxhdGlvbi5yZXN0YXJ0
++					290 toolbar node:c2NvcGUtdHJhY2Utcm93
++						291 button Export scope CSV, ID: node:ZXhwb3J0LWNzdg
++						292 button Inspect trace source, ID: node:c2NvcGUtdHJhY2UtZm9jdXM, Help: Current choice: Inspect trace… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++						293 text (settable) ID: node:c2NvcGUtbGVnZW5k, Teal: U1 motor output voltage · Coral: MTR1 armature current · Blue: U1.enable / ground · Rose: U1.vm current into driver
++					294 text (settable) Step completed · 80/80 staged samples, ID: node:c3RlcC13b3JrLXN0YXR1cw
++					295 toolbar node:c2NvcGUtY3Vyc29ycw
++						296 button A, Help: Selected., ID: node:Y3Vyc29yLXNlbGVjdC1h
++						297 text field (settable) Cursor A time, ID: node:Y3Vyc29yLXRpbWUtYQ, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
++						298 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWE
++						299 button B, ID: node:Y3Vyc29yLXNlbGVjdC1i
++						300 text field (settable) Cursor B time, ID: node:Y3Vyc29yLXRpbWUtYg, Help: Enter a time to place this cursor. Enter seconds or a unit such as 10 ms or 250 us; bare numbers are seconds.
++						301 button (disabled) ×, ID: node:Y3Vyc29yLWNsZWFyLWI
++						302 text (settable) ms · click / drag plot to place selected cursor, ID: node:Y3Vyc29yLW1lYXN1cmVtZW50
+~				90 text (settable) R1 current, ID: node:Y3VycmVudC10aXRsZQ
+~				91 text (settable) 1.1999 mA, ID: node:Y3VycmVudC12YWx1ZQ
+~				93 text (settable) R1 voltage, ID: node:dm9sdGFnZS10aXRsZQ
+~				94 text (settable) 11.999 V, ID: node:dm9sdGFnZS12YWx1ZQ
+~				96 text (settable) Power residual, ID: node:cG93ZXItdGl0bGU
+~				97 text (settable) 1.11e-06 nW, ID: node:cG93ZXItdmFsdWU
+~				100 text (settable) Network · t = 0.004 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+~			102 text (settable) 26 components · 22 wires, Help: Reversible PWM motor driver · 26 components · 22 wires · last change: user, ID: node:Zm9vdGVy
+~			104 text (settable) 51%, ID: node:em9vbQ

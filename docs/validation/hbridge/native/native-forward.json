@@ -1,0 +1,109 @@
+{
+  "run_id": 3,
+  "paused": true,
+  "selected": "U1",
+  "source_warnings": [
+    {
+      "code": "source-sampling",
+      "message": "PWM: output sample step 5e-05 s may hide waveform detail; use 2.5e-05 s or less.",
+      "object_id": "PWM"
+    }
+  ],
+  "source_sampling": [
+    {
+      "id": "PWM",
+      "source_kind": "finite-pulse-source",
+      "target_step_s": 2.5e-05,
+      "recommended_step_s": 2.5e-05,
+      "minimum_step_s": 1e-06,
+      "unresolved": true,
+      "minimum_limited": false,
+      "can_fit": true
+    }
+  ],
+  "switch_states": [
+    {
+      "id": "S1",
+      "desired_closed": true,
+      "applied_closed": true,
+      "pending": false
+    },
+    {
+      "id": "S2",
+      "desired_closed": false,
+      "applied_closed": false,
+      "pending": false
+    },
+    {
+      "id": "SEN",
+      "desired_closed": true,
+      "applied_closed": true,
+      "pending": false
+    }
+  ],
+  "view": {
+    "center": {
+      "x": -300.5,
+      "y": 111.33364140477542
+    },
+    "zoom": 0.49316317228682227
+  },
+  "mixed": {
+    "hbridges": [
+      {
+        "id": "U1",
+        "model": "elab.generic-hbridge.v1",
+        "state": "forward",
+        "input1": "high",
+        "input2": "low",
+        "enable": "high",
+        "supply_voltage_v": 12,
+        "output_voltage_v": 11.766398575828394,
+        "pin_currents_a": [
+          1.1998788122399639e-05,
+          1.188107048445065e-10,
+          4.999495050999849e-06,
+          -0.46720283657681433,
+          0.4672028365768119,
+          0.46732286034321296,
+          -0.46733985874519457
+        ],
+        "clamp_currents_a": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "dissipation_w": 0.11074849906532669
+      }
+    ],
+    "motors": [
+      {
+        "id": "MTR1",
+        "model": "elab.power-and-isolation.v1",
+        "state": "running",
+        "voltage_v": 11.766398575828394,
+        "armature_current_a": 0.4672028365768119,
+        "speed_rad_s": 408.10651679943686,
+        "rpm": 3897.1301673987605,
+        "back_emf_v": 8.162130335988737,
+        "torque_n_m": 0.009344056731536238,
+        "blocked_rotor_reference_current_a": 1.4707998219785492,
+        "winding_heat_w": 1.7462279240433536,
+        "drag_power_w": 1.6655092905416906,
+        "magnetic_energy_j": 0.001091392452527096,
+        "rotational_energy_j": 0.08327546452708451,
+        "terminal_power_w": 5.497294790920385
+      }
+    ],
+    "time_s": 0.03,
+    "kcl_residual_a": 2.609024107869118e-15,
+    "power_residual_w": -8.881784197001252e-16,
+    "stale": false
+  },
+  "document": {
+    "path": "",
+    "dirty": false,
+    "generation": 2
+  }
+}

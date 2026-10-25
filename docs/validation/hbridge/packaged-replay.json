@@ -1,0 +1,158 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "modes": {
+    "forward": {
+      "rpm": 4713.578656250936,
+      "driver": {
+        "id": "U1",
+        "model": "elab.generic-hbridge.v1",
+        "state": "forward",
+        "input1": "high",
+        "input2": "low",
+        "enable": "high",
+        "supply_voltage_v": 12,
+        "output_voltage_v": 11.8747169819278,
+        "pin_currents_a": [
+          1.1998788122399639e-05,
+          1.188107048445065e-10,
+          4.999495050999849e-06,
+          -0.25056602426968166,
+          0.25056602426968055,
+          0.25068604814439865,
+          -0.25070304654638165
+        ],
+        "clamp_currents_a": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "dissipation_w": 0.0330009201106467
+      }
+    },
+    "reverse": {
+      "rpm": -3831.4998004155473,
+      "driver": {
+        "id": "U1",
+        "model": "elab.generic-hbridge.v1",
+        "state": "reverse",
+        "input1": "low",
+        "input2": "high",
+        "enable": "high",
+        "supply_voltage_v": 12,
+        "output_voltage_v": -11.757691380131547,
+        "pin_currents_a": [
+          1.188107048445065e-10,
+          1.1998788122399639e-05,
+          4.999495050999849e-06,
+          0.48461722797921625,
+          -0.4846172279792146,
+          0.48473725173690596,
+          -0.48475425013889173
+        ],
+        "clamp_currents_a": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "dissipation_w": 0.11903618263560123
+      }
+    },
+    "brake low": {
+      "rpm": 441.03942791769396,
+      "driver": {
+        "id": "U1",
+        "model": "elab.generic-hbridge.v1",
+        "state": "brake low",
+        "input1": "low",
+        "input2": "low",
+        "enable": "high",
+        "supply_voltage_v": 12,
+        "output_voltage_v": 0.058512800898127625,
+        "pin_currents_a": [
+          1.188107048445065e-10,
+          1.188107048445065e-10,
+          4.999495050999849e-06,
+          0.11702560185476805,
+          -0.11702560185476805,
+          0.000120023999999994,
+          -0.00012502373267239984
+        ],
+        "clamp_currents_a": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "dissipation_w": 0.008312778692104731
+      }
+    },
+    "brake high": {
+      "rpm": 441.03942791769373,
+      "driver": {
+        "id": "U1",
+        "model": "elab.generic-hbridge.v1",
+        "state": "brake high",
+        "input1": "high",
+        "input2": "high",
+        "enable": "high",
+        "supply_voltage_v": 12,
+        "output_voltage_v": 0.0585128008981286,
+        "pin_currents_a": [
+          1.1998788122399639e-05,
+          1.1998788122399639e-05,
+          4.999495050999849e-06,
+          0.11702560185476901,
+          -0.11702560185477101,
+          0.00012002400000199777,
+          -0.00014902107129579313
+        ],
+        "clamp_currents_a": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "dissipation_w": 0.008600720524889315
+      }
+    },
+    "coast": {
+      "rpm": 3081.517033449542,
+      "driver": {
+        "id": "U1",
+        "model": "elab.generic-hbridge.v1",
+        "state": "coast",
+        "input1": "high",
+        "input2": "low",
+        "enable": "low",
+        "supply_voltage_v": 12,
+        "output_voltage_v": 6.453914131812008,
+        "pin_currents_a": [
+          1.1998788122399639e-05,
+          1.188107048445065e-10,
+          4.950446035187771e-11,
+          6.453914131813296e-09,
+          -6.45391413181072e-09,
+          0.000120012,
+          -0.00013201095643756484
+        ],
+        "clamp_currents_a": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "dissipation_w": 0.0015841565694304262
+      }
+    }
+  },
+  "pwm_motor_rpm": 2639.350717478326,
+  "capture_fresh_reopen": true,
+  "exports": {
+    "svg": "6fc0e38cccda40df67948b29df0b7f0563f68704bcb065c55ff8ea0f32e44ab6",
+    "png": "d6b76c376b5cab2a7ca01a6a64838c0edd90530a2df965c55e0584e4ffaaf2bf",
+    "pdf": "a75f30337dd90b151cb83c32f0b2af6207963e570518d1138e0debd4fa74cbdb"
+  }
+}

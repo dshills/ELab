@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "log": "root-race-complete.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=20m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 226.2625291252043
+    },
+    {
+      "log": "root-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 5.820790333207697
+    },
+    {
+      "log": "desktop-race-focused.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-run",
+        "HBridge|Motor|Battery|Transformer|Optocoupler|ComponentBrowser|ComponentSymbols|HighCurrentScope|Scope.*Cursor|Inspector",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 31.815024584066123
+    },
+    {
+      "log": "desktop-mounted-focused.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-run",
+        "HBridge|Motor|ComponentBrowser|ComponentSymbols|HighCurrentScope|MountedInspector",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 71.27483458304778
+    },
+    {
+      "log": "desktop-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 2.1075652081053704
+    },
+    {
+      "log": "desktop-mounted-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 2.3034318750724196
+    },
+    {
+      "log": "lint.txt",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 22.765272499993443
+    },
+    {
+      "log": "python.txt",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 1.673755916999653
+    },
+    {
+      "log": "prd.txt",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.028326208936050534
+    }
+  ]
+}

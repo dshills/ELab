@@ -527,3 +527,17 @@ paint repairs; focused checks and the final package/native replay qualify those
 later edits. Component-list thumb dragging remains unqualified by targeted CUA;
 wheel access to all 48 components and inspector wheel/thumb passed. All five
 requested additions and the defects found during qualification are handled.
+
+
+October 25: the separately requested H-bridge feature is complete. The Motors
+browser adds a generic seven-pin driver; forward/reverse, PWM, brake-low,
+brake-high and coast use the same wired switch/source controls for users and
+agents. The reversible motor template, conservation/analytic/storage/capture
+checks, complete root race run, focused native/mounted checks and final packaged
+replay pass. Native mouse actuation verified forward→brake; the final /252
+candidate fixes fitted label spacing and starts without a sampling advisory.
+Evidence, source-baseline distinctions and model limitations are in
+[H-bridge qualification](../docs/validation/hbridge/README.md). Package:
+`build/ELab-0.191.0-252-HBridge/ELab.app`. Owned fixtures are saved/closed; the
+qualified alpha and owner projects remain preserved. No other proposed component
+families were added.

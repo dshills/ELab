@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "source_commit": "03f8d7a72276bee1e1d1af3d33fafe69d1dc307f",
+  "version": "0.191.0",
+  "build": 252,
+  "components": 49,
+  "public_commands": 175,
+  "suites": {
+    "root-race-complete.jsonl": {
+      "top_level_passed": 844,
+      "including_subtests": 1877,
+      "skipped_tests": [],
+      "packages": [
+        {
+          "package": "github.com/dshills/elab/cmd/elab-conformance",
+          "elapsed_s": 0
+        },
+        {
+          "package": "github.com/dshills/elab/internal/conformance",
+          "elapsed_s": 0.001
+        },
+        {
+          "package": "github.com/dshills/elab/internal/printspool",
+          "elapsed_s": 0
+        },
+        {
+          "package": "github.com/dshills/elab/internal/schematicpdf",
+          "elapsed_s": 0
+        },
+        {
+          "package": "github.com/dshills/elab/internal/uiaudit",
+          "elapsed_s": 0
+        },
+        {
+          "package": "github.com/dshills/elab/transport",
+          "elapsed_s": 0
+        },
+        {
+          "package": "github.com/dshills/elab/workbench",
+          "elapsed_s": 213.477
+        }
+      ]
+    },
+    "desktop-race-focused.jsonl": {
+      "top_level_passed": 13,
+      "including_subtests": 18,
+      "skipped_tests": [],
+      "packages": [
+        {
+          "package": "github.com/dshills/elab/desktop",
+          "elapsed_s": 23.893
+        }
+      ]
+    },
+    "desktop-mounted-focused.jsonl": {
+      "top_level_passed": 18,
+      "including_subtests": 59,
+      "skipped_tests": [],
+      "packages": [
+        {
+          "package": "github.com/dshills/elab/desktop",
+          "elapsed_s": 64.88
+        }
+      ]
+    }
+  },
+  "complete_suite_source_commit": "020a4eb3d891698f9448bb548b57a2c549652dc1",
+  "post_suite_scope": "Example-only named-net routing and caption/label positions, then default pulse ramps100us->200us matching50us output grid and an assertion rejecting template sampling warnings. H-bridge and motor equations, numerical accuracy and production work limits unchanged. Targeted electrical/source-sampling/export/routing and mounted parity tests plus lint rerun after these changes.",
+  "test_process_GOMAXPROCS": 2,
+  "simulation_limits_unchanged": true,
+  "desktop_suite_scope": "Focused desktop and focused mounted controls; not complete desktop suites for this addition",
+  "native": {
+    "physical_switch_actuation_build": 251,
+    "physical_switch_source_commit": "90ff87c49cdc13eaf9844a3a19ff631d10784bd0",
+    "canvas_mouse_selection": true,
+    "native_open_switch": true,
+    "pending_until_step": true,
+    "after_step_state": "brake low",
+    "run_preserved": true,
+    "final_presentation_build": 252,
+    "final_fitted_labels_readable": true,
+    "default_sampling_resolved": true,
+    "actual_theme": "apollo",
+    "mounted_themes": [
+      "light",
+      "dark",
+      "apollo"
+    ],
+    "private_fixtures_saved": true,
+    "closed_normally": true,
+    "owned_endpoints_removed": true,
+    "CUA_running_ELab_after_cleanup": [],
+    "window_resized": false,
+    "owner_projects_untouched": true,
+    "launcher_note": "Fixed argument-only C launcher execs the unchanged packaged executable with private profile flags. CUA launcher-path lookup reports running app not found; endpoint and actual running app were checked and the exact canonical app was reused. No duplicate launch or repeated permission question."
+  },
+  "release_promoted": false,
+  "preserved_alpha_sha256": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b"
+}
