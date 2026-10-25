@@ -146,6 +146,15 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
 			capture.display.Animate = false
 			capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
+		case "audio-wav":
+			if s.audio == nil || s.audio.view.ID != p.ID || s.audio.view.Status != "completed" || !s.audioViewLocked().Current {
+				return fmt.Errorf("export needs the exact current completed audio preview")
+			}
+			command = "export.audio.wav"
+			capture.previewData = append([]byte(nil), s.audio.wav...)
+			capture.artifact.Format = "wav"
+			capture.artifact.OperationID = p.ID
+			capture.artifact.RunID = 0
 		case "scope-csv":
 			if p.ID != "" {
 				return fmt.Errorf("live scope export does not use a recording ID")
@@ -199,7 +208,7 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			capture.artifact.RunID = 0
 			capture.artifact.ElectricalRevision = operation.record.metadata.ElectricalRevision
 		default:
-			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json or sweep-csv")
+			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json, sweep-csv or audio-wav")
 		}
 	}
 	// Keep protection tied to this admission even for an older preview capture.
@@ -238,6 +247,8 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 		data, err = encodeSweepExport(capture.sweep, "csv")
 	case "schematic-svg":
 		data = schematicSVGWithAnnotations(capture.graph, capture.artifact.RunID, capture.artifact.ElectricalRevision, capture.display, capture.annotations, capture.settings, capture.readings...)
+	case "audio-wav":
+		data = append([]byte(nil), capture.previewData...)
 	case "scope-csv":
 		data, err = encodeScopeCSV(capture.trace, capture.scope)
 	case "verification-json":

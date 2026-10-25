@@ -160,6 +160,46 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.configureOptocouplerLocked(p)
+	case "audio.render", "audio.play", "audio.stop":
+		return s.audioCommandLocked(command, raw)
+	case "pwm.configure":
+		var p PWMParams
+		if err := params(raw, &p, "id", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &PWMConfig{}, "frequency_hz", "duty_fraction"); err != nil {
+			return err
+		}
+		return s.configureDeviceLocked(p.ID, "pwm-controller", &DeviceParameters{PWM: &p.Parameters})
+	case "opamp.dynamics.set":
+		var p DynamicsParams
+		if err := params(raw, &p, "id", "enabled", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &OpAmpDynamics{}, "gain_bandwidth_hz", "slew_v_per_s"); err != nil {
+			return err
+		}
+		if err := validateDeviceParameters(Component{Kind: "opamp", Device: &DeviceParameters{Dynamics: &p.Parameters}}); err != nil {
+			return err
+		}
+		var d *DeviceParameters
+		if p.Enabled {
+			d = &DeviceParameters{Dynamics: &p.Parameters}
+		}
+		return s.configureDeviceLocked(p.ID, "opamp", d)
+	case "sound.configure":
+		var p SoundParams
+		if err := params(raw, &p, "id", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &SoundConfig{}, "capacitance_f", "frequency_hz"); err != nil {
+			return err
+		}
+		part, ok := s.graph.Component(p.ID)
+		if !ok || !isSoundKind(part.Kind) {
+			return fmt.Errorf("choose a sounder")
+		}
+		return s.configureDeviceLocked(p.ID, part.Kind, &DeviceParameters{Sound: &p.Parameters})
 	case "motor.configure":
 		var p MotorParams
 		if err := params(raw, &p, "id", "parameters"); err != nil {
@@ -683,7 +723,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"hbridge": "U", "transformer": "T", "optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"shift-register": "U", "piezo": "BZ", "active-buzzer": "BZ", "pwm-controller": "U", "hbridge": "U", "transformer": "T", "optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

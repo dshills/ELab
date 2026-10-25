@@ -91,6 +91,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if part.Kind == "pwm-controller" || part.Kind == "opamp" || part.Kind == "shift-register" || part.Kind == "piezo" || part.Kind == "active-buzzer" {
+		inspector = append(inspector, s.extendedControls(state, part)...)
+	}
 	if part.Kind == "hbridge" {
 		inspector = append(inspector, s.hbridgeControls(state, part)...)
 	}
@@ -228,7 +231,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	inspector = append(inspector, s.partPlotControls(state, part)...)
 	if part.Kind == "opamp" {
 		inspector = append(inspector, s.partGeometryControls(state, part)...)
-		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model), quiet("opamp-model", "Gain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nNo internal bandwidth or slew model."))
+		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model), quiet("opamp-model", "Gain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nBandwidth and slew are optional below."))
 	}
 	for _, entry := range workbench.Library() {
 		if entry.Kind == part.Kind {

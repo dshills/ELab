@@ -114,6 +114,14 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 					options.Title = "Open captured frequency or DC sweep"
 				}
 				options.Extensions = []string{"json"}
+			case "export.start":
+				var kind string
+				_ = json.Unmarshal(fields["kind"], &kind)
+				if kind == "audio-wav" {
+					options.Title = "Export audio preview WAV"
+					options.Extensions = []string{"wav"}
+					options.Filename = "Sounder.wav"
+				}
 			case "export.scope.csv":
 				options.Title = "Export scope CSV"
 				options.Extensions = []string{"csv"}
@@ -206,7 +214,10 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				path := state.Document.Path
 				continueAction := true
 				saveAssociated := true
-				if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export")) {
+				if id == "export.start" && state.ProjectWork != nil {
+					s.fileMessage = "Exporting " + filepath.Base(state.ProjectWork.Path)
+					continueAction = false
+				} else if response.Result.(workbench.Snapshot).LastExport != nil && (strings.HasPrefix(id, "export.") || (id == "verification.export" || id == "sweep.export")) {
 					s.fileMessage = "Exported " + filepath.Base(response.Result.(workbench.Snapshot).LastExport.Path)
 				} else if id == "verification.import" || id == "sweep.import" {
 					var opened string

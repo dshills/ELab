@@ -1,0 +1,153 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "log": "preflight-lint.txt",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 11.48942779097706
+    },
+    {
+      "log": "devices-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-run",
+        "TestExtended|TestAudio|TestSoundWAV|TestDynamicOpAmp|TestOpAmpDynamics|TestShift|TestPWMClock",
+        "-timeout=5m",
+        "./workbench"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.32257162500172853
+    },
+    {
+      "log": "devices-mounted.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-run",
+        "TestMountedExtended|TestComponentSymbols|TestExtended",
+        "-timeout=10m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 49.90148016694002
+    },
+    {
+      "log": "root-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 405.0287272911519
+    },
+    {
+      "log": "desktop-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 741.9085301670711
+    },
+    {
+      "log": "desktop-mounted.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 1140.1360900418367
+    },
+    {
+      "log": "root-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 6.954634290887043
+    },
+    {
+      "log": "desktop-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 1.7650241667870432
+    },
+    {
+      "log": "mounted-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 2.876065040938556
+    },
+    {
+      "log": "lint.txt",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 10.564876083983108
+    },
+    {
+      "log": "python.txt",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 1.7374099171720445
+    },
+    {
+      "log": "prd.txt",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.029767582891508937
+    }
+  ]
+}

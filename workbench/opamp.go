@@ -43,12 +43,13 @@ type opAmpVoltages [opAmpTerminalCount]float64
 type opAmpEvaluation struct {
 	// All five currents are positive into the device. Supply and output
 	// derivatives sum to zero, just as the terminal currents do.
-	current      [opAmpTerminalCount]float64
-	jacobian     [opAmpTerminalCount][opAmpTerminalCount]float64
-	target       float64
-	enable       float64
-	activeOutput float64
-	bleedOutput  float64
+	current        [opAmpTerminalCount]float64
+	jacobian       [opAmpTerminalCount][opAmpTerminalCount]float64
+	poleDerivative [opAmpTerminalCount]float64
+	target         float64
+	enable         float64
+	activeOutput   float64
+	bleedOutput    float64
 }
 
 // opAmpTarget is defined only for positive supply span. The derivative of tanh
@@ -74,7 +75,8 @@ func opAmpTarget(v opAmpVoltages, gain float64) (float64, [opAmpTerminalCount]fl
 
 // opAmpCurrents evaluates the memoryless current law and its analytic stamp.
 // Callers supply finite voltages within the network's existing node bounds.
-func opAmpCurrents(v opAmpVoltages) opAmpEvaluation {
+func opAmpCurrents(v opAmpVoltages) opAmpEvaluation { return opAmpCurrentsControlled(v, 0, false) }
+func opAmpCurrentsControlled(v opAmpVoltages, pole float64, dynamic bool) opAmpEvaluation {
 	m := OpAmpDeviceModel()
 	var result opAmpEvaluation
 	var dEnable, dActive [opAmpTerminalCount]float64
@@ -87,12 +89,33 @@ func opAmpCurrents(v opAmpVoltages) opAmpEvaluation {
 		dEnable[opAmpPositive] = 2 * span * soft2 / (denominator * denominator)
 		dEnable[opAmpNegative] = -dEnable[opAmpPositive]
 		target, derivative := opAmpTarget(v, m.OpenLoopGain)
+		poleWeight := 0.
+		if dynamic {
+			target = pole
+			poleWeight = 1
+			derivative = [opAmpTerminalCount]float64{}
+			// Stored compensation charge can outlast a falling rail. It is
+			// control state, not an additional supply for the output stage.
+			if pole > v[opAmpPositive] {
+				target = v[opAmpPositive]
+				derivative[opAmpPositive] = 1
+				poleWeight = 0
+			}
+			if pole < v[opAmpNegative] {
+				target = v[opAmpNegative]
+				derivative[opAmpNegative] = 1
+				poleWeight = 0
+			}
+		}
 		result.target = target
 		u := (v[opAmpOutput] - target) / (m.OutputResistance * m.ActiveCurrentLimit)
 		h := math.Hypot(1, u)
 		limited := m.ActiveCurrentLimit * u / h
 		result.activeOutput = result.enable * limited
 		conductance := 1 / (m.OutputResistance * h * h * h)
+		if dynamic {
+			result.poleDerivative[opAmpOutput] = -result.enable * conductance * poleWeight
+		}
 		for k := range dActive {
 			output := 0.
 			if k == opAmpOutput {
@@ -126,6 +149,8 @@ func opAmpCurrents(v opAmpVoltages) opAmpEvaluation {
 		// Central generalized derivative at the source/sink handover.
 		share = .5
 	}
+	result.poleDerivative[opAmpPositive] = -share * result.poleDerivative[opAmpOutput]
+	result.poleDerivative[opAmpNegative] = -result.poleDerivative[opAmpOutput] - result.poleDerivative[opAmpPositive]
 	for k := range dActive {
 		result.jacobian[opAmpPositive][k] = m.QuiescentCurrent*dEnable[k] - share*dActive[k]
 		result.jacobian[opAmpNegative][k] = -result.jacobian[opAmpOutput][k] - result.jacobian[opAmpPositive][k]

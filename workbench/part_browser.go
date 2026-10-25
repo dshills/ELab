@@ -36,13 +36,13 @@ func browserCategory(category string) string {
 
 func partGroup(kind string) (category string, common bool) {
 	switch kind {
-	case "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+	case "shift-register", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		category = "logic"
-	case "hbridge", "dc-motor":
+	case "hbridge", "dc-motor", "pwm-controller":
 		category = "motors"
 	case "battery", "dc-source", "sine-source", "finite-pulse-source", "pulse-source":
 		category = "sources"
-	case "transformer", "thermistor", "ldr", "resistor", "capacitor", "inductor", "potentiometer":
+	case "piezo", "active-buzzer", "transformer", "thermistor", "ldr", "resistor", "capacitor", "inductor", "potentiometer":
 		category = "passives"
 	case "optocoupler", "timer555", "led", "diode", "zener", "schottky", "npn", "pnp", "nmos", "pmos":
 		category = "semiconductors"

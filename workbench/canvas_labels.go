@@ -115,6 +115,10 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 		return Point{part.Position.X + 90, part.Position.Y - 15}
 	}
 	switch part.Kind {
+	case "pwm-controller", "piezo", "active-buzzer":
+		return Point{part.Position.X + 110, part.Position.Y - 95}
+	case "shift-register":
+		return Point{part.Position.X + 140, part.Position.Y - 200}
 	case "hbridge":
 		return Point{part.Position.X + 110, part.Position.Y - 95}
 	case "transformer", "optocoupler":

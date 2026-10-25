@@ -75,7 +75,7 @@ func TestLinearNegativeRailAndCapacitorStep(t *testing.T) {
 }
 
 func TestNetworkLinearityIsConservativeForEveryPart(t *testing.T) {
-	nonlinear := map[string]bool{"hbridge": true, "optocoupler": true, "linear-regulator": true, "ldo-regulator": true, "relay": true, "comparator": true, "pushbutton": true, "bouncing-pushbutton": true, "bcd-decoder": true, "seven-segment": true, "led": true, "diode": true, "zener": true, "schottky": true, "npn": true, "pnp": true, "nmos": true, "pmos": true, "opamp": true, "timer555": true, "d-flipflop": true, "jk-flipflop": true, "t-flipflop": true, "binary-counter": true, "decade-counter": true, "logic-not": true, "logic-and": true, "logic-or": true, "logic-nand": true, "logic-nor": true, "logic-xor": true, "logic-xnor": true}
+	nonlinear := map[string]bool{"pwm-controller": true, "shift-register": true, "piezo": true, "active-buzzer": true, "hbridge": true, "optocoupler": true, "linear-regulator": true, "ldo-regulator": true, "relay": true, "comparator": true, "pushbutton": true, "bouncing-pushbutton": true, "bcd-decoder": true, "seven-segment": true, "led": true, "diode": true, "zener": true, "schottky": true, "npn": true, "pnp": true, "nmos": true, "pmos": true, "opamp": true, "timer555": true, "d-flipflop": true, "jk-flipflop": true, "t-flipflop": true, "binary-counter": true, "decade-counter": true, "logic-not": true, "logic-and": true, "logic-or": true, "logic-nand": true, "logic-nor": true, "logic-xor": true, "logic-xnor": true}
 	for _, part := range Library() {
 		value := part.DefaultValue
 		if part.Kind == "net-label" {

@@ -44,6 +44,15 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "shift-register":
+			for _, pin := range shiftPins {
+				join(p, pin, "gnd")
+			}
+		case "piezo", "active-buzzer":
+			join(p, "positive", "negative")
+		case "pwm-controller":
+			join(p, "vcc", "gnd")
+			join(p, "out", "gnd")
 		case "hbridge":
 			for _, pin := range hbridgePins[:6] {
 				join(p, pin, "gnd")

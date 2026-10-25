@@ -2,6 +2,12 @@ package workbench
 
 func partAliases(kind string) []string {
 	switch kind {
+	case "shift-register":
+		return []string{"74HC595", "serial", "SIPO", "latch", "cascade"}
+	case "piezo", "active-buzzer":
+		return []string{"sound", "audio", "alarm", "tone"}
+	case "pwm-controller":
+		return []string{"PWM", "clock", "duty", "buck", "switching converter", "motor controller"}
 	case "hbridge":
 		return []string{"H bridge", "motor driver", "forward", "reverse", "brake", "coast", "PWM", "bidirectional"}
 	case "thermistor":
@@ -85,6 +91,12 @@ func partAliases(kind string) []string {
 }
 func partLimitations(kind string) string {
 	switch kind {
+	case "shift-register":
+		return ExtendedDeviceModel().Shift
+	case "piezo", "active-buzzer":
+		return ExtendedDeviceModel().Sound
+	case "pwm-controller":
+		return ExtendedDeviceModel().PWM
 	case "hbridge":
 		return HBridgeDeviceModel().Limitations
 	case "relay":

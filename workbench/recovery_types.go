@@ -99,6 +99,7 @@ type DocumentInspection struct {
 	PNPModel           *PNPModel              `json:"pnp_model,omitempty"`
 	OpAmpModel         *OpAmpModel            `json:"opamp_model,omitempty"`
 	Timer555Model      *Timer555Model         `json:"timer555_model,omitempty"`
+	DeviceModel        *ExtendedModel         `json:"device_model,omitempty"`
 	HBridgeModel       *HBridgeModel          `json:"hbridge_model,omitempty"`
 	LogicModel         *LogicModel            `json:"logic_model,omitempty"`
 	SequentialModel    *SequentialModel       `json:"sequential_model,omitempty"`

@@ -36,6 +36,10 @@ func (n *mixedNetwork) opAmpVoltages(p Component, x []float64) opAmpVoltages {
 }
 
 func (n *mixedNetwork) stampOpAmp(p Component, x []float64, add func(int, int, float64), residual []float64) {
+	if hasDynamics(p) {
+		n.stampDynamicOpAmp(p, x, add, residual)
+		return
+	}
 	pins := n.opAmpPins(p)
 	device := opAmpCurrents(n.opAmpVoltages(p, x))
 	// Intentional pin joins (including follower feedback) sum both currents
@@ -52,7 +56,7 @@ func (n *mixedNetwork) stampOpAmp(p Component, x []float64, add func(int, int, f
 
 func (n *mixedNetwork) opAmpResult(p Component, x []float64) OpAmpResult {
 	v := n.opAmpVoltages(p, x)
-	device := opAmpCurrents(v)
+	device, _ := n.opAmpDevice(p, x)
 	power := 0.
 	for pin, current := range device.current {
 		// Express terminal power relative to V- to avoid cancellation from
@@ -91,6 +95,9 @@ func (n *mixedNetwork) opAmpNewtonScale(x, delta []float64, stages int, scale fl
 		values := x[stage*size : (stage+1)*size]
 		changes := delta[stage*size : (stage+1)*size]
 		for _, p := range n.opamps {
+			if hasDynamics(p) {
+				continue
+			}
 			pins := n.opAmpPins(p)
 			span := voltage(values, pins[opAmpPositive]) - voltage(values, pins[opAmpNegative])
 			if span <= 0 {

@@ -1,5 +1,7 @@
 # Powered op-amps
 
+**Later addition:** [optional bandwidth and slew dynamics](hobbyist-devices.md#optional-op-amp-dynamics) are now available through the inspector and `opamp.dynamics.set`. The original model and old saved circuits remain the default; the historical qualification below describes that base model.
+
 Source implementation in progress after 0.105.0. The canonical `build/ELab.app` remains the previously qualified 0.105 app. A separate pinned-SDK candidate now passes packaged smoke, public electronics suites and amplifier output checks. [Current native/output review](../research/ui-audit/opamp-output/README.md) records small fitted labels, a persistent tooltip, incomplete external accessibility and remaining release gates. The later [native mouse review](../research/ui-audit/native-mouse/README.md) advances the earlier value-editor findings; it does not establish complete native input acceptance.
 
 The shared part library now includes `opamp`, searchable as **op-amp**, **operational amplifier**, **buffer**, or **voltage follower**. Its automatic IDs start at **U1**. Native palette placement, terminal wiring, source/resistor value edits, rotation and movement use the existing public commands. The gain and internal parameters are fixed generic model assumptions, rather than editable component values.

@@ -59,6 +59,9 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	if m.Timer555Model != nil {
 		envelope["timer555_model"] = m.Timer555Model
 	}
+	if m.DeviceModel != nil {
+		envelope["device_model"] = m.DeviceModel
+	}
 	if m.HBridgeModel != nil {
 		envelope["hbridge_model"] = m.HBridgeModel
 	}
@@ -292,6 +295,18 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			return err
 		}
 		if err := validateRecordedSequential(c, m.Graph, r); err != nil {
+			return err
+		}
+		if err := validateRecordedShifts(c, m.Graph, r); err != nil {
+			return err
+		}
+		if err := validateRecordedSounds(c, m.Graph, r); err != nil {
+			return err
+		}
+		if err := validateRecordedDynamics(c, m.Graph, r); err != nil {
+			return err
+		}
+		if err := validateRecordedPWM(c, m.Graph, r); err != nil {
 			return err
 		}
 		if err := validateRecordedHBridges(c, m.Graph, r); err != nil {

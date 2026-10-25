@@ -10,10 +10,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/dshills/elab/internal/audioplay"
+
 	"github.com/dshills/elab/internal/printspool"
 )
 
 type Snapshot struct {
+	Audio                  *AudioPreview          `json:"audio_preview,omitempty"`
 	InspectorSection       string                 `json:"inspector_section"`
 	WorkspaceLayout        WorkspaceLayout        `json:"workspace_layout"`
 	Viewport               ViewportState          `json:"viewport"`
@@ -54,6 +57,7 @@ type Snapshot struct {
 	PNPModel               *PNPModel              `json:"pnp_model,omitempty"`
 	OpAmpModel             *OpAmpModel            `json:"opamp_model,omitempty"`
 	Timer555Model          *Timer555Model         `json:"timer555_model,omitempty"`
+	DeviceModel            *ExtendedModel         `json:"device_model,omitempty"`
 	HBridgeModel           *HBridgeModel          `json:"hbridge_model,omitempty"`
 	LogicModel             *LogicModel            `json:"logic_model,omitempty"`
 	SequentialModel        *SequentialModel       `json:"sequential_model,omitempty"`
@@ -115,6 +119,12 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	audio                            *audioJob
+	audioWorkers                     int
+	audioSerial                      uint64
+	audioPlayer                      audioplay.Player
+	audioPlaybackCancel              context.CancelFunc
+	audioPlaybackSerial              uint64
 	inspectorSection                 string
 	workspaceLayout                  WorkspaceLayout
 	shutdown                         *shutdownJob
@@ -339,6 +349,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		InspectorSection:       s.inspectorSection,
 		Viewport:               cloneViewport(s.viewport),
 		PulseTimings:           s.pulseTimingsLocked(),
+		Audio:                  s.audioViewLocked(),
 		Shutdown:               s.shutdownViewLocked(),
 		SourceAnnotations:      s.sourceAnnotationsLocked(),
 		Printing:               s.printingStateLocked(),
@@ -468,6 +479,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out.PNPModel = pnpModelForGraph(graph)
 	out.OpAmpModel = opAmpModelForGraph(graph)
 	out.Timer555Model = timer555ModelForGraph(graph)
+	out.DeviceModel = extendedModelForGraph(graph)
 	out.HBridgeModel = hbridgeModelForGraph(graph)
 	out.LogicModel = logicModelForGraph(graph)
 	out.SequentialModel = sequentialModelForGraph(graph)
@@ -645,6 +657,7 @@ func (s *Service) closeLocked() {
 	s.cancelProjectWorkLocked("canceled")
 	s.cancelInputWorkLocked("canceled")
 	s.cancelStepLocked("canceled")
+	s.cancelAudioLocked()
 	s.closed = true
 	if s.appearanceStore != nil {
 		select {
@@ -813,6 +826,17 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 				return fail("operation-unavailable", "Project operation expired or is unknown")
 			}
 			out.Result = cloneProjectWork(&job.work)
+			return out
+		}
+		if r.Command == "audio.read" {
+			var p IDParams
+			if err := params(r.Params, &p, "id"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			if s.audio == nil || s.audio.view.ID != p.ID {
+				return fail("not-found", "Audio preview is not retained")
+			}
+			out.Result = AudioData{Preview: *s.audioViewLocked(), WAV: append([]byte(nil), s.audio.wav...)}
 			return out
 		}
 		if r.Command == "examples.list" {
@@ -1089,6 +1113,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	if strings.HasPrefix(r.Command, "recording.") && r.Command != "recording.keep.set" {
 		s.viewerRevision++
 	}
+	if s.audio != nil && !s.audioViewLocked().Current {
+		s.cancelAudioLocked()
+	}
 	s.actor = actor
 	s.commandRevision++
 	s.revision++
@@ -1111,6 +1138,14 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	if state.Audio != nil {
+		v := *state.Audio
+		if v.Error != nil {
+			e := *v.Error
+			v.Error = &e
+		}
+		state.Audio = &v
+	}
 	state.Viewport = cloneViewport(state.Viewport)
 	state.Shutdown = cloneShutdown(state.Shutdown)
 	state.SourceAnnotations = cloneSourceAnnotations(state.SourceAnnotations)
@@ -1167,6 +1202,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	if state.Timer555Model != nil {
 		m := *state.Timer555Model
 		state.Timer555Model = &m
+	}
+	if state.DeviceModel != nil {
+		m := *state.DeviceModel
+		state.DeviceModel = &m
 	}
 	if state.HBridgeModel != nil {
 		m := *state.HBridgeModel
@@ -1245,6 +1284,7 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	state.Components = append([]Component{}, state.Components...)
 	for i := range state.Components {
 		state.Components[i].Power = clonePower(state.Components[i].Power)
+		state.Components[i].Device = cloneDeviceParameters(state.Components[i].Device)
 		state.Components[i].Terminals = append([]string(nil), state.Components[i].Terminals...)
 		if state.Components[i].Sine != nil {
 			w := *state.Components[i].Sine

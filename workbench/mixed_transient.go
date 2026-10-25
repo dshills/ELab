@@ -82,7 +82,23 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, b := range r.Batteries {
 		p.Energy += b.Energy
 	}
+	for _, s := range r.Sounds {
+		p.Energy += s.Energy
+	}
+	for _, d := range r.Dynamics {
+		p.Energy += d.Energy
+	}
 	currents := map[string]float64{}
+	for _, u := range r.Shifts {
+		for k, pin := range shiftPins {
+			currents[u.ID+"."+pin] = u.PinCurrents[k]
+		}
+	}
+	for _, u := range r.Sounds {
+		currents[u.ID] = u.Current
+		currents[u.ID+".positive"] = u.Current
+		currents[u.ID+".negative"] = -u.Current
+	}
 	for _, u := range r.Transformers {
 		currents[u.ID+".primary1"] = u.PrimaryCurrent
 		currents[u.ID+".primary2"] = -u.PrimaryCurrent
@@ -151,6 +167,11 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 			index = 9
 		}
 		currents[u.ID] = -u.PinCurrents[index]
+	}
+	for _, u := range r.PWM {
+		for k, pin := range pwmPins {
+			currents[u.ID+"."+pin] = u.PinCurrents[k]
+		}
 	}
 	for _, u := range r.HBridges {
 		for k, pin := range hbridgePins {

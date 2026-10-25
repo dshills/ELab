@@ -49,7 +49,7 @@ func acFormat(parameter string) (string, string) {
 func acAssumptions() []string {
 	return []string{
 		"Normalized 1 V small-signal excitation of the selected source around a solved DC bias; all other ideal voltage sources are AC grounded",
-		"Capacitor admittance jωC; inductor impedance jωL; memoryless op-amp analytic Jacobian. Generic op-amp has no intrinsic bandwidth or slew rate",
+		"Capacitor admittance jωC; inductor impedance jωL; op-amp analytic Jacobian, including its compensation capacitor when optional dynamics are enabled; small-signal AC does not predict large-signal slew distortion",
 		"Configured sine offset/pulse low/DC source levels establish bias; waveform amplitude, startup and live trajectory are ignored",
 		"Gain is output differential voltage / selected source voltage; phase unwrap follows the requested point order. Below 1e-30 V/V gain is plotted at -600 dB. Zero transfer has undefined phase, displayed as zero with phase_defined=false",
 		"Half-power estimates use logarithmic interpolation between sampled dB crossings relative to sampled peak, not a certified pole/resonance; expand the sweep for passband reference",

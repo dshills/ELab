@@ -33,6 +33,13 @@ func (n *mixedNetwork) sequentialVoltages(p Component, x []float64) (v [15]float
 			}
 		}
 	}
+	if source, ok := n.stageInputs[p.ID]; ok {
+		m := n.sequentialMemory(Component{ID: source})
+		v[0] = v[14]
+		if m.Powered && m.Value == 1 {
+			v[0] = v[13]
+		}
+	}
 	return
 }
 func (n *mixedNetwork) sequentialMemory(p Component) SequentialMemory {
@@ -44,7 +51,7 @@ func (n *mixedNetwork) sequentialMemory(p Component) SequentialMemory {
 	return SequentialMemory{}
 }
 func (n *mixedNetwork) stampSequential(p Component, x []float64, add func(int, int, float64), f []float64) {
-	e := sequentialCurrents(p.Kind, n.sequentialVoltages(p, x), n.sequentialMemory(p))
+	e := n.sequentialEvaluation(p, x, n.sequentialMemory(p))
 	for row, pin := range sequentialPinOrder {
 		if !containsPin(p, pin) {
 			continue
@@ -71,7 +78,7 @@ func containsPin(p Component, pin string) bool {
 func (n *mixedNetwork) sequentialResult(p Component, x []float64) SequentialResult {
 	v := n.sequentialVoltages(p, x)
 	memory := n.sequentialMemory(p)
-	e := sequentialCurrents(p.Kind, v, memory)
+	e := n.sequentialEvaluation(p, x, memory)
 	span := v[13] - v[14]
 	r := SequentialResult{ID: p.ID, Kind: p.Kind, Model: SequentialDeviceModel(), Memory: memory, State: strconv.Itoa(memory.Value), Clock: logicLevel(v[4]-v[14], span), Reset: logicLevel(v[5]-v[14], span), SupplyVoltage: span, PinCurrents: e.Current}
 	if !memory.Powered {
@@ -100,7 +107,7 @@ func (s *mixedState) sequentialChangesWithBaseline(sample bool, baseline []bool)
 	for k, p := range s.net.sequential {
 		m, err := sequentialDecision(p.Kind, s.net.sequentialVoltages(p, s.x), next[k], sample && (len(baseline) == 0 || !baseline[k]))
 		if err != nil {
-			return nil, false, fmt.Errorf("%s: %w", p.ID, err)
+			return nil, false, s.net.sequentialPublicError(p, err)
 		}
 		changed = changed || m != next[k]
 		next[k] = m
@@ -270,8 +277,18 @@ func (s *mixedState) advanceSequential(t *Transient, end float64, budget *integr
 			return nil, err
 		}
 		for k, p := range cur.net.sequential {
-			if cur.net.sequenceMemory[k] != right.net.sequenceMemory[k] {
-				appendInputEvent(t, InputEvent{Time: right.result.Time, Mode: "sequential:" + p.ID + ":" + right.result.Sequential[k].State})
+			if !privatePart(p.ID) && cur.net.sequenceMemory[k] != right.net.sequenceMemory[k] {
+				appendInputEvent(t, InputEvent{Time: right.result.Time, Mode: "sequential:" + p.ID + ":" + right.net.sequentialResult(p, right.x).State})
+			}
+		}
+		for _, p := range cur.net.authored.Components {
+			if p.Kind != "shift-register" {
+				continue
+			}
+			before, after := cur.net.shiftMemories(p), right.net.shiftMemories(p)
+			if before != after {
+				u := right.net.shiftResult(p, right.x)
+				appendInputEvent(t, InputEvent{Time: right.result.Time, Mode: fmt.Sprintf("shift:%s:%02X:%02X", p.ID, u.Shifted, u.Latched)})
 			}
 		}
 		for k, p := range cur.net.timers {
@@ -283,4 +300,25 @@ func (s *mixedState) advanceSequential(t *Transient, end float64, budget *integr
 		cur = right
 	}
 	return cur, nil
+}
+
+// Private shift stages exchange binary memories without unnecessary analog
+// output nodes. Their declared input loading still draws real supply current.
+func (n *mixedNetwork) sequentialEvaluation(p Component, x []float64, m SequentialMemory) sequentialEvaluation {
+	v := n.sequentialVoltages(p, x)
+	e := sequentialCurrentsForPins(p.Kind, v, m, p.Terminals)
+	if source, ok := n.stageInputs[p.ID]; ok {
+		input := n.sequentialMemory(Component{ID: source})
+		if input.Powered && input.Value == 1 {
+			g := 1 / SequentialDeviceModel().InputResistance
+			i := (v[13] - v[14]) * g
+			e.Current[13] += i
+			e.Current[14] -= i
+			e.Jacobian[13][13] += g
+			e.Jacobian[14][14] += g
+			e.Jacobian[13][14] -= g
+			e.Jacobian[14][13] -= g
+		}
+	}
+	return e
 }

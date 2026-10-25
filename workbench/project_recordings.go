@@ -57,6 +57,8 @@ func recordingModelHashes(m VerificationMetadata) map[string]string {
 			data, _ = json.Marshal(m.DisplayModel)
 		case SequentialModelID:
 			data, _ = json.Marshal(m.SequentialModel)
+		case ExtendedModelID:
+			data, _ = json.Marshal(m.DeviceModel)
 		case HBridgeModelID:
 			data, _ = json.Marshal(m.HBridgeModel)
 		case LogicModelID:
@@ -80,6 +82,11 @@ func recordingModelHashes(m VerificationMetadata) map[string]string {
 		}
 		digest := sha256.Sum256(data)
 		out[part.Model] = hex.EncodeToString(digest[:])
+	}
+	if m.DeviceModel != nil {
+		data, _ := json.Marshal(m.DeviceModel)
+		digest := sha256.Sum256(data)
+		out[ExtendedModelID] = hex.EncodeToString(digest[:])
 	}
 	return out
 }

@@ -27,7 +27,7 @@ type BatchParams struct {
 var atomicBatchCommands = [...]string{
 	"component.place", "component.move", "component.rotate", "component.set", "component.duplicate",
 	"capacitor.initial.set", "inductor.initial.set", "object.delete", "wire.connect", "wire.junction.insert",
-	"transformer.configure", "optocoupler.configure", "motor.configure", "motor.load.set", "battery.configure", "sensor.temperature.set", "sensor.light.set", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set",
+	"transformer.configure", "optocoupler.configure", "pwm.configure", "opamp.dynamics.set", "sound.configure", "motor.configure", "motor.load.set", "battery.configure", "sensor.temperature.set", "sensor.light.set", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set",
 	"source.pulse.timing.set", "simulation.pulse.timing.set", "simulation.sampling.fit",
 }
 
@@ -101,6 +101,7 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 		if s.graph.Components[i].ID == s.selected {
 			s.graph.Components[i].Rotation = part.Rotation
 			s.graph.Components[i].Power = clonePower(part.Power)
+			s.graph.Components[i].Device = cloneDeviceParameters(part.Device)
 			if IsSensorKind(part.Kind) {
 				setSensorEnvironment(&s.graph.Components[i], sensorEnvironment(part))
 			}

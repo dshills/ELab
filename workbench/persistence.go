@@ -32,6 +32,7 @@ type Document struct {
 	PNPModel           *PNPModel           `json:"pnp_model,omitempty"`
 	OpAmpModel         *OpAmpModel         `json:"opamp_model,omitempty"`
 	Timer555Model      *Timer555Model      `json:"timer555_model,omitempty"`
+	DeviceModel        *ExtendedModel      `json:"device_model,omitempty"`
 	HBridgeModel       *HBridgeModel       `json:"hbridge_model,omitempty"`
 	LogicModel         *LogicModel         `json:"logic_model,omitempty"`
 	SequentialModel    *SequentialModel    `json:"sequential_model,omitempty"`
@@ -182,6 +183,9 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 		var p Component
 		if err := json.Unmarshal(component, &p); err != nil {
+			return d, err
+		}
+		if err := validateDeviceFields(component, p); err != nil {
 			return d, err
 		}
 		if err := validatePowerFields(component, p); err != nil {
@@ -394,6 +398,9 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := validateSequentialModel(d.Graph, d.SequentialModel); err != nil {
 		return d, err
 	}
+	if err := validateExtendedModel(d.Graph, d.DeviceModel); err != nil {
+		return d, err
+	}
 	if err := validateHBridgeModel(d.Graph, d.HBridgeModel); err != nil {
 		return d, err
 	}
@@ -497,10 +504,14 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, fmt.Errorf("waveform source requires complete per-source parameters")
 		}
 
+		if err := validateDeviceParameters(c); err != nil {
+			return d, err
+		}
 		if err := validatePower(c); err != nil {
 			return d, err
 		}
 		expected.Power = clonePower(c.Power)
+		expected.Device = cloneDeviceParameters(c.Device)
 		if IsSensorKind(c.Kind) {
 			v := c.TemperatureC
 			if c.Kind == "ldr" {
@@ -666,6 +677,7 @@ func (s *Service) documentLocked() Document {
 	d.PNPModel = pnpModelForGraph(s.graph)
 	d.OpAmpModel = opAmpModelForGraph(s.graph)
 	d.Timer555Model = timer555ModelForGraph(s.graph)
+	d.DeviceModel = extendedModelForGraph(s.graph)
 	d.HBridgeModel = hbridgeModelForGraph(s.graph)
 	d.LogicModel = logicModelForGraph(s.graph)
 	d.SequentialModel = sequentialModelForGraph(s.graph)

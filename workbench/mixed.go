@@ -40,6 +40,10 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Shifts             []ShiftResult         `json:"shift_registers,omitempty"`
+	Sounds             []SoundResult         `json:"sounders,omitempty"`
+	Dynamics           []DynamicsResult      `json:"opamp_dynamics,omitempty"`
+	PWM                []PWMResult           `json:"pwm_controllers,omitempty"`
 	HBridges           []HBridgeResult       `json:"hbridges,omitempty"`
 	Transformers       []TransformerResult   `json:"transformers,omitempty"`
 	Optocouplers       []OptocouplerResult   `json:"optocouplers,omitempty"`
@@ -79,6 +83,10 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Shifts = append([]ShiftResult(nil), r.Shifts...)
+	o.Sounds = append([]SoundResult(nil), r.Sounds...)
+	o.Dynamics = append([]DynamicsResult(nil), r.Dynamics...)
+	o.PWM = append([]PWMResult(nil), r.PWM...)
 	o.HBridges = append([]HBridgeResult(nil), r.HBridges...)
 	o.Transformers = append([]TransformerResult(nil), r.Transformers...)
 	o.Optocouplers = append([]OptocouplerResult(nil), r.Optocouplers...)
@@ -132,6 +140,7 @@ type mixedNetwork struct {
 	timerMemory                  []timer555Memory
 	sequential                   []Component
 	sequenceMemory               []SequentialMemory
+	stageInputs                  map[string]string
 	inductorCuts                 []inductorCut
 	inductorPins                 map[string]int
 }
@@ -143,11 +152,22 @@ type mixedState struct {
 
 func newMixedNetwork(c Compiled) *mixedNetwork {
 	c, authored := lowerPowerDevices(c)
-	n := &mixedNetwork{authored: authored, c: c, index: map[string]int{c.Ground: -1}}
+	n := &mixedNetwork{stageInputs: map[string]string{}, authored: authored, c: c, index: map[string]int{c.Ground: -1}}
 	for _, node := range c.Nets {
 		if node.ID != c.Ground {
 			n.index[node.ID] = len(n.nodes)
 			n.nodes = append(n.nodes, node.ID)
+		}
+	}
+	for _, p := range authored.Components {
+		if p.Kind == "shift-register" {
+			for k := 1; k < 16; k++ {
+				source := k - 1
+				if k >= 8 {
+					source = k - 8
+				}
+				n.stageInputs[shiftStage(p.ID, k)] = shiftStage(p.ID, source)
+			}
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
@@ -319,6 +339,12 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "shift-register":
+			n.stampShift(p, x, add, f)
+		case "piezo", "active-buzzer":
+			n.stampSound(p, x, add, f)
+		case "pwm-controller":
+			n.stampPWM(p, x, at, add, f)
 		case "hbridge":
 			n.stampHBridge(p, x, add, f)
 		case "optocoupler":
@@ -722,6 +748,18 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 					r.Resistors = append(r.Resistors, br)
 				}
 			}
+		case "shift-register":
+			device := n.shiftResult(p, x)
+			r.Shifts = append(r.Shifts, device)
+			powers += device.Power
+		case "piezo", "active-buzzer":
+			device := n.soundResult(p, x)
+			r.Sounds = append(r.Sounds, device)
+			powers += device.Power
+		case "pwm-controller":
+			device := n.pwmResult(p, x, at)
+			r.PWM = append(r.PWM, device)
+			powers += device.Power
 		case "hbridge":
 			device := n.hbridgeResult(p, x)
 			r.HBridges = append(r.HBridges, device)
@@ -747,10 +785,16 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			r.Displays = append(r.Displays, device)
 			powers += device.Power
 		case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
+			if privatePart(p.ID) {
+				continue
+			}
 			device := n.logicResult(p, x)
 			r.LogicGates = append(r.LogicGates, device)
 			powers += device.Power
 		case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
+			if privatePart(p.ID) {
+				continue
+			}
 			device := n.sequentialResult(p, x)
 			r.Sequential = append(r.Sequential, device)
 			powers += device.Power
@@ -772,6 +816,11 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			r.MOSFETs = append(r.MOSFETs, device)
 		case "opamp":
 			device := n.opAmpResult(p, x)
+			if hasDynamics(p) {
+				d := n.dynamicsResult(p, x)
+				r.Dynamics = append(r.Dynamics, d)
+				powers -= d.Voltage * d.Current
+			}
 			powers += device.Power
 			r.OpAmps = append(r.OpAmps, device)
 		case "npn", "pnp":

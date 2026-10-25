@@ -25,6 +25,17 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			known[ref] = ok
 		}
 		switch p.Kind {
+		case "shift-register":
+			for _, pin := range shiftPins {
+				set(pin, p.ID+"."+pin, 1)
+			}
+		case "piezo", "active-buzzer":
+			set("positive", p.ID, 1)
+			set("negative", p.ID, -1)
+		case "pwm-controller":
+			for _, pin := range pwmPins {
+				set(pin, p.ID+"."+pin, 1)
+			}
 		case "hbridge":
 			for _, pin := range hbridgePins {
 				set(pin, p.ID+"."+pin, 1)

@@ -195,14 +195,14 @@ func nextSourceCorner(p Component, t *Transient, at float64, primary bool) float
 }
 func (n *mixedNetwork) nextSourceCorner(t *Transient, at float64) float64 {
 	next := math.Inf(1)
-	for _, p := range n.sources {
+	for _, p := range n.waveformComponents() {
 		next = math.Min(next, nextSourceCorner(p, t, at, p.ID == n.c.Source.ID))
 	}
 	return next
 }
 func (n *mixedNetwork) maximumWaveformStep(t *Transient, at float64) float64 {
 	limit := math.Inf(1)
-	for _, p := range n.sources {
+	for _, p := range n.waveformComponents() {
 		if p.ID == n.c.Source.ID && t.Mode != "auto" {
 			continue
 		}

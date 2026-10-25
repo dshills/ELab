@@ -172,7 +172,7 @@ func batteryNode(id string) string         { return "$" + id + "_ocv" }
 // ports, net names and saved graphs retain their original identities.
 func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 	original := c.MixedGraph
-	if powerModelForGraph(original) == nil {
+	if powerModelForGraph(original) == nil && extendedModelForGraph(original) == nil {
 		return c, Graph{}
 	}
 	c.MixedGraph = original.Clone()
@@ -180,6 +180,18 @@ func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 	c.Nets = append([]Net(nil), c.Nets...)
 	parts := []Component{}
 	for _, p := range original.Components {
+		if p.Kind == "shift-register" {
+			parts = append(parts, lowerShift(&c, p)...)
+			continue
+		}
+		if isSoundKind(p.Kind) {
+			parts = append(parts, lowerSound(&c, p)...)
+			continue
+		}
+		if hasDynamics(p) {
+			parts = append(parts, lowerOpAmpDynamics(&c, p)...)
+			continue
+		}
 		if p.Kind == "transformer" {
 			parts = append(parts, lowerTransformer(&c, p)...)
 			continue
@@ -300,6 +312,15 @@ func validateRecordedPower(c Compiled, g Graph, r *MixedResult) error {
 	return nil
 }
 func (n *mixedNetwork) restorePowerNodes(r *MixedResult, x []float64) error {
+	if err := n.restoreDynamics(r, x); err != nil {
+		return err
+	}
+	if err := n.restoreShift(r, x); err != nil {
+		return err
+	}
+	if err := n.restoreSounds(r, x); err != nil {
+		return err
+	}
 	for _, p := range n.authored.Components {
 		if p.Kind == "transformer" {
 			if err := n.restoreTransformerNodes(p, r, x); err != nil {
@@ -335,7 +356,7 @@ func (n *mixedNetwork) usesCollocation() bool {
 		return true
 	}
 	for _, p := range n.authored.Components {
-		if p.Kind == "battery" || p.Kind == "dc-motor" {
+		if p.Kind == "piezo" || hasDynamics(p) || p.Kind == "battery" || p.Kind == "dc-motor" {
 			return !n.dc
 		}
 	}
@@ -346,6 +367,19 @@ type powerResourceUsage struct{ parts, caps, inductors, resistors, sources, node
 
 func powerResources(g Graph) (u powerResourceUsage) {
 	for _, p := range g.Components {
+		if hasDynamics(p) {
+			u.parts++
+			u.caps++
+			u.nodes++
+		}
+		if p.Kind == "shift-register" {
+			u.parts += 17
+			u.nodes++
+		}
+		if p.Kind == "piezo" {
+			u.parts++
+			u.caps++
+		}
 		switch p.Kind {
 		case "transformer":
 			u.parts++

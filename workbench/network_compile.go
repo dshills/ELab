@@ -20,7 +20,16 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	sequential := []Component{}
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
+		if err := validateDeviceParameters(p); err != nil {
+			return fail("error", "invalid-parameters", err.Error(), p.ID)
+		}
 		switch p.Kind {
+		case "shift-register":
+			sequential = append(sequential, p)
+		case "piezo", "active-buzzer":
+			bridges = append(bridges, p)
+		case "pwm-controller":
+			bridges = append(bridges, p)
 		case "hbridge":
 			bridges = append(bridges, p)
 		case "transformer":
@@ -74,6 +83,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			return fail("unsupported", "unsupported-model", "The network solver supports sources, resistors, SPST switches, potentiometers, capacitors, inductors, diodes, red LEDs, NPN/PNP transistors, N/P-channel MOSFETs generic powered op-amps, 555 timers, logic gates, flip-flops and counters.", p.ID)
 		}
 	}
+	for _, p := range opamps {
+		if hasDynamics(p) && out.Analysis == NetworkDCAnalysis {
+			out.Analysis = NetworkTransientAnalysis
+		}
+	}
 	generalBipolar := hasBipolarPolarity(qs, "pnp")
 	if len(grounds) > 0 {
 		for _, q := range qs {
@@ -107,6 +121,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(inductors)+len(motors)+len(transformers) > 0 {
 		out.Analysis = InductorAnalysis
 	}
+	for _, p := range bridges {
+		if p.Kind == "pwm-controller" && len(inductors)+len(motors)+len(transformers) == 0 {
+			out.Analysis = WaveformAnalysis
+		}
+	}
 	if len(timers) > 0 {
 		out.Analysis = Timer555Analysis
 	}
@@ -115,6 +134,16 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	}
 	if len(controls) > 0 {
 		out.Analysis = ControlAnalysis
+	}
+	for _, p := range opamps {
+		if hasDynamics(p) && out.Analysis == NetworkDCAnalysis {
+			out.Analysis = NetworkTransientAnalysis
+		}
+	}
+	for _, p := range bridges {
+		if p.Kind == "piezo" && out.Analysis == NetworkDCAnalysis {
+			out.Analysis = NetworkTransientAnalysis
+		}
 	}
 	if len(timers) > MaxNetworkTimers555 {
 		return fail("unsupported", "mixed-limit", "Network simulation supports at most two 555 timers.", "")
@@ -161,7 +190,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		if p.Kind == "hbridge" && net(p, "vm") == net(p, "gnd") {
 			return fail("error", "shorted-component", "Remove the short across H-bridge supply pins.", p.ID)
 		}
-		if (p.Kind == "timer555" || IsLogicKind(p.Kind) || IsSequentialKind(p.Kind) || p.Kind == "bcd-decoder" || p.Kind == "comparator") && net(p, "vcc") == net(p, "gnd") {
+		if (p.Kind == "shift-register" || p.Kind == "pwm-controller" || p.Kind == "timer555" || IsLogicKind(p.Kind) || IsSequentialKind(p.Kind) || p.Kind == "bcd-decoder" || p.Kind == "comparator") && net(p, "vcc") == net(p, "gnd") {
 			return fail("error", "shorted-component", "Remove the short across IC supply pins.", p.ID)
 		}
 		if IsDisplayKind(p.Kind) {
@@ -174,12 +203,12 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 		for i, a := range p.Terminals {
 			ref := p.ID + "." + a
-			if !(p.Kind == "hbridge" && (a == "out1" || a == "out2")) && p.Kind != "transformer" && !(IsRegulatorKind(p.Kind) && a == "out") && !(p.Kind == "relay" && (a == "no" || a == "nc")) && !(p.Kind == "comparator" && a == "out") && !IsDisplayKind(p.Kind) && p.Kind != "potentiometer" && !(IsSequentialKind(p.Kind) && sequentialOutput(a)) && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
+			if !(p.Kind == "shift-register" && (a == "serial" || len(a) == 2 && a[0] == 'q')) && !(p.Kind == "pwm-controller" && a == "out") && !(p.Kind == "hbridge" && (a == "out1" || a == "out2")) && p.Kind != "transformer" && !(IsRegulatorKind(p.Kind) && a == "out") && !(p.Kind == "relay" && (a == "no" || a == "nc")) && !(p.Kind == "comparator" && a == "out") && !IsDisplayKind(p.Kind) && p.Kind != "potentiometer" && !(IsSequentialKind(p.Kind) && sequentialOutput(a)) && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && p.Kind != "hbridge" && p.Kind != "transformer" && p.Kind != "optocoupler" && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
+				if u == v && p.Kind != "shift-register" && p.Kind != "pwm-controller" && p.Kind != "hbridge" && p.Kind != "transformer" && p.Kind != "optocoupler" && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				if networkReferencePair(p, a, b, len(opamps) > 0) {
@@ -288,6 +317,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		out.Output = net(mos[0], "drain")
 	} else if len(sequential) > 0 {
 		pin := "q"
+		if sequential[0].Kind == "shift-register" {
+			pin = "q0"
+		}
 		if IsCounterKind(sequential[0].Kind) {
 			pin = "q0"
 		}
@@ -322,5 +354,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		out.Output = out.Supply
 	}
 	out.Circuit = Circuit{out.Source.Value, resistance, true}
+	if err := validateExtendedConstraints(out); err != nil {
+		return fail("unsupported", "ideal-source-capacitor", err.Error(), "")
+	}
 	return out, "", nil
 }

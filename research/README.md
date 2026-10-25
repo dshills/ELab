@@ -115,3 +115,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Native keyboard and text history](109-native-keyboard-history.md): initial/boundary selection, local text editing, actual application-history routing, exact state preservation and four remaining native checks.
 
 - [Queued field callback ownership](110-queued-field-origin.md): reproduced text/number queue-context defect, private SDK elab14 repair and passing full framework/application quality. Owner returned and requested a stop; new candidate/native checks are deferred and the existing release remains preserved.
+
+- [PWM, amplifier dynamics, shift registers and sound plan](111-hobbyist-devices-plan.md): the four additions following the H-bridge; [model and command guide](../docs/hobbyist-devices.md) documents examples, shared controls, numerical scope and explicit audio preview.

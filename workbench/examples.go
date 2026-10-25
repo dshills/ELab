@@ -49,6 +49,13 @@ func legacyExampleID(command string) string {
 
 func ExampleCatalog() []ExampleInfo {
 	return []ExampleInfo{
+		{ID: "buck", Title: "PWM buck converter", Question: "PWM buck converter", Expected: "Duty changes the switched LC output; close SLOAD for a load step. This is an open-loop converter, not a regulated feedback supply.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().PWM},
+		{ID: "opamp-slew", Title: "Op-amp slew-limited follower", Question: "Op-amp slew-limited follower", Expected: "The output takes finite time to follow each input edge. Disable dynamics to compare the original model.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Dynamics},
+		{ID: "opamp-bandwidth", Title: "Op-amp bandwidth limit", Question: "Op-amp bandwidth limit", Expected: "A 1 kHz, 10 mV input is attenuated near the configured 1 kHz gain-bandwidth. Change input frequency or use an AC sweep.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Dynamics},
+		{ID: "shift-register", Title: "Serial shift and parallel latch", Question: "Serial shift and parallel latch", Expected: "SDATA sets data, SLATCH captures the shifted byte, SCLEAR clears only the shift chain, and SOE disables the parallel outputs. D7 shows bit 7.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Shift},
+		{ID: "555-tone", Title: "555 piezo tone", Question: "555 piezo tone", Expected: "The real 555 drives a capacitive piezo through RS. Select BZ1, render a preview, then explicitly Play or export WAV.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Sound},
+		{ID: "light-alarm", Title: "Light-sensitive buzzer alarm", Question: "Light-sensitive buzzer alarm", Expected: "Lower the LDR light level to activate the comparator and buzzer. Audio preview is explicit; simulation never starts playback.", Try: "Select the new component to edit its parameters and inspect signed readings.", Limitation: ExtendedDeviceModel().Sound},
+
 		{ID: "hbridge-motor", Title: "Reversible PWM motor driver", Question: "How do direction, PWM, braking and coasting change motor current and speed?", Expected: "S1 closed / S2 open drives forward; reverse those switches for reverse. Both equal brake; open SEN to coast. Flyback clamps carry winding current after disable.", Try: "Select MTR1 for RPM and current. Change PWM high/low times, then compare brake and coast from the same speed. Mode changes preserve shaft speed and winding current at the switching instant.", Limitation: HBridgeDeviceModel().Limitations},
 		{ID: "led", Title: "LED current limiter", Question: "How does resistance change LED current?", Expected: "Increasing the series resistance lowers current and the illustrative LED brightness.", Try: "Change R1 from 1 kΩ to 2 kΩ and compare signed current.", Limitation: "Generic red LED; brightness is illustrative and there is no thermal behavior or physical part rating."},
 		{ID: "split-supply", Title: "Split-rail DC supply", Question: "How do two positive batteries create a negative rail?", Expected: "The midpoint reference makes the rails +3 V and −3 V. Each source remains +3 V across its own terminals; R1 sees 6 V and carries 6 mA.", Try: "Inspect V2.negative relative to ground, then V2 across its terminals. Change either source to 5 V or move ground to the bottom rail and compare.", Limitation: "Ideal DC sources have no output resistance, current limit, battery discharge or physical ratings. The network still needs one common reference; ideal voltage-source/capacitor constraint loops refuse."},
@@ -131,6 +138,43 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "buck":
+		d.graph = BuckExampleGraph()
+		d.selected = "PWM"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00002, .005
+		d.probes = []string{"v:C1", "i:L1", "v:PWM"}
+		d.view = View{Zoom: .55}
+	case "opamp-slew":
+		d.graph = OpAmpDynamicsExampleGraph(true)
+		d.selected = "U1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00002, .005
+		d.probes = []string{"v:VIN", "v:U1"}
+		d.view = View{Zoom: .55}
+	case "opamp-bandwidth":
+		d.graph = OpAmpDynamicsExampleGraph(false)
+		d.selected = "U1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00001, .005
+		d.probes = []string{"v:VIN", "v:U1"}
+		d.view = View{Zoom: .55}
+	case "shift-register":
+		d.graph = ShiftRegisterExampleGraph()
+		d.selected = "U1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0025, .2
+		d.probes = []string{"v:U1.clk", "v:U1.q0", "v:U1.serial"}
+		d.view = View{Zoom: .55}
+	case "555-tone":
+		d.graph = Piezo555ExampleGraph()
+		d.selected = "BZ1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00001, .001
+		d.probes = []string{"v:BZ1", "i:BZ1", "v:C1"}
+		d.view = View{Zoom: .55}
+	case "light-alarm":
+		d.graph = BuzzerAlarmExampleGraph()
+		d.selected = "BZ1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0001, .01
+		d.probes = []string{"v:BZ1", "i:BZ1"}
+		d.view = View{Zoom: .55}
+
 	case "hbridge-motor":
 		d.graph = HBridgeExampleGraph()
 		d.selected = "U1"

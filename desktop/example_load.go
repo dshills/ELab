@@ -12,6 +12,12 @@ import (
 // template. Agents discover the same ID through examples.list / example.load.
 func (s *screen) registerExampleLoadCommands() {
 	for _, template := range []struct{ command, label, id string }{
+		{"example.buck", "Load PWM buck converter", "buck"},
+		{"example.opamp-slew", "Load Op-amp slew-limited follower", "opamp-slew"},
+		{"example.opamp-bandwidth", "Load Op-amp bandwidth limit", "opamp-bandwidth"},
+		{"example.shift-register", "Load Serial shift and parallel latch", "shift-register"},
+		{"example.555-tone", "Load 555 piezo tone", "555-tone"},
+		{"example.light-alarm", "Load Light-sensitive buzzer alarm", "light-alarm"},
 		{"example.opamp-follower", "Load op-amp voltage follower", "opamp-follower"},
 		{"example.opamp-inverting", "Load inverting op-amp amplifier", "opamp-inverting"},
 		{"example.rc-high-pass", "Load RC high-pass edge detector", "rc-high-pass"},

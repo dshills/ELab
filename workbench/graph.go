@@ -20,6 +20,7 @@ func ExampleGraph() Graph { c := DefaultCircuit(); return Graph{Components(c), W
 func (g Graph) Clone() Graph {
 	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
 	for i := range out.Components {
+		out.Components[i].Device = cloneDeviceParameters(out.Components[i].Device)
 		out.Components[i].Power = clonePower(out.Components[i].Power)
 		out.Components[i].Terminals = append([]string{}, out.Components[i].Terminals...)
 		if w := out.Components[i].Sine; w != nil {
@@ -157,6 +158,10 @@ type Part struct {
 
 func libraryParts() []Part {
 	return []Part{
+		{Kind: "shift-register", Name: "8-bit shift / latch register", Terminals: append([]string{}, shiftPins...), Model: ExtendedModelID},
+		{Kind: "piezo", Name: "Piezo sounder", Terminals: []string{"positive", "negative"}, Model: ExtendedModelID},
+		{Kind: "active-buzzer", Name: "Active buzzer", Terminals: []string{"positive", "negative"}, Model: ExtendedModelID},
+		{Kind: "pwm-controller", Name: "PWM controller", Terminals: append([]string{}, pwmPins...), Model: ExtendedModelID},
 		{Kind: "hbridge", Name: "H-bridge motor driver", Terminals: append([]string{}, hbridgePins[:]...), Model: HBridgeModelID},
 		{Kind: "transformer", Name: "Transformer / coupled inductors", Terminals: []string{"primary1", "primary2", "secondary1", "secondary2"}, Model: PowerModelID},
 		{Kind: "optocoupler", Name: "LED / phototransistor optocoupler", Terminals: []string{"anode", "cathode", "collector", "emitter"}, Model: PowerModelID},
@@ -248,6 +253,7 @@ func MakeComponent(id, kind string, p Point, value string) (Component, error) {
 			c.Pulse = &w
 		}
 		defaultPower(&c)
+		defaultDeviceParameters(&c)
 		if IsSensorKind(kind) {
 			v := 25.
 			if kind == "ldr" {
@@ -336,6 +342,8 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 	p := Point{}
 	found := true
 	switch c.Kind {
+	case "pwm-controller", "shift-register", "piezo", "active-buzzer":
+		p, found = ExtendedTerminalLocal(c.Kind, name)
 	case "hbridge":
 		p, found = HBridgeTerminalLocal(name)
 	case "transformer":
@@ -529,7 +537,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 				hasSwitch = true
 			}
 			sources = append(sources, c)
-		case "hbridge", "transformer", "optocoupler", "dc-motor", "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
+		case "shift-register", "piezo", "active-buzzer", "pwm-controller", "hbridge", "transformer", "optocoupler", "dc-motor", "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true

@@ -91,6 +91,19 @@ func probeInventory(g Graph) []Probe {
 		switch p.Kind {
 		case "thermistor", "ldr", "pushbutton", "bouncing-pushbutton", "resistor", "capacitor", "inductor", "led", "switch", "diode", "zener", "schottky":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " current", "A", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]})
+		case "shift-register":
+			for _, pin := range shiftPins {
+				ref := p.ID + "." + pin
+				out = append(out, Probe{"i:" + ref, ref + " into register", "A", ref, "into register"})
+			}
+		case "piezo", "active-buzzer":
+			out = append(out, Probe{"i:" + p.ID, p.ID + " sounder current", "A", p.ID + ".positive", "positive to negative"})
+		case "pwm-controller":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " PWM output", "V", p.ID + ".out", p.ID + ".gnd"})
+			for _, pin := range pwmPins {
+				ref := p.ID + "." + pin
+				out = append(out, Probe{"i:" + ref, ref + " into controller", "A", ref, "into controller"})
+			}
 		case "hbridge":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " motor output voltage", "V", p.ID + ".out1", p.ID + ".out2"})
 			for _, pin := range hbridgePins {

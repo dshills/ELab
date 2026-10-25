@@ -143,7 +143,7 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	for _, p := range g.Components {
 		minX = math.Min(minX, p.Position.X-90)
 		maxX = math.Max(maxX, p.Position.X+140)
-		if p.Kind == "hbridge" {
+		if p.Kind == "hbridge" || p.Kind == "pwm-controller" {
 			minX = math.Min(minX, p.Position.X-120)
 			maxX = math.Max(maxX, p.Position.X+120)
 			minY = math.Min(minY, p.Position.Y-120)
@@ -156,6 +156,12 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			x, y, text := schematicPartLabel(p)
 			minX, maxX = math.Min(minX, x-10), math.Max(maxX, x+schematicLabelWidth(text)+10)
 			minY, maxY = math.Min(minY, y-25), math.Max(maxY, y+10)
+		}
+		if p.Kind == "shift-register" {
+			minX = math.Min(minX, p.Position.X-240)
+			maxX = math.Max(maxX, p.Position.X+240)
+			minY = math.Min(minY, p.Position.Y-240)
+			maxY = math.Max(maxY, p.Position.Y+240)
 		}
 		if IsDisplayKind(p.Kind) {
 			minX = math.Min(minX, p.Position.X-140)
@@ -219,6 +225,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
 	if model := timer555ModelForGraph(g); model != nil {
 		metadataFields["timer555_model"] = model
+	}
+	if model := extendedModelForGraph(g); model != nil {
+		metadataFields["device_model"] = model
 	}
 	if model := hbridgeModelForGraph(g); model != nil {
 		metadataFields["hbridge_model"] = model
@@ -418,6 +427,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
+		case "pwm-controller", "shift-register", "piezo", "active-buzzer":
+			for _, path := range ExtendedSymbolPaths(p.Kind) {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "hbridge":
 			for _, path := range HBridgeSymbolPaths() {
 				b.WriteString(`<polyline points="`)
@@ -492,6 +509,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
 
 	for _, p := range g.Components {
+		if isExtendedKind(p.Kind) {
+			for _, label := range ExtendedSymbolLabels(p) {
+				fmt.Fprintf(&b, `<text x="%g" y="%g" fill="%s" stroke="none">%s</text>`, label.At.X, label.At.Y, "#1e2c3a", html.EscapeString(label.Text))
+			}
+		}
 		if p.Kind == "hbridge" {
 			for _, label := range HBridgeSymbolLabels(p) {
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
@@ -601,6 +623,10 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
+	case "pwm-controller", "piezo", "active-buzzer", "shift-register":
+		text += " · " + p.Name
+		at := CanvasPartLabelPosition(p, text)
+		x, y = at.X, at.Y
 	case "hbridge":
 		text += " · H-bridge"
 		x, y = p.Position.X+110, p.Position.Y-95

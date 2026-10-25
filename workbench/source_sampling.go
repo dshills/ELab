@@ -19,6 +19,7 @@ type SourceSamplingAdvice struct {
 }
 
 func waveformTargetStep(p Component) float64 {
+	p = withDeviceWaveform(p)
 	target := math.Inf(1)
 	if p.Sine != nil && p.Sine.Amplitude > 0 {
 		target = 1 / (32 * p.Sine.Frequency)

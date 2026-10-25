@@ -170,6 +170,12 @@ type sequentialEvaluation struct {
 }
 
 func sequentialCurrents(kind string, v [15]float64, memory SequentialMemory) sequentialEvaluation {
+	return sequentialCurrentsForPins(kind, v, memory, sequentialPins(kind))
+}
+
+// Composite stages need not allocate an unused complement output node. The
+// authored/public law still uses its complete original terminal list.
+func sequentialCurrentsForPins(kind string, v [15]float64, memory SequentialMemory, pins []string) sequentialEvaluation {
 	m := SequentialDeviceModel()
 	e := sequentialEvaluation{}
 	branch := func(a, b int, r float64) {
@@ -185,7 +191,7 @@ func sequentialCurrents(kind string, v [15]float64, memory SequentialMemory) seq
 	branch(13, 14, m.SupplyResistance)
 	for index, pin := range sequentialPinOrder {
 		present := false
-		for _, p := range sequentialPins(kind) {
+		for _, p := range pins {
 			present = present || p == pin
 		}
 		if !present || pin == "vcc" || pin == "gnd" {
