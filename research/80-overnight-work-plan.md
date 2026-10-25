@@ -480,3 +480,30 @@ The new checks pass three race repeats in 1.421 s; all export/schematic/parts
 regressions pass in 23.434 s; strict XML/motor checks pass in 1.589 s and
 goimports/staticcheck pass. Repackaging as 0.190.1 /248 preserves /247 and the
 qualified alpha. Actual native interaction checks remain for the final package.
+
+Actual native /248 qualification used the untouched packaged executable through
+a fixed argument-only launcher, private recovery/appearance files and the matching
+agent socket. CUA mouse/keyboard checks pass battery drag and exact 50%/200 Ω
+entry, live motor load continuity and deceleration, locked-rotor current, 70%
+PWM wiper continuity, 1% optical CTR, transformer 0.75 turns/derived L and
+exact secondary sign reversal, native AC run/gain/phase/cursor dragging and
+unchanged full RC transient result. Light/Dark/Apollo were exercised. All 48
+parts are reachable by wheel; the long motor inspector scrolls by wheel/thumb.
+Targeted CUA component-list thumb gestures instead select rows, so that native
+method is explicitly not qualified. No ordinary-hardware conclusion is made.
+The synthetic project was saved, the app closed normally and its endpoint was
+removed. No window resizing or owner-project changes. The first launcher lookup
+stalled several hours waiting for its old identity after exec; the actual ELab
+process was found and reused, with no extra permission question. Terminal is
+blocked by CUA and was never launched.
+
+Native motor plots exposed scientific-notation current labels clipped at the
+right edge. A geometry regression reproduces x=240.5 on a 240 px canvas.
+Scope rendering now reserves actual bitmap-font width for all five right-axis
+labels, preserving the original margin where it already fits. Simulation, units
+and command behavior are unchanged. High-current Light/Dark/Apollo bounds at
+240/320/800/1700 px, existing cursor/context/overlay/scroll/Bode tests pass three
+race repetitions in 6.307 s; mounted high-current/browser/wheel/inspector checks
+pass in 6.594 s. Lint passes. Reviewed inventory changes are only scope.go's
+hash and shifted site line numbers; 175/427/143/87 counts/routes remain.
+Packaging this paint-only correction as 0.190.2 /249; /248 remains preserved.

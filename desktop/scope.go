@@ -103,7 +103,16 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		p := v.World(canvas.Point{X: x, Y: y})
 		b.text(p.X, p.Y, content, c)
 	}
-	left, right, top, bottom := 58., v.Width-78, 12., v.Height-28
+	vmin, vmax, imin, imax := scopeRanges(plot.Traces, reference)
+	var currentLabels [5]string
+	rightPadding := 78.
+	for i := range currentLabels {
+		currentLabels[i] = fmt.Sprintf("%.2g mA", imin+(imax-imin)*float64(i)/4)
+		// Scientific notation for amp-level currents can be wider than the
+		// ordinary milliamp labels. Reserve its actual bitmap-font advance.
+		rightPadding = max(rightPadding, 6+workbench.CanvasTextWidth(currentLabels[i], 1.25)+4)
+	}
+	left, right, top, bottom := 58., v.Width-rightPadding, 12., v.Height-28
 	if right <= left || bottom <= top {
 		return canvas.NewMesh(nil, nil)
 	}
@@ -112,14 +121,13 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if span <= 0 {
 		span = step // A DC operating point has no time extent.
 	}
-	vmin, vmax, imin, imax := scopeRanges(plot.Traces, reference)
 	grid := palette.Grid
 	for i := 0; i <= 4; i++ {
 		fraction := float64(i) / 4
 		py := bottom - (bottom-top)*fraction
 		line(grid, 1, canvas.Point{X: left, Y: py}, canvas.Point{X: right, Y: py})
 		text(4, py+4, fmt.Sprintf("%.3g V", vmin+(vmax-vmin)*fraction), muted)
-		text(right+6, py+4, fmt.Sprintf("%.2g mA", imin+(imax-imin)*fraction), muted)
+		text(right+6, py+4, currentLabels[i], muted)
 	}
 	x := func(at float64) float64 { return left + (right-left)*(at-first)/span }
 	for i, trace := range plot.Traces {
