@@ -76,7 +76,9 @@ func TestMixedCapacitanceSetsFlasherPeriod(t *testing.T) {
 		}
 		n := newMixedNetwork(c)
 		cfg := DefaultTransientSettings()
-		cfg.StepSeconds = .005 * scale
+		// A finer output grid resolves the switching interval under race instrumentation
+		// while keeping the same duration, solver tolerances and per-output work limits.
+		cfg.StepSeconds = .0025 * scale
 		tr := &Transient{Settings: cfg, Mode: "auto"}
 		old := []float64{.1, 0}
 		s, err := n.solve(nil, old, 0, tr, 0)
@@ -85,8 +87,8 @@ func TestMixedCapacitanceSetsFlasherPeriod(t *testing.T) {
 		}
 		edges := []float64{}
 		high := s.result.LEDs[0].Current > .001
-		for i := 0; i < 600; i++ {
-			s, err = s.advance(tr, float64(i+1)*.005*scale)
+		for i := 0; i < 1200; i++ {
+			s, err = s.advance(tr, float64(i+1)*cfg.StepSeconds)
 			if err != nil {
 				t.Fatal(err)
 			}

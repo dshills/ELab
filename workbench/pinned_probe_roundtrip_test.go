@@ -55,6 +55,10 @@ func TestPinnedAdvancedProbeSaveReopenAndMissingSource(t *testing.T) {
 		name, owner string
 		graph       Graph
 	}{
+		{"coupled-windings", "T1", TransformerExampleGraph(false)},
+		{"opto-switch", "OC1", OptocouplerExampleGraph()},
+		{"motor-dc", "MTR1", MotorExampleGraph(false)},
+		{"battery-led", "B1", BatteryExampleGraph(false)},
 		{"nmos", "M1", NMOSExampleGraph()},
 		{"pmos", "M1", PMOSExampleGraph()},
 		{"pnp", "Q1", PNPExampleGraph()},

@@ -114,11 +114,13 @@ func TestRecoveryReadJobsSharePureReadSlotsAndCancelWithoutPartialResult(t *test
 	promptLiveCommand(t, s, "view.pan", map[string]float64{"dx": 2, "dy": 3})
 	release()
 	awaitReadWork(t, s, ids[0], "canceled")
-	refuse(t, s, "recovery.read.result", IDParams{ID: ids[0]}, "not-ready")
-	refuse(t, s, "recovery.read.cancel", IDParams{ID: ids[0]}, "unavailable")
+	// Refusal checks compare complete snapshots; let the other released readers
+	// finish their legitimate publications before asserting query purity.
 	for _, id := range ids[1:] {
 		awaitReadWork(t, s, id, "completed")
 	}
+	refuse(t, s, "recovery.read.result", IDParams{ID: ids[0]}, "not-ready")
+	refuse(t, s, "recovery.read.cancel", IDParams{ID: ids[0]}, "unavailable")
 }
 
 func TestRecoveryReadResultsRemainCapturedAcrossReconfigurationAndEviction(t *testing.T) {

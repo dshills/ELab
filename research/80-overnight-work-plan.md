@@ -416,3 +416,18 @@ Python tools, final packaged replay and actual owned native mouse/keyboard/
 scrolling/plots across themes. Preserve the qualified release; no owner review
 or repeated launch permission gate. Continue reproduced defects and acceptance
 checks after qualification, without unrelated new component families.
+
+Full-regression follow-up: root fixtures no longer assume battery search means
+an ideal source or that the first catalog entry has a numeric value; composite
+linearity fixtures use real configured components. Full workbench exposed a real
+pinned-probe persistence omission: transformer secondary / optocoupler output
+voltage aliases are now portable, with save/reopen/missing-source coverage for
+all four new component families. The recovery-reader query-purity test now waits
+for other legitimate reader completions before comparing full snapshots. A
+finer flasher physics grid reproduced a per-output time-limit failure. Trial
+diagnostics established that solves succeeded but repeated half-size rejections
+wasted the sample budget; error-guided SDIRK2 retry proposals now retain the same
+complete estimator, residual, 512-attempt and100 ms guards. The finer-grid period
+check, pin persistence and recovery concurrency checks pass three repeats in
+13.663 s. Temporary diagnostics and an unsuccessful Newton-limiter experiment
+were removed. Full qualification continues; no runtime limit was raised.

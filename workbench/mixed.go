@@ -932,7 +932,15 @@ func (state *mixedState) advanceAnalogBudget(t *Transient, end float64, budget *
 				h *= math.Min(2, math.Cbrt(.75/errRatio))
 			}
 		} else {
-			h /= 2
+			// The SDIRK2 estimate is cubic in h. Use its measured error to avoid
+			// spending the sample budget on repeated half-size rejections at a sharp
+			// transition. This changes only the next proposal; it still must pass the
+			// original estimator, solve and work guards. Failed solves keep halving.
+			factor := .5
+			if finite(errRatio) {
+				factor = math.Max(.1, math.Min(.5, math.Cbrt(.75/errRatio)))
+			}
+			h *= factor
 		}
 	}
 	return cur, nil
