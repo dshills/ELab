@@ -20,7 +20,7 @@ func addRecoveryChoiceDetails(id string, schema map[string]any) bool {
 		c.Errors = append(c.Errors, commandFailureDetail{"unavailable", "admission", "No store configured or service closed"}, commandFailureDetail{"busy", "admission", "Four shared recovery readers active"}, commandFailureDetail{"invalid-recovery", "read", "Invalid ID, absent/inaccessible/nonregular/oversized file or invalid capsule/document/models/recordings"}, commandFailureDetail{"file-conflict", "read", "Readable valid capsule hash differs from requested exact digest"}, commandFailureDetail{"canceled", "read", "Caller/Close cancellation"}, commandFailureDetail{"timeout", "read", "Cooperative 30-second deadline; OS calls are not forcibly interrupted"})
 		if id == "recovery.samples" {
 			inputProperty(schema, "recording_index")["minimum"] = 0
-			inputProperty(schema, "recording_index")["description"] = "Required non-null zero-based embedded Verify index; saved DC sweeps are not this recording list. Validated after reading/hash validation."
+			inputProperty(schema, "recording_index")["description"] = "Required non-null zero-based embedded Verify index; saved frequency/DC sweeps are not this recording list. Validated after reading/hash validation."
 			inputProperty(schema, "offset")["minimum"] = 0
 			inputProperty(schema, "offset")["description"] = "Optional omitted/null/zero starts at row 0. Total is inclusive: EOF returns no rows."
 			p := inputProperty(schema, "limit")

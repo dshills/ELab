@@ -226,7 +226,7 @@ func decodeDocument(data []byte) (Document, error) {
 	_ = json.Unmarshal(data, &sweepFields)
 	_, hasSweepField := sweepFields["dc_sweeps"]
 	if d.Version < SweepDocumentVersion && hasSweepField {
-		return d, fmt.Errorf("DC sweeps require version 5")
+		return d, fmt.Errorf("captured sweeps require version 5")
 	}
 	if d.Version == SweepDocumentVersion {
 		var fields map[string]json.RawMessage

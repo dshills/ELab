@@ -258,7 +258,7 @@ func cloneSweepState(in *SweepState) *SweepState {
 }
 func (s *Service) startDCSweepLocked(p SweepStartParams) error {
 	if s.sweepWorkers != 0 {
-		return &actionError{"busy", "Finish or cancel the active DC sweep before starting another"}
+		return &actionError{"busy", "Finish or cancel the active sweep before starting another"}
 	}
 	cfg := s.sweepSettingsLocked()
 	if p.Settings != nil {
@@ -343,7 +343,7 @@ func (s *Service) runDCSweep(job *sweepJob, plan sweepPlan, compute func(context
 		job.summary.Status = "canceled"
 	case errors.Is(err, context.DeadlineExceeded):
 		job.summary.Status = "failed"
-		job.summary.Error = &Failure{Code: "timeout", Message: "DC sweep exceeded its cooperative 30-second budget"}
+		job.summary.Error = &Failure{Code: "timeout", Message: "Sweep exceeded its cooperative 30-second budget"}
 	case err != nil:
 		job.summary.Status = "failed"
 		job.summary.Error = &Failure{Code: "sweep-failed", Message: err.Error()}

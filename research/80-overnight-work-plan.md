@@ -449,3 +449,21 @@ including keyboard placement/focus. Both corrected tests pass three race
 repetitions in 6.426 s. The failing full log is preserved as
 build/power-expansion/desktop-race-initial.jsonl. Complete corrected standard
 and mounted runs follow; production sources are unchanged by these fixture fixes.
+
+Combined desktop qualification passes from 0baca004: 321 top-level tests /744
+including subtests in 627.990 s, and 437 top-level /1,288 including subtests
+with rendered offscreen controls in 932.227 s. Neither suite fails or skips
+tests. All three vets and goimports/staticcheck pass. Seven post-suite strings
+now correctly describe shared frequency/DC sweep import, point bounds, busy/
+timeout/version errors and recording inventories. These edits change no
+conditions, parameters, numerical code, limits or wire formats. The reviewed
+native source inventory differs only in dc_sweep.go's accessibility-label hash;
+175 commands /427 sites /143 routes /87 production sources remain. Final
+wording checks pass: root AC/DC/discovery/recovery tests in 17.898 s, the full
+UI-inventory tests in 1.473 s and rendered native AC/Bode/DC-sweep checks in
+44.986 s. Full-suite baseline and the subsequent string-only diff will remain
+separate in the final receipt; package and actual native checks are next.
+Final post-wording goimports/staticcheck passes; two newly generalized Go error
+strings were lowercased to satisfy ST1005. No behavior changed. The packaged
+candidate will identify this final wording commit, while full regression logs
+retain their original source baselines.

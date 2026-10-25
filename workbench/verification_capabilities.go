@@ -14,7 +14,7 @@ func addVerificationCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	failure("invalid-params", "admission", "Malformed input or an invalid parameter/relationship")
 	schema["x-max-retained-operations"] = MaxVerificationOperations
-	schema["x-operation-inventory"] = "snapshot.operations (time/DC verification and imported/project recordings; not DC sweeps)"
+	schema["x-operation-inventory"] = "snapshot.operations (time/DC verification and imported/project recordings; not frequency/DC sweeps)"
 	switch id {
 	case "verification.settings.set", "simulation.verify":
 		starting := id == "simulation.verify"

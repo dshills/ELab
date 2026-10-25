@@ -45,7 +45,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	s.pruneSweepFieldRejections(state)
 	cfg := sweep.Settings
 	nodes := []ui.Node{section("sweep-settings-title", "Frequency & DC sweeps"), quiet("sweep-settings-help", "AC response or DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
-	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
+	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured frequency or DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
 	options := []ui.Option{}
 	selected := cfg.ComponentID + ":" + cfg.Parameter
 	valid := false

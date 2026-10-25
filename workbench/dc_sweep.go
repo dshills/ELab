@@ -159,7 +159,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper or AC frequency target")
 	}
 	if settings.Points < 2 || settings.Points > MaxDCSweepPoints {
-		return plan, fmt.Errorf("DC sweep requires 2–201 points")
+		return plan, fmt.Errorf("sweep requires 2–201 points")
 	}
 	parse := func(text string) (float64, error) {
 		if len(text) == 0 || len(text) > 128 {
