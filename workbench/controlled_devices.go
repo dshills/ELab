@@ -3,6 +3,7 @@ package workbench
 import (
 	"fmt"
 	"math"
+	"strings"
 )
 
 const ControlModelID = "elab.generic-controls.v1"
@@ -309,6 +310,12 @@ func (n *mixedNetwork) nextControlEvent(at float64) float64 {
 func controlTimeReached(at, event float64) bool { return at >= event || sameSampleTime(at, event) }
 
 func inductorWindingResistance(p Component) float64 {
+	if privatePart(p.ID) && p.Power != nil && p.Power.Transformer != nil {
+		if strings.HasSuffix(p.ID, "_secondary") {
+			return p.Power.Transformer.SecondaryResistance
+		}
+		return p.Power.Transformer.PrimaryResistance
+	}
 	if p.Kind == "relay" {
 		return ControlledDeviceModel().RelayResistance
 	}

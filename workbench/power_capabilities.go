@@ -1,6 +1,9 @@
 package workbench
 
 func addPowerCapabilityDetails(id string, schema map[string]any) bool {
+	if id == "transformer.configure" {
+		return addTransformerCapability(schema)
+	}
 	if id == "optocoupler.configure" {
 		p := inputProperty(schema, "current_transfer_ratio")
 		p["minimum"], p["maximum"], p["x-unit"] = .01, 5, "A/A"

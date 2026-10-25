@@ -102,6 +102,10 @@ func validatePowerModel(g Graph, m *PowerModel) error {
 	return nil
 }
 func defaultPower(p *Component) {
+	if p.Kind == "transformer" {
+		c := transformerDefault()
+		p.Power = &PowerParameters{Transformer: &c}
+	}
 	if p.Kind == "optocoupler" {
 		p.Power = &PowerParameters{Optocoupler: &OptocouplerConfig{1}}
 	}
@@ -119,6 +123,9 @@ func validatePower(p Component) error {
 			return fmt.Errorf("power device requires explicit parameters")
 		}
 		return nil
+	}
+	if p.Kind == "transformer" && p.Power.Transformer != nil && p.Power.Battery == nil && p.Power.Motor == nil && p.Power.Optocoupler == nil {
+		return validateTransformer(*p.Power.Transformer)
 	}
 	if p.Kind == "optocoupler" && p.Power.Optocoupler != nil && p.Power.Battery == nil && p.Power.Motor == nil && p.Power.Transformer == nil {
 		return validateOptocoupler(*p.Power.Optocoupler)
@@ -173,6 +180,10 @@ func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 	c.Nets = append([]Net(nil), c.Nets...)
 	parts := []Component{}
 	for _, p := range original.Components {
+		if p.Kind == "transformer" {
+			parts = append(parts, lowerTransformer(&c, p)...)
+			continue
+		}
 		if p.Kind == "dc-motor" {
 			parts = append(parts, lowerMotor(&c, p)...)
 			continue
@@ -246,6 +257,9 @@ func (n *mixedNetwork) batteryResult(p Component, x []float64) BatteryResult {
 }
 func (n *mixedNetwork) publishPower(r *MixedResult, x []float64) {
 	for _, p := range n.authored.Components {
+		if p.Kind == "transformer" {
+			r.Transformers = append(r.Transformers, n.transformerResult(p, x))
+		}
 		if p.Kind == "dc-motor" {
 			r.Motors = append(r.Motors, n.motorResult(p, x))
 		}
@@ -287,6 +301,11 @@ func validateRecordedPower(c Compiled, g Graph, r *MixedResult) error {
 }
 func (n *mixedNetwork) restorePowerNodes(r *MixedResult, x []float64) error {
 	for _, p := range n.authored.Components {
+		if p.Kind == "transformer" {
+			if err := n.restoreTransformerNodes(p, r, x); err != nil {
+				return err
+			}
+		}
 		if p.Kind == "dc-motor" {
 			if err := n.restoreMotorNodes(p, r, x); err != nil {
 				return err
@@ -328,6 +347,9 @@ type powerResourceUsage struct{ parts, caps, inductors, resistors, sources, node
 func powerResources(g Graph) (u powerResourceUsage) {
 	for _, p := range g.Components {
 		switch p.Kind {
+		case "transformer":
+			u.parts++
+			u.inductors += 2
 		case "battery":
 			u.parts++
 			u.caps++

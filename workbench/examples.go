@@ -69,6 +69,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "coupled-windings", Title: "Transformer ratio and winding polarity", Question: "How do turns, coupling and dots change the secondary signal?", Expected: "The loaded secondary follows the primary with winding losses and leakage; reversing its dot reverses the signal.", Try: "Select T1 for ratio, coupling, winding L/R and dot polarity. Inspect both winding voltages/currents and stored magnetic energy.", Limitation: PowerDeviceModel().Transformer},
+		{ID: "transformer-supply", Title: "AC transformer to regulated 3.3 V", Question: "How does a low-voltage AC source become a DC supply?", Expected: "Coupled windings feed a full bridge, C1 smooths rectified pulses, and U1 regulates 3.3 V after startup.", Try: "Compare T1 secondary, C1 voltage and U1 output. Inspect winding loss; change turns or load to observe headroom/dropout. RSN/CSN explicitly snub commutation; RREF defines secondary common mode when diodes turn off.", Limitation: PowerDeviceModel().Transformer},
 		{ID: "opto-switch", Title: "Optically isolated LED switch", Question: "Can an LED control a separate electrical circuit?", Expected: "Closing S1 lights the internal input LED; its photocurrent enables D1 on the separate output supply. CTR and output headroom limit transferred current.", Try: "Close S1; select OC1 to compare input/output currents and effective CTR. Change CTR and Restart. The two supplies use separate wiring and common zero-volt measurement references.", Limitation: PowerDeviceModel().Optocoupler},
 		{ID: "ac-rc", Title: "RC filter Bode plot", Question: "Where does a low-pass filter begin to attenuate?", Expected: "A 1 kΩ /1 µF low-pass crosses about 159 Hz at −3 dB and −45°. Gain rolls off above it.", Try: "Open Sweeps and run the prepared AC range. Select gain or phase, click a point and compare half-power estimates.", Limitation: "Normalized small-signal response around DC bias; captured sweep leaves the live circuit unchanged."},
 		{ID: "ac-rlc", Title: "RLC resonance Bode plot", Question: "Where does inductance boost capacitor voltage?", Expected: "Series RLC shows a sampled resonant peak and phase rotation.", Try: "Run the prepared AC range, compare gain/phase, then change R1 and rerun to see damping.", Limitation: "Ideal L/C and explicit series resistance; sampled peak and interpolated half-power estimates."},
@@ -128,6 +130,17 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "coupled-windings", "transformer-supply":
+		d.graph = TransformerExampleGraph(id == "transformer-supply")
+		d.selected = "T1"
+		d.settings.StepSeconds = .0001
+		d.settings.PlaybackSpeed = .01
+		d.probes = []string{"v:VIN", "v:T1.secondary", "i:T1.primary1", "i:T1.secondary1"}
+		d.view = View{Zoom: .6}
+		if id == "transformer-supply" {
+			d.probes = []string{"v:T1.secondary", "v:C1", "v:U1", "i:T1.primary1", "i:T1.secondary1"}
+			d.view = View{Center: Point{X: 350, Y: 50}, Zoom: .5}
+		}
 	case "opto-switch":
 		d.graph = OptocouplerExampleGraph()
 		d.selected = "OC1"

@@ -13,6 +13,9 @@ func validatePowerFields(raw json.RawMessage, p Component) error {
 	if err := json.Unmarshal(raw, &fields); err != nil {
 		return err
 	}
+	if p.Kind == "transformer" {
+		return paramsNested(fields["power"], "transformer", &TransformerConfig{}, transformerParameterFields()...)
+	}
 	if p.Kind == "optocoupler" {
 		return paramsNested(fields["power"], "optocoupler", &OptocouplerConfig{}, "current_transfer_ratio")
 	}

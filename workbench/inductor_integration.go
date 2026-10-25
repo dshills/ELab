@@ -54,7 +54,16 @@ func (n *mixedNetwork) radauEquations(x, old []float64, h float64, trace *Transi
 			current, previous := local[index], old[len(n.caps)+k]
 			residual[row] = current - previous
 			matrix[row][row] = 1
-			magnitude := math.Abs(current) + math.Abs(previous)
+			partner, M := n.windingPartner(k)
+			mutualMagnitude := 0.
+			if partner >= 0 {
+				ratio := M / part.Value
+				other := n.inductorIndex(partner)
+				residual[row] += ratio * (local[other] - old[len(n.caps)+partner])
+				matrix[row][offset+other] += ratio
+				mutualMagnitude = math.Abs(ratio) * (math.Abs(local[other]) + math.Abs(old[len(n.caps)+partner]))
+			}
+			magnitude := math.Abs(current) + math.Abs(previous) + mutualMagnitude
 			one, two := n.pin(part, "1"), n.pin(part, "2")
 			for other := range radauNodes {
 				base := other * size

@@ -3,6 +3,7 @@ package main
 import (
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
@@ -22,7 +23,10 @@ func TestNativeACSweepGainPhaseCursorMatchesAgent(t *testing.T) {
 	uiAction(t, u, "sweep-start", nil)
 	agentAction(t, a, "sweep.start", workbench.SweepStartParams{})
 	native := awaitNativeSweep(t, u)
-	a.Wait(t.Context())
+	deadline := time.Now().Add(5 * time.Second)
+	for a.Snapshot().DCSweep.Result == nil && time.Now().Before(deadline) {
+		time.Sleep(time.Millisecond)
+	}
 	if !reflect.DeepEqual(native.DCSweep.Result, a.Snapshot().DCSweep.Result) {
 		t.Fatal("AC native/agent response differs")
 	}
@@ -46,5 +50,32 @@ func TestNativeACSweepGainPhaseCursorMatchesAgent(t *testing.T) {
 		if _, ok := findNode(u.view(), id); !ok {
 			t.Fatal("missing AC readout", id)
 		}
+	}
+}
+
+func TestNativeBodeAxisLabelsStayInsideNarrowCanvas(t *testing.T) {
+	u, cleanup := testScreen(t)
+	defer cleanup()
+	uiAction(t, u, "examples-menu", &ui.ChangeEvent{SelectedID: "example.ac-rc"})
+	uiAction(t, u, "simulation.pause", nil)
+	u.service.Wait(t.Context())
+	uiAction(t, u, "sweep-start", nil)
+	awaitNativeSweep(t, u)
+	for _, width := range []float64{240, 320, 800} {
+		u.app.Do(func() {
+			u.view()
+			v := *u.sweepDrawing.View
+			v.Width = width
+			mesh, err := u.sweepMesh(v)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, vertex := range mesh.Vertices() {
+				point := v.Screen(vertex.Position)
+				if point.X < 0 || point.X > width || point.Y < 0 || point.Y > v.Height {
+					t.Fatalf("axis/trace clipped at width %.0f: %+v", width, point)
+				}
+			}
+		})
 	}
 }

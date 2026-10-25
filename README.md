@@ -361,3 +361,9 @@ existing sweep commands, captured-data export and saved-project workflow.
 CTR and smooth output saturation, live port readings and an isolated LED-switch
 example. Inspector and agents share `optocoupler.configure`; each port has its
 own voltage/current probes and power accounting.
+
+[Transformers and coupled inductors](docs/transformers.md) add turns ratio,
+mutual flux, dot polarity, winding resistance and shared magnetic energy.
+Examples compare loaded winding polarity and build a 50 Hz transformer / full
+bridge / smoothing capacitor / regulated 3.3 V supply with explicit snubber and
+reference parts. Inspector and agents share `transformer.configure`.

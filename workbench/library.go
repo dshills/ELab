@@ -26,6 +26,8 @@ func partAliases(kind string) []string {
 		return []string{"logic", "digital", "CMOS", "boolean", "inverter", "inverting gate"}
 	case "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return []string{"logic", "digital", "CMOS", "boolean", "gate"}
+	case "transformer":
+		return []string{"coupled inductors", "mutual inductance", "turns ratio", "winding", "dot polarity", "power supply"}
 	case "optocoupler":
 		return []string{"optoisolator", "phototransistor", "optical isolation", "CTR", "isolated switch"}
 	case "dc-motor":
@@ -97,6 +99,8 @@ func partLimitations(kind string) string {
 		return ResistiveSensorModel().Limitations
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return LogicDeviceModel().Limitations
+	case "transformer":
+		return PowerDeviceModel().Transformer
 	case "optocoupler":
 		return PowerDeviceModel().Optocoupler
 	case "dc-motor":

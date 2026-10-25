@@ -408,6 +408,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
+		case "transformer":
+			for _, path := range TransformerSymbolPaths(p.Power.Transformer.Reversed) {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "optocoupler":
 			for _, path := range OptocouplerSymbolPaths() {
 				b.WriteString(`<polyline points="`)
@@ -519,6 +527,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		if p.Unit != "" {
 			text += " · " + displayPartValue(p)
 		}
+		if p.Kind == "transformer" {
+			c := p.Power.Transformer
+			polarity := "same dots"
+			if c.Reversed {
+				polarity = "reversed secondary"
+			}
+			text += fmt.Sprintf(" · Ns/Np %.6g · Lp %.6g H · k %.6g · R %.6g/%.6g Ω · %s", c.Ratio, c.Inductance, c.Coupling, c.PrimaryResistance, c.SecondaryResistance, polarity)
+		}
 		if p.Kind == "optocoupler" {
 			text += fmt.Sprintf(" · CTR %.6g A/A", p.Power.Optocoupler.CTR)
 		}
@@ -598,7 +614,7 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
-	case "optocoupler":
+	case "transformer", "optocoupler":
 		x, y = p.Position.X-55, p.Position.Y-90
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		text += " · " + strings.ToUpper(strings.TrimPrefix(p.Kind, "logic-"))

@@ -14,7 +14,9 @@ The existing shared commands handle the entire workflow:
 sweep.start {"settings":{"component_id":"V1","parameter":"frequency","spacing":"logarithmic","start":"1 Hz","stop":"100 kHz","points":201,"probe_ids":["v:C1"]}}
 ```
 
-Observe `snapshot.dc_sweep` / `sweep.inspect`, or wait with `simulation.wait`.
+Observe `snapshot.dc_sweep` / `sweep.inspect` until its operation is terminal,
+or watch `events.poll`. `simulation.wait` covers live/manual/project work and
+does not wait for independent sweep operations.
 `sweep.trace.select` accepts captured `gain:v:C1` / `phase:v:C1` IDs.
 `sweep.cursor.set` selects an exact point or clears with explicit null.
 `sweep.cancel` cancels active work; partial results are not published. Existing

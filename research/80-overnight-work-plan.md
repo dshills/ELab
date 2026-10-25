@@ -392,3 +392,27 @@ Battery/motor wire anchors now meet their symbol lead ends, and native captions
 move beside those symbols. Inventory: 174 commands /424 sites /142 routes /86
 production desktop sources. Next: transformer/coupled winding physics and the
 low-voltage rectifier/smoothing/regulator workflow; then full qualification.
+
+Transformer checkpoint: coupled Radau flux rows, inverse-inductance startup
+cuts, positive magnetic energy, winding losses and leakage-aware LC guard are
+implemented under unchanged work/accuracy/node limits. Analytic open-winding
+RL/induction, dot reversal, shorted-secondary initial slope, loaded AC complex
+impedance, full 100 ms rectifier/smoothing/3.3 V regulation, capture integrity,
+saved roundtrip and failed-work atomicity pass. Combined transformer / existing
+inductor / discovery race tests passed in 36.909 s. Native parameter / AC /
+plot-bound checks passed three repeats in 10.390 s. A reproduced browser-icon
+startup panic (kind-only placeholder has no simulation config) is fixed; mounted
+browser/transformer/AC checks passed with offscreen in 4.940 s. A stale Passives
+count was updated for the transformer. Filtered native/agent AC tests now wait
+for the sweep operation explicitly; simulation.wait does not cover independent
+sweeps. Plot endpoint tick labels are kept inside narrow canvases (clipping was
+reproduced at x=240.5 for a 240 px plot). Lint/goimports/staticcheck pass.
+Public transformer replay passes polarity, energy/conservation, output regulation,
+captures and clean fresh reopen/exports; final layout/source will be replayed
+again from the combined package. Inventory: 48 parts, 175 commands /427 sites /143
+routes /87 production desktop sources. The five requested feature phases are
+implemented. Remaining work: complete root/native/offscreen suites and vets,
+Python tools, final packaged replay and actual owned native mouse/keyboard/
+scrolling/plots across themes. Preserve the qualified release; no owner review
+or repeated launch permission gate. Continue reproduced defects and acceptance
+checks after qualification, without unrelated new component families.

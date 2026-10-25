@@ -91,6 +91,12 @@ func probeInventory(g Graph) []Probe {
 		switch p.Kind {
 		case "thermistor", "ldr", "pushbutton", "bouncing-pushbutton", "resistor", "capacitor", "inductor", "led", "switch", "diode", "zener", "schottky":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " current", "A", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]})
+		case "transformer":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " primary voltage", "V", p.ID + ".primary1", p.ID + ".primary2"}, Probe{"v:" + p.ID + ".secondary", p.ID + " secondary voltage", "V", p.ID + ".secondary1", p.ID + ".secondary2"})
+			for _, pin := range transformerPins {
+				ref := p.ID + "." + pin
+				out = append(out, Probe{"i:" + ref, ref + " current into winding", "A", ref, "into winding"})
+			}
 		case "optocoupler":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " input LED voltage", "V", p.ID + ".anode", p.ID + ".cathode"}, Probe{"v:" + p.ID + ".output", p.ID + " collector-emitter voltage", "V", p.ID + ".collector", p.ID + ".emitter"})
 			for _, pin := range optoPins {

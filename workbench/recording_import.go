@@ -267,6 +267,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if err := validateRecordedControls(c, m.Graph, r); err != nil {
 			return err
 		}
+		if err := validateRecordedTransformers(c, m.Graph, r); err != nil {
+			return err
+		}
 		if err := validateRecordedOptocouplers(c, m.Graph, r); err != nil {
 			return err
 		}

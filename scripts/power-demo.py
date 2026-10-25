@@ -3,6 +3,7 @@
 import argparse
 import importlib.util
 import json
+import time
 from pathlib import Path
 
 spec = importlib.util.spec_from_file_location('control_client', Path(__file__).with_name('controls-demo.py'))
@@ -86,9 +87,16 @@ def ac_sweeps(agent, assets):
             client.mutate('simulation.pause')
             before = client.ask('simulation.wait')
             client.mutate('sweep.start')
-            state = client.ask('simulation.wait')
+            state = client.ask('project.inspect')
             op = state['dc_sweep']['selected_operation']
-            view = client.ask('sweep.inspect', {'id': op})
+            deadline = time.monotonic() + 30
+            while True:
+                view = client.ask('sweep.inspect', {'id': op})
+                if view['operation']['status'] not in ('queued', 'running', 'canceling'):
+                    break
+                assert time.monotonic() < deadline
+                time.sleep(.01)
+            state = client.ask('project.inspect')
             assert view['operation']['status'] == 'completed', view
             assert view['metadata']['format'] == 'elab.ac-sweep'
             assert before['run_id'] == state['run_id'] and before.get('mixed') == state.get('mixed')
@@ -140,16 +148,56 @@ def optocouplers(agent, assets):
         client.close()
 
 
+def transformers(agent, assets):
+    reports = []
+    for example in ('coupled-windings', 'transformer-supply'):
+        client = helper.Client(agent)
+        try:
+            client.mutate('example.load', {'id': example})
+            client.mutate('simulation.pause')
+            client.mutate('simulation.restart')
+            client.ask('simulation.wait')
+            state = client.step(.05)
+            state = client.step(.05)
+            assert state['mixed']['kcl_residual_a'] < 1e-9
+            assert abs(state['mixed']['power_residual_w']) < 1e-7
+            winding = state['mixed']['transformers'][0]
+            assert winding['magnetic_energy_j'] >= 0 and winding['winding_loss_w'] >= 0
+            assert not state['mixed'].get('inductors')
+            if example == 'transformer-supply':
+                cap = next(c for c in state['mixed']['capacitors'] if c['id'] == 'C1')
+                assert cap['voltage_v'] > 4
+                assert 3.29 < state['mixed']['regulators'][0]['output_voltage_v'] < 3.31
+                probes = ['v:T1.secondary', 'v:C1', 'v:U1', 'i:T1.primary1']
+            else:
+                client.mutate('simulation.restart')
+                client.ask('simulation.wait')
+                normal = client.step(.003)['mixed']['transformers'][0]['secondary_voltage_v']
+                parameters = next(p for p in state['components'] if p['id'] == 'T1')['power']['transformer']
+                parameters['reversed_secondary'] = True
+                client.mutate('transformer.configure', {'id': 'T1', 'parameters': parameters})
+                client.mutate('simulation.restart')
+                client.ask('simulation.wait')
+                reversed_v = client.step(.003)['mixed']['transformers'][0]['secondary_voltage_v']
+                assert abs(normal + reversed_v) < 1e-8
+                probes = ['v:T1', 'v:T1.secondary', 'i:T1.primary1', 'i:T1.secondary1']
+            exports = helper.capture_and_reopen(client, agent, assets, example, probes, sample_step=.0001)
+            reports.append(dict(example=example, winding_energy_and_conservation=True, ratio_and_polarity=example == 'coupled-windings', rectification_and_regulation=example == 'transformer-supply', captures_and_fresh_reopen=True, exports=exports))
+        finally:
+            client.close()
+    return reports
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--artifacts', type=Path, required=True)
-    parser.add_argument('--only', choices=('batteries', 'motors', 'ac_sweeps', 'optocouplers'))
+    parser.add_argument('--only', choices=('batteries', 'motors', 'ac_sweeps', 'optocouplers', 'transformers'))
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    groups = dict(batteries=batteries, motors=motors, ac_sweeps=ac_sweeps, optocouplers=optocouplers)
+    groups = dict(batteries=batteries, motors=motors, ac_sweeps=ac_sweeps, optocouplers=optocouplers, transformers=transformers)
     report = dict(passed=True, transport='headless-stdio')
     for name, replay in groups.items():
         if args.only is None or args.only == name:

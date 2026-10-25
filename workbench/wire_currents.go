@@ -25,6 +25,10 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			known[ref] = ok
 		}
 		switch p.Kind {
+		case "transformer":
+			for _, pin := range transformerPins {
+				set(pin, p.ID+"."+pin, 1)
+			}
 		case "optocoupler":
 			for _, pin := range optoPins {
 				set(pin, p.ID+"."+pin, 1)

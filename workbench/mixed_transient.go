@@ -43,6 +43,9 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		p.Current = r.Switches[0].Current
 	} else if len(r.Sensors) > 0 {
 		p.Current = r.Sensors[0].Current
+	} else if len(r.Transformers) > 0 {
+		p.Current = r.Transformers[0].PrimaryCurrent
+		p.Voltage = r.Transformers[0].SecondaryVoltage
 	} else if len(r.Motors) > 0 {
 		p.Current = r.Motors[0].Current
 		p.Voltage = r.Motors[0].Voltage
@@ -64,7 +67,7 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, device := range r.Controls {
 		hasRelay = hasRelay || device.Kind == "relay"
 	}
-	if len(r.Inductors) > 0 || hasRelay || len(r.Motors) > 0 || len(r.Batteries) > 0 {
+	if len(r.Transformers) > 0 || len(r.Inductors) > 0 || hasRelay || len(r.Motors) > 0 || len(r.Batteries) > 0 {
 		p.Energy = 0
 		for _, part := range r.Inductors {
 			p.Energy += part.Energy
@@ -80,6 +83,13 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		p.Energy += b.Energy
 	}
 	currents := map[string]float64{}
+	for _, u := range r.Transformers {
+		currents[u.ID+".primary1"] = u.PrimaryCurrent
+		currents[u.ID+".primary2"] = -u.PrimaryCurrent
+		currents[u.ID+".secondary1"] = u.SecondaryCurrent
+		currents[u.ID+".secondary2"] = -u.SecondaryCurrent
+		p.Energy += u.Energy
+	}
 	for _, u := range r.Optocouplers {
 		currents[u.ID+".anode"] = u.InputCurrent
 		currents[u.ID+".cathode"] = -u.InputCurrent

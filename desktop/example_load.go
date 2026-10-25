@@ -25,6 +25,7 @@ func (s *screen) registerExampleLoadCommands() {
 		{"example.emitter-follower", "Load NPN emitter follower", "emitter-follower"},
 		{"example.bipolar-push-pull", "Load complementary transistor buffer", "bipolar-push-pull"},
 		{"example.cmos", "Load complementary MOSFET inverter", "cmos"},
+		{"example.coupled-windings", "Load transformer ratio and polarity", "coupled-windings"}, {"example.transformer-supply", "Load transformer DC supply", "transformer-supply"},
 		{"example.opto-switch", "Load optically isolated switch", "opto-switch"},
 		{"example.ac-rc", "Load RC Bode filter", "ac-rc"}, {"example.ac-rlc", "Load RLC Bode filter", "ac-rlc"}, {"example.ac-opamp", "Load op-amp Bode filter", "ac-opamp"},
 		{"example.motor-dc", "Load DC motor", "motor-dc"}, {"example.motor-pwm", "Load PWM motor", "motor-pwm"}, {"example.battery-led", "Load battery LED", "battery-led"}, {"example.battery-regulator", "Load battery regulator", "battery-regulator"}, {"example.night-light", "Load automatic night-light", "night-light"},

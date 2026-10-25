@@ -91,6 +91,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if part.Kind == "transformer" {
+		inspector = append(inspector, s.transformerControls(state, part)...)
+	}
 	if part.Kind == "optocoupler" {
 		inspector = append(inspector, s.optocouplerControls(state, part)...)
 	}

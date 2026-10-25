@@ -145,6 +145,15 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.setPulseTimingLocked(raw)
 	case "simulation.pulse.timing.set":
 		return s.setIdealPulseTimingLocked(raw)
+	case "transformer.configure":
+		var p TransformerParams
+		if err := params(raw, &p, "id", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &TransformerConfig{}, transformerParameterFields()...); err != nil {
+			return err
+		}
+		return s.configureTransformerLocked(p)
 	case "optocoupler.configure":
 		var p OptocouplerParams
 		if err := params(raw, &p, "id", "current_transfer_ratio"); err != nil {
@@ -674,7 +683,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"transformer": "T", "optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

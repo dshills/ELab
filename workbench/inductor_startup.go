@@ -152,6 +152,10 @@ func (n *mixedNetwork) checkInductorStartup(old []float64) error {
 }
 
 func (n *mixedNetwork) stampInductorStartup(x []float64, a [][]float64, f []float64) {
+	if len(n.couplings) > 0 {
+		n.stampCoupledStartup(x, a, f)
+		return
+	}
 	for _, cut := range n.inductorCuts {
 		row := cut.row
 		clear(a[row])

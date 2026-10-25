@@ -129,10 +129,7 @@ func (n *mixedNetwork) maximumInductorStep() float64 {
 	if len(n.inductors) == 0 || len(n.caps) == 0 {
 		return math.Inf(1)
 	}
-	inductance, capacitance := math.Inf(1), math.Inf(1)
-	for _, p := range n.inductors {
-		inductance = math.Min(inductance, p.Value)
-	}
+	inductance, capacitance := n.minimumWindingInductance(), math.Inf(1)
 	for _, p := range n.caps {
 		capacitance = math.Min(capacitance, p.Value)
 	}

@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Transformers       []TransformerResult   `json:"transformers,omitempty"`
 	Optocouplers       []OptocouplerResult   `json:"optocouplers,omitempty"`
 	Motors             []MotorResult         `json:"motors,omitempty"`
 	Batteries          []BatteryResult       `json:"batteries,omitempty"`
@@ -77,6 +78,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Transformers = append([]TransformerResult(nil), r.Transformers...)
 	o.Optocouplers = append([]OptocouplerResult(nil), r.Optocouplers...)
 	o.Motors = append([]MotorResult(nil), r.Motors...)
 	o.Batteries = append([]BatteryResult(nil), r.Batteries...)
@@ -118,6 +120,7 @@ type mixedNetwork struct {
 	index                        map[string]int
 	sources, caps                []Component
 	inductors                    []Component
+	couplings                    []windingCoupling
 	controls                     []Component
 	controlMemory                []ControlMemory
 	displays                     []Component
@@ -197,6 +200,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 			n.inductorPins[terminal] = n.index[net]
 		}
 	}
+	n.prepareCouplings()
 	n.inductorCuts = n.inductorStartupCuts()
 	return n
 }
@@ -796,6 +800,12 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	for k, p := range n.inductors {
 		v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
 		i := x[n.inductorIndex(k)]
+		if privatePart(p.ID) && p.Power != nil && p.Power.Transformer != nil {
+			R := inductorWindingResistance(p)
+			energyRate += (v - R*i) * i
+			powers += R * i * i
+			continue
+		}
 		if p.Kind == "relay" {
 			energyRate += (v - inductorWindingResistance(p)*i) * i
 			continue

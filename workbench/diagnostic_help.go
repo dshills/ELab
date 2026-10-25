@@ -184,7 +184,7 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	// Related request targets are context, never guessed solver causes. Parsing
 	// known intent fields cannot change state or make an unknown ID a marker.
 	var fields map[string]json.RawMessage
-	targeted := strings.HasPrefix(r.Command, "optocoupler.") || strings.HasPrefix(r.Command, "battery.") || strings.HasPrefix(r.Command, "motor.") || strings.HasPrefix(r.Command, "component.") || strings.HasPrefix(r.Command, "wire.") || strings.HasPrefix(r.Command, "source.") || strings.HasPrefix(r.Command, "capacitor.") || strings.HasPrefix(r.Command, "sensor.") || strings.HasPrefix(r.Command, "potentiometer.") || r.Command == "switch.set" || r.Command == "object.delete" || r.Command == "simulation.pulse.timing.set"
+	targeted := strings.HasPrefix(r.Command, "transformer.") || strings.HasPrefix(r.Command, "optocoupler.") || strings.HasPrefix(r.Command, "battery.") || strings.HasPrefix(r.Command, "motor.") || strings.HasPrefix(r.Command, "component.") || strings.HasPrefix(r.Command, "wire.") || strings.HasPrefix(r.Command, "source.") || strings.HasPrefix(r.Command, "capacitor.") || strings.HasPrefix(r.Command, "sensor.") || strings.HasPrefix(r.Command, "potentiometer.") || r.Command == "switch.set" || r.Command == "object.delete" || r.Command == "simulation.pulse.timing.set"
 	if currentContext && targeted && json.Unmarshal(r.Params, &fields) == nil {
 		for _, key := range []string{"id", "from", "to", "terminal"} {
 			var ref string

@@ -26,7 +26,7 @@ type ACBand struct {
 func acSupported(g Graph) error {
 	for _, p := range g.Components {
 		switch p.Kind {
-		case "ground", "net-label", "junction", "resistor", "potentiometer", "capacitor", "inductor", "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "opamp", "thermistor", "ldr", "switch":
+		case "transformer", "ground", "net-label", "junction", "resistor", "potentiometer", "capacitor", "inductor", "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "opamp", "thermistor", "ldr", "switch":
 		default:
 			return fmt.Errorf("AC small-signal analysis does not yet support %s; use transient simulation", p.Kind)
 		}
@@ -174,6 +174,11 @@ func computeACSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*S
 		}
 		for k, p := range n.inductors {
 			add(n.inductorIndex(k), n.inductorIndex(k), complex(0, -w*p.Value))
+		}
+		for _, c := range n.couplings {
+			one, two := n.inductorIndex(c.first), n.inductorIndex(c.second)
+			add(one, two, complex(0, -w*c.mutual))
+			add(two, one, complex(0, -w*c.mutual))
 		}
 		x, err := complexSolve(ctx, a, rhs)
 		if err != nil {

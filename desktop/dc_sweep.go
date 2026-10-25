@@ -342,7 +342,9 @@ func (s *screen) sweepMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		y := bottom - (bottom-top)*f
 		line(palette.Grid, 1, canvas.Point{X: left, Y: y}, canvas.Point{X: right, Y: y})
 		text(2, y-5, fmt.Sprintf("%.4g", ymin+(ymax-ymin)*f))
-		text(x-14, bottom+12, fmt.Sprintf("%.4g", result.AxisValue(f)))
+		label := fmt.Sprintf("%.4g", result.AxisValue(f))
+		width := workbench.CanvasTextWidth(label, 1.25)
+		text(math.Max(2, math.Min(x-width/2, v.Width-width-6)), bottom+12, label)
 	}
 	text(left, bottom+27, result.Target.Unit)
 	points := make([]canvas.Point, len(result.Points))
