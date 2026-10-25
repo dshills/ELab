@@ -49,6 +49,7 @@ func legacyExampleID(command string) string {
 
 func ExampleCatalog() []ExampleInfo {
 	return []ExampleInfo{
+		{ID: "hbridge-motor", Title: "Reversible PWM motor driver", Question: "How do direction, PWM, braking and coasting change motor current and speed?", Expected: "S1 closed / S2 open drives forward; reverse those switches for reverse. Both equal brake; open SEN to coast. Flyback clamps carry winding current after disable.", Try: "Select MTR1 for RPM and current. Change PWM high/low times, then compare brake and coast from the same speed. Mode changes preserve shaft speed and winding current at the switching instant.", Limitation: HBridgeDeviceModel().Limitations},
 		{ID: "led", Title: "LED current limiter", Question: "How does resistance change LED current?", Expected: "Increasing the series resistance lowers current and the illustrative LED brightness.", Try: "Change R1 from 1 kΩ to 2 kΩ and compare signed current.", Limitation: "Generic red LED; brightness is illustrative and there is no thermal behavior or physical part rating."},
 		{ID: "split-supply", Title: "Split-rail DC supply", Question: "How do two positive batteries create a negative rail?", Expected: "The midpoint reference makes the rails +3 V and −3 V. Each source remains +3 V across its own terminals; R1 sees 6 V and carries 6 mA.", Try: "Inspect V2.negative relative to ground, then V2 across its terminals. Change either source to 5 V or move ground to the bottom rail and compare.", Limitation: "Ideal DC sources have no output resistance, current limit, battery discharge or physical ratings. The network still needs one common reference; ideal voltage-source/capacitor constraint loops refuse."},
 		{ID: "rc", Title: "RC charge and discharge", Question: "How quickly does a capacitor charge and discharge?", Expected: "Capacitor voltage changes smoothly; switching from charge to discharge reverses current while preserving voltage at the switching instant.", Try: "Pause, step 10 ms, then choose Discharge. Increase R1 or C1 to slow the response.", Limitation: "Ideal capacitor/resistor with zero ESR and leakage; this example uses an ideal source edge."},
@@ -130,6 +131,12 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "hbridge-motor":
+		d.graph = HBridgeExampleGraph()
+		d.selected = "U1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00005, .005
+		d.probes = []string{"v:U1", "i:MTR1", "v:U1.enable", "i:U1.vm"}
+		d.view = View{Zoom: .65}
 	case "coupled-windings", "transformer-supply":
 		d.graph = TransformerExampleGraph(id == "transformer-supply")
 		d.selected = "T1"

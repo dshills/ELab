@@ -143,6 +143,12 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	for _, p := range g.Components {
 		minX = math.Min(minX, p.Position.X-90)
 		maxX = math.Max(maxX, p.Position.X+140)
+		if p.Kind == "hbridge" {
+			minX = math.Min(minX, p.Position.X-120)
+			maxX = math.Max(maxX, p.Position.X+120)
+			minY = math.Min(minY, p.Position.Y-120)
+			maxY = math.Max(maxY, p.Position.Y+120)
+		}
 		if p.Kind == "net-label" {
 			maxX = math.Max(maxX, p.Position.X+50+float64(len(p.Label)+len(p.ID)+3)*7.5)
 		}
@@ -213,6 +219,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
 	if model := timer555ModelForGraph(g); model != nil {
 		metadataFields["timer555_model"] = model
+	}
+	if model := hbridgeModelForGraph(g); model != nil {
+		metadataFields["hbridge_model"] = model
 	}
 	if model := logicModelForGraph(g); model != nil {
 		metadataFields["logic_model"] = model
@@ -409,6 +418,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
+		case "hbridge":
+			for _, path := range HBridgeSymbolPaths() {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "transformer":
 			for _, path := range TransformerSymbolPaths(p.Power.Transformer.Reversed) {
 				b.WriteString(`<polyline points="`)
@@ -475,6 +492,11 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="19">ELab · schematic · electrical revision %d</text>`, minX+15, minY+25, revision)
 
 	for _, p := range g.Components {
+		if p.Kind == "hbridge" {
+			for _, label := range HBridgeSymbolLabels(p) {
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
+			}
+		}
 		if IsLogicKind(p.Kind) {
 			for _, label := range LogicSymbolLabels(p) {
 				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" transform="rotate(%d %g %g)">%s</text>`, label.At.X, label.At.Y, p.Rotation, label.At.X, label.At.Y, html.EscapeString(label.Text))
@@ -579,6 +601,9 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
+	case "hbridge":
+		text += " · H-bridge"
+		x, y = p.Position.X-70, p.Position.Y-115
 	case "transformer", "optocoupler":
 		x, y = p.Position.X-55, p.Position.Y-90
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":

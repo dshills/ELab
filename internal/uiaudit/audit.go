@@ -68,7 +68,7 @@ func nativeAliases() map[string][]string {
 		"example.coupled-windings":  {"example.load"}, "example.transformer-supply": {"example.load"},
 		"example.opto-switch": {"example.load"},
 		"example.ac-rc":       {"example.load"}, "example.ac-rlc": {"example.load"}, "example.ac-opamp": {"example.load"},
-		"example.motor-dc": {"example.load"}, "example.motor-pwm": {"example.load"},
+		"example.hbridge-motor": {"example.load"}, "example.motor-dc": {"example.load"}, "example.motor-pwm": {"example.load"},
 		"example.battery-led": {"example.load"}, "example.battery-regulator": {"example.load"},
 		"example.night-light":          {"example.load"},
 		"example.thermostat":           {"example.load"},

@@ -28,6 +28,7 @@ func (s *screen) registerExampleLoadCommands() {
 		{"example.coupled-windings", "Load transformer ratio and polarity", "coupled-windings"}, {"example.transformer-supply", "Load transformer DC supply", "transformer-supply"},
 		{"example.opto-switch", "Load optically isolated switch", "opto-switch"},
 		{"example.ac-rc", "Load RC Bode filter", "ac-rc"}, {"example.ac-rlc", "Load RLC Bode filter", "ac-rlc"}, {"example.ac-opamp", "Load op-amp Bode filter", "ac-opamp"},
+		{"example.hbridge-motor", "Load reversible H-bridge motor", "hbridge-motor"},
 		{"example.motor-dc", "Load DC motor", "motor-dc"}, {"example.motor-pwm", "Load PWM motor", "motor-pwm"}, {"example.battery-led", "Load battery LED", "battery-led"}, {"example.battery-regulator", "Load battery regulator", "battery-regulator"}, {"example.night-light", "Load automatic night-light", "night-light"},
 		{"example.thermostat", "Load thermistor relay thermostat", "thermostat"},
 		{"example.regulator-supply", "Load regulated supply and load", "regulator-supply"},

@@ -152,6 +152,11 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		}
 		currents[u.ID] = -u.PinCurrents[index]
 	}
+	for _, u := range r.HBridges {
+		for k, pin := range hbridgePins {
+			currents[u.ID+"."+pin] = u.PinCurrents[k]
+		}
+	}
 	for _, u := range r.LogicGates {
 		for k, pin := range logicPinOrder {
 			if pin == "b" && u.Kind == "logic-not" {

@@ -42,6 +42,11 @@ func (n *mixedNetwork) inductorNewtonScale(x, delta []float64, stages int) float
 				} else {
 					forward(junction(p, "drain", "source"))
 				}
+			case "hbridge":
+				for _, out := range []string{"out1", "out2"} {
+					forward(junction(p, out, "vm"))
+					forward(junction(p, "gnd", out))
+				}
 			case "relay", "comparator", "pushbutton", "bouncing-pushbutton", "timer555", "thermistor", "ldr", "resistor", "capacitor", "inductor", "switch", "potentiometer",
 				"dc-source", "pulse-source", "sine-source", "finite-pulse-source",
 				"ground", "junction", "net-label":

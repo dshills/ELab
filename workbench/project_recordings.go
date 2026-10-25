@@ -57,6 +57,8 @@ func recordingModelHashes(m VerificationMetadata) map[string]string {
 			data, _ = json.Marshal(m.DisplayModel)
 		case SequentialModelID:
 			data, _ = json.Marshal(m.SequentialModel)
+		case HBridgeModelID:
+			data, _ = json.Marshal(m.HBridgeModel)
 		case LogicModelID:
 			data, _ = json.Marshal(m.LogicModel)
 		case Timer555ModelID:

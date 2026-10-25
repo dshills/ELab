@@ -16,10 +16,13 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	displays := []Component{}
 	controls := []Component{}
 	regulators := []Component{}
+	bridges := []Component{}
 	sequential := []Component{}
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
+		case "hbridge":
+			bridges = append(bridges, p)
 		case "transformer":
 			transformers = append(transformers, p)
 		case "optocoupler":
@@ -128,7 +131,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers) == 0 {
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers)+len(bridges) == 0 {
 		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
@@ -155,6 +158,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 		}
 
+		if p.Kind == "hbridge" && net(p, "vm") == net(p, "gnd") {
+			return fail("error", "shorted-component", "Remove the short across H-bridge supply pins.", p.ID)
+		}
 		if (p.Kind == "timer555" || IsLogicKind(p.Kind) || IsSequentialKind(p.Kind) || p.Kind == "bcd-decoder" || p.Kind == "comparator") && net(p, "vcc") == net(p, "gnd") {
 			return fail("error", "shorted-component", "Remove the short across IC supply pins.", p.ID)
 		}
@@ -168,12 +174,12 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 		for i, a := range p.Terminals {
 			ref := p.ID + "." + a
-			if p.Kind != "transformer" && !(IsRegulatorKind(p.Kind) && a == "out") && !(p.Kind == "relay" && (a == "no" || a == "nc")) && !(p.Kind == "comparator" && a == "out") && !IsDisplayKind(p.Kind) && p.Kind != "potentiometer" && !(IsSequentialKind(p.Kind) && sequentialOutput(a)) && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
+			if !(p.Kind == "hbridge" && (a == "out1" || a == "out2")) && p.Kind != "transformer" && !(IsRegulatorKind(p.Kind) && a == "out") && !(p.Kind == "relay" && (a == "no" || a == "nc")) && !(p.Kind == "comparator" && a == "out") && !IsDisplayKind(p.Kind) && p.Kind != "potentiometer" && !(IsSequentialKind(p.Kind) && sequentialOutput(a)) && !((p.Kind == "opamp" || IsLogicKind(p.Kind)) && a == "out") && !(p.Kind == "timer555" && (a == "control" || a == "out" || a == "discharge")) && len(physicalTerminals(g, groups[root(ref)])) < 2 {
 				return fail("incomplete", "open-terminal", "Connect terminal "+ref+" to complete the circuit.", ref)
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && p.Kind != "transformer" && p.Kind != "optocoupler" && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
+				if u == v && p.Kind != "hbridge" && p.Kind != "transformer" && p.Kind != "optocoupler" && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				if networkReferencePair(p, a, b, len(opamps) > 0) {

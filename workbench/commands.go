@@ -108,6 +108,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(SequentialModel{}), "urn:elab:sequential-model:1"},
 	{reflect.TypeOf(SequentialMemory{}), "urn:elab:sequential-memory:1"},
 	{reflect.TypeOf(SequentialResult{}), "urn:elab:sequential-result:1"},
+	{reflect.TypeOf(HBridgeModel{}), "urn:elab:hbridge-model:1"},
+	{reflect.TypeOf(HBridgeResult{}), "urn:elab:hbridge-result:1"},
 	{reflect.TypeOf(LogicModel{}), "urn:elab:logic-model:1"},
 	{reflect.TypeOf(LogicResult{}), "urn:elab:logic-result:1"},
 	{reflect.TypeOf(Timer555Model{}), "urn:elab:timer555-model:1"},

@@ -367,3 +367,9 @@ mutual flux, dot polarity, winding resistance and shared magnetic energy.
 Examples compare loaded winding polarity and build a 50 Hz transformer / full
 bridge / smoothing capacitor / regulated 3.3 V supply with explicit snubber and
 reference parts. Inspector and agents share `transformer.configure`.
+
+[H-bridge motor drivers](docs/hbridge.md) add forward/reverse, active braking,
+coasting and enable-pin PWM with passive flyback paths. The reversible motor
+example uses ordinary switches and a finite pulse source; users and agents share
+placement, wiring, switch, source, probe and project commands. Live readouts show
+mode, differential output voltage, signed supply current and driver dissipation.

@@ -91,6 +91,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if part.Kind == "hbridge" {
+		inspector = append(inspector, s.hbridgeControls(state, part)...)
+	}
 	if part.Kind == "transformer" {
 		inspector = append(inspector, s.transformerControls(state, part)...)
 	}

@@ -295,3 +295,12 @@ inherited foreground; its separate SDK regression covers simultaneous palettes
 and post-mount updates. ELab's mounted paint/expansion and shared-agent collapse
 preserve physics and history. [Repair and current qualification](85-disclosure-theme.md).
 This does not close native-device, screen-reader or exhaustive binding acceptance.
+
+
+October 25 H-bridge addition: 88 production native sources, 427 sites, 175 public
+commands and 143 source-routed commands. The new read-only motor-driver inspector,
+shared symbol, body hit area, plot labels and example menu use existing commands.
+The reviewed `example.hbridge-motor` native alias maps to `example.load`; it adds
+no private driver-control API. Motor mode is determined by wired input voltages,
+using the ordinary switch/source commands. The catalog grows to 49 parts. Static
+route inventory and runtime UI/agent parity remain separate checks.

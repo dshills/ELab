@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	HBridges           []HBridgeResult       `json:"hbridges,omitempty"`
 	Transformers       []TransformerResult   `json:"transformers,omitempty"`
 	Optocouplers       []OptocouplerResult   `json:"optocouplers,omitempty"`
 	Motors             []MotorResult         `json:"motors,omitempty"`
@@ -78,6 +79,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.HBridges = append([]HBridgeResult(nil), r.HBridges...)
 	o.Transformers = append([]TransformerResult(nil), r.Transformers...)
 	o.Optocouplers = append([]OptocouplerResult(nil), r.Optocouplers...)
 	o.Motors = append([]MotorResult(nil), r.Motors...)
@@ -317,6 +319,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "hbridge":
+			n.stampHBridge(p, x, add, f)
 		case "optocoupler":
 			n.stampOptocoupler(p, x, add, f)
 		case "thermistor", "ldr":
@@ -718,6 +722,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 					r.Resistors = append(r.Resistors, br)
 				}
 			}
+		case "hbridge":
+			device := n.hbridgeResult(p, x)
+			r.HBridges = append(r.HBridges, device)
+			powers += device.Power
 		case "optocoupler":
 			device := n.optoResult(p, x)
 			r.Optocouplers = append(r.Optocouplers, device)

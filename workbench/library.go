@@ -2,6 +2,8 @@ package workbench
 
 func partAliases(kind string) []string {
 	switch kind {
+	case "hbridge":
+		return []string{"H bridge", "motor driver", "forward", "reverse", "brake", "coast", "PWM", "bidirectional"}
 	case "thermistor":
 		return []string{"temperature", "sensor", "NTC", "thermistor", "heat"}
 	case "ldr":
@@ -83,6 +85,8 @@ func partAliases(kind string) []string {
 }
 func partLimitations(kind string) string {
 	switch kind {
+	case "hbridge":
+		return HBridgeDeviceModel().Limitations
 	case "relay":
 		return ControlledDeviceModel().Limitations
 	case "comparator":

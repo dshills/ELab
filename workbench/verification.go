@@ -242,6 +242,7 @@ func (s *Service) startVerificationLocked(p VerifyParams) error {
 	metadata.PNPModel = pnpModelForGraph(graph)
 	metadata.OpAmpModel = opAmpModelForGraph(graph)
 	metadata.Timer555Model = timer555ModelForGraph(graph)
+	metadata.HBridgeModel = hbridgeModelForGraph(graph)
 	metadata.LogicModel = logicModelForGraph(graph)
 	metadata.SequentialModel = sequentialModelForGraph(graph)
 	metadata.DisplayModel = displayModelForGraph(graph)
@@ -381,6 +382,10 @@ func cloneVerificationMetadata(in VerificationMetadata) VerificationMetadata {
 	if in.Timer555Model != nil {
 		m := *in.Timer555Model
 		out.Timer555Model = &m
+	}
+	if in.HBridgeModel != nil {
+		m := *in.HBridgeModel
+		out.HBridgeModel = &m
 	}
 	if in.LogicModel != nil {
 		m := *in.LogicModel

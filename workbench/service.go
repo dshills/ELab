@@ -54,6 +54,7 @@ type Snapshot struct {
 	PNPModel               *PNPModel              `json:"pnp_model,omitempty"`
 	OpAmpModel             *OpAmpModel            `json:"opamp_model,omitempty"`
 	Timer555Model          *Timer555Model         `json:"timer555_model,omitempty"`
+	HBridgeModel           *HBridgeModel          `json:"hbridge_model,omitempty"`
 	LogicModel             *LogicModel            `json:"logic_model,omitempty"`
 	SequentialModel        *SequentialModel       `json:"sequential_model,omitempty"`
 	DisplayModel           *DisplayModel          `json:"display_model,omitempty"`
@@ -467,6 +468,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out.PNPModel = pnpModelForGraph(graph)
 	out.OpAmpModel = opAmpModelForGraph(graph)
 	out.Timer555Model = timer555ModelForGraph(graph)
+	out.HBridgeModel = hbridgeModelForGraph(graph)
 	out.LogicModel = logicModelForGraph(graph)
 	out.SequentialModel = sequentialModelForGraph(graph)
 	out.DisplayModel = displayModelForGraph(graph)
@@ -1165,6 +1167,10 @@ func cloneSnapshot(state Snapshot) Snapshot {
 	if state.Timer555Model != nil {
 		m := *state.Timer555Model
 		state.Timer555Model = &m
+	}
+	if state.HBridgeModel != nil {
+		m := *state.HBridgeModel
+		state.HBridgeModel = &m
 	}
 	if state.LogicModel != nil {
 		m := *state.LogicModel

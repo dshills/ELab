@@ -284,6 +284,23 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		b.stroke(c, width, transformed...)
 	}
 	switch part.Kind {
+	case "hbridge":
+		for _, path := range workbench.HBridgeSymbolPaths() {
+			points := make([]canvas.Point, len(path))
+			for k, p := range path {
+				points[k] = canvas.Point{X: p.X, Y: p.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		for _, label := range workbench.HBridgeSymbolLabels(part) {
+			first := len(b.vertices)
+			b.text(label.At.X, label.At.Y, label.Text, muted)
+			for i := first; i < len(b.vertices); i++ {
+				at := b.vertices[i].Position
+				d := workbench.RotateLocal(workbench.Point{X: at.X - label.At.X, Y: at.Y - label.At.Y}, part.Rotation)
+				b.vertices[i].Position = canvas.Point{X: label.At.X + d.X, Y: label.At.Y + d.Y}
+			}
+		}
 	case "transformer":
 		// Browser artwork uses kind-only placeholders; unconfigured glyphs use normal dots.
 		reversed := part.Power != nil && part.Power.Transformer != nil && part.Power.Transformer.Reversed

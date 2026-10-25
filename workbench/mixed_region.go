@@ -20,6 +20,9 @@ func MixedRegion(result *MixedResult) (deviceID, state string) {
 		if len(result.Timers555) > 0 {
 			return result.Timers555[0].ID, result.Timers555[0].State
 		}
+		if len(result.HBridges) > 0 {
+			return result.HBridges[0].ID, result.HBridges[0].State
+		}
 		if len(result.LogicGates) > 0 {
 			return result.LogicGates[0].ID, result.LogicGates[0].State
 		}
