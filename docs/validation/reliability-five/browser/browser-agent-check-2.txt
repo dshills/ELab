@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/reliability-five/browser-agent-check.py", line 29, in <module>
+    c.ask('examples.search.set',dict(query='RC charge'),True);assert c.ask('project.inspect')['example_browser']['matching_ids']==['rc']
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

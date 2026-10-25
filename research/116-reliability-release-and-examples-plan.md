@@ -18,7 +18,7 @@ blocking progress. No new components or electrical model families.
    electronics, matching agent, examples, use/model limits, checksum and rollback.
    Preserve the qualified /205 download and /256 development candidate. Test
    archive extraction and offline packaged workflows; retain declared deferrals.
-5. In progress: searchable categorized examples browser with schematic thumbnails
+5. Complete: searchable categorized examples browser with schematic thumbnails
    and short experiment descriptions, retaining existing protected example-load
    commands and their agent equivalents. Verify keyboard, search, selection,
    unsaved-work protection and theme/size containment. Package a final update
@@ -104,3 +104,41 @@ in the receipts. The native harness now navigates the appropriate inspector and
 observes stable native publication; semantic bulk fixtures do not flush editors
 that have not mounted. Mounted and actual keyboard settlement remain covered.
 The final ordered item begins from this preserved release.
+
+## Item 5 result
+
+ELab 0.195.3 /264 completes the examples browser using the existing 62 templates.
+Start here, 11 topic/navigation choices, global word search, actual schematic
+thumbnails and larger previews include short experiments and model limits.
+The five added public browser/query commands bring discovery to 187 IDs;
+component kinds remain 53. Protected `example.load`, file/model versions,
+ordinary export bytes and simulation limits are retained.
+
+Native checks cover all four themes, the compact 1053×802 window and larger
+window, category popup, Return search/open, Clear/no results, Escape/focus,
+mouse wheel and scrollbar dragging. Exact public snapshots are unchanged by
+wheel/drag. Native Cancel keeps the edited circuit and chooser; Save and continue
+writes R1=2000 Ω before replacement, and final Save/Discard restore component
+Search focus. Held callbacks refuse later agent context. The same matching
+packaged headless/native agents return identical 62 SVG/source hash pairs.
+
+The complete quality matrix passes: 866 portable, 336 ordinary-desktop and
+459 rendered-desktop top-level tests (1,945 / 836 / 1,414 including subtests),
+with race checks, lint, imports, both desktop vet configurations, Python, PRD
+and build. Scoped source receipts distinguish the unchanged portable source
+from final desktop compilation. The copied exact package passes native smoke
+and extended four-adapter public electrical suites with development-file and
+outbound-IP denial; all 102 external processes exit normally.
+
+The unsigned final ZIP is `build/releases/ELab-0.195.3-macos-arm64.zip`,
+38,746,820 bytes /375 files, SHA-256:
+`31fa3386d57850e5d68ead285d65f2c8a7319ef1e4866ba3e6f070ea76c85fe1`.
+A macOS extraction matches every file's bytes/mode and integrity seal; its
+matching agent reopens all62 included paused projects cleanly with exact graphs
+and accepted startup. The /260 and /205 ZIP hashes remain unchanged. No upload
+or push is performed. Owned test apps close normally; owner projects/sessions
+are preserved. Recorded owner/clean-account deferrals remain in force.
+
+All five ordered items are complete. No further component or optional feature
+work is started. Evidence and original failures are indexed in
+[the qualification record](../docs/validation/reliability-five/README.md).

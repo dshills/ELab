@@ -2,27 +2,39 @@
 
 ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PNP, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
-## Latest development additions
-
-PWM buck conversion, optional op-amp bandwidth/slew limits, an eight-bit shift/latch register, and piezo/active-buzzer audio previews now share the UI and agent commands. Six working examples are listed in [the model and command guide](docs/hobbyist-devices.md). Audio playback is explicit; opening or simulating a circuit stays silent. The qualified alpha below remains preserved.
-
-[Open the 0.194.1 /256 development app](build/ELab-0.194.1-256-Tooltips/ELab.app). The matching agent is alongside it. See the [tooltip cleanup checks](docs/validation/inspector-tooltip-retirement/README.md) for this build and the [electronics qualification](docs/validation/hobbyist-devices/README.md) for the component implementations.
-
 ## Downloadable release
 
-**ELab 0.181.4 /205 improves rejected component-value feedback.** [Open app](build/releases/ELab-0.181.4-macos-arm64/ELab.app), [download ZIP](build/releases/ELab-0.181.4-macos-arm64.zip), or [verify SHA-256](build/releases/ELab-0.181.4-macos-arm64.zip.sha256). Users and agents receive the same target, range, unit syntax and unchanged accepted value, including current waveform constraints. First-Apply correction and one-step Undo are verified. Existing components, commands, models and file formats are unchanged. See the [repair and checks](research/81-component-value-guidance.md) and [validation receipt](docs/validation/value-guidance-205/report.json). The qualified [0.181.3 /204 first-version package](build/releases/ELab-0.181.3-macos-arm64/ELab.app) remains preserved.
+**ELab 0.195.3 /264** packages the current 53 component kinds and all 62 existing
+examples with a matching agent. [Open app](build/releases/ELab-0.195.3-macos-arm64/ELab.app),
+[download ZIP](build/releases/ELab-0.195.3-macos-arm64.zip), or
+[verify SHA-256](build/releases/ELab-0.195.3-macos-arm64.zip.sha256).
 
-The [first-version release closeout](research/79-first-version-release-closeout.md)
-reconciles the checklist to the preserved /204 baseline, including extracted offline
-workflows, native keyboard construction and Save/Open. Owner review and
-clean-account installation retain their recorded deferrals; full PRD MVP
-acceptance remains separate.
+The new **Examples** browser has Start here, topic categories, global word search,
+actual schematic previews and short experiments. Browsing preserves the live
+circuit; opening uses the existing Save / Discard / Cancel protection. Users and
+agents share the same browser commands. See the [browser guide](docs/example-browser.md).
+This round also fixes scroll-related numeric help and verifies keyboard drawing,
+editing, measurement and save workflows. It adds no components or electrical models
+and leaves simulation capacities and precision unchanged.
 
-The UI follows a document-editor layout: quiet toolbar, dedicated component library, central canvas, fixed **Inspect / Simulate / Document** navigation, compact live readings, and coordinated light/dark appearance. Users and agents share category, search, inspector and editing commands. See the [component browser contract](docs/component-browser.md), [design decisions](research/73-native-ui-design.md) and [inspector workflow](docs/workspace-layout.md#inspector-sections).
+Requires Apple Silicon and macOS 26.0 or later; tested on macOS 26.6.2. This is
+the owner-selected unsigned channel, with an ad-hoc integrity seal and no
+Developer ID or notarization. A downloaded copy can be blocked by Gatekeeper;
+see [installation/use instructions](build/releases/ELab-0.195.3-macos-arm64/README.md).
+The [ordered work and qualification](research/116-reliability-release-and-examples-plan.md)
+records native, agent, race, rendered, archive and offline checks. Owner walkthrough,
+separate-account installation and full PRD acceptance retain their recorded deferrals.
+The package is prepared locally; nothing has been publicly uploaded or pushed.
 
-Requires Apple Silicon and macOS 26.0 or later; tested on macOS 26.6.2. The owner-selected unsigned channel retains an ad-hoc integrity seal, without Developer ID or notarization. Gatekeeper can block a downloaded copy. See [installation instructions](build/releases/ELab-0.181.4-macos-arm64/README.md) and the [validation receipt](docs/validation/value-guidance-205/report.json) for source, packaged-agent, native UI and archive checks and their limitations. No component models or file-format changes are included. Browser state is session-only and does not mark the circuit edited.
+The [0.194.5 /260 reliability release](build/releases/ELab-0.194.5-macos-arm64.zip)
+and [0.181.4 /205 qualified alpha](build/releases/ELab-0.181.4-macos-arm64.zip)
+remain byte-for-byte preserved, alongside earlier candidates and owner projects.
 
-The [0.181.1 /202 scrolling repair](build/releases/ELab-0.181.1-macos-arm64/ELab.app), [0.181.0 /201 component browser](build/releases/ELab-0.181.0-macos-arm64/ELab.app), [0.180.2 /200 example fixes](build/releases/ELab-0.180.2-macos-arm64/ELab.app), [0.180.1 /199 pointer repair](build/releases/ELab-0.180.1-macos-arm64/ELab.app), earlier releases and owner /189 remain preserved. Existing owner documents are left open. Clean-account installation and full PRD MVP acceptance remain separate; component-browser wheel and thumb behavior is rechecked in /202, while earlier flasher timing limitations remain separate. Everything is prepared locally; nothing has been publicly uploaded or pushed.
+The document-editor UI has a component library, central canvas, Inspect / Simulate /
+Document navigation, live readings and Light, Dark, System and Apollo themes.
+See the [component browser](docs/component-browser.md),
+[workspace layout](docs/workspace-layout.md) and [electronics model guide](docs/hobbyist-devices.md).
+Audio playback is explicit; opening or simulating a circuit stays silent.
 
 ## Build and run from source
 

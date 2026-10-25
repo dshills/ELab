@@ -1,71 +1,79 @@
-# Ordered reliability, workflow, release and examples work
+# Ordered reliability and examples qualification
 
-October 25, 2026. [Execution plan](../../../research/116-reliability-release-and-examples-plan.md).
+October 25, 2026. All five [ordered items](../../../research/116-reliability-release-and-examples-plan.md)
+are complete. Final unsigned release: **ELab 0.195.3 /264**, clean binary source
+`d9af4fc49f4bb6f6f86e4ae9b3a823afd7c815fc`. No new components or electrical
+model families; 53 kinds and 62 existing examples remain.
 
-Item 1: raw native capture diagnosis identifies intact schematic/scope pixels
-in frames that looked empty in the large preview. The exact regions compare
-identically; pan changes the pixels, and theme/resize checks retain the drawing.
-The original dimensions are restored. No speculative renderer change is made.
-The diagnostic overlay under ignored build paths was never launched or shipped.
+## Findings and completed work
 
-Item 2: the focused regression reproduces both scroll failures before the fix.
-Visible help persists and a pending timer opens corner help after clipping. The
-fixed exported SDK passes both cases, valid re-hover and unchanged numeric value,
-plus refusal of an already queued callback after a new same-widget hover starts.
-Exact SDK identities and all-member verification are retained in tooltip/.
-Native verification and complete suite results follow at closeout.
+1. **Canvas visibility:** saved native schematic/scope pixels are intact and
+   byte-identical in frames that seemed empty in the large preview. Pan changes
+   the expected pixels; resize, inspector and theme changes preserve the circuit.
+   No speculative renderer change. [Pixel diagnosis](canvas/pixel-diagnosis.json).
+2. **Numeric help on scroll:** SDK elab5 cancels visible/pending help, refuses
+   clipped controls and rejects queued stale hover callbacks without stealing a
+   fresh same-widget hover. Values remain unchanged. Portable/ordinary/rendered
+   framework checks and native PWM Duty scrolling pass. [Tooltip evidence](tooltip/).
+3. **Keyboard and agents:** actual native LED construction/wiring, rejected
+   value/correction, Undo/Redo, Save and focus, RC stepping/cursors and protected
+   replacement Cancel pass. The matching agent reopens the exact saved 2 kΩ
+   drawing at 1.476723549 mA. Four-adapter public checks pass; 45 external processes
+   exit normally. [Workflow receipt](workflow/report.json).
+4. **Preserved intermediate release:** [0.194.5 /260 archive](release-260/archive.json)
+   includes all current electronics, matching agent and 62 examples. Its copied
+   runtime and all extracted projects pass. ZIP SHA-256 remains
+   `4132046779dd14442187e37baa426de55ccff4c9f5f7b587d691bc31c5ae857a`.
+5. **Examples browser:** Start here, categories, global word search, actual
+   schematics and short experiments use the same public commands as agents.
+   Native all-theme/compact layout, category, keyboard, empty search/Clear,
+   wheel, thumb drag, Escape and Save/Discard/Cancel checks pass. Held callbacks
+   refuse agent interleavings. Final packaged agents return identical SVG/source
+   hashes for all62 examples. [Native receipt](browser/browser-native-report.json),
+   [agent comparison](browser/browser-agent-final-report.json),
+   [initial failures and repairs](browser/failures.md).
 
-The current alpha and /256 development package remain preserved. This source
-checkpoint does not promote a release or claim all five ordered items complete.
+## Final quality and package
 
-Item 3: [native keyboard and four-client evidence](workflow/report.json) passes.
-All 45 external conformance processes exit normally. The keyboard build's saved
-project freshly reopens through the matching packaged agent with 2000 Ω and
-1.476723549 mA. Invalid edits, correction, Undo/Redo, native save focus, RC
-cursors and protected replacement Cancel are covered. The owned session closes
-through the public command and its shutdown receipt is retained.
+| Complete race suite | Top-level tests | Including subtests |
+| --- | ---: | ---: |
+| Portable | 866 | 1,945 |
+| Ordinary desktop | 336 | 836 |
+| Rendered desktop | 459 | 1,414 |
 
-The /257 copied-runtime smoke stops at an obsolete fixture assumption: file
-open succeeds cleanly, but the smoke searches the current Inspect page for a
-status now in Document. The smoke now explicitly navigates to Document before
-checking status, as the ordinary file-workflow test already does. No file or
-model behavior changes. The original failure is retained. Ad-hoc signing also
-changes the source executable's bytes; the runtime harness now accepts only an
-explicit independent post-signing pin for such packages and records both hashes.
-The old strict source-hash check remains the default. Release rerun follows.
+Lint/imports, root and both desktop vet modes, Python, PRD and build pass.
+[Quality summary](browser-quality/quality-complete.json) and
+[source/compilation scope](browser-quality/scope.json) retain exact boundaries;
+raw JSONL logs are compressed alongside them. Earlier item-4 source checks and
+failed smoke assumptions remain under quality/ and release-260/; they are not
+relabeled as final candidate results.
 
-The first /258 copied-runtime pass stops earlier at the native inspector's
-corrected Apply readiness predicate. The /257 pass and physical keyboard
-workflow passed this value edit. The smoke previously observed accepted model
-text/mesh preparation, then immediately pressed the independently queued Cocoa
-control. It now additionally requires a newer native AX publication displaying
-the corrected text before Apply, and retains selected/draft/resistance diagnostics
-on failure. It does not retry edits or relax electrical tolerances. The original
-failed run is retained for comparison; a new clean candidate is tested next.
+The [exact copied /264 runtime](release-264/runtime-report.json.gz) passes complete
+native smoke and extended public electrical/project/inductor/op-amp/storage/
+capacity suites across in-process, headless stdio/socket and native socket
+adapters, with source/development-file and outbound-IP denial. All
+[102 external processes](release-264/runtime-process-exits.json) exit normally.
+The [archive receipt](release-264/archive.json) verifies 375 member bytes/modes,
+macOS extraction and its ad-hoc integrity seal. The extracted matching agent
+[reopens all62 bundled examples](release-264/offline-examples.json), paused and
+clean, with exact graphs and accepted startup. The public registry has 187
+commands; compact ordinary discovery stays within its unchanged 64 KiB bound.
 
-Full source quality passes: 861 portable, 332 ordinary-desktop and 453 rendered-
-desktop top-level tests (1,940 / 765 / 1,337 including subtests). Race checking,
-both desktop vet modes, lint, Python, PRD and build pass. The full Go suites
-compiled the /257 source; later changes are confined to smoke prerequisites and
-its regression. Final vet/build include those changes, with focused regressions
-and native smoke checked separately. Exact scope and raw logs are in quality/.
+Download: `build/releases/ELab-0.195.3-macos-arm64.zip` (38,746,820 bytes).
+SHA-256: `31fa3386d57850e5d68ead285d65f2c8a7319ef1e4866ba3e6f070ea76c85fe1`.
+The /260 and /205 releases remain unchanged. SDK upstream f9dee54,
+compatibility source bc599ea5, exported elab5; earlier SDK evidence remains in
+[the tooltip record](tooltip/). Project format and solver capacities/precision
+are unchanged; ordinary schematic report SVG bytes are frozen in regression tests.
 
-The diagnostic native smoke now completes through lifecycle shutdown. Repairs
-are limited to test assumptions: explicitly choosing Document for job status and
-Simulate/Inspect for text geometry, expecting the current battery search result,
-and observing stable corrected Cocoa publication before native Apply. Bulk
-fixtures supply accepted controlled edits before editors mount, so they no longer
-flush a retired editor from the previous page. Actual native Apply and the
-mounted/physical input tests retain normal settlement; a regression proves the
-helper restores those callbacks. No retry silently replays a failed user edit.
-The earlier failed passes are retained rather than relabeled as successes.
+## Limits
 
-A fresh clean package repeats the native/offline checks before ZIP qualification.
-
-Item 4 complete: [qualified /260 archive](release-260/archive.json),
-[copied runtime](release-260/runtime-report.json.gz) and
-[all extracted examples](release-260/offline-examples.json) pass. The unsigned
-ZIP is build/releases/ELab-0.194.5-macos-arm64.zip (38,681,875 bytes), with a
-matching checksum file. The 374 archive members and extracted signature match.
-The /205 alpha remains byte-for-byte preserved. This release is retained while
-the ordered examples-browser work proceeds, with no new component/model work.
+This is local workstation qualification, with representative actual native
+input plus deterministic mounted/agent checks. Flattened mounted browser-body
+checks do not claim native centering; native captures qualify centering separately.
+All62 thumbnail raster tests cover nonblank/fitting generated drawings, with
+representative native previews observed. Owner walkthrough, participant/
+screen-reader/IME acceptance, downloaded Gatekeeper/quarantine and separate-
+account installation remain outside these receipts; existing owner/clean-account
+deferrals remain in force. No Developer ID/notarization, public upload or push
+is claimed. Owned test sessions close normally and owner work is preserved.

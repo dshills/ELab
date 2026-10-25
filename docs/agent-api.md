@@ -357,3 +357,12 @@ See [button timing and contracts](momentary-buttons.md).
 width. Examples `comparator-threshold` and `comparator-counter` expose the
 same controls to users and agents; state/current readings are in
 `mixed.controls`. See [comparator contracts](comparators.md).
+
+## Example browser
+
+The [example browser](example-browser.md) adds session-only category, search,
+visibility and selection mutations, plus the pure `example.preview` SVG query.
+The catalog now has 187 commands. Existing `examples.list` metadata and protected
+`example.load` behavior are retained. Shared example-info, example-preview and
+project-work schemas keep ordinary enumeration within its existing 64 KiB bound;
+resolve `$ref` values through the returned local schema registry.

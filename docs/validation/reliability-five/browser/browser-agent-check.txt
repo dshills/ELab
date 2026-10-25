@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/reliability-five/browser-agent-check.py", line 3, in <module>
+    root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/reliability-five';spec=importlib.util.spec_from_file_location('client',root/'scripts/viewport-fit-demo.py');v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
+                                                                                                                                                                                                                                ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "<frozen importlib._bootstrap_external>", line 751, in exec_module
+  File "<frozen importlib._bootstrap>", line 549, in _call_with_frames_removed
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 14, in <module>
+    from validation_artifacts import discovery_summary
+ModuleNotFoundError: No module named 'validation_artifacts'

@@ -123,3 +123,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [Queued field callback ownership](110-queued-field-origin.md): reproduced text/number queue-context defect, private SDK elab14 repair and passing full framework/application quality. Owner returned and requested a stop; new candidate/native checks are deferred and the existing release remains preserved.
 
 - [PWM, amplifier dynamics, shift registers and sound plan](111-hobbyist-devices-plan.md): the four additions following the H-bridge; [model and command guide](../docs/hobbyist-devices.md) documents examples, shared controls, numerical scope and explicit audio preview.
+
+- [Reliability, workflow, release and examples closeout](116-reliability-release-and-examples-plan.md): all five ordered items complete; ELab 0.195.3 /264 unsigned download, unchanged 53 component kinds and 62 examples, shared browser commands, native keyboard/mouse/save checks, full race/rendered gates and extracted offline qualification.

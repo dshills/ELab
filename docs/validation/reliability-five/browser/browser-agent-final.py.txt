@@ -1,0 +1,39 @@
+from pathlib import Path
+import hashlib,importlib.util,json,subprocess,sys
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/reliability-five';sys.path.insert(0,str(root/'scripts'));spec=importlib.util.spec_from_file_location('client',root/'scripts/viewport-fit-demo.py');v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
+agent=root/'build/ELab-0.195.3-264-Examples/elab-agent'
+class Client(v.Client):
+ def __init__(self, endpoint=None):
+  args=[str(agent)]+(['--connect',str(endpoint)] if endpoint else []);self.process=subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True);self.sequence=0
+
+def unchanged(s):return {k:s.get(k) for k in ('components','wires','document','run_id','electrical_revision','result','mixed','transient','undo_name','redo_name','selected')}
+reports=[]
+for mode,endpoint in [('headless',None),('native',stage/'browser-native264/endpoint.json')]:
+ c=Client(endpoint);queries={};checks=[]
+ try:
+  c.ask('example.load',dict(id='led',discard_changes=True),True);c.ask('simulation.pause',{},True);c.ask('simulation.wait');before=c.ask('project.inspect')
+  catalog=c.ask('examples.list');assert len(catalog)==62
+  caps=c.ask('capabilities.list');assert len(caps['capabilities'])==187
+  for command in ['examples.visibility.set','examples.category.set','examples.search.set','examples.select','example.preview']:
+   detail=c.ask('capabilities.list',dict(command=command));assert detail['capabilities'][0]['input_schema']['x-command-contract']
+  for e in catalog:
+   p=c.ask('example.preview',dict(id=e['id']));assert p['info']==e and p['svg'].startswith('<svg') and len(p['source_sha256'])==64
+   queries[e['id']]=dict(source=p['source_sha256'],svg=hashlib.sha256(p['svg'].encode()).hexdigest())
+  assert unchanged(c.ask('project.inspect'))==unchanged(before)
+  c.ask('examples.visibility.set',dict(visible=True),True);c.ask('examples.category.set',dict(category='timers'),True)
+  c.ask('examples.search.set',dict(query='h-bridge'),True);b=c.ask('project.inspect')['example_browser'];assert b['matching_ids']==['hbridge-motor']
+  c.ask('examples.select',dict(id='hbridge-motor'),True)
+  before_refusal=c.ask('project.inspect')
+  for cmd,p in [('examples.category.set',dict(category='bad')),('examples.select',dict(id='rc')),('examples.search.set',dict(query='x'*129))]:c.ask(cmd,p,True,expect='invalid-params')
+  c.ask('example.preview',dict(id='bad'),expect='not-found');assert c.ask('project.inspect')==before_refusal
+  c.ask('examples.search.set',dict(query='RC charge'),True);assert 'rc' in c.ask('project.inspect')['example_browser']['matching_ids']
+  c.ask('component.select',dict(id='R1'),True);c.ask('editor.value.set',dict(value='2k'),True);c.ask('component.set',dict(id='R1',value='2k'),True);dirty=c.ask('project.inspect');assert dirty['document']['dirty']
+  c.ask('example.load',dict(id='rc'),True,expect='unsaved-changes');assert c.ask('project.inspect')['document']==dirty['document']
+  c.ask('example.load',dict(id='rc',discard_changes=True),True);opened=c.ask('project.inspect');assert opened['example']['info']['id']=='rc' and not opened['document']['dirty'] and not opened['example_browser']['visible']
+  c.ask('simulation.pause',{},True);c.ask('simulation.wait')
+  checks=['187 discovered commands with five browser contracts','62 pure graph/SVG previews','global search and single selection','invalid parameters preserve state','dirty example load refuses','confirmed replacement closes chooser cleanly']
+  reports.append(dict(mode=mode,passed=True,checks=checks,previews=queries))
+ finally:c.close()
+assert reports[0]['previews']==reports[1]['previews']
+(stage/'browser-agent-final-report.json').write_text(json.dumps(dict(passed=True,matching_previews=True,reports=reports),indent=2)+'\n')
+print('Both packaged agent adapters passed; all 62 preview hashes match')

@@ -1,0 +1,131 @@
+{
+  "example_id": "led",
+  "recordings": {
+    "entries": [],
+    "selected_index": -1,
+    "viewing": false
+  },
+  "paused": true,
+  "scope_probes": {
+    "ids": []
+  },
+  "format": "elab.schematic",
+  "version": 4,
+  "graph": {
+    "components": [
+      {
+        "id": "V1",
+        "kind": "dc-source",
+        "name": "DC source",
+        "terminals": [
+          "positive",
+          "negative"
+        ],
+        "position": {
+          "x": -200,
+          "y": 0
+        },
+        "value": 5,
+        "unit": "V",
+        "model": "ideal-dc.v1",
+        "rotation": 0
+      },
+      {
+        "id": "R1",
+        "kind": "resistor",
+        "name": "Resistor",
+        "terminals": [
+          "1",
+          "2"
+        ],
+        "position": {
+          "x": 0,
+          "y": -110
+        },
+        "value": 2000,
+        "unit": "Ω",
+        "model": "ideal-resistor.v1",
+        "rotation": 0
+      },
+      {
+        "id": "D1",
+        "kind": "led",
+        "name": "Red LED",
+        "terminals": [
+          "anode",
+          "cathode"
+        ],
+        "position": {
+          "x": 200,
+          "y": 0
+        },
+        "value": 0,
+        "model": "elab.generic-red-led.v1",
+        "rotation": 0
+      },
+      {
+        "id": "GND",
+        "kind": "ground",
+        "name": "Ground",
+        "terminals": [
+          "reference"
+        ],
+        "position": {
+          "x": 0,
+          "y": 110
+        },
+        "value": 0,
+        "model": "ground.v1",
+        "rotation": 0
+      }
+    ],
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "connected": true
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "D1.anode",
+        "connected": true
+      },
+      {
+        "id": "W3",
+        "from": "D1.cathode",
+        "to": "GND.reference",
+        "connected": true
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "connected": true
+      }
+    ]
+  },
+  "view": {
+    "center": {
+      "x": -26,
+      "y": -9
+    },
+    "zoom": 1.67837078651547
+  },
+  "led_model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  }
+}

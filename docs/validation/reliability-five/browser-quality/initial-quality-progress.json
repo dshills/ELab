@@ -1,0 +1,53 @@
+[
+  {
+    "log": "lint.txt",
+    "command": [
+      "sh",
+      "scripts/lint.sh"
+    ],
+    "exit_code": 0,
+    "wall_s": 23.914593667024747
+  },
+  {
+    "log": "python.txt",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "wall_s": 1.6573275001719594
+  },
+  {
+    "log": "prd.txt",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/prd-audit.py",
+      "--verify",
+      "research/11-prd-implementation-audit.json"
+    ],
+    "exit_code": 0,
+    "wall_s": 0.03038833406753838
+  },
+  {
+    "log": "root-race.jsonl",
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-json",
+      "-timeout=15m",
+      "./..."
+    ],
+    "exit_code": -15,
+    "wall_s": 161.38161745900288,
+    "failed_test_seen": true
+  }
+]
