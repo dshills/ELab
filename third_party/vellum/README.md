@@ -15,12 +15,12 @@ decimal steps, system cursors, event-position/wheel behavior, partial-scroll
 accessibility, divider gestures, disclosure colors, window backgrounds and text
 Undo boundaries. Upstream's newer controls, secure text and focus reveal remain.
 ELab adjusts explicit action padding for the new reserved keyboard-focus border.
-Five compatibility dependency stages follow upstream's 106 stages, numbered
-107–111; preparation verifies the complete ordered recipe and each input/output
-hash. The private derived source is `2c349fc86e1dbf05e96a0e3f1453cb545cc5eb91`.
+Six compatibility dependency stages follow upstream's 106 stages, numbered
+107–112; preparation verifies the complete ordered recipe and each input/output
+hash. The private derived source is `bc599ea5f39b31e45c41bbe003e167612ed43275`.
 
-The active archive is `vellum-f9dee54-elab4.tar.gz`; all four native module
-replacements resolve into `build/.vellum-sdk-f9dee54-elab4`. The lock pins source, complete
+The active archive is `vellum-f9dee54-elab5.tar.gz`; all four native module
+replacements resolve into `build/.vellum-sdk-f9dee54-elab5`. The lock pins source, complete
 archive/manifest, compatibility patch and all bootstrap scripts before execution.
 The SDK is a **private compatibility build**, not an upstream release or a public
 redistribution approval. The SDK compatibility changes add no electronics models,
@@ -49,6 +49,17 @@ bounds, typing, stepping, public ELab commands and simulation limits are unchang
 The exact-input/output stage 111 is part of the [complete compatibility patch](patches/elab-f9dee54-tooltip-compat.patch).
 The preceding elab3 SDK, archive and /255 package remain preserved. Qualification
 and bounded native verification are recorded in the [ELab tooltip checks](../../docs/validation/inspector-tooltip-retirement/README.md).
+
+## Scroll hover lifetime · October 25, 2026
+
+The elab5 SDK cancels visible and pending hover help before wheel scrolling
+moves a field. Queued native callbacks keep their originating hover epoch and
+cannot publish for a new hover on the same widget. A delayed hover also checks
+that its control is actually visible before opening. Numeric values, field
+callbacks, menus, existing public ELab commands and solver limits are unchanged.
+Exact-input/output stage 112 records the native change and queued-timer test.
+See [ordered-work qualification](../../docs/validation/reliability-five/README.md). The preceding SDK/app and
+qualified unsigned release remain preserved.
 
 ## Historical integration records
 

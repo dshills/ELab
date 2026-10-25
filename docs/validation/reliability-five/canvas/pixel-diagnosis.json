@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "original": "baseline-native/ui/buck-0.jpg",
+  "apparently_blank": "baseline-native/ui/raised-blank-0.jpg",
+  "regions": {
+    "schematic": {
+      "bounds": [
+        245,
+        160,
+        1430,
+        715
+      ],
+      "identical": true
+    },
+    "scope": {
+      "bounds": [
+        77,
+        840,
+        1700,
+        930
+      ],
+      "identical": true
+    }
+  },
+  "conclusion": "Full-resolution native screenshot regions are byte-identical; no canvas omission in the stored frame. Full-window visual preview was misleading.",
+  "restored_size": [
+    1761,
+    1215
+  ],
+  "original_size": [
+    1761,
+    1215
+  ],
+  "resized_size": [
+    1401,
+    1005
+  ],
+  "native_captures": 30,
+  "pan_changes_pixels": true,
+  "scope": "Current /256 raw native frames, paused LED and PWM with scope, focus/scroll/inspector changes, viewport pan/fit, Light/Apollo and reversible resize; no demonstrated canvas omission."
+}
