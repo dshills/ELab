@@ -1,0 +1,46 @@
+{
+  "selected": "U1",
+  "paused": true,
+  "run_id": 6,
+  "electrical_revision": 4,
+  "mixed": {
+    "opamp_dynamics": [
+      {
+        "id": "U1",
+        "pole_voltage_v": 1.9999999999999911,
+        "compensation_current_a": 1.0000000000000002e-06,
+        "stored_energy_j": 1.9999999999999828e-09
+      }
+    ],
+    "opamps": [
+      {
+        "id": "U1",
+        "model": {
+          "id": "elab.generic-opamp.v1",
+          "open_loop_gain_v_per_v": 100000,
+          "differential_resistance_ohm": 10000000,
+          "output_resistance_ohm": 50,
+          "active_output_current_limit_a": 0.02,
+          "quiescent_current_a": 0.001,
+          "supply_soft_voltage_v": 0.1,
+          "output_bleed_resistance_ohm": 1000000000,
+          "limitations": "Generic five-pin educational macromodel with differential input resistance, midpoint-centered soft voltage limiting, finite output resistance, bounded active output current, supply-dependent enable and explicit supply currents. A declared 1 Gohm output-to-V- bleed remains with power off or reversed; differential input resistance also remains. No internal bandwidth, slew rate, offset/bias mismatch, common-mode restrictions, protection diodes, noise, thermal behavior, ratings or named physical device. External storage supplies circuit timing; this model cannot qualify physical amplifier speed or stability."
+        },
+        "input_difference_v": 3.9850517524598814,
+        "output_voltage_v": -2.9850517524598814,
+        "supply_voltage_v": 10,
+        "noninverting_current_a": 3.985051752459881e-07,
+        "inverting_current_a": -3.985051752459881e-07,
+        "output_delivered_current_a": -0.0002989036793063058,
+        "positive_supply_current_a": 0.001000900009999,
+        "negative_supply_current_a": -0.0012998036893053057,
+        "power_w": 0.010612863608538513,
+        "state": "powered"
+      }
+    ],
+    "time_s": 0.002,
+    "kcl_residual_a": 1.1149285946143999e-12,
+    "power_residual_w": 2.246524421279831e-12,
+    "stale": false
+  }
+}

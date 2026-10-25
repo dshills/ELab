@@ -1,0 +1,17 @@
+Desktop inventory checked through CUA: no running ELab session at start of qualification. Other owner apps remain running; preserve them. Use a separately profiled owned ELab fixture for final packaged check. Native source review: 182 public commands, 438 sites, zero unknown routes. New numeric/checkbox callbacks carry captured command revision/document generation; audio buttons route shared commands; export chooser routes export.start with exact preview ID. Source inventory is not runtime coverage; native parity and mounted checks supply separate evidence.
+
+Final packaged native check: ELab 0.192.0 /253, separately profiled fixture using the exact clean-source packaged executable. Fixed-argument launcher initially returned a CUA lookup error; the owned endpoint and running-app inventory confirmed successful launch, and CUA attached to the actual packaged app without launching another copy.
+
+Apollo PWM: Frequency/Duty controls, live controller reading, schematic and scope were visible. A native mouse click increased duty 45 to 46 percent; Undo identified pwm configure by user, and paused readings became explicitly stale. An initial requested 0.1 s step was correctly refused by the existing 1000-sample command limit; a 0.002 s bounded step succeeded. No simulation limits were changed.
+
+Light op-amp: the slew follower rendered with optional dynamics enabled, GBW 1000 Hz and slew 1000 V/s, compensation energy and rate. Native checkbox disabled dynamics, removed its two parameter controls and marked paused readings stale. Original equations remain the default for old projects.
+
+Dark shift register: after 0.802 s, shift byte was 0x0F while latch remained 0x00. Native Close switch on SLATCH displayed pending-next-step. A 0.002 s accepted step published latch 0x0F and finite loaded output voltages approximately 4.861 V, preserving tiny KCL/power residuals. The inspector showed Shift 0x0F / latch 0x0F.
+
+Apollo piezo: native Render 250 ms preview changed running to completed, 6044 bytes, current true; it did not start playback. Play and Stop buttons were clicked; the quarter-second playback can finish before a CUA snapshot, so a separate exact public-command receipt verifies macOS AVAudioPlayer accepted playing=true then playing=false, with unchanged live results. No claim of physical audibility or calibrated loudness is made.
+
+Apollo active buzzer: bright default was inactive. sensor.light.set to 1 lux produced 4.6398 V, 4.6403 mA and active=true. Native Render produced another completed 6044-byte preview without autoplay. Source replacement invalidated the preceding piezo preview.
+
+Screenshots/AX observations are under native-ui. Exported buck, shift-register and 555-tone figures were visually inspected for complete page content. Packaged replay independently covers all six examples, fresh reopen, captures, SVG/PNG/PDF and matching WAV exports.
+
+Saved only the disposable fixture drawing as native-alarm.elab, then quit normally with CUA Cmd+Q. Owned endpoint was removed and fresh CUA inventory reported no running ELab. Other owner applications/projects were preserved. Native testing did not modify source or qualified release packages.

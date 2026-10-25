@@ -58,4 +58,24 @@ schema registry. The browser inventory assertion now expects 53 parts. Rendered
 label tests check text containment in full-width label frames; short labels are
 not required to occupy 100 pixels. These checks do not weaken simulation limits.
 
-Package replay and the separately profiled native check follow the source commit; their receipts will be appended before final closeout.
+## Package and native check
+
+ELab **0.192.0 /253** is built from clean source
+`28c13cc365c9687fb03c5c096412febf1ae3e2b3` at `/Users/dshills/Development/projects/ELab/build/ELab-0.192.0-253-Hobbyist/ELab.app`, with its matching agent alongside it.
+Both build-info receipts report that revision and `vcs.modified=false`.
+Strict ad-hoc signature verification passed. This development candidate does
+not replace the qualified unsigned alpha.
+
+The packaged stdio replay captures, saves/fresh-reopens and exports SVG/PNG/PDF
+for all six examples. Both sound examples render and export matching WAV bytes
+without autoplay. `packaged-replay.json` and `artifact-manifest.json` retain
+results and digests. Selected exported figures are kept under `exports/`.
+
+The separately profiled native fixture uses the same packaged executable and
+commands. Saved UI/state evidence and `native-notes.txt` describe the exercised
+controls and remaining observation limits. It was closed normally after testing;
+its owned endpoint is gone. Owner applications/projects were preserved.
+
+The alpha archive remains unchanged, SHA-256
+`d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b`. No public upload/push, Developer ID signing,
+notarization or new physical printer check is claimed.

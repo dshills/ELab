@@ -1,0 +1,62 @@
+The following is a diff from the previous accessibility tree for Window: "ELab · Live electronics" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 286-321
+~				4 text (settable) Light-sensitive buzzer alarm, ID: node:dGl0bGU
+~					258 scroll area node:c2lkZWJhci02LWNvbXBvbmVudA
+~								262 button Selected object, ID: node:c2VsZWN0aW9u, Help: Current choice: BZ1 · Active buzzer ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+~								267 text (settable) BZ1 · Active buzzer, ID: node:aW5zcGVjdG9y
+~								271 container node:aW5zcGVjdG9yLWZpZWxkLXNvdW5kLWZyZXF1ZW5jeQ
+~									272 text (settable) Buzzer tone · Hz, ID: node:c291bmQtZnJlcXVlbmN5LWxhYmVs
+~									273 stepper (settable, integer) Buzzer tone · Hz, Value: 1000, ID: node:c291bmQtZnJlcXVlbmN5
+~								277 text (settable) completed · 6044 bytes · current false, ID: node:YXVkaW8tc3RhdHVz
+~								278 text (settable) ID: node:c291bmQtcmVhZGluZw, Live · 0 V · 0 mA
+Stored 0 nJ · loss 0 mW
+~								279 button Plot voltage, ID: node:cGxvdC12OkJaMQ
+~								280 button Plot current, ID: node:cGxvdC1pOkJaMQ
+~								281 text (settable) Adds a trace; replaces the last when six are shown., ID: node:cGxvdC1oZWxw
+~								282 text (settable) ID: node:cGFydC1hc3N1bXB0aW9ucw, Generic capacitive piezo sounder and DC-powered active buzzer. Passive piezo uses explicit capacitance and leakage; acoustic preview is a normalized illustrative terminal-voltage signal, not calibrated SPL or a mechanical/room simulation. Active buzzer uses a passive voltage-dependent DC load and an ideal acoustic oscillator; no electrical oscillator ripple. Opening or simulating a project never plays audio. Preview rendering, playback, stopping and WAV export are explicit shared commands.
+~								283 text (settable) Position 500, 420 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
+~								284 button Rotate 90°, ID: node:cm90YXRlLXBhcnQ
+~								285 button Duplicate, ID: node:ZHVwbGljYXRlLXBhcnQ
++								286 button Delete selected, ID: node:ZGVsZXRlLW9iamVjdA
++							287 container Live measurements, ID: node:aW5zcGVjdG9yLWdyb3VwLW1lYXN1cmVtZW50cw
++								288 text (settable) Live measurements, ID: node:bWVhc3VyZW1lbnQtdGl0bGU
++								289 text (settable) Plot adds a trace, replacing the last if six are shown. Pin keeps a reading on the sheet., ID: node:bWVhc3VyZW1lbnQtaGVscA
++								290 button Inspect named terminal voltage, ID: node:aW5zcGVjdC10ZXJtaW5hbA, Help: Current choice: Measure a terminal… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								291 button Inspect named electrical net, ID: node:aW5zcGVjdC1uZXQ, Help: Current choice: Measure a net… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								292 button Inspect voltage or current probe, ID: node:aW5zcGVjdC1wcm9iZQ, Help: Current choice: Measure voltage/current… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
++								293 text (settable) BZ1 · sample 0 ms, ID: node:bWVhc3VyZW1lbnQtc291cmNl
++								294 text (settable) Live v:BZ1.positive · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpCWjEucG9zaXRpdmU
++								295 text (settable) Voltage: BZ1.positive - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6QloxLnBvc2l0aXZl
++								296 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkJaMS5wb3NpdGl2ZQ
++									297 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkJaMS5wb3NpdGl2ZQ
++									298 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6QloxLnBvc2l0aXZl
++								299 text (settable) Live v:BZ1.negative · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpCWjEubmVnYXRpdmU
++								300 text (settable) Voltage: BZ1.negative - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6QloxLm5lZ2F0aXZl
++								301 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkJaMS5uZWdhdGl2ZQ
++									302 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkJaMS5uZWdhdGl2ZQ
++									303 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6QloxLm5lZ2F0aXZl
++								304 text (settable) Live v:BZ1 · 0 V, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpCWjE
++								305 text (settable) Voltage: BZ1.positive - BZ1.negative, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6Qlox
++								306 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OkJaMQ
++									307 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OkJaMQ
++									308 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6Qlox
++								309 text (settable) Live i:BZ1 · 0 mA, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpCWjE
++								310 text (settable) Current: BZ1.positive -> positive to negative, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6Qlox
++								311 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOkJaMQ
++									312 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOkJaMQ
++									313 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6Qlox
++								314 button Inspect selected object, ID: node:bWVhc3VyZW1lbnQtY2xlYXI
++							315 container Pinned readings, ID: node:aW5zcGVjdG9yLWdyb3VwLXBpbm5lZA
++								316 text (settable) Pinned live readings, ID: node:cGlubmVkLXJlYWRpbmdzLXRpdGxl
++								317 text (settable) ID: node:cGlubmVkLXJlYWRpbmdzLWhlbHA, Pin up to eight voltage/current readings, then drag a card on the sheet or edit X / Y. Readings always follow the live circuit.
++								318 button Pin a live voltage or current reading, ID: node:cGluLXJlYWRpbmctcHJvYmU, Help: Current choice: Pin a reading… ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+~						237 text (settable) Live control scope, ID: node:c2NvcGUtdGl0bGU
+~						238 text (settable) t = 0 s · network · run 13 · paused, ID: node:c2NvcGUtY2FwdGlvbg
+~						247 text (settable) Amber: BZ1 voltage · Coral: BZ1 sounder current, ID: node:c2NvcGUtbGVnZW5k
+~					248 text (settable) Previous Step completed · 200/200 staged samples, ID: node:c3RlcC13b3JrLXN0YXR1cw
+~				93 text (settable) D1 voltage, ID: node:dm9sdGFnZS10aXRsZQ
+~				94 text (settable) 0 V, ID: node:dm9sdGFnZS12YWx1ZQ
+~				97 text (settable) 0 nW, ID: node:cG93ZXItdmFsdWU
+~				100 text (settable) Network · t = 0 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+~			102 text (settable) 19 components · 17 wires, Help: Light-sensitive buzzer alarm · 19 components · 17 wires · last change: agent.socket, ID: node:Zm9vdGVy
+~			104 text (settable) 48%, ID: node:em9vbQ

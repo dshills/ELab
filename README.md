@@ -6,6 +6,8 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PN
 
 PWM buck conversion, optional op-amp bandwidth/slew limits, an eight-bit shift/latch register, and piezo/active-buzzer audio previews now share the UI and agent commands. Six working examples are listed in [the model and command guide](docs/hobbyist-devices.md). Audio playback is explicit; opening or simulating a circuit stays silent. The qualified alpha below remains preserved.
 
+[Open the 0.192.0 /253 development app](build/ELab-0.192.0-253-Hobbyist/ELab.app). The matching agent is alongside it. Complete electrical, command, race, rendered UI and packaged checks are recorded in [the qualification receipts](docs/validation/hobbyist-devices/README.md).
+
 ## Downloadable release
 
 **ELab 0.181.4 /205 improves rejected component-value feedback.** [Open app](build/releases/ELab-0.181.4-macos-arm64/ELab.app), [download ZIP](build/releases/ELab-0.181.4-macos-arm64.zip), or [verify SHA-256](build/releases/ELab-0.181.4-macos-arm64.zip.sha256). Users and agents receive the same target, range, unit syntax and unchanged accepted value, including current waveform constraints. First-Apply correction and one-step Undo are verified. Existing components, commands, models and file formats are unchanged. See the [repair and checks](research/81-component-value-guidance.md) and [validation receipt](docs/validation/value-guidance-205/report.json). The qualified [0.181.3 /204 first-version package](build/releases/ELab-0.181.3-macos-arm64/ELab.app) remains preserved.

@@ -25,5 +25,12 @@ audit. Numerical accuracy, circuit capacity and per-output work limits are
 unchanged. See [qualification](../docs/validation/hobbyist-devices/README.md)
 and the [model/command guide](../docs/hobbyist-devices.md).
 
-A separate 0.192.0 /253 package, matching-agent replay and owned native check
-follow this clean source checkpoint. The qualified alpha remains preserved.
+ELab 0.192.0 /253 is packaged from clean source commit
+`28c13cc365c9687fb03c5c096412febf1ae3e2b3`, with its matching agent.
+The packaged replay passed all six examples, save/fresh reopen, captures,
+SVG/PNG/PDF and explicit WAV exports. Native checks exercised PWM editing,
+optional dynamics, shift/latch switching, both sounders, and explicit preview
+render/play/stop across Apollo, light and dark themes. The owned fixture was
+saved and closed normally; its endpoint is gone. Receipts, export digests and
+UI evidence are in the qualification directory. The qualified alpha remains
+unchanged; this development candidate has not been publicly uploaded.

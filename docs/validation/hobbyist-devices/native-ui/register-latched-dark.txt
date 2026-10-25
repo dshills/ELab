@@ -1,0 +1,129 @@
+The following is a diff from the previous accessibility tree for Window: "ELab · Live electronics" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 404-414, 416-420, 422-426
+~								262 button Selected object, ID: node:c2VsZWN0aW9u, Help: Current choice: U1 · 8-bit shift / latch register ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+~								267 text (settable) U1 · 8-bit shift / latch register, ID: node:aW5zcGVjdG9y
+~								268 text (settable) Terminals: data, clk, latch, reset_n, oe_n, q0, q1, q2, q3, q4, q5, q6, q7, serial, vcc, gnd, ID: node:cGFydC10ZXJtaW5hbHM
+~								269 text (settable) Model: elab.hobbyist-devices.v1, ID: node:cGFydC1tb2RlbC1pZA
+~								396 text (settable) Shift and latch, ID: node:c2hpZnQtdGl0bGU
+~								397 text (settable) ID: node:c2hpZnQtaGVscA, DATA sampled on rising CLK. Rising LATCH publishes the byte. RESET_N low clears the shift chain; OE_N low enables Q0–Q7. SERIAL always follows the last shift bit.
+~								398 text (settable) ID: node:c2hpZnQtcmVhZGluZw, Shift 0x0F · latch 0x0F
+Parallel outputs enabled: true
+~								399 button Plot U1.data / ground, ID: node:cGxvdC12OlUxLmRhdGE
+~								400 button Plot U1.clk / ground, ID: node:cGxvdC12OlUxLmNsaw
+~								401 button Plot U1.latch / ground, ID: node:cGxvdC12OlUxLmxhdGNo
+~								402 button Plot U1.reset_n / ground, ID: node:cGxvdC12OlUxLnJlc2V0X24
+~								403 button Plot U1.oe_n / ground, ID: node:cGxvdC12OlUxLm9lX24
++								404 button Plot U1.q0 / ground, ID: node:cGxvdC12OlUxLnEw
++								405 button Plot U1.q1 / ground, ID: node:cGxvdC12OlUxLnEx
++								406 button Plot U1.q2 / ground, ID: node:cGxvdC12OlUxLnEy
++								407 button Plot U1.q3 / ground, ID: node:cGxvdC12OlUxLnEz
++								408 button Plot U1.q4 / ground, ID: node:cGxvdC12OlUxLnE0
++								409 button Plot U1.q5 / ground, ID: node:cGxvdC12OlUxLnE1
++								410 button Plot U1.q6 / ground, ID: node:cGxvdC12OlUxLnE2
++								411 button Plot U1.q7 / ground, ID: node:cGxvdC12OlUxLnE3
++								412 button Plot U1.serial / ground, ID: node:cGxvdC12OlUxLnNlcmlhbA
++								413 button Plot U1.vcc / ground, ID: node:cGxvdC12OlUxLnZjYw
++								414 button Plot U1.gnd / ground, ID: node:cGxvdC12OlUxLmduZA
+~								290 text (settable) ID: node:cGFydC1hc3N1bXB0aW9ucw, Generic 8-bit serial-in parallel-out register with separate positive-edge shift and output-latch clocks, active-low shift clear, active-low parallel output enable, and serial cascade output independent of output enable. State starts cleared; power loss clears both registers. Sixteen internal D memories reuse sequential-v1 edge/guard laws; internal data uses ideal logic rails with explicit 1 Gohm loading, while finite 50 ohm drive is applied only at public Q/SERIAL outputs. A logic-v1 inverter maps active-lo
+~								291 text (settable) Position 0, 0 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
+~								415 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmRhdGE
++									416 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmRhdGE
++									417 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuZGF0YQ
++								418 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmNsaw
++									419 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmNsaw
++									420 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuY2xr
+~								421 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmxhdGNo
++									422 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmxhdGNo
++									423 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEubGF0Y2g
++								424 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnJlc2V0X24
++									425 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnJlc2V0X24
++									426 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucmVzZXRfbg
+~								427 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLm9lX24
+~									428 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLm9lX24
+~									429 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEub2Vfbg
+~								430 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnEw
++									431 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnEw
++									432 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTA
++								433 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnEx
++									434 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnEx
++									435 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTE
++								436 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnEy
++									437 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnEy
++									438 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTI
++								439 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnEz
++									440 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnEz
++									441 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTM
++								442 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnE0
++									443 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnE0
++									444 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTQ
++								445 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnE1
++									446 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnE1
++									447 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTU
++								448 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnE2
++									449 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnE2
++									450 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTY
++								451 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnE3
++									452 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnE3
++									453 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEucTc
++								454 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnNlcmlhbA
++									455 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnNlcmlhbA
++									456 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuc2VyaWFs
++								457 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLnZjYw
++									458 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLnZjYw
++									459 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEudmNj
++								460 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlUxLmduZA
++									461 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlUxLmduZA
++									462 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6VTEuZ25k
++								463 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmRhdGE
++									464 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmRhdGE
++									465 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuZGF0YQ
++								466 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmNsaw
++									467 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmNsaw
++									468 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuY2xr
++								469 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmxhdGNo
++									470 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmxhdGNo
++									471 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEubGF0Y2g
++								472 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnJlc2V0X24
++									473 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnJlc2V0X24
++									474 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucmVzZXRfbg
++								475 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLm9lX24
++									476 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLm9lX24
++									477 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEub2Vfbg
++								478 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnEw
++									479 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnEw
++									480 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTA
++								481 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnEx
++									482 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnEx
++									483 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTE
++								484 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnEy
++									485 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnEy
++									486 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTI
++								487 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnEz
++									488 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnEz
++									489 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTM
++								490 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnE0
++									491 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnE0
++									492 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTQ
++								493 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnE1
++									494 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnE1
++									495 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTU
++								496 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnE2
++									497 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnE2
++									498 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTY
++								499 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnE3
++									500 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnE3
++									501 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEucTc
++								502 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnNlcmlhbA
++									503 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnNlcmlhbA
++									504 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuc2VyaWFs
++								505 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLnZjYw
++									506 button Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLnZjYw
++									507 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEudmNj
++								508 row (settable, unknown) node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlUxLmduZA
++									509 button (settable, unknown) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlUxLmduZA
++									510 button (settable, unknown) Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6VTEuZ25k
+~						238 text (settable) t = 0.804 s · network · run 9 · paused, ID: node:c2NvcGUtY2FwdGlvbg
+~					248 text (settable) Step completed · 1/1 staged samples, ID: node:c3RlcC13b3JrLXN0YXR1cw
+~				97 text (settable) 4.02e-07 nW, ID: node:cG93ZXItdmFsdWU
+~				100 text (settable) Network · t = 0.804 s · paused, ID: node:cmVhZGluZy1zdGF0dXM
+~			102 text (settable) 62 components · 53 wires, Help: Serial shift and parallel latch · Unsaved · 62 components · 53 wires · last change: agent.socket, ID: node:Zm9vdGVy
