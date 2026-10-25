@@ -74,6 +74,11 @@ intervals stay short enough for live work; the DC example uses 100 µs samples.
 The PWM electrical regression covers 40 ms at each of three wiper positions,
 including both extreme duty settings, with the same accuracy and work limits.
 
+Schematic exports and printing include every saved motor parameter and the
+rotor mode. Long parts descriptions wrap inside their column, and narrow
+schematics use a single column. This also keeps winding and battery details
+readable without crossing neighboring entries.
+
 Tests check analytic steady speed, load lines, locked RL current, power/energy,
 private-state ownership, live continuity and capture integrity. The event locator
 reuses an accepted unchanged lower bracket instead of re-integrating its prefix

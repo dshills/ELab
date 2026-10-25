@@ -467,3 +467,16 @@ Final post-wording goimports/staticcheck passes; two newly generalized Go error
 strings were lowercased to satisfy ST1005. No behavior changed. The packaged
 candidate will identify this final wording commit, while full regression logs
 retain their original source baselines.
+
+Clean candidate 0.190.0 /247 built from 7e9dc320 with strict ad-hoc signature
+verification and matching agent; all ten final packaged stdio example replays
+pass, including mathematical readings, live continuity, captures, fresh reopen
+and SVG/PNG/PDF. Visual inspection then reproduced a real omission: motor
+parts-list entries lacked their saved parameters. A regression fails for both
+free/locked motors in DC/PWM examples. The repair includes R, L, Ke/Kt, inertia,
+friction, load and rotor mode. Bounded multiline parts descriptions prevent
+column overlap; narrow diagrams use one column. No simulation or UI code changes.
+The new checks pass three race repeats in 1.421 s; all export/schematic/parts
+regressions pass in 23.434 s; strict XML/motor checks pass in 1.589 s and
+goimports/staticcheck pass. Repackaging as 0.190.1 /248 preserves /247 and the
+qualified alpha. Actual native interaction checks remain for the final package.

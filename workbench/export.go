@@ -198,7 +198,8 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		maxX, maxY = math.Max(maxX, max.X+25), math.Max(maxY, max.Y+25)
 	}
 	diagramBottom := maxY
-	maxY += 55 + float64((len(g.Components)+1)/2)*24
+	partLines, partsHeight := schematicPartsList(g.Components, maxX-minX)
+	maxY += partsHeight
 	minY -= 50
 	width, height := maxX-minX, maxY-minY
 	var b strings.Builder
@@ -517,44 +518,8 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		}
 	}
 	fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="15">Components · generic educational models</text>`, minX+15, diagramBottom+19)
-	for i, p := range g.Components {
-		x := minX + 15 + float64(i%2)*width/2
-		y := diagramBottom + 44 + float64(i/2)*24
-		text := p.ID + " · " + p.Name
-		if p.Kind == "net-label" {
-			text += " · " + p.Label
-		}
-		if p.Unit != "" {
-			text += " · " + displayPartValue(p)
-		}
-		if p.Kind == "transformer" {
-			c := p.Power.Transformer
-			polarity := "same dots"
-			if c.Reversed {
-				polarity = "reversed secondary"
-			}
-			text += fmt.Sprintf(" · Ns/Np %.6g · Lp %.6g H · k %.6g · R %.6g/%.6g Ω · %s", c.Ratio, c.Inductance, c.Coupling, c.PrimaryResistance, c.SecondaryResistance, polarity)
-		}
-		if p.Kind == "optocoupler" {
-			text += fmt.Sprintf(" · CTR %.6g A/A", p.Power.Optocoupler.CTR)
-		}
-		if p.Kind == "battery" {
-			text += fmt.Sprintf(" · startup %.6g%% · %.6g mAh · ESR %.6g Ω", p.Power.Battery.Charge*100, p.Power.Battery.CapacityAh*1000, p.Power.Battery.Resistance)
-		}
-		if IsSensorKind(p.Kind) {
-			unit := "lux"
-			if p.Kind == "thermistor" {
-				unit = "°C"
-			}
-			text += fmt.Sprintf(" · %.6g %s", sensorEnvironment(p), unit)
-		}
-		if p.InitialVoltage != nil {
-			text += fmt.Sprintf(" · initial %.4g V", *p.InitialVoltage)
-		}
-		if p.InitialCurrent != nil {
-			text += fmt.Sprintf(" · initial %.4g A", *p.InitialCurrent)
-		}
-		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, x, y, html.EscapeString(text))
+	for _, line := range partLines {
+		fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="12">%s</text>`, minX+line.x, diagramBottom+line.y, html.EscapeString(line.text))
 	}
 	b.WriteString("</g>")
 	for _, marker := range MakeDisplayFrame(g, display, 0).Markers {
