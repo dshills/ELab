@@ -35,7 +35,7 @@ func nativeRailLabelsSmoke(ctx context.Context, a *app.Application, s *screen) e
 				return
 			}
 		}
-		done <- nil
+		done <- smokeUI(s, "inspector-section-component", nil)
 	}); err != nil {
 		return err
 	}
@@ -150,7 +150,7 @@ func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen
 					return
 				}
 			}
-			done <- nil
+			done <- smokeUI(s, "inspector-section-simulation", nil)
 		}); err != nil {
 			return err
 		}

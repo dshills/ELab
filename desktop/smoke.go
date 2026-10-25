@@ -304,6 +304,14 @@ rendered:
 }
 
 func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
+	// This batch helper supplies controlled Change events directly and can
+	// navigate an inspector before its native editors mount. Do not flush a
+	// retired editor from the preceding page. Private text settlement is tested
+	// separately by mounted input tests, CUA, and nativeValueApplySmoke, whose
+	// Apply action deliberately bypasses this semantic fixture helper.
+	settleField, settleNumber := s.settleField, s.settleNumber
+	s.settleField, s.settleNumber = nil, nil
+	defer func() { s.settleField, s.settleNumber = settleField, settleNumber }()
 	// Batch fixtures run before their numeric widgets are mounted. They place
 	// already accepted coordinates through the public command; they do not test
 	// private input settlement. Mounted tests and native replay cover that path.
@@ -1505,8 +1513,8 @@ func nativeAuditSmoke(ctx context.Context, a *app.Application, s *screen) error 
 			checked <- err
 			return
 		}
-		if !matchingPart(s.view(), "dc-source") {
-			checked <- fmt.Errorf("native battery alias absent")
+		if !matchingPart(s.view(), "battery") {
+			checked <- fmt.Errorf("native battery search result absent")
 			return
 		}
 		if err := smokeUI(s, "part-search", &ui.ChangeEvent{Text: ""}); err != nil {

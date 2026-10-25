@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "test_compilation_source": "6a1110bb36a4061e915b21989ad5b80c10c45caf",
+  "counts": {
+    "root-race.jsonl": {
+      "top_level": 861,
+      "including_subtests": 1940
+    },
+    "desktop-race.jsonl": {
+      "top_level": 332,
+      "including_subtests": 765
+    },
+    "mounted-race.jsonl": {
+      "top_level": 453,
+      "including_subtests": 1337
+    }
+  },
+  "later_changes": "Smoke-only inspector/publication/bulk-fixture prerequisites plus a new focused fixture regression; final vet/build include them. Python pin-handling fix rechecked in python-final.txt. Production commands and models unchanged.",
+  "focused_regressions": [
+    "TestSmokeBatchControlsDoNotFlushUnmountedEditors",
+    "TestVerificationDeferredFieldsCompleteOnlyOnce",
+    "TestValueApplyWaitsForNativeFieldAndUsesSharedCommands"
+  ],
+  "native_smoke": "Qualified separately on a clean candidate before packaging"
+}

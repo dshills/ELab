@@ -114,7 +114,7 @@ func nativeRectifierSmoke(ctx context.Context, a *app.Application, s *screen) er
 	ready := make(chan error, 1)
 	if err := a.PostWait(ctx, func() {
 		err := smokeUI(s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.rectifier"})
-		if err == nil && s.pendingCommand == "example.rectifier" {
+		if err == nil && s.pendingCommand != "" {
 			err = smokeUI(s, "discard-continue", nil)
 		}
 		ready <- err

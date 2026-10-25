@@ -42,3 +42,22 @@ control. It now additionally requires a newer native AX publication displaying
 the corrected text before Apply, and retains selected/draft/resistance diagnostics
 on failure. It does not retry edits or relax electrical tolerances. The original
 failed run is retained for comparison; a new clean candidate is tested next.
+
+Full source quality passes: 861 portable, 332 ordinary-desktop and 453 rendered-
+desktop top-level tests (1,940 / 765 / 1,337 including subtests). Race checking,
+both desktop vet modes, lint, Python, PRD and build pass. The full Go suites
+compiled the /257 source; later changes are confined to smoke prerequisites and
+its regression. Final vet/build include those changes, with focused regressions
+and native smoke checked separately. Exact scope and raw logs are in quality/.
+
+The diagnostic native smoke now completes through lifecycle shutdown. Repairs
+are limited to test assumptions: explicitly choosing Document for job status and
+Simulate/Inspect for text geometry, expecting the current battery search result,
+and observing stable corrected Cocoa publication before native Apply. Bulk
+fixtures supply accepted controlled edits before editors mount, so they no longer
+flush a retired editor from the previous page. Actual native Apply and the
+mounted/physical input tests retain normal settlement; a regression proves the
+helper restores those callbacks. No retry silently replays a failed user edit.
+The earlier failed passes are retained rather than relabeled as successes.
+
+A fresh clean package repeats the native/offline checks before ZIP qualification.

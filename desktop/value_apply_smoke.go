@@ -19,11 +19,14 @@ import (
 // covers mounted inspector bindings; it does not certify an external reader or
 // explain why a separate CUA projection omits some of these controls.
 func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Application, s *screen) error {
+	parent := ctx
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	waitControls := func(stage, value string, afterGeneration uint64) ([]cogent.AccessibilityElement, error) {
 		tick := time.NewTicker(20 * time.Millisecond)
 		defer tick.Stop()
+		var observedGeneration uint64
+		var stableSince time.Time
 		for {
 			inspection, err := cogent.InspectAccessibility(ctx, "main")
 			if err != nil {
@@ -42,6 +45,10 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 					ready = ready && element.Value == value
 				}
 			}
+			if !ready || inspection.Generation != observedGeneration {
+				observedGeneration, stableSince = inspection.Generation, time.Now()
+			}
+			ready = ready && time.Since(stableSince) >= 100*time.Millisecond
 			if ready {
 				evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.controls", "stage": stage, "native_elements": len(inspection.Elements), "controls": controls})
 				log.Print(string(evidence))
@@ -97,6 +104,14 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 		return state.Circuit.Resistance == 2200 && state.Result != nil && !state.Result.Stale && math.Abs(state.Result.Current-0.001345) < 0.000002
 	})
 	if err != nil {
+		message := make(chan string, 1)
+		if sampleErr := a.PostWait(parent, func() { message <- s.errorMessage }); sampleErr == nil {
+			select {
+			case notice := <-message:
+				return fmt.Errorf("native inspector Apply did not complete: %w; selected=%q draft=%q resistance=%g diagnostics=%+v notice=%q", err, state.Selected, state.Drawing.Value, state.Circuit.Resistance, state.Diagnostics, notice)
+			case <-parent.Done():
+			}
+		}
 		return fmt.Errorf("native inspector Apply did not complete: %w; selected=%q draft=%q resistance=%g diagnostics=%+v", err, state.Selected, state.Drawing.Value, state.Circuit.Resistance, state.Diagnostics)
 	}
 	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "refused_native_controls": refusedControls, "invalid_value_preserved_state": true, "focus_requests": focus.Requests, "focus_admissions": focus.Admissions, "observed_focus_id": focus.FocusedID, "observed_focus_generation": focus.Generation, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
