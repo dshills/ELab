@@ -42,6 +42,14 @@ func (s *screen) colorsForTheme(mode string) appPalette {
 
 func (s *screen) scopedTheme(p appPalette, reducedMotion bool) ui.Theme {
 	theme := desktopTheme()
+	// Composite native choices read the scoped default for their private rows,
+	// rather than inheriting the outer Node's explicitly remapped ink.
+	theme.Default.Foreground = ui.Some(p.Ink)
+	if p.FontFamily != "" {
+		typography := theme.Default.Typography.Value
+		typography.Family = p.FontFamily
+		theme.Default.Typography = ui.Some(typography)
+	}
 	theme.Palette = ui.Some(ui.Palette{Window: p.Paper, Panel: p.Paper, Field: p.Surface, Popup: p.Paper,
 		Ink: p.Ink, Secondary: p.Muted, Line: toolbarOutline(p), Accent: p.Accent, AccentInk: accentForeground(p.Accent)})
 	theme.ReducedMotion = s.reduceMotion.Load() || reducedMotion

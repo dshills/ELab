@@ -82,6 +82,9 @@ var commonSchemas = []struct {
 	ID   string
 }{
 	{reflect.TypeOf(Point{}), "urn:elab:point:1"},
+	{reflect.TypeOf(ExampleInfo{}), "urn:elab:example-info:1"},
+	{reflect.TypeOf(ExamplePreview{}), "urn:elab:example-preview:1"},
+	{reflect.TypeOf(ProjectWork{}), "urn:elab:project-work:1"},
 	{reflect.TypeOf(struct{}{}), "urn:elab:empty-input:1"},
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},

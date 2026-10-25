@@ -64,9 +64,13 @@ func (s *screen) openBrowserExample(id string) {
 func (s *screen) exampleSearchNode(state workbench.Snapshot) ui.Node {
 	f := &s.exampleSearch
 	f.ID, f.Label, f.Text = "example-search-box", "Search examples", state.ExampleBrowser.Query
-	f.Placeholder = "Circuit, component or topic"
+	f.Placeholder = "Search all examples"
 	f.Help = "Search all examples. Return shows matching circuits; arrow keys choose and Return opens."
-	f.Style = ui.Style{GrowX: ui.Some(float32(1)), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter)}
+	// Bound both the row and its editor before text shaping; a growing row
+	// alone leaves the native editor at its narrow intrinsic word width.
+	f.Style = ui.Style{MinSize: ui.Some(ui.Size{Width: 508}), MaxSize: ui.Some(ui.Size{Width: 508}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(6)), Align: ui.Some(ui.AlignCenter)}
+	f.InputStyle = ui.Style{MinSize: ui.Some(ui.Size{Width: 440, Height: 20}), MaxSize: ui.Some(ui.Size{Width: 440, Height: 20}), Padding: ui.Some(ui.UniformInsets(6))}
+	f.ClearStyle = ui.Style{MinSize: ui.Some(ui.Size{Width: 24, Height: 28}), MaxSize: ui.Some(ui.Size{Width: 24, Height: 28}), Padding: ui.Some(ui.UniformInsets(0)), Border: ui.Some(ui.Border{})}
 	f.Change = func(e ui.SearchEvent) {
 		r := s.invoke("examples.search.set", workbench.SearchParams{Query: e.Text})
 		if r.Error == nil {
@@ -168,7 +172,11 @@ func (s *screen) exampleBrowserView(state workbench.Snapshot) ui.Node {
 		filter := ui.Node{ID: "example-category", Kind: ui.Selector, Options: categories, SelectedID: b.Category, Accessibility: ui.Accessibility{Name: "Example category", Help: "Choosing a category clears search. Search covers all categories."}, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 208}), MaxSize: ui.Some(ui.Size{Width: 208})}, Change: func(e ui.ChangeEvent) {
 			s.invoke("examples.category.set", workbench.PartCategoryParams{Category: e.SelectedID})
 		}}
-		count := fmt.Sprintf("%d examples · arrows choose · Return opens", len(b.MatchingIDs))
+		noun := "examples"
+		if len(b.MatchingIDs) == 1 {
+			noun = "example"
+		}
+		count := fmt.Sprintf("%d %s · arrows choose · Return opens", len(b.MatchingIDs), noun)
 		if strings.TrimSpace(b.Query) != "" {
 			count += " · searching all categories"
 		}

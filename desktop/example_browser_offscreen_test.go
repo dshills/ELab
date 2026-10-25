@@ -63,6 +63,13 @@ func TestMountedExampleBrowserFieldsPreviewAndActionsFitAllThemes(t *testing.T) 
 			theme.Default.Background = ui.Some(color.NRGBA{})
 			m := newMountedControlWindowSize(t, s, func() ui.Node { return exampleBrowserBody(s) }, 840, 760, theme, func(c *cogent.ManualConfig) { c.GPUSceneRendering = true })
 			body := mountedControlElement(t, m, exampleBrowserID).Bounds
+			search := mountedControlElement(t, m, "example-search").Bounds
+			if search.Dx() < 400 || search.Dy() > 48 {
+				t.Fatal("search wrapped or shrank to its intrinsic word width", search)
+			}
+			if full := s.view(); full.Theme == nil || !full.Theme.Default.Foreground.Set || full.Theme.Default.Foreground.Value != paletteForTheme(mode).Ink {
+				t.Fatal("native collection rows lack the current theme's ink")
+			}
 			if body.Empty() || !body.In(image.Rect(0, 0, 840, 760)) {
 				t.Fatal("browser body escaped the compact viewport", body)
 			}
