@@ -125,6 +125,23 @@ class RuntimeIsolationTests(unittest.TestCase):
             isolation.bundle_tree(app)
         self.assertEqual(target.read_text(), 'original')
 
+    def test_post_signing_bytes_require_an_independent_exact_pin(self):
+        app, executable = self.bundle()
+        original = isolation.digest(executable)
+        executable.write_bytes(b'owned executable with an ad-hoc signature')
+        sealed = isolation.digest(executable)
+        self.assertNotEqual(original, sealed)
+        self.assertEqual(isolation.bundle_executable(app, sealed), executable)
+        for pin in [None, original, '', '0'*64, 'bad', sealed.upper()]:
+            with self.subTest(pin=pin), self.assertRaisesRegex(ValueError, 'mismatch'):
+                isolation.bundle_executable(app, pin)
+        manifest = app/'Contents/Resources/APP_MANIFEST.json'
+        data = json.loads(manifest.read_text())
+        data['source_binary_sha256'] = 'invalid'
+        manifest.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, 'mismatch'):
+            isolation.bundle_executable(app, sealed)
+
     def test_executable_cannot_escape_bundle_and_copy_modes_are_evidence(self):
         app, executable = self.bundle()
         before = isolation.bundle_tree(app)

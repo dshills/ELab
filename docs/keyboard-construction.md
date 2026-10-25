@@ -32,3 +32,21 @@ A successful native Pause/Resume action explicitly continues focus to the replac
 The [current-run review](../research/ui-audit/keyboard-inspector/README.md) and [checkpoint receipt](validation/keyboard-inspector-validation.json) record actual search/placement, unit-bearing value apply/undo, and clock-focus checks. CUA omitted several visible selected-component controls from its accessibility tree even while Tab reached them; this unresolved discrepancy prevents full assistive-technology acceptance. Physical pointer/wheel, IME, dialog restoration and complete RC/recovery scenarios remain unqualified.
 
 The 0.101.0 pass gives rail labels bounded containers, repairing the observed long-line clipping without changing label IDs, text, focus order or commands. Native shaped-text bounds and default-window light/dark captures qualify the bounded fix. See [rail text review](../research/ui-audit/rail-labels/README.md). The CUA accessibility omission remains open; a separate native Cocoa probe sees the selected controls, which does not establish reader acceptance.
+
+## Current /257 keyboard qualification
+
+The [October 25 workflow receipt](validation/reliability-five/workflow/report.json)
+repeats construction and four named wires using physical keyboard input. Invalid
+0 Ω is refused; 2 kΩ applies, Undo/Redo restores the right values, and Resume
+shows 1.477 mA. Cmd+S saves `Keyboard LED.elab` with one suffix. The dialog
+returns focus to Pause, and Tab reaches the component category. The matching
+packaged agent freshly reopens the exact graph cleanly. These cases supersede
+the older doubled-filename and missing post-dialog-focus observations above.
+
+In the RC example, keyboard sample steps reach 10 ms and 3.1606 V. Keyboard
+cursor entries of 0 ms and 10 ms show Δt = 10 ms. New replaces the untouched
+example without a save prompt; an edited restoration shows the protected
+Save/Discard/Cancel decision, and Escape preserves the graph. Dependent native
+menu choices were observed before continuing; fast input batches are not a
+latency or keystroke-throughput qualification. Accessibility participant/IME
+and separate-account checks remain outside this engineering evidence.

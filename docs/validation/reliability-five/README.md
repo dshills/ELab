@@ -17,3 +17,19 @@ Native verification and complete suite results follow at closeout.
 
 The current alpha and /256 development package remain preserved. This source
 checkpoint does not promote a release or claim all five ordered items complete.
+
+Item 3: [native keyboard and four-client evidence](workflow/report.json) passes.
+All 45 external conformance processes exit normally. The keyboard build's saved
+project freshly reopens through the matching packaged agent with 2000 Ω and
+1.476723549 mA. Invalid edits, correction, Undo/Redo, native save focus, RC
+cursors and protected replacement Cancel are covered. The owned session closes
+through the public command and its shutdown receipt is retained.
+
+The /257 copied-runtime smoke stops at an obsolete fixture assumption: file
+open succeeds cleanly, but the smoke searches the current Inspect page for a
+status now in Document. The smoke now explicitly navigates to Document before
+checking status, as the ordinary file-workflow test already does. No file or
+model behavior changes. The original failure is retained. Ad-hoc signing also
+changes the source executable's bytes; the runtime harness now accepts only an
+explicit independent post-signing pin for such packages and records both hashes.
+The old strict source-hash check remains the default. Release rerun follows.

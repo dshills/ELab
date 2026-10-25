@@ -42,3 +42,10 @@ python3 -B scripts/package_review.py \
 
 
 A separate [exact /165 LaunchServices smoke observation](validation/launchservices-165/README.md) verifies macOS `open` reaches the extracted app's full native smoke success event and the same stage journal. It observes the exact native PID, endpoint removal and subsequent process absence. It does not infer target exit status from `open -W`, nor claim that a LaunchServices child inherits the earlier sandbox policy. Smoke-specific isolation differs from ordinary no-argument/default-configuration startup; clean-account, quarantine and distribution gates remain open.
+
+For bundles whose ad-hoc signature changes the Mach-O bytes after the packager
+records `source_binary_sha256`, supply `--app-executable-sha256` from the separate
+qualified package receipt. The harness checks this exact post-signing identity
+before copying and records both hashes. Without that explicit pin it retains
+the original source-hash equality requirement; it never treats an arbitrary
+signature or a self-reported replacement hash as sufficient provenance.

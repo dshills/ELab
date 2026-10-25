@@ -1,0 +1,1001 @@
+{
+  "inspector_section": "component",
+  "workspace_layout": {
+    "schematic_fraction": 0.65
+  },
+  "viewport": {
+    "width_px": 1199,
+    "height_px": 579,
+    "registered": true,
+    "following": false
+  },
+  "pulse_timings": [
+    {
+      "source_kind": "pulse-source",
+      "shared": true,
+      "id": "V1",
+      "frequency_hz": 10,
+      "period_s": 0.1,
+      "duty_percent": 50,
+      "frequency_text": "10 Hz",
+      "duty_text": "50 %"
+    }
+  ],
+  "verification_input_modes": [
+    "auto",
+    "charge",
+    "discharge"
+  ],
+  "live_input_modes": [
+    "auto",
+    "charge",
+    "discharge"
+  ],
+  "dc_sweep": {
+    "settings": {
+      "component_id": "V1",
+      "parameter": "voltage",
+      "start": "0 V",
+      "stop": "5 V",
+      "points": 51
+    },
+    "targets": [
+      {
+        "component_id": "V1",
+        "parameter": "voltage",
+        "label": "V1 \u00b7 DC bias",
+        "unit": "V",
+        "minimum": -12,
+        "maximum": 12
+      },
+      {
+        "component_id": "V1",
+        "parameter": "frequency",
+        "label": "V1 \u00b7 AC frequency / 1 V excitation",
+        "unit": "Hz",
+        "minimum": 0.01,
+        "maximum": 1000000000
+      },
+      {
+        "component_id": "R1",
+        "parameter": "resistance",
+        "label": "R1 \u00b7 Resistance",
+        "unit": "\u03a9",
+        "minimum": 10,
+        "maximum": 100000
+      }
+    ],
+    "available_probes": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:R1.1",
+        "label": "R1.1 / ground",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.2",
+        "label": "R1.2 / ground",
+        "unit": "V",
+        "positive": "R1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1",
+        "label": "R1 voltage",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "i:R1",
+        "label": "R1 current",
+        "unit": "A",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1.2",
+        "label": "C1.2 / ground",
+        "unit": "V",
+        "positive": "C1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      }
+    ],
+    "operations": [],
+    "selected_operation": "",
+    "visible": false,
+    "trace_id": ""
+  },
+  "source_annotations": [
+    {
+      "id": "V1",
+      "position": {
+        "x": -584,
+        "y": -22
+      },
+      "lines": [
+        "V1 | pulse (ideal edges)",
+        "low 0 V | high 5 V",
+        "high 50 ms | low 50 ms",
+        "configured | live stale"
+      ],
+      "state": "stale"
+    }
+  ],
+  "project_work": {
+    "cancelable": false,
+    "associated_with_current_document": true,
+    "artifact_sha256": "3117724d1ab065531cfda3d8da3ea1899cf9aa18b1018bf7d6b4b6b1966143ed",
+    "id": "project-2",
+    "command": "project.save",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "user",
+    "path": "/Users/dshills/Development/projects/ELab/build/reliability-five/native/Keyboard LED.elab",
+    "input_revision": 88,
+    "command_revision": 66,
+    "document_generation": 3,
+    "bytes": 2534,
+    "result_document_generation": 3
+  },
+  "example": {
+    "info": {
+      "id": "rc",
+      "title": "RC charge and discharge",
+      "question": "How quickly does a capacitor charge and discharge?",
+      "expected": "Capacitor voltage changes smoothly; switching from charge to discharge reverses current while preserving voltage at the switching instant.",
+      "try": "Pause, step 10 ms, then choose Discharge. Increase R1 or C1 to slow the response.",
+      "limitation": "Ideal capacitor/resistor with zero ESR and leakage; this example uses an ideal source edge."
+    },
+    "modified": false
+  },
+  "diagnostic_presentation": {
+    "details_visible": false,
+    "items": []
+  },
+  "display": {
+    "preferences": {
+      "voltage_color": false,
+      "voltage_range_v": 5,
+      "current_cues": false,
+      "current_motion": false,
+      "reduced_motion": false,
+      "direction": "conventional"
+    },
+    "run_id": 18,
+    "electrical_revision": 15,
+    "time_s": 0.010000000000000002,
+    "animate": false,
+    "wires": [
+      {
+        "id": "W1",
+        "from": "V1.positive",
+        "to": "R1.1",
+        "voltage_v": 5,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      },
+      {
+        "id": "W2",
+        "from": "R1.2",
+        "to": "C1.1",
+        "voltage_v": 3.1606027941427888,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      },
+      {
+        "id": "W3",
+        "from": "C1.2",
+        "to": "GND.reference",
+        "voltage_v": 0,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      },
+      {
+        "id": "W4",
+        "from": "GND.reference",
+        "to": "V1.negative",
+        "voltage_v": 0,
+        "state": "stale",
+        "reason": "Previous accepted live result; resume or restart a valid circuit",
+        "current_reason": "Current direction requires a fresh accepted circuit",
+        "color": "#387d93"
+      }
+    ]
+  },
+  "measurement_inspection": {
+    "result_kind": "none",
+    "available": false,
+    "object_ids": [],
+    "terminal_refs": [],
+    "wire_ids": [],
+    "nets": [],
+    "readings": []
+  },
+  "pinned_readings": [],
+  "limits": {
+    "timers555": 2,
+    "pnp_transistors": 2,
+    "bipolar_transistors_total": 2,
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 2,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "simulated_component_count": 3,
+  "step_work": {
+    "id": "step-10",
+    "status": "completed",
+    "actor": "user",
+    "run_id": 18,
+    "electrical_revision": 15,
+    "actuation_revision": 0,
+    "command_revision": 84,
+    "start_time_s": 0.009000000000000001,
+    "duration_s": 0.001,
+    "completed_samples": 1,
+    "total_samples": 1,
+    "progress": 1
+  },
+  "undo_entry": {
+    "name": "Load example",
+    "actor": "agent.socket",
+    "command_revision": 68
+  },
+  "redo_entry": {
+    "name": "New schematic",
+    "actor": "user",
+    "command_revision": 87
+  },
+  "actuation_revision": 0,
+  "recovery": {
+    "directory": "/Users/dshills/Development/projects/ELab/build/reliability-five/native/recovery",
+    "enabled": true,
+    "interval_s": 2,
+    "last_snapshot": "rec-1b25e83f1479704e6d344501-0000000013",
+    "last_saved_at": "2026-10-25T19:52:56.581768Z",
+    "selected": "rec-1b25e83f1479704e6d344501-0000000013",
+    "candidates": [
+      {
+        "owner_status": "active",
+        "id": "rec-1b25e83f1479704e6d344501-0000000013",
+        "document_key": "1b25e83f1479704e6d344501",
+        "saved_at": "2026-10-25T19:52:56.581768Z",
+        "sha256": "19f1866a720daa62f28231ccfcc140f6c85c3f44bfe9e2c201b4e07d86e9a6f5",
+        "current_session": true,
+        "active_session": true,
+        "recording_count": 0,
+        "components": 4
+      }
+    ],
+    "problems": []
+  },
+  "verification_settings": {
+    "duration_s": 0.1,
+    "sample_step_s": 0,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "operations": [],
+  "selected_operation": "",
+  "schematic_page": {
+    "paper": "letter",
+    "orientation": "landscape",
+    "margin_mm": 10
+  },
+  "part_category": "common",
+  "part_categories": [
+    {
+      "id": "common",
+      "name": "Common",
+      "count": 6
+    },
+    {
+      "id": "all",
+      "name": "All components",
+      "count": 53
+    },
+    {
+      "id": "sources",
+      "name": "Sources",
+      "count": 5
+    },
+    {
+      "id": "motors",
+      "name": "Motors",
+      "count": 3
+    },
+    {
+      "id": "passives",
+      "name": "Passives",
+      "count": 9
+    },
+    {
+      "id": "semiconductors",
+      "name": "Semiconductors",
+      "count": 10
+    },
+    {
+      "id": "amplifiers",
+      "name": "Amplifiers / ICs",
+      "count": 4
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "count": 15
+    },
+    {
+      "id": "switches",
+      "name": "Switches",
+      "count": 4
+    },
+    {
+      "id": "connections",
+      "name": "Connections",
+      "count": 3
+    }
+  ],
+  "part_search": "Ground",
+  "theme": "apollo",
+  "appearance": {
+    "path": "/Users/dshills/Development/projects/ELab/build/reliability-five/native/appearance.json",
+    "status": "ready",
+    "saved_theme": "apollo"
+  },
+  "appearance_work": {
+    "id": "appearance-1",
+    "command": "appearance.configure",
+    "status": "completed",
+    "phase": "completed",
+    "actor": "user",
+    "path": "/Users/dshills/Development/projects/ELab/build/reliability-five/native/appearance.json",
+    "input_revision": 6,
+    "command_revision": 3,
+    "document_generation": 1,
+    "electrical_revision": 1,
+    "input_run_id": 1,
+    "input_theme": "light",
+    "result_theme": "apollo",
+    "source_sha256": "f644c7d0583651d5f2aa65828b6d66f886cf052c4c10e51871135a69e1e1c76b",
+    "artifact_sha256": "f644c7d0583651d5f2aa65828b6d66f886cf052c4c10e51871135a69e1e1c76b",
+    "bytes": 0,
+    "cancelable": false,
+    "superseded": false,
+    "published": false,
+    "current_at_completion": true
+  },
+  "matching_parts": [
+    {
+      "category": "connections",
+      "common": true,
+      "value_type": "none",
+      "aliases": [
+        "ground",
+        "voltage reference"
+      ],
+      "limitations": "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design.",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "model": "ground.v1"
+    }
+  ],
+  "undo_name": "Load example",
+  "redo_name": "New schematic",
+  "scope": {
+    "window": {
+      "mode": "live",
+      "start_s": 0,
+      "end_s": 0.010000000000000002
+    },
+    "window_valid": true,
+    "statistics": [],
+    "available": [
+      {
+        "id": "v:V1.positive",
+        "label": "V1.positive / ground",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1.negative",
+        "label": "V1.negative / ground",
+        "unit": "V",
+        "positive": "V1.negative",
+        "reference": "ground"
+      },
+      {
+        "id": "v:V1",
+        "label": "V1 voltage",
+        "unit": "V",
+        "positive": "V1.positive",
+        "reference": "V1.negative"
+      },
+      {
+        "id": "i:V1",
+        "label": "V1 delivered current",
+        "unit": "A",
+        "positive": "V1.positive",
+        "reference": "out of positive"
+      },
+      {
+        "id": "v:R1.1",
+        "label": "R1.1 / ground",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1.2",
+        "label": "R1.2 / ground",
+        "unit": "V",
+        "positive": "R1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:R1",
+        "label": "R1 voltage",
+        "unit": "V",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "i:R1",
+        "label": "R1 current",
+        "unit": "A",
+        "positive": "R1.1",
+        "reference": "R1.2"
+      },
+      {
+        "id": "v:C1.1",
+        "label": "C1.1 / ground",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1.2",
+        "label": "C1.2 / ground",
+        "unit": "V",
+        "positive": "C1.2",
+        "reference": "ground"
+      },
+      {
+        "id": "v:C1",
+        "label": "C1 voltage",
+        "unit": "V",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "i:C1",
+        "label": "C1 current",
+        "unit": "A",
+        "positive": "C1.1",
+        "reference": "C1.2"
+      },
+      {
+        "id": "v:GND.reference",
+        "label": "GND.reference / ground",
+        "unit": "V",
+        "positive": "GND.reference",
+        "reference": "ground"
+      }
+    ],
+    "selected": [
+      "v:C1.1",
+      "v:V1.positive"
+    ],
+    "traces": [
+      {
+        "probe": {
+          "id": "v:C1.1",
+          "label": "C1.1 / ground",
+          "unit": "V",
+          "positive": "C1.1",
+          "reference": "ground"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0,
+            "value": 0
+          },
+          {
+            "time_s": 0.001,
+            "value": 0.47581290982020213
+          },
+          {
+            "time_s": 0.002,
+            "value": 0.9063462346100908
+          },
+          {
+            "time_s": 0.003,
+            "value": 1.2959088965914107
+          },
+          {
+            "time_s": 0.004,
+            "value": 1.6483997698218036
+          },
+          {
+            "time_s": 0.005,
+            "value": 1.9673467014368329
+          },
+          {
+            "time_s": 0.006,
+            "value": 2.255941819529868
+          },
+          {
+            "time_s": 0.007,
+            "value": 2.5170734810429525
+          },
+          {
+            "time_s": 0.008,
+            "value": 2.753355179413892
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 2.967151701297005
+          },
+          {
+            "time_s": 0.010000000000000002,
+            "value": 3.1606027941427888
+          }
+        ]
+      },
+      {
+        "probe": {
+          "id": "v:V1.positive",
+          "label": "V1.positive / ground",
+          "unit": "V",
+          "positive": "V1.positive",
+          "reference": "ground"
+        },
+        "points": [
+          {
+            "time_s": 0,
+            "value": 5
+          },
+          {
+            "time_s": 0,
+            "value": 5
+          },
+          {
+            "time_s": 0.001,
+            "value": 5
+          },
+          {
+            "time_s": 0.002,
+            "value": 5
+          },
+          {
+            "time_s": 0.003,
+            "value": 5
+          },
+          {
+            "time_s": 0.004,
+            "value": 5
+          },
+          {
+            "time_s": 0.005,
+            "value": 5
+          },
+          {
+            "time_s": 0.006,
+            "value": 5
+          },
+          {
+            "time_s": 0.007,
+            "value": 5
+          },
+          {
+            "time_s": 0.008,
+            "value": 5
+          },
+          {
+            "time_s": 0.009000000000000001,
+            "value": 5
+          },
+          {
+            "time_s": 0.010000000000000002,
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "run_id": 18,
+    "stale": true,
+    "active_cursor": "a",
+    "readings": []
+  },
+  "scope_visible": true,
+  "transient": {
+    "engine": "elab.ideal-rc-exact.v1",
+    "run_id": 18,
+    "electrical_revision": 15,
+    "source_id": "V1",
+    "resistor_id": "R1",
+    "capacitor_id": "C1",
+    "output_net": "net:C1.1",
+    "time_constant_s": 0.01,
+    "settings": {
+      "step_s": 0.001,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "charge",
+    "sample": {
+      "time_s": 0.010000000000000002,
+      "input_v": 5,
+      "voltage_v": 3.1606027941427888,
+      "current_a": 0.00018393972058572113,
+      "energy_j": 4.9947050111716015e-06
+    },
+    "samples": [
+      {
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0,
+        "current_a": 0.0005,
+        "energy_j": 0
+      },
+      {
+        "time_s": 0,
+        "input_v": 5,
+        "voltage_v": 0,
+        "current_a": 0.0005,
+        "energy_j": 0
+      },
+      {
+        "time_s": 0.001,
+        "input_v": 5,
+        "voltage_v": 0.47581290982020213,
+        "current_a": 0.0004524187090179798,
+        "energy_j": 1.131989625757839e-07
+      },
+      {
+        "time_s": 0.002,
+        "input_v": 5,
+        "voltage_v": 0.9063462346100908,
+        "current_a": 0.0004093653765389909,
+        "energy_j": 4.1073174849594485e-07
+      },
+      {
+        "time_s": 0.003,
+        "input_v": 5,
+        "voltage_v": 1.2959088965914107,
+        "current_a": 0.00037040911034085894,
+        "energy_j": 8.396899341323838e-07
+      },
+      {
+        "time_s": 0.004,
+        "input_v": 5,
+        "voltage_v": 1.6483997698218036,
+        "current_a": 0.0003351600230178196,
+        "energy_j": 1.3586109005742874e-06
+      },
+      {
+        "time_s": 0.005,
+        "input_v": 5,
+        "voltage_v": 1.9673467014368329,
+        "current_a": 0.0003032653298563167,
+        "energy_j": 1.9352265218271934e-06
+      },
+      {
+        "time_s": 0.006,
+        "input_v": 5,
+        "voltage_v": 2.255941819529868,
+        "current_a": 0.0002744058180470132,
+        "energy_j": 2.5446367465518655e-06
+      },
+      {
+        "time_s": 0.007,
+        "input_v": 5,
+        "voltage_v": 2.5170734810429525,
+        "current_a": 0.00024829265189570474,
+        "energy_j": 3.1678294544848432e-06
+      },
+      {
+        "time_s": 0.008,
+        "input_v": 5,
+        "voltage_v": 2.753355179413892,
+        "current_a": 0.0002246644820586108,
+        "energy_j": 3.790482372002653e-06
+      },
+      {
+        "time_s": 0.009000000000000001,
+        "input_v": 5,
+        "voltage_v": 2.967151701297005,
+        "current_a": 0.00020328482987029951,
+        "energy_j": 4.401994609254855e-06
+      },
+      {
+        "time_s": 0.010000000000000002,
+        "input_v": 5,
+        "voltage_v": 3.1606027941427888,
+        "current_a": 0.00018393972058572113,
+        "energy_j": 4.9947050111716015e-06
+      }
+    ],
+    "events": [
+      {
+        "time_s": 0,
+        "mode": "restart"
+      },
+      {
+        "time_s": 0,
+        "mode": "charge"
+      }
+    ],
+    "stale": true
+  },
+  "transient_settings": {
+    "step_s": 0.001,
+    "high_s": 0.05,
+    "low_s": 0.05,
+    "initial_voltage_v": 0,
+    "seconds_per_wall_second": 0.02
+  },
+  "document": {
+    "preferences_dirty": true,
+    "schematic_dirty": true,
+    "recordings_dirty": false,
+    "recording_count": 0,
+    "path": "",
+    "dirty": true,
+    "format_version": 4,
+    "generation": 5
+  },
+  "command_revision": 90,
+  "revision": 151,
+  "electrical_revision": 17,
+  "circuit": {
+    "voltage_v": 5,
+    "resistance_ohm": 10000,
+    "connected": true
+  },
+  "components": [
+    {
+      "id": "V1",
+      "kind": "pulse-source",
+      "name": "Pulse source",
+      "terminals": [
+        "positive",
+        "negative"
+      ],
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "value": 5,
+      "unit": "V",
+      "model": "ideal-square.v1",
+      "rotation": 0
+    },
+    {
+      "id": "R1",
+      "kind": "resistor",
+      "name": "Resistor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 0,
+        "y": -110
+      },
+      "value": 10000,
+      "unit": "\u03a9",
+      "model": "ideal-resistor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "C1",
+      "kind": "capacitor",
+      "name": "Capacitor",
+      "terminals": [
+        "1",
+        "2"
+      ],
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "value": 1e-06,
+      "unit": "F",
+      "model": "ideal-capacitor.v1",
+      "rotation": 0
+    },
+    {
+      "id": "GND",
+      "kind": "ground",
+      "name": "Ground",
+      "terminals": [
+        "reference"
+      ],
+      "position": {
+        "x": 0,
+        "y": 110
+      },
+      "value": 0,
+      "model": "ground.v1",
+      "rotation": 0
+    }
+  ],
+  "wires": [
+    {
+      "id": "W1",
+      "from": "V1.positive",
+      "to": "R1.1",
+      "connected": true
+    },
+    {
+      "id": "W2",
+      "from": "R1.2",
+      "to": "C1.1",
+      "connected": true
+    },
+    {
+      "id": "W3",
+      "from": "C1.2",
+      "to": "GND.reference",
+      "connected": true
+    },
+    {
+      "id": "W4",
+      "from": "GND.reference",
+      "to": "V1.negative",
+      "connected": true
+    }
+  ],
+  "nets": [
+    {
+      "id": "net:C1.1",
+      "terminals": [
+        "C1.1",
+        "R1.2"
+      ]
+    },
+    {
+      "id": "net:C1.2",
+      "terminals": [
+        "C1.2",
+        "GND.reference",
+        "V1.negative"
+      ]
+    },
+    {
+      "id": "net:R1.1",
+      "terminals": [
+        "R1.1",
+        "V1.positive"
+      ]
+    }
+  ],
+  "drawing": {
+    "tool": "select",
+    "kind": "dc-source",
+    "position": {
+      "x": -200,
+      "y": 0
+    },
+    "wire_start": "",
+    "from": "",
+    "to": "",
+    "value": ""
+  },
+  "model": {
+    "id": "elab.generic-red-led.v1",
+    "is_a": 1e-20,
+    "n": 2,
+    "rs_ohm": 1,
+    "temperature_c": 27,
+    "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+  },
+  "selected": "",
+  "view": {
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "zoom": 1
+  },
+  "status": "paused",
+  "analysis": "RC transient",
+  "paused": true,
+  "run_id": 20,
+  "diagnostics": [],
+  "can_undo": true,
+  "can_redo": true,
+  "last_actor": "user",
+  "closed": false
+}

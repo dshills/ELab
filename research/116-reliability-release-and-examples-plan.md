@@ -7,14 +7,14 @@ blocking progress. No new components or electrical model families.
    Reproduce on the current app; inspect native composition/retained resources.
    Fix a demonstrated defect and verify scrolling, inspector/theme changes and
    redraw, with direct-source and composed-frame evidence where available.
-2. In progress: finish scroll-related tooltip behavior. Retained numeric controls
+2. Complete: finish scroll-related tooltip behavior. Retained numeric controls
    leaving the visible clip must not publish displaced help at the window edge.
    Preserve valid help, numeric edits, existing command semantics and menus.
-3. Pending: qualify the core drawing/wiring/editing/measurement/save workflows
+3. Complete: qualify the core drawing/wiring/editing/measurement/save workflows
    through keyboard and public agent commands, including refusal/correction,
    interruption, stale actions, Undo and recovery. Fix demonstrated failures;
    distinguish actual keyboard evidence from descriptor/callback checks.
-4. Pending: produce an updated unsigned downloadable release with the current
+4. In progress: produce an updated unsigned downloadable release with the current
    electronics, matching agent, examples, use/model limits, checksum and rollback.
    Preserve the qualified /205 download and /256 development candidate. Test
    archive extraction and offline packaged workflows; retain declared deferrals.
@@ -52,3 +52,35 @@ Receipts/captures are staged in build/reliability-five. The new native checking
 method compares actual saved pixels and crops instead of relying on the large
 preview. This resolves the earlier observation within the tested cases without
 claiming exhaustive GPU/platform qualification.
+
+## Item 2 result
+
+The old SDK reproduces visible help retained during scroll and pending help
+opening at (0,10) after clipping, with numeric value still 45. SDK elab5 cancels
+hover on scroll, rejects stale queued callbacks by origin and refuses delayed
+help for invisible widgets. Visible/pending, fresh valid help and unchanged
+number tests pass; an explicit old-callback replay cannot steal a new same-widget
+hover. Framework portable/ordinary-driver race, scoped rendered lifecycle/menu/
+focus/number tests, core queued-hover race and ordinary/tagged vet pass.
+
+Clean /257 native verification scrolls PWM Duty out of view with no displaced
+corner help. Accepted components, frequency/duty, electrical revision and run
+remain unchanged. The /256 and qualified alpha bytes are preserved. The same
+owned /257 fixture is reused for the next keyboard workflow.
+
+## Item 3 result
+
+The owned /257 app passes actual keyboard LED placement/wiring, rejected zero
+resistance and correction, Undo/Redo, live DC calculation, native save and
+post-dialog focus. The matching packaged agent freshly reopens the exact four-
+part/four-wire file with 2000 Ω and 1.476723549 mA, clean. The earlier doubled
+filename and dialog-focus observations do not reproduce in this candidate.
+Native RC stepping reaches 3.1606 V at 10 ms; keyboard cursors measure 10 ms.
+An untouched example replaces without a spurious prompt, while an edited
+restoration shows Save/Discard/Cancel and Escape keeps its graph.
+
+The existing LED/RC/NPN, project-contract and independent electrical suites
+pass across in-process, headless stdio/socket and native socket adapters. All
+45 owned external processes exit normally with code zero. Detailed receipts
+are in docs/validation/reliability-five/workflow. This does not claim participant,
+screen-reader/IME or clean-account acceptance. Full release gates run next.

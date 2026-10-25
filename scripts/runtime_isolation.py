@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import platform
 import plistlib
+import re
 import shlex
 import shutil
 import signal
@@ -75,7 +76,7 @@ def bundle_tree(folder):
     return result
 
 
-def bundle_executable(folder):
+def bundle_executable(folder, sealed_sha256=None):
     bundle_tree(folder)
     info = plistlib.loads(regular(folder/'Contents/Info.plist').read_bytes())
     if not isinstance(info, dict):
@@ -85,7 +86,16 @@ def bundle_executable(folder):
         raise ValueError('invalid bundle executable')
     executable = regular(folder/'Contents/MacOS'/name)
     manifest = json.loads(regular(folder/'Contents/Resources/APP_MANIFEST.json').read_text())
-    if not isinstance(manifest, dict) or manifest.get('private_build') is not True or manifest.get('source_binary_sha256') != digest(executable):
+    if not isinstance(manifest, dict) or manifest.get('private_build') is not True:
+        raise ValueError('private bundle manifest/executable mismatch')
+    source_sha256 = manifest.get('source_binary_sha256')
+    if not isinstance(source_sha256, str) or not re.fullmatch('[0-9a-f]{64}', source_sha256):
+        raise ValueError('private bundle manifest/executable mismatch')
+    # Signing changes Mach-O bytes after the packager records its source hash.
+    # Accept those bytes only against an explicitly supplied independent pin;
+    # never silently trust an arbitrary signed binary or a self-reported hash.
+    expected = source_sha256 if sealed_sha256 is None else sealed_sha256
+    if not isinstance(expected, str) or not re.fullmatch('[0-9a-f]{64}', expected) or expected != digest(executable):
         raise ValueError('private bundle manifest/executable mismatch')
     return executable
 
@@ -264,7 +274,7 @@ def run(args):
     if platform.system() != 'Darwin' or not Path('/usr/bin/sandbox-exec').is_file():
         raise ValueError('this runtime rehearsal requires macOS sandbox-exec')
     app = args.app.absolute()
-    executable = bundle_executable(app)
+    executable = bundle_executable(app, args.app_executable_sha256)
     agent, controller = regular(args.agent_binary.absolute()), regular(args.conformance_binary.absolute())
     dependencies = native_dependencies(subprocess.check_output(['otool', '-L', str(executable)], text=True, timeout=30))
     sdk, run_child = pinned_child_runner()
@@ -274,7 +284,9 @@ def run(args):
     create_output(directory, roots)
     result = dict(passed=False, scope='macOS copied runtime with development-file and outbound IP denial; controller unrestricted',
                   app_source=str(app), source_bundle=bundle_tree(app), source_agent_sha256=digest(agent),
-                  source_controller_sha256=digest(controller), system_dependencies=dependencies, blocked_development=canaries, stages=[])
+                  source_controller_sha256=digest(controller), system_dependencies=dependencies, blocked_development=canaries, stages=[],
+                  executable_identity_source='explicit sealed-byte pin' if args.app_executable_sha256 else 'manifest source hash',
+                  executable_sha256=digest(executable), manifest_source_sha256=json.loads((app/'Contents/Resources/APP_MANIFEST.json').read_text())['source_binary_sha256'])
     report = directory/'runtime-report.json'
     def save():
         report.write_text(json.dumps(result, indent=2)+'\n')
@@ -322,6 +334,7 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--app', type=Path, required=True)
+    parser.add_argument('--app-executable-sha256', help='Independent post-signing executable SHA-256; required when signing changed the packager source bytes')
     parser.add_argument('--agent-binary', type=Path, default=ROOT/'build/elab-agent')
     parser.add_argument('--conformance-binary', type=Path, default=ROOT/'build/elab-conformance')
     parser.add_argument('--artifacts', type=Path, required=True, help='new directory outside the repository and development caches')

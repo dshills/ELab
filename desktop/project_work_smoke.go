@@ -38,6 +38,12 @@ func nativeProjectOpenSmoke(ctx context.Context, a *app.Application, s *screen) 
 	}
 	checked := make(chan error, 1)
 	if err := a.PostWait(ctx, func() {
+		// File-job status belongs to the Document inspector. Navigate before
+		// asserting its presence instead of depending on a preceding fixture's tab.
+		if err := smokeUI(s, "inspector-section-document", nil); err != nil {
+			checked <- err
+			return
+		}
 		state := s.service.Snapshot()
 		if s.errorMessage != "" || state.ProjectWork == nil || state.ProjectWork.Status != "completed" || state.ProjectWork.Actor != "user" || state.Document.Path != path || state.Document.Dirty {
 			checked <- fmt.Errorf("native project open failed: %s / %+v", s.errorMessage, state.ProjectWork)

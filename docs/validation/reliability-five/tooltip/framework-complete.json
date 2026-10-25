@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "source_commit": "bc599ea5f39b31e45c41bbe003e167612ed43275",
+  "checks": [
+    {
+      "log": "framework-root-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=10m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 0.3307003329973668
+    },
+    {
+      "log": "framework-driver-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=10m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 86.84889641590416
+    },
+    {
+      "log": "framework-focused-final.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-run",
+        "Test(NumericTooltipWheel|RetiredNumberField|TooltipRetirement|MacNumberStepper|NumberField|ManagedNumber|StateKey|Reconcile|.*Menu|.*Focus|.*Retain|.*Number.*Wheel)",
+        "-count=1",
+        "-timeout=10m",
+        "."
+      ],
+      "exit_code": 0,
+      "wall_s": 24.701898999977857
+    },
+    {
+      "log": "framework-core-hover.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-run",
+        "TestVellumScrollHover",
+        "-count=1",
+        "-timeout=3m",
+        "./core"
+      ],
+      "exit_code": 0,
+      "wall_s": 2.7847976670600474
+    },
+    {
+      "log": "framework-driver-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 21.537314916029572
+    },
+    {
+      "log": "framework-rendered-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 21.667978791054338
+    }
+  ],
+  "scope": "Full portable and ordinary-driver race; focused rendered lifecycle/menu/focus/number-field checks; ordinary and tagged driver vet"
+}
