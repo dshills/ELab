@@ -15,12 +15,12 @@ decimal steps, system cursors, event-position/wheel behavior, partial-scroll
 accessibility, divider gestures, disclosure colors, window backgrounds and text
 Undo boundaries. Upstream's newer controls, secure text and focus reveal remain.
 ELab adjusts explicit action padding for the new reserved keyboard-focus border.
-Four compatibility dependency stages follow upstream's 106 stages, numbered
-107–110; preparation verifies the complete ordered recipe and each input/output
-hash. The private derived source is `0edd5db7cd8c9cb2728564b014f9294e9a923bf8`.
+Five compatibility dependency stages follow upstream's 106 stages, numbered
+107–111; preparation verifies the complete ordered recipe and each input/output
+hash. The private derived source is `2c349fc86e1dbf05e96a0e3f1453cb545cc5eb91`.
 
-The active archive is `vellum-f9dee54-elab3.tar.gz`; all four native module
-replacements resolve into `build/.vellum-sdk-f9dee54-elab3`. The lock pins source, complete
+The active archive is `vellum-f9dee54-elab4.tar.gz`; all four native module
+replacements resolve into `build/.vellum-sdk-f9dee54-elab4`. The lock pins source, complete
 archive/manifest, compatibility patch and all bootstrap scripts before execution.
 The SDK is a **private compatibility build**, not an upstream release or a public
 redistribution approval. The SDK compatibility changes add no electronics models,
@@ -38,6 +38,17 @@ contract. No solver/model limits change. The complete new patch is
 [here](patches/elab-f9dee54-stepper-compat.patch).
 The preceding elab2 archive, patch, manifest and qualified /254 package remain
 preserved. See the [widget migration qualification](../../docs/validation/vellum-widget-adoption/README.md) for exact source/test scope.
+
+## Inspector tooltip retirement · October 25, 2026
+
+The elab4 SDK adds a native popup lifetime seam and calls it before retiring a
+managed subtree. Only tooltip stages originating in that subtree are closed;
+menus and retained controls’ help remain. The seam runs on the originating
+render owner and invokes no input/value-change handlers. Existing numeric
+bounds, typing, stepping, public ELab commands and simulation limits are unchanged.
+The exact-input/output stage 111 is part of the [complete compatibility patch](patches/elab-f9dee54-tooltip-compat.patch).
+The preceding elab3 SDK, archive and /255 package remain preserved. Qualification
+and bounded native verification are recorded with the ELab tooltip fix.
 
 ## Historical integration records
 
