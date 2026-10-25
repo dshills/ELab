@@ -6,7 +6,7 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PN
 
 PWM buck conversion, optional op-amp bandwidth/slew limits, an eight-bit shift/latch register, and piezo/active-buzzer audio previews now share the UI and agent commands. Six working examples are listed in [the model and command guide](docs/hobbyist-devices.md). Audio playback is explicit; opening or simulating a circuit stays silent. The qualified alpha below remains preserved.
 
-[Open the 0.192.0 /253 development app](build/ELab-0.192.0-253-Hobbyist/ELab.app). The matching agent is alongside it. Complete electrical, command, race, rendered UI and packaged checks are recorded in [the qualification receipts](docs/validation/hobbyist-devices/README.md).
+[Open the 0.193.0 /254 development app](build/ELab-0.193.0-254-Vellum/ELab.app). The matching agent is alongside it. See the [Vellum update checks](docs/validation/vellum-f9dee54-update/README.md) for this build and the [electronics qualification](docs/validation/hobbyist-devices/README.md) for the component implementations.
 
 ## Downloadable release
 
@@ -26,7 +26,7 @@ The [0.181.1 /202 scrolling repair](build/releases/ELab-0.181.1-macos-arm64/ELab
 
 ## Build and run from source
 
-Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned SDK from public Vellum source](third_party/vellum/README.md), including prepared Cogent/typesetting sources and explicit compatibility fixes. Public base `e58d405` and the patch/archive hashes are pinned in `third_party/vellum/sdk.lock.json`. A sibling Vellum checkout is not required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
+Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned SDK from public Vellum source](third_party/vellum/README.md), including prepared Cogent/typesetting sources and explicit compatibility fixes. The pushed `f9dee54` personal.1 source and compatibility patch/archive hashes are pinned in `third_party/vellum/sdk.lock.json`. A sibling Vellum checkout is not required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
 
 The SDK lock distinguishes the public repository commit from the compatibility-patched source and unreleased SDK artifact. The [initial baseline](docs/vellum-baseline.json) and [packaged application qualification](docs/vellum-baseline-current.json) retain their historical release identities; changing the source dependency does not promote an application bundle.
 

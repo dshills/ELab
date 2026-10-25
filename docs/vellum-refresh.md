@@ -1,5 +1,36 @@
 # Current Vellum SDK integration
 
+## Current dependency · October 25, 2026
+
+ELab consumes Vellum **v0.1.0-personal.1** from the owner's newly pushed
+[`f9dee54`](https://github.com/dshills/vellum/commit/f9dee54fdb2a9e73a38fdd3fb67c8871dc0f6c40) on
+`codex/mac-personal-app-stabilization`. This is newer source than both `main`
+(`39250c6`) and the published `v0.1.0-alpha.3` assets. The alpha.3 download was
+verified against its published SHA-256 during discovery; it is not the selected
+runtime. The separate owner Vellum checkout was not modified.
+
+The reproducible local compatibility patch preserves ELab's existing control
+ownership/settlement, queued field and held-gesture callbacks, numeric drafts and
+decimal steps, system cursors, event-position/wheel behavior, partial-scroll
+accessibility, divider gestures, disclosure colors, window backgrounds and text
+Undo boundaries. Upstream's newer controls, secure text and focus reveal remain.
+ELab also subtracts the new managed focus-border allowance from explicit action
+padding, preserving constrained toolbar and tab geometry.
+Four compatibility dependency stages follow upstream's 106 stages, numbered
+107–110; preparation verifies the complete ordered recipe and each input/output
+hash. The private derived source is `218c0dec8cfb52de4d63b91e0701f340396b7d84`.
+
+The active archive is `vellum-f9dee54-elab2.tar.gz`; all four native module
+replacements resolve into `build/.vellum-sdk-f9dee54-elab2`. The lock pins source, complete
+archive/manifest, compatibility patch and all bootstrap scripts before execution.
+The SDK is a **private compatibility build**, not an upstream release or a public
+redistribution approval. No new widget adoption, electronics behavior, user/agent
+command or project-format change is included. Previous SDKs and qualified app
+packages remain preserved. See [update checks](validation/vellum-f9dee54-update/README.md) for evidence
+and its exact native/package scope.
+
+## Historical integration records
+
 ## Public repository migration · October 21, 2026
 
 The active source dependency now comes from [dshills/vellum](https://github.com/dshills/vellum) at public commit `e58d40581fe21d1de53fd54cab1bcf6acf11c163`. Native preparation and the four explicit replacements remain necessary under the upstream consumer contract. ELab's previously required control ownership/numeric settlement APIs are absent from that snapshot; the [explicit compatibility patch](../third_party/vellum/patches/elab-public-e58d405-compat.patch) carries those and the existing held-input, legacy-handoff and scroll-publication fixes forward. Local derived source is `96e22bf25809148b9a28169baf1b24cba72af475`; it is not an upstream commit.

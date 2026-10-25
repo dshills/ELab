@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "log": "sdk-prepare.txt",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/prepare-vellum.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.5527168749831617
+    },
+    {
+      "log": "python.txt",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 1.6336207501590252
+    },
+    {
+      "log": "lint.txt",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 15.24577320786193
+    },
+    {
+      "log": "native-build.txt",
+      "command": [
+        "sh",
+        "scripts/build.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 6.983858459163457
+    },
+    {
+      "log": "desktop-compatibility-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=10m",
+        "-run",
+        "TestTheme|TestAppearance|TestComponentBrowser|TestMenu|TestWorkspace|TestControl|TestFile|TestPointer|TestNumeric|TestSlider",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 12.148333374876529
+    },
+    {
+      "log": "mounted-compatibility.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-timeout=20m",
+        "-run",
+        "TestMounted|TestComponentSymbols|TestWorkspace|TestTheme|TestAppearance",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 399.57218787493184
+    },
+    {
+      "log": "desktop-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 4.641603749943897
+    },
+    {
+      "log": "mounted-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 20.775585582945496
+    }
+  ]
+}

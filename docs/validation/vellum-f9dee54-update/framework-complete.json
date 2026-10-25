@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "log": "framework-prepare.txt",
+      "command": [
+        "python3",
+        "-B",
+        "drivers/cogent/prepare_test.py"
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-update-source",
+      "exit_code": 0,
+      "wall_s": 0.3678514161147177
+    },
+    {
+      "log": "framework-root-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=15m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-update-source",
+      "exit_code": 0,
+      "wall_s": 0.20399441686458886
+    },
+    {
+      "log": "framework-root-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-update-source",
+      "exit_code": 0,
+      "wall_s": 0.1840661249589175
+    },
+    {
+      "log": "framework-driver-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=15m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-update-source/drivers/cogent",
+      "exit_code": 0,
+      "wall_s": 73.62386495806277
+    },
+    {
+      "log": "framework-driver-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-update-source/drivers/cogent",
+      "exit_code": 0,
+      "wall_s": 15.006723624886945
+    },
+    {
+      "log": "framework-offscreen-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-timeout=15m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-update-source/drivers/cogent",
+      "exit_code": 0,
+      "wall_s": 483.1803547500167
+    },
+    {
+      "log": "framework-offscreen-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-update-source/drivers/cogent",
+      "exit_code": 0,
+      "wall_s": 23.61996354185976
+    }
+  ]
+}

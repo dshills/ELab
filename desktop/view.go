@@ -592,6 +592,7 @@ func (s *screen) view() ui.Node {
 	applyPalette(&root, colors)
 	polishToolbars(&root, colors, false)
 	polishInspector(&root, colors, false)
+	reserveManagedFocusOutline(&root)
 	return root
 }
 

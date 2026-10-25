@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "source_commit": "218c0dec8cfb52de4d63b91e0701f340396b7d84",
+  "checks": [
+    {
+      "log": "final-framework-root-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=15m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 0.2379627909976989
+    },
+    {
+      "log": "final-framework-root-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 0.29771416704170406
+    },
+    {
+      "log": "final-framework-driver-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=15m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 61.38978095795028
+    },
+    {
+      "log": "final-framework-driver-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 15.268698832951486
+    },
+    {
+      "log": "final-framework-offscreen-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 15.384447582997382
+    }
+  ],
+  "focused_rendered_log": "final-framework-controls-qualified.txt",
+  "focused_rendered_scope": "TestWindowFocusReveal|TestManagedFocusScroll|TestManagedNumberFieldDraft|TestMacNumberStepper|TestReducedMotionToolbarDrag|TestToolbarCustomization|TestNumberField|TestQueuedFieldChange|TestAccessibilityGeometryFollowsPartialScroll"
+}

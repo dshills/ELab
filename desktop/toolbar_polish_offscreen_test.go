@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"cogentcore.org/core/colors"
 	"cogentcore.org/core/events"
 	"cogentcore.org/core/events/key"
 	"github.com/dshills/elab/workbench"
@@ -80,7 +79,9 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 					if control.Focused {
 						// Vellum retains the platform keyboard-focus outline over
 						// the descriptor's ordinary/selected border.
-						outline = color.NRGBAModel.Convert(colors.Scheme.Primary.Base.At(0, 0)).(color.NRGBA)
+						// The current Vellum managed-control focus cue uses its
+						// macOS accent fallback when no theme palette is supplied.
+						outline = color.NRGBA{R: 0, G: 112, B: 245, A: 255}
 					}
 					columns := 0
 					for x := control.Bounds.Min.X + 8; x < control.Bounds.Max.X-8; x++ {
@@ -123,8 +124,15 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if pixel := color.NRGBAModel.Convert(paint.At(selected.Min.X+selected.Dx()/2, selected.Max.Y-1)).(color.NRGBA); pixel != paletteForTheme(mode).Accent {
-				t.Fatal("agent-selected cursor did not acquire its accent outline", pixel)
+			// A one-point resting stroke is inset within Vellum's two-point
+			// focus allowance. Inspect the whole lower stroke area, as above.
+			selectedOutline := false
+			for y := selected.Max.Y - 3; y < selected.Max.Y; y++ {
+				pixel := color.NRGBAModel.Convert(paint.At(selected.Min.X+selected.Dx()/2, y)).(color.NRGBA)
+				selectedOutline = selectedOutline || pixel == paletteForTheme(mode).Accent
+			}
+			if !selectedOutline {
+				t.Fatal("agent-selected cursor did not acquire its accent outline", selected)
 			}
 			resume := mountedControlElement(t, m, "simulation.resume").Bounds
 			clickMountedControl(t, m, "simulation.resume")
