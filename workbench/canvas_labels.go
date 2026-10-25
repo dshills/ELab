@@ -116,7 +116,7 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 	}
 	switch part.Kind {
 	case "hbridge":
-		return Point{part.Position.X - 70, part.Position.Y - 115}
+		return Point{part.Position.X + 110, part.Position.Y - 95}
 	case "transformer", "optocoupler":
 		return Point{part.Position.X - 55, part.Position.Y - 90}
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":

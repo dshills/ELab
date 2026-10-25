@@ -603,7 +603,7 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 	switch p.Kind {
 	case "hbridge":
 		text += " · H-bridge"
-		x, y = p.Position.X-70, p.Position.Y-115
+		x, y = p.Position.X+110, p.Position.Y-95
 	case "transformer", "optocoupler":
 		x, y = p.Position.X-55, p.Position.Y-90
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
