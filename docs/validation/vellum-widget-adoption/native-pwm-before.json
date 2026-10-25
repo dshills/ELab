@@ -1,0 +1,59 @@
+{
+  "selected": "PWM",
+  "paused": true,
+  "run_id": 3,
+  "electrical_revision": 2,
+  "theme": "apollo",
+  "part_category": "common",
+  "part_search": "",
+  "appearance": {
+    "path": "/Users/dshills/Development/projects/ELab/build/widget-adoption/native/appearance.json",
+    "status": "ready",
+    "saved_theme": "apollo"
+  },
+  "edited_components": [
+    {
+      "device_parameters": {
+        "pwm": {
+          "frequency_hz": 500,
+          "duty_fraction": 0.45
+        }
+      },
+      "id": "PWM",
+      "kind": "pwm-controller",
+      "name": "PWM controller",
+      "terminals": [
+        "out",
+        "vcc",
+        "gnd"
+      ],
+      "position": {
+        "x": -380,
+        "y": 80
+      },
+      "value": 0,
+      "model": "elab.hobbyist-devices.v1",
+      "rotation": 0
+    }
+  ],
+  "mixed": {
+    "pwm_controllers": [
+      {
+        "id": "PWM",
+        "model": "elab.hobbyist-devices.v1",
+        "drive_fraction": 0,
+        "voltage_v": 5.999699415059305e-07,
+        "pin_currents_a": [
+          -5.999699415054693e-13,
+          1.201199999940003e-05,
+          -1.2011999399430089e-05
+        ],
+        "power_w": 0.0001441439999928
+      }
+    ],
+    "time_s": 0,
+    "kcl_residual_a": 2.8916910725873763e-19,
+    "power_residual_w": 0,
+    "stale": false
+  }
+}

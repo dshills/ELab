@@ -76,8 +76,29 @@ preserved.json rechecks the qualified alpha ZIP and the previous /254 app/agent
 hashes. The preceding SDK lock, archive and compatibility patch remain unchanged. The new package is a development
 candidate and does not replace or promote the qualified unsigned alpha.
 
-## Package follow-up
 
-A clean-source /255 package, matching-agent replay and bounded owned native check
-follow this source checkpoint; their final receipts are appended at closeout.
-No physical printer, public distribution or system-settings change is claimed.
+## Completed package check
+
+ELab **0.194.0 /255** is built from clean source
+`87b7d47a7b01fe86a419db0b7f24f5e5da83526f`, with its matching agent alongside it. Both build-info
+receipts report that revision and `vcs.modified=false`. The unchanged SDK packager
+records matching version, build, SDK release and pre-signing source-binary hash.
+Strict ad-hoc signature verification passes. The qualified unsigned alpha remains
+unchanged.
+
+The packaged replay saves, fresh-reopens and exports all six latest electronics
+examples as SVG/PNG/PDF. Both sound examples render and export matching WAV bytes
+without autoplay. Artifact hashes and replay receipts are retained here.
+The separately profiled native check is described in `native-notes.txt`; its UI
+and state evidence are saved. The owned session was closed normally and its
+endpoint is absent. Owner projects and existing applications were preserved.
+
+## Remaining native observation
+
+A PWM bounds tooltip remained visible in captures after changing to the LED
+inspector and moving focus. The resistor’s accepted domain and validation are
+correct; this is an unresolved native hover/tooltip-retirement observation.
+See [native notes](native-notes.txt) and saved UI captures. The native check also
+records one intermittent custom-mesh capture omission, with the circuit visible
+in earlier and later captures. Neither observation is counted as a passing
+hover/rendering gate. All automated suites above pass.

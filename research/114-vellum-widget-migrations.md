@@ -47,3 +47,12 @@ packaged example replay and bounded native observations are recorded in
 
 No thumbnail examples chooser, native titlebar migration, new electronics model,
 new solver work allowance or project-format change is included in this migration.
+
+The /255 package is available at
+[ELab.app](../build/ELab-0.194.0-255-Widgets/ELab.app), with its matching agent.
+The bounded native check confirmed search/Clear focus, compact pointer stepping,
+wheel value preservation, refused-value guidance and corrected unit entry.
+A lingering PWM bounds tooltip after changing inspectors remains a separately
+recorded native issue; see the validation notes. System changes and constrained
+More-menu routing are covered by synthetic/routed tests rather than OS settings
+changes or native window resizing.

@@ -1,0 +1,45 @@
+ELab 0.194.0 /255 bounded native widget check — October 25, 2026
+
+Method: CUA native app control, exact /255 package, fixed-argument owned launcher.
+The first launch response said running application not found; its owned endpoint
+was already present, so the existing session was attached by exact package path.
+No second copy was launched. Appearance/recovery/endpoint files and saved circuit
+fixtures are under build/widget-adoption/native. No owner project was opened.
+
+Observed and checked:
+- Apollo ordinary window layout: search icon, field and Clear fit in library rail;
+  frequency/duty compact arrows are completely visible, inspector labels and
+  action buttons remain contained. Screenshot 01-apollo-pwm.png.
+- Typing motor and Return shows PWM controller, H-bridge motor driver and Brushed
+  DC motor, with focus on the matching list. Clicking Clear restores the Common
+  list and focuses the search entry (AX receipts 02/03).
+- Pointer click on the duty upper arrow changes 45 to 46. A native wheel event
+  over that field leaves it at 46. Matching agent state confirms duty_fraction
+  0.46. The wheel observation proves value preservation; it does not independently
+  measure a scroll-distance or scrollbar-thumb geometry.
+- LED R1: type 0, Return, Apply. Field retains rejected draft, FormField metadata
+  and adjacent text show the shared refusal, InlineNotice shows the same summary.
+  Agent inspection confirms accepted resistance stays 1000 ohm. Correct to 2k,
+  Return, Apply: normalized 2 kOhm, guidance removed, shared value 2000 ohm.
+- PWM and corrected LED fixtures saved before switching/closing. Dark, Light and
+  System selected through the shared appearance command in the private fixture.
+  Native screenshots show the updated field/search/toolbar presentation.
+- Saved owned session closed normally with Command-Q. CUA returned App quit,
+  and the owned endpoint was verified absent.
+
+Scope and remaining observations:
+- No native window resize or shared geometry reset. Tight More overflow, popup
+  retirement after agent edits and restored wider actions are routed offscreen
+  checks in all four themes. No native overflow selection is claimed here.
+- System preference changes are synthetic tests; no macOS preference was changed.
+- One intermediate screenshot omitted custom schematic meshes; earlier and later
+  screenshots contain the same circuit. This observation is retained as capture/
+  rendering uncertainty, not treated as proof the canvas always renders blank.
+- A bounds tooltip reading minimum 10, maximum 90 remained in captures after
+  switching from PWM to the LED inspector, including after focus moved to search.
+  This is an unresolved native hover/tooltip-retirement observation; it is not
+  the resistor's domain (the actual resistor validator remains 10..100000 ohm).
+  No claim of complete native hover-state qualification is made. Track separately
+  from the five completed widget integrations.
+- No physical printer, autoplay/audio playback, OS setting change, public release
+  promotion or clean-account installation test was performed in this check.
