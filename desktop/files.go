@@ -261,6 +261,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 func (s *screen) continuePending(discard bool) {
 	id, raw := s.pendingCommand, append(json.RawMessage{}, s.pendingParams...)
 	serial := s.pendingFileSerial
+	fromBrowser := id == "example.load" && s.service.Snapshot().ExampleBrowser.Visible
 	if id == "" {
 		return
 	}
@@ -279,6 +280,9 @@ func (s *screen) continuePending(discard bool) {
 		s.beginFile(id, false, raw, clear)
 	} else if result := s.requestReplace(id, raw); result.Error == nil {
 		clear()
+		if fromBrowser {
+			s.requestKeyboardFocus("part-search")
+		}
 	}
 }
 func (s *screen) registerFileCommands() {

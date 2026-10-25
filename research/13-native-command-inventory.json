@@ -29,7 +29,7 @@
     "desktop/file_decision.go": "0eefa5e911d9914966b47ca3fa439ec64c73f5da2868657a79d5ed899de62a67",
     "desktop/file_focus_darwin.go": "fd24d88b522308de015cb02496434e62343e221916167f4c84773cd22b5967a5",
     "desktop/file_focus_other.go": "c027b71d35fbd52d344ed31b46bba5f5b828d1ae622ef7ca20b89f4f4423a343",
-    "desktop/files.go": "aa7422dd678c4a325f8c66ddb8badb63cb14b585c6d29881f0c0e63741904fdb",
+    "desktop/files.go": "2bc27b10e5b1c8bc54f56567cad90552be98a3e6cdf17da31d54acdaf48d9c25",
     "desktop/focus_outline_layout.go": "9268ec9e8ed5150f9b7de38b8eb7fd24eceecf0943a0dab04b0e3cb0e00881c3",
     "desktop/hbridge_controls.go": "f11e407baa7e7f554f457bb8d4f81b86d8a15dc45e092171cbae60ce7332b167",
     "desktop/inductor_controls.go": "326e6590bf52d5e7aa256d508f1a73c8dcb164b48692d2012e5706104d50c5c0",
@@ -1823,7 +1823,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 279,
+      "line": 280,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.beginFile(id, false, raw, clear)",
@@ -1831,7 +1831,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 280,
+      "line": 281,
       "function": "*screen.continuePending",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(id, raw)",
@@ -1839,7 +1839,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 289,
+      "line": 293,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.open\", \"Open…\", \"Meta+O\", func() { s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil) }}",
@@ -1851,7 +1851,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 290,
+      "line": 294,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save\", \"Save\", \"Meta+S\", func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)\n}}",
@@ -1863,7 +1863,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 293,
+      "line": 297,
       "function": "*screen.registerFileCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"file.save-as\", \"Save As…\", \"Meta+Shift+S\", func() { s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil) }}",
@@ -1875,7 +1875,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 289,
+      "line": 293,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.load\", true, workbench.LoadParams{}, nil)",
@@ -1886,7 +1886,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 291,
+      "line": 295,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{}, nil)",
@@ -1897,7 +1897,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 293,
+      "line": 297,
       "function": "*screen.registerFileCommands",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", true, workbench.SaveParams{}, nil)",
@@ -1908,7 +1908,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 296,
+      "line": 300,
       "function": "*screen.registerFileCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.text, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts, Available: func() error {\n\tif s.service.Snapshot().Closed {\n\t\treturn fmt.Errorf(\"session is closing\")\n\t}\n\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t}\n\treturn nil\n}, Execute:\tfunc(context.Context) error { entry.action(); return nil }})",
@@ -1916,7 +1916,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 312,
+      "line": 316,
       "function": "*screen.filePrompt",
       "kind": "callback-factory",
       "expression": "s.withFileDecision(decision, false, func() {\n\ts.setPendingFileAction(\"\", nil)\n\ts.errorMessage = \"\"\n\ts.requestHelp = nil\n\ts.app.Invalidate(\"main\")\n})",
@@ -1924,7 +1924,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 320,
+      "line": 324,
       "function": "*screen.filePrompt",
       "kind": "node-Dismiss",
       "expression": "Dismiss: dismiss",
@@ -1932,7 +1932,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 325,
+      "line": 329,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.withFileDecision(decision, true, func() {\n\t\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: \u0026decision.generation}, func() {\n\t\t\tif s.pendingFileSerial == decision.serial {\n\t\t\t\ts.continuePending(false)\n\t\t\t}\n\t\t})\n\t})\n}",
@@ -1940,7 +1940,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 326,
+      "line": 330,
       "function": "*screen.filePrompt",
       "kind": "callback-factory",
       "expression": "s.withFileDecision(decision, true, func() {\n\ts.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: \u0026decision.generation}, func() {\n\t\tif s.pendingFileSerial == decision.serial {\n\t\t\ts.continuePending(false)\n\t\t}\n\t})\n})",
@@ -1948,7 +1948,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 327,
+      "line": 331,
       "function": "*screen.filePrompt",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"project.save\", s.service.Snapshot().Document.Path == \"\", workbench.SaveParams{ExpectedGeneration: \u0026decision.generation}, func() {\n\tif s.pendingFileSerial == decision.serial {\n\t\ts.continuePending(false)\n\t}\n})",
@@ -1959,7 +1959,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 334,
+      "line": 338,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.withFileDecision(decision, true, func() { s.continuePending(true) }) }",
@@ -1967,7 +1967,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 334,
+      "line": 338,
       "function": "*screen.filePrompt",
       "kind": "callback-factory",
       "expression": "s.withFileDecision(decision, true, func() { s.continuePending(true) })",
@@ -1975,7 +1975,7 @@
     },
     {
       "file": "desktop/files.go",
-      "line": 335,
+      "line": 339,
       "function": "*screen.filePrompt",
       "kind": "node-Activate",
       "expression": "Activate: dismiss",

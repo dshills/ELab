@@ -82,6 +82,9 @@ func TestExampleBrowserUserControlsMatchAgentAndProtectEdits(t *testing.T) {
 	if state := u.service.Snapshot(); state.ExampleBrowser.Visible || state.Example == nil || state.Example.Info.ID != "rc" || state.Document.Dirty {
 		t.Fatal("confirmed Open failed")
 	}
+	if u.keyboardFocus.ID != "part-search" {
+		t.Fatal("continued Open lost the browser keyboard destination", u.keyboardFocus)
+	}
 }
 
 func TestExampleBrowserHeldActionsRefuseAnAgentInterleaving(t *testing.T) {
