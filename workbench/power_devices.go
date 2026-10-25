@@ -31,6 +31,7 @@ type BatteryConfig struct {
 	Charge     float64 `json:"initial_charge_fraction"`
 }
 type MotorConfig struct {
+	Locked     bool    `json:"locked_rotor"`
 	Resistance float64 `json:"armature_resistance_ohm"`
 	Inductance float64 `json:"armature_inductance_h"`
 	Constant   float64 `json:"ke_v_s_per_rad"`
@@ -101,6 +102,10 @@ func validatePowerModel(g Graph, m *PowerModel) error {
 	return nil
 }
 func defaultPower(p *Component) {
+	if p.Kind == "dc-motor" {
+		m := motorDefault()
+		p.Power = &PowerParameters{Motor: &m}
+	}
 	if p.Kind == "battery" {
 		p.Power = &PowerParameters{Battery: &BatteryConfig{.1, 1, 1}}
 	}
@@ -111,6 +116,9 @@ func validatePower(p Component) error {
 			return fmt.Errorf("power device requires explicit parameters")
 		}
 		return nil
+	}
+	if p.Kind == "dc-motor" && p.Power.Motor != nil && p.Power.Battery == nil && p.Power.Optocoupler == nil && p.Power.Transformer == nil {
+		return validateMotor(*p.Power.Motor)
 	}
 	if p.Kind != "battery" || p.Power.Battery == nil || p.Power.Motor != nil || p.Power.Optocoupler != nil || p.Power.Transformer != nil {
 		return fmt.Errorf("power parameters do not match component kind")
@@ -159,6 +167,10 @@ func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 	c.Nets = append([]Net(nil), c.Nets...)
 	parts := []Component{}
 	for _, p := range original.Components {
+		if p.Kind == "dc-motor" {
+			parts = append(parts, lowerMotor(&c, p)...)
+			continue
+		}
 		if p.Kind != "battery" {
 			parts = append(parts, p)
 			continue
@@ -228,6 +240,9 @@ func (n *mixedNetwork) batteryResult(p Component, x []float64) BatteryResult {
 }
 func (n *mixedNetwork) publishPower(r *MixedResult, x []float64) {
 	for _, p := range n.authored.Components {
+		if p.Kind == "dc-motor" {
+			r.Motors = append(r.Motors, n.motorResult(p, x))
+		}
 		if p.Kind == "battery" {
 			b := n.batteryResult(p, x)
 			r.Batteries = append(r.Batteries, b)
@@ -266,6 +281,11 @@ func validateRecordedPower(c Compiled, g Graph, r *MixedResult) error {
 }
 func (n *mixedNetwork) restorePowerNodes(r *MixedResult, x []float64) error {
 	for _, p := range n.authored.Components {
+		if p.Kind == "dc-motor" {
+			if err := n.restoreMotorNodes(p, r, x); err != nil {
+				return err
+			}
+		}
 		if p.Kind == "battery" {
 			found := false
 			for _, b := range r.Batteries {
@@ -295,4 +315,31 @@ func (n *mixedNetwork) usesCollocation() bool {
 		}
 	}
 	return false
+}
+
+type powerResourceUsage struct{ parts, caps, inductors, resistors, sources, nodes int }
+
+func powerResources(g Graph) (u powerResourceUsage) {
+	for _, p := range g.Components {
+		switch p.Kind {
+		case "battery":
+			u.parts++
+			u.caps++
+			u.resistors++
+			u.nodes++
+		case "dc-motor":
+			u.parts += 2
+			u.inductors++
+			u.resistors++
+			u.sources++
+			u.nodes += 2
+			if !p.Power.Motor.Locked {
+				u.parts += 2
+				u.caps++
+				u.resistors++
+				u.nodes++
+			}
+		}
+	}
+	return
 }

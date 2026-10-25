@@ -183,6 +183,9 @@ func decodeDocument(data []byte) (Document, error) {
 		if err := json.Unmarshal(component, &p); err != nil {
 			return d, err
 		}
+		if err := validatePowerFields(component, p); err != nil {
+			return d, err
+		}
 		// Probe and pinned-reading validation below derives branch references
 		// from these terminals. Check their library shape before indexing any
 		// untrusted saved array; full component metadata is still checked below.

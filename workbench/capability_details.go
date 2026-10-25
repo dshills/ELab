@@ -2,6 +2,7 @@ package workbench
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 )
 
@@ -32,6 +33,7 @@ func detailedCapabilities(id string) ([]Capability, error) {
 			}
 			delete(schema, "$id")
 		}
+		expandPointInputs(schema)
 		addCapabilityDetails(id, schema)
 		data, err := json.Marshal(schema)
 		if err != nil {
@@ -212,4 +214,25 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	// This is explicit coverage of parameter restrictions, not an exhaustive
 	// catalog of stateful admission preconditions or all possible failure codes.
 	schema["x-details-scope"] = "parameter-bounds-and-examples; stateful-preconditions-and-errors-not-exhaustive"
+}
+
+// Geometry remains shared in ordinary schemas. Filtered editing guidance owns
+// its coordinate copy so command bounds never mutate the numeric output type.
+func expandPointInputs(value any) {
+	switch v := value.(type) {
+	case map[string]any:
+		if v["$ref"] == "urn:elab:point:1" {
+			delete(v, "$ref")
+			for k, x := range structSchema(reflect.TypeOf(Point{})) {
+				v[k] = x
+			}
+		}
+		for _, child := range v {
+			expandPointInputs(child)
+		}
+	case []any:
+		for _, child := range v {
+			expandPointInputs(child)
+		}
+	}
 }

@@ -49,6 +49,34 @@ def batteries(agent, assets):
     return reports
 
 
+def motors(agent, assets):
+    reports = []
+    for example in ('motor-dc', 'motor-pwm'):
+        client = helper.Client(agent)
+        try:
+            client.mutate('example.load', {'id': example})
+            client.mutate('simulation.pause')
+            client.mutate('simulation.restart')
+            client.ask('simulation.wait')
+            state = client.step(.04)
+            m = state['mixed']['motors'][0]
+            assert m['rpm'] > 500
+            assert abs(m['back_emf_v'] - m['speed_rad_s'] * .02) < 1e-8
+            client.mutate('motor.load.set', {'id': 'MTR1', 'load_n_m_s_per_rad': .0001})
+            client.ask('simulation.wait')
+            loaded = client.ask('project.inspect')
+            assert loaded['mixed']['motors'][0]['rpm'] == m['rpm']
+            assert loaded['mixed']['motors'][0]['armature_current_a'] == m['armature_current_a']
+            assert loaded['mixed']['time_s'] == state['mixed']['time_s']
+            slow = client.step(.04)
+            assert slow['mixed']['motors'][0]['rpm'] < m['rpm']
+            exports = helper.capture_and_reopen(client, agent, assets, example, ['v:MTR1', 'i:MTR1'])
+            reports.append(dict(example=example, startup_and_live_load=True, captures_and_fresh_reopen=True, exports=exports))
+        finally:
+            client.close()
+    return reports
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent', type=Path, required=True)
@@ -57,7 +85,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    report = dict(passed=True, transport='headless-stdio', batteries=batteries(args.agent, assets))
+    report = dict(passed=True, transport='headless-stdio', batteries=batteries(args.agent, assets), motors=motors(args.agent, assets))
     args.output.write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report))
 

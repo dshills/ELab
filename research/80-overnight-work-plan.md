@@ -356,3 +356,13 @@ path, reserve existing internal resource budgets and leave simulation work and
 accuracy limits unchanged. After the five phases, finish broad quality/native
 checks and package a clean local app/agent. Continue reproduced defect and
 remaining acceptance work rather than add unrelated component families.
+
+Motor checkpoint: analytic steady/load/locked RL references, PWM at three
+potentiometer positions, flyback/conservation, high-speed mechanical range,
+staged failure/cancel/return-to-committed, save/reopen/undo/strict input and capture
+integrity pass. The motor plus existing 555 focused race suite passed in 49.959 s;
+native controls passed in 2.379 s. Public stdio replay passed for both motors
+and both battery examples including captures, fresh reopen and SVG/PNG/PDF.
+The PWM PNG was inspected; no clipping. Inventory is 173 commands /421 sites /141
+routes /85 production desktop sources. Full regressions and native changed-build
+interaction remain for the combined package. Next is AC frequency response.

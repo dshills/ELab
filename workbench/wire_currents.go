@@ -25,6 +25,9 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			known[ref] = ok
 		}
 		switch p.Kind {
+		case "dc-motor":
+			set("positive", p.ID, 1)
+			set("negative", p.ID, -1)
 		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			set("positive", p.ID, -1)
 			set("negative", p.ID, 1)

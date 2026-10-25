@@ -5,6 +5,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	fail := func(status, code, msg, id string) (Compiled, string, *Diagnostic) {
 		return out, status, &Diagnostic{code, msg, id}
 	}
+	motors := []Component{}
 	inductors := []Component{}
 	mos := []Component{}
 	opamps := []Component{}
@@ -17,6 +18,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
+		case "dc-motor":
+			motors = append(motors, p)
 		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, p)
 		case "capacitor":
@@ -92,7 +95,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			out.Analysis = NetworkTransientAnalysis
 		}
 	}
-	if len(inductors) > 0 {
+	if len(inductors)+len(motors) > 0 {
 		out.Analysis = InductorAnalysis
 	}
 	if len(timers) > 0 {
@@ -110,19 +113,16 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(opamps) > MaxNetworkOpAmps {
 		return fail("unsupported", "mixed-limit", "Network simulation supports at most two generic powered op-amps within the existing total part, node and source limits.", "")
 	}
-	batteries := 0
-	for _, p := range sources {
-		if p.Kind == "battery" {
-			batteries++
-		}
-	}
-	if SimulatedComponentCount(g)+batteries > MaxSimulatedComponents || len(caps)+batteries > MaxNetworkCapacitors || len(rs)+batteries > MaxNetworkResistors || len(out.Nets)+batteries > MaxElectricalNodes {
+
+	usage := powerResources(g)
+	if SimulatedComponentCount(g)+usage.parts > MaxSimulatedComponents || len(caps)+usage.caps > MaxNetworkCapacitors || len(rs)+usage.resistors > MaxNetworkResistors || len(inductors)+usage.inductors > MaxNetworkInductors || len(sources)+usage.sources > MaxNetworkSources || len(out.Nets)+usage.nodes > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
+
 	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators) == 0 {
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors) == 0 {
 		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }

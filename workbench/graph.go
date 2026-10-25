@@ -157,6 +157,7 @@ type Part struct {
 
 func libraryParts() []Part {
 	return []Part{
+		{Kind: "dc-motor", Name: "Brushed DC motor", Terminals: []string{"positive", "negative"}, Model: PowerModelID},
 		{Kind: "battery", Name: "Battery", Terminals: []string{"positive", "negative"}, DefaultValue: "9 V", Unit: "V", Model: PowerModelID},
 		{Kind: "dc-source", Name: "DC source", Terminals: []string{"positive", "negative"}, DefaultValue: "5 V", Unit: "V", Model: "ideal-dc.v1"},
 		{Kind: "thermistor", Name: "NTC thermistor", Terminals: []string{"1", "2"}, DefaultValue: "10k Ω", Unit: "Ω", Model: SensorModelID},
@@ -332,7 +333,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 	p := Point{}
 	found := true
 	switch c.Kind {
-	case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+	case "dc-motor", "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		switch name {
 		case "positive":
 			p = Point{0, -34}
@@ -513,7 +514,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 				hasSwitch = true
 			}
 			sources = append(sources, c)
-		case "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
+		case "dc-motor", "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true

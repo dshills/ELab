@@ -408,6 +408,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
+		case "dc-motor":
+			for _, path := range MotorSymbolPaths() {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "battery":
 			for _, path := range BatterySymbolPaths() {
 				b.WriteString(`<polyline points="`)
@@ -629,7 +637,7 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 	case "capacitor":
 		at := CapacitorLabelPosition(p)
 		x, y = at.X, at.Y
-	case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+	case "dc-motor", "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		x, y = p.Position.X-schematicLabelWidth(text)-32, p.Position.Y-2
 	case "junction":
 		x, y = p.Position.X+8, p.Position.Y-8

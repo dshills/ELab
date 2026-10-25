@@ -91,6 +91,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if part.Kind == "dc-motor" {
+		inspector = append(inspector, s.motorControls(state, part)...)
+	}
 	if part.Kind == "battery" {
 		inspector = append(inspector, s.batteryControls(state, part)...)
 	}

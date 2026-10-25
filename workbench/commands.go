@@ -81,6 +81,7 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(Point{}), "urn:elab:point:1"},
 	{reflect.TypeOf(struct{}{}), "urn:elab:empty-input:1"},
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
@@ -89,6 +90,7 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(ControlModel{}), "urn:elab:control-model:1"},
 	{reflect.TypeOf(ControlMemory{}), "urn:elab:control-memory:1"},
 	{reflect.TypeOf(ControlResult{}), "urn:elab:control-result:1"},
+	{reflect.TypeOf(MotorParams{}), "urn:elab:motor-input:1"}, {reflect.TypeOf(MotorLoadParams{}), "urn:elab:motor-load-input:1"}, {reflect.TypeOf(MotorResult{}), "urn:elab:motor-result:1"},
 	{reflect.TypeOf(BatteryParams{}), "urn:elab:battery-input:1"},
 	{reflect.TypeOf(PowerModel{}), "urn:elab:power-model:1"},
 	{reflect.TypeOf(PowerParameters{}), "urn:elab:power-parameters:1"},
@@ -316,6 +318,8 @@ func Catalog() []Capability {
 		typedCapability("source.pulse.set", "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics", reflect.TypeOf(PulseParams{})),
 		typedCapability("source.pulse.timing.set", "Set finite-pulse frequency/period and duty; preserve voltage/ramp settings. Undoable electrical edit.", reflect.TypeOf(PulseTimingParams{})),
 		typedCapability("simulation.pulse.timing.set", "Set frequency/period and duty for all ideal squares; preserve sampling/playback and voltage levels.", reflect.TypeOf(IdealPulseTimingParams{})),
+		typedCapability("motor.configure", "Set motor startup parameters.", reflect.TypeOf(MotorParams{})),
+		typedCapability("motor.load.set", "Stage live motor drag; inspect input_work.", reflect.TypeOf(MotorLoadParams{})),
 		typedCapability("battery.configure", "Set battery ESR, capacity and startup charge; undoable startup edit.", reflect.TypeOf(BatteryParams{})),
 		typedCapability("sensor.temperature.set", "Set NTC °C; inspect input_work and simulation.wait.", reflect.TypeOf(TemperatureParams{})),
 		typedCapability("sensor.light.set", "Set LDR lux; inspect input_work and simulation.wait.", reflect.TypeOf(LightParams{})),

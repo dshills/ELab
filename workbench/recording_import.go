@@ -267,6 +267,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if err := validateRecordedControls(c, m.Graph, r); err != nil {
 			return err
 		}
+		if err := validateRecordedMotors(c, m.Graph, r); err != nil {
+			return err
+		}
 		if err := validateRecordedPower(c, m.Graph, r); err != nil {
 			return err
 		}

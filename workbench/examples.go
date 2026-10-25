@@ -69,6 +69,8 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "motor-dc", Title: "DC motor startup and load", Question: "Why does motor current fall as speed rises?", Expected: "Current starts at zero through armature inductance, rises during startup, then back EMF reduces it as the rotor accelerates.", Try: "Select MTR1 to vary mechanical load live. Lock the rotor in startup settings and Restart to measure stall current.", Limitation: PowerDeviceModel().Motor},
+		{ID: "motor-pwm", Title: "555 PWM motor controller", Question: "How does a pulse train control motor speed?", Expected: "The 555 drives an N-channel MOSFET; armature inductance, inertia and flyback conduction smooth the motion between pulses.", Try: "Select P1 to change timer timing/duty; select MTR1 to change load and watch RPM/current. Compare motor voltage/current, gate pulses and D1 flyback current.", Limitation: PowerDeviceModel().Motor},
 		{ID: "battery-led", Title: "Battery sag and LED fade", Question: "Why does a weak battery dim an LED?", Expected: "Internal resistance sags under load; stored charge and open-circuit voltage fall as current is delivered.", Try: "Select B1 for live charge and voltage. Close S1 to add load. Change startup charge, capacity or ESR and Restart.", Limitation: PowerDeviceModel().Battery},
 		{ID: "battery-regulator", Title: "Battery discharge and regulator dropout", Question: "When does a regulator lose its output as a battery weakens?", Expected: "The 5 V regulator enters dropout as battery terminal voltage loses headroom.", Try: "Compare B1 terminal voltage, U1 output and battery current; change startup charge or capacity and Restart.", Limitation: PowerDeviceModel().Battery},
 		{ID: "night-light", Title: "Automatic night-light", Question: "How can light switch an LED automatically?", Expected: "LDR resistance rises as light falls. U1 switches the LED on in darkness, retaining its state across a narrow threshold band.", Try: "Select LDR1 and move Light level or enter lux. P1 adjusts the light threshold. Compare sensor resistance, divider voltage and LED current.", Limitation: ResistiveSensorModel().Limitations},
@@ -122,6 +124,16 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "motor-dc", "motor-pwm":
+		d.graph = MotorExampleGraph(id == "motor-pwm")
+		d.selected = "MTR1"
+		d.settings.StepSeconds = .0001
+		d.settings.PlaybackSpeed = .01
+		d.probes = []string{"v:MTR1", "i:MTR1"}
+		if id == "motor-pwm" {
+			d.probes = []string{"v:U1", "v:MTR1", "i:MTR1", "i:D1"}
+		}
+		d.view = View{Zoom: .6}
 	case "battery-led", "battery-regulator":
 		d.graph = BatteryExampleGraph(id == "battery-regulator")
 		d.selected = "B1"

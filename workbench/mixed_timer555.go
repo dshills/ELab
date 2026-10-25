@@ -151,10 +151,13 @@ func (state *mixedState) advanceTimers555(t *Transient, end float64, budget *int
 		}
 		// Bracket the first change without modifying memory during an analog trial.
 		// Each trial retains the ordinary integration estimator and shared budget.
+		// Reuse the accepted unchanged lower state instead of reintegrating the
+		// entire prefix on every bisection; all state stays private until publication.
 		lo, hi := at, stop
+		lower := cur
 		for hi-lo > math.Max(1e-9, 8*math.Abs(math.Nextafter(hi, math.Inf(1))-hi)) {
 			when := lo + (hi-lo)/2
-			candidate, err := cur.advanceAnalogBudget(t, when, budget)
+			candidate, err := lower.advanceAnalogBudget(t, when, budget)
 			if err != nil {
 				return nil, err
 			}
@@ -166,6 +169,7 @@ func (state *mixedState) advanceTimers555(t *Transient, end float64, budget *int
 				hi, trial = candidate.result.Time, candidate
 			} else {
 				lo = when
+				lower = candidate
 			}
 		}
 		appendNetworkTrace(t, mixedSample(cur.net.c, trial.result, mixedSourceVoltage(cur.net.c, trial.result)))

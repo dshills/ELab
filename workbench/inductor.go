@@ -155,6 +155,16 @@ func (n *mixedNetwork) inductorError(previous, full, refined *inductorStage) flo
 		tolerance := 5e-8 + 5e-7*math.Max(math.Abs(value), math.Abs(previous.capV[k]))
 		ratio = math.Max(ratio, math.Abs(value-full.capV[k])/tolerance)
 	}
+	for _, p := range n.authored.Components {
+		if p.Kind == "dc-motor" && !p.Power.Motor.Locked {
+			index := n.motorSpeedIndex(p)
+			before := voltage(previous.x, index) * motorSpeedScale
+			one := voltage(full.x, index) * motorSpeedScale
+			two := voltage(refined.x, index) * motorSpeedScale
+			tol := 1e-5 + 1e-6*math.Max(math.Abs(before), math.Abs(two))
+			ratio = math.Max(ratio, math.Abs(one-two)/tol)
+		}
+	}
 	return ratio
 }
 

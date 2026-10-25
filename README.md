@@ -346,3 +346,8 @@ changes preserve capacitor voltage, coil current and accepted time.
 resistance, capacity and startup-charge controls, live charge/OCV/current/energy
 readings, and LED-fade / regulator-dropout examples. Native controls and agents
 share `battery.configure`; discharge uses the existing adaptive storage solver.
+
+[Brushed DC motors](docs/dc-motors.md) add armature RL/back EMF, shaft inertia,
+RPM and live viscous load. A 555/MOSFET PWM example includes flyback protection
+and an explicit snubber. Native controls and agents share motor configuration
+and staged load commands; failed/canceled work preserves current and speed.

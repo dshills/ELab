@@ -7,6 +7,7 @@ import (
 )
 
 type InputWork struct {
+	MotorLoad          *MotorLoadParams   `json:"requested_motor_load,omitempty"`
 	Temperature        *TemperatureParams `json:"requested_temperature,omitempty"`
 	Light              *LightParams       `json:"requested_light,omitempty"`
 	Button             *ButtonParams      `json:"requested_button,omitempty"`
@@ -30,6 +31,10 @@ func cloneInputWork(in *InputWork) *InputWork {
 		return nil
 	}
 	out := *in
+	if in.MotorLoad != nil {
+		v := *in.MotorLoad
+		out.MotorLoad = &v
+	}
 	if in.Temperature != nil {
 		v := *in.Temperature
 		out.Temperature = &v
@@ -120,6 +125,7 @@ func (s *Service) startInputWorkLocked(mode string, wiper *WiperParams, graph Gr
 	}
 	job := &inputJob{work: InputWork{ID: fmt.Sprintf("input-%d", s.inputSerial), Command: command, Status: "queued", RunID: s.run, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, CommandRevision: s.commandRevision + 1, Time: s.transient.Sample.Time, Mode: mode, Wiper: wiper}, ctx: ctx, cancel: cancel, state: cloneMixedState(s.mixedState), trace: cloneTransient(s.transient), originalState: s.mixedState, originalTrace: s.transient, graph: graph.Clone(), event: event, mode: s.transient.Mode, pending: s.transient.PendingMode}
 	setSensorWork(&job.work, event)
+	setMotorWork(&job.work, event)
 	job.work.Button = buttonEventTarget(event)
 	job.work.Click = command == "button.click"
 	s.inputJob = job
@@ -166,8 +172,11 @@ func (s *Service) runInputWork(job *inputJob, solve inputSolveFunc) {
 		job.work.Status = "failed"
 		job.work.Error = &Failure{Code: "solve-failed", Message: err.Error()}
 	} else {
-		if job.work.Wiper != nil || sensorInputID(&job.work) != "" {
+		if job.work.Wiper != nil || sensorInputID(&job.work) != "" || job.work.MotorLoad != nil {
 			before := s.historyLocked()
+			if job.work.MotorLoad != nil {
+				applyMotorLoad(&s.graph, *job.work.MotorLoad)
+			}
 			if sensorInputID(&job.work) != "" {
 				applySensorWork(&s.graph, &job.work)
 			}
@@ -181,6 +190,9 @@ func (s *Service) runInputWork(job *inputJob, solve inputSolveFunc) {
 			before.Name = "Adjust wiper"
 			if sensorInputID(&job.work) != "" {
 				before.Name = "Change sensor environment"
+			}
+			if job.work.MotorLoad != nil {
+				before.Name = "Change motor load"
 			}
 			before.CommandRevision = job.work.CommandRevision
 			s.undo = append(s.undo, before)

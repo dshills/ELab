@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Motors             []MotorResult         `json:"motors,omitempty"`
 	Batteries          []BatteryResult       `json:"batteries,omitempty"`
 	Sensors            []SensorResult        `json:"sensors,omitempty"`
 	Regulators         []RegulatorResult     `json:"regulators,omitempty"`
@@ -75,6 +76,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Motors = append([]MotorResult(nil), r.Motors...)
 	o.Batteries = append([]BatteryResult(nil), r.Batteries...)
 	o.Sensors = append([]SensorResult(nil), r.Sensors...)
 	o.Regulators = append([]RegulatorResult(nil), r.Regulators...)
@@ -370,6 +372,7 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	for k, p := range n.sources {
 		branch(n.pin(p, "positive"), n.pin(p, "negative"), len(n.nodes)+k, n.sourceStimulus(p, t, at, dt))
 	}
+	n.stampMotorCoupling(x, add, f)
 	if !storageRows {
 		for _, parts := range [][]Component{n.inductors, n.caps} {
 			for k, p := range parts {
@@ -789,7 +792,9 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			continue
 		}
 		energyRate += v * i
-		r.Inductors = append(r.Inductors, InductorResult{ID: p.ID, Voltage: v, Current: i, Energy: .5 * p.Value * i * i})
+		if !privatePart(p.ID) {
+			r.Inductors = append(r.Inductors, InductorResult{ID: p.ID, Voltage: v, Current: i, Energy: .5 * p.Value * i * i})
+		}
 	}
 	_, f := n.mnaEquations(x, old, dt, t, at, !n.usesCollocation())
 	for i := range n.nodes {

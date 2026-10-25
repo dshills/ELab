@@ -5,7 +5,7 @@
     "desktop/actuation_controls.go": "7440a002d8fb8556463fda10e1f152529a3aa7cd79173455ed4af1a9066ca0e6",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/canvas.go": "f4f3f32bb36587889703fba5724e62e00840399dc6dad233d3413fe5f88cc901",
-    "desktop/component_inspector.go": "6232c5337717c639f020ef447195dbb84aac8c7703883e691c781ecacae9553c",
+    "desktop/component_inspector.go": "84bf9b5feb7f2451ee38637d1b9a8701ebb49520723f4d78f8a77d0dba1884f0",
     "desktop/component_palette.go": "d3195f223b9d569a013eacf54e13b8e1f05989c3b61db99751e641a94ed35be9",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
@@ -17,8 +17,8 @@
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "f54283db2acec7240b861f415ce0855fbb7dc3349785883f2095002833bb9e13",
     "desktop/document_workspace.go": "130574f08669ac76d9dc7667175533f01c1da57081eda473d7ecdbfcbb0da616",
-    "desktop/drawing.go": "0c0edcdfb6643b28d01bcd1bb1af535810cde2e0f50726e396211dd987516cef",
-    "desktop/example_load.go": "ccd7def40620d060aacf3e234e0a6e8630065aebb0dabef7b90b4b2e2368fce0",
+    "desktop/drawing.go": "0d81192a0c9bfec88d73b9ead33fa7a1ef212c3140b44c3681c72a398098598f",
+    "desktop/example_load.go": "e97427cd4e4fdf3d81adb946e74c77785075f0c52ca34d78b84253745387426b",
     "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
     "desktop/field_context.go": "615916cc47caeb68e7b0e69feddf10d4ca5b057f0064eb5e80de4dc7bc68e39c",
     "desktop/file_decision.go": "0eefa5e911d9914966b47ca3fa439ec64c73f5da2868657a79d5ed899de62a67",
@@ -33,9 +33,10 @@
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/main.go": "bab7d175e7939978bdd0937b2b1f08866e52fb1e61ce0ebfd4e93efc36c352ac",
     "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
-    "desktop/menus.go": "05325b00be5919a566f6f19abcc59646f81cf1acaf7da538bcf4ef395124c424",
+    "desktop/menus.go": "0a2754a56cdad2df9146e5e8a600f0430e9d6a3a4dd4ed2d7206454458a21991",
     "desktop/menus_darwin.go": "fedce80e039ce946802b932b6f778c3b509d4121dfc2b3270aba449d7724f3c3",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
+    "desktop/motor_controls.go": "b9d2416b6fa95da22b0ccb1d55ef6cfa62c0681de2d4cd55e6d85c04bbc1d09a",
     "desktop/native_chrome.go": "c9990bed7c0b15abe210c6a80fffa5bbc8815e1bcc45a102b837aadbef935b38",
     "desktop/npn.go": "f355ebca5a937207f73da01d8358831d4f1f8da1e7e95e538ca4eda742f8cbaf",
     "desktop/output_page_actions.go": "92b5592e3bb9ead8363e4c6f6c6b4ae9ac892926e253eb415a97a98bbdf8a923",
@@ -76,7 +77,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "df354b9b782395581baaa0e933af0df8a714208e6dfde7a0ee75dc7cfc62c6a9",
+    "desktop/view.go": "926e1fc712950848b40ef47c47d589345d19c9b2ad95df801e709324d857084d",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -142,6 +143,8 @@
     "measurement.pin.move",
     "measurement.pin.remove",
     "measurement.select",
+    "motor.configure",
+    "motor.load.set",
     "object.delete",
     "operation.cancel",
     "operation.inspect",
@@ -337,6 +340,12 @@
       "example.load"
     ],
     "example.logic-switches": [
+      "example.load"
+    ],
+    "example.motor-dc": [
+      "example.load"
+    ],
+    "example.motor-pwm": [
       "example.load"
     ],
     "example.night-light": [
@@ -696,7 +705,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 144,
+      "line": 147,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -704,7 +713,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 144,
+      "line": 147,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
@@ -712,7 +721,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 178,
+      "line": 181,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -720,7 +729,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 178,
+      "line": 181,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
@@ -728,7 +737,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 187,
+      "line": 190,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -736,7 +745,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 187,
+      "line": 190,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -744,7 +753,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 200,
+      "line": 203,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeComponentStartup(state, part, fmt.Sprintf(\"%.9g V\", e.Number))\n}",
@@ -752,7 +761,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 202,
+      "line": 205,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.componentStartupDefault(state, part)",
@@ -760,7 +769,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 203,
+      "line": 206,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -768,7 +777,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 203,
+      "line": 206,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -776,7 +785,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 254,
+      "line": 257,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -787,7 +796,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 255,
+      "line": 258,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -798,7 +807,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 258,
+      "line": 261,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -809,7 +818,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 259,
+      "line": 262,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -2194,7 +2203,7 @@
       "line": 20,
       "function": "(package)",
       "kind": "native-menu-group",
-      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.pnp\", \"example.emitter-follower\", \"example.bipolar-push-pull\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.opamp-follower\", \"example.opamp-inverting\", \"example.rectifier\", \"example.zener\", \"example.schottky\", \"example.battery-led\", \"example.battery-regulator\", \"example.night-light\", \"example.thermostat\", \"example.regulator-supply\", \"example.regulator-dropout\", \"example.relay-switch\", \"example.relay-flasher\", \"example.comparator-threshold\", \"example.comparator-counter\", \"example.button-counter\", \"example.button-debounce\", \"example.display-counter\", \"example.d-flipflop\", \"example.jk-flipflop\", \"example.t-flipflop\", \"example.binary-counter\", \"example.decade-counter\", \"example.logic-inverter\", \"example.logic-switches\", \"example.logic-half-adder\", \"example.555-flasher\", \"example.555-oscillator\", \"example.555-one-shot\"}",
+      "expression": "Commands: []string{\"example.reset\", \"example.split-supply\", \"example.rc\", \"example.rc-high-pass\", \"example.rl\", \"example.rlc\", \"example.flyback\", \"example.npn\", \"example.pnp\", \"example.emitter-follower\", \"example.bipolar-push-pull\", \"example.switch-npn\", \"example.npn-pulse\", \"example.flasher\", \"example.led-fade\", \"example.nmos\", \"example.pmos\", \"example.cmos\", \"example.opamp-follower\", \"example.opamp-inverting\", \"example.rectifier\", \"example.zener\", \"example.schottky\", \"example.motor-dc\", \"example.motor-pwm\", \"example.battery-led\", \"example.battery-regulator\", \"example.night-light\", \"example.thermostat\", \"example.regulator-supply\", \"example.regulator-dropout\", \"example.relay-switch\", \"example.relay-flasher\", \"example.comparator-threshold\", \"example.comparator-counter\", \"example.button-counter\", \"example.button-debounce\", \"example.display-counter\", \"example.d-flipflop\", \"example.jk-flipflop\", \"example.t-flipflop\", \"example.binary-counter\", \"example.decade-counter\", \"example.logic-inverter\", \"example.logic-switches\", \"example.logic-half-adder\", \"example.555-flasher\", \"example.555-oscillator\", \"example.555-one-shot\"}",
       "public_commands": [
         "example.reset",
         "example.load",
@@ -2217,6 +2226,8 @@
         "example.load",
         "example.load",
         "example.rectifier",
+        "example.load",
+        "example.load",
         "example.load",
         "example.load",
         "example.load",
@@ -2293,6 +2304,60 @@
       "function": "*screen.nativeChoiceButton",
       "kind": "callback-assignment",
       "expression": "node.Activate = func() { s.showChoiceMenu(captured, choices, selection, revision) }",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/motor_controls.go",
+      "line": 31,
+      "function": "*screen.motorControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"motor.load.set\", workbench.MotorLoadParams{ID: part.ID, Load: v})",
+      "public_commands": [
+        "motor.load.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/motor_controls.go",
+      "line": 38,
+      "function": "*screen.motorControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Number == float32(motorLoadPosition(value)) {\n\t\tunchanged()\n\t\treturn\n\t}\n\tsetLoad(motorLoadAt(float64(e.Number)))\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/motor_controls.go",
+      "line": 44,
+      "function": "*screen.motorControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Number == float32(value*1e6) {\n\t\tunchanged()\n\t\treturn\n\t}\n\tsetLoad(float64(e.Number) / 1e6)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/motor_controls.go",
+      "line": 65,
+      "function": "*screen.motorControls",
+      "kind": "domain-ingress",
+      "expression": "s.invoke(\"motor.configure\", workbench.MotorParams{ID: part.ID, Parameters: v})",
+      "public_commands": [
+        "motor.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/motor_controls.go",
+      "line": 79,
+      "function": "*screen.motorControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Number == float32(f.value) {\n\t\treturn\n\t}\n\tv := float64(e.Number)\n\tif e.Number == float32(f.min) {\n\t\tv = f.min\n\t}\n\tif e.Number == float32(f.max) {\n\t\tv = f.max\n\t}\n\tnext := config\n\tf.set(\u0026next, v/f.scale)\n\tapply(next)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/motor_controls.go",
+      "line": 95,
+      "function": "*screen.motorControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) { v := config; v.Locked = e.Checked; apply(v) }",
       "status": "requires-binding-review"
     },
     {
@@ -4083,7 +4148,7 @@
       "line": 148,
       "function": "*screen.view",
       "kind": "command-menu",
-      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.pnp\", \"PNP high-side LED\"}, {\"example.emitter-follower\", \"NPN emitter follower\"}, {\"example.bipolar-push-pull\", \"Complementary transistor buffer\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}, {\"example.zener\", \"Zener voltage regulator\"}, {\"example.schottky\", \"Schottky rectifier\"}, {\"example.battery-led\", \"Battery sag and LED fade\"}, {\"example.battery-regulator\", \"Battery and regulator dropout\"}, {\"example.night-light\", \"Automatic night-light\"}, {\"example.thermostat\", \"Thermistor relay thermostat\"}, {\"example.regulator-supply\", \"Regulated supply and load\"}, {\"example.regulator-dropout\", \"Linear versus LDO dropout\"}, {\"example.relay-switch\", \"Pushbutton transistor relay\"}, {\"example.relay-flasher\", \"Relay coil and flyback protection\"}, {\"example.comparator-threshold\", \"Comparator threshold detector\"}, {\"example.comparator-counter\", \"Analog signal to digit counter\"}, {\"example.button-counter\", \"Pushbutton decimal counter\"}, {\"example.button-debounce\", \"Contact bounce and RC debounce\"}, {\"example.display-counter\", \"555-driven digit counter\"}, {\"example.d-flipflop\", \"D flip-flop sampler\"}, {\"example.jk-flipflop\", \"JK flip-flop divider\"}, {\"example.t-flipflop\", \"T flip-flop toggle\"}, {\"example.binary-counter\", \"4-bit binary counter\"}, {\"example.decade-counter\", \"Decade counter\"}, {\"example.logic-inverter\", \"Logic inverter LED\"}, {\"example.logic-switches\", \"AND gate with switches\"}, {\"example.logic-half-adder\", \"Logic half adder\"}, {\"example.555-flasher\", \"555 LED flasher\"}, {\"example.555-oscillator\", \"Adjustable 555 oscillator\"}, {\"example.555-one-shot\", \"555 one-shot timer\"}})",
+      "expression": "s.commandMenu(\"examples-menu\", \"Examples\", [][2]string{{\"example.reset\", \"LED circuit\"}, {\"example.split-supply\", \"Split-rail DC supply\"}, {\"example.rc\", \"RC charge / discharge\"}, {\"example.rc-high-pass\", \"RC high-pass filter\"}, {\"example.rl\", \"Coil buildup / decay\"}, {\"example.rlc\", \"RLC ringing\"}, {\"example.flyback\", \"Coil / flyback diode\"}, {\"example.npn\", \"Transistor LED\"}, {\"example.pnp\", \"PNP high-side LED\"}, {\"example.emitter-follower\", \"NPN emitter follower\"}, {\"example.bipolar-push-pull\", \"Complementary transistor buffer\"}, {\"example.switch-npn\", \"Manual transistor switch\"}, {\"example.npn-pulse\", \"Blinking LED\"}, {\"example.flasher\", \"Capacitor-timed flasher\"}, {\"example.led-fade\", \"LED fade\"}, {\"example.nmos\", \"MOSFET LED switch\"}, {\"example.pmos\", \"High-side MOSFET LED\"}, {\"example.cmos\", \"CMOS inverter\"}, {\"example.opamp-follower\", \"Op-amp follower\"}, {\"example.opamp-inverting\", \"Inverting amplifier\"}, {\"example.rectifier\", \"Rectifier / smoothing\"}, {\"example.zener\", \"Zener voltage regulator\"}, {\"example.schottky\", \"Schottky rectifier\"}, {\"example.motor-dc\", \"DC motor startup and load\"}, {\"example.motor-pwm\", \"555 PWM motor controller\"}, {\"example.battery-led\", \"Battery sag and LED fade\"}, {\"example.battery-regulator\", \"Battery and regulator dropout\"}, {\"example.night-light\", \"Automatic night-light\"}, {\"example.thermostat\", \"Thermistor relay thermostat\"}, {\"example.regulator-supply\", \"Regulated supply and load\"}, {\"example.regulator-dropout\", \"Linear versus LDO dropout\"}, {\"example.relay-switch\", \"Pushbutton transistor relay\"}, {\"example.relay-flasher\", \"Relay coil and flyback protection\"}, {\"example.comparator-threshold\", \"Comparator threshold detector\"}, {\"example.comparator-counter\", \"Analog signal to digit counter\"}, {\"example.button-counter\", \"Pushbutton decimal counter\"}, {\"example.button-debounce\", \"Contact bounce and RC debounce\"}, {\"example.display-counter\", \"555-driven digit counter\"}, {\"example.d-flipflop\", \"D flip-flop sampler\"}, {\"example.jk-flipflop\", \"JK flip-flop divider\"}, {\"example.t-flipflop\", \"T flip-flop toggle\"}, {\"example.binary-counter\", \"4-bit binary counter\"}, {\"example.decade-counter\", \"Decade counter\"}, {\"example.logic-inverter\", \"Logic inverter LED\"}, {\"example.logic-switches\", \"AND gate with switches\"}, {\"example.logic-half-adder\", \"Logic half adder\"}, {\"example.555-flasher\", \"555 LED flasher\"}, {\"example.555-oscillator\", \"Adjustable 555 oscillator\"}, {\"example.555-one-shot\", \"555 one-shot timer\"}})",
       "public_commands": [
         "example.reset",
         "example.load",
@@ -4106,6 +4171,8 @@
         "example.load",
         "example.load",
         "example.rectifier",
+        "example.load",
+        "example.load",
         "example.load",
         "example.load",
         "example.load",
@@ -4574,6 +4641,8 @@
     "measurement.pin.move",
     "measurement.pin.remove",
     "measurement.select",
+    "motor.configure",
+    "motor.load.set",
     "object.delete",
     "operation.cancel",
     "operation.inspect",

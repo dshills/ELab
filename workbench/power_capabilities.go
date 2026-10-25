@@ -1,6 +1,9 @@
 package workbench
 
 func addPowerCapabilityDetails(id string, schema map[string]any) bool {
+	if addMotorCapabilityDetails(id, schema) {
+		return true
+	}
 	if id != "battery.configure" {
 		return false
 	}

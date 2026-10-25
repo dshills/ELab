@@ -1,6 +1,9 @@
 package workbench
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func validateRecordedBipolars(c Compiled, graph Graph, result *MixedResult) error {
 	ids := map[string][]string{"npn": {}, "pnp": {}}
@@ -57,7 +60,7 @@ func recordedDeviceNodes(c Compiled, result *MixedResult) (*mixedNetwork, []floa
 	if len(result.Nodes) != len(c.Nets) {
 		return nil, nil, fmt.Errorf("recorded device node inventory disagrees with its graph")
 	}
-	x := make([]float64, len(n.nodes))
+	x := make([]float64, n.matrixSize(0))
 	for k, node := range n.nodes {
 		if privatePart(node) {
 			continue
@@ -70,6 +73,11 @@ func recordedDeviceNodes(c Compiled, result *MixedResult) (*mixedNetwork, []floa
 	}
 	if err := n.restorePowerNodes(result, x); err != nil {
 		return nil, nil, err
+	}
+	for i := range n.nodes {
+		if !finite(x[i]) || math.Abs(x[i]) > maxMixedNodeVoltage {
+			return nil, nil, fmt.Errorf("invalid reconstructed device state")
+		}
 	}
 	return n, x, nil
 }
