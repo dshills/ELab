@@ -439,3 +439,13 @@ covers the same 40 ms at all three wiper positions with twice as many samples.
 Three race repetitions pass in 111.942 s. The packaged replay uses the same
 finer capture grid for this example. No numerical tolerance, integration-attempt
 limit or per-output time budget changed. Python tooling passes all 67 tests.
+
+The complete root race rerun passes 835 top-level tests /1,858 including
+subtests, with no failing tests (two CLI packages contain no tests). Workbench
+passes in 197.687 s; conformance in 117.814 s. The first complete standard
+desktop run passes 742 checks and identifies only two stale battery-search
+expectations. They now exercise the actual battery and its VOLTAGE SAG alias,
+including keyboard placement/focus. Both corrected tests pass three race
+repetitions in 6.426 s. The failing full log is preserved as
+build/power-expansion/desktop-race-initial.jsonl. Complete corrected standard
+and mounted runs follow; production sources are unchanged by these fixture fixes.

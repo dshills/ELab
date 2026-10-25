@@ -11,9 +11,9 @@ import (
 func TestNativeSearchModelAssumptionsAndUnavailableProbeRecovery(t *testing.T) {
 	s, cleanup := testScreen(t)
 	defer cleanup()
-	uiAction(t, s, "part-search", &ui.ChangeEvent{Text: "BATTERY"})
-	if !matchingPart(s.view(), "dc-source") {
-		t.Fatal("native hobbyist alias search failed")
+	uiAction(t, s, "part-search", &ui.ChangeEvent{Text: "VOLTAGE SAG"})
+	if !matchingPart(s.view(), "battery") {
+		t.Fatal("native battery alias search failed")
 	}
 	uiAction(t, s, "part-search", &ui.ChangeEvent{Text: ""})
 	uiAction(t, s, "example.rc", nil)

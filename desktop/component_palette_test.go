@@ -15,10 +15,10 @@ func TestComponentListFocusOrderAndNoMatches(t *testing.T) {
 	uiAction(t, s, "part-search", &ui.ChangeEvent{Text: "battery"})
 	root := s.view()
 	list, ok := findNode(root, "part-list")
-	if !ok || list.Kind != ui.ListBox || len(list.Options) != 1 || list.Options[0].ID != "dc-source" || root.Focus.ID != "part-list" {
+	if !ok || list.Kind != ui.ListBox || len(list.Options) != 1 || list.Options[0].ID != "battery" || root.Focus.ID != "part-list" {
 		t.Fatal("alias filter does not feed managed list")
 	}
-	uiAction(t, s, "part-list", &ui.ChangeEvent{SelectedID: "dc-source"})
+	uiAction(t, s, "part-list", &ui.ChangeEvent{SelectedID: "battery"})
 	root = s.view()
 	order := ui.FocusOrder(root)
 	previous := -1
