@@ -6,6 +6,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return out, status, &Diagnostic{code, msg, id}
 	}
 	motors := []Component{}
+	optos := []Component{}
 	inductors := []Component{}
 	mos := []Component{}
 	opamps := []Component{}
@@ -18,6 +19,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	sources, caps, qs, rs, leds, grounds, switches, diodes, pots := []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}, []Component{}
 	for _, p := range g.Components {
 		switch p.Kind {
+		case "optocoupler":
+			optos = append(optos, p)
 		case "dc-motor":
 			motors = append(motors, p)
 		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
@@ -119,10 +122,10 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 
-	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
+	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors) == 0 {
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos) == 0 {
 		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
@@ -167,7 +170,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
+				if u == v && p.Kind != "optocoupler" && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				if networkReferencePair(p, a, b, len(opamps) > 0) {

@@ -27,8 +27,8 @@ class Client(helper.Client):
         return self.ask('simulation.wait')
 
 
-def capture_and_reopen(client, agent, assets, example, probes):
-    client.mutate('simulation.verify', {'duration_s': .02, 'sample_step_s': .0005, 'probe_ids': probes})
+def capture_and_reopen(client, agent, assets, example, probes, duration=.02):
+    client.mutate('simulation.verify', {'duration_s': duration, 'sample_step_s': .0005, 'probe_ids': probes})
     operation = client.ask('project.inspect')['last_operation']
     deadline = time.monotonic() + 30
     while True:

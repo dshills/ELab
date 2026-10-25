@@ -379,3 +379,16 @@ reservoirs and generalizing example tests to templates without a resistor.
 Inventory remains 173 commands /421 sites /141 routes /85 production sources.
 Actual combined native app and full suites remain. Next: optocoupler ports, CTR,
 saturation, shared controls, isolated switch example, and electrical/capture tests.
+
+Optocoupler checkpoint: CTR/load/saturation, analytic derivatives, separate-port
+conservation, pulse switching, output-to-input isolation, floating output refusal,
+inductor startup, strict capture and save/reopen tests pass. Focused electrical,
+example and discovery race checks passed in 19.784 s; native CTR field/slider
+parity and battery/motor regression controls passed in 5.750 s. Public agent
+replay (all eight examples, then final isolated switch fixture) passes, including
+captures, fresh clean reopen and SVG/PNG/PDF. Final PNG inspected after moving
+the output LED/resistor to keep its collector route clear of the emitter return.
+Battery/motor wire anchors now meet their symbol lead ends, and native captions
+move beside those symbols. Inventory: 174 commands /424 sites /142 routes /86
+production desktop sources. Next: transformer/coupled winding physics and the
+low-voltage rectifier/smoothing/regulator workflow; then full qualification.

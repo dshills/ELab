@@ -356,3 +356,8 @@ and staged load commands; failed/canceled work preserves current and speed.
 gain/phase Bode curves, exact sampled-point inspection and half-power estimates,
 with RC, RLC and op-amp filter examples. Native controls and agents share the
 existing sweep commands, captured-data export and saved-project workflow.
+
+[Optocouplers](docs/optocouplers.md) add separate LED/phototransistor ports,
+CTR and smooth output saturation, live port readings and an isolated LED-switch
+example. Inspector and agents share `optocoupler.configure`; each port has its
+own voltage/current probes and power accounting.

@@ -13,6 +13,9 @@ func validatePowerFields(raw json.RawMessage, p Component) error {
 	if err := json.Unmarshal(raw, &fields); err != nil {
 		return err
 	}
+	if p.Kind == "optocoupler" {
+		return paramsNested(fields["power"], "optocoupler", &OptocouplerConfig{}, "current_transfer_ratio")
+	}
 	if p.Kind == "battery" {
 		return paramsNested(fields["power"], "battery", &BatteryConfig{}, "capacity_ah", "internal_resistance_ohm", "initial_charge_fraction")
 	}

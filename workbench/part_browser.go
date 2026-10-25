@@ -44,7 +44,7 @@ func partGroup(kind string) (category string, common bool) {
 		category = "sources"
 	case "thermistor", "ldr", "resistor", "capacitor", "inductor", "potentiometer":
 		category = "passives"
-	case "timer555", "led", "diode", "zener", "schottky", "npn", "pnp", "nmos", "pmos":
+	case "optocoupler", "timer555", "led", "diode", "zener", "schottky", "npn", "pnp", "nmos", "pmos":
 		category = "semiconductors"
 	case "linear-regulator", "ldo-regulator", "opamp", "comparator":
 		category = "amplifiers"

@@ -102,6 +102,9 @@ func validatePowerModel(g Graph, m *PowerModel) error {
 	return nil
 }
 func defaultPower(p *Component) {
+	if p.Kind == "optocoupler" {
+		p.Power = &PowerParameters{Optocoupler: &OptocouplerConfig{1}}
+	}
 	if p.Kind == "dc-motor" {
 		m := motorDefault()
 		p.Power = &PowerParameters{Motor: &m}
@@ -116,6 +119,9 @@ func validatePower(p Component) error {
 			return fmt.Errorf("power device requires explicit parameters")
 		}
 		return nil
+	}
+	if p.Kind == "optocoupler" && p.Power.Optocoupler != nil && p.Power.Battery == nil && p.Power.Motor == nil && p.Power.Transformer == nil {
+		return validateOptocoupler(*p.Power.Optocoupler)
 	}
 	if p.Kind == "dc-motor" && p.Power.Motor != nil && p.Power.Battery == nil && p.Power.Optocoupler == nil && p.Power.Transformer == nil {
 		return validateMotor(*p.Power.Motor)

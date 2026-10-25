@@ -91,6 +91,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if part.Kind == "optocoupler" {
+		inspector = append(inspector, s.optocouplerControls(state, part)...)
+	}
 	if part.Kind == "dc-motor" {
 		inspector = append(inspector, s.motorControls(state, part)...)
 	}

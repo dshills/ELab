@@ -116,15 +116,44 @@ def ac_sweeps(agent, assets):
     return reports
 
 
+def optocouplers(agent, assets):
+    client = helper.Client(agent)
+    try:
+        client.mutate('example.load', {'id': 'opto-switch'})
+        client.mutate('simulation.pause')
+        off = client.ask('simulation.wait')
+        assert off['mixed']['optocouplers'][0]['led_current_a'] < 1e-6
+        client.mutate('switch.set', {'id': 'S1', 'closed': True})
+        client.mutate('simulation.restart')
+        on = client.ask('simulation.wait')
+        assert on['mixed']['leds'][0]['current_a'] > .001
+        client.mutate('optocoupler.configure', {'id': 'OC1', 'current_transfer_ratio': .5})
+        client.mutate('simulation.restart')
+        state = client.ask('simulation.wait')
+        u = state['mixed']['optocouplers'][0]
+        assert u['collector_current_a'] < on['mixed']['optocouplers'][0]['collector_current_a']
+        assert abs(state['mixed']['power_residual_w']) < 1e-8
+        assert state['mixed']['kcl_residual_a'] < 1e-9
+        exports = helper.capture_and_reopen(client, agent, assets, 'opto-switch', ['v:OC1', 'v:OC1.output', 'i:OC1.anode', 'i:OC1.collector'], duration=0)
+        return [dict(example='opto-switch', independent_ports_and_ctr=True, output_led_switch=True, captures_and_fresh_reopen=True, exports=exports)]
+    finally:
+        client.close()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--artifacts', type=Path, required=True)
+    parser.add_argument('--only', choices=('batteries', 'motors', 'ac_sweeps', 'optocouplers'))
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    report = dict(passed=True, transport='headless-stdio', batteries=batteries(args.agent, assets), motors=motors(args.agent, assets), ac_sweeps=ac_sweeps(args.agent, assets))
+    groups = dict(batteries=batteries, motors=motors, ac_sweeps=ac_sweeps, optocouplers=optocouplers)
+    report = dict(passed=True, transport='headless-stdio')
+    for name, replay in groups.items():
+        if args.only is None or args.only == name:
+            report[name] = replay(args.agent, assets)
     args.output.write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report))
 

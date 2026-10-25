@@ -44,6 +44,9 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "optocoupler":
+			join(p, "anode", "cathode")
+			join(p, "collector", "emitter")
 		case "linear-regulator", "ldo-regulator":
 			join(p, "in", "gnd")
 			join(p, "out", "gnd")

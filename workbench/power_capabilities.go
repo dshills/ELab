@@ -1,6 +1,14 @@
 package workbench
 
 func addPowerCapabilityDetails(id string, schema map[string]any) bool {
+	if id == "optocoupler.configure" {
+		p := inputProperty(schema, "current_transfer_ratio")
+		p["minimum"], p["maximum"], p["x-unit"] = .01, 5, "A/A"
+		schema["x-model-id"] = PowerModelID
+		schema["x-target-inventory"] = "snapshot.components kind optocoupler"
+		schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "optocoupler-configuration", Preconditions: []string{"Existing optocoupler and finite CTR within 0.01–5"}, Effects: []string{"Saved undoable startup edit; running circuit restarts, paused readings stay stale until Restart/Resume", "Separate input LED and output phototransistor conductive ports; optical current coupling never creates a reference path across the barrier", "Input uses the generic red LED law. Output is CTR*max(IF,0)*Vce/hypot(Vce,0.1 V) for forward Vce plus 1 GΩ dark leakage; reverse output has only dark leakage", "mixed.optocouplers reports input/output currents, effective CTR, headroom state and separate port power; no physical isolation rating or propagation-delay claim"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing fields, wrong kind or out-of-range CTR preserves accepted state"}}}
+		return true
+	}
 	if addMotorCapabilityDetails(id, schema) {
 		return true
 	}

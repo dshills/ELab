@@ -97,7 +97,7 @@ func CanvasPartLabel(part Component) (Point, string) {
 // source as its text grows. Horizontal sources put text above both leads.
 // Other symbols retain their established anchors; export geometry is unchanged.
 func CanvasPartLabelPositionAtZoom(part Component, title string, zoom float64) Point {
-	if part.Kind != "dc-source" {
+	if part.Kind != "dc-source" && part.Kind != "battery" && part.Kind != "dc-motor" {
 		return CanvasPartLabelPosition(part, title)
 	}
 	width := CanvasTextWidth(title, CanvasFontScale(zoom))
@@ -112,6 +112,8 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 		return Point{part.Position.X + 90, part.Position.Y - 15}
 	}
 	switch part.Kind {
+	case "optocoupler":
+		return Point{part.Position.X - 55, part.Position.Y - 90}
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		return LogicLabelPosition(part)
 	case "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter":
@@ -145,7 +147,7 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 		y = part.Position.Y - 75
 	}
 	x := part.Position.X - float64(len(title))*4.4
-	if part.Kind == "dc-source" {
+	if part.Kind == "dc-source" || part.Kind == "battery" || part.Kind == "dc-motor" {
 		x, y = part.Position.X-45-float64(len(title))*8.8, part.Position.Y+3
 	} else if part.Kind == "resistor" && (part.Rotation == 90 || part.Rotation == 270) {
 		x, y = part.Position.X+27, part.Position.Y+3

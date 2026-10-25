@@ -80,6 +80,12 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		p.Energy += b.Energy
 	}
 	currents := map[string]float64{}
+	for _, u := range r.Optocouplers {
+		currents[u.ID+".anode"] = u.InputCurrent
+		currents[u.ID+".cathode"] = -u.InputCurrent
+		currents[u.ID+".collector"] = u.OutputCurrent
+		currents[u.ID+".emitter"] = -u.OutputCurrent
+	}
 	for _, m := range r.Motors {
 		currents[m.ID] = m.Current
 		p.Energy += m.MagneticEnergy + m.RotationalEnergy

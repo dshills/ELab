@@ -69,6 +69,7 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "opto-switch", Title: "Optically isolated LED switch", Question: "Can an LED control a separate electrical circuit?", Expected: "Closing S1 lights the internal input LED; its photocurrent enables D1 on the separate output supply. CTR and output headroom limit transferred current.", Try: "Close S1; select OC1 to compare input/output currents and effective CTR. Change CTR and Restart. The two supplies use separate wiring and common zero-volt measurement references.", Limitation: PowerDeviceModel().Optocoupler},
 		{ID: "ac-rc", Title: "RC filter Bode plot", Question: "Where does a low-pass filter begin to attenuate?", Expected: "A 1 kΩ /1 µF low-pass crosses about 159 Hz at −3 dB and −45°. Gain rolls off above it.", Try: "Open Sweeps and run the prepared AC range. Select gain or phase, click a point and compare half-power estimates.", Limitation: "Normalized small-signal response around DC bias; captured sweep leaves the live circuit unchanged."},
 		{ID: "ac-rlc", Title: "RLC resonance Bode plot", Question: "Where does inductance boost capacitor voltage?", Expected: "Series RLC shows a sampled resonant peak and phase rotation.", Try: "Run the prepared AC range, compare gain/phase, then change R1 and rerun to see damping.", Limitation: "Ideal L/C and explicit series resistance; sampled peak and interpolated half-power estimates."},
 		{ID: "ac-opamp", Title: "Op-amp low-pass Bode plot", Question: "How does feedback capacitance reduce high-frequency gain?", Expected: "The inverting filter starts near 6 dB gain and −180° phase; its external RC feedback sets the rolloff.", Try: "Open Sweeps and run the prepared frequency range; compare CF and RF changes.", Limitation: OpAmpDeviceModel().Limitations},
@@ -127,6 +128,11 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "opto-switch":
+		d.graph = OptocouplerExampleGraph()
+		d.selected = "OC1"
+		d.probes = []string{"v:OC1", "v:OC1.output", "i:OC1.anode", "i:OC1.collector"}
+		d.view = View{Zoom: .7}
 	case "ac-rc", "ac-rlc", "ac-opamp":
 		d.graph = ACRCExampleGraph()
 		d.selected = "C1"

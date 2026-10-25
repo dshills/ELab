@@ -40,6 +40,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Optocouplers       []OptocouplerResult   `json:"optocouplers,omitempty"`
 	Motors             []MotorResult         `json:"motors,omitempty"`
 	Batteries          []BatteryResult       `json:"batteries,omitempty"`
 	Sensors            []SensorResult        `json:"sensors,omitempty"`
@@ -76,6 +77,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Optocouplers = append([]OptocouplerResult(nil), r.Optocouplers...)
 	o.Motors = append([]MotorResult(nil), r.Motors...)
 	o.Batteries = append([]BatteryResult(nil), r.Batteries...)
 	o.Sensors = append([]SensorResult(nil), r.Sensors...)
@@ -105,28 +107,28 @@ func cloneMixed(r *MixedResult) *MixedResult {
 }
 
 type mixedNetwork struct {
-	authored          Graph
-	dc                bool
-	nonlinear         bool
-	hasRegulator      bool
-	hasMOSFET         bool
-	hasGeneralBipolar bool
-	c                 Compiled
-	nodes             []string
-	index             map[string]int
-	sources, caps     []Component
-	inductors         []Component
-	controls          []Component
-	controlMemory     []ControlMemory
-	displays          []Component
-	logic             []Component
-	opamps            []Component
-	timers            []Component
-	timerMemory       []timer555Memory
-	sequential        []Component
-	sequenceMemory    []SequentialMemory
-	inductorCuts      []inductorCut
-	inductorPins      map[string]int
+	authored                     Graph
+	dc                           bool
+	nonlinear                    bool
+	hasOptocoupler, hasRegulator bool
+	hasMOSFET                    bool
+	hasGeneralBipolar            bool
+	c                            Compiled
+	nodes                        []string
+	index                        map[string]int
+	sources, caps                []Component
+	inductors                    []Component
+	controls                     []Component
+	controlMemory                []ControlMemory
+	displays                     []Component
+	logic                        []Component
+	opamps                       []Component
+	timers                       []Component
+	timerMemory                  []timer555Memory
+	sequential                   []Component
+	sequenceMemory               []SequentialMemory
+	inductorCuts                 []inductorCut
+	inductorPins                 map[string]int
 }
 type mixedState struct {
 	net     *mixedNetwork
@@ -144,6 +146,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
+		n.hasOptocoupler = n.hasOptocoupler || p.Kind == "optocoupler"
 		n.hasRegulator = n.hasRegulator || IsRegulatorKind(p.Kind)
 		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
 		n.hasGeneralBipolar = n.hasGeneralBipolar || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
@@ -310,6 +313,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "optocoupler":
+			n.stampOptocoupler(p, x, add, f)
 		case "thermistor", "ldr":
 			u, v := n.pin(p, "1"), n.pin(p, "2")
 			r := sensorResistance(p)
@@ -585,7 +590,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
+		if good && (n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || n.hasOptocoupler || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -709,6 +714,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 					r.Resistors = append(r.Resistors, br)
 				}
 			}
+		case "optocoupler":
+			device := n.optoResult(p, x)
+			r.Optocouplers = append(r.Optocouplers, device)
+			powers += device.Power
 		case "thermistor", "ldr":
 			device := n.sensorResult(p, x)
 			r.Sensors = append(r.Sensors, device)

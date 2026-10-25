@@ -408,6 +408,14 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
+		case "optocoupler":
+			for _, path := range OptocouplerSymbolPaths() {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "dc-motor":
 			for _, path := range MotorSymbolPaths() {
 				b.WriteString(`<polyline points="`)
@@ -511,6 +519,9 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 		if p.Unit != "" {
 			text += " · " + displayPartValue(p)
 		}
+		if p.Kind == "optocoupler" {
+			text += fmt.Sprintf(" · CTR %.6g A/A", p.Power.Optocoupler.CTR)
+		}
 		if p.Kind == "battery" {
 			text += fmt.Sprintf(" · startup %.6g%% · %.6g mAh · ESR %.6g Ω", p.Power.Battery.Charge*100, p.Power.Battery.CapacityAh*1000, p.Power.Battery.Resistance)
 		}
@@ -587,6 +598,8 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 		text += " · " + displayPartValue(p)
 	}
 	switch p.Kind {
+	case "optocoupler":
+		x, y = p.Position.X-55, p.Position.Y-90
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		text += " · " + strings.ToUpper(strings.TrimPrefix(p.Kind, "logic-"))
 		at := LogicLabelPosition(p)

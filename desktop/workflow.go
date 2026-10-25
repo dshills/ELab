@@ -27,11 +27,23 @@ func withProbe(ids []string, id string) []string {
 func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Component) []ui.Node {
 	nodes := []ui.Node{}
 	for _, probe := range state.Scope.Available {
-		match := workbench.IsSensorKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsRegulatorKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsControlKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsDisplayKind(p.Kind) && (strings.HasPrefix(probe.ID, "v:"+p.ID+".") || strings.HasPrefix(probe.ID, "i:"+p.ID+".")) || workbench.IsSequentialKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsLogicKind(p.Kind) && (probe.ID == "v:"+p.ID+".a" || probe.ID == "v:"+p.ID+".b") || p.Kind == "timer555" && (probe.ID == "v:"+p.ID+".threshold" || probe.ID == "v:"+p.ID+".trigger" || probe.ID == "v:"+p.ID+".control") || p.Kind == "opamp" && (probe.ID == "v:"+p.ID+".input-difference" || probe.ID == "v:"+p.ID+".supply") || workbench.IsMOSFETKind(p.Kind) && (probe.ID == "v:"+p.ID+".gate-source" || probe.ID == "i:"+p.ID+".drain") || p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || workbench.IsBipolarKind(p.Kind) && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "v:"+p.ID+".base-emitter" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
+		match := p.Kind == "optocoupler" && (probe.ID == "v:"+p.ID+".output" || probe.ID == "i:"+p.ID+".anode" || probe.ID == "i:"+p.ID+".collector") || workbench.IsSensorKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsRegulatorKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsControlKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsDisplayKind(p.Kind) && (strings.HasPrefix(probe.ID, "v:"+p.ID+".") || strings.HasPrefix(probe.ID, "i:"+p.ID+".")) || workbench.IsSequentialKind(p.Kind) && strings.HasPrefix(probe.ID, "v:"+p.ID+".") || workbench.IsLogicKind(p.Kind) && (probe.ID == "v:"+p.ID+".a" || probe.ID == "v:"+p.ID+".b") || p.Kind == "timer555" && (probe.ID == "v:"+p.ID+".threshold" || probe.ID == "v:"+p.ID+".trigger" || probe.ID == "v:"+p.ID+".control") || p.Kind == "opamp" && (probe.ID == "v:"+p.ID+".input-difference" || probe.ID == "v:"+p.ID+".supply") || workbench.IsMOSFETKind(p.Kind) && (probe.ID == "v:"+p.ID+".gate-source" || probe.ID == "i:"+p.ID+".drain") || p.Kind == "potentiometer" && (probe.ID == "v:"+p.ID+".wiper" || probe.ID == "i:"+p.ID+".wiper") || probe.ID == "v:"+p.ID || probe.ID == "i:"+p.ID || workbench.IsBipolarKind(p.Kind) && (probe.ID == "v:"+p.ID+".collector" || probe.ID == "v:"+p.ID+".base-emitter" || probe.ID == "i:"+p.ID+".collector") || workbench.IsConnectivityPrimitive(p.Kind) && probe.ID == "v:"+p.ID+".node" || p.Kind == "ground" && probe.ID == "v:"+p.ID+".reference"
 		if match {
 			text := "Plot voltage"
 			if probe.Unit == "A" {
 				text = "Plot current"
+			}
+			if p.Kind == "optocoupler" {
+				switch probe.ID {
+				case "v:" + p.ID:
+					text = "Plot input LED voltage"
+				case "v:" + p.ID + ".output":
+					text = "Plot collector-emitter voltage"
+				case "i:" + p.ID + ".anode":
+					text = "Plot input LED current"
+				case "i:" + p.ID + ".collector":
+					text = "Plot collector current"
+				}
 			}
 			if workbench.IsSensorKind(p.Kind) {
 				if strings.HasPrefix(probe.ID, "v:"+p.ID+".") {
