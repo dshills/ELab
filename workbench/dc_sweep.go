@@ -29,10 +29,11 @@ type SweepTarget struct {
 	Maximum     float64 `json:"maximum"`
 }
 type SweepPoint struct {
-	Input         float64   `json:"input"`
-	Values        []float64 `json:"values"`
-	KCLResidual   float64   `json:"kcl_residual_a"`
-	PowerResidual float64   `json:"power_residual_w"`
+	AC            []ACResponse `json:"ac_response,omitempty"`
+	Input         float64      `json:"input"`
+	Values        []float64    `json:"values"`
+	KCLResidual   float64      `json:"kcl_residual_a"`
+	PowerResidual float64      `json:"power_residual_w"`
 }
 type SweepSource struct {
 	ID      string  `json:"id"`
@@ -46,6 +47,7 @@ type SweepStatistics struct {
 	Maximum float64 `json:"maximum"`
 }
 type SweepResult struct {
+	AC         []ACBand          `json:"ac_bands,omitempty"`
 	Target     SweepTarget       `json:"target"`
 	Spacing    string            `json:"spacing,omitempty"`
 	Start      float64           `json:"start_si"`
@@ -72,7 +74,7 @@ type sweepDomain struct {
 }
 
 func sweepDomains() []sweepDomain {
-	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"wiper", "ratio", 0, 1}}
+	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}}
 }
 
 func sweepTargets(g Graph) []SweepTarget {
@@ -82,8 +84,12 @@ func sweepTargets(g Graph) []SweepTarget {
 		for _, d := range domains {
 			label := ""
 			switch d.Parameter {
+			case "frequency":
+				if IsVoltageSource(p.Kind) && p.Kind != "battery" {
+					label = "AC frequency / 1 V excitation"
+				}
 			case "voltage":
-				if IsVoltageSource(p.Kind) {
+				if IsVoltageSource(p.Kind) && p.Kind != "battery" {
 					label = "DC bias"
 				}
 			case "resistance":
@@ -126,6 +132,11 @@ func newSweepPlan(g Graph, settings SweepSettings) (sweepPlan, error) {
 }
 func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (sweepPlan, error) {
 	plan := sweepPlan{graph: g.Clone(), settings: settings}
+	if settings.Parameter == "frequency" {
+		if err := acSupported(g); err != nil {
+			return plan, err
+		}
+	}
 	if controlModelForGraph(g) != nil {
 		return sweepPlan{}, fmt.Errorf("controlled circuits require event history and cannot use a DC sweep")
 	}
@@ -145,7 +156,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		}
 	}
 	if !found {
-		return plan, fmt.Errorf("choose an existing DC bias, resistance or wiper target")
+		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper or AC frequency target")
 	}
 	if settings.Points < 2 || settings.Points > MaxDCSweepPoints {
 		return plan, fmt.Errorf("DC sweep requires 2–201 points")
@@ -159,6 +170,9 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 			unit = ""
 		}
 		value, err := ParseValue(text, unit)
+		if plan.target.Parameter == "frequency" {
+			value, err = parseWaveformQuantity(text, "Hz")
+		}
 		if plan.target.Parameter == "wiper" {
 			value, err = strconv.ParseFloat(strings.TrimSpace(text), 64)
 		}
@@ -199,9 +213,31 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		return plan, &actionError{"unavailable", "Complete a supported circuit before sweeping: " + diagnostic.Message}
 	}
 	available := probeInventory(g)
+	if settings.Parameter == "frequency" {
+		v := []Probe{}
+		for _, p := range available {
+			if p.Unit == "V" {
+				v = append(v, p)
+			}
+		}
+		available = v
+	}
 	ids := settings.ProbeIDs
 	if ids == nil {
-		for _, wanted := range []string{"i:" + settings.ComponentID, "v:" + settings.ComponentID} {
+		wantedIDs := []string{"i:" + settings.ComponentID, "v:" + settings.ComponentID}
+		if settings.Parameter == "frequency" {
+			wantedIDs = nil
+			for _, p := range available {
+				if p.ID != "v:"+settings.ComponentID && p.Positive != settings.ComponentID+".positive" && p.Reference != "ground" {
+					wantedIDs = []string{p.ID}
+					break
+				}
+			}
+			if len(wantedIDs) == 0 {
+				wantedIDs = []string{"v:" + settings.ComponentID}
+			}
+		}
+		for _, wanted := range wantedIDs {
 			for _, p := range available {
 				if p.ID == wanted {
 					ids = append(ids, p.ID)
@@ -214,8 +250,12 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		}
 	}
 
-	if len(ids) == 0 || len(ids) > MaxScopeProbes {
-		return plan, fmt.Errorf("choose 1–6 sweep probes")
+	limit := MaxScopeProbes
+	if settings.Parameter == "frequency" {
+		limit = 3
+	}
+	if len(ids) == 0 || len(ids) > limit {
+		return plan, fmt.Errorf("choose 1–6 DC probes or 1–3 AC voltage outputs")
 	}
 	seen := map[string]bool{}
 	for _, id := range ids {
@@ -293,6 +333,9 @@ func solveDCOperatingPoint(ctx context.Context, g Graph, levels []SweepSource) (
 	return result, mixedSample(compiled, result, 0), nil
 }
 func computeDCSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*SweepResult, error) {
+	if plan.settings.Parameter == "frequency" {
+		return computeACSweep(ctx, plan, progress)
+	}
 	out := &SweepResult{Target: plan.target, Spacing: plan.settings.Spacing, Start: plan.start, Stop: plan.stop, Probes: append([]Probe{}, plan.probes...), Points: []SweepPoint{}, Statistics: []SweepStatistics{}}
 	for index := 0; index < plan.settings.Points; index++ {
 		if err := ctx.Err(); err != nil {
@@ -353,11 +396,16 @@ func cloneSweepResult(in *SweepResult) *SweepResult {
 	}
 	out := *in
 	out.Probes = append([]Probe{}, in.Probes...)
+	out.AC = append([]ACBand(nil), in.AC...)
+	for i := range out.AC {
+		out.AC[i].HalfPowerHz = append([]float64{}, in.AC[i].HalfPowerHz...)
+	}
 	out.Statistics = append([]SweepStatistics{}, in.Statistics...)
 	out.Points = make([]SweepPoint, len(in.Points))
 	for i, p := range in.Points {
 		out.Points[i] = p
 		out.Points[i].Values = append([]float64{}, p.Values...)
+		out.Points[i].AC = append([]ACResponse(nil), p.AC...)
 	}
 	return &out
 }

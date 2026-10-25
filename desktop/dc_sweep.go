@@ -44,7 +44,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	}
 	s.pruneSweepFieldRejections(state)
 	cfg := sweep.Settings
-	nodes := []ui.Node{section("sweep-settings-title", "DC parameter sweep"), quiet("sweep-settings-help", "Independent DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
+	nodes := []ui.Node{section("sweep-settings-title", "Frequency & DC sweeps"), quiet("sweep-settings-help", "AC response or DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
 	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
 	options := []ui.Option{}
 	selected := cfg.ComponentID + ":" + cfg.Parameter
@@ -69,6 +69,8 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		next.ProbeIDs = nil
 		next.Spacing = ""
 		switch next.Parameter {
+		case "frequency":
+			next.Start, next.Stop, next.Spacing = "1 Hz", "100 kHz", "logarithmic"
 		case "resistance":
 			next.Start, next.Stop = "100 Ω", "10k Ω"
 		case "wiper":
@@ -106,6 +108,9 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	}})
 	probeOptions := []ui.Option{{ID: "__auto", Label: "Auto readings"}}
 	for _, p := range sweep.Available {
+		if cfg.Parameter == "frequency" && p.Unit != "V" {
+			continue
+		}
 		probeOptions = append(probeOptions, ui.Option{ID: p.ID, Label: p.Label + " · " + p.Unit})
 	}
 	choice := "__auto"
@@ -131,7 +136,11 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 					return
 				}
 			}
-			if len(next.ProbeIDs) >= workbench.MaxScopeProbes {
+			limit := workbench.MaxScopeProbes
+			if cfg.Parameter == "frequency" {
+				limit = 3
+			}
+			if len(next.ProbeIDs) >= limit {
 				s.errorMessage = "Remove a sweep reading before adding another"
 				s.app.Invalidate("main")
 				return
@@ -169,7 +178,11 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	start := s.sweepStartAction(state)
 	_, _, diagnostic := (workbench.Graph{Components: state.Components, Wires: state.Wires}).Compile()
 	start.Disabled = start.Disabled || active || !valid || diagnostic != nil
-	nodes = append(nodes, start, quiet("sweep-assumptions", "Capacitors: open"), quiet("sweep-source-help", "Sine: offset / pulse: low"), quiet("sweep-time-help", "Startup/time ignored"))
+	if cfg.Parameter == "frequency" {
+		nodes = append(nodes, start, quiet("sweep-assumptions", "AC · small signal at DC bias"), quiet("sweep-source-help", "Selected source: normalized 1 V"), quiet("sweep-time-help", "Other sources: AC ground"), quiet("sweep-ac-bandwidth", "Op-amp: no intrinsic bandwidth"))
+	} else {
+		nodes = append(nodes, start, quiet("sweep-assumptions", "Capacitors: open"), quiet("sweep-source-help", "Sine: offset / pulse: low"), quiet("sweep-time-help", "Startup/time ignored"))
+	}
 	if len(sweep.Operations) > 0 {
 		ops := []ui.Option{}
 		for _, op := range sweep.Operations {
@@ -200,13 +213,16 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 	sweep := state.DCSweep
 	s.ensureSweepCanvas()
 	s.sweepDrawing.Revision = state.Revision
-	toolbar := ui.Node{ID: "sweep-toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{heading("sweep-title", "DC sweep"), s.action("sweep-back", "Back to circuit", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: false})}}
+	toolbar := ui.Node{ID: "sweep-toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{heading("sweep-title", "Frequency & DC sweeps"), s.action("sweep-back", "Back to circuit", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: false})}}
 	nodes := []ui.Node{toolbar}
 	op := selectedSweep(sweep)
 	if op == nil {
 		return append(nodes, quiet("sweep-no-record", "Build a supported circuit, choose a range, then run a sweep."))
 	}
 	caption := op.ID + " · " + op.Status + " · independent DC points"
+	if sweep.Result != nil && sweep.Result.Target.Parameter == "frequency" {
+		caption = op.ID + " · " + op.Status + " · AC small-signal at DC bias"
+	}
 	if op.Kind == "sweep-import" {
 		caption += " · imported recorded data"
 	}
@@ -223,6 +239,12 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 		return nodes
 	}
 	result := sweep.Result
+	for j, band := range result.AC {
+		nodes = append(nodes, quiet(fmt.Sprintf("sweep-ac-peak-%d", j), fmt.Sprintf("%s · sampled peak %.5g dB at %.5g Hz", band.ProbeID, band.PeakDB, band.PeakFrequency)))
+		for k, f := range band.HalfPowerHz {
+			nodes = append(nodes, quiet(fmt.Sprintf("sweep-ac-cutoff-%d-%d", j, k), fmt.Sprintf("Half-power estimate %.5g Hz", f)))
+		}
+	}
 	yLabel := ""
 	for _, p := range result.Probes {
 		if p.ID == sweep.TraceID {
@@ -241,6 +263,11 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 	if sweep.Cursor != nil && *sweep.Cursor < len(result.Points) {
 		p := result.Points[*sweep.Cursor]
 		nodes = append(nodes, quiet("sweep-readout", fmt.Sprintf("Point %d · %.9g %s", *sweep.Cursor+1, p.Input, result.Target.Unit)))
+		for j, z := range p.AC {
+			if !z.PhaseDefined {
+				nodes = append(nodes, quiet(fmt.Sprintf("sweep-ac-zero-%d", j), "Zero transfer · phase undefined"))
+			}
+		}
 		for i, probe := range result.Probes {
 			nodes = append(nodes, quiet("sweep-reading-"+probe.ID, fmt.Sprintf("%s · %.9g %s", probe.ID, p.Values[i], probe.Unit)))
 		}

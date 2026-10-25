@@ -40,13 +40,14 @@ func sweepSettingsInputSchema() map[string]any {
 	for _, name := range []string{"start", "stop"} {
 		p := inputProperty(schema, name)
 		p["minLength"], p["maxLength"], p["x-max-utf8-bytes"] = 1, 128, 128
-		p["description"] = "Finite floating point text; optional V for voltage, Ω/ohm with k/K/M resistance prefixes; wiper is a unitless fraction. Bounds apply after parsing."
+		p["description"] = "Finite floating point text; optional V for voltage, Ω/ohm with k/K/M resistance prefixes; wiper is a unitless fraction; frequency uses Hz/kHz/mHz or bare Hz. Bounds apply after parsing."
 	}
 	probes := inputProperty(schema, "probe_ids")
 	probes["minItems"], probes["maxItems"], probes["uniqueItems"] = 1, MaxScopeProbes, true
 	probes["type"] = []string{"array", "null"}
-	probes["description"] = "Omit or null for automatic target readings. Explicit arrays require 1–6 distinct IDs from snapshot.dc_sweep.available_probes; empty arrays are refused."
+	probes["description"] = "Omit or null for automatic target readings. DC arrays require 1–6 distinct IDs; AC frequency accepts 1–3 voltage output IDs from snapshot.dc_sweep.available_probes; empty arrays are refused."
 	schema["x-parameter-domains"] = sweepDomains()
+	schema["x-ac-small-signal"] = acAssumptions()
 	schema["x-relations"] = []map[string]any{
 		{"operator": "positive-if-logarithmic", "fields": []string{"start", "stop"}, "when": "spacing=logarithmic", "after": "parameter-unit-normalization"},
 		{"operator": "different", "fields": []string{"start", "stop"}, "after": "parameter-unit-normalization"},
@@ -103,7 +104,7 @@ func addSweepCapabilityDetails(id string, schema map[string]any) bool {
 		fail("unavailable", "admission", "Current circuit is incomplete or unsupported")
 		fail("record-limit", "admission", "Eight retained operations are kept or active")
 		fail("timeout", "operation", "Cooperative computation deadline expires")
-		fail("sweep-failed", "operation", "A DC solve fails, including a singular system")
+		fail("sweep-failed", "operation", "A DC bias or complex AC solve fails, including a singular system")
 		contract.Completion = &commandCompletionDetail{Mode: "immediate-admission; inspect operation status", Observe: []string{"sweep.inspect", "project.inspect", "events.poll"}, Cancel: "sweep.cancel", CooperativeDeadlineSeconds: 30}
 		schema["examples"] = []any{SweepStartParams{}}
 	case "sweep.inspect", "sweep.select":
@@ -152,7 +153,7 @@ func addSweepCapabilityDetails(id string, schema map[string]any) bool {
 	case "sweep.import", "sweep.import.start":
 		file()
 		schema["x-max-file-bytes"] = MaxProjectBytes
-		schema["x-file-format"] = map[string]any{"format": "elab.dc-sweep", "version": 1, "engine": DCSweepEngineID}
+		schema["x-file-format"] = map[string]any{"format": "elab.dc-sweep", "version": 1, "engines": []string{DCSweepEngineID, ACSweepEngineID}, "ac_format": "elab.ac-sweep"}
 		contract.Preconditions = append(contract.Preconditions, "Source is a regular file, not a symlink/special file, up to 8 MiB", "A retained curve slot is available at admission and publication")
 		fail("invalid-sweep", "work", "Captured JSON fails strict format/model/source/axis/probe/count/extrema validation")
 		fail("record-limit", "admission-or-publication", "Kept/active curves consume all eight retained slots")

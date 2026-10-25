@@ -111,7 +111,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 			case "verification.import", "sweep.import":
 				options.Title = "Open recorded run"
 				if id == "sweep.import" {
-					options.Title = "Open captured DC sweep"
+					options.Title = "Open captured frequency or DC sweep"
 				}
 				options.Extensions = []string{"json"}
 			case "export.scope.csv":
@@ -140,7 +140,7 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				options.Extensions = []string{format}
 				options.Filename = "Verification." + format
 				if id == "sweep.export" {
-					options.Title = "Export DC sweep"
+					options.Title = "Export frequency or DC sweep"
 					options.Filename = "DCSweep." + format
 				}
 			}

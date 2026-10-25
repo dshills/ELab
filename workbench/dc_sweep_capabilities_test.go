@@ -58,6 +58,9 @@ func TestPublishedSweepDomainsAndLimitsMatchAdmission(t *testing.T) {
 		min, max := d["minimum"].(float64), d["maximum"].(float64)
 		graph := ExampleGraph()
 		target := "V1"
+		if parameter == "frequency" {
+			graph = ACRCExampleGraph()
+		}
 		if parameter == "resistance" {
 			target = "R1"
 		}

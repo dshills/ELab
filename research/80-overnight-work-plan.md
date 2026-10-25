@@ -366,3 +366,16 @@ and both battery examples including captures, fresh reopen and SVG/PNG/PDF.
 The PWM PNG was inspected; no clipping. Inventory is 173 commands /421 sites /141
 routes /85 production desktop sources. Full regressions and native changed-build
 interaction remain for the combined package. Next is AC frequency response.
+
+AC checkpoint: complex RC/RLC and op-amp filter reference tests, descending and
+zero response, no-live-mutation, strict capture consistency, save/reopen and
+existing sweep/example/battery regressions passed (7.996 s). Additional AC and
+discovery race checks passed in 16.024 s; native sweep parity and existing mouse/
+form controls passed in 13.289 s. Public stdio replay passes for all seven
+battery/motor/AC examples, including gain/phase/cursor, JSON/CSV and schematic
+exports, kept sweep plus transient capture, and clean fresh reopen. The op-amp
+filter PNG was inspected. Fixes include refusing ideal-bias sweeps of battery
+reservoirs and generalizing example tests to templates without a resistor.
+Inventory remains 173 commands /421 sites /141 routes /85 production sources.
+Actual combined native app and full suites remain. Next: optocoupler ports, CTR,
+saturation, shared controls, isolated switch example, and electrical/capture tests.

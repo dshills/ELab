@@ -64,7 +64,7 @@ func TestExampleCatalogAndProtectedResetTrackEveryTemplate(t *testing.T) {
 				t.Fatal("example does not open as a running immutable template")
 			}
 			call(t, s, "simulation.pause", struct{}{}, "pause")
-			id := ""
+			id := original.Components[0].ID
 			for _, part := range original.Components {
 				if part.Kind == "resistor" {
 					id = part.ID

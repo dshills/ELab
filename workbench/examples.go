@@ -69,6 +69,9 @@ func ExampleCatalog() []ExampleInfo {
 		{ID: "blink", Title: "Pulse-controlled LED", Question: "What happens when transistor base drive alternates?", Expected: "The LED follows the high/low base-drive phases; the scope separates signed base and collector behavior.", Try: "Change pulse high/low durations, then pause and measure matching edges.", Limitation: "Instantaneous junction response; no physical switching delay or stored transistor charge."},
 		{ID: "flasher", Title: "Capacitor-timed LED flasher", Question: "How can two RC stages make alternating light?", Expected: "The LEDs alternate as capacitor voltages drive the two transistor bases; larger timing capacitors generally lengthen the period.", Try: "Plot both LED currents and collector voltages; double both capacitors and compare measured periods.", Limitation: "Generic grounded-emitter NPN/LED models, ideal capacitors and an explicit asymmetric startup; hardware tolerances are not modeled."},
 		{ID: "led-fade", Title: "Capacitor-buffered LED fade", Question: "How does stored capacitor charge change an LED pulse?", Expected: "C1 charges across D1 while the input is high; after the input falls, stored charge keeps LED current flowing briefly as voltage decays.", Try: "Compare input voltage, C1 voltage and D1 current. Change C1 from 100 µF to 220 µF and compare the falling-edge tail.", Limitation: "Ideal capacitor and generic red LED; source low discharges through R1 as well as D1. Brightness is illustrative; no physical LED rating, ESR or heating."},
+		{ID: "ac-rc", Title: "RC filter Bode plot", Question: "Where does a low-pass filter begin to attenuate?", Expected: "A 1 kΩ /1 µF low-pass crosses about 159 Hz at −3 dB and −45°. Gain rolls off above it.", Try: "Open Sweeps and run the prepared AC range. Select gain or phase, click a point and compare half-power estimates.", Limitation: "Normalized small-signal response around DC bias; captured sweep leaves the live circuit unchanged."},
+		{ID: "ac-rlc", Title: "RLC resonance Bode plot", Question: "Where does inductance boost capacitor voltage?", Expected: "Series RLC shows a sampled resonant peak and phase rotation.", Try: "Run the prepared AC range, compare gain/phase, then change R1 and rerun to see damping.", Limitation: "Ideal L/C and explicit series resistance; sampled peak and interpolated half-power estimates."},
+		{ID: "ac-opamp", Title: "Op-amp low-pass Bode plot", Question: "How does feedback capacitance reduce high-frequency gain?", Expected: "The inverting filter starts near 6 dB gain and −180° phase; its external RC feedback sets the rolloff.", Try: "Open Sweeps and run the prepared frequency range; compare CF and RF changes.", Limitation: OpAmpDeviceModel().Limitations},
 		{ID: "motor-dc", Title: "DC motor startup and load", Question: "Why does motor current fall as speed rises?", Expected: "Current starts at zero through armature inductance, rises during startup, then back EMF reduces it as the rotor accelerates.", Try: "Select MTR1 to vary mechanical load live. Lock the rotor in startup settings and Restart to measure stall current.", Limitation: PowerDeviceModel().Motor},
 		{ID: "motor-pwm", Title: "555 PWM motor controller", Question: "How does a pulse train control motor speed?", Expected: "The 555 drives an N-channel MOSFET; armature inductance, inertia and flyback conduction smooth the motion between pulses.", Try: "Select P1 to change timer timing/duty; select MTR1 to change load and watch RPM/current. Compare motor voltage/current, gate pulses and D1 flyback current.", Limitation: PowerDeviceModel().Motor},
 		{ID: "battery-led", Title: "Battery sag and LED fade", Question: "Why does a weak battery dim an LED?", Expected: "Internal resistance sags under load; stored charge and open-circuit voltage fall as current is delivered.", Try: "Select B1 for live charge and voltage. Close S1 to add load. Change startup charge, capacity or ESR and Restart.", Limitation: PowerDeviceModel().Battery},
@@ -124,6 +127,19 @@ func findExample(id string) (exampleDefinition, bool) {
 		return d, false
 	}
 	switch id {
+	case "ac-rc", "ac-rlc", "ac-opamp":
+		d.graph = ACRCExampleGraph()
+		d.selected = "C1"
+		d.probes = []string{"v:C1"}
+		d.view = View{Zoom: .7}
+		if id == "ac-rlc" {
+			d.graph = RLCExampleGraph()
+		}
+		if id == "ac-opamp" {
+			d.graph = ACOpAmpExampleGraph()
+			d.selected = "U1"
+			d.probes = []string{"v:U1"}
+		}
 	case "motor-dc", "motor-pwm":
 		d.graph = MotorExampleGraph(id == "motor-pwm")
 		d.selected = "MTR1"

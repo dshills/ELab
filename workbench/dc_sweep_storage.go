@@ -37,7 +37,8 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 		return nil, err
 	}
 	m := record.Metadata
-	if m.Format != "elab.dc-sweep" || m.Version != 1 || m.Engine != DCSweepEngineID || m.OperationID == "" {
+	format, engine := acFormat(m.Settings.Parameter)
+	if m.Format != format || m.Version != 1 || m.Engine != engine || m.OperationID == "" {
 		return nil, fmt.Errorf("unsupported sweep format, version or engine")
 	}
 	// Reuse strict model/graph validation, using a minimal nonrecursive source
@@ -54,7 +55,11 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 		return nil, err
 	}
 	r := &record.Result
-	if !reflect.DeepEqual(m.Sources, plan.sources) || r.Target != plan.target || r.Spacing != m.Settings.Spacing || r.Start != plan.start || r.Stop != plan.stop || !reflect.DeepEqual(r.Probes, plan.probes) || len(r.Points) != m.Settings.Points || len(r.Statistics) != len(r.Probes) {
+	probes := plan.probes
+	if m.Settings.Parameter == "frequency" {
+		probes = acProbes(probes)
+	}
+	if !reflect.DeepEqual(m.Sources, plan.sources) || r.Target != plan.target || r.Spacing != m.Settings.Spacing || r.Start != plan.start || r.Stop != plan.stop || !reflect.DeepEqual(r.Probes, probes) || len(r.Points) != m.Settings.Points || len(r.Statistics) != len(r.Probes) {
 		return nil, fmt.Errorf("sweep metadata, probes or point count do not match its source/settings")
 	}
 	stats := make([]SweepStatistics, len(r.Probes))
@@ -73,6 +78,9 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 			stats[j].Minimum = math.Min(stats[j].Minimum, value)
 			stats[j].Maximum = math.Max(stats[j].Maximum, value)
 		}
+	}
+	if err := validateACRecord(plan, r); err != nil {
+		return nil, err
 	}
 	if !reflect.DeepEqual(stats, r.Statistics) {
 		return nil, fmt.Errorf("sweep extrema do not match recorded points")
@@ -114,6 +122,11 @@ func validateSweepFields(data []byte) error {
 		var out SweepPoint
 		if err := params(point, &out, "input", "values", "kcl_residual_a", "power_residual_w"); err != nil {
 			return fmt.Errorf("sweep point %d: %w", i, err)
+		}
+	}
+	if metadata.Settings.Parameter == "frequency" {
+		if err := validateACFields(raw.Result, arrays.Points); err != nil {
+			return err
 		}
 	}
 	for i, statistic := range arrays.Statistics {

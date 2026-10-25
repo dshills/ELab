@@ -40,12 +40,13 @@ def capture_and_reopen(client, agent, assets, example, probes):
     assert view['operation']['status'] == 'completed', view
     client.mutate('verification.export', {'id': operation, 'format': 'json', 'path': str(assets / (example + '-capture.json'))})
     path = assets / (example + '.elab')
+    expected_records = client.ask('project.inspect')['document']['recording_count']
     client.mutate('project.save', {'path': str(path)})
     fresh = Client(agent)
     try:
         fresh.mutate('project.load', {'path': str(path)})
         state = fresh.ask('simulation.wait')
-        assert state['document']['recording_count'] == 1 and not state['document']['dirty']
+        assert state['document']['recording_count'] == expected_records and not state['document']['dirty']
     finally:
         fresh.close()
     exports = {}

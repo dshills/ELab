@@ -351,3 +351,8 @@ share `battery.configure`; discharge uses the existing adaptive storage solver.
 RPM and live viscous load. A 555/MOSFET PWM example includes flyback protection
 and an explicit snubber. Native controls and agents share motor configuration
 and staged load commands; failed/canceled work preserves current and speed.
+
+[AC frequency sweeps](docs/ac-frequency-sweeps.md) add normalized small-signal
+gain/phase Bode curves, exact sampled-point inspection and half-power estimates,
+with RC, RLC and op-amp filter examples. Native controls and agents share the
+existing sweep commands, captured-data export and saved-project workflow.

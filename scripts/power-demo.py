@@ -77,6 +77,45 @@ def motors(agent, assets):
     return reports
 
 
+def ac_sweeps(agent, assets):
+    reports = []
+    for example in ('ac-rc', 'ac-rlc', 'ac-opamp'):
+        client = helper.Client(agent)
+        try:
+            client.mutate('example.load', {'id': example})
+            client.mutate('simulation.pause')
+            before = client.ask('simulation.wait')
+            client.mutate('sweep.start')
+            state = client.ask('simulation.wait')
+            op = state['dc_sweep']['selected_operation']
+            view = client.ask('sweep.inspect', {'id': op})
+            assert view['operation']['status'] == 'completed', view
+            assert view['metadata']['format'] == 'elab.ac-sweep'
+            assert before['run_id'] == state['run_id'] and before.get('mixed') == state.get('mixed')
+            result = view['result']
+            assert len(result['points']) == 201
+            assert result['ac_bands'][0]['half_power_estimates_hz']
+            if example == 'ac-rc':
+                assert abs(result['ac_bands'][0]['half_power_estimates_hz'][0] - 159.154943) < .1
+            client.mutate('sweep.trace.select', {'id': result['probes'][1]['id']})
+            client.mutate('sweep.cursor.set', {'operation_id': op, 'index': 80})
+            for fmt in ('json', 'csv'):
+                client.mutate('sweep.export', {'id': op, 'format': fmt, 'path': str(assets / (example + '-sweep.' + fmt))})
+            exports = helper.capture_and_reopen(client, agent, assets, example, [view['metadata']['settings']['probe_ids'][0]])
+            fresh = helper.Client(agent)
+            try:
+                fresh.mutate('project.load', {'path': str(assets / (example + '.elab'))})
+                reopened = fresh.ask('simulation.wait')
+                assert reopened['dc_sweep']['result'] == result
+                assert reopened['dc_sweep']['cursor_index'] == 80
+            finally:
+                fresh.close()
+            reports.append(dict(example=example, bands=result['ac_bands'], no_live_mutation=True, gain_phase_cursor_and_exports=True, fresh_saved_capture=True, exports=exports))
+        finally:
+            client.close()
+    return reports
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent', type=Path, required=True)
@@ -85,7 +124,7 @@ def main():
     args = parser.parse_args()
     assets = args.artifacts.resolve()
     assets.mkdir(parents=True, exist_ok=False)
-    report = dict(passed=True, transport='headless-stdio', batteries=batteries(args.agent, assets), motors=motors(args.agent, assets))
+    report = dict(passed=True, transport='headless-stdio', batteries=batteries(args.agent, assets), motors=motors(args.agent, assets), ac_sweeps=ac_sweeps(args.agent, assets))
     args.output.write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report))
 

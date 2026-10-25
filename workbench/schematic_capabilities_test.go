@@ -42,7 +42,7 @@ func TestSchematicDiscoveryContractsAreOwnedPureAndBounded(t *testing.T) {
 		switch command {
 		case "parts.category.set":
 			choices, ok := inputProperty(schema, "category")["enum"].([]any)
-			if !ok || len(choices) != 9 || choices[0] != "common" || choices[6] != "logic" || choices[8] != "connections" {
+			if !ok || len(choices) != 10 || choices[0] != "common" || choices[3] != "motors" || choices[7] != "logic" || choices[9] != "connections" {
 				t.Fatal("category discovery missing", choices)
 			}
 		case "parts.search.set":

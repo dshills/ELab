@@ -180,6 +180,13 @@ func (s *Service) sweepSettingsLocked() SweepSettings {
 	if s.sweeps != nil && s.sweeps.settings != nil {
 		return cloneSweepSettings(*s.sweeps.settings)
 	}
+	if s.exampleID == "ac-rc" || s.exampleID == "ac-rlc" || s.exampleID == "ac-opamp" {
+		source, probe := "V1", "v:C1"
+		if s.exampleID == "ac-opamp" {
+			source, probe = "VIN", "v:U1"
+		}
+		return SweepSettings{ComponentID: source, Parameter: "frequency", Spacing: "logarithmic", Start: "1 Hz", Stop: "100 kHz", Points: 201, ProbeIDs: []string{probe}}
+	}
 	cfg := SweepSettings{Parameter: "voltage", Start: "0 V", Stop: "5 V", Points: 51}
 	targets := sweepTargets(s.graph)
 	if len(targets) > 0 {
@@ -198,7 +205,7 @@ func sweepGraphHash(g Graph) [32]byte { data, _ := json.Marshal(g); return sha25
 func (s *Service) sweepSummaryLocked(job *sweepJob) SweepSummary {
 	out := job.summary
 	out.Kept = job.keep
-	out.SourceUnchanged = job.summary.Kind == "dc-sweep" && job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
+	out.SourceUnchanged = (job.summary.Kind == "dc-sweep" || job.summary.Kind == "ac-sweep") && job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
 	if out.Error != nil {
 		e := *out.Error
 		out.Error = &e
@@ -271,11 +278,20 @@ func (s *Service) startDCSweepLocked(p SweepStartParams) error {
 	source := dcCircuitSnapshot(s.graph, s.transientSettings)
 	// This capture is a source document, not a recursive collection of other runs.
 	metadata := SweepMetadata{Format: "elab.dc-sweep", Version: 1, Engine: DCSweepEngineID, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), DocumentGeneration: s.documentGeneration, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, Source: source, Settings: cloneSweepSettings(plan.settings), Sources: append([]SweepSource{}, plan.sources...), Assumptions: []string{"Independent DC operating points; no time advancement or hysteresis continuation", "Capacitors open; startup voltages ignored", "Sine sources use offset; finite pulses use low level; ideal pulses use zero; swept source uses the requested DC bias", "Configured switch states and accepted wiper positions; live held inputs and pending actuation are not applied", "Existing generic device assumptions and limits remain in force"}}
+	metadata.Format, metadata.Engine = acFormat(cfg.Parameter)
+	if cfg.Parameter == "frequency" {
+		metadata.Assumptions = acAssumptions()
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	job := &sweepJob{summary: SweepSummary{ID: id, Kind: "dc-sweep", Status: "queued", Total: cfg.Points}, metadata: metadata, sourceHash: sweepGraphHash(s.graph), ctx: ctx, cancel: cancel}
 	s.retainSweepJobLocked(job)
 	s.sweepViewerRevision++
-	store.selected, store.visible, store.traceID, store.cursor = id, true, plan.probes[0].ID, nil
+	traceID := plan.probes[0].ID
+	if cfg.Parameter == "frequency" {
+		traceID = "gain:" + traceID
+		job.summary.Kind = "ac-sweep"
+	}
+	store.selected, store.visible, store.traceID, store.cursor = id, true, traceID, nil
 	s.dismissPrintPreviewLocked()
 	s.sweepWorkers++
 	s.liveWorkers.Add(1)
