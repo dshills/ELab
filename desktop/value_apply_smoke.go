@@ -21,7 +21,7 @@ import (
 func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Application, s *screen) error {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	waitControls := func(stage string) ([]cogent.AccessibilityElement, error) {
+	waitControls := func(stage, value string, afterGeneration uint64) ([]cogent.AccessibilityElement, error) {
 		tick := time.NewTicker(20 * time.Millisecond)
 		defer tick.Stop()
 		for {
@@ -35,9 +35,12 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 					controls = append(controls, element)
 				}
 			}
-			ready := inspection.Reachable && inspection.NativeWindow && len(controls) == 2
+			ready := inspection.Reachable && inspection.NativeWindow && len(controls) == 2 && inspection.Generation > afterGeneration
 			for _, element := range controls {
 				ready = ready && element.Enabled && element.Frame[2] > 0 && element.Frame[3] > 0 && element.HitTestID == element.ID
+				if value != "" && element.DomainID == "value-entry" {
+					ready = ready && element.Value == value
+				}
 			}
 			if ready {
 				evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.controls", "stage": stage, "native_elements": len(inspection.Elements), "controls": controls})
@@ -51,7 +54,7 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 			}
 		}
 	}
-	controls, err := waitControls("before-invalid-apply")
+	controls, err := waitControls("before-invalid-apply", "", 0)
 	if err != nil {
 		return err
 	}
@@ -61,7 +64,7 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 	if err := nativeValueApplySmoke(ctx, a, s, "R1", "0", true); err != nil {
 		return fmt.Errorf("native inspector invalid Apply: %w", err)
 	}
-	refusedControls, err := waitControls("after-invalid-apply")
+	refusedControls, err := waitControls("after-invalid-apply", "0", 0)
 	if err != nil {
 		return err
 	}
@@ -81,6 +84,12 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 	}); err != nil {
 		return fmt.Errorf("native inspector set did not complete: %w; selected=%q draft=%q", err, state.Selected, state.Drawing.Value)
 	}
+	// Mesh preparation and Cocoa AX publication have separate queues. Observe
+	// the corrected value in a newer native publication before pressing Apply;
+	// command admission alone does not refresh the native button's callback.
+	if _, err := waitControls("corrected-before-apply", "2.2k", focus.Generation); err != nil {
+		return err
+	}
 	if accepted, err := cogent.PerformAccessibilityAction(ctx, "main", "apply-value", "press", ""); err != nil || !accepted {
 		return fmt.Errorf("native inspector Apply: accepted=%t err=%v", accepted, err)
 	}
@@ -88,7 +97,7 @@ func nativeLEDInspectorAccessibilitySmoke(ctx context.Context, a *app.Applicatio
 		return state.Circuit.Resistance == 2200 && state.Result != nil && !state.Result.Stale && math.Abs(state.Result.Current-0.001345) < 0.000002
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("native inspector Apply did not complete: %w; selected=%q draft=%q resistance=%g diagnostic=%+v", err, state.Selected, state.Drawing.Value, state.Circuit.Resistance, state.Diagnostic)
 	}
 	evidence, _ := json.Marshal(map[string]any{"event": "elab.led-inspector.accessibility.smoke", "passed": true, "initial_native_controls": controls, "refused_native_controls": refusedControls, "invalid_value_preserved_state": true, "focus_requests": focus.Requests, "focus_admissions": focus.Admissions, "observed_focus_id": focus.FocusedID, "observed_focus_generation": focus.Generation, "resistance_ohm": state.Circuit.Resistance, "current_a": state.Result.Current, "scope": "in-process Cocoa selectors, not external AX or VoiceOver acceptance"})
 	log.Print(string(evidence))

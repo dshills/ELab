@@ -33,3 +33,12 @@ model behavior changes. The original failure is retained. Ad-hoc signing also
 changes the source executable's bytes; the runtime harness now accepts only an
 explicit independent post-signing pin for such packages and records both hashes.
 The old strict source-hash check remains the default. Release rerun follows.
+
+The first /258 copied-runtime pass stops earlier at the native inspector's
+corrected Apply readiness predicate. The /257 pass and physical keyboard
+workflow passed this value edit. The smoke previously observed accepted model
+text/mesh preparation, then immediately pressed the independently queued Cocoa
+control. It now additionally requires a newer native AX publication displaying
+the corrected text before Apply, and retains selected/draft/resistance diagnostics
+on failure. It does not retry edits or relax electrical tolerances. The original
+failed run is retained for comparison; a new clean candidate is tested next.
