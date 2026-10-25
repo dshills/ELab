@@ -71,7 +71,7 @@ def motors(agent, assets):
             assert loaded['mixed']['time_s'] == state['mixed']['time_s']
             slow = client.step(.04)
             assert slow['mixed']['motors'][0]['rpm'] < m['rpm']
-            exports = helper.capture_and_reopen(client, agent, assets, example, ['v:MTR1', 'i:MTR1'])
+            exports = helper.capture_and_reopen(client, agent, assets, example, ['v:MTR1', 'i:MTR1'], sample_step=.00005 if example == 'motor-pwm' else .0005)
             reports.append(dict(example=example, startup_and_live_load=True, captures_and_fresh_reopen=True, exports=exports))
         finally:
             client.close()

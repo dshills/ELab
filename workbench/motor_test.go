@@ -82,8 +82,8 @@ func TestMotorPWM555DrivesShaftAndFlyback(t *testing.T) {
 		k := batteryKernel(t, g)
 		trace := k.trace
 		high, low, flyback := false, false, false
-		for j := 1; j <= 400; j++ {
-			next, updated, err := advanceMixed(k.mixed, trace, float64(j)*.0001)
+		for j := 1; j <= 800; j++ {
+			next, updated, err := advanceMixed(k.mixed, trace, float64(j)*.00005)
 			if err != nil {
 				t.Fatal("PWM", position, j, err)
 			}

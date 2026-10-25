@@ -166,6 +166,7 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.settings.PlaybackSpeed = .01
 		d.probes = []string{"v:MTR1", "i:MTR1"}
 		if id == "motor-pwm" {
+			d.settings.StepSeconds, d.settings.PlaybackSpeed = .00005, .005
 			d.probes = []string{"v:U1", "v:MTR1", "i:MTR1", "i:D1"}
 		}
 		d.view = View{Zoom: .6}

@@ -69,6 +69,10 @@ live to slow it; use locked startup to compare blocked current.
 D1 carries flyback current. RSN/CSN form an explicit 100 Ω /1 µF snubber, damping
 the switching transient in a model with no hidden parasitic capacitance.
 Compare timer output, motor voltage/current and flyback current with RPM.
+The PWM example uses 50 µs output samples and 0.005× playback so switching
+intervals stay short enough for live work; the DC example uses 100 µs samples.
+The PWM electrical regression covers 40 ms at each of three wiper positions,
+including both extreme duty settings, with the same accuracy and work limits.
 
 Tests check analytic steady speed, load lines, locked RL current, power/energy,
 private-state ownership, live continuity and capture integrity. The event locator

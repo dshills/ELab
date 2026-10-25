@@ -427,7 +427,15 @@ for other legitimate reader completions before comparing full snapshots. A
 finer flasher physics grid reproduced a per-output time-limit failure. Trial
 diagnostics established that solves succeeded but repeated half-size rejections
 wasted the sample budget; error-guided SDIRK2 retry proposals now retain the same
-complete estimator, residual, 512-attempt and100 ms guards. The finer-grid period
+complete estimator, residual, 512-attempt and 100 ms guards. The finer-grid period
 check, pin persistence and recovery concurrency checks pass three repeats in
 13.663 s. Temporary diagnostics and an unsuccessful Newton-limiter experiment
 were removed. Full qualification continues; no runtime limit was raised.
+
+PWM qualification follow-up: the otherwise-green complete root race run hit the
+unchanged 100 ms sample guard at the 95% potentiometer position. The motor PWM
+example now publishes 50 µs samples at 0.005× playback; the electrical check
+covers the same 40 ms at all three wiper positions with twice as many samples.
+Three race repetitions pass in 111.942 s. The packaged replay uses the same
+finer capture grid for this example. No numerical tolerance, integration-attempt
+limit or per-output time budget changed. Python tooling passes all 67 tests.
