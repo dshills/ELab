@@ -25,8 +25,12 @@ func polishToolbars(node *ui.Node, p appPalette, inToolbar bool) {
 	}
 	if node.Kind == ui.Toolbar {
 		inToolbar = true
+		height := toolbarHeight
+		if node.ID == "drawing-secondary-actions" {
+			height = 30
+		}
 		minimum, maximum := node.Style.MinSize.Value, node.Style.MaxSize.Value
-		minimum.Height, maximum.Height = toolbarHeight, toolbarHeight
+		minimum.Height, maximum.Height = height, height
 		node.Style.MinSize, node.Style.MaxSize = ui.Some(minimum), ui.Some(maximum)
 		padding := node.Style.Padding.Value
 		// Keep spacing outside constrained rows: a padded toolbar can let its

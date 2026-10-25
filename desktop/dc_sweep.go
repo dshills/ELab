@@ -212,7 +212,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 	sweep := state.DCSweep
 	s.ensureSweepCanvas()
-	s.sweepDrawing.Revision = state.Revision
+	s.sweepDrawing.Revision = s.sweepAppearance.next(state.Revision, s.colorsForTheme(state.Theme))
 	toolbar := ui.Node{ID: "sweep-toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{heading("sweep-title", "Frequency & DC sweeps"), s.action("sweep-back", "Back to circuit", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: false})}}
 	nodes := []ui.Node{toolbar}
 	op := selectedSweep(sweep)
@@ -303,7 +303,7 @@ func (s *screen) sweepMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if right <= left || bottom <= top {
 		return canvas.NewMesh(nil, nil)
 	}
-	palette := paletteForTheme(state.Theme)
+	palette := s.colorsForTheme(state.Theme)
 	probe := result.Probes[index]
 	factor := 1.
 	if probe.Unit == "A" {

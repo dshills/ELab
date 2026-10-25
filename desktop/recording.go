@@ -198,7 +198,7 @@ func (s *screen) recordingPanel(state workbench.Snapshot) ui.Node {
 	if r.PlotReduced {
 		policy += " · plot reduced with bucket extrema preserved"
 	}
-	s.scope.Revision = state.Revision
+	s.scope.Revision = s.scopeAppearance.next(state.Revision, s.colorsForTheme(state.Theme))
 	rowStyle := chromeStyle()
 	panel := ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 328}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{{ID: "recorded-toolbar", Kind: ui.Toolbar, Children: controls, Style: rowStyle}, {ID: "recorded-position", Kind: ui.Toolbar, Children: position, Style: rowStyle}, {ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, quiet("recorded-legend", strings.Join(legend, " · ")+" · "+policy), s.recordingCursors(state)}}
 	scopeOwnedControlState(&panel, "recording:"+r.ID)

@@ -53,6 +53,8 @@ func (s *screen) displayControls(state workbench.Snapshot) []ui.Node {
 	}
 	if prefs.ReducedMotion {
 		legend += "\nReduced motion: static arrows; no moving dots."
+	} else if s.reduceMotion.Load() {
+		legend += "\nmacOS Reduce Motion: static arrows; no moving dots."
 	} else if prefs.CurrentMotion && !state.Display.Animate {
 		legend += "\nMotion stopped: paused, unavailable, zero or ambiguous current."
 	}

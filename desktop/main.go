@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -149,10 +150,10 @@ func runNative() (runErr error) {
 					a.Close()
 					return
 				}
-				if !state.Closed && state.Display.Animate && time.Since(lastMotion) >= 125*time.Millisecond {
+				if !state.Closed && state.Display.Animate && !screen.reduceMotion.Load() && time.Since(lastMotion) >= 125*time.Millisecond {
 					lastMotion = time.Now()
 					_ = a.PostWindow(screen.window, func() {
-						if !service.Snapshot().Display.Animate || screen.drawing.widget == nil {
+						if !service.Snapshot().Display.Animate || screen.reduceMotion.Load() || screen.drawing.widget == nil {
 							return
 						}
 						screen.renderRevision++
@@ -179,7 +180,11 @@ func runNative() (runErr error) {
 	if *smoke {
 		go func() { smokeResult <- nativeSmoke(a, screen, renderer, *smokeTimeout); a.Close() }()
 	}
-	if err := a.Run(context.Background(), cogent.Driver{Commands: screen.commands, Theme: desktopTheme()}); err != nil {
+	driver := cogent.Driver{Commands: screen.commands, Theme: desktopTheme()}
+	if runtime.GOOS == "darwin" {
+		driver.OnSystemAppearance = screen.observeSystemAppearance
+	}
+	if err := a.Run(context.Background(), driver); err != nil {
 		return err
 	}
 	if *smoke {
@@ -192,6 +197,11 @@ func runNative() (runErr error) {
 }
 
 type screen struct {
+	partSearch                          ui.SearchBox
+	statusNotice                        ui.InlineNotice
+	systemAppearance                    atomic.Pointer[cogent.SystemAppearance]
+	reduceMotion                        atomic.Bool
+	scopeAppearance, sweepAppearance    canvasAppearanceRevision
 	viewportPending                     *viewportReport
 	viewportSerial                      uint64
 	keyboardFocus                       ui.FocusRequest
@@ -219,6 +229,7 @@ type screen struct {
 	renderRevision, lastDrawRevision    uint64
 	lastDrawAnalysis                    string
 	lastPalette                         appPalette
+	lastReduceMotion                    bool
 	nativePalette                       atomic.Pointer[appPalette]
 	menuSerial                          uint64
 	menuCommandRevision                 *uint64

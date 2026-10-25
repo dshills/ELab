@@ -63,12 +63,15 @@ func (b *meshBuilder) textAtScale(x, y float64, text string, c color.NRGBA, scal
 	}
 }
 func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*canvas.Mesh, error) {
+	return schematicWithPalette(state, view, phase, paletteForTheme(state.Theme))
+}
+
+func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase float64, palette appPalette) (*canvas.Mesh, error) {
 	b := &meshBuilder{minimumStroke: 1.25 / view.Zoom}
 	annotated := map[string]bool{}
 	for _, a := range state.SourceAnnotations {
 		annotated[a.ID] = true
 	}
-	palette := paletteForTheme(state.Theme)
 	ink, muted, accent := palette.Ink, palette.Muted, palette.Accent
 	wireColor := traceColor(color.NRGBA{R: 56, G: 125, B: 147, A: 255}, palette)
 	grid := palette.Grid

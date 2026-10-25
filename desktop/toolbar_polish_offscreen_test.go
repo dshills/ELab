@@ -77,11 +77,12 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 					node, _ := findNode(view(), id)
 					outline := node.Style.Border.Value.Color
 					if control.Focused {
-						// Vellum retains the platform keyboard-focus outline over
-						// the descriptor's ordinary/selected border.
-						// The current Vellum managed-control focus cue uses its
-						// macOS accent fallback when no theme palette is supplied.
-						outline = color.NRGBA{R: 0, G: 112, B: 245, A: 255}
+						// Focus uses the same scoped semantic accent as the app.
+						root := view()
+						if root.Theme == nil || !root.Theme.Palette.Set {
+							t.Fatal("missing scoped focus palette")
+						}
+						outline = root.Theme.Palette.Value.Accent
 					}
 					columns := 0
 					for x := control.Bounds.Min.X + 8; x < control.Bounds.Max.X-8; x++ {

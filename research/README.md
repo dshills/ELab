@@ -6,6 +6,8 @@ This first research phase covers **24 product families**, **82 selected source r
 
 ## Start here
 
+**Vellum widgets implemented:** [Five UI migrations](114-vellum-widget-migrations.md) — October 25, 2026. Search/Clear, field feedback, compact steppers, semantic appearance and secondary-action overflow, retaining shared commands.
+
 **Vellum widget review:** [Recommended UI adoptions](113-vellum-widget-adoption-review.md) — October 25, 2026. Prioritized search, field feedback, compact steppers, semantic appearance and constrained toolbar overflow, with integration limits and deferred widgets.
 
 **Component browser:** [Common, categories, search and schematic symbols](76-component-browser.md) — October 23, 2026. Organization of the existing 18 kinds with the same user/agent browser commands; no new device models.

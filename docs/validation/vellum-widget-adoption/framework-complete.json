@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "log": "framework-root-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=10m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 24.27784000011161
+    },
+    {
+      "log": "framework-root-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 0.3859662499744445
+    },
+    {
+      "log": "framework-driver-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 17.303266500122845
+    },
+    {
+      "log": "framework-rendered-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 17.680928792105988
+    }
+  ],
+  "ordinary_driver_race": "framework-driver-race.txt",
+  "rendered_focus": "framework-decimal-qualified.txt",
+  "consumer_unchanged_regression": "consumer-decimal-qualified.txt",
+  "scope": "Full portable and ordinary native-driver race/vet, tagged vet and focused rendered decimal/number-field checks; not a full rendered framework rerun",
+  "source_commit": "0edd5db7cd8c9cb2728564b014f9294e9a923bf8",
+  "upstream_commit": "f9dee54fdb2a9e73a38fdd3fb67c8871dc0f6c40"
+}

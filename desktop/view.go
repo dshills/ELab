@@ -95,7 +95,7 @@ func (s *screen) view() ui.Node {
 	previousContext := s.actionContext
 	s.actionContext = &actionContext{state.CommandRevision, state.Document.Generation}
 	defer func() { s.actionContext = previousContext }()
-	colors := paletteForTheme(state.Theme)
+	colors := s.colorsForTheme(state.Theme)
 	s.nativePalette.Store(&colors)
 	if state.Closed {
 		s.drawing.pointer.invalidateFrame()
@@ -103,6 +103,8 @@ func (s *screen) view() ui.Node {
 		s.nativePointerPane = ""
 		root := s.shutdownView(state)
 		applyPalette(&root, colors)
+		theme := s.scopedTheme(colors, state.Display.Preferences.ReducedMotion)
+		root.Theme = &theme
 		return root
 	}
 	if s.requestHelp != nil && state.CommandRevision != s.requestHelpRevision {
@@ -135,11 +137,13 @@ func (s *screen) view() ui.Node {
 	if state.Analysis == "RC transient" {
 		drawRevision = state.CommandRevision
 	}
-	if drawRevision != s.lastDrawRevision || state.Analysis != s.lastDrawAnalysis || colors != s.lastPalette {
+	reduceMotion := s.reduceMotion.Load()
+	if drawRevision != s.lastDrawRevision || state.Analysis != s.lastDrawAnalysis || colors != s.lastPalette || reduceMotion != s.lastReduceMotion {
 		s.renderRevision++
 		s.lastDrawRevision = drawRevision
 		s.lastDrawAnalysis = state.Analysis
 		s.lastPalette = colors
+		s.lastReduceMotion = reduceMotion
 	}
 	s.drawing.Revision = s.renderRevision
 	toolbar := ui.Node{ID: "toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{
@@ -330,7 +334,8 @@ func (s *screen) view() ui.Node {
 	tools.Children = append(tools.Children, ui.Node{ID: "drawing-actions", Kind: ui.Row, Grow: true, Style: ui.Style{
 		MinSize: ui.Some(ui.Size{Height: 30}), MaxSize: ui.Some(ui.Size{Height: 30}),
 		Padding: ui.Some(ui.Insets{Top: 3, Bottom: 3}), Gap: ui.Some(float32(8)), Align: ui.Some(ui.AlignCenter),
-	}, Children: []ui.Node{cancel, {ID: "tool-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, s.action("sweep-open", "Sweeps", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit}})
+	}, Children: []ui.Node{cancel, {ID: "tool-spacer", Kind: ui.ToolbarFlexibleSpace}, secondaryDrawingActions(state.CommandRevision,
+		s.action("sweep-open", "Sweeps", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit)}})
 	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"
 	switch state.Drawing.Tool {
 	case "wire":
@@ -374,14 +379,11 @@ func (s *screen) view() ui.Node {
 			message = s.requestHelp.Summary
 		}
 	}
-	messages := quiet("messages", message)
-	messages.Style.MaxSize = ui.Some(ui.Size{Height: 40})
+	messageHelp := ""
 	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage {
-		messages.Accessibility.Help = s.requestHelp.Action
+		messageHelp = s.requestHelp.Action
 	}
-	if s.errorMessage != "" {
-		messages.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
-	}
+	messages := s.operationNotice(message, messageHelp, s.errorMessage != "")
 	current, voltage, power := "—", "—", "—"
 	readStatus := "Complete the circuit to start"
 	if state.Result != nil {
@@ -526,7 +528,12 @@ func (s *screen) view() ui.Node {
 		palette = s.sweepInspector(state)
 	}
 	palette, inspector = s.organizeWorkspace(palette, inspector, state)
-	prepareInspectorGroups(inspector)
+	var fieldValidation map[string]string
+	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage && state.Selected != "" &&
+		strings.HasPrefix(s.requestHelp.Summary, state.Selected+" needs a valid ") {
+		fieldValidation = map[string]string{"value-entry": s.requestHelp.Summary}
+	}
+	prepareInspectorGroups(inspector, fieldValidation)
 	constrainRail(palette, 176)
 	constrainRail(inspector, inspectorContentWidth)
 	filename := documentName(state)
@@ -593,6 +600,8 @@ func (s *screen) view() ui.Node {
 	polishToolbars(&root, colors, false)
 	polishInspector(&root, colors, false)
 	reserveManagedFocusOutline(&root)
+	theme := s.scopedTheme(colors, state.Display.Preferences.ReducedMotion)
+	root.Theme = &theme
 	return root
 }
 

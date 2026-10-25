@@ -271,13 +271,16 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		}
 	}
 	phase := 0.
-	if state.Display.Animate && !s.displayStarted.IsZero() {
+	if state.Display.Animate && !s.reduceMotion.Load() && !s.displayStarted.IsZero() {
 		phase = math.Mod(time.Since(s.displayStarted).Seconds(), 1)
 	}
 	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage && s.requestHelpRevision == state.CommandRevision {
 		state.DiagnosticPresentation.Items = append(state.DiagnosticPresentation.Items, *s.requestHelp)
 	}
-	return schematic(state, v, phase)
+	if s.reduceMotion.Load() {
+		state.Display.Animate = false
+	}
+	return schematicWithPalette(state, v, phase, s.colorsForTheme(state.Theme))
 }
 
 // pointer routes precise native packets through the same intent functions and

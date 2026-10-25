@@ -18,16 +18,27 @@ ELab also subtracts the new managed focus-border allowance from explicit action
 padding, preserving constrained toolbar and tab geometry.
 Four compatibility dependency stages follow upstream's 106 stages, numbered
 107–110; preparation verifies the complete ordered recipe and each input/output
-hash. The private derived source is `218c0dec8cfb52de4d63b91e0701f340396b7d84`.
+hash. The private derived source is `0edd5db7cd8c9cb2728564b014f9294e9a923bf8`.
 
-The active archive is `vellum-f9dee54-elab2.tar.gz`; all four native module
-replacements resolve into `build/.vellum-sdk-f9dee54-elab2`. The lock pins source, complete
+The active archive is `vellum-f9dee54-elab3.tar.gz`; all four native module
+replacements resolve into `build/.vellum-sdk-f9dee54-elab3`. The lock pins source, complete
 archive/manifest, compatibility patch and all bootstrap scripts before execution.
 The SDK is a **private compatibility build**, not an upstream release or a public
-redistribution approval. No new widget adoption, electronics behavior, user/agent
-command or project-format change is included. Previous SDKs and qualified app
-packages remain preserved. See [update checks](validation/vellum-f9dee54-update/README.md) for evidence
+redistribution approval. The SDK compatibility changes add no electronics models,
+user/agent commands or project-format changes. ELab’s widget integrations are
+qualified separately below. Previous SDKs and qualified app packages remain preserved. See [update checks](validation/vellum-f9dee54-update/README.md) for evidence
 and its exact native/package scope.
+
+## Compact stepper compatibility · October 25, 2026
+
+The widget migration uses the same upstream source with a small additional
+compatibility fix: compact steppers share ELab's existing decimal addition with
+inline number fields. Compact bounds still clamp; inline bounds still wrap.
+Repeated decimal steps, off-grid values and typed precision retain their original
+contract. No solver/model limits change. The complete new patch is
+[here](../third_party/vellum/patches/elab-f9dee54-stepper-compat.patch).
+The preceding elab2 archive, patch, manifest and qualified /254 package remain
+preserved. See the [widget migration qualification](validation/vellum-widget-adoption/README.md) for exact source/test scope.
 
 ## Historical integration records
 

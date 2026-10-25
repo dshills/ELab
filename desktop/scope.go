@@ -70,7 +70,7 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	s.scope.frame.Store(nil)
 	b := &meshBuilder{}
 	state := s.service.Snapshot()
-	palette := paletteForTheme(state.Theme)
+	palette := s.colorsForTheme(state.Theme)
 	muted := palette.Muted
 	t := state.Transient
 	plot := state.Scope
@@ -320,7 +320,7 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	traceSelector.Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 10, Right: 10})
 	export := ui.Node{ID: "export-csv", Kind: ui.Button, Text: "Export CSV", Accessibility: ui.Accessibility{Name: "Export scope CSV"}, Disabled: t == nil || t.Stale || !state.Scope.WindowValid, Activate: func() { s.beginFile("export.scope.csv", true, workbench.SaveParams{}, nil) }}
 	export.Style.Padding = ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 10, Right: 10})
-	s.scope.Revision = state.Revision
+	s.scope.Revision = s.scopeAppearance.next(state.Revision, s.colorsForTheme(state.Theme))
 	return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 288}), Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
 		{ID: "scope-toolbar", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: controls},
 		{ID: "rc-scope", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 120}), MaxSize: ui.Some(ui.Size{Height: 120})}, Custom: s.scope}, {ID: "scope-trace-row", Kind: ui.Toolbar, Style: traceStyle, Children: []ui.Node{export, traceSelector, quiet("scope-legend", legend)}}, quiet("step-work-status", stepStatus), s.cursorControls(state),

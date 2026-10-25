@@ -29,6 +29,13 @@ var popupCallbacks = struct {
 var popupToken atomic.Uint64
 
 func (s *screen) platformSelectors(node *ui.Node, revision uint64) {
+	if node.ToolbarOverflow {
+		// Keep the framework's More menu and its hidden-action filter intact.
+		// Converting that required MenuButton to an AppKit proxy Button breaks
+		// the overflow contract and exposes actions already visible in the bar.
+		// The existing File/Examples/choice menus retain their AppKit path.
+		return
+	}
 	if node.Kind == ui.Selector || node.Kind == ui.MenuButton {
 		*node = s.nativeChoiceButton(*node, node.Kind == ui.Selector, revision)
 	}

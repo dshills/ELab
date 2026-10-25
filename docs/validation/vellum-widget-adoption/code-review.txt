@@ -1,0 +1,64 @@
+Widget migration source review, October 25, 2026
+
+Scope: desktop presentation, retained component ownership, command ingress,
+appearance publication and custom-canvas invalidation. Electrical engines and
+project schemas are unchanged. This is a manual source review by the implementing
+agent, supplemented by routed regression tests, not an independent human review.
+
+1. Managed overflow popup origin
+Vellum queueMenuAction resolves the current record callback. ELab's previous
+menus use an AppKit revision guard, which cannot be applied by converting the
+required overflow MenuButton into a Button. Keep the framework's hidden-item
+filter, and give More a command-revision owner key. An intervening command
+retires the actual open popup; reopening gets a new current session. Routed
+four-theme tests require native incarnation change, old popup disappearance,
+fresh Fit admission and restoration of the wider toolbar's actions.
+
+2. Retained SearchBox callback
+SearchBox callbacks read owner-held current state. Keep the historical leaf ID,
+wrap Clear with its originating revision/document context, and restore both
+fieldContext and fieldAccepted after delivery. A captured Clear after an agent
+query plus View refresh must not erase that query. Return preserves the previous
+commit-to-results policy; successful Clear returns to entry. No keystroke filter
+or new service command was introduced.
+
+3. FormField retention and refusal guidance
+Preserve editor callbacks, IDs and logical-owner keys. Keep visible label IDs and
+bounded wrapping while suppressing FormField's otherwise duplicate private
+caption. Flat zero-border groups avoid nested boxes. Associate actual shared
+component-value refusals only with the selected target's value entry. Existing
+correction continuations, history, unit parsing and service validators stay in
+place. InlineNotice is passive and creates no extra action or focus stop.
+
+4. Appearance isolation
+Observe macOS preferences on the application owner; publish detached preference
+and palette snapshots atomically for native/render access. Explicit themes are
+preserved. Semantic palettes are validated as opaque. High contrast and reduced
+motion do not write document/service preferences or alter a run. Contrast ink is
+chosen separately for the accent. Non-macOS runs do not enable an unsupported
+appearance observer.
+
+5. Repaint without model changes
+System preference notifications need not advance service revisions. Scope and
+sweep mesh paint tokens track model plus palette; schematic paint also tracks
+system motion. Motion-only changes stop moving dots and repaint static geometry,
+without disabling live solver work or overwriting saved display settings.
+Synthetic-preference tests compare complete accepted service snapshots.
+
+6. Audit and test maintenance
+The source inventory caught changed desktop source hashes. After reviewing the
+new bindings, it still has 182 public commands, 150 literal routes, no unknown
+routes, 95 source files and 439 sites. Generated/dynamic bindings remain subject
+to runtime evidence. Keyboard focus order explicitly includes Clear. Focus-stroke
+painting expects the session's scoped accent; geometry and coverage assertions
+remain active. No numerical test tolerances, simulation limits or failure
+assertions were removed. Full source checks and package/native scope are recorded
+separately in the qualification receipt.
+
+7. Compact decimal regression found by the complete rendered application run
+The compact-mode StepFunc replaced the already-pinned decimal addition with
+binary float addition. Share that decimal helper between modes, preserving
+compact clamp and inline wrap behavior. Existing ELab precision assertions are
+unchanged and pass against the fix. Framework coverage adds repeated, off-grid,
+negative, page and clamped-bound cases. The corrected SDK is a separate pinned
+archive/patch; the preceding SDK remains intact.

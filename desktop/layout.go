@@ -38,6 +38,10 @@ const railLabelBoundsPrefix = "rail-label-bounds:"
 func constrainRail(nodes []ui.Node, width float32) {
 	for i := range nodes {
 		node := &nodes[i]
+		if node.ID == "part-search-box" {
+			layoutComponentSearch(node, width)
+			continue
+		}
 		// Reapplying layout must not nest bounds frames or duplicate IDs.
 		if node.Kind == ui.Column && len(node.Children) == 1 && node.Children[0].Kind == ui.Label && node.ID == railLabelBoundsPrefix+node.Children[0].ID {
 			*node = node.Children[0]
@@ -48,7 +52,7 @@ func constrainRail(nodes []ui.Node, width float32) {
 			insets := ui.Insets{Top: 8, Bottom: 8, Left: 10, Right: 10}
 			node.Style.Padding = ui.Some(insets)
 			padding = insets.Left + insets.Right
-		case ui.Label, ui.Row, ui.Column:
+		case ui.Label, ui.Row, ui.Column, ui.FormGroup:
 			node.Style.Padding = ui.Some(ui.UniformInsets(0))
 		}
 		maximum := ui.Size{}

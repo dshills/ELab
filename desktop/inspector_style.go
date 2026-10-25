@@ -9,7 +9,7 @@ import (
 // Arrange existing labels and fields without changing leaf identities or their
 // command/editing bindings. Run before constrainRail so wrapping frames inherit
 // the same width policy as the rest of the inspector.
-func prepareInspectorGroups(nodes []ui.Node) {
+func prepareInspectorGroups(nodes []ui.Node, validation map[string]string) {
 	for i := range nodes {
 		n := &nodes[i]
 		if strings.HasPrefix(n.ID, "inspector-group-") && len(n.Children) > 0 {
@@ -20,7 +20,7 @@ func prepareInspectorGroups(nodes []ui.Node) {
 				n.Children = append([]ui.Node{title}, n.Children...)
 			}
 		}
-		prepareInspectorGroups(n.Children)
+		prepareInspectorGroups(n.Children, validation)
 		var children []ui.Node
 		for j := 0; j < len(n.Children); j++ {
 			child := n.Children[j]
@@ -31,9 +31,7 @@ func prepareInspectorGroups(nodes []ui.Node) {
 				field := n.Children[j+1]
 				child.Style.Typography = ui.Some(ui.Typography{Size: 12, Weight: 500})
 				child.Style.Foreground = ui.Some(ink)
-				children = append(children, ui.Node{ID: "inspector-field-" + field.ID, Kind: ui.Column, Style: ui.Style{
-					Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(4)),
-				}, Children: []ui.Node{child, field}})
+				children = append(children, inspectorFormField(child, field, validation[field.ID]))
 				j++
 			} else {
 				children = append(children, child)
@@ -41,6 +39,25 @@ func prepareInspectorGroups(nodes []ui.Node) {
 		}
 		n.Children = children
 	}
+}
+
+func inspectorFormField(caption, editor ui.Node, validation string) ui.Node {
+	node, err := (ui.FormField{ID: "inspector-field-" + editor.ID, Label: caption.Text, Content: editor, ValidationMessage: validation, Style: ui.Style{
+		Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(4)), Border: ui.Some(ui.Border{}), Background: ui.Some(paper),
+	}}).View()
+	if err != nil {
+		panic(err) // The caller supplies a labeled managed editor.
+	}
+	// Retain visible label IDs and wrapping policy. FormField supplies the
+	// editor metadata; the existing label replaces its private native caption.
+	node.Text = ""
+	node.Children = append([]ui.Node{caption}, node.Children...)
+	if validation != "" {
+		errorLabel := &node.Children[len(node.Children)-1]
+		errorLabel.Style.Foreground = ui.Some(resolvePalette("light", false).Danger)
+		errorLabel.Style.Typography = ui.Some(ui.Typography{Size: 12})
+	}
+	return node
 }
 
 func inspectorEditor(n ui.Node) bool {
@@ -57,6 +74,9 @@ func polishInspector(node *ui.Node, p appPalette, inInspector bool) {
 		node.Style.Gap = ui.Some(float32(20))
 	}
 	if inInspector {
+		if node.Kind == ui.NumberField {
+			node.NumberButtons = ui.NumberButtonsStepper
+		}
 		switch node.Kind {
 		case ui.Label:
 			typeface := node.Style.Typography.Value
