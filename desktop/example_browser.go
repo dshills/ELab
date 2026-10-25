@@ -180,7 +180,7 @@ func (s *screen) exampleBrowserView(state workbench.Snapshot) ui.Node {
 		if strings.TrimSpace(b.Query) != "" {
 			count += " · searching all categories"
 		}
-		sheet.Children = []ui.Node{quiet("example-browser-help", "Choose a circuit, explore what it does, and make it your own."), {ID: "example-filters", Kind: ui.Row, Style: ui.Style{Gap: ui.Some(float32(12)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{s.exampleSearchNode(state), filter}}, quiet("example-results-count", count), s.exampleCollection(state), s.exampleDetails(state, width-32)}
+		sheet.Children = []ui.Node{quiet("example-browser-help", "Choose a circuit, explore what it does, and make it your own."), {ID: "example-filters", Kind: ui.Row, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(12)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{s.exampleSearchNode(state), filter}}, quiet("example-results-count", count), s.exampleCollection(state), s.exampleDetails(state, width-32)}
 	}
 	node, err := sheet.View()
 	if err != nil {

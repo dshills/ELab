@@ -29,6 +29,12 @@ var popupCallbacks = struct {
 var popupToken atomic.Uint64
 
 func (s *screen) platformSelectors(node *ui.Node, revision uint64) {
+	if node.ID == exampleBrowserID {
+		// This sheet is mounted in a separate native scene. The canvas-based
+		// AppKit proxy cannot locate its controls; retain the framework's
+		// scoped selector, which owns modal coordinates and keyboard focus.
+		return
+	}
 	if node.ToolbarOverflow {
 		// Keep the framework's More menu and its hidden-action filter intact.
 		// Converting that required MenuButton to an AppKit proxy Button breaks

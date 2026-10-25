@@ -73,7 +73,7 @@ func TestMountedExampleBrowserFieldsPreviewAndActionsFitAllThemes(t *testing.T) 
 			if body.Empty() || !body.In(image.Rect(0, 0, 840, 760)) {
 				t.Fatal("browser body escaped the compact viewport", body)
 			}
-			for _, id := range []string{"example-search", "example-category", "example-grid", "example-preview-image", "example-description-scroll", ui.SheetConfirmID(exampleBrowserID), ui.SheetCancelID(exampleBrowserID)} {
+			for _, id := range []string{"example-filters", "example-search", "example-category", "example-grid", "example-preview-image", "example-description-scroll", ui.SheetConfirmID(exampleBrowserID), ui.SheetCancelID(exampleBrowserID)} {
 				e := mountedControlElement(t, m, id)
 				t.Log(id, e.Bounds, "in", body)
 				if !e.Visible || e.Bounds.Empty() || !e.Bounds.In(body) {
