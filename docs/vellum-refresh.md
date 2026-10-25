@@ -49,7 +49,7 @@ render owner and invokes no input/value-change handlers. Existing numeric
 bounds, typing, stepping, public ELab commands and simulation limits are unchanged.
 The exact-input/output stage 111 is part of the [complete compatibility patch](../third_party/vellum/patches/elab-f9dee54-tooltip-compat.patch).
 The preceding elab3 SDK, archive and /255 package remain preserved. Qualification
-and bounded native verification are recorded with the ELab tooltip fix.
+and bounded native verification are recorded in the [ELab tooltip checks](validation/inspector-tooltip-retirement/README.md).
 
 ## Historical integration records
 

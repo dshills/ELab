@@ -6,7 +6,7 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PN
 
 PWM buck conversion, optional op-amp bandwidth/slew limits, an eight-bit shift/latch register, and piezo/active-buzzer audio previews now share the UI and agent commands. Six working examples are listed in [the model and command guide](docs/hobbyist-devices.md). Audio playback is explicit; opening or simulating a circuit stays silent. The qualified alpha below remains preserved.
 
-[Open the 0.194.0 /255 development app](build/ELab-0.194.0-255-Widgets/ELab.app). The matching agent is alongside it. See the [widget migration checks](docs/validation/vellum-widget-adoption/README.md) for this build and the [electronics qualification](docs/validation/hobbyist-devices/README.md) for the component implementations.
+[Open the 0.194.1 /256 development app](build/ELab-0.194.1-256-Tooltips/ELab.app). The matching agent is alongside it. See the [tooltip cleanup checks](docs/validation/inspector-tooltip-retirement/README.md) for this build and the [electronics qualification](docs/validation/hobbyist-devices/README.md) for the component implementations.
 
 ## Downloadable release
 

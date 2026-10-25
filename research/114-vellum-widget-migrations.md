@@ -56,3 +56,5 @@ A lingering PWM bounds tooltip after changing inspectors remains a separately
 recorded native issue; see the validation notes. System changes and constrained
 More-menu routing are covered by synthetic/routed tests rather than OS settings
 changes or native window resizing.
+
+The lingering retired-inspector bounds tooltip is subsequently fixed in [the /256 cleanup](115-inspector-tooltip-retirement.md).

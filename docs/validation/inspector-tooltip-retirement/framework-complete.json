@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "source_commit": "2c349fc86e1dbf05e96a0e3f1453cb545cc5eb91",
+  "checks": [
+    {
+      "log": "framework-root-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=10m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 0.360085790976882
+    },
+    {
+      "log": "framework-driver-race.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-timeout=10m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 88.72161012515426
+    },
+    {
+      "log": "framework-focused-final.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-run",
+        "Test(RetiredNumberField|TooltipRetirement|MacNumberStepper|NumberField|ManagedNumber|StateKey|Reconcile|.*Menu|.*Focus|.*Retain|.*Number.*Wheel)",
+        "-count=1",
+        "-timeout=10m",
+        "."
+      ],
+      "exit_code": 0,
+      "wall_s": 24.996177833992988
+    },
+    {
+      "log": "framework-driver-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 23.067054791143164
+    },
+    {
+      "log": "framework-rendered-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 23.457951915916055
+    }
+  ],
+  "scope": "Full portable and ordinary-driver race; focused rendered lifecycle/menu/focus/number-field checks; ordinary and tagged driver vet"
+}

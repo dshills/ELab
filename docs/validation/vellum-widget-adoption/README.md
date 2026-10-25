@@ -102,3 +102,5 @@ See [native notes](native-notes.txt) and saved UI captures. The native check als
 records one intermittent custom-mesh capture omission, with the circuit visible
 in earlier and later captures. Neither observation is counted as a passing
 hover/rendering gate. All automated suites above pass.
+
+The retired-inspector tooltip issue above is fixed and verified in [/256](../inspector-tooltip-retirement/README.md). This historical /255 receipt remains unchanged otherwise.

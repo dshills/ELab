@@ -1,0 +1,42 @@
+ELab 0.194.1 /256 native tooltip check, October 25, 2026
+
+CUA native input/AX/screenshots; exact clean-source /256 package. Fixed arguments
+isolate endpoint, recovery and appearance in build/tooltip-retirement/native.
+No running ELab was present in CUA inventory. The launcher initially returned
+running application not found, but its endpoint was present; the existing owned
+session was attached by exact /256 path, without launching a second copy.
+
+1. Load buck, pause/restart and select PWM through existing shared commands.
+   Focus Duty 45 with CUA. A wheel event over the field scrolls the inspector;
+   the real bounds popup appears (minimum 10, maximum 90), captured in 02.
+   The earlier 01 capture did not yet show a popup and is not a positive case.
+2. With the popup visible, call workspace.inspector.set section=simulation
+   through the matching agent. No CUA pointer input occurs between capture 02
+   and 03. Capture 03 shows Simulate selected and the old tooltip absent.
+3. Restore component inspector through the same command. Focus Duty again and
+   wheel the rail. Capture 04 does not yet show a popup; capture 05 shows the
+   new control's bounds help, proving help was not disabled by the fix.
+4. With that popup visible, load led and select R1 through existing commands,
+   without pointer input. Capture 06 shows the LED inspector with value 1 kOhm
+   and no old minimum-10/maximum-90 popup. Its actual 10..100000-ohm domain stays.
+5. Matching-agent state compares every component, electrical revision and run ID
+   across hover-only and inspector-section transitions: unchanged. PWM duty
+   stays 0.45 and frequency 500 Hz. Neither example is marked modified.
+6. Close normally with Command-Q. The first input met CUA's external-state guard;
+   a fresh AX read allowed normal close. Owned endpoint is absent. Owner projects
+   and existing apps are untouched; no new permission question was needed.
+
+Scope: native Apollo inspector/document switches and restored help. Pending
+hover, private arrow help, same-ID owner replacement, retained sibling tooltip
+and menu preservation are routed offscreen regressions. No OS setting, shared
+window geometry or other user preference changed. No audio playback or print.
+
+Capture limitation: some intermediate custom-mesh captures omit the schematic,
+while later captures show it. This is retained separately from popup verification;
+no claim that the unrelated intermittent mesh/capture observation is fixed.
+
+Additional visual observation: scrolling the bounds field completely offscreen
+can position its still-current tooltip at the upper-left window edge. This is
+separate from the requested retired-inspector leak; the tested section/example
+transitions close it. Positioning of help on retained offscreen controls is not
+claimed fixed by this narrow ownership cleanup.
