@@ -116,3 +116,18 @@ public signing/notarization are not established by these source/driver checks.
 No participant sessions are invented; the existing study packet stays unmeasured.
 The heartbeat stays paused. No owner project writes, SDK/sibling checkout edits,
 security weakening, push or upload are part of this batch.
+
+## Packaged self-test adjustment
+
+The initial clean /271 candidate correctly refuses the old smoke test's attempt
+to plot a seventh trace. Its [failed sequence and preserved identities](investigations/native271/README.md)
+remain recorded. The harness now explicitly clears its sixth visible selector
+before Plot. No ordinary product command or behavior changes after source
+checkpoint `699a475e`.
+
+All **1,370 other frozen executable/test/dependency inputs** stay byte-identical;
+the [narrow follow-up](smoke-harness/report.json) passes fresh ordinary/rendered
+race workflow regressions, lint/imports, both desktop vets and build. Prior full
+source gates are carried for those exact inputs, not relabeled a fresh complete
+run after the self-test-only change. Final /272 native smoke and runtime evidence
+will qualify the adjusted self-test itself.

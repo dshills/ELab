@@ -1,0 +1,13 @@
+{
+  "controller": "scripts/runtime_isolation.py",
+  "controller_sha256": "ec0a4c7da19b0e315337217474ca100b3fdab82cd7989abeee2af101ffc63acc",
+  "arguments": {
+    "app": "/Users/dshills/Development/projects/ELab/build/ELab-0.196.0-271-Workbench/ELab.app",
+    "app_executable_sha256": "3bfd22c4148c29034145e215082a0b3df184b33f2a77355f5a7d6da86020f841",
+    "agent_binary": "/Users/dshills/Development/projects/ELab/build/ELab-0.196.0-271-Workbench/elab-agent",
+    "conformance_binary": "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+    "artifacts": "/private/tmp/elab-workbench271-699a475e"
+  },
+  "extra_policy": "deny shared Library/Cogent Core writes; existing development-file/IP restrictions preserved",
+  "production_security_settings_changed": false
+}

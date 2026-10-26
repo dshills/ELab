@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+r=Path('/Users/dshills/Development/projects/ELab'); b=r/'build/workbench-improvements'; out=b/'smoke-harness-quality'
+out.mkdir(exist_ok=False)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+prior=json.loads((b/'quality-final3/frozen-inputs.json').read_text())
+changed=[p for p,h in prior.items() if sha(r/p)!=h]
+assert changed==['desktop/smoke.go'],changed
+(out/'carried-inputs.json').write_text(json.dumps(dict(prior_inputs=len(prior),unchanged_inputs=len(prior)-1,changed_inputs=changed,smoke_sha256=sha(r/'desktop/smoke.go'),scope='Only native smoke input sequence changed; prior complete source gates carried for 1370 exact executable/test/dependency inputs'),indent=2)+'\n')
+env=os.environ.copy();env.update(GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),STATICCHECK_CACHE=str(r/'build/staticcheck-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+pattern='Test(NextWorkflowControlsUseAgentCommands|PlotActionRevealsHiddenScopeAndKeepsOtherTraces|ProposalReviewControlsShareGuardedCommandsAndUndo|ActiveExperimentAndExplanationUseSharedStateAcrossThemes|MountedProposalReviewFitsAndAppliesAcrossThemes|DrawingPreview)'
+steps=[('lint',['sh','scripts/lint.sh'],r),('desktop-race',['go','test','-race','-json','-run',pattern,'-count=1','-timeout=5m','./...'],r/'desktop'),('rendered-race',['go','test','-race','-json','-tags=offscreen','-run',pattern,'-count=1','-timeout=5m','./...'],r/'desktop'),('desktop-vet',['go','vet','./...'],r/'desktop'),('rendered-vet',['go','vet','-tags=offscreen','./...'],r/'desktop'),('build',['sh','scripts/build.sh'],r)]
+results=[]
+for name,argv,cwd in steps:
+ print('Running '+name,flush=True);start=time.monotonic()
+ with (out/(name+('.jsonl' if '-race' in name else '.txt'))).open('w') as stream:q=subprocess.run(argv,cwd=cwd,env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=360)
+ results.append(dict(name=name,command=argv,cwd=str(cwd),exit_code=q.returncode,wall_s=time.monotonic()-start));print(json.dumps(results[-1]),flush=True)
+ (out/'progress.json').write_text(json.dumps(results,indent=2)+'\n')
+ if q.returncode:raise SystemExit(q.returncode)
+assert [p for p,h in prior.items() if sha(r/p)!=h]==changed
+(out/'report.json').write_text(json.dumps(dict(passed=True,steps=results,unchanged_inputs=len(prior)-1,changed_inputs=changed,smoke_sha256=sha(r/'desktop/smoke.go')),indent=2)+'\n')

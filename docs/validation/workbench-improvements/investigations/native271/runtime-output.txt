@@ -1,0 +1,12 @@
+Starting native-smoke
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/workbench-improvements/qualify_runtime.py", line 10, in <module>
+    report=m.run(args);assert report['passed']
+  File "/Users/dshills/Development/projects/ELab/scripts/runtime_isolation.py", line 315, in run
+    execute_stage(result, directory, working, name, command, timeout, run_child, save)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/scripts/runtime_isolation.py", line 263, in execute_stage
+    completed = run_child(command, cwd=working, stdout=log, stderr=subprocess.STDOUT, timeout=timeout, check=True)
+  File "/Users/dshills/Development/projects/ELab/build/.vellum-sdk-f9dee54-elab9/scripts/child_process.py", line 210, in run_child
+    raise subprocess.CalledProcessError(completed.returncode, arguments, output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command ['/private/tmp/elab-workbench271-699a475e/native', '--smoke', '--smoke-timeout', '2m'] returned non-zero exit status 1.

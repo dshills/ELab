@@ -1,0 +1,88 @@
+{
+  "passed": true,
+  "steps": [
+    {
+      "name": "lint",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 16.700164374895394
+    },
+    {
+      "name": "desktop-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-run",
+        "Test(NextWorkflowControlsUseAgentCommands|PlotActionRevealsHiddenScopeAndKeepsOtherTraces|ProposalReviewControlsShareGuardedCommandsAndUndo|ActiveExperimentAndExplanationUseSharedStateAcrossThemes|MountedProposalReviewFitsAndAppliesAcrossThemes|DrawingPreview)",
+        "-count=1",
+        "-timeout=5m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 16.648453207919374
+    },
+    {
+      "name": "rendered-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-tags=offscreen",
+        "-run",
+        "Test(NextWorkflowControlsUseAgentCommands|PlotActionRevealsHiddenScopeAndKeepsOtherTraces|ProposalReviewControlsShareGuardedCommandsAndUndo|ActiveExperimentAndExplanationUseSharedStateAcrossThemes|MountedProposalReviewFitsAndAppliesAcrossThemes|DrawingPreview)",
+        "-count=1",
+        "-timeout=5m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 17.314495667116717
+    },
+    {
+      "name": "desktop-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 0.808365167118609
+    },
+    {
+      "name": "rendered-vet",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 2.2391953750047833
+    },
+    {
+      "name": "build",
+      "command": [
+        "sh",
+        "scripts/build.sh"
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 10.265593584161252
+    }
+  ],
+  "unchanged_inputs": 1370,
+  "changed_inputs": [
+    "desktop/smoke.go"
+  ],
+  "smoke_sha256": "6109b9c766f0981a2aa2402a06a576b016688a1dfb1b3a3b081b542122138e73"
+}

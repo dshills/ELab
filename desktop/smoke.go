@@ -807,6 +807,12 @@ func nativeWorkflowSmoke(ctx context.Context, a *app.Application, s *screen) err
 			result <- err
 			return
 		}
+		// Plot no longer silently evicts a trace. Explicitly free the slot
+		// through the same visible selector used by the ordinary workflow.
+		if err := smokeUI(s, "probe-5", &ui.ChangeEvent{SelectedID: "__none"}); err != nil {
+			result <- err
+			return
+		}
 		for _, id := range []string{"plot-v:C2", "scope-latest-window"} {
 			if err := smokeUI(s, id, nil); err != nil {
 				result <- err

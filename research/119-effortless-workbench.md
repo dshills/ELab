@@ -49,3 +49,9 @@ candidate verification follows the reviewed clean source checkpoint; /270 and
 all previous qualified bytes stay preserved. Detailed failures, fixes, visual
 scope and receipts are in
 [the engineering record](../docs/validation/workbench-improvements/README.md).
+
+The first clean candidate /271 exposes an outdated native smoke assumption:
+Plot correctly refuses a seventh trace. The self-test alone now explicitly
+clears its sixth selector first. All 1,370 other frozen inputs are exact and
+relevant fresh ordinary/rendered workflow regressions, lint/vets/build pass.
+A separate /272 preserves /271 and qualifies the corrected smoke sequence.
