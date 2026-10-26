@@ -12,7 +12,7 @@ assert all(sha(root/p)==h for p,h in prior.items())
 report=dict(production_files_changed=changes,added_regression='desktop/menu_origin_offscreen_test.go',sdk_unchanged=True,prior_package_sdk_hashes=prior,components=53,examples=62,public_commands=187,native_checks_still_open=[3,6,9,11],actual_native_ui_retested=False)
 (base/'scope-review.json').write_text(json.dumps(report,indent=2)+'\n')
 for p in [*base.glob('*.txt'),*base.glob('*.json')]:
- if p.name.startswith('native-inventory-') and p.name!='native-inventory-review.json':
+ if p.name.endswith('-build-info.txt') or p.name.startswith('native-inventory-') and p.name!='native-inventory-review.json':
   (out/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
  else:shutil.copy2(p,out/p.name)
 for p in base.glob('*.py'):shutil.copy2(p,out/(p.name+'.txt'))

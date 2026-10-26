@@ -4,7 +4,8 @@ October 26, 2026. A routed, retained-driver reproduction shows that an Examples
 category choice can erase a newer agent search. The application now retires this
 managed menu when its command context changes. No Vellum, public command,
 component, electrical-model, file-format or solver-limit change is made.
-The qualified /267 and every earlier release remain preserved.
+The qualified /267 and every earlier release remain preserved. The additional
+unsigned **0.195.7 /268** now passes its separate package checks below.
 
 ## Reproduction and scope
 
@@ -73,5 +74,65 @@ and rendered desktop race suites contain867 /339 /470 top-level tests, with
 1,950 /839 /1,446 including subtests. Lint/imports,68 Python tests, PRD review,
 all three vet modes and the complete build pass. [Final quality](full-quality/quality-complete.json),
 [test counts](test-counts.json). These are the final reviewed inventory and source;
-initial partial results remain labeled separately. /267 remains the qualified
-download until the exclusive /268 copied-runtime/archive checks complete.
+initial partial results remain labeled separately. Complete package checks for
+the additional /268 release are recorded below.
+
+
+## Qualified unsigned package
+
+Clean binary source **c6422900fc75ae9b01bfa1d7c94c0bd53b200b86** builds
+**0.195.7 /268**, with the unchanged SDK0650083e/elab8. Its exact copied app and
+matching agent pass native smoke and all public project/electrical/inductor/
+op-amp/storage/capacity suites across four adapters, under development-file and
+outbound-IP denial. All **102** conformance external processes exit0 normally.
+[Runtime report](runtime-report.json.gz), [public report](public-report.json.gz),
+[process exits](runtime-process-exits.json), [clean package identity](package.json).
+Raw Go build-info output is gzip-preserved byte-for-byte, including its tab
+layout: [native](native-build-info.txt.gz), [agent](agent-build-info.txt.gz).
+No CUA attachment or new native queue/rate qualification is claimed.
+
+A release-to-release inventory comparison caught a missing top-level README in
+the first assembly. That **unqualified** ZIP, its receipt and manifest stay in
+the ignored initial-archive staging folder; small evidence is retained here in
+initial-archive/. The corrected assembly restores prior run/model/agent guidance
+with the new version and menu note. A new exclusive archive contains all **375**
+expected members; every byte/mode matches the OS-extracted copy and its strict
+ad-hoc seal verifies. Previous qualified archives and native binaries never
+change. [Assembly correction](assembly-correction.json), [final archive](archive.json).
+
+The first offline controller run cannot apply nested sandbox-exec under the
+execution tool's default sandbox. The authorized test runner then applies the
+existing stricter runtime profile successfully, without changing system
+settings. Three controller assertions are corrected to the existing documented
+API: capabilities.capabilities, project.load and top-level snapshot.status.
+Their failures are retained as offline-fixture-*.txt and are not product defects.
+The final exact extracted agent opens all **62** saved projects paused and clean,
+with exact graphs, **53** kinds and **187** public commands, then exits normally.
+[Extracted examples](offline-examples.json), [exact controller](offline_examples.py.txt).
+
+All62 saved project files are byte-identical to /267, as are125 of126 Examples
+files. One blink.svg differs only in display/source-annotation metadata: its
+initial sample was accepted before pause, whereas the prior copy reported
+configured/unavailable readings. Every visible SVG node is identical across
+all62 previews, after excluding metadata; static circuit/source parameters are
+exact. No file is replaced to force equality. This is XML/data comparison,
+not new physical rendering acceptance. [Distribution comparison](distribution-comparison.json),
+[exact metadata variation](distribution-svg-metadata.json).
+
+The **1,355** frozen executable/test inputs remain exact through qualification,
+including the new regression file. Nine prior package/SDK archive identities are
+preserved. [Source scope](source-scope.json.gz), [qualification](qualification.json).
+No unchanged SDK or full application gate is rerun after packaging-only guidance
+correction. Owner/clean-account/participant and original native deferrals remain.
+No upload, push, Developer ID signing, notarization or security setting change.
+
+ZIP: build/releases/ELab-0.195.7-macos-arm64.zip, **38,743,156 bytes**.
+SHA-256: `0c04f6348098bbcd4c0206da5cb613ea7931d5d674bb10be6e801a5147772f60`.
+Owned app: build/ELab-0.195.7-268-Menus/ELab.app, with adjacent matching agent.
+
+Next audit actual Examples collection selection/activation queues across agent
+edits and document replacement. Existing held descriptor replays do not establish
+that routed scope. Require a reachable reproduction before any fix; keep the
+SDK's intentional non-list contracts unchanged without evidence. Native checks
+remain prioritized when tooling can establish their actual scope with bounded
+attachment. Do not repeat identical Save trials or completed gates.

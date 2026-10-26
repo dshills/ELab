@@ -1,0 +1,49 @@
+from pathlib import Path
+import json,hashlib,gzip,shutil,xml.etree.ElementTree as ET
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/menu-origin';out=root/'docs/validation/offline-quality/menu-origin';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+scope=json.loads((base/'source-scope.json').read_text());assert len(scope['files_sha256'])==1355
+assert all(sha(root/p)==h for p,h in scope['files_sha256'].items())
+prior=json.loads((base/'scope-review.json').read_text())['prior_package_sdk_hashes'];assert all(sha(root/p)==h for p,h in prior.items())
+archive=json.loads((base/'archive.json').read_text());package=json.loads((base/'package.json').read_text());offline=json.loads((base/'offline-examples.json').read_text());quality=json.loads((base/'full-quality/quality-complete.json').read_text());runtime=Path(json.loads((base/'runtime-invocation.json').read_text())['artifacts']);r=json.loads((runtime/'runtime-report.json').read_text())
+assert archive['passed'] and offline['passed'] and quality['passed'] and r['passed']
+assert archive['files_verified']==375 and len(offline['examples'])==62 and offline['component_kinds']==53 and offline['public_commands']==187
+assert sha(Path(archive['archive']))==archive['archive_sha256']
+assert sha(Path(package['app'])/'Contents/MacOS/ELab')==package['app_executable_sha256']==r['executable_sha256']
+assert sha(Path(package['agent']))==package['agent_sha256']==r['source_agent_sha256']
+exits=json.loads((base/'runtime-process-exits.json').read_text());assert len(exits)==102 and all(x['exit_code']==0 and not x['graceful_wait_timed_out'] for x in exits)
+old=root/'build/releases/ELab-0.195.6-macos-arm64';new=root/'build/releases/ELab-0.195.7-macos-arm64'
+old_members={str(p.relative_to(old)) for p in old.rglob('*') if p.is_file()};new_members={str(p.relative_to(new)) for p in new.rglob('*') if p.is_file()};assert old_members==new_members
+examples={str(p.relative_to(old/'Examples')):sha(p) for p in (old/'Examples').rglob('*') if p.is_file()}
+changed=[p for p,h in examples.items() if sha(new/'Examples'/p)!=h]
+assert changed==['blink.svg'],changed
+svg_count=0
+for path in (old/'Examples').glob('*.svg'):
+ a=ET.fromstring(path.read_text());b=ET.fromstring((new/'Examples'/path.name).read_text())
+ ma=a.find('{http://www.w3.org/2000/svg}metadata');mb=b.find('{http://www.w3.org/2000/svg}metadata')
+ before=json.loads(ma.text);after=json.loads(mb.text)
+ if path.name=='blink.svg':
+  keys=[k for k in before if before[k]!=after[k]];assert keys==['display','source_annotations'],keys
+  (base/'distribution-svg-metadata.json').write_text(json.dumps(dict(file='blink.svg',changed_metadata_keys=keys,before={k:before[k] for k in keys},after={k:after[k] for k in keys},explanation='Paused export may have accepted initial display readings before pause; the old copy carries configured/unavailable readings. Static source parameters and every visible SVG node are identical. No package file is changed to force byte equality.'),indent=2)+'\n')
+ a.remove(ma);b.remove(mb);assert ET.tostring(a)==ET.tostring(b),path.name
+ svg_count+=1
+assert svg_count==62
+saved=[p for p in examples if p.endswith('.elab')];assert len(saved)==62 and all(sha(new/'Examples'/p)==examples[p] for p in saved)
+(base/'distribution-comparison.json').write_text(json.dumps(dict(member_names_match_prior=True,member_count=len(new_members),example_files_byte_identical=len(examples)-len(changed),example_files=len(examples),changed_examples=changed,all_saved_project_files_byte_identical=True,visible_svg_node_sets_identical=svg_count,prior_version='0.195.6',final_version='0.195.7'),indent=2)+'\n')
+qualification=dict(passed=True,version='0.195.7',build=268,source_commit=package['source_commit'],source_inputs_verified=1355,sdk_source=scope['sdk']['source_commit'],sdk_qualification_carried_unchanged=True,archive_sha256=archive['archive_sha256'],archive_bytes=archive['archive_bytes'],files_verified=375,test_counts=json.loads((base/'test-counts.json').read_text()),external_processes=102,all_conformance_external_exits_zero=True,examples_reopened=62,saved_projects_byte_identical_to_prior=len(saved),example_files_byte_identical_to_prior=len(examples)-len(changed),visible_svg_node_sets_identical=svg_count,svg_metadata_variations=changed,component_kinds=53,commands=187,original_native_checks_still_open=[3,6,9,11],native_scope='Exact copied native smoke and native-socket public commands; new menu interleavings qualified through retained-driver/service input. No CUA or native OS queue/rate acceptance.',prior_qualified_releases_unchanged=True,no_push_or_upload=True)
+(base/'qualification.json').write_text(json.dumps(qualification,indent=2)+'\n')
+# Update the checked-in evidence after the clean binary source/package is fixed.
+for p in base.iterdir():
+ if not p.is_file():continue
+ if p.suffix=='.py':shutil.copy2(p,out/(p.name+'.txt'))
+ elif p.name.endswith('-build-info.txt') or p.suffix=='.json' and p.name in ['source-scope.json','extracted-capabilities.json','extracted-parts.json']:(out/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+ elif p.name.startswith('native-inventory-') and p.name!='native-inventory-review.json':continue
+ elif p.suffix in ['.json','.txt']:shutil.copy2(p,out/p.name)
+for name,p in [('runtime-report.json',runtime/'runtime-report.json'),('public-report.json',runtime/'public/report.json')]:
+ (out/(name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+initial=out/'initial-archive';initial.mkdir(exist_ok=True)
+for p in (base/'initial-archive').iterdir():
+ if p.suffix=='.zip':continue
+ if p.suffix=='.py':shutil.copy2(p,initial/(p.name+'.txt'))
+ elif p.name=='RELEASE_MANIFEST.json':(initial/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+ else:shutil.copy2(p,initial/p.name)
+print(json.dumps(qualification))

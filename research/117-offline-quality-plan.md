@@ -351,3 +351,37 @@ and build. SDK0650083e/elab8 stays byte-identical; its prior full gates are
 carried instead of repeated. The clean source checkpoint is ready for exclusive
 0.195.7 /268 packaging and copied-runtime/extraction qualification. /267 remains
 qualified until those checks complete. No new native acceptance is claimed.
+
+## Menu follow-up qualification closeout
+
+Unsigned0.195.7 /268 is qualified from clean binary sourcec6422900fc75ae9b01bfa1d7c94c0bd53b200b86.
+SDK0650083e/elab8 remains exact; no SDK gate repeat. Exact copied app/agent native
+smoke and four-adapter public suites pass under source/development-file/IP denial;
+all102 conformance external processes exit0 normally. The extracted matching
+agent opens all62 examples paused/clean with exact graphs,53 kinds/187 commands.
+
+Distribution comparison catches a missing README before promotion; the initial
+unqualified archive/manifest are preserved, guidance restored and the final
+exclusive archive verifies375 member bytes/modes, OS extraction and strict seal.
+The nested sandbox tool limitation is handled by the authorized existing runner;
+three new offline-controller schema assumptions are corrected, without product
+or security changes. Those fixture failures are recorded separately. All62 saved
+projects match /267 bytes;125/126 Examples files match. blink.svg has initial
+accepted-vs-configured display metadata only, with every visible SVG node and
+static parameter identical. No output is replaced to hide that variation.
+
+Final ZIP: build/releases/ELab-0.195.7-macos-arm64.zip,38,743,156 bytes.
+SHA-2560c04f6348098bbcd4c0206da5cb613ea7931d5d674bb10be6e801a5147772f60.
+All1355 frozen executable/test inputs and nine prior package/SDK identities stay
+exact. No CUA attachment or native OS queue/hardware-rate acceptance is inferred;
+checks3/6/9/11 remain open. Owned runtime processes close normally; no push/upload.
+[Full closeout](../docs/validation/offline-quality/menu-origin/README.md).
+
+Next bounded source/routed batch: audit actual Examples collection selection and
+activation queues across agent edits/document replacement. Prior descriptor
+held-action tests do not establish the actual routed queue scope. Reproduce a
+reachable defect before any repair and preserve intentional non-list SDK
+contracts without contrary evidence. Native checks retain priority when tools
+can establish exact scope without an uncontrolled attachment. No unchanged full
+gates, identical Save retries, new components/features or solver-limit changes.
+Pause the heartbeat and safe-checkpoint on a direct human return/stop instruction.

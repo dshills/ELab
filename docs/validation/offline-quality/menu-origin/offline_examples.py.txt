@@ -1,0 +1,33 @@
+from pathlib import Path
+import json,hashlib,subprocess,importlib.util,sys,signal
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/menu-origin';sys.path.insert(0,str(root/'scripts'))
+spec=importlib.util.spec_from_file_location('client',root/'scripts/viewport-fit-demo.py');v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
+archive=json.loads((base/'archive.json').read_text());extracted=Path(archive['extracted']);runtime=Path(json.loads((base/'runtime-invocation.json').read_text())['artifacts'])
+package=json.loads((base/'package.json').read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(extracted/'elab-agent')==package['agent_sha256']
+class Client(v.Client):
+ def __init__(self):
+  self.process=subprocess.Popen(['/usr/bin/sandbox-exec','-f',str(runtime/'runtime.sb'),str(extracted/'elab-agent')],cwd=runtime/'empty-working-directory',stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
+  self.sequence=0
+# A controller deadline bounds pipe waits; this never sends OS UI events.
+def deadline(signum,frame):raise TimeoutError('offline example controller exceeded120s')
+signal.signal(signal.SIGALRM,deadline);signal.alarm(120)
+c=Client();rows=[]
+try:
+ catalog=c.ask('examples.list');assert len(catalog)==62
+ capabilities=c.ask('capabilities.list');parts=c.ask('parts.list')
+ (base/'extracted-capabilities.json').write_text(json.dumps(capabilities,indent=2)+'\n');(base/'extracted-parts.json').write_text(json.dumps(parts,indent=2)+'\n')
+ assert len(capabilities['capabilities'])==187 and len(parts)==53
+ for e in catalog:
+  path=extracted/'Examples'/(e['id']+'.elab');original=json.loads(path.read_text())
+  c.ask('project.load',dict(path=str(path),discard_changes=True),True);c.ask('simulation.wait')
+  state=c.ask('project.inspect')
+  assert state['components']==original['graph']['components'] and state['wires']==original['graph']['wires'],e['id']
+  assert state['paused'] and not state['document']['dirty'],e['id']
+  assert state['status']=='paused', (e['id'],state['status'])
+  rows.append(dict(id=e['id'],components=len(state['components']),wires=len(state['wires']),paused=True,clean=True,status=state['status'],file_sha256=sha(path)))
+finally:
+ c.close();signal.alarm(0)
+assert len(rows)==62
+(base/'offline-examples.json').write_text(json.dumps(dict(passed=True,scope='Fresh extracted matching headless agent under copied-runtime development-file/outbound-IP denial; not native UI acceptance',actual_native_ui=False,extracted_agent_sha256=sha(extracted/'elab-agent'),component_kinds=len(parts),public_commands=len(capabilities['capabilities']),normal_agent_exit=True,examples=rows),indent=2)+'\n')
+print(json.dumps(dict(passed=True,examples=len(rows),kinds=len(parts),commands=len(capabilities['capabilities']))))

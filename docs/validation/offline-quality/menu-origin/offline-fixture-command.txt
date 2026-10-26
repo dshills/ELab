@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/offline-quality/menu-origin/offline_examples.py", line 23, in <module>
+    c.ask('project.open',dict(path=str(path),discard_changes=True),True);c.ask('simulation.wait')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 51, in ask
+    assert code == expect, response
+           ^^^^^^^^^^^^^^
+AssertionError: {'version': 1, 'id': 'viewport-5', 'revision': 1, 'error': {'code': 'unknown-command', 'message': 'enumerate capabilities.list for supported commands'}}

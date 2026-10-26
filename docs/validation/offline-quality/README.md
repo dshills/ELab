@@ -121,3 +121,13 @@ category choice overwriting newer agent search context. All-theme routed
 regressions, focus continuity, existing overflow controls and final complete
 application gates pass. The SDK stays exact. /268 package qualification follows
 separately; /267 and prior releases remain preserved and native checks stay open.
+
+The [Examples menu repair](menu-origin/README.md) is separately qualified in
+unsigned **0.195.7 /268**, clean binary sourcec6422900. Full application gates,
+exact copied native/public runtime,102 normal conformance exits and all62
+extracted examples pass. Final375-member ZIP SHA-256:
+`0c04f6348098bbcd4c0206da5cb613ea7931d5d674bb10be6e801a5147772f60`.
+The SDK remains exact. The first unqualified assembly's missing README is repaired
+before final archive qualification; initial receipts and controlled fixture/tool
+errors remain explicit. All prior releases stay preserved and native checks
+3/6/9/11 remain open.

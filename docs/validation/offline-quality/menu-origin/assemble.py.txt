@@ -36,3 +36,8 @@ print(json.dumps(dict(folder=str(out),example_count=len(catalog))))
 rollback=(root/'build/releases/ELab-0.195.6-macos-arm64/ROLLBACK.md').read_text()
 rollback+='\nThe /267 ZIP remains preserved with SHA-256:\n`fac6d6a47c73443956c44e525ff22eb3079866add0a5a5828a7c9cf475902cd3`.\n'
 (out/'ROLLBACK.md').write_text(rollback)
+
+# Preserve user-facing run/model/agent guidance from the qualified distribution.
+readme=(root/'build/releases/ELab-0.195.6-macos-arm64/README.md').read_text().replace('0.195.6 /267','0.195.7 /268')
+readme+='\n## Examples category reliability update\n\nAn intervening agent command now retires the Examples category popup and pending\nchoice. A queued click or held release cannot erase a newer example search.\nFresh selection still clears search through the same command and keeps keyboard\nfocus on the category. The SDK and component set are unchanged. Routed queue\nchecks cover all four themes; native OS queue/rate acceptance remains open.\n'
+(out/'README.md').write_text(readme)

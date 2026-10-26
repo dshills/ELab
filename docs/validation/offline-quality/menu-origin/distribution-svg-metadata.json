@@ -1,0 +1,219 @@
+{
+  "file": "blink.svg",
+  "changed_metadata_keys": [
+    "display",
+    "source_annotations"
+  ],
+  "before": {
+    "display": {
+      "preferences": {
+        "voltage_color": false,
+        "voltage_range_v": 5,
+        "current_cues": false,
+        "current_motion": false,
+        "reduced_motion": false,
+        "direction": "conventional"
+      },
+      "run_id": 0,
+      "electrical_revision": 0,
+      "time_s": 0,
+      "animate": false,
+      "wires": [
+        {
+          "id": "W1",
+          "from": "VCC.positive",
+          "to": "RL.1",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        },
+        {
+          "id": "W2",
+          "from": "RL.2",
+          "to": "D1.anode",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        },
+        {
+          "id": "W3",
+          "from": "D1.cathode",
+          "to": "Q1.collector",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        },
+        {
+          "id": "W4",
+          "from": "VIN.positive",
+          "to": "RB.1",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        },
+        {
+          "id": "W5",
+          "from": "RB.2",
+          "to": "Q1.base",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        },
+        {
+          "id": "W6",
+          "from": "Q1.emitter",
+          "to": "GND1.reference",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        },
+        {
+          "id": "W7",
+          "from": "VCC.negative",
+          "to": "GND1.reference",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        },
+        {
+          "id": "W8",
+          "from": "VIN.negative",
+          "to": "GND1.reference",
+          "state": "unavailable",
+          "reason": "No accepted live result for this probe",
+          "current_reason": "Current direction requires a fresh accepted circuit",
+          "color": "#387d93"
+        }
+      ]
+    },
+    "source_annotations": [
+      {
+        "id": "VIN",
+        "position": {
+          "x": -658,
+          "y": 47
+        },
+        "lines": [
+          "VIN | pulse (ideal edges)",
+          "low 0 V | high 5 V",
+          "high 50 ms | low 50 ms"
+        ],
+        "state": "configured"
+      }
+    ]
+  },
+  "after": {
+    "display": {
+      "preferences": {
+        "voltage_color": false,
+        "voltage_range_v": 5,
+        "current_cues": false,
+        "current_motion": false,
+        "reduced_motion": false,
+        "direction": "conventional"
+      },
+      "run_id": 26,
+      "electrical_revision": 26,
+      "time_s": 0,
+      "animate": false,
+      "wires": [
+        {
+          "id": "W1",
+          "from": "VCC.positive",
+          "to": "RL.1",
+          "voltage_v": 5,
+          "current_a": 0.0028603304910690083,
+          "state": "live",
+          "color": "#387d93"
+        },
+        {
+          "id": "W2",
+          "from": "RL.2",
+          "to": "D1.anode",
+          "voltage_v": 2.1396695089309916,
+          "current_a": 0.0028603304910690096,
+          "state": "live",
+          "color": "#387d93"
+        },
+        {
+          "id": "W3",
+          "from": "D1.cathode",
+          "to": "Q1.collector",
+          "voltage_v": 0.057533807794293346,
+          "current_a": 0.0028603304910690096,
+          "state": "live",
+          "color": "#387d93"
+        },
+        {
+          "id": "W4",
+          "from": "VIN.positive",
+          "to": "RB.1",
+          "voltage_v": 5,
+          "current_a": 0.00043113965708351323,
+          "state": "live",
+          "color": "#387d93"
+        },
+        {
+          "id": "W5",
+          "from": "RB.2",
+          "to": "Q1.base",
+          "voltage_v": 0.6886034291648679,
+          "current_a": 0.00043113965708351323,
+          "state": "live",
+          "color": "#387d93"
+        },
+        {
+          "id": "W6",
+          "from": "Q1.emitter",
+          "to": "GND1.reference",
+          "voltage_v": 0,
+          "current_a": 0.0032914701481525227,
+          "state": "live",
+          "color": "#387d93"
+        },
+        {
+          "id": "W7",
+          "from": "VCC.negative",
+          "to": "GND1.reference",
+          "voltage_v": 0,
+          "current_a": -0.0028603304910690096,
+          "state": "live",
+          "color": "#387d93"
+        },
+        {
+          "id": "W8",
+          "from": "VIN.negative",
+          "to": "GND1.reference",
+          "voltage_v": 0,
+          "current_a": -0.00043113965708351323,
+          "state": "live",
+          "color": "#387d93"
+        }
+      ]
+    },
+    "source_annotations": [
+      {
+        "id": "VIN",
+        "position": {
+          "x": -658,
+          "y": 47
+        },
+        "lines": [
+          "VIN | pulse (ideal edges)",
+          "low 0 V | high 5 V",
+          "high 50 ms | low 50 ms"
+        ],
+        "state": "current",
+        "input_mode": "auto"
+      }
+    ]
+  },
+  "explanation": "Paused export may have accepted initial display readings before pause; the old copy carries configured/unavailable readings. Static source parameters and every visible SVG node are identical. No package file is changed to force byte equality."
+}

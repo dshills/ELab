@@ -1,0 +1,21 @@
+sandbox-exec: sandbox_apply: Operation not permitted
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/offline-quality/menu-origin/offline_examples.py", line 17, in <module>
+    catalog=c.ask('examples.list');assert len(catalog)==62
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 47, in ask
+    response = self.request(command, params, guard)
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 39, in request
+    assert line, f'agent terminated during {command}'
+           ^^^^
+AssertionError: agent terminated during examples.list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/offline-quality/menu-origin/offline_examples.py", line 30, in <module>
+    c.close();signal.alarm(0)
+    ~~~~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 57, in close
+    assert self.process.wait(timeout=5) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
