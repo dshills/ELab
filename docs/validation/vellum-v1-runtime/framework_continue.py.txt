@@ -1,0 +1,14 @@
+from pathlib import Path
+import json,os,subprocess,time
+r=Path('/Users/dshills/Development/projects/ELab');s=r/'build/vellum-runtime-4cf0176';b=r/'build/vellum-runtime-refresh/framework';assert b.is_dir()
+env=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=s,text=True).strip()
+steps=[('api-tool-race',['go','test','-race','-json','-count=1','./...'],s/'tools/apicompat'),('api-tool-vet',['go','vet','./...'],s/'tools/apicompat'),('api-check',['go','run','.','check','-root',str(s),'-baseline',str(s/'release/api/v1')],s/'tools/apicompat'),('driver-race',['go','test','-race','-json','-count=1','-timeout=20m','./...'],s/'drivers/cogent'),('driver-vet',['go','vet','./...'],s/'drivers/cogent'),('rendered-race',['go','test','-race','-json','-tags=offscreen','-count=1','-timeout=20m','./...'],s/'drivers/cogent'),('rendered-vet',['go','vet','-tags=offscreen','./...'],s/'drivers/cogent')]
+rows=json.loads((b/'progress.json').read_text())[:4];assert all(q['exit_code']==0 for q in rows)
+for name,cmd,cwd in steps:
+ print('Running '+name,flush=True);start=time.monotonic()
+ with (b/(name+('.jsonl' if '-race' in name else '.txt'))).open('w') as stream:q=subprocess.run(cmd,cwd=cwd,env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=1500)
+ row=dict(name=name,command=cmd,cwd=str(cwd),exit_code=q.returncode,wall_s=time.monotonic()-start);rows.append(row);print(json.dumps(row),flush=True);(b/'progress.json').write_text(json.dumps(rows,indent=2)+'\n')
+ if q.returncode:raise SystemExit(q.returncode)
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=s,text=True).strip()
+(b/'report.json').write_text(json.dumps(dict(passed=True,source_commit=source,steps=rows),indent=2)+'\n')

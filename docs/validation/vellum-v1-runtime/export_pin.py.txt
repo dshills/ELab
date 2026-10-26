@@ -1,0 +1,27 @@
+from pathlib import Path
+import gzip,hashlib,json,os,subprocess,tarfile
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/vellum-runtime-refresh';s=r/'build/vellum-runtime-4cf0176'
+q=json.loads((b/'framework/report.json').read_text());assert q['passed']
+commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=s,text=True).strip();assert q['source_commit']==commit and not subprocess.check_output(['git','status','--porcelain'],cwd=s).strip()
+lock=r/'third_party/vellum/sdk.lock.json';old=json.loads(lock.read_text());assert old==json.loads((b/'before.json').read_text())['runtime_sdk']
+archive=r/'third_party/vellum/vellum-4cf0176-elab1.tar.gz';assert not archive.exists()
+env=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'))
+with (b/'sdk-export.txt').open('w') as stream:subprocess.run(['python3','-B','scripts/release-sdk.py','--output',str(archive)],cwd=s,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=240)
+sha=lambda raw:hashlib.sha256(raw).hexdigest();prefix='vellum-v1.0.0'
+with tarfile.open(archive) as t:
+ raw=t.extractfile(prefix+'/SDK_MANIFEST.json').read();m=json.loads(raw)
+ assert m['private_build'] and m['source']==dict(clean=True,commit=commit) and not m['untracked_files']
+ actual={}
+ for member in t:
+  assert member.isfile() and member.name.startswith(prefix+'/')
+  name=member.name[len(prefix)+1:]
+  if name!='SDK_MANIFEST.json':actual[name]=sha(t.extractfile(member).read())
+ assert actual==m['files']
+patch=r/'third_party/vellum/patches/elab-4cf0176-runtime-compat.patch.gz';assert not patch.exists();diff=subprocess.check_output(['git','diff','--binary','4cf01763c1fd5501648ea19b4bb406fe62446319','HEAD'],cwd=s);encoded=gzip.compress(diff,mtime=0);patch.write_bytes(encoded)
+cache='build/.vellum-sdk-4cf0176-elab1';new=dict(old,upstream_commit='4cf01763c1fd5501648ea19b4bb406fe62446319',source_commit=commit,compatibility_patch=dict(path=str(patch.relative_to(r)),sha256=sha(encoded)),archive=str(archive.relative_to(r)),archive_bytes=archive.stat().st_size,sha256=sha(archive.read_bytes()),manifest_sha256=sha(raw),prefix=prefix,cache=cache,version='v1.0.0',files=len(actual),bootstrap={k:actual[k] for k in old['bootstrap']})
+(b/'previous-sdk.lock.json').write_bytes(lock.read_bytes());lock.write_text(json.dumps(new,indent=2)+'\n')
+p=r/'desktop/go.mod';v=p.read_text();assert v.count('.vellum-sdk-f9dee54-elab9')==4;v=v.replace('.vellum-sdk-f9dee54-elab9','.vellum-sdk-4cf0176-elab1').replace('github.com/dshills/vellum v0.0.0','github.com/dshills/vellum v1.0.0').replace('github.com/dshills/vellum/drivers/cogent v0.0.0-20261025140420-f9dee54fdb2a','github.com/dshills/vellum/drivers/cogent v0.0.0-20261026183335-4cf01763c1fd');p.write_text(v)
+previous=json.loads((r/old['cache']/'SDK_MANIFEST.json').read_text())['files'];report=dict(passed=True,upstream_commit=new['upstream_commit'],source_commit=commit,archive_sha256=new['sha256'],manifest_sha256=new['manifest_sha256'],files=len(actual),changed=sorted(k for k in previous.keys()&actual.keys() if previous[k]!=actual[k]),added=sorted(actual.keys()-previous.keys()),removed=sorted(previous.keys()-actual.keys()),all_members_verified=True,bootstrap_changes=[k for k in old['bootstrap'] if old['bootstrap'][k]!=new['bootstrap'][k]])
+(b/'sdk-comparison.json').write_text(json.dumps(report,indent=2)+'\n')
+with (b/'sdk-prepare.txt').open('w') as stream:subprocess.run(['python3','-B','scripts/prepare-vellum.py'],cwd=r,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=240)
+print(json.dumps(dict(passed=True,source=commit,archive=str(archive),files=len(actual))))

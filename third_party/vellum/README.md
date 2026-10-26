@@ -1,6 +1,27 @@
 # Pinned Vellum SDK from public source
 
-## Current dependency · October 26, 2026
+## Current runtime · October 26, 2026
+
+The development runtime now pins the latest public Vellum v1.0.0 source
+[`4cf0176`](https://github.com/dshills/vellum/commit/4cf01763c1fd5501648ea19b4bb406fe62446319),
+with ELab compatibility source `19c9ebc37ed9f06daa824e024b331caf9700f4b0`. The icon packager is
+already pinned to the same upstream source. GitHub's published release list
+still has the older alpha.3 prerelease; this pin follows newer public main.
+
+The private SDK archive is `vellum-4cf0176-elab1.tar.gz`, containing 8862
+verified files; all four module replacements use `build/.vellum-sdk-4cf0176-elab1`. Complete
+SDK portable/ordinary/rendered race, Python, vet and stable-API checks pass.
+ELab application/package qualification is recorded separately in
+[the runtime refresh evidence](../../docs/validation/vellum-v1-runtime/README.md).
+
+Existing input ownership, queued callbacks, fields, cursors, scrolling, dividers
+and tooltip repairs remain. Native preparation verifies upstream's prose patch
+107 followed by the six compatibility patches 108–113. The merge retains both
+new native content/help-tag support and existing ELab press/tooltip handling.
+No components, models, solver limits or public ELab commands are added.
+
+
+## Previous dependency · October 26, 2026
 
 ELab consumes Vellum **v0.1.0-personal.1** from the owner's newly pushed
 [`f9dee54`](https://github.com/dshills/vellum/commit/f9dee54fdb2a9e73a38fdd3fb67c8871dc0f6c40) on
@@ -348,7 +369,7 @@ unmodified upstream bytes, including the MIT license and icon regressions.
 `scripts/package_app.py` verifies the complete tool inventory and hashes before
 executing it. The `--icon` option converts/embeds artwork before signing.
 
-This is a packaging dependency, not a runtime SDK upgrade. The active runtime
-continues to use the existing elab9 SDK lock/cache and its qualified compatibility
-changes. No verified SDK cache or sibling source was edited. See
+The initial /273 icon update changed packaging only and preserved the elab9
+runtime. The subsequent v1 runtime update is recorded at the top of this file;
+the packaging and runtime locks remain independently verified. No verified SDK cache or sibling source was edited. See
 [the application-icon guide](../../docs/application-icon.md).

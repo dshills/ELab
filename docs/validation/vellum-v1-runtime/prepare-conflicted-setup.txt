@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/drivers/cogent/prepare.py", line 381, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/drivers/cogent/prepare.py", line 314, in main
+    manifest = json.loads((ROOT / "native/dependencies.json").read_text())
+  File "/opt/homebrew/Cellar/python@3.15/3.15.1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/json/__init__.py", line 371, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/json/decoder.py", line 358, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/json/decoder.py", line 374, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1397 column 1 (char 61414)
