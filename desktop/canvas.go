@@ -405,7 +405,7 @@ func navigationDirection(chord string) string {
 // Runs on the application owner, with the event's original document/command guard.
 func (c *commandCanvas) navigateObject(direction string, revision, generation uint64) {
 	state := c.screen.service.Snapshot()
-	if c.dragging || state.Closed || c.screen.fileBusy || c.screen.pendingCommand != "" || sourcePaneHidden(state) {
+	if c.dragging || state.Closed || c.screen.fileBusy || c.screen.pendingCommand != "" || sourcePaneHidden(state) || state.ExampleBrowser.Visible {
 		return
 	}
 	c.screen.invokeAtCommandRevision("selection.navigate", workbench.NavigateParams{Direction: direction, Center: true}, revision, generation)

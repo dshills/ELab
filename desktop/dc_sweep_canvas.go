@@ -107,7 +107,8 @@ func (c *sweepCanvas) cursorPointer(frame *sweepPlotFrame, kind events.Types, bu
 }
 
 func (c *sweepCanvas) applyCursorFrame(frame *sweepPlotFrame, x float64, revision uint64) (uint64, bool) {
-	if frame == nil || c.frame.Load() == nil || c.screen.fileBusy || c.screen.pendingCommand != "" || !sweepVisible(c.screen.service.Snapshot()) || len(frame.inputs) == 0 || frame.right <= frame.left || math.IsNaN(x) || math.IsInf(x, 0) || x < frame.left || x > frame.right {
+	state := c.screen.service.Snapshot()
+	if frame == nil || c.frame.Load() == nil || c.screen.fileBusy || c.screen.pendingCommand != "" || !sweepVisible(state) || state.ExampleBrowser.Visible || len(frame.inputs) == 0 || frame.right <= frame.left || math.IsNaN(x) || math.IsInf(x, 0) || x < frame.left || x > frame.right {
 		return revision, false
 	}
 	value := (x - frame.left) / (frame.right - frame.left)

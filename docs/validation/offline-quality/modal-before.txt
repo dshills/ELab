@@ -1,0 +1,11 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestExamplesModalBlocksBackgroundScopeButKeepsAgentAccess (0.04s)
+    modal_background_input_test.go:26: background scope changed a measurement behind the examples sheet
+--- FAIL: TestExamplesModalBlocksBackgroundSweepButKeepsAgentAccess (0.13s)
+    modal_background_input_test.go:57: background sweep changed a measurement behind the examples sheet
+--- FAIL: TestExamplesModalBlocksBackgroundObjectNavigation (0.04s)
+    modal_background_input_test.go:84: background object shortcut changed selection behind the examples sheet
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.878s
+FAIL
