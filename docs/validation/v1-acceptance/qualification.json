@@ -1,0 +1,104 @@
+{
+  "status": "unsigned-private-candidate-qualified-with-open-native-input-acceptance",
+  "version": "0.195.9",
+  "build": 270,
+  "source_commit": "e3103c57ee32e7d3e7726b0269815cf14c1b52ac",
+  "clean_binary_source": true,
+  "archive_sha256": "deebeecfdecf76b07affb0c468a78da36b737883a5c6e7103720d5e31bd0613a",
+  "archive_bytes": 38782947,
+  "archive_files_verified": 376,
+  "native_sha256": "f328914dca65aed0b062cfd94707a62aaf70f5be2a0013e0c9960e805303067e",
+  "agent_sha256": "02bf50757662c9a752471fe598aeac4688b244c6fefcdf185fbc9693c1e02c4e",
+  "frozen_inputs_verified": 1363,
+  "prior_package_sdk_identities_preserved": 12,
+  "changed_previous_inputs": [
+    "desktop/cmos_example_test.go",
+    "desktop/document_workspace.go",
+    "desktop/mixed_region_test.go",
+    "desktop/scope.go",
+    "desktop/view.go"
+  ],
+  "reviewed_native_inventory_sha256": "e33073f0c4678c346d37da0c1e4f4d8a06c3132acf4a3dce6ed0a3ea8349d947",
+  "test_counts": {
+    "portable": {
+      "top_level": 867,
+      "including_subtests": 1950,
+      "packages": 7,
+      "skipped": [],
+      "cached_packages": [
+        "github.com/dshills/elab/cmd/elab-conformance",
+        "github.com/dshills/elab/internal/conformance",
+        "github.com/dshills/elab/internal/printspool",
+        "github.com/dshills/elab/internal/schematicpdf",
+        "github.com/dshills/elab/transport",
+        "github.com/dshills/elab/workbench"
+      ],
+      "unstructured_build_diagnostics": []
+    },
+    "ordinary": {
+      "top_level": 339,
+      "including_subtests": 839,
+      "packages": 1,
+      "skipped": [],
+      "cached_packages": [],
+      "unstructured_build_diagnostics": []
+    },
+    "rendered": {
+      "top_level": 475,
+      "including_subtests": 1505,
+      "packages": 1,
+      "skipped": [],
+      "cached_packages": [],
+      "unstructured_build_diagnostics": []
+    }
+  },
+  "interaction_families": 15,
+  "interaction_tests": 51,
+  "interaction_subtests": 159,
+  "actual_parser_queue_cases": 10,
+  "scope_geometry_cases": 16,
+  "examples_reopened": 62,
+  "example_files_match_qualified_269_zip": 126,
+  "components": 53,
+  "commands": 187,
+  "normal_conformance_external_exits": 102,
+  "sdk_complete_qualification_carried_unchanged": true,
+  "soak": {
+    "passed": true,
+    "requested_wall_s": 1800.0,
+    "observed_wall_s": 1800.0159699588548,
+    "cycles": 180,
+    "circuits": [
+      "display-counter",
+      "flasher",
+      "rc"
+    ],
+    "scope": "public API against continuously integrating owned process; not visible latency",
+    "rss_min_bytes": 308330496,
+    "rss_max_bytes": 377044992,
+    "rss_final_bytes": 374145024,
+    "cpu_s": 473.57,
+    "rss_late_minus_early_median_bytes": 8413184.0,
+    "rss_growth_under_128_mib": true
+  },
+  "command_request_response_p95_ms": 18.180707935243845,
+  "timing_scope": "Request/response including conflict refreshes; admission preflight inspect is measured separately. Not input-to-pixel latency.",
+  "original_native_checks_still_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "full_native_input_acceptance": false,
+  "owner_review_deferred": true,
+  "clean_account_installation_deferred": true,
+  "developer_id_signed": false,
+  "notarized": false,
+  "no_new_components_or_commands": true,
+  "solver_limits_unchanged": true,
+  "no_push_or_upload": true,
+  "heartbeat_remains_paused": true,
+  "normal_supervised_endurance_exits": 185,
+  "first_candidate_run": "Confirmed manual close after 161 cycles; excluded from the continuous endurance verdict",
+  "supervisor_scope": "Owned wait/poll exit metadata observation only; same compiled app and agent and unchanged public-command workload"
+}

@@ -487,3 +487,16 @@ The owner has returned and asked for next priorities. The overnight heartbeat is
 PAUSED by the standing return instruction. Save this test/evidence checkpoint and
 hand off; do not begin another autonomous batch. /269 remains the qualified build,
 with original native checks 3/6/9/11 and recorded acceptance deferrals still open.
+
+## Direct completion batch after owner return
+
+The owner requests the five first-version completion items and reports live-scope
+layout movement. This directly requested work is closed out in
+[research/118](118-v1-completion.md) and
+[the consolidated evidence](../docs/validation/v1-acceptance/README.md). Additional
+unsigned 0.195.9 /270, clean binary source e3103c57, fixes scope/readout geometry
+and completes the available interaction/workflow/endurance/package work. Four
+native input gates remain explicitly open; the owner confirms the first /270
+endurance interruption was a manual close, and the repeat completes 30 minutes.
+All earlier /269 and older bytes are preserved. The offline heartbeat remains
+PAUSED; this direct request does not resume it or start another feature batch.

@@ -1,0 +1,34 @@
+"""Verify exact-source full gates and derive the selected matrix without reruns."""
+from pathlib import Path
+import hashlib,importlib.util,json,sys
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/v1-acceptance';q=json.loads((b/'full-quality/quality-complete.json').read_text());scope=json.loads((b/'source-scope.json').read_text())
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert q['passed'] and all(sha(r/p)==h for p,h in scope['files_sha256'].items())
+assert sha(r/'research/13-native-command-inventory.json')==scope['reviewed_native_inventory_sha256']
+counts={};streams={}
+for mode,name in [('portable','root-race.jsonl'),('ordinary','desktop-race.jsonl'),('rendered','mounted-race.jsonl')]:
+ rows=[];unstructured=[]
+ for line in (b/'full-quality'/name).read_text().splitlines():
+  try:rows.append(json.loads(line))
+  except ValueError:unstructured.append(line)
+ assert not any(x.get('Action')=='fail' for x in rows),mode
+ passes={(x['Package'],x['Test']) for x in rows if x.get('Action')=='pass' and x.get('Test')}
+ packages={x['Package'] for x in rows if x.get('Action')=='pass' and not x.get('Test')}
+ assert packages and passes
+ skipped=sorted(x['Test'] for x in rows if x.get('Action')=='skip' and x.get('Test'))
+ cached=sorted({x['Package'] for x in rows if '(cached)' in x.get('Output','') and not x.get('Test')})
+ counts[mode]=dict(top_level=len([n for _,n in passes if '/' not in n]),including_subtests=len(passes),packages=len(packages),skipped=skipped,cached_packages=cached,unstructured_build_diagnostics=unstructured)
+ streams[mode]=rows
+sys.path.insert(0,str(r/'scripts'))
+spec=importlib.util.spec_from_file_location('matrix',r/'scripts/v1-interactions.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+matrix,selected,sources=m.load_matrix(m.DEFAULT);chosen=set(selected)
+# Every test in the selected matrix also ran in this exact final full rendered
+# suite. Preserve the selected events and validate them with the same strict
+# runner, rather than spending another two minutes repeating unchanged tests.
+out=b/'interaction-qualified';out.mkdir(exist_ok=False)
+rows=[x for x in streams['rendered'] if not x.get('Test') or x['Test'].split('/')[0] in chosen]
+(out/'events.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in rows))
+report=dict(passed=True,scope=matrix['scope'],native_open_checks=matrix['native_open_checks'],family_count=len(matrix['families']),matrix_sha256=sha(m.DEFAULT),source_sha256=sources,source_commit=scope['source_commit'],derived_from_exact_full_rendered_suite=True,full_suite_log='full-quality/mounted-race.jsonl',full_suite_sha256=sha(b/'full-quality/mounted-race.jsonl'))
+report.update(m.summarize_events(out/'events.jsonl',selected));(out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+(b/'test-counts.json').write_text(json.dumps(counts,indent=2)+'\n')
+print(json.dumps(dict(passed=True,counts=counts,selected_tests=report['top_level_passed'],selected_subtests=report['subtests_passed'])))

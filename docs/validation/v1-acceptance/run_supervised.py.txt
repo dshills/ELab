@@ -1,0 +1,28 @@
+"""Observe owned child exits while running the unchanged acceptance controller.
+No UI action, event injection, focus change or capture method is added.
+"""
+from pathlib import Path
+import hashlib,importlib.util,json,subprocess,sys,time
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/v1-acceptance';out=b/'candidate-supervision.jsonl'
+assert not out.exists()
+original=subprocess.Popen
+seen=set()
+class ObservedProcess(original):
+ def __init__(self,*args,**kwargs):
+  super().__init__(*args,**kwargs)
+  argv=self.args if isinstance(self.args,(list,tuple)) else []
+  self.observed=any(str(x).endswith(('/ELab','/elab-agent')) for x in argv)
+ def observe(self,code):
+  if code is not None and self.observed and self.pid not in seen:
+   seen.add(self.pid)
+   with out.open('a') as stream:stream.write(json.dumps(dict(pid=self.pid,exit_code=code,unix_s=time.time(),kind='native' if any(str(x).endswith('/ELab') for x in self.args) else 'agent'))+'\n')
+  return code
+ def poll(self):return self.observe(super().poll())
+ def wait(self,*args,**kwargs):return self.observe(super().wait(*args,**kwargs))
+subprocess.Popen=ObservedProcess
+sys.path.insert(0,str(r/'scripts'))
+spec=importlib.util.spec_from_file_location('workflow',r/'scripts/v1-workflows.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+p=json.loads((b/'package.json').read_text())
+sys.argv=[str(r/'scripts/v1-workflows.py'),'--agent',p['agent'],'--agent-sha256',p['agent_sha256'],'--app',p['app'],'--app-sha256',p['app_executable_sha256'],'--artifacts',str(b/'candidate-workflows-soak'),'--soak-seconds','1800']
+(b/'supervisor-invocation.json').write_text(json.dumps(dict(argv=sys.argv,unchanged_controller_sha256=hashlib.sha256((r/'scripts/v1-workflows.py').read_bytes()).hexdigest(),supervisor_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),scope='Owned child exit metadata only; no process/input/capture behavior altered; OS process wait/poll results returned unchanged'),indent=2)+'\n')
+m.main()

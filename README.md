@@ -7,14 +7,19 @@ the existing feature scope and records required checks and acceptance limits.
 
 ## Downloadable release
 
-**ELab 0.195.4 /265** packages the current 53 component kinds and all 62 existing
-examples with a matching agent. [Open app](build/releases/ELab-0.195.4-macos-arm64/ELab.app),
-[download ZIP](build/releases/ELab-0.195.4-macos-arm64.zip), or
-[verify SHA-256](build/releases/ELab-0.195.4-macos-arm64.zip.sha256).
+**ELab 0.195.9 /270** packages the current 53 component kinds and all 62 existing
+examples with a matching agent. [Open app](build/releases/ELab-0.195.9-macos-arm64/ELab.app),
+[download ZIP](build/releases/ELab-0.195.9-macos-arm64.zip), or
+[verify SHA-256](build/releases/ELab-0.195.9-macos-arm64.zip.sha256).
 
-This quality update blocks background plot/navigation handlers while Examples is
-open, and includes active PWM, op-amp dynamics and sounder settings in exported
-parts lists. [Repair and qualification](docs/validation/offline-quality/README.md).
+This quality update keeps live scope buttons, time/status text and footer readings
+in stable positions as simulation values change. It also qualifies shared-agent
+LED/RC/counter workflows, a 30-minute run, exact archive extraction and all 62
+reopened examples. [Completion evidence and limits](docs/validation/v1-acceptance/README.md).
+
+Four native input checks remain unqualified: Save-panel editing, controlled
+divider rates and precise native pre-agent parser origin. Their investigation
+and tool limits are recorded separately from passing software/runtime tests.
 
 The **Examples** browser has Start here, topic categories, global word search,
 actual schematic previews and short experiments. Browsing preserves the live
@@ -27,13 +32,15 @@ and leaves simulation capacities and precision unchanged.
 Requires Apple Silicon and macOS 26.0 or later; tested on macOS 26.6.2. This is
 the owner-selected unsigned channel, with an ad-hoc integrity seal and no
 Developer ID or notarization. A downloaded copy can be blocked by Gatekeeper;
-see [installation/use instructions](build/releases/ELab-0.195.4-macos-arm64/README.md).
+see [installation/use instructions](build/releases/ELab-0.195.9-macos-arm64/README.md).
 The [ordered work and qualification](research/116-reliability-release-and-examples-plan.md)
 records native, agent, race, rendered, archive and offline checks. Owner walkthrough,
 separate-account installation and full PRD acceptance retain their recorded deferrals.
 The package is prepared locally; nothing has been publicly uploaded or pushed.
 
-The [0.195.3 /264 examples release](build/releases/ELab-0.195.3-macos-arm64.zip),
+The [0.195.8 /269 collection-origin release](build/releases/ELab-0.195.8-macos-arm64.zip),
+[0.195.4 /265 modal/export release](build/releases/ELab-0.195.4-macos-arm64.zip),
+[0.195.3 /264 examples release](build/releases/ELab-0.195.3-macos-arm64.zip),
 [0.194.5 /260 reliability release](build/releases/ELab-0.194.5-macos-arm64.zip)
 and [0.181.4 /205 qualified alpha](build/releases/ELab-0.181.4-macos-arm64.zip)
 remain byte-for-byte preserved, alongside earlier candidates and owner projects.

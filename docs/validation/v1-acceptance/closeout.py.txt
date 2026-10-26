@@ -1,0 +1,60 @@
+"""Consolidate qualified receipts without changing binaries or prior releases."""
+from pathlib import Path
+import gzip,hashlib,json,shutil,zipfile
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/v1-acceptance';e=r/'docs/validation/v1-acceptance';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+read=lambda name:json.loads((b/name).read_text())
+p=read('package.json');s=read('source-scope.json');a=read('archive.json');q=read('full-quality/quality-complete.json');i=read('interaction-qualified/report.json');w=read('candidate-workflows-soak/report.json');o=read('offline-examples.json');runtime=Path(read('runtime-invocation.json')['artifacts']);rt=json.loads((runtime/'runtime-report.json').read_text());exits=read('runtime-process-exits.json')
+assert all(x['passed'] for x in [a,q,i,w,o,rt]) and w['normal_cleanup_passed'] and w['native_exit_code']==0
+assert len(exits)==102 and all(x['exit_code']==0 and not x['graceful_wait_timed_out'] for x in exits)
+assert w['soak']['observed_wall_s']>=1800 and w['app_sha256']==p['app_executable_sha256']==rt['executable_sha256']
+assert w['agent_sha256']==p['agent_sha256']==rt['source_agent_sha256']
+assert all(sha(r/path)==h for path,h in s['files_sha256'].items())
+assert sha(r/'research/13-native-command-inventory.json')==s['reviewed_native_inventory_sha256']
+assert all(sha(r/path)==h for path,h in s['previous_package_sdk_sha256'].items())
+assert sha(Path(a['archive']))==a['archive_sha256']
+assert len(o['examples'])==62 and o['component_kinds']==53 and o['public_commands']==187
+# Compare copied assets against the immutable qualified ZIP, not merely another
+# loose directory. This prevents silently carrying changed extracted examples.
+folder=r/'build/releases/ELab-0.195.9-macos-arm64';old=r/'build/releases/ELab-0.195.8-macos-arm64.zip';checked=[]
+with zipfile.ZipFile(old) as archive:
+ for entry in archive.infolist():
+  prefix='ELab-0.195.8-macos-arm64/Examples/'
+  if entry.filename.startswith(prefix):
+   rel=entry.filename[len(prefix):]
+   if not rel:continue
+   path=folder/'Examples'/rel
+   assert hashlib.sha256(archive.read(entry)).hexdigest()==sha(path),rel
+   checked.append(rel)
+assert len(checked)==126
+soak={k:v for k,v in w['soak'].items() if k!='samples'}
+counts=read('test-counts.json')
+report=dict(status='unsigned-private-candidate-qualified-with-open-native-input-acceptance',version=p['version'],build=p['build'],source_commit=p['source_commit'],clean_binary_source=True,archive_sha256=a['archive_sha256'],archive_bytes=a['archive_bytes'],archive_files_verified=a['files_verified'],native_sha256=p['app_executable_sha256'],agent_sha256=p['agent_sha256'],frozen_inputs_verified=len(s['files_sha256']),prior_package_sdk_identities_preserved=len(s['previous_package_sdk_sha256']),changed_previous_inputs=s['previous_frozen_inputs_changed'],reviewed_native_inventory_sha256=s['reviewed_native_inventory_sha256'],test_counts=counts,interaction_families=i['family_count'],interaction_tests=i['top_level_passed'],interaction_subtests=i['subtests_passed'],actual_parser_queue_cases=10,scope_geometry_cases=16,examples_reopened=62,example_files_match_qualified_269_zip=126,components=53,commands=187,normal_conformance_external_exits=102,sdk_complete_qualification_carried_unchanged=True,soak=soak,command_request_response_p95_ms=w['backend_api_p95_ms'],timing_scope='Request/response including conflict refreshes; admission preflight inspect is measured separately. Not input-to-pixel latency.',original_native_checks_still_open=[3,6,9,11],full_native_input_acceptance=False,owner_review_deferred=True,clean_account_installation_deferred=True,developer_id_signed=False,notarized=False,no_new_components_or_commands=True,solver_limits_unchanged=True,no_push_or_upload=True,heartbeat_remains_paused=True)
+(b/'qualification.json').write_text(json.dumps(report,indent=2)+'\n')
+for name in ['qualification.json','package.json','app-manifest.json','signature.txt','framework-carried.json','runtime-invocation.json','runtime-process-exits.json','archive.json','assembled.json','test-counts.json','controller-tests.txt','qualify-tests.txt','workflow-isolated-control.txt','scope-final-focused.txt','toolbar-pixels.txt','build-package.txt','runtime-output.txt','offline-output.txt','source-scope.json','full_checks.py','package.py','assemble.py','qualify_runtime.py','qualify_tests.py','archive.py','offline_examples.py','closeout.py','native-build-info.txt','agent-build-info.txt']:
+ path=b/name
+ if not path.exists():continue
+ if path.suffix=='.py':shutil.copyfile(path,e/(name+'.txt'))
+ elif name in ['source-scope.json','native-build-info.txt','agent-build-info.txt']:(e/(name+'.gz')).write_bytes(gzip.compress(path.read_bytes(),mtime=0))
+ else:shutil.copyfile(path,e/name)
+for folder_name,files in [('full-quality',['quality-complete.json','quality-progress.json','root-race.jsonl','desktop-race.jsonl','mounted-race.jsonl','lint.txt','python.txt','prd.txt','root-vet.txt','desktop-vet.txt','mounted-vet.txt','build.txt']),('interaction-qualified',['report.json','events.jsonl']),('native-workflows-soak',['report.json','native-output.txt','soak-progress.jsonl']),('candidate-workflows-soak',['report.json','native-output.txt','soak-progress.jsonl'])]:
+ dst=e/folder_name;dst.mkdir(exist_ok=True)
+ for name in files:
+  path=b/folder_name/name
+  if path.suffix=='.jsonl' or name=='report.json' and 'workflows' in folder_name:(dst/(name+'.gz')).write_bytes(gzip.compress(path.read_bytes(),mtime=0))
+  else:shutil.copyfile(path,dst/name)
+for name in ['runtime-report.json','public/report.json']:
+ (e/('runtime-report.json.gz' if name=='runtime-report.json' else 'public-report.json.gz')).write_bytes(gzip.compress((runtime/name).read_bytes(),mtime=0))
+for label in ['toolbar-pixels-final']:
+ dst=e/label;dst.mkdir(exist_ok=True)
+ for path in (b/label).glob('*.png'):shutil.copyfile(path,dst/path.name)
+failures=e/'investigation-records';failures.mkdir(exist_ok=True)
+for name in ['scope-layout-before.txt','scope-layout-reproduced.txt','scope-layout-readings.txt','scope-layout-fixed.txt','scope-layout-all-fixed.txt','scope-layout-live-race-qualified.txt','parser-queue-initial.txt']:
+ (failures/(name+'.gz')).write_bytes(gzip.compress((b/name).read_bytes(),mtime=0))
+for label in ['full-quality-sandbox-initial','full-quality-inventory-initial','full-quality-before-separated-rows','full-quality-parallel-final','interaction-run','interaction-final']:
+ src=b/label;dst=failures/label;dst.mkdir(exist_ok=True)
+ for path in src.iterdir():
+  if path.is_file() and path.suffix in ['.txt','.json','.jsonl']:
+   (dst/(path.name+'.gz')).write_bytes(gzip.compress(path.read_bytes(),mtime=0))
+shutil.copyfile(b/'offline-examples.json',e/'offline-examples.json')
+(b/'preservation.json').write_text(json.dumps(dict(passed=True,frozen_inputs=len(s['files_sha256']),prior_identities=s['previous_package_sdk_sha256'],examples_equal_qualified_zip=len(checked),native_inventory_verified=True),indent=2)+'\n');shutil.copyfile(b/'preservation.json',e/'preservation.json')
+print(json.dumps({k:v for k,v in report.items() if k not in ['test_counts','soak']},indent=2))

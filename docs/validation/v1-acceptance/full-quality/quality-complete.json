@@ -1,0 +1,130 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "log": "lint.txt",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 18.500732959015295,
+      "carried_from_exact_final_source": true
+    },
+    {
+      "log": "python.txt",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 2.4198132080491632,
+      "carried_from_exact_final_source": true
+    },
+    {
+      "log": "prd.txt",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.029538000002503395,
+      "carried_from_exact_final_source": true
+    },
+    {
+      "log": "root-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=15m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 5.592707874951884,
+      "carried_from_exact_final_source": true
+    },
+    {
+      "log": "root-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 3.053838707972318,
+      "carried_from_exact_final_source": true
+    },
+    {
+      "log": "desktop-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 211.59555920795538
+    },
+    {
+      "log": "mounted-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 489.4458241669927
+    },
+    {
+      "log": "desktop-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 2.7465814161114395
+    },
+    {
+      "log": "mounted-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 0.7341391250956804
+    },
+    {
+      "log": "build.txt",
+      "command": [
+        "sh",
+        "scripts/build.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 2.4227359578944743
+    }
+  ],
+  "desktop_configurations_parallel": false,
+  "go_workers_per_process": 2,
+  "logical_cpus": 14
+}

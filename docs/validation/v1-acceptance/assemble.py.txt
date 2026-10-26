@@ -1,0 +1,27 @@
+"""Assemble an additional immutable v1 candidate, retaining qualified examples."""
+from pathlib import Path
+import hashlib,json,shutil
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/v1-acceptance'
+p=json.loads((b/'package.json').read_text());assert p['clean_source'] and p['strict_adhoc_signature']
+old=r/'build/releases/ELab-0.195.8-macos-arm64';out=r/'build/releases/ELab-0.195.9-macos-arm64';out.mkdir(exist_ok=False)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(old/'elab-agent')=='cc97f900762ff5e1fcb329d28b05baf8c6919899573eac980e293d0e017dd655'
+shutil.copytree(p['app'],out/'ELab.app');shutil.copyfile(p['agent'],out/'elab-agent');(out/'elab-agent').chmod(0o755)
+# Models and catalog are unchanged. Preserve the already qualified example bytes,
+# then independently reopen every graph with the newly extracted matching agent.
+shutil.copytree(old/'Examples',out/'Examples');shutil.copytree(old/'Licenses',out/'Licenses')
+assert (out/'Licenses/Vellum/sdk.lock.json').read_bytes()==(r/'third_party/vellum/sdk.lock.json').read_bytes()
+doc=out/'Documentation';doc.mkdir()
+for path in (r/'docs').glob('*.md'):shutil.copyfile(path,doc/path.name)
+shutil.copyfile(r/'docs/agent-api.md',out/'AGENT_PROTOCOL.md')
+readme=(old/'README.md').read_text().replace('0.195.8 /269','0.195.9 /270')
+readme+='\n## Stable live controls\n\nTime and transistor-state captions occupy a fixed two-line region. Footer\nreading columns retain their widths as values change. The buttons and labels\nstay in position while scope traces and numeric readings update. No electrical\nmodel, command or solver limit changes.\n\nSee Documentation/v1-release-checklist.md for frozen scope and acceptance limits.\nThe original four native input checks remain open; no native OS queue/rate or\ncomplete first-responder acceptance is inferred from API or rendered tests.\n'
+(out/'README.md').write_text(readme)
+rollback=(old/'ROLLBACK.md').read_text()+'\nThe /269 ZIP is preserved: `4ff827a087e40888adf40fd1778cbd4f5046003b51522226199d57011265404e`.\n'
+(out/'ROLLBACK.md').write_text(rollback)
+assert sha(out/'ELab.app/Contents/MacOS/ELab')==p['app_executable_sha256']
+assert sha(out/'elab-agent')==p['agent_sha256']
+example_files=[x for x in (old/'Examples').rglob('*') if x.is_file()]
+assert len(example_files)==126 and all(sha(out/'Examples'/x.relative_to(old/'Examples'))==sha(x) for x in example_files)
+(b/'assembled.json').write_text(json.dumps(dict(folder=str(out),example_count=62,example_files_byte_identical=126,matching_package=p),indent=2)+'\n')
+print(json.dumps(dict(folder=str(out),example_count=62)))

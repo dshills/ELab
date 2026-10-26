@@ -1,0 +1,18 @@
+"""Use the existing copied-runtime controller with extra owner-settings denial."""
+from pathlib import Path
+import argparse,hashlib,importlib.util,json,sys
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/v1-acceptance';p=json.loads((b/'package.json').read_text());runtime=Path('/private/tmp/elab-v1-stable270-'+p['source_commit'][:8]);assert not runtime.exists()
+sys.path.insert(0,str(r/'scripts'))
+spec=importlib.util.spec_from_file_location('runtime',r/'scripts/runtime_isolation.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+original=m.sandbox_profile
+# Tighten only the test process policy. Keep every existing source/network
+# denial and control unchanged, while refusing shared geometry/settings writes.
+def profile(roots):return original(roots)+'(deny file-write* (subpath '+m.sb_string(str(Path.home()/'Library/Cogent Core'))+'))\n'
+m.sandbox_profile=profile
+args=argparse.Namespace(app=Path(p['app']),app_executable_sha256=p['app_executable_sha256'],agent_binary=Path(p['agent']),conformance_binary=r/'build/elab-conformance',artifacts=runtime)
+(b/'runtime-invocation.json').write_text(json.dumps(dict(method='runtime_isolation.run public controller API',module='scripts/runtime_isolation.py',module_sha256=hashlib.sha256((r/'scripts/runtime_isolation.py').read_bytes()).hexdigest(),arguments={k:str(v) for k,v in vars(args).items()},artifacts=str(runtime),additional_restriction='deny shared Library/Cogent Core writes in every copied child; original development-file/IP policy retained',production_or_os_security_settings_changed=False),indent=2)+'\n')
+report=m.run(args);assert report['passed'];assert report['executable_sha256']==p['app_executable_sha256'] and report['source_agent_sha256']==p['agent_sha256']
+exits=[json.loads(path.read_text()) for path in sorted((runtime/'public').rglob('process-exit.json'))]
+assert len(exits)==102 and all(x['exit_code']==0 and not x['graceful_wait_timed_out'] for x in exits)
+(b/'runtime-process-exits.json').write_text(json.dumps(exits,indent=2)+'\n')
+print(json.dumps(dict(passed=True,runtime=str(runtime),normal_external_exits=len(exits))),flush=True)

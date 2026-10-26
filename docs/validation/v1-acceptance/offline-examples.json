@@ -1,0 +1,569 @@
+{
+  "passed": true,
+  "scope": "Fresh extracted matching headless agent under copied-runtime development-file/outbound-IP denial; not native UI acceptance",
+  "actual_native_ui": false,
+  "extracted_agent_sha256": "02bf50757662c9a752471fe598aeac4688b244c6fefcdf185fbc9693c1e02c4e",
+  "component_kinds": 53,
+  "public_commands": 187,
+  "normal_agent_exit": true,
+  "examples": [
+    {
+      "id": "buck",
+      "components": 22,
+      "wires": 20,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "92e03a7e9f6f6e1a2217f07f76bc95bde3e101c18eeb84c07401ff8f7ee84ae5"
+    },
+    {
+      "id": "opamp-slew",
+      "components": 17,
+      "wires": 16,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "571f4341102e6f1172e20669cb851457cbb0fd89ac792807b6a76064bf6fe284"
+    },
+    {
+      "id": "opamp-bandwidth",
+      "components": 17,
+      "wires": 16,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "0b91d6effc8037642e63ba20d39ce6bc80feb2573f970267e2198500a361514c"
+    },
+    {
+      "id": "shift-register",
+      "components": 62,
+      "wires": 53,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "0acb3a83ff94ac037ef4a76bb45ba7033935e3365023a7407cf163898c00472d"
+    },
+    {
+      "id": "555-tone",
+      "components": 19,
+      "wires": 22,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "0139a7013671fd14920d859c856927485e2d3409335bb7586b9ace82d3512609"
+    },
+    {
+      "id": "light-alarm",
+      "components": 19,
+      "wires": 17,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "ab5f387bf36a488830c326592edb68a46faab6d9036c057a0a66bc179fd55fe8"
+    },
+    {
+      "id": "hbridge-motor",
+      "components": 26,
+      "wires": 22,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "dacc978ce586d38d7586c076037b591c11a900e704c7acf08f5932a613d82179"
+    },
+    {
+      "id": "led",
+      "components": 4,
+      "wires": 4,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688"
+    },
+    {
+      "id": "split-supply",
+      "components": 5,
+      "wires": 5,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "692692d7557593ec8f7ede6ef9b7bd5d1775fe18824072364315e59c21f154f1"
+    },
+    {
+      "id": "rc",
+      "components": 4,
+      "wires": 4,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4"
+    },
+    {
+      "id": "rc-high-pass",
+      "components": 4,
+      "wires": 4,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "588bbb3cc91c2c1be4efbb4cd3195d134b0a999bbe9611afaa7578a7de864728"
+    },
+    {
+      "id": "rl",
+      "components": 4,
+      "wires": 4,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "2957f08d15248e686d0a9c7d30c503d73427256b7d997032a4df7f136effa03b"
+    },
+    {
+      "id": "rlc",
+      "components": 5,
+      "wires": 5,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "e9d771b1318a8d9079a4703b4c449c287e52a2e732c15c0862fe9a7285824cbb"
+    },
+    {
+      "id": "flyback",
+      "components": 16,
+      "wires": 17,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "ff54d48126ab6b3db7554aab16ab46fc08d3a02d4bc22c979b0a5e896187fb7e"
+    },
+    {
+      "id": "pnp",
+      "components": 10,
+      "wires": 10,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "5052529aa8feb5761ed109b580282ecb8412010895c1248a368981c8b81674ad"
+    },
+    {
+      "id": "emitter-follower",
+      "components": 9,
+      "wires": 8,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "c87decff61f46458b3d682eba0b40560c68641c1a4a4f43c59335506a8f1ad9c"
+    },
+    {
+      "id": "bipolar-push-pull",
+      "components": 13,
+      "wires": 13,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "42fb31e050e6c7901eceef7c3b14c72c132c1d304c7343c8de4a9d43f75cb6b2"
+    },
+    {
+      "id": "npn",
+      "components": 7,
+      "wires": 8,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "8e840a0a225476b3f3e2f7f49164f80b5a11c280f5196d1416cfeb41a3b3cf3f"
+    },
+    {
+      "id": "switch-npn",
+      "components": 9,
+      "wires": 11,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "af71c78aa8711f522d936d143d29b7cad26254eb4381448fd8cc9d5725e72588"
+    },
+    {
+      "id": "pmos",
+      "components": 9,
+      "wires": 11,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "84a9e59c937c8241e5cd94cd4cf69780a047d163163892fc3526769cf1368479"
+    },
+    {
+      "id": "nmos",
+      "components": 8,
+      "wires": 10,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "899e5088827856c7486ac65f5edcf814b33673aeb04ac52e64a75ee094d9db63"
+    },
+    {
+      "id": "cmos",
+      "components": 8,
+      "wires": 11,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "0fdfcfc5a2a29ab50f37447138c21f1d53bf8780c1ba42c6fb164192eeceea0e"
+    },
+    {
+      "id": "opamp-follower",
+      "components": 17,
+      "wires": 16,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "75816928355ebf7d623cb828628eb1a822acb10bf9248abc7a40ff86476ccc34"
+    },
+    {
+      "id": "opamp-inverting",
+      "components": 20,
+      "wires": 19,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "dfd12987718295a61fdb8facf63da214e1056f584e7a036e1ce3fa3c2edb60ca"
+    },
+    {
+      "id": "blink",
+      "components": 7,
+      "wires": 8,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "f137179e56b953d4ef14bd21ce380a9fc880c830ec5ddd43e8ef1d34d516f134"
+    },
+    {
+      "id": "flasher",
+      "components": 12,
+      "wires": 17,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "daa0dd7d711693349ead3c9ecc47fe469ae2b368c196456c71fd8e0936bae9dc"
+    },
+    {
+      "id": "led-fade",
+      "components": 5,
+      "wires": 6,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "9a9d113531b3c4511cd76f0b0ff76c98dc45ee6358081ebf0bebe55b0ace338e"
+    },
+    {
+      "id": "coupled-windings",
+      "components": 6,
+      "wires": 6,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "3d7d564a17b6ca3b7db32889a6e5442ce23d9a39c2b6b0290e2829218298d96d"
+    },
+    {
+      "id": "transformer-supply",
+      "components": 27,
+      "wires": 25,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "b695a1f0962ed04fdbc607b9cfc4971332d1dcf3eea0b3583493c27a309f0f02"
+    },
+    {
+      "id": "opto-switch",
+      "components": 11,
+      "wires": 10,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "886000daad7ac098b1f80506e24260200200d3fb67b8ac131f947f6748d6dc49"
+    },
+    {
+      "id": "ac-rc",
+      "components": 5,
+      "wires": 4,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "0e3f0f50f4761cf1dd08643ba4c1e0661661c503d5b36f4bc0a860c7b46e9618"
+    },
+    {
+      "id": "ac-rlc",
+      "components": 5,
+      "wires": 5,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "c4eb90ff879c1df77d40f5fe2b41763627211f936bfdf0a370ba621cbb14493b"
+    },
+    {
+      "id": "ac-opamp",
+      "components": 21,
+      "wires": 21,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "cd9e790c9a7219c79bc62e75fbb589c594484fc1f5c65a7224a504cee6ab9fc0"
+    },
+    {
+      "id": "motor-dc",
+      "components": 4,
+      "wires": 3,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "c3764c2c2de584d09dda37ac4b57e15d9fd183bf0febf96d50840eac8b2a034f"
+    },
+    {
+      "id": "motor-pwm",
+      "components": 21,
+      "wires": 24,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "c2660788c0f0d9731e353992fe05ced6c7ae01ce78e2f03cc6d1696ce604d018"
+    },
+    {
+      "id": "battery-led",
+      "components": 7,
+      "wires": 7,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "e3f858151d3d0966082c53a635e21f458f4938b74d658dca9aa7d485e7ca0c24"
+    },
+    {
+      "id": "battery-regulator",
+      "components": 7,
+      "wires": 7,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "9260ef7a79eda1d215faaa9b98265351653b43dbf5e5330a7cc416c68be60f51"
+    },
+    {
+      "id": "night-light",
+      "components": 17,
+      "wires": 15,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "fd3ea7906bfa10702b0d215f11140464248bea9135808a9c27128e83afa41148"
+    },
+    {
+      "id": "thermostat",
+      "components": 29,
+      "wires": 28,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "bfc055be7461b70de34706dd3699d0348e78b5144d500a4945663c1973e7dcbf"
+    },
+    {
+      "id": "regulator-supply",
+      "components": 14,
+      "wires": 13,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "ed6458df13d0234dfea551cc2c0124de9f56ebaf99f13db8203325c1d37975cb"
+    },
+    {
+      "id": "regulator-dropout",
+      "components": 10,
+      "wires": 9,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "31a95dd7ff034961b8732d98f3b2e511c1962e7f76868825761c7e0fc25eb11a"
+    },
+    {
+      "id": "relay-switch",
+      "components": 16,
+      "wires": 18,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "16e59d70b489b2f4073e15e92c57e0e4592d4985bef91aecbc771cffaab83511"
+    },
+    {
+      "id": "relay-flasher",
+      "components": 17,
+      "wires": 18,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "b442dbe2017c2a6564b2539f56e38c65043eea810847ec218df689f2b8ceca29"
+    },
+    {
+      "id": "comparator-threshold",
+      "components": 11,
+      "wires": 10,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "ce316f39c38dd84a36046a77b6824d3182a6852f06fcc28942def7c3351a902a"
+    },
+    {
+      "id": "comparator-counter",
+      "components": 31,
+      "wires": 38,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "c0d9d29f804cd8a0dda309e48d35321a9e01d97288bde350788d87156d7f3f7f"
+    },
+    {
+      "id": "button-counter",
+      "components": 28,
+      "wires": 35,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "1c16a213a603a0fdb9ede77fd210f9173b3a220e2cd6f343f43cc9f670645c48"
+    },
+    {
+      "id": "button-debounce",
+      "components": 32,
+      "wires": 33,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "585934fc32692058b68724f0d7d22703764802a6943a6db9a30177a7a12c6abb"
+    },
+    {
+      "id": "display-counter",
+      "components": 31,
+      "wires": 43,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "7c920fcdb644524486dae2bee5377231731d3747b003e5e6e119bda0c47f6faa"
+    },
+    {
+      "id": "d-flipflop",
+      "components": 29,
+      "wires": 29,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "c9a8e129637dff6529c2024049a80e6a61f92ebe8fd6e10913383a3b4d375ffe"
+    },
+    {
+      "id": "jk-flipflop",
+      "components": 25,
+      "wires": 27,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "716335420f5a84e429bf665ede014e49323d6505685007dde421ae8ca04d3e7e"
+    },
+    {
+      "id": "t-flipflop",
+      "components": 25,
+      "wires": 26,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "3a4b588d7d57e587aff4a033023af57778154d7141382f3a10ce8b97c68f18ee"
+    },
+    {
+      "id": "binary-counter",
+      "components": 41,
+      "wires": 42,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "5ae2c2fb7134a2bde3e51d4bbdc4d4f8eef609bf9ca66d3a60e93e2f452dab74"
+    },
+    {
+      "id": "decade-counter",
+      "components": 41,
+      "wires": 42,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "716b6dd7e72b67b2bee78303281b6e9074ef468c7f094dde04ea7c992f5b0e7d"
+    },
+    {
+      "id": "logic-inverter",
+      "components": 9,
+      "wires": 8,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "69c6b051ec5cd5ea9a16af265f7178bb3c8372d07b514a5c15faf40071cfeb45"
+    },
+    {
+      "id": "logic-switches",
+      "components": 13,
+      "wires": 14,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "847f360f78d6ca4cc0792cb9d53b1c7fbd1b885b3c2ef2be682cdd17e2bbd135"
+    },
+    {
+      "id": "logic-half-adder",
+      "components": 22,
+      "wires": 23,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "9ddb8758a42efede1d7cc2072b5e2267cfc19e89cb6b150979eab10385c5c283"
+    },
+    {
+      "id": "555-flasher",
+      "components": 16,
+      "wires": 19,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "b0a57db535ec9ee337ea6fdd66e198cad01da64201621729b3192e456643f0ba"
+    },
+    {
+      "id": "555-oscillator",
+      "components": 16,
+      "wires": 20,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "776104bf3206fc94b12a33a1101e9c6a41bf38114b7f19c939bfba059f77e329"
+    },
+    {
+      "id": "555-one-shot",
+      "components": 16,
+      "wires": 18,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "eb5bb25b8eb3a1d1c8e7e8fb679f43e0cfdc0feb5cad71df44bbdd2125f63e8b"
+    },
+    {
+      "id": "zener",
+      "components": 5,
+      "wires": 6,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "a78a175b2120a5bf43fe620d12e9d64c8b65bc06b90f4bf6106111d8e935fdcf"
+    },
+    {
+      "id": "schottky",
+      "components": 12,
+      "wires": 13,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "eedc190b3d1957203cc7993ef7247dbafd58f6097465cd7ccbfb37147c98b4fe"
+    },
+    {
+      "id": "rectifier",
+      "components": 6,
+      "wires": 7,
+      "paused": true,
+      "clean": true,
+      "status": "paused",
+      "file_sha256": "77290f997823c822d11a3e05244c8cd616296717f297961699f01f74a1075167"
+    }
+  ]
+}

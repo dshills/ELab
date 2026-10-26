@@ -1,0 +1,15 @@
+{
+  "method": "runtime_isolation.run public controller API",
+  "module": "scripts/runtime_isolation.py",
+  "module_sha256": "ec0a4c7da19b0e315337217474ca100b3fdab82cd7989abeee2af101ffc63acc",
+  "arguments": {
+    "app": "/Users/dshills/Development/projects/ELab/build/ELab-0.195.9-270-StableScope/ELab.app",
+    "app_executable_sha256": "f328914dca65aed0b062cfd94707a62aaf70f5be2a0013e0c9960e805303067e",
+    "agent_binary": "/Users/dshills/Development/projects/ELab/build/ELab-0.195.9-270-StableScope/elab-agent",
+    "conformance_binary": "/Users/dshills/Development/projects/ELab/build/elab-conformance",
+    "artifacts": "/private/tmp/elab-v1-stable270-e3103c57"
+  },
+  "artifacts": "/private/tmp/elab-v1-stable270-e3103c57",
+  "additional_restriction": "deny shared Library/Cogent Core writes in every copied child; original development-file/IP policy retained",
+  "production_or_os_security_settings_changed": false
+}

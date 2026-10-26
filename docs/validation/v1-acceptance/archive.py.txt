@@ -1,0 +1,64 @@
+"""Exclusive verified archive of an exact runtime-qualified v1 candidate."""
+from pathlib import Path
+import hashlib,json,os,stat,subprocess,sys,zipfile
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/v1-acceptance';sys.path.insert(0,str(r/'scripts'))
+from package_review import members,verify_archive
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+p=json.loads((b/'package.json').read_text());q=json.loads((b/'full-quality/quality-complete.json').read_text());s=json.loads((b/'source-scope.json').read_text())
+f=json.loads((b/'framework-complete.json').read_text());i=json.loads((b/'interaction-qualified/report.json').read_text());w=json.loads((b/'candidate-workflows-soak/report.json').read_text())
+runtime=Path(json.loads((b/'runtime-invocation.json').read_text())['artifacts']);rt=json.loads((runtime/'runtime-report.json').read_text())
+assert p['source_commit']==s['source_commit'];assert all(x['passed'] for x in [q,f,i,w,rt]);assert w['soak']['observed_wall_s']>=1800 and w['normal_cleanup_passed'] and w['native_exit_code']==0
+assert all(sha(r/path)==h for path,h in s['files_sha256'].items())
+assert all(sha(r/path)==h for path,h in s['previous_package_sdk_sha256'].items())
+assert w['app_sha256']==p['app_executable_sha256']==rt['executable_sha256']
+assert w['agent_sha256']==p['agent_sha256']==rt['source_agent_sha256']
+out=Path(json.loads((b/'assembled.json').read_text())['folder'])
+archive=Path(str(out)+'.zip');extraction=Path('/private/tmp/elab-v1-stable270-extract-'+p['source_commit'][:8])
+assert not archive.exists() and not extraction.exists(), 'Refusing to replace an existing qualified archive/extraction'
+status=dict(channel='unsigned-private-macos-arm64',version=p['version'],build=p['build'],source_commit=p['source_commit'],clean_binary_source=True,components=53,examples=62,commands=187,native_open_checks=[3,6,9,11],full_native_input_acceptance=False,developer_id=False,notarized=False,no_push_or_upload=True)
+status.update(kind='unsigned-macos-arm64-reliability',native_sha256=p['app_executable_sha256'],agent_sha256=p['agent_sha256'],architecture='arm64',developer_id_signed=False,ad_hoc_integrity_seal=True,published=False,quality_passed=True,copied_runtime_passed=True,owner_review_deferred=True,clean_account_installation_deferred=True,soak_wall_s=w['soak']['observed_wall_s'])
+(out/'RELEASE_STATUS.json').write_text(json.dumps(status,indent=2)+'\n')
+(out/'RELEASE_NOTES.md').write_text(f'''# ELab {p['version']} /{p['build']}
+
+Live scope time and device status have separate fixed baselines. Changing digits
+and transistor regions no longer resize or recenter the scope's buttons. Footer
+readings retain stable column widths. Geometry checks cover four circuits across
+all four themes, including genuine background integration; rendered fonts and
+control alignment were inspected separately.
+
+The frozen existing set contains 53 component kinds, 62 examples and 187 shared
+user/agent commands. The 15-family interaction matrix, ten actual queued parser
+origin cases, LED construction, RC charge/discharge and 555 counter workflows,
+fresh persistence, SVG/PNG/PDF and a real 30-minute exact-candidate endurance run
+pass. Complete application gates and exact copied runtime checks pass. The SDK
+is byte-identical to qualified /269, with its prior complete qualification carried.
+All 126 example files are preserved and every graph is freshly reopened after
+archive extraction. Prior release and SDK bytes remain unchanged.
+
+Four native checks remain open: Save-panel Command-A editing, controlled divider
+hardware rates, and recorded-position/Verify/time/sweep native pre-agent parser
+callback origin. The standard AppKit comparison reproduces the Save shortcut
+observation while local Command-A and native menu replacement work. Cause is
+unestablished. Rendered/service tests do not establish native OS queue acceptance.
+Owner review and separate-account installation retain the owner's private-alpha
+deferrals. This is unsigned without Developer ID or notarization; no upload/push.
+
+Clean binary source: {p['source_commit']}.
+Native executable SHA-256: {p['app_executable_sha256']}.
+Matching agent SHA-256: {p['agent_sha256']}.
+SDK source: cdd596c2ea75ee483869678a6b2354d5e214cee0 (elab9).
+See Documentation/v1-release-checklist.md for scope and acceptance definitions.
+''')
+manifest=dict(status=status,files=members(out));(out/'RELEASE_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');expected=members(out)
+extraction.mkdir(mode=0o700)
+with archive.open('xb') as target:
+ with zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,entry in expected.items():
+   info=zipfile.ZipInfo(out.name+'/'+name,date_time=(1980,1,1,0,0,0));info.create_system=3;info.external_attr=(stat.S_IFREG|int(entry['mode'],8))<<16;info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,(out/name).read_bytes(),compresslevel=9)
+verify_archive(archive,out.name,expected)
+subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(extraction)],check=True)
+extracted=extraction/out.name;assert members(extracted)==expected==members(out)
+subprocess.run(['codesign','--verify','--deep','--strict',str(extracted/'ELab.app')],check=True)
+with archive.with_suffix('.zip.sha256').open('x') as out_hash:out_hash.write(sha(archive)+'  '+archive.name+'\n')
+report=dict(passed=True,status=status,archive=str(archive),archive_sha256=sha(archive),archive_bytes=archive.stat().st_size,files_verified=len(expected),extracted=str(extracted),source_unchanged=True,extraction_bytes_and_modes_match=True,strict_adhoc_signature=True)
+(b/'archive.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
