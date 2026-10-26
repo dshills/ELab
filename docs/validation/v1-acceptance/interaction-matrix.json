@@ -1,0 +1,310 @@
+{
+  "format": "elab.v1-interaction-matrix",
+  "version": 1,
+  "scope": "rendered offscreen real driver queues plus public service agents; no native OS queue/hardware acceptance",
+  "families": [
+    {
+      "id": "buttons",
+      "acceptance": "Press ownership, own commits, independent retry and live repaint",
+      "tests": [
+        {
+          "name": "TestMountedButtonOwnerKeepsPressContextAcrossAgentSwitchEdit",
+          "source": "desktop/button_context_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedButtonOwnerKeepsPressContextAcrossAgentHistoryTip",
+          "source": "desktop/button_context_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedButtonOwnerPauseAcceptsLiveRepaintDuringHeldPress",
+          "source": "desktop/button_context_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "discrete",
+      "acceptance": "Five actual assembled checkbox, button, disclosure and list queues",
+      "tests": [
+        {
+          "name": "TestMountedQueuedDiscreteInputCannotBorrowAgentContext",
+          "source": "desktop/discrete_origin_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "text-fields",
+      "acceptance": "Value ownership on replacement, real queued parser origin and correction",
+      "tests": [
+        {
+          "name": "TestMountedValueDraftDoesNotLeakAcrossRetainedDocumentReplacement",
+          "source": "desktop/value_context_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedParserQueueCannotInstallPreAgentRefusal",
+          "source": "desktop/parser_queue_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "numeric-fields",
+      "acceptance": "Private numeric ownership, recorded playback and independent retry",
+      "tests": [
+        {
+          "name": "TestMountedNumericOwnerDoesNotInheritPrivateWiperDraft",
+          "source": "desktop/control_owner_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedNumericOwnerRecordedStepPrivateEntryRefusesAgent",
+          "source": "desktop/recorded_step_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedNumericOwnerRecordedPlayPrivateEntryRefusesAgent",
+          "source": "desktop/recorded_playback_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "sliders",
+      "acceptance": "Held drag, replacement and keyboard focus during a gesture",
+      "tests": [
+        {
+          "name": "TestMountedSliderDoesNotBorrowAgentContextDuringHeldDrag",
+          "source": "desktop/slider_invalidation_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedSliderKeyboardFocusChangePreservesContext",
+          "source": "desktop/slider_invalidation_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedSliderRunningChargeAndAgentParity",
+          "source": "desktop/slider_invalidation_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "dividers",
+      "acceptance": "Queued and held origin, grip and repeated inverse movement",
+      "tests": [
+        {
+          "name": "TestMountedWorkspaceQueuedDividerCannotBorrowAgentContext",
+          "source": "desktop/workspace_drag_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedWorkspaceHeldDividerCannotBorrowAgentContext",
+          "source": "desktop/workspace_drag_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedWorkspaceRepeatedOffCenterDragsUseUpdatedHandle",
+          "source": "desktop/workspace_drag_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "menus",
+      "acceptance": "Queued and held category origin, own focus and overflow actions",
+      "tests": [
+        {
+          "name": "TestMountedQueuedExampleCategoryRetainsAgentSearch",
+          "source": "desktop/menu_origin_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedHeldExampleCategoryRetainsAgentSearch",
+          "source": "desktop/menu_origin_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedQueuedOverflowRetainsAgentViewport",
+          "source": "desktop/menu_origin_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "collections",
+      "acceptance": "Queued selection and activation across agent edits/replacement, own navigation",
+      "tests": [
+        {
+          "name": "TestMountedQueuedExampleCollectionKeepsAgentContext",
+          "source": "desktop/collection_origin_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedQueuedCollectionOwnKeysContinueWithoutLosingFocus",
+          "source": "desktop/collection_origin_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "modals",
+      "acceptance": "Actual routed sheet confirm/cancel and synchronous Escape",
+      "tests": [
+        {
+          "name": "TestMountedExampleSheetActionsAcrossAgentEdits",
+          "source": "desktop/modal_origin_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedFileDecisionAllButtonsRefuseHeldAgentEdit",
+          "source": "desktop/file_decision_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedFileDecisionHeldDiscardCannotUseReopenedPrompt",
+          "source": "desktop/file_decision_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedFileDecisionFreshSaveKeepsAgentWorkBeforeContinuing",
+          "source": "desktop/file_decision_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "wheel-and-scroll",
+      "acceptance": "Focused/unfocused numeric/slider wheel, new-document inspector scroll",
+      "tests": [
+        {
+          "name": "TestMountedNumericOwnerWheelScrollPreservesValues",
+          "source": "desktop/numeric_scroll_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedSliderWheelScrollPreservesCircuit",
+          "source": "desktop/slider_scroll_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedInspectorScrollReturnsToStartForNewDocument",
+          "source": "desktop/inspector_scroll_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "drawing",
+      "acceptance": "Placement, named-terminal wiring, fresh retries and held input",
+      "tests": [
+        {
+          "name": "TestMountedPlacementLabelAndBatchedCoordinatesMatchAgent",
+          "source": "desktop/placement_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedPlacementHeldClickRefusesAgentAfterOwnCommit",
+          "source": "desktop/placement_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedNamedWiringLEDMatchesAgentAndUndo",
+          "source": "desktop/named_wiring_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedNamedWiringHeldConnectRefusesAgentEndpointChange",
+          "source": "desktop/named_wiring_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "cursors",
+      "acceptance": "Focus loss, own settlement, stale cursor input and interval refusal",
+      "tests": [
+        {
+          "name": "TestMountedScopeCursorEnterSelectClearMatchesPublicAgent",
+          "source": "desktop/scope_cursor_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedScopeCursorFocusLossThenClearUsesOneClick",
+          "source": "desktop/scope_cursor_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedScopeCursorHeldSelectionRefusesAgentAfterOwnCommit",
+          "source": "desktop/scope_cursor_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedScopeCursorIntervalHeldResetCannotCrossAnAgentEdit",
+          "source": "desktop/scope_interval_refusal_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedScopeCursorIntervalRefusalRetainsTextAndRecovers",
+          "source": "desktop/scope_interval_refusal_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "verification-and-sweep",
+      "acceptance": "Uncommitted edits, actual queued parser origin, refusal/correction and held Run",
+      "tests": [
+        {
+          "name": "TestMountedVerificationFieldsMatchAgentCapture",
+          "source": "desktop/verification_handoff_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedVerificationHeldClickRefusesAgentEdit",
+          "source": "desktop/verification_handoff_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedVerificationCorrectionToAcceptedTime",
+          "source": "desktop/verification_handoff_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedDCSweepRefusesThenCorrectsInvalidSettings",
+          "source": "desktop/dc_sweep_handoff_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedDCSweepHeldRunRefusesAgentEdit",
+          "source": "desktop/dc_sweep_handoff_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedDCSweepTargetChangeRetiresPrivatePoints",
+          "source": "desktop/dc_sweep_handoff_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "output",
+      "acceptance": "Typed margin, fit, refresh, held preview and pixels match the public agent",
+      "tests": [
+        {
+          "name": "TestMountedOutputPageOneClickPreviewIncludesTypedMargin",
+          "source": "desktop/output_page_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedOutputPageFitAndRefreshUseTypedMargin",
+          "source": "desktop/output_page_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedOutputPageHeldPreviewRefusesAgentAfterOwnCommit",
+          "source": "desktop/output_page_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedOutputPagePreviewPixelsMatchPublicAgent",
+          "source": "desktop/output_page_offscreen_test.go"
+        }
+      ]
+    },
+    {
+      "id": "navigation-and-chrome",
+      "acceptance": "All-theme tabs, toolbar geometry, overflow, search clear and live scope stability",
+      "tests": [
+        {
+          "name": "TestMountedInspectorAndDrawingTabsFitAndKeepSharedActions",
+          "source": "desktop/workspace_tabs_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedToolbarPolishFitsAndPreservesSharedSelection",
+          "source": "desktop/toolbar_polish_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedToolbarOverflowKeepsLastActionReachable",
+          "source": "desktop/toolbar_polish_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedWidgetSearchClearFitsAndUsesSharedCommand",
+          "source": "desktop/widget_adoption_offscreen_test.go"
+        },
+        {
+          "name": "TestMountedLiveScopeControlsKeepGeometryAcrossSamples",
+          "source": "desktop/scope_layout_offscreen_test.go"
+        }
+      ]
+    }
+  ],
+  "native_open_checks": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "intentional_contracts": [
+    "No broad changes to generic selectors, Switch, ToggleButton, programmatic buttons or non-list choices without a reachable ELab defect"
+  ]
+}

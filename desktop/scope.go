@@ -222,13 +222,13 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	npn := workbench.IsNPNTransientAnalysis(state.Analysis) || t != nil && workbench.IsNPNTransientEngine(t.Engine)
 	caption := "Transient · waiting for a valid run"
 	if t != nil {
-		caption = fmt.Sprintf("t = %.4g s · τ = %.3g ms · run %d", t.Sample.Time, t.TimeConstant*1000, t.RunID)
+		caption = fmt.Sprintf("t = %.4g s\nτ = %.3g ms · run %d", t.Sample.Time, t.TimeConstant*1000, t.RunID)
 		if npn {
 			region := t.Sample.State
 			if deviceID, _ := workbench.MixedRegion(state.Mixed); deviceID != "" {
 				region = deviceID + " " + region
 			}
-			caption = fmt.Sprintf("t = %.4g s · %s · run %d", t.Sample.Time, region, t.RunID)
+			caption = fmt.Sprintf("t = %.4g s\n%s · run %d", t.Sample.Time, region, t.RunID)
 		}
 		if t.Stale {
 			caption += " · stale"
@@ -258,7 +258,11 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	title := section("scope-title", titleText)
 	title.MinWidth = 110
 	captionNode := quiet("scope-caption", caption)
-	captionNode.Style.MaxSize = ui.Some(ui.Size{Width: 240})
+	// Live time digits and transistor-region names change every sample. Reserve
+	// a stable two-line readout so they cannot resize/recenter the toolbar and
+	// move its buttons while the user is trying to operate the scope.
+	captionNode.Style.MinSize = ui.Some(ui.Size{Width: 240, Height: 40})
+	captionNode.Style.MaxSize = ui.Some(ui.Size{Width: 240, Height: 40})
 	controls := []ui.Node{s.scopeVisibilityButton(state), title, captionNode}
 	modeLabels := map[string]string{"auto": "Auto", "charge": "Charge", "discharge": "Discharge", "high": "High", "low": "Low"}
 	if t != nil && workbench.IsNetworkAnalysis(state.Analysis) {

@@ -2,6 +2,9 @@
 
 ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PNP, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
 
+The [first-version completion checklist](docs/v1-release-checklist.md) freezes
+the existing feature scope and records required checks and acceptance limits.
+
 ## Downloadable release
 
 **ELab 0.195.4 /265** packages the current 53 component kinds and all 62 existing

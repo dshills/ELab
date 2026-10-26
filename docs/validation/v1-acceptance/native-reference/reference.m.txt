@@ -1,0 +1,86 @@
+#import <AppKit/AppKit.h>
+#import <dispatch/dispatch.h>
+#include <stdint.h>
+#include <unistd.h>
+void elabCaptureFileDialogFocus(uint64_t token);
+void elabRestoreFileDialogFocus(uint64_t token);
+
+@interface ReferenceDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
+@property(retain) NSWindow *window;
+@property(retain) NSTextField *status;
+@property(retain) NSSavePanel *panel;
+@property(assign) uint64_t token;
+@end
+@implementation ReferenceDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+    NSMenu *main = [[[NSMenu alloc] initWithTitle:@""] autorelease];
+    NSMenuItem *appGroup = [[[NSMenuItem alloc] initWithTitle:@"Reference" action:nil keyEquivalent:@""] autorelease];
+    NSMenu *appMenu = [[[NSMenu alloc] initWithTitle:@"Reference"] autorelease];
+    [appMenu addItemWithTitle:@"Quit Save Reference" action:@selector(terminate:) keyEquivalent:@"q"];
+    appGroup.submenu = appMenu;
+    [main addItem:appGroup];
+    NSMenuItem *fileGroup = [[[NSMenuItem alloc] initWithTitle:@"File" action:nil keyEquivalent:@""] autorelease];
+    fileGroup.submenu = [[[NSMenu alloc] initWithTitle:@"File"] autorelease];
+    [main addItem:fileGroup];
+    NSMenuItem *editGroup = [[[NSMenuItem alloc] initWithTitle:@"Edit" action:nil keyEquivalent:@""] autorelease];
+    NSMenu *editMenu = [[[NSMenu alloc] initWithTitle:@"Edit"] autorelease];
+    [editMenu addItemWithTitle:@"Undo" action:@selector(undo:) keyEquivalent:@"z"];
+    [editMenu addItemWithTitle:@"Select All" action:@selector(selectAll:) keyEquivalent:@"a"];
+    editGroup.submenu = editMenu;
+    [main addItem:editGroup];
+    NSApp.mainMenu = main;
+    self.window = [[[NSWindow alloc] initWithContentRect:NSMakeRect(120,120,540,200)
+        styleMask:(NSWindowStyleMaskTitled|NSWindowStyleMaskClosable)
+        backing:NSBackingStoreBuffered defer:NO] autorelease];
+    self.window.releasedWhenClosed = NO;
+    self.window.title = @"ELab permanent Edit menu control";
+    self.window.delegate = self;
+    NSButton *button = [NSButton buttonWithTitle:@"Open Save panel" target:self action:@selector(openPanel:)];
+    button.frame = NSMakeRect(24,110,200,36);
+    [self.window.contentView addSubview:button];
+    self.status = [NSTextField labelWithString:@"Owned synthetic fixture. Cancel without saving."];
+    self.status.frame = NSMakeRect(24,50,490,40);
+    [self.window.contentView addSubview:self.status];
+    [self.window makeKeyAndOrderFront:nil];
+    NSTextField *field = [[[NSTextField alloc] initWithFrame:NSMakeRect(24,155,490,28)] autorelease];
+    field.stringValue = @"Local Alpha";
+    field.placeholderString = @"Local editing control";
+    [self.window.contentView addSubview:field];
+    [self.window makeFirstResponder:field];
+    NSDictionary *ready = @{@"pid": @(getpid()), @"unix_s": @([NSDate timeIntervalSinceReferenceDate]+NSTimeIntervalSince1970)};
+    [[NSJSONSerialization dataWithJSONObject:ready options:0 error:NULL]
+        writeToFile:@(getenv("ELAB_REFERENCE_READY")) atomically:YES];
+}
+- (void)openPanel:(id)sender {
+    if (self.panel) return;
+    self.status.stringValue = @"Panel pending";
+    uint64_t token = ++self.token;
+    elabCaptureFileDialogFocus(token);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.panel = [NSSavePanel savePanel];
+        self.panel.directoryURL = [NSURL fileURLWithPath:@(getenv("ELAB_REFERENCE_DIRECTORY")) isDirectory:YES];
+        self.panel.nameFieldStringValue = @"Reference Fixture.elab";
+        [self.panel beginWithCompletionHandler:^(NSModalResponse result) {
+            self.status.stringValue = result == NSModalResponseCancel ? @"Cancelled; no file written" : @"Accepted; reference never writes a file";
+            self.panel = nil;
+            elabRestoreFileDialogFocus(token);
+        }];
+    });
+}
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+    if (self.panel) [self.panel cancel:nil];
+    return NSTerminateNow;
+}
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender { return YES; }
+@end
+int main(void) {
+    @autoreleasepool {
+        NSApplication *app = [NSApplication sharedApplication];
+        [app setActivationPolicy:NSApplicationActivationPolicyRegular];
+        ReferenceDelegate *delegate = [ReferenceDelegate new];
+        app.delegate = delegate;
+        [app run];
+        [delegate release];
+    }
+    return 0;
+}

@@ -511,7 +511,14 @@ func (s *screen) view() ui.Node {
 	metric := func(id, title, value string) ui.Node {
 		n := heading(id+"-value", value)
 		n.Style.Typography = ui.Some(ui.Typography{Size: 18, Weight: 500})
-		return ui.Node{ID: id, Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 5, Bottom: 5, Left: 12, Right: 12}), Gap: ui.Some(float32(2)), Background: ui.Some(paper)}, Children: []ui.Node{section(id+"-title", title), n}}
+		titleNode := section(id+"-title", title)
+		// Equal intrinsic reading widths keep changing digits and device regions
+		// from redistributing the footer's growing columns on every live sample.
+		for _, label := range []*ui.Node{&titleNode, &n} {
+			label.Style.MinSize = ui.Some(ui.Size{Width: 176})
+			label.Style.MaxSize = ui.Some(ui.Size{Width: 176})
+		}
+		return ui.Node{ID: id, Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 5, Bottom: 5, Left: 12, Right: 12}), Gap: ui.Some(float32(2)), Background: ui.Some(paper)}, Children: []ui.Node{titleNode, n}}
 	}
 	// Native max sizes constrain content, while padding consumes extra space.
 	// Bound descendants too: a long selector or button must not widen the rail.
