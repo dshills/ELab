@@ -73,7 +73,7 @@
     "desktop/sampling.go": "9caef58d4d66e4b9d90806e682cd5985567dd923262bf41daed39b2d3572faf4",
     "desktop/schematic_keyboard.go": "5d33c95abaed2f59b52101e925dc08dfebffa2947b6c947be59e0be3b1afc97d",
     "desktop/schematic_pointer_context.go": "80cd906ba1f61f2cd60079f89d601b08122955fcb1fcd1136f8bbb1b552ac457",
-    "desktop/scope.go": "23191ce9b7ae16cf034faf2530b1f2b56338fef12143da0435a6a55431c473da",
+    "desktop/scope.go": "49c46bf21796fb0cfdf74125037a76ebdcd0f37c44f92624eb115a4367d0d484",
     "desktop/scope_context.go": "4a1463abdf9bbb27f80e8c862f6b206b0bc81b10de914e746d0587b60936de34",
     "desktop/scope_interval_rejection.go": "5a9ea95402c45cef271466499720e4955f99d765099535fe35b01f4ece948c97",
     "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
@@ -3904,7 +3904,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 276,
+      "line": 284,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"input-\"+mode, modeLabels[mode], \"simulation.input.set\", workbench.InputParams{Mode: mode})",
@@ -3915,7 +3915,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 289,
+      "line": 297,
       "function": "*screen.scopePanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})\n}",
@@ -3923,7 +3923,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 294,
+      "line": 302,
       "function": "*screen.scopePanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})",
@@ -3934,7 +3934,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 296,
+      "line": 304,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"transient-step\", \"Step +1 sample\", \"simulation.step.start\", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})",
@@ -3945,7 +3945,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 298,
+      "line": 306,
       "function": "*screen.scopePanel",
       "kind": "registry-button",
       "expression": "s.button(\"simulation.restart\", \"Restart\")",
@@ -3956,7 +3956,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 307,
+      "line": 315,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"step-work-cancel\", \"Cancel step\", \"simulation.work.cancel\", workbench.IDParams{ID: work.ID})",
@@ -3967,7 +3967,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 325,
+      "line": 333,
       "function": "*screen.scopePanel",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil) }",
@@ -3975,7 +3975,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 325,
+      "line": 333,
       "function": "*screen.scopePanel",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil)",
@@ -3986,7 +3986,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 330,
+      "line": 338,
       "function": "*screen.scopePanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -3994,7 +3994,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 398,
+      "line": 406,
       "function": "*screen.transientInspector",
       "kind": "callback-factory",
       "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)\n})",
@@ -4002,7 +4002,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 399,
+      "line": 407,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
@@ -4013,7 +4013,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 403,
+      "line": 411,
       "function": "*screen.transientInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\n\tvalue := float64(e.Number)\n\tif e.Number == float32(setting.min) {\n\t\tvalue = setting.min\n\t}\n\tif e.Number == float32(setting.max) {\n\t\tvalue = setting.max\n\t}\n\tsetting.set(\u0026next, value/setting.scale)\n\ts.invoke(\"simulation.transient.set\", next)\n}",
@@ -4021,7 +4021,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 416,
+      "line": 424,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"simulation.transient.set\", next)",

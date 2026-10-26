@@ -28,7 +28,7 @@ func TestMixedNPNMOSCaptionNamesTheDeviceProvidingTraceState(t *testing.T) {
 		t.Helper()
 		state := user.service.Snapshot()
 		region := state.Mixed.Transistors[0].State
-		caption, _ := findNode(user.view(), "scope-caption")
+		caption, _ := findNode(user.view(), "scope-caption-detail")
 		if !strings.Contains(caption.Text, ids["Q1"]+" "+region) || strings.Contains(caption.Text, ids["MX"]+" "+region) {
 			t.Fatal("scope associates the NPN state with the wrong device", caption.Text)
 		}

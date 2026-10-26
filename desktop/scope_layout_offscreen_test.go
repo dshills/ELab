@@ -35,7 +35,7 @@ func TestMountedLiveScopeControlsKeepGeometryAcrossSamples(t *testing.T) {
 					return root
 				}
 				m := newMountedControlWindowSize(t, s, view, 1040, 760, inspectorLayoutTestTheme())
-				ids := []string{"scope-title", "scope-caption", "scope-visibility", "transient-step", "simulation.restart", "scope-trace-row", "export-csv", "scope-trace-focus", "scope-cursors", "cursor-select-a", "cursor-select-b", "current", "voltage", "power", "simulation-info"}
+				ids := []string{"scope-title", "scope-caption", "scope-caption-time", "scope-caption-detail", "scope-visibility", "transient-step", "simulation.restart", "scope-trace-row", "export-csv", "scope-trace-focus", "scope-cursors", "cursor-select-a", "cursor-select-b", "current", "voltage", "power", "simulation-info"}
 				for _, input := range s.service.Snapshot().LiveInputModes {
 					ids = append(ids, "input-"+input)
 				}
@@ -47,7 +47,7 @@ func TestMountedLiveScopeControlsKeepGeometryAcrossSamples(t *testing.T) {
 				for _, duration := range []float64{.001, .002, .003, .004, .005, .04} {
 					agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: duration})
 					m.frame()
-					caption, _ := findNode(s.view(), "scope-caption")
+					caption, _ := findNode(s.view(), "scope-caption-time")
 					captions[caption.Text] = true
 					for _, id := range ids {
 						if got := mountedControlElement(t, m, id).Bounds; got != bounds[id] {

@@ -257,12 +257,20 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	}
 	title := section("scope-title", titleText)
 	title.MinWidth = 110
-	captionNode := quiet("scope-caption", caption)
 	// Live time digits and transistor-region names change every sample. Reserve
 	// a stable two-line readout so they cannot resize/recenter the toolbar and
 	// move its buttons while the user is trying to operate the scope.
-	captionNode.Style.MinSize = ui.Some(ui.Size{Width: 240, Height: 40})
-	captionNode.Style.MaxSize = ui.Some(ui.Size{Width: 240, Height: 40})
+	timeText, detailText, _ := strings.Cut(caption, "\n")
+	captionNode := ui.Node{ID: "scope-caption", Kind: ui.Column, Style: ui.Style{
+		MinSize: ui.Some(ui.Size{Width: 240, Height: 40}), MaxSize: ui.Some(ui.Size{Width: 240, Height: 40}),
+		Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)),
+	}, Children: []ui.Node{quiet("scope-caption-time", timeText), quiet("scope-caption-detail", detailText)}}
+	// Native labels normalize whitespace; separate fixed rows keep both baselines
+	// stable instead of relying on a newline or content-dependent wrapping.
+	for i := range captionNode.Children {
+		captionNode.Children[i].Style.MinSize = ui.Some(ui.Size{Width: 240, Height: 20})
+		captionNode.Children[i].Style.MaxSize = ui.Some(ui.Size{Width: 240, Height: 20})
+	}
 	controls := []ui.Node{s.scopeVisibilityButton(state), title, captionNode}
 	modeLabels := map[string]string{"auto": "Auto", "charge": "Charge", "discharge": "Discharge", "high": "High", "low": "Low"}
 	if t != nil && workbench.IsNetworkAnalysis(state.Analysis) {

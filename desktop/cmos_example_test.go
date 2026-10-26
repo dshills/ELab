@@ -38,7 +38,7 @@ func TestCMOSNativeMenuUsesProtectedGenericLoad(t *testing.T) {
 	}
 	root := s.view()
 	region, _ := findNode(root, "power-title")
-	caption, _ := findNode(root, "scope-caption")
+	caption, _ := findNode(root, "scope-caption-detail")
 	if strings.ToLower(region.Text) != "mp region" || !strings.Contains(caption.Text, "MP cutoff") {
 		t.Fatal("region summary must identify MP while MN is selected", region.Text, caption.Text)
 	}
