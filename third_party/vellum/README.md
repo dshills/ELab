@@ -17,10 +17,10 @@ Undo boundaries. Upstream's newer controls, secure text and focus reveal remain.
 ELab adjusts explicit action padding for the new reserved keyboard-focus border.
 Six compatibility dependency stages follow upstream's 106 stages, numbered
 107–112; preparation verifies the complete ordered recipe and each input/output
-hash. The private derived source is `bc599ea5f39b31e45c41bbe003e167612ed43275`.
+hash. The private derived source is `303cd0ca0baa31f3d9e30817140b03529cff2736`.
 
-The active archive is `vellum-f9dee54-elab5.tar.gz`; all four native module
-replacements resolve into `build/.vellum-sdk-f9dee54-elab5`. The lock pins source, complete
+The active archive is `vellum-f9dee54-elab6.tar.gz`; all four native module
+replacements resolve into `build/.vellum-sdk-f9dee54-elab6`. The lock pins source, complete
 archive/manifest, compatibility patch and all bootstrap scripts before execution.
 The SDK is a **private compatibility build**, not an upstream release or a public
 redistribution approval. The SDK compatibility changes add no electronics models,
@@ -60,6 +60,22 @@ callbacks, menus, existing public ELab commands and solver limits are unchanged.
 Exact-input/output stage 112 records the native change and queued-timer test.
 See [ordered-work qualification](../../docs/validation/reliability-five/README.md). The preceding SDK/app and
 qualified unsigned release remain preserved.
+
+## Divider callback origin · October 25, 2026
+
+The elab6 SDK keeps each queued divider request in its originating callback.
+A held pointer gesture retains the callback from its initial press, allowing
+ELab's own accepted moves to continue while refusing an intervening agent's
+revision or document. Requests still use current numeric bounds and retain
+existing disable, retirement, pane-order and orientation checks. Fresh gestures
+use the current callback. This intentionally replaces the driver's prior
+latest-callback behavior after a rendered ELab/agent regression demonstrated
+that it could overwrite an agent's newer layout. No command or solver changes.
+
+The [complete compatibility patch](patches/elab-f9dee54-split-origin-compat.patch)
+is pinned alongside the SDK. The preceding elab5 SDK and qualified /265, /264,
+/260 and /205 packages remain unchanged. Qualification and its native limits
+are recorded in [the divider evidence](../../docs/validation/offline-quality/split-origin/README.md).
 
 ## Historical integration records
 

@@ -136,3 +136,22 @@ All four original native checks remain open; next investigate the driver split
 callback-origin lead with an actual queued ELab/agent reproduction before any SDK
 contract change, while preserving the native observations separately.
 [Detailed evidence](../docs/validation/offline-quality/native-round2-265/README.md).
+
+## Divider origin repair, October 25 night
+
+The queued SplitPane lead is now reproduced through the actual retained driver
+originating/owner queues, ELab workspace context binding and public service
+agent commands. A pre-agent queued key changes the agent's accepted .75 share
+to .6699999570846558 as a new user command. Held drags also adopt refreshed
+callbacks across agent layout/input changes and document replacement. Four
+corrected baseline cases fail; a prior invalid RC-mode fixture is retained and
+identified separately. This is rendered/routed evidence, not native hardware
+queue or controlled drag-rate acceptance.
+
+The isolated SDK source 303cd0ca retains admitted callbacks and pointer-start
+context while preserving latest numeric bounds, pane ordering and disable/
+retirement checks. Pinned elab6 changes only driver split code/tests and derived
+source documentation. The focused candidate regressions pass, including own
+repaint continuation and independent fresh input; full qualification is in
+progress. No commands, components, physics or solver limits change. /265 and
+all earlier qualified packages remain preserved. [Evidence and current status](../docs/validation/offline-quality/split-origin/README.md).

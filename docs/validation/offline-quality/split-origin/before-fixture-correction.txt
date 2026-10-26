@@ -1,0 +1,14 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestMountedWorkspaceQueuedDividerCannotBorrowAgentContext (0.11s)
+    workspace_drag_offscreen_test.go:66: queued divider borrowed refreshed agent context: fraction 0.75 -> 0.6699999570846558, command revision 6 -> 7, actor "user"
+--- FAIL: TestMountedWorkspaceHeldDividerCannotBorrowAgentContext (0.38s)
+    --- FAIL: TestMountedWorkspaceHeldDividerCannotBorrowAgentContext/agent-layout (0.10s)
+        workspace_drag_offscreen_test.go:198: held divider borrowed agent-layout context: fraction 0.75 -> 0.579077959060669, revision 7 -> 8
+    --- FAIL: TestMountedWorkspaceHeldDividerCannotBorrowAgentContext/agent-input (0.08s)
+        workspace_drag_offscreen_test.go:182: &{invalid-params input mode must be one of [auto charge discharge] for RC transient}
+    --- FAIL: TestMountedWorkspaceHeldDividerCannotBorrowAgentContext/document-replacement (0.10s)
+        workspace_drag_offscreen_test.go:198: held divider borrowed document-replacement context: fraction 0.6145389676094055 -> 0.579077959060669, revision 8 -> 9
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.123s
+FAIL
