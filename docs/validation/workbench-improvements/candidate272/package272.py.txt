@@ -1,0 +1,36 @@
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess,zipfile
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/workbench-improvements';out=r/'build/ELab-0.196.0-272-Workbench'
+assert not out.exists(), 'Refusing to replace a candidate'
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=r,text=True).strip(), 'Commit reviewed source before compiling'
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()
+quality=json.loads((b/'quality-final3/report.json').read_text());assert quality['passed']
+harness=json.loads((b/'smoke-harness-quality/report.json').read_text());assert harness['passed']
+prior=json.loads((b/'quality-final3/frozen-inputs.json').read_text())
+changed=[p for p,h in prior.items() if hashlib.sha256((r/p).read_bytes()).hexdigest()!=h]
+assert changed==['desktop/smoke.go'] and hashlib.sha256((r/'desktop/smoke.go').read_bytes()).hexdigest()==harness['smoke_sha256']
+old=json.loads((b/'package.json').read_text())
+assert hashlib.sha256(Path(old['app']).joinpath('Contents/MacOS/ELab').read_bytes()).hexdigest()==old['app_executable_sha256']
+assert hashlib.sha256(Path(old['agent']).read_bytes()).hexdigest()==old['agent_sha256']
+env=os.environ.copy();env.update(GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+subprocess.run(['sh','scripts/build.sh'],cwd=r,env=env,check=True)
+out.mkdir();app=out/'ELab.app';shutil.copyfile(r/'build/elab-agent',out/'elab-agent');(out/'elab-agent').chmod(0o755)
+q=subprocess.run(['python3','-B',str(r/'build/.vellum-sdk-f9dee54-elab9/scripts/package-app.py'),'--binary',str(r/'build/elab'),'--output',str(app),'--name','ELab','--identifier','com.dshills.elab','--version','0.196.0','--build-version','272','--platform','darwin','--sign-identity','-'],cwd=r,env=env,check=True,capture_output=True,text=True)
+(b/'272-packager.json').write_text(q.stdout)
+q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True,capture_output=True,text=True);(b/'272-signature.txt').write_text(q.stdout+q.stderr)
+for label,path in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent')]:
+ info=subprocess.check_output(['go','version','-m',str(path)],text=True);assert 'vcs.revision='+source in info and 'vcs.modified=false' in info;(b/(label+'-272-build-info.txt')).write_text(info)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+preserved=json.loads((b/'preservation-before.json').read_text())['identities'];assert all(sha(r/p)==h for p,h in preserved.items())
+with zipfile.ZipFile(r/'build/releases/ELab-0.195.9-macos-arm64.zip') as archive:
+ for member in archive.infolist():
+  relative=Path(*Path(member.filename).parts[1:])
+  if not relative.parts or relative.parts[0] not in ('Examples','Licenses') or member.is_dir():continue
+  assert not relative.is_absolute() and '..' not in relative.parts
+  target=out/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(archive.read(member));target.chmod((member.external_attr>>16)&0o777)
+assert len(list((out/'Examples').rglob('*.elab')))==62
+shutil.copyfile(r/'docs/agent-api.md',out/'AGENT_PROTOCOL.md')
+shutil.copyfile(r/'docs/workbench-workflows.md',out/'WORKBENCH_WORKFLOWS.md')
+(out/'README.md').write_text('ELab 0.196.0 /272 development candidate\n\nSnapped placement ghosts, pending wire routes, nearest unambiguous pins, focused canvas shortcuts, component explanations, explicit live plotting, active experiments with template comparisons, and shared guarded edit proposals. No new components or solver-limit changes.\n\n53 kinds, 62 existing examples and 194 public commands. Matching agent included. Full source checks and exact runtime receipts are recorded separately in docs/validation/workbench-improvements/. This candidate is ad-hoc signed and not notarized. The qualified /270 release is preserved. Original native checks 3/6/9/11 and participant/clean-account review remain unqualified or deferred; routed/software geometry is not native hardware acceptance.\n\nRead WORKBENCH_WORKFLOWS.md for commands and shortcuts.\n')
+report=dict(version='0.196.0',build=272,source_commit=source,clean_source=True,app=str(app),agent=str(out/'elab-agent'),app_executable_sha256=sha(app/'Contents/MacOS/ELab'),agent_sha256=sha(out/'elab-agent'),strict_adhoc_signature=True,component_kinds=53,example_count=62,public_commands=194,release_promoted=False,qualified_base_preserved=True)
+(b/'272-package.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

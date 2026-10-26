@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "version": "0.196.0",
+  "build": 272,
+  "binary_source": "5fd9087344c12626880313c1d86a4508c8765ebc",
+  "clean_binary_source": true,
+  "release_promoted": false,
+  "qualified270_preserved": true,
+  "components": 53,
+  "examples": 62,
+  "commands": 194,
+  "unchanged_frozen_inputs": 1370,
+  "only_followup_changed_input": "desktop/smoke.go",
+  "smoke_sha256": "6109b9c766f0981a2aa2402a06a576b016688a1dfb1b3a3b081b542122138e73",
+  "native_smoke": {
+    "name": "native-smoke",
+    "command": [
+      "/private/tmp/elab-workbench272-5fd90873/native",
+      "--smoke",
+      "--smoke-timeout",
+      "2m"
+    ],
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 41.129617125028744
+  },
+  "public_adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "normal_conformance_external_exits": 102,
+  "feature_workflows_native_and_headless": true,
+  "packaged_example_opens": 62,
+  "example_files_exact": 126,
+  "owned_native_fixture_exit": 0,
+  "owned_native_endpoint_removed": true,
+  "all_prior_13_release_sdk_identities_exact": true,
+  "preserved271_exact": true,
+  "original_native_checks_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "hardware_hover_shortcuts_not_qualified": true,
+  "participant_study_not_performed": true,
+  "heartbeat_remains_paused": true,
+  "no_push_or_upload": true
+}

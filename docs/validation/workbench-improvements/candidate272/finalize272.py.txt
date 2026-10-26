@@ -1,0 +1,100 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/workbench-improvements';d=r/'docs/validation/workbench-improvements';out=d/'candidate272';out.mkdir(exist_ok=False)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+load=lambda p:json.loads(p.read_text())
+p=load(b/'272-package.json');rr=load(b/'272-runtime-result.json');runtime=Path(rr['directory']);report=load(runtime/'runtime-report.json');nf=load(b/'272-native-features.json');hf=load(b/'272-public-headless.json');ex=load(b/'272-examples.json')
+assert all(x['passed'] for x in (rr,report,nf,hf,ex))
+assert p['source_commit']==subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()
+assert sha(Path(p['app'])/'Contents/MacOS/ELab')==p['app_executable_sha256'] and sha(Path(p['agent']))==p['agent_sha256']
+assert nf['native_exit_code']==0 and load(runtime/'features/final-process-state.json')['exit_code']==0
+assert [a['name'] for a in load(runtime/'public/report.json')['adapters']]==['in-process','headless-stdio','headless-socket','native-socket']
+exits=[dict(path=str(f.relative_to(runtime)),result=load(f)) for f in sorted((runtime/'public').rglob('process-exit.json'))]
+assert len(exits)==102 and all(x['result']['exit_code']==0 and not x['result']['graceful_wait_timed_out'] for x in exits)
+assert ex['examples_reopened']==62 and ex['example_files_equal_qualified_zip']==126 and all(x['agent_exit_code']==0 for x in ex['examples'])
+assert hf['agent_exit_code']==0 and load(runtime/'features/new-workflows.json')['agent_exit_code']==0
+prior=load(b/'quality-final3/frozen-inputs.json');changed=[f for f,h in prior.items() if sha(r/f)!=h];assert changed==['desktop/smoke.go']
+harness=load(b/'smoke-harness-quality/report.json');assert sha(r/'desktop/smoke.go')==harness['smoke_sha256']
+preserved=load(b/'preservation-before.json')['identities'];assert all(sha(r/f)==h for f,h in preserved.items())
+old=load(b/'package.json');assert sha(Path(old['app'])/'Contents/MacOS/ELab')==old['app_executable_sha256'] and sha(Path(old['agent']))==old['agent_sha256']
+checks=[]
+for app in (Path(p['app']),runtime/'ELab.app'):
+ q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True,capture_output=True,text=True);checks.append(q.stdout+q.stderr)
+(out/'final-signatures.txt').write_text('\n'.join(checks))
+for name in ('272-package.json','272-packager.json','272-signature.txt','native-272-build-info.txt','agent-272-build-info.txt','272-runtime-invocation.json','272-runtime-result.json','272-runtime-output.txt','272-native-features.json','272-native-features-output.txt','272-public-headless.json','272-examples.json','272-examples-output.txt'):
+ shutil.copyfile(b/name,out/name)
+for name in ('runtime-report.json','native-smoke.log.txt','public-suites.log.txt','public/report.json'):
+ f=runtime/name
+ (out/(name.replace('/','-')+'.gz')).write_bytes(gzip.compress(f.read_bytes(),mtime=0))
+(out/'external-process-exits.json.gz').write_bytes(gzip.compress((json.dumps(exits,indent=2)+'\n').encode(),mtime=0))
+for name in ('startup.json','new-workflows.json','native-output.txt','controller.txt','final-process-state.json'):
+ shutil.copyfile(runtime/'features'/name,out/('native-feature-'+name))
+for name in ('package272.py','qualify_runtime272.py','native_features272.py','check_examples272.py','finalize272.py'):
+ shutil.copyfile(b/name,out/(name+'.txt'))
+(out/'preservation-after.json').write_text(json.dumps(dict(prior_identities=preserved,all_prior_exact=True,preserved271=old,final272=p),indent=2)+'\n')
+summary=dict(passed=True,version=p['version'],build=p['build'],binary_source=p['source_commit'],clean_binary_source=True,release_promoted=False,qualified270_preserved=True,components=53,examples=62,commands=194,unchanged_frozen_inputs=1370,only_followup_changed_input='desktop/smoke.go',smoke_sha256=harness['smoke_sha256'],native_smoke=report['stages'][0],public_adapters=rr['public_adapters'],normal_conformance_external_exits=102,feature_workflows_native_and_headless=True,packaged_example_opens=62,example_files_exact=126,owned_native_fixture_exit=0,owned_native_endpoint_removed=True,all_prior_13_release_sdk_identities_exact=True,preserved271_exact=True,original_native_checks_open=[3,6,9,11],hardware_hover_shortcuts_not_qualified=True,participant_study_not_performed=True,heartbeat_remains_paused=True,no_push_or_upload=True)
+(out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+with (d/'README.md').open('a') as stream:stream.write('''
+## Runnable candidate /272
+
+**ELab 0.196.0 /272** is available at
+[the candidate app](../../../build/ELab-0.196.0-272-Workbench/ELab.app), with its
+matching agent, all 62 existing projects and the workflow guide. Clean binary
+source is `5fd9087344c12626880313c1d86a4508c8765ebc`; final documentation is a
+later checkpoint. [Candidate identities](candidate272/272-package.json),
+[summary](candidate272/summary.json),
+[final strict ad-hoc seals](candidate272/final-signatures.txt).
+
+The exact copied app passes its full native smoke in **41.130 seconds**. Both
+that test and all four public conformance adapters run with development-file
+and outbound IP denial; an additional fixture-only policy denies writes to the
+owner's shared framework geometry folder. All **102 external conformance
+processes exit 0 normally**. The copied bundle, agent and controller remain
+exact. This testing restriction changes no platform security setting.
+[Runtime receipt](candidate272/runtime-report.json.gz),
+[public adapters](candidate272/public-report.json.gz),
+[process cleanup](candidate272/external-process-exits.json.gz).
+
+The new drawing/explanation/plot/experiment/proposal walkthrough passes through
+both the exact copied native service and the matching headless agent. It checks
+pure preview, a 2.916796577 mA LED reference, accepted explanation, plot reveal,
+atomic diff, stale refusal, refreshed apply, one-operation Undo, template diff
+and dismissal. The owned native feature fixture closes normally with exit 0 and
+its endpoint removed. These are public-command workflows, not physical pointer/
+keyboard acceptance. [Native walkthrough](candidate272/native-feature-new-workflows.json),
+[headless walkthrough](candidate272/272-public-headless.json).
+
+All **62 packaged examples reopen paused and clean with exact graphs** using
+the matching agent; all 62 agents exit 0. All **126 example files** match the
+qualified /270 ZIP. The thirteen prior qualified release/SDK identities and the
+initial /271 candidate bytes remain exact.
+[Examples](candidate272/272-examples.json),
+[preservation](candidate272/preservation-after.json).
+
+This is a runnable development candidate, not a promotion of the qualified
+release or a new 30-minute endurance qualification. Source tests, retained-driver
+captures and software geometry do not close original native checks 3/6/9/11,
+hardware hover/shortcut acceptance, participant ease-of-use, IME/screen-reader,
+separate-account installation or public signing/notarization. Those limits remain
+as above. No owned test window remains open; no owner project, SDK cache or
+sibling Vellum source was edited. No push/upload or heartbeat restart occurred.
+''')
+with (r/'research/119-effortless-workbench.md').open('a') as stream:stream.write('''
+## Candidate closeout
+
+Runnable **0.196.0 /272**, clean binary source `5fd90873`, completes this scoped
+five-item batch. Exact copied native smoke and all four public adapters pass;
+all 102 external conformance processes exit normally. New feature walkthroughs
+pass through native and headless agents. All 62 existing packaged examples open
+paused/clean with exact graphs and exit-0 agents; all 126 example files match
+qualified /270. Strict ad-hoc seals, prior thirteen release/SDK identities and
+/271 bytes remain exact. Owned native fixtures are closed normally.
+
+[Candidate summary and limits](../docs/validation/workbench-improvements/candidate272/summary.json).
+This development candidate does not promote /270 or establish a new 30-minute
+endurance run. Hardware/native queue gates and participant/clean-account reviews
+remain separate. No new components, solver-limit changes, push, upload or resumed
+heartbeat. The working batch ends here rather than starting another feature.
+''')
+readme=r/'README.md';text=readme.read_text();text=text.replace('The qualified /270 download below remains preserved separately.','**Runnable workbench candidate: [ELab 0.196.0 /272](build/ELab-0.196.0-272-Workbench/ELab.app)**,\nwith the matching agent and all 62 examples alongside it. Native smoke, four\npublic adapters and new-workflow checks pass; all packaged examples reopen clean.\nThis development candidate keeps the qualified /270 download below preserved\nseparately; existing native-input and participant acceptance limits remain open.');readme.write_text(text)
+print(json.dumps(summary,indent=2))

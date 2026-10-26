@@ -13,7 +13,11 @@ explicit live plotting, experiment comparisons and shared edit proposals.
 The existing 53 component kinds and solver limits are unchanged; users and agents
 share 194 commands. See the [workflow guide](docs/workbench-workflows.md) and
 [engineering checks](docs/validation/workbench-improvements/README.md).
-The qualified /270 download below remains preserved separately.
+**Runnable workbench candidate: [ELab 0.196.0 /272](build/ELab-0.196.0-272-Workbench/ELab.app)**,
+with the matching agent and all 62 examples alongside it. Native smoke, four
+public adapters and new-workflow checks pass; all packaged examples reopen clean.
+This development candidate keeps the qualified /270 download below preserved
+separately; existing native-input and participant acceptance limits remain open.
 
 ## Downloadable release
 

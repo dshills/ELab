@@ -131,3 +131,47 @@ race workflow regressions, lint/imports, both desktop vets and build. Prior full
 source gates are carried for those exact inputs, not relabeled a fresh complete
 run after the self-test-only change. Final /272 native smoke and runtime evidence
 will qualify the adjusted self-test itself.
+
+## Runnable candidate /272
+
+**ELab 0.196.0 /272** is available at
+[the candidate app](../../../build/ELab-0.196.0-272-Workbench/ELab.app), with its
+matching agent, all 62 existing projects and the workflow guide. Clean binary
+source is `5fd9087344c12626880313c1d86a4508c8765ebc`; final documentation is a
+later checkpoint. [Candidate identities](candidate272/272-package.json),
+[summary](candidate272/summary.json),
+[final strict ad-hoc seals](candidate272/final-signatures.txt).
+
+The exact copied app passes its full native smoke in **41.130 seconds**. Both
+that test and all four public conformance adapters run with development-file
+and outbound IP denial; an additional fixture-only policy denies writes to the
+owner's shared framework geometry folder. All **102 external conformance
+processes exit 0 normally**. The copied bundle, agent and controller remain
+exact. This testing restriction changes no platform security setting.
+[Runtime receipt](candidate272/runtime-report.json.gz),
+[public adapters](candidate272/public-report.json.gz),
+[process cleanup](candidate272/external-process-exits.json.gz).
+
+The new drawing/explanation/plot/experiment/proposal walkthrough passes through
+both the exact copied native service and the matching headless agent. It checks
+pure preview, a 2.916796577 mA LED reference, accepted explanation, plot reveal,
+atomic diff, stale refusal, refreshed apply, one-operation Undo, template diff
+and dismissal. The owned native feature fixture closes normally with exit 0 and
+its endpoint removed. These are public-command workflows, not physical pointer/
+keyboard acceptance. [Native walkthrough](candidate272/native-feature-new-workflows.json),
+[headless walkthrough](candidate272/272-public-headless.json).
+
+All **62 packaged examples reopen paused and clean with exact graphs** using
+the matching agent; all 62 agents exit 0. All **126 example files** match the
+qualified /270 ZIP. The thirteen prior qualified release/SDK identities and the
+initial /271 candidate bytes remain exact.
+[Examples](candidate272/272-examples.json),
+[preservation](candidate272/preservation-after.json).
+
+This is a runnable development candidate, not a promotion of the qualified
+release or a new 30-minute endurance qualification. Source tests, retained-driver
+captures and software geometry do not close original native checks 3/6/9/11,
+hardware hover/shortcut acceptance, participant ease-of-use, IME/screen-reader,
+separate-account installation or public signing/notarization. Those limits remain
+as above. No owned test window remains open; no owner project, SDK cache or
+sibling Vellum source was edited. No push/upload or heartbeat restart occurred.

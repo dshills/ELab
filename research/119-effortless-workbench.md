@@ -55,3 +55,19 @@ Plot correctly refuses a seventh trace. The self-test alone now explicitly
 clears its sixth selector first. All 1,370 other frozen inputs are exact and
 relevant fresh ordinary/rendered workflow regressions, lint/vets/build pass.
 A separate /272 preserves /271 and qualifies the corrected smoke sequence.
+
+## Candidate closeout
+
+Runnable **0.196.0 /272**, clean binary source `5fd90873`, completes this scoped
+five-item batch. Exact copied native smoke and all four public adapters pass;
+all 102 external conformance processes exit normally. New feature walkthroughs
+pass through native and headless agents. All 62 existing packaged examples open
+paused/clean with exact graphs and exit-0 agents; all 126 example files match
+qualified /270. Strict ad-hoc seals, prior thirteen release/SDK identities and
+/271 bytes remain exact. Owned native fixtures are closed normally.
+
+[Candidate summary and limits](../docs/validation/workbench-improvements/candidate272/summary.json).
+This development candidate does not promote /270 or establish a new 30-minute
+endurance run. Hardware/native queue gates and participant/clean-account reviews
+remain separate. No new components, solver-limit changes, push, upload or resumed
+heartbeat. The working batch ends here rather than starting another feature.
