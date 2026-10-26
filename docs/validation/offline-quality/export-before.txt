@@ -1,0 +1,14 @@
+--- FAIL: TestDeviceExportRetainsActiveSavedParameters (0.01s)
+    --- FAIL: TestDeviceExportRetainsActiveSavedParameters/pwm-controller (0.00s)
+        export_device_parameters_test.go:35: printed pwm-controller loses active saved parameter "PWM 123 Hz": U1 · PWM controller
+        export_device_parameters_test.go:35: printed pwm-controller loses active saved parameter "duty 37%": U1 · PWM controller
+    --- FAIL: TestDeviceExportRetainsActiveSavedParameters/opamp (0.00s)
+        export_device_parameters_test.go:35: printed opamp loses active saved parameter "GBW 3456 Hz": U1 · Powered op-amp
+        export_device_parameters_test.go:35: printed opamp loses active saved parameter "slew 7890 V/s": U1 · Powered op-amp
+    --- FAIL: TestDeviceExportRetainsActiveSavedParameters/piezo (0.00s)
+        export_device_parameters_test.go:35: printed piezo loses active saved parameter "piezo C 4.7e-08 F": U1 · Piezo sounder
+    --- FAIL: TestDeviceExportRetainsActiveSavedParameters/active-buzzer (0.00s)
+        export_device_parameters_test.go:35: printed active-buzzer loses active saved parameter "tone 2300 Hz": U1 · Active buzzer
+FAIL
+FAIL	github.com/dshills/elab/workbench	0.381s
+FAIL

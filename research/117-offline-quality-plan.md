@@ -54,3 +54,11 @@ The failing regression is retained; output repair is the next action.
 Recurring continuation: active thread heartbeat every 30 minutes, named
 “Continue ELab offline quality work”. Stop it when the owner returns. Qualified
 /264 bytes remain preserved; no new build is promoted by these source checks.
+
+Export repair: printed parts now include active PWM frequency/duty, optional
+op-amp GBW/slew, piezo capacitance and active-buzzer tone. Unused sound settings
+are not mislabeled as active parameters. All four original failures are retained;
+focused race/export/narrow-page and unchanged legacy-report regressions pass.
+Mounted modal/browser/scope/sweep/navigation checks pass in 10.454 s. No command,
+component, model, saved file or simulation limit changes. Full combined package
+qualification remains pending; /264 stays the qualified download.

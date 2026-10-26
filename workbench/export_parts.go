@@ -46,6 +46,24 @@ func schematicPartDescription(p Component) string {
 		}
 		text += fmt.Sprintf(" · %.6g %s", sensorEnvironment(p), unit)
 	}
+	if p.Device != nil {
+		if p.Kind == "pwm-controller" && p.Device.PWM != nil {
+			c := p.Device.PWM
+			text += fmt.Sprintf(" · PWM %.6g Hz · duty %.6g%%", c.Frequency, c.Duty*100)
+		}
+		if hasDynamics(p) {
+			c := p.Device.Dynamics
+			text += fmt.Sprintf(" · GBW %.6g Hz · slew %.6g V/s", c.GBW, c.Slew)
+		}
+		if c := p.Device.Sound; c != nil {
+			// Each kind retains both settings, but only one affects its model.
+			if p.Kind == "piezo" {
+				text += fmt.Sprintf(" · piezo C %.6g F", c.Capacitance)
+			} else if p.Kind == "active-buzzer" {
+				text += fmt.Sprintf(" · tone %.6g Hz", c.Frequency)
+			}
+		}
+	}
 	if p.InitialVoltage != nil {
 		text += fmt.Sprintf(" · initial %.4g V", *p.InitialVoltage)
 	}
