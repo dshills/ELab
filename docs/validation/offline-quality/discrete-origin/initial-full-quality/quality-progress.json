@@ -1,0 +1,119 @@
+[
+  {
+    "log": "lint.txt",
+    "command": [
+      "sh",
+      "scripts/lint.sh"
+    ],
+    "exit_code": 0,
+    "wall_s": 45.5028520419728
+  },
+  {
+    "log": "python.txt",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "wall_s": 1.6422200410161167
+  },
+  {
+    "log": "prd.txt",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/prd-audit.py",
+      "--verify",
+      "research/11-prd-implementation-audit.json"
+    ],
+    "exit_code": 0,
+    "wall_s": 0.02843320812098682
+  },
+  {
+    "log": "root-race.jsonl",
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-json",
+      "-timeout=15m",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 5.399774958146736
+  },
+  {
+    "log": "root-vet.txt",
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 2.93259270908311
+  },
+  {
+    "log": "desktop-race.jsonl",
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-json",
+      "-timeout=30m",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 247.07090937509201
+  },
+  {
+    "log": "mounted-race.jsonl",
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-tags=offscreen",
+      "-json",
+      "-timeout=30m",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 428.5709363340866
+  },
+  {
+    "log": "desktop-vet.txt",
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 4.232956584077328
+  },
+  {
+    "log": "mounted-vet.txt",
+    "command": [
+      "go",
+      "vet",
+      "-tags=offscreen",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 18.507959832902998
+  },
+  {
+    "log": "build.txt",
+    "command": [
+      "sh",
+      "scripts/build.sh"
+    ],
+    "exit_code": 0,
+    "wall_s": 10.137267916928977
+  }
+]

@@ -214,3 +214,41 @@ and preserves the other contracts. Their tests remain unchanged. This is a
 scope correction, not a weakening of the reproduced five ELab refusals. Initial
 application/SDK gate logs remain separately labeled. Final pin qualification
 will be run once on the frozen narrowed source before any package is qualified.
+
+## Discrete batch closeout
+
+Additional unsigned **0.195.6 /267** is qualified, clean binary source
+d020f63d10558592923d95caceba21cc316d5625; final SDK 0650083e /elab8. The five
+admitted checkbox/list/disclosure/keyboard-action interleavings refuse stale
+requests and accept fresh independent input. The initial Switch/ToggleButton
+contract regression is corrected by narrowing production scope, preserving their
+unchanged tests. Complete initial and final gates are labeled separately.
+
+Final SDK ordinary/rendered race and both vet modes pass. Its portable race
+covers byte-identical non-driver Go/module inputs (556) and is carried unchanged.
+Complete final ELab suites pass 867 /339 /466 top-level tests (1,950 /839 /1,432
+with subtests), lint/imports, Python, PRD, all vets and build. All 1,354 frozen
+executable/test inputs remain exact. Native Tab/Down, three Tabs and Return
+select/place R1, 1 kΩ at (−200,0), with user history. That owned fixture is
+explicitly discarded and the app closes normally. This is fresh native input,
+not staged pre-agent queue or hardware-rate acceptance.
+
+Exact copied runtime smoke and four-adapter public suites pass with source/
+developer-file/IP denial; all 102 external processes exit normally. Final 375
+ZIP entries and strict seal verify, and its extracted agent freshly opens all 62
+paused examples cleanly with exact graphs. All 53 kinds /187 commands remain.
+Qualified /266, /265, /264, /260, /205 and prior SDK archives remain preserved.
+
+ZIP: build/releases/ELab-0.195.6-macos-arm64.zip, 38,742,658 bytes.
+SHA-256 fac6d6a47c73443956c44e525ff22eb3079866add0a5a5828a7c9cf475902cd3.
+[Complete evidence](../docs/validation/offline-quality/discrete-origin/README.md).
+
+Next prioritize the known native Save-panel dispatch observation: use a bounded
+owned diagnostic build to observe AppKit active/key-window/first-responder and
+command-routing state before another identical shortcut trial. Keep actual UI
+interactions in documented CUA APIs; no other-app capture, clipboard changes,
+security changes, product features or qualified-byte replacement. Do not infer
+activation/focus as the cause before evidence. The four original native checks
+3/6/9/11 remain open. Continue other in-use queue audits only with real reachable
+ELab/agent reproductions before altering intentional SDK contracts. Pause the
+thread heartbeat and finish a safe checkpoint on the owner's direct return.

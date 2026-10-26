@@ -1,0 +1,26 @@
+from pathlib import Path
+import hashlib,json,os,plistlib,shutil,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/offline-quality/discrete-origin-267'
+out=root/'build/ELab-0.195.6-267-Discrete'
+quality=json.loads((stage/'full-quality/quality-complete.json').read_text());assert quality['passed']
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root,text=True).strip(),'Commit source before packaging'
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+assert not out.exists();out.mkdir();app=out/'ELab.app'
+env=os.environ.copy();env.update(GOMAXPROCS='2',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+subprocess.run(['sh','scripts/build.sh'],cwd=root,env=env,check=True)
+shutil.copyfile(root/'build/elab-agent',out/'elab-agent');(out/'elab-agent').chmod(0o755)
+native=root/'build/elab'
+package=subprocess.run(['python3','-B',str(root/'build/.vellum-sdk-f9dee54-elab8/scripts/package-app.py'),'--binary',str(native),'--output',str(app),'--name','ELab','--identifier','com.dshills.elab','--version','0.195.6','--build-version','267','--platform','darwin','--sign-identity','-'],env=env,capture_output=True,text=True,check=True)
+(stage/'packager.json').write_text(package.stdout)
+manifest=json.loads((app/'Contents/Resources/APP_MANIFEST.json').read_text())
+assert manifest['version']=='0.195.6' and manifest['build_version']=='267' and manifest['sdk_release']=='v0.1.0-personal.1' and manifest['source_binary_sha256']==hashlib.sha256(native.read_bytes()).hexdigest()
+(stage/'app-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+verify=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],capture_output=True,text=True,check=True);(stage/'signature.txt').write_text(verify.stdout+verify.stderr)
+for label,p in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent')]:
+ info=subprocess.check_output(['go','version','-m',str(p)],text=True);assert 'vcs.revision='+source in info and 'vcs.modified=false' in info;(stage/(label+'-build-info.txt')).write_text(info)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+release=sha(root/'build/releases/ELab-0.181.4-macos-arm64.zip');assert release=='d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b'
+report=dict(version='0.195.6',build=267,source_commit=source,clean_source=True,strict_adhoc_signature=True,app=str(app),agent=str(out/'elab-agent'),app_executable_sha256=sha(app/'Contents/MacOS/ELab'),agent_sha256=sha(out/'elab-agent'),preserved_alpha_sha256=release,release_promoted=False)
+(stage/'package.json').write_text(json.dumps(report,indent=2)+'\n')
+(out/'README.md').write_text('ELab 0.195.6 /267 — discrete context development candidate\n\nFix: admitted checkbox/list/disclosure changes and keyboard button actions retain their originating context across newer agent edits. Full native/package qualification is still pending. Existing commands and numeric behavior remain unchanged. Existing electronics examples and commands are preserved.\n\nSelect PWM, U1 or BZ1 to configure and inspect. Audio rendering is silent; playback requires Play. Paused SPST switch changes apply at the next Step.\n\nSource '+source+'. Ad-hoc signed; qualified alpha preserved. See docs/hobbyist-devices.md and docs/validation/reliability-five/README.md in the repository.\n')
+print(json.dumps(report))

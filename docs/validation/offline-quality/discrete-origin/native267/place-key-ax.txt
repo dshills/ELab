@@ -1,0 +1,64 @@
+The following is a diff from the previous accessibility tree for Window: "ELab · Live electronics" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 72-73, 80, 119-126
+~				5 text (settable) Edited, ID: node:ZG9jdW1lbnQtc3VidGl0bGU
+~				12 button Undo, Help: Place component · by user, ID: node:ZWRpdC51bmRv
+~					28 list (settable) Matching components, ID: node:cGFydC1saXN0, Help: Use Up/Down, Home/End, page keys or an initial letter to choose a part. Return or Space chooses the focused row. Tab moves to exact placement.
+~						30 row (settable, boolean) Resistor, Value: off, ID: option:cGFydC1saXN0:cmVzaXN0b3I
+~					36 button Connect by name, ID: node:d2lyZS1ieS1uYW1l
+~						40 button Select, Help: Selected drawing mode., ID: node:dG9vbC1zZWxlY3Q
+~				48 text (settable) Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom, ID: node:c2NoZW1hdGljLWhlbHA
+~				49 row ID: node:b3BlcmF0aW9uLW5vdGljZQ, information: Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.
+~					50 text (settable) ID: node:bWVzc2FnZXM, Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.
+~							67 button Selected object, ID: node:c2VsZWN0aW9u, Help: Current choice: R1 · Resistor ▾. Opens a native menu. Use arrow keys to choose and Escape to dismiss.
+~								69 button Previous schematic object, ID: node:c2VsZWN0aW9uLXByZXZpb3Vz
+~								70 button Next schematic object, ID: node:c2VsZWN0aW9uLW5leHQ
+~								71 button Center selection, ID: node:c2VsZWN0aW9uLWNlbnRlcg
++							119 text (settable) R1 · Resistor, ID: node:aW5zcGVjdG9y
++							120 text (settable) Terminals: 1, 2, ID: node:cGFydC10ZXJtaW5hbHM
++							121 text (settable) Model: ideal-resistor.v1, ID: node:cGFydC1tb2RlbC1pZA
++							122 container Value · Ω, ID: node:aW5zcGVjdG9yLWZpZWxkLXZhbHVlLWVudHJ5
++								123 text (settable) Value · Ω, ID: node:dmFsdWUtdGl0bGU
++								124 text field (settable) Component value, Help: Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF, Value: 1 kΩ, ID: node:dmFsdWUtZW50cnk
++							125 button Apply value, Help: Selected., ID: node:YXBwbHktdmFsdWU
++							126 text (settable) 10–100000 Ω, ID: node:dmFsdWUtZG9tYWluLXJhbmdl
++							127 text (settable) Bare SI or Ω/ohm; k/K/M prefixes, for example 2.2k or 0.1M Ω, ID: node:dmFsdWUtZG9tYWluLXN5bnRheA
++							128 row node:cHJlc2V0cw
++								129 button 1 kΩ, ID: node:ci0xaw
++								130 button 2 kΩ, ID: node:ci0yaw
++							131 button (disabled) Plot voltage, ID: node:cGxvdC12OlIx
++							132 button (disabled) Plot current, ID: node:cGxvdC1pOlIx
++							133 text (settable) Adds a trace; replaces the last when six are shown., ID: node:cGxvdC1oZWxw
++							134 text (settable) ID: node:cGFydC1hc3N1bXB0aW9ucw, Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2.
++							135 text (settable) Position -200, 0 · rotation 0°, ID: node:cGFydC1wb3NpdGlvbg
++							136 button Rotate 90°, ID: node:cm90YXRlLXBhcnQ
++							137 button Duplicate, ID: node:ZHVwbGljYXRlLXBhcnQ
++							138 button Delete selected, ID: node:ZGVsZXRlLW9iamVjdA
++							139 text (settable) R1, ID: node:bWVhc3VyZW1lbnQtc291cmNl
++							140 text (settable) Live v:R1.1 · unavailable, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpSMS4x
++							141 text (settable) Voltage: R1.1 - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6UjEuMQ
++							142 text (settable) No accepted live result for this probe, ID: node:bWVhc3VyZW1lbnQtc3RhdHVzLXY6UjEuMQ
++							143 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlIxLjE
++								144 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlIxLjE
++								145 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6UjEuMQ
++							146 text (settable) Live v:R1.2 · unavailable, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpSMS4y
++							147 text (settable) Voltage: R1.2 - ground, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6UjEuMg
++							148 text (settable) No accepted live result for this probe, ID: node:bWVhc3VyZW1lbnQtc3RhdHVzLXY6UjEuMg
++							149 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlIxLjI
++								150 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlIxLjI
++								151 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6UjEuMg
++							152 text (settable) Live v:R1 · unavailable, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtdjpSMQ
++							153 text (settable) Voltage: R1.1 - R1.2, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLXY6UjE
++							154 text (settable) No accepted live result for this probe, ID: node:bWVhc3VyZW1lbnQtc3RhdHVzLXY6UjE
++							155 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy12OlIx
++								156 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC12OlIx
++								157 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLXY6UjE
++							158 text (settable) Live i:R1 · unavailable, ID: node:bWVhc3VyZW1lbnQtdmFsdWUtaTpSMQ
++							159 text (settable) Current: R1.1 -> R1.2, ID: node:bWVhc3VyZW1lbnQtcmVmZXJlbmNlLWk6UjE
++							160 text (settable) No accepted live result for this probe, ID: node:bWVhc3VyZW1lbnQtc3RhdHVzLWk6UjE
++							161 row node:bWVhc3VyZW1lbnQtYWN0aW9ucy1pOlIx
++								162 button (disabled) Plot, ID: node:bWVhc3VyZW1lbnQtcGxvdC1pOlIx
++								163 button Pin, ID: node:bWVhc3VyZW1lbnQtcGluLWk6UjE
++							164 button Inspect selected object, ID: node:bWVhc3VyZW1lbnQtY2xlYXI
+~							87 text (settable) ID: node:ZGlhZ25vc3RpYy0wLXN1bW1hcnk, Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.
+~			105 text (settable) 1 components · 0 wires, Help: Untitled circuit · Unsaved · 1 components · 0 wires · last change: user, ID: node:Zm9vdGVy
+The focused UI element is 26 text field (settable) Search components, Help: Search all categories by name or hobbyist alias. Return focuses the matching component list., ID: node:cGFydC1zZWFyY2g

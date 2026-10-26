@@ -5,7 +5,7 @@ Qualified additional unsigned release **ELab 0.195.4 /265**, clean source
 `1d4ff4602585a33a6a548fac4c4949466ad71cb6`. No new components, public commands,
 electrical models, file formats or solver limits. /264, /260 and /205 stay exact.
 
-## Subsequent divider follow-up
+## Subsequent input follow-ups
 
 The later [divider origin repair](split-origin/README.md) is qualified separately
 in unsigned **0.195.5 /266**, clean source `a23e56f2`. Queued requests and held
@@ -13,6 +13,15 @@ gestures cannot adopt newer agent context. Full source/SDK gates, copied-runtime
 suites and final offline extraction pass. The /265 first-batch evidence below
 and all its package bytes remain preserved. Original native checks 3,6,9,11
 remain open with their exact recorded limits.
+
+The later [discrete-input follow-up](discrete-origin/README.md) is qualified in
+unsigned **0.195.6 /267**, clean source `d020f63d`. Admitted checkbox, single-list,
+disclosure and keyboard-button actions retain their original context across
+agent edits. Five rendered reproductions, complete final gates, representative
+native keyboard input, exact copied runtime and offline extraction pass. The
+initial broader Switch/ToggleButton change is narrowed to preserve their legacy
+contracts. All earlier qualified packages remain exact; native checks 3/6/9/11
+stay explicitly open.
 
 ## Reproduced defects and repairs
 

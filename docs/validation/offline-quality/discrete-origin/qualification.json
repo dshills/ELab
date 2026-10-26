@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "version": "0.195.6",
+  "build": 267,
+  "source_commit": "d020f63d10558592923d95caceba21cc316d5625",
+  "source_inputs_unchanged": 1354,
+  "sdk_source": "0650083e179aae67c3f67aff406ac7a1b5206486",
+  "sdk_cache": "build/.vellum-sdk-f9dee54-elab8",
+  "archive_sha256": "fac6d6a47c73443956c44e525ff22eb3079866add0a5a5828a7c9cf475902cd3",
+  "archive_bytes": 38742658,
+  "files_verified": 375,
+  "test_counts": {
+    "root-race.jsonl": {
+      "top_level": 867,
+      "including_subtests": 1950
+    },
+    "desktop-race.jsonl": {
+      "top_level": 339,
+      "including_subtests": 839
+    },
+    "mounted-race.jsonl": {
+      "top_level": 466,
+      "including_subtests": 1432
+    }
+  },
+  "external_processes": 102,
+  "all_external_exits_zero": true,
+  "examples_reopened": 62,
+  "component_kinds": 53,
+  "commands": 187,
+  "original_native_checks_still_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "native_scope": "Fresh component-list keyboard selection and Place-at-X/Y Return activation only; staged pre-agent checks remain routed/manual evidence.",
+  "prior_qualified_releases_unchanged": true,
+  "initial_scope_correction": "Initial elab7 changed unproven Switch/ToggleButton legacy contracts; five framework cases exposed it. Final elab8 narrows the code and preserves their unchanged tests. Final application/dependency gates are separate from initial-phase results.",
+  "no_push_or_upload": true
+}

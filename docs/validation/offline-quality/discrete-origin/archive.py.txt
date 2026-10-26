@@ -1,0 +1,97 @@
+"""Exclusive archive of a qualified matching bundle; verify every member and OS extraction."""
+from pathlib import Path
+import argparse,hashlib,json,os,platform,shutil,stat,subprocess,sys,zipfile
+root=Path('/Users/dshills/Development/projects/ELab');sys.path.insert(0,str(root/'scripts'))
+from package_review import members,verify_archive
+p=argparse.ArgumentParser();p.add_argument('--stage',type=Path,required=True);p.add_argument('--runtime',type=Path,required=True);p.add_argument('--extraction',type=Path,required=True);a=p.parse_args();stage=a.stage;package=json.loads((stage/'package.json').read_text());version=package['version'];build=package['build']
+framework=json.loads((stage/'framework-complete.json').read_text());assert framework['passed'] and framework['source_commit']=='0650083e179aae67c3f67aff406ac7a1b5206486'
+quality=json.loads((root/'build/offline-quality/discrete-origin-267/full-quality/quality-complete.json').read_text());runtime=json.loads((a.runtime/'runtime-report.json').read_text());assert quality['passed'] and runtime['passed']
+out=root/f'build/releases/ELab-{version}-macos-arm64';assert out.exists()
+sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
+assert sha(out/'ELab.app/Contents/MacOS/ELab')==package['app_executable_sha256']==runtime['executable_sha256']
+assert sha(out/'elab-agent')==package['agent_sha256']==runtime['source_agent_sha256']
+assert sha(root/'build/releases/ELab-0.181.4-macos-arm64.zip')==package['preserved_alpha_sha256']
+assert sha(root/'build/releases/ELab-0.195.5-macos-arm64.zip')=='cbc3f687068d932fa148d2a580b4116f4755582184435b2ec6718d80be37a863'
+assert sha(root/'build/releases/ELab-0.195.4-macos-arm64.zip')=='81e8e4a858663e4391214e82be0498e5fb6d62b2280ea623088638c1b549c10d'
+assert sha(root/'build/releases/ELab-0.195.3-macos-arm64.zip')=='31fa3386d57850e5d68ead285d65f2c8a7319ef1e4866ba3e6f070ea76c85fe1'
+assert sha(root/'build/releases/ELab-0.194.5-macos-arm64.zip')=='4132046779dd14442187e37baa426de55ccff4c9f5f7b587d691bc31c5ae857a'
+subprocess.run(['codesign','--verify','--deep','--strict',str(out/'ELab.app')],check=True)
+status=dict(kind='unsigned-macos-arm64-reliability',version=version,build=build,source_commit=package['source_commit'],native_sha256=package['app_executable_sha256'],agent_sha256=package['agent_sha256'],architecture='arm64',developer_id_signed=False,ad_hoc_integrity_seal=True,notarized=False,published=False,components=53,examples=62,quality_passed=True,copied_runtime_passed=True,owner_review_deferred=True,clean_account_installation_deferred=True)
+(out/'RELEASE_STATUS.json').write_text(json.dumps(status,indent=2)+'\n')
+(out/'RELEASE_NOTES.md').write_text(f'''# ELab {version} /{build}
+
+All 53 current component kinds and 62 existing examples, with a matching agent.
+No new components, electrical models, simulation capacities or precision limits.
+
+Examples now has Start here, topic categories, global word search, real schematic
+thumbnails and larger previews with experiments/model limits. Search, category,
+selection, visibility and exact SVG preview queries are public agent commands.
+Browsing leaves graph/document/history/physics intact. Open retains protected
+replacement, including native Save/Discard/Cancel and keyboard focus return.
+
+Scroll cancels visible and pending numeric help; stale callbacks cannot revive
+help for clipped controls. Keyboard LED construction/wiring, invalid values,
+correction, Undo/Redo, native save and RC timing cursors were exercised. The
+apparent canvas omission was traced to the large capture preview; saved pixels
+retain the circuit. No speculative renderer fix was shipped.
+
+This update keeps admitted Checkbox, component-list selection, disclosure and
+keyboard button actions in their originating callbacks across newer agent edits.
+The existing shared command guards reject the stale input; independent fresh
+input resumes. Programmatic Send(Click), Switch/ToggleButton, selector and
+non-list-group contracts remain unchanged. Tests use actual retained driver
+queues, assembled ELab callbacks and public service agent commands. They do not
+close native hardware-rate or precise pre-agent OS queue acceptance.
+
+The prior update keeps queued divider requests and held pointer gestures in their
+originating callback context. An intervening agent layout/input edit or document
+replacement cannot grant an old request a fresh command context. Latest numeric
+bounds and pane/disable/retirement rules remain. Uninterrupted own moves and fresh
+independent input continue through the existing shared command. Rendered driver
+queue and public-service agent interleavings reproduce the original failures;
+this does not claim native hardware queue/rate acceptance.
+
+The previous update refuses background scope/sweep cursor and object
+navigation handlers while Examples is visible, preserving deliberate public
+agent access and restoring normal input after dismissal. Exported parts include
+active PWM frequency/duty, op-amp GBW/slew, piezo capacitance and buzzer tone.
+The original seven source regression failures are retained alongside repairs.
+Controlled record-only and inductor crash recovery, preserved manual saves,
+and recovery-storage failure/disable/re-enable checks pass on the matching agent.
+
+Browser checks include all-theme compact layouts, keyboard search/open/clear,
+empty results, physical wheel and scrollbar dragging, held callbacks after agent
+edits, 62 matching headless/native SVG hashes and stable document export bytes.
+Native tests fixed search wrapping, dark collection ink, sheet category routing,
+filter clipping and focus after protected replacement.
+
+Portable and ordinary/rendered desktop race suites, lint, vet, Python and PRD
+checks pass. The exact copied package passes native smoke and public electrical
+suites under source/development-file and outbound-IP denial. Every ZIP member's
+bytes/mode and the extracted integrity seal are verified; all shipped examples
+are freshly reopened offline with the extracted agent.
+
+These are workstation checks. Owner walkthrough, screen-reader/IME participant
+acceptance, Gatekeeper/quarantine and separate-account installation remain
+outside these receipts; recorded owner/clean-account deferrals remain in force.
+Unsigned channel, without Developer ID/notarization or public hosting.
+
+Clean binary source: {package['source_commit']}.
+SDK upstream f9dee54; compatibility source 0650083e, exported SDK elab8.
+Qualified /266, /265, /264, /260 and /205 ZIPs are preserved unchanged.
+See repository docs/validation/reliability-five for scopes and raw receipts.
+''')
+manifest=dict(status=status,files=members(out));(out/'RELEASE_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n');expected=members(out)
+archive=Path(str(out)+'.zip');assert not archive.exists() and not a.extraction.exists();a.extraction.mkdir(mode=0o700)
+with archive.open('xb') as dest:
+ with zipfile.ZipFile(dest,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+  for name,entry in expected.items():
+   info=zipfile.ZipInfo(out.name+'/'+name,date_time=(1980,1,1,0,0,0));info.create_system=3;info.external_attr=(stat.S_IFREG|int(entry['mode'],8))<<16;info.compress_type=zipfile.ZIP_DEFLATED;z.writestr(info,(out/name).read_bytes(),compresslevel=9)
+verify_archive(archive,out.name,expected)
+subprocess.run(['/usr/bin/ditto','-x','-k',str(archive),str(a.extraction)],check=True)
+extracted=a.extraction/out.name
+assert members(extracted)==expected==members(out)
+subprocess.run(['codesign','--verify','--deep','--strict',str(extracted/'ELab.app')],check=True)
+archive.with_suffix('.zip.sha256').write_text(sha(archive)+'  '+archive.name+'\n')
+report=dict(passed=True,status=status,archive=str(archive),archive_sha256=sha(archive),archive_bytes=archive.stat().st_size,files_verified=len(expected),extracted=str(extracted),source_unchanged=True,extraction_bytes_and_modes_match=True,strict_adhoc_signature=True)
+(stage/'archive.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

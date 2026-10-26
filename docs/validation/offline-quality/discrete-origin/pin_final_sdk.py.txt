@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,hashlib,subprocess,tarfile
+r=Path('/Users/dshills/Development/projects/ELab');stage=r/'build/offline-quality/discrete-origin-267';src=r/'build/vellum-update-source'
+lock=r/'third_party/vellum/sdk.lock.json';old=json.loads(lock.read_text());assert old['cache'].endswith('elab7')
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=src).strip()
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=src,text=True).strip();upstream=old['upstream_commit']
+archive=r/'third_party/vellum/vellum-f9dee54-elab8.tar.gz';patch=r/'third_party/vellum/patches/elab-f9dee54-discrete-origin-compat.patch';prefix=old['prefix']
+sha=lambda b:hashlib.sha256(b).hexdigest()
+with tarfile.open(archive) as t:
+ raw=t.extractfile(prefix+'/SDK_MANIFEST.json').read();m=json.loads(raw)
+ assert m['source']==dict(clean=True,commit=source) and m['private_build'] and not m['untracked_files']
+ actual={}
+ for member in t:
+  assert member.isfile() and member.name.startswith(prefix+'/')
+  name=member.name[len(prefix)+1:]
+  if name!='SDK_MANIFEST.json':actual[name]=sha(t.extractfile(member).read())
+ assert actual==m['files']
+ diff=subprocess.check_output(['git','diff','--binary',upstream,'HEAD'],cwd=src);patch.write_bytes(diff)
+ new=dict(old,source_commit=source,archive=str(archive.relative_to(r)),archive_bytes=archive.stat().st_size,sha256=sha(archive.read_bytes()),manifest_sha256=sha(raw),cache='build/.vellum-sdk-f9dee54-elab8',files=len(actual),compatibility_patch=dict(path=str(patch.relative_to(r)),sha256=sha(diff)),bootstrap={k:actual[k] for k in old['bootstrap']})
+ (stage/'previous-sdk.lock.json').write_text(lock.read_text());lock.write_text(json.dumps(new,indent=2)+'\n')
+ p=r/'desktop/go.mod';s=p.read_text();assert s.count('.vellum-sdk-f9dee54-elab7')==4;p.write_text(s.replace('.vellum-sdk-f9dee54-elab7','.vellum-sdk-f9dee54-elab8'))
+ previous=json.loads((r/old['cache']/'SDK_MANIFEST.json').read_text())['files']
+ report=dict(passed=True,upstream_commit=upstream,source_commit=source,archive_sha256=new['sha256'],manifest_sha256=new['manifest_sha256'],files=len(actual),changed=sorted(k for k in previous.keys()&actual.keys() if previous[k]!=actual[k]),added=sorted(actual.keys()-previous.keys()),removed=sorted(previous.keys()-actual.keys()),all_members_match=True)
+ (stage/'sdk-comparison.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(json.dumps(report))

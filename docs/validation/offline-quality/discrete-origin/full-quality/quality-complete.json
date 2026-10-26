@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "log": "lint.txt",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 45.94713933300227
+    },
+    {
+      "log": "python.txt",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "wall_s": 1.6314620829652995
+    },
+    {
+      "log": "prd.txt",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "exit_code": 0,
+      "wall_s": 0.028757499996572733
+    },
+    {
+      "log": "root-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=15m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 5.401681500021368
+    },
+    {
+      "log": "root-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 2.9122515830677003
+    },
+    {
+      "log": "desktop-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 241.48121520807035
+    },
+    {
+      "log": "mounted-race.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 415.9075352088548
+    },
+    {
+      "log": "desktop-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 2.9476773331407458
+    },
+    {
+      "log": "mounted-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 17.636337917065248
+    },
+    {
+      "log": "build.txt",
+      "command": [
+        "sh",
+        "scripts/build.sh"
+      ],
+      "exit_code": 0,
+      "wall_s": 8.898528750054538
+    }
+  ],
+  "desktop_configurations_parallel": true,
+  "go_workers_per_process": 2,
+  "logical_cpus": 14
+}
