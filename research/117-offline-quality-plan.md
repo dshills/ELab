@@ -318,3 +318,36 @@ bounded; this is not a proposed production fix. Continue native checks when
 tools can establish their actual queue/rate scope. No new components/features,
 solver-limit changes, owner writes or uploads. Pause the heartbeat and checkpoint
 on the owner's direct return/stop instruction.
+
+## Retained menu-action follow-up, October 26
+
+Actual assembled managed example-category input reproduces loss of a newer agent
+search: a queued Timers choice, delivered after public examples.search.set motor
+and descriptor redraw, clears that search and changes category. Held release
+also reproduces. Nine baseline cases fail across the four themes and an unrelated
+editor edit. Existing document-replacement and queued overflow Fit/agent-pan
+controls pass; those implementations and SDK contracts remain unchanged.
+
+The app now retires this browser popup on command-revision changes. A first fix
+lost keyboard focus after its own normal category choice; an explicit baseline
+comparison caught it. Final accepted choices restore the same category focus.
+Six queued cases, four held cases, overflow and normal focus pass focused race
+checks through actual driver input and public service agents. No normal-package
+or precise native OS/hardware acceptance is inferred; checks3/6/9/11 stay open.
+
+The first full gate stops on the mandatory native inventory mismatch. Review
+confirms one source hash, four line shifts and the category callback's accepted
+focus expression; all187 commands and routes remain. The ledger is regenerated
+and complete application gates are running on that final state. /267 and all
+prior releases/SDK bytes stay exact. [Evidence](../docs/validation/offline-quality/menu-origin/README.md).
+No production SDK, component, model, public-command or solver-limit changes.
+Next finish the full source gates, commit the reviewed repair cleanly and qualify
+exclusive unsigned0.195.7 /268 against its exact copied runtime and extraction.
+Avoid another uncontrolled native attachment; preserve owner files and sessions.
+
+Full final source qualification passes867 /339 /470 top-level race tests
+(1,950 /839 /1,446 with subtests), lint/imports,68 Python tests, PRD, all vets
+and build. SDK0650083e/elab8 stays byte-identical; its prior full gates are
+carried instead of repeated. The clean source checkpoint is ready for exclusive
+0.195.7 /268 packaging and copied-runtime/extraction qualification. /267 remains
+qualified until those checks complete. No new native acceptance is claimed.

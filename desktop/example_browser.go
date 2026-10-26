@@ -169,8 +169,14 @@ func (s *screen) exampleBrowserView(state workbench.Snapshot) ui.Node {
 		for _, c := range b.Categories {
 			categories = append(categories, ui.Option{ID: c.ID, Label: fmt.Sprintf("%s · %d", c.Name, c.Count)})
 		}
-		filter := ui.Node{ID: "example-category", Kind: ui.Selector, Options: categories, SelectedID: b.Category, Accessibility: ui.Accessibility{Name: "Example category", Help: "Choosing a category clears search. Search covers all categories."}, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 208}), MaxSize: ui.Some(ui.Size{Width: 208})}, Change: func(e ui.ChangeEvent) {
-			s.invoke("examples.category.set", workbench.PartCategoryParams{Category: e.SelectedID})
+		// This managed popup must retire with its displayed command context.
+		// Otherwise a queued category choice can clear a newer agent search.
+		filter := ui.Node{ID: "example-category", Kind: ui.Selector, ControlStateKey: fmt.Sprint(state.CommandRevision), Options: categories, SelectedID: b.Category, Accessibility: ui.Accessibility{Name: "Example category", Help: "Choosing a category clears search. Search covers all categories."}, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 208}), MaxSize: ui.Some(ui.Size{Width: 208})}, Change: func(e ui.ChangeEvent) {
+			if r := s.invoke("examples.category.set", workbench.PartCategoryParams{Category: e.SelectedID}); r.Error == nil {
+				// Its own accepted choice refreshes the context too. Keep the
+				// keyboard at the category control after that replacement.
+				s.requestKeyboardFocus("example-category")
+			}
 		}}
 		noun := "examples"
 		if len(b.MatchingIDs) == 1 {

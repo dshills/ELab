@@ -1,0 +1,26 @@
+from pathlib import Path
+import json,hashlib,gzip,shutil,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/menu-origin';out=root/'docs/validation/offline-quality/menu-origin';out.mkdir(exist_ok=True)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+previous=json.loads(gzip.decompress((root/'docs/validation/offline-quality/discrete-origin/source-scope.json.gz').read_bytes()))
+changes=[p for p,h in previous['files_sha256'].items() if sha(root/p)!=h]
+assert changes==['desktop/example_browser.go'],changes
+assert sha(root/previous['sdk']['archive'])==previous['sdk']['sha256']
+assert json.loads((root/'third_party/vellum/sdk.lock.json').read_text())==previous['sdk']
+prior=json.loads((root/'docs/validation/offline-quality/save-panel-reference/report.json').read_text())['preserved_prior_hashes']
+assert all(sha(root/p)==h for p,h in prior.items())
+report=dict(production_files_changed=changes,added_regression='desktop/menu_origin_offscreen_test.go',sdk_unchanged=True,prior_package_sdk_hashes=prior,components=53,examples=62,public_commands=187,native_checks_still_open=[3,6,9,11],actual_native_ui_retested=False)
+(base/'scope-review.json').write_text(json.dumps(report,indent=2)+'\n')
+for p in [*base.glob('*.txt'),*base.glob('*.json')]:
+ if p.name.startswith('native-inventory-') and p.name!='native-inventory-review.json':
+  (out/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+ else:shutil.copy2(p,out/p.name)
+for p in base.glob('*.py'):shutil.copy2(p,out/(p.name+'.txt'))
+for name in ['initial-full-quality','full-quality']:
+ directory=base/name
+ if not directory.exists():continue
+ target=out/name;target.mkdir(exist_ok=True)
+ for p in directory.iterdir():
+  if p.suffix in ['.txt','.jsonl']:(target/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+  elif p.suffix=='.json':shutil.copy2(p,target/p.name)
+print(json.dumps(dict(frozen_inputs_unchanged=1353,production_change=changes,sdk_and_prior_packages_unchanged=True)))

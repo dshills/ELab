@@ -115,3 +115,9 @@ CUA attachment still takes44.8 minutes despite its requested15s timeout. The
 owned panel/app close normally; qualified inputs/packages stay exact. Native
 acceptance remains open, with source/agent queue investigation next while this
 attachment limitation persists.
+
+The [Examples menu follow-up](menu-origin/README.md) repairs a real queued/held
+category choice overwriting newer agent search context. All-theme routed
+regressions, focus continuity, existing overflow controls and final complete
+application gates pass. The SDK stays exact. /268 package qualification follows
+separately; /267 and prior releases remain preserved and native checks stay open.

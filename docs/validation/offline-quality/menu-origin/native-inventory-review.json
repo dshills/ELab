@@ -1,0 +1,55 @@
+{
+  "changed_sources": [
+    "desktop/example_browser.go"
+  ],
+  "site_shifts": [
+    {
+      "file": "desktop/example_browser.go",
+      "old_line": 172,
+      "new_line": 174,
+      "kind": "node-Change"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "old_line": 173,
+      "new_line": 175,
+      "kind": "domain-ingress"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "old_line": 191,
+      "new_line": 197,
+      "kind": "callback-assignment"
+    },
+    {
+      "file": "desktop/example_browser.go",
+      "old_line": 198,
+      "new_line": 204,
+      "kind": "callback-assignment"
+    }
+  ],
+  "expressions": [
+    {
+      "before": {
+        "file": "desktop/example_browser.go",
+        "line": 172,
+        "function": "*screen.exampleBrowserView",
+        "kind": "node-Change",
+        "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"examples.category.set\", workbench.PartCategoryParams{Category: e.SelectedID})\n}",
+        "status": "requires-binding-review"
+      },
+      "after": {
+        "file": "desktop/example_browser.go",
+        "line": 174,
+        "function": "*screen.exampleBrowserView",
+        "kind": "node-Change",
+        "expression": "Change: func(e ui.ChangeEvent) {\n\tif r := s.invoke(\"examples.category.set\", workbench.PartCategoryParams{Category: e.SelectedID}); r.Error == nil {\n\n\t\ts.requestKeyboardFocus(\"example-category\")\n\t}\n}",
+        "status": "requires-binding-review"
+      },
+      "review": "Same public category command; return keyboard focus only after an accepted choice replaces its context."
+    }
+  ],
+  "command_routes_unchanged": true,
+  "public_commands": 187,
+  "issues": []
+}

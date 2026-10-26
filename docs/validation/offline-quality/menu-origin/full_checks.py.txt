@@ -1,0 +1,47 @@
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor,as_completed
+import os,json,subprocess,time,threading,signal
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/offline-quality/menu-origin/full-quality'
+env=dict(os.environ,GOMAXPROCS='2',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native',PYTHONDONTWRITEBYTECODE='1')
+results=[]
+failure=threading.Event()
+def run(name,cwd,cmd):
+ start=time.monotonic();cancelled=False;seen_failure=False
+ with (stage/name).open('w') as out:
+  if cmd[0]=='go' and 'test' in cmd and '-json' in cmd:
+   process=subprocess.Popen(cmd,cwd=cwd,env=env,stdout=out,stderr=subprocess.STDOUT,start_new_session=True)
+   with (stage/name).open('r') as reader:
+    tail=''
+    while process.poll() is None:
+     tail=(tail+reader.read())[-65536:]
+     if '"Action":"fail"' in tail:
+      seen_failure=True;failure.set()
+     if failure.is_set():
+      cancelled=not seen_failure
+      try:os.killpg(process.pid,signal.SIGTERM)
+      except ProcessLookupError:pass
+      break
+     time.sleep(.25)
+   rc=process.wait()
+   if rc:failure.set()
+  else:rc=subprocess.run(cmd,cwd=cwd,env=env,stdout=out,stderr=subprocess.STDOUT).returncode
+ row=dict(log=name,command=cmd,exit_code=rc,wall_s=time.monotonic()-start)
+ if cancelled:row['cancelled_on_peer_failure']=True
+ if seen_failure:row['failed_test_seen']=True
+ return row
+def record(row):
+ results.append(row);(stage/'quality-progress.json').write_text(json.dumps(results,indent=2)+'\n');print(json.dumps(row),flush=True)
+ if row['exit_code']:raise SystemExit(row['exit_code'])
+for check in [('lint.txt',root,['sh','scripts/lint.sh']),('python.txt',root,['python3','-B','-m','unittest','discover','-s','scripts','-p','test_*.py']),('prd.txt',root,['python3','-B','scripts/prd-audit.py','--verify','research/11-prd-implementation-audit.json']),('root-race.jsonl',root,['go','test','-race','-json','-timeout=15m','./...']),('root-vet.txt',root,['go','vet','./...'])]:record(run(*check))
+# Independent build configurations, isolated test fixtures; cap each process at
+# two Go workers on this 14-logical-CPU host. Native desktop interaction waits.
+parallel=[('desktop-race.jsonl',root/'desktop',['go','test','-race','-json','-timeout=30m','./...']),('mounted-race.jsonl',root/'desktop',['go','test','-race','-tags=offscreen','-json','-timeout=30m','./...'])]
+failed=[]
+with ThreadPoolExecutor(max_workers=2) as executor:
+ futures=[executor.submit(run,*check) for check in parallel]
+ for future in as_completed(futures):
+  row=future.result();results.append(row);(stage/'quality-progress.json').write_text(json.dumps(results,indent=2)+'\n');print(json.dumps(row),flush=True)
+  if row['exit_code']:failed.append(row)
+if failed:raise SystemExit(1)
+for check in [('desktop-vet.txt',root/'desktop',['go','vet','./...']),('mounted-vet.txt',root/'desktop',['go','vet','-tags=offscreen','./...']),('build.txt',root,['sh','scripts/build.sh'])]:record(run(*check))
+(stage/'quality-complete.json').write_text(json.dumps(dict(passed=True,checks=results,desktop_configurations_parallel=True,go_workers_per_process=2,logical_cpus=14),indent=2)+'\n')

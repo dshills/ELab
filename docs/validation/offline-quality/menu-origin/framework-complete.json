@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "source_commit": "0650083e179aae67c3f67aff406ac7a1b5206486",
+  "checks": [
+    {
+      "log": "framework-root.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "-timeout=10m",
+        "./..."
+      ],
+      "scope": "portable SDK; unchanged Go inputs in final source",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-final-driver.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "-timeout=10m",
+        "./..."
+      ],
+      "scope": "all ordinary driver packages",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-final-rendered.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-count=1",
+        "-timeout=12m",
+        "./..."
+      ],
+      "scope": "all rendered driver packages",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-contract-scope.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-run",
+        "Test(QueuedScalar|ButtonActivation|Disclosure|ListBox|NativeControls|Chrome|ExpandedBoolean)",
+        "-count=1",
+        "-timeout=3m",
+        "."
+      ],
+      "scope": "narrowed origin and preserved legacy contracts",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-final-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "scope": "ordinary driver vet",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-final-rendered-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "scope": "rendered driver vet",
+      "exit_code": 0
+    }
+  ],
+  "portable_inputs_unchanged": 556,
+  "scope": "Carried unchanged SDK0650083e/elab8 qualification. No SDK code/archive/lock changes; prepare-vellum validates the pinned cache. These SDK gates are not rerun for the application-only menu change.",
+  "carried_from": "docs/validation/offline-quality/discrete-origin/framework-complete.json"
+}

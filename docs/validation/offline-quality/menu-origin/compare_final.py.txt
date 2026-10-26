@@ -1,0 +1,15 @@
+from pathlib import Path
+import subprocess,os,json
+root=Path('/Users/dshills/Development/projects/ELab');p=root/'desktop/example_browser.go';base=root/'build/offline-quality/menu-origin';current=p.read_bytes()
+env=dict(os.environ,GOMAXPROCS='2',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+cmd=['go','test','-race','-tags','offscreen','-run','^TestMounted(QueuedExampleCategory|HeldExampleCategory|QueuedOverflow|FreshExampleCategory)','-count=1','-timeout=90s','-v','.']
+try:
+ p.write_bytes(subprocess.check_output(['git','show','d63e74e5:desktop/example_browser.go'],cwd=root))
+ with (base/'before-final-regressions.txt').open('w') as out:r=subprocess.run(cmd,cwd=root/'desktop',env=env,stdout=out,stderr=subprocess.STDOUT,timeout=150)
+ assert r.returncode==1
+ text=(base/'before-final-regressions.txt').read_text()
+ assert 'queued category replaced agent search' in text and 'held category release replaced agent search' in text
+ assert '--- PASS: TestMountedQueuedOverflowRetainsAgentViewport' in text and '--- PASS: TestMountedFreshExampleCategoryFocus' in text
+ assert '--- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/light/replace' in text
+finally:p.write_bytes(current)
+print(json.dumps(dict(baseline_failure_reproduced=True,production_restored=p.read_bytes()==current)))

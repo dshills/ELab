@@ -1,0 +1,32 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/light/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/dark/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/system/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/apollo/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/light/editor
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/light/replace
+--- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch (2.48s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/light/search (0.56s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/dark/search (0.38s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/system/search (0.43s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/apollo/search (0.39s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/light/editor (0.36s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/light/replace (0.36s)
+=== RUN   TestMountedHeldExampleCategoryRetainsAgentSearch
+=== RUN   TestMountedHeldExampleCategoryRetainsAgentSearch/light
+=== RUN   TestMountedHeldExampleCategoryRetainsAgentSearch/dark
+=== RUN   TestMountedHeldExampleCategoryRetainsAgentSearch/system
+=== RUN   TestMountedHeldExampleCategoryRetainsAgentSearch/apollo
+--- PASS: TestMountedHeldExampleCategoryRetainsAgentSearch (1.45s)
+    --- PASS: TestMountedHeldExampleCategoryRetainsAgentSearch/light (0.36s)
+    --- PASS: TestMountedHeldExampleCategoryRetainsAgentSearch/dark (0.35s)
+    --- PASS: TestMountedHeldExampleCategoryRetainsAgentSearch/system (0.36s)
+    --- PASS: TestMountedHeldExampleCategoryRetainsAgentSearch/apollo (0.38s)
+=== RUN   TestMountedQueuedOverflowRetainsAgentViewport
+--- PASS: TestMountedQueuedOverflowRetainsAgentViewport (0.22s)
+=== RUN   TestMountedFreshExampleCategoryFocus
+--- PASS: TestMountedFreshExampleCategoryFocus (0.24s)
+PASS
+ok  	github.com/dshills/elab/desktop	6.055s

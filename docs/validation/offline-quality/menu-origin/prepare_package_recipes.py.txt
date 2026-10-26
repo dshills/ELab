@@ -1,0 +1,29 @@
+from pathlib import Path
+import json
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/menu-origin';old=root/'docs/validation/offline-quality/discrete-origin'
+assert not (root/'build/ELab-0.195.7-268-Menus').exists()
+assert not (root/'build/releases/ELab-0.195.7-macos-arm64').exists()
+assert not (root/'build/releases/ELab-0.195.7-macos-arm64.zip').exists()
+p=(old/'package.py.txt').read_text().replace("stage=root/'build/offline-quality/discrete-origin-267'","stage=root/'build/offline-quality/menu-origin'").replace('0.195.6','0.195.7').replace('267-Discrete','268-Menus').replace("'267'","'268'").replace('build=267','build=268').replace('/267','/268').replace(' /267',' /268')
+p=p.replace('discrete context development candidate','browser menu context development candidate').replace('Fix: admitted checkbox/list/disclosure changes and keyboard button actions retain their originating context across newer agent edits.','Fix: pending and held example-category choices cannot erase newer agent searches; fresh category choices retain keyboard focus.')
+(base/'package.py').write_text(p)
+a=(old/'assemble.py.txt').read_text().replace("stage=root/'build/offline-quality/discrete-origin-267'","stage=root/'build/offline-quality/menu-origin'").replace('0.195.6','0.195.7')
+a=a.replace("build/releases/ELab-0.195.5-macos-arm64/ROLLBACK.md","build/releases/ELab-0.195.6-macos-arm64/ROLLBACK.md").replace('The /266 ZIP','The /267 ZIP').replace('cbc3f687068d932fa148d2a580b4116f4755582184435b2ec6718d80be37a863','fac6d6a47c73443956c44e525ff22eb3079866add0a5a5828a7c9cf475902cd3')
+(base/'assemble.py').write_text(a)
+r=(old/'archive.py.txt').read_text().replace("root/'build/offline-quality/discrete-origin-267/full-quality/quality-complete.json'","root/'build/offline-quality/menu-origin/full-quality/quality-complete.json'")
+r=r.replace("subprocess.run(['codesign','--verify','--deep','--strict',str(out/'ELab.app')],check=True)","assert sha(root/'build/releases/ELab-0.195.6-macos-arm64.zip')=='fac6d6a47c73443956c44e525ff22eb3079866add0a5a5828a7c9cf475902cd3'\nsubprocess.run(['codesign','--verify','--deep','--strict',str(out/'ELab.app')],check=True)",1)
+r=r.replace('This update keeps admitted Checkbox,', '''This update retires the Examples category menu when an intervening command changes
+its context. Queued and held category choices can no longer erase a newer agent
+search. A fresh category choice still uses examples.category.set and retains
+keyboard focus. Routed real-driver queue tests cover all four themes, agent
+search/editor changes and document replacement. The existing toolbar More menu
+passes its queued Fit/agent-pan control without a product change. The framework,
+public commands and component set remain unchanged. Exact native OS queue and
+hardware-rate acceptance remain open; no speculative Save-panel repair is made.
+
+The previous update keeps admitted Checkbox,''')
+r=r.replace('Qualified /266, /265, /264, /260 and /205 ZIPs','Qualified /267, /266, /265, /264, /260 and /205 ZIPs')
+(base/'archive.py').write_text(r)
+framework=json.loads((old/'framework-complete.json').read_text());framework['carried_from']='docs/validation/offline-quality/discrete-origin/framework-complete.json';framework['scope']='Carried unchanged SDK0650083e/elab8 qualification. No SDK code/archive/lock changes; prepare-vellum validates the pinned cache. These SDK gates are not rerun for the application-only menu change.'
+(base/'framework-complete.json').write_text(json.dumps(framework,indent=2)+'\n')
+print('Prepared exclusive /268 recipes; no package or prior release modified')

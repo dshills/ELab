@@ -1,0 +1,20 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/light/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/dark/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/system/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/apollo/search
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/light/editor
+=== RUN   TestMountedQueuedExampleCategoryRetainsAgentSearch/light/replace
+    menu_origin_offscreen_test.go:27: assembled browser lost its managed selector
+--- FAIL: TestMountedQueuedExampleCategoryRetainsAgentSearch (2.18s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/light/search (0.50s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/dark/search (0.35s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/system/search (0.36s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/apollo/search (0.38s)
+    --- PASS: TestMountedQueuedExampleCategoryRetainsAgentSearch/light/editor (0.36s)
+    --- FAIL: TestMountedQueuedExampleCategoryRetainsAgentSearch/light/replace (0.23s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	2.876s
+FAIL

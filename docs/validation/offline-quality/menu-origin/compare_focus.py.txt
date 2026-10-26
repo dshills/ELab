@@ -1,0 +1,13 @@
+from pathlib import Path
+import subprocess,os,json
+root=Path('/Users/dshills/Development/projects/ELab');p=root/'desktop/example_browser.go';base=root/'build/offline-quality/menu-origin';current=p.read_bytes()
+env=dict(os.environ,GOMAXPROCS='2',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+cmd=['go','test','-tags','offscreen','-run','^TestMountedFreshExampleCategoryFocus$','-count=1','-timeout=90s','-v','.']
+try:
+ p.write_bytes(subprocess.check_output(['git','show','d63e74e5:desktop/example_browser.go'],cwd=root))
+ with (base/'baseline-focus.txt').open('w') as out:r=subprocess.run(cmd,cwd=root/'desktop',env=env,stdout=out,stderr=subprocess.STDOUT,timeout=150)
+ assert r.returncode==0
+finally:p.write_bytes(current)
+with (base/'repaired-focus.txt').open('w') as out:r=subprocess.run(cmd,cwd=root/'desktop',env=env,stdout=out,stderr=subprocess.STDOUT,timeout=150)
+assert r.returncode==0
+print((base/'baseline-focus.txt').read_text());print((base/'repaired-focus.txt').read_text())

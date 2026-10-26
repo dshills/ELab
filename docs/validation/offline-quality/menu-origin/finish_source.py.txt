@@ -1,0 +1,24 @@
+from pathlib import Path
+import json,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/menu-origin'
+quality=json.loads((base/'full-quality/quality-complete.json').read_text());assert quality['passed']
+counts={}
+for name in ['root-race.jsonl','desktop-race.jsonl','mounted-race.jsonl']:
+ rows=[json.loads(x) for x in (base/'full-quality'/name).read_text().splitlines() if x.startswith('{')]
+ assert not [r for r in rows if r.get('Action')=='fail']
+ passed={(r['Package'],r['Test']) for r in rows if r.get('Action')=='pass' and r.get('Test')}
+ counts[name]=dict(top_level=sum('/' not in test for package,test in passed),including_subtests=len(passed))
+assert [counts[n]['top_level'] for n in counts]==[867,339,470],counts
+(base/'test-counts.json').write_text(json.dumps(counts,indent=2)+'\n')
+subprocess.run(['python3',str(base/'record_evidence.py')],cwd=root,check=True)
+p=root/'docs/validation/offline-quality/menu-origin/README.md';s=p.read_text().replace('''Complete application source qualification is running. /267 remains the current
+qualified release; a new package will be qualified separately after these gates.''','''Complete application source qualification passes: portable, ordinary desktop
+and rendered desktop race suites contain867 /339 /470 top-level tests, with
+1,950 /839 /1,446 including subtests. Lint/imports,68 Python tests, PRD review,
+all three vet modes and the complete build pass. [Final quality](full-quality/quality-complete.json),
+[test counts](test-counts.json). These are the final reviewed inventory and source;
+initial partial results remain labeled separately. /267 remains the qualified
+download until the exclusive /268 copied-runtime/archive checks complete.''');p.write_text(s)
+with (root/'research/117-offline-quality-plan.md').open('a') as f:f.write('''\nFull final source qualification passes867 /339 /470 top-level race tests\n(1,950 /839 /1,446 with subtests), lint/imports,68 Python tests, PRD, all vets\nand build. SDK0650083e/elab8 stays byte-identical; its prior full gates are\ncarried instead of repeated. The clean source checkpoint is ready for exclusive\n0.195.7 /268 packaging and copied-runtime/extraction qualification. /267 remains\nqualified until those checks complete. No new native acceptance is claimed.\n''')
+with (root/'docs/validation/offline-quality/README.md').open('a') as f:f.write('''\nThe [Examples menu follow-up](menu-origin/README.md) repairs a real queued/held\ncategory choice overwriting newer agent search context. All-theme routed\nregressions, focus continuity, existing overflow controls and final complete\napplication gates pass. The SDK stays exact. /268 package qualification follows\nseparately; /267 and prior releases remain preserved and native checks stay open.\n''')
+print(json.dumps(counts))
