@@ -1,0 +1,12 @@
+from pathlib import Path
+import json,plistlib,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/native266';fixture=base/'ELabFixture.app';app=root/'build/ELab-0.195.5-266-Divider/ELab.app'
+assert (root/'build/offline-quality/split-origin-266/package.json').exists()
+(fixture/'Contents/MacOS').mkdir(parents=True,exist_ok=False)
+(base/'appearance.json').write_text(json.dumps(dict(format='elab.appearance',version=1,theme='apollo'))+'\n')
+args=[str(app/'Contents/MacOS/ELab'),'--agent-endpoint',str(base/'endpoint.json'),'--recovery-directory',str(base/'recovery'),'--appearance-file',str(base/'appearance.json')]
+source='#include <unistd.h>\n#include <stdio.h>\nint main(void) { char *const args[] = {'+','.join(json.dumps(a) for a in args)+',0};execv(args[0],args);perror("ELab fixture launch");return 1;}\n'
+(base/'launcher.c').write_text(source);subprocess.run(['clang',str(base/'launcher.c'),'-o',str(fixture/'Contents/MacOS/ELabFixture')],check=True)
+(fixture/'Contents/Info.plist').write_bytes(plistlib.dumps(dict(CFBundleExecutable='ELabFixture',CFBundleIdentifier='com.dshills.elab',CFBundleName='ELab',CFBundlePackageType='APPL',CFBundleVersion='266')))
+subprocess.run(['codesign','--force','--sign','-','--timestamp=none',str(fixture)],check=True)
+print('Owned fixed-argument launcher prepared; GUI not launched.')

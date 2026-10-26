@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "scope": "Representative native /266 CUA forward/inverse off-center drags; no controlled hardware-rate/queue claim",
+  "baseline_fraction": 0.65,
+  "forward_fraction": 0.5912340879440308,
+  "restored_fraction": 0.6499999761581421,
+  "restore_tolerance": 1e-06,
+  "forward_canvas_height_delta": -60,
+  "forward_changed_fields": [
+    "command_revision",
+    "revision",
+    "viewport",
+    "workspace_layout"
+  ],
+  "restored_changed_fields": [
+    "command_revision",
+    "revision",
+    "workspace_layout"
+  ],
+  "graph_document_physics_history_measurements_preserved": true,
+  "down_shortcut_ax_no_reported_change": true,
+  "original_native_check6_closed": false,
+  "fixture_assertion_corrections": [
+    "Initial comparator expected last_actor to change; baseline and movements already use user.",
+    "Inverse fraction is float32 0.6499999761581421, within 1e-6 of original 0.65; viewport geometry restores exactly."
+  ],
+  "owned_session_closed_normally": true
+}

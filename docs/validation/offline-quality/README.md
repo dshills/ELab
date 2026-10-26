@@ -5,6 +5,15 @@ Qualified additional unsigned release **ELab 0.195.4 /265**, clean source
 `1d4ff4602585a33a6a548fac4c4949466ad71cb6`. No new components, public commands,
 electrical models, file formats or solver limits. /264, /260 and /205 stay exact.
 
+## Subsequent divider follow-up
+
+The later [divider origin repair](split-origin/README.md) is qualified separately
+in unsigned **0.195.5 /266**, clean source `a23e56f2`. Queued requests and held
+gestures cannot adopt newer agent context. Full source/SDK gates, copied-runtime
+suites and final offline extraction pass. The /265 first-batch evidence below
+and all its package bytes remain preserved. Original native checks 3,6,9,11
+remain open with their exact recorded limits.
+
 ## Reproduced defects and repairs
 
 Fresh prepared background scope/sweep frames and object navigation could change

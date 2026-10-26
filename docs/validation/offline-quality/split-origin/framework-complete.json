@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "source_commit": "303cd0ca0baa31f3d9e30817140b03529cff2736",
+  "checks": [
+    {
+      "log": "framework-root-authorized.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "-timeout=10m",
+        "./..."
+      ],
+      "scope": "portable SDK",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-driver-authorized.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "-timeout=10m",
+        "./..."
+      ],
+      "scope": "ordinary driver and all child packages",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-rendered-authorized.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-count=1",
+        "-timeout=12m",
+        "./..."
+      ],
+      "scope": "rendered driver and all child packages",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-rendered-focused.txt",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-run",
+        "TestSplit|Test(HeldSlider|QueuedSlider|QueuedField)",
+        "-count=1",
+        "-timeout=3m",
+        "."
+      ],
+      "scope": "focused callback-origin compatibility",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "scope": "ordinary static analysis",
+      "exit_code": 0
+    },
+    {
+      "log": "framework-rendered-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "scope": "rendered static analysis",
+      "exit_code": 0
+    }
+  ],
+  "restricted_attempts": "Unix-socket binding was denied in restricted full SDK runs; authorized repeats pass. First full rendered attempt predates final callback-closure cleanup; final authorized run qualifies exact final source.",
+  "scope": "Full portable, ordinary and rendered driver race suites, callback-origin focused rendered tests and both vet modes"
+}

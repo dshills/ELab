@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "source_commit": "a23e56f265c8d300df3ca9afae4b419c0bbbbff7",
+  "source_inputs_unchanged": true,
+  "source_inputs": 1353,
+  "sdk_source": "303cd0ca0baa31f3d9e30817140b03529cff2736",
+  "version": "0.195.5",
+  "build": 266,
+  "archive_sha256": "cbc3f687068d932fa148d2a580b4116f4755582184435b2ec6718d80be37a863",
+  "archive_bytes": 38748268,
+  "files_verified": 375,
+  "test_counts": {
+    "root-race.jsonl": {
+      "top_level": 867,
+      "including_subtests": 1950
+    },
+    "desktop-race.jsonl": {
+      "top_level": 339,
+      "including_subtests": 839
+    },
+    "mounted-race.jsonl": {
+      "top_level": 465,
+      "including_subtests": 1426
+    }
+  },
+  "external_processes": 102,
+  "all_external_exits_zero": true,
+  "examples_reopened": 62,
+  "component_kinds": 53,
+  "commands": 187,
+  "original_native_checks_still_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "prior_qualified_releases_unchanged": true,
+  "actual_native_scope": "Representative forward/inverse divider only; not controlled hardware-rate or exact queued pre-agent acceptance",
+  "packaging_controller_corrections": [
+    "Relative workspace extraction could not execute after cwd change; final extraction is absolute and outside denied source tree.",
+    "An initial 374-file draft omitted separate rollback guidance; draft bytes/receipts are preserved, final 375-file ZIP includes it. App and agent bytes unchanged."
+  ],
+  "no_push_or_upload": true
+}

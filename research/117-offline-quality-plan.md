@@ -107,7 +107,7 @@ ELab 0.195.4 /265 is a qualified additional unsigned local download:
 `build/releases/ELab-0.195.4-macos-arm64.zip`, 38,747,134 bytes /375 files.
 SHA-256 `81e8e4a858663e4391214e82be0498e5fb6d62b2280ea623088638c1b549c10d`.
 Every extracted byte/mode matches, the integrity seal verifies, and the extracted
-agent reopens all62 paused examples cleanly with exact graphs and accepted
+agent reopens all 62 paused examples cleanly with exact graphs and accepted
 startup. Prior /264, /260 and /205 ZIPs remain exact. Native owned sessions are
 closed; intentional SIGKILL applies only to two disposable recovery producers.
 
@@ -155,3 +155,38 @@ source documentation. The focused candidate regressions pass, including own
 repaint continuation and independent fresh input; full qualification is in
 progress. No commands, components, physics or solver limits change. /265 and
 all earlier qualified packages remain preserved. [Evidence and current status](../docs/validation/offline-quality/split-origin/README.md).
+
+## Divider batch closeout
+
+The divider origin repair is qualified in additional unsigned **0.195.5 /266**,
+clean binary source a23e56f265c8d300df3ca9afae4b419c0bbbbff7, SDK 303cd0ca/elab6.
+Full portable/ordinary/rendered SDK race suites and both vets pass. Complete
+ELab suites pass 867 /339 /465 top-level tests (1,950 /839 /1,426 with subtests),
+alongside lint/imports, Python, PRD, all vets and build. Frozen executable/test
+sources remain exact. /265, /264, /260, /205 and the earlier SDK archive remain
+unchanged. No new components, commands, models or solver limits.
+
+Native representative /266 off-center forward/inverse drags preserve circuit,
+physics/history/measurements and restore viewport geometry. This is not a
+controlled slow/fast rate trial, and does not explain the earlier inverse CUA
+observation. Native Down produces no reported AX change. All four original
+native checks 3/6/9/11 remain open. The owned session closes normally.
+
+The exact copied bundle passes smoke and four-adapter public suites under
+source/developer-file/IP denial; all 102 external processes exit normally. The
+final ZIP's 375 byte/mode entries and strict seal verify; its extracted agent
+reopens all 62 paused examples cleanly with exact graphs. An initial relative
+extraction-path failure and a missing rollback document in the preserved draft
+are controller/assembly corrections, explicitly retained in the evidence.
+
+Final ZIP: build/releases/ELab-0.195.5-macos-arm64.zip, 38,748,268 bytes.
+SHA-256 cbc3f687068d932fa148d2a580b4116f4755582184435b2ec6718d80be37a863.
+[Complete scope and raw evidence](../docs/validation/offline-quality/split-origin/README.md).
+
+Next: keep native parser/Save/rate checks open where tools cannot establish
+actual OS-origin scope. Avoid repeating the same CUA shortcuts or unchanged
+full gates. Examine other retained managed control queues for the same concrete
+agent-origin hazard, reproducing through real driver queues before any SDK
+contract change. Prioritize demonstrated reliability gaps, add no components or
+unrelated features, preserve all qualified packages and stop at a safe checkpoint
+when the owner returns. The thread heartbeat remains active until that return.

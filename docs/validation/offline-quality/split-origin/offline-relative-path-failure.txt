@@ -1,0 +1,21 @@
+sandbox-exec: execvp() of 'build/offline-quality/split-origin-266/extracted/ELab-0.195.5-macos-arm64/elab-agent' failed: No such file or directory
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/reliability-five/reopen_archive.py", line 12, in <module>
+    catalog=c.ask('examples.list');assert len(catalog)==62
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 47, in ask
+    response = self.request(command, params, guard)
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 39, in request
+    assert line, f'agent terminated during {command}'
+           ^^^^
+AssertionError: agent terminated during examples.list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/reliability-five/reopen_archive.py", line 23, in <module>
+    finally:c.close()
+            ~~~~~~~^^
+  File "/Users/dshills/Development/projects/ELab/scripts/viewport-fit-demo.py", line 57, in close
+    assert self.process.wait(timeout=5) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
