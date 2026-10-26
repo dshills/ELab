@@ -1,0 +1,46 @@
+from pathlib import Path
+import hashlib,json,gzip,shutil,subprocess
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/save-panel-reference';out=root/'docs/validation/offline-quality/save-panel-reference'
+sha=lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+original=json.loads(gzip.decompress((root/'docs/validation/offline-quality/discrete-origin/source-scope.json.gz').read_bytes()))
+assert len(original['files_sha256'])==1354
+assert all(sha(root/p)==h for p,h in original['files_sha256'].items())
+prior=json.loads((root/'docs/validation/offline-quality/save-panel-diagnostic/report.json').read_text())['prior_file_hashes_preserved']
+prior[original['sdk']['archive']]=original['sdk']['sha256']
+assert all(sha(root/p)==h for p,h in prior.items())
+assert not list((base/'fixtures').iterdir())
+assert json.loads((base/'exit.json').read_text())['exit_code']==0
+assert json.loads((base/'cleanup.json').read_text())==[]
+assert 'Value: Alpha CircuitBeta' in (base/'beta-after-command-a-ax.txt').read_text()
+assert 'Selected text: ```\nAlpha CircuitBeta\n```' in (base/'menu-select-all-ax.txt').read_text()
+assert 'Value: Gamma' in (base/'gamma-after-menu-selection-ax.txt').read_text()
+assert 'Cancelled; no file written' in (base/'cancelled-ax.txt').read_text()
+rows=[json.loads(x) for x in (base/'native-events.jsonl').read_text().splitlines()]
+menu=[r for r in rows if r.get('event',{}).get('menu_action')=='selectAll:']
+assert len(menu)==2
+assert all(r['active'] and r['first_responder_class']=='NSRemoteView' and r['select_all_target_class']=='NSFakeServiceResponder' and r['select_all_menu_mask']==1048576 for r in menu)
+assert rows[-1]['edit_group_present']==0
+subprocess.run(['/usr/bin/otool','-L',str(base/'ELabSaveReference.app/Contents/MacOS/ELabSaveReference')],stdout=(base/'linked-frameworks.txt').open('w'),check=True)
+report=dict(investigation_completed=True,production_change=False,new_package=False,native_checks_still_open=[3,6,9,11],
+ comparison_scope='Standard NSApplication main event loop and NSSavePanel, same byte-identical instrumented temporary Edit-menu helper as earlier GLFW/Vellum diagnostic; no GLFW or Vellum in this reference.',
+ startup=json.loads((base/'startup.json').read_text()),
+ cua_attach_reported_wall_seconds=2690.6643,cua_attach_requested_timeout_ms=15000,
+ attach_limit='Process was already ready in 0.380 s; documented getApp attachment nevertheless took about 44.8 minutes. Cause unavailable; timeout did not bound tool wall time. No approval rejection reported. No duplicate launch.',
+ command_a_probe=dict(before='Alpha Circuit',actions=['Right','Command-A','type Beta'],after='Alpha CircuitBeta',selected_all=False),
+ menu_control=dict(actions=['Edit > Select All','type Gamma'],selected_text='Alpha CircuitBeta',after='Gamma',entire_filename_replaced=True),
+ local_parent_key_event_records=sum(r['phase'].startswith('local-event') for r in rows),
+ menu_observations=menu,
+ limits=['The failure is reproduced without GLFW/Vellum; this does not establish CUA, AppKit, remote-view or shared menu-helper cause.',
+         'No event is observed at the exact failing chord in the parent process; activation and responder metadata at menu transitions do not prove chord delivery.',
+         'The temporary menu helper remains common to both runs; a standard permanent Edit menu is a possible separate control, not an established repair.',
+         'This instrumented reference is not normal-package acceptance or hardware-rate/native-queue qualification.'],
+ temporary_edit_removed_after_cancel=True,save_buttons_pressed=False,files_written_by_panel=False,clipboard_commands_used=False,
+ exit=json.loads((base/'exit.json').read_text()),cua_remaining_owned_apps=[],
+ compiled_inputs_verified_unchanged=1354,preserved_prior_hashes=prior)
+(base/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+out.mkdir(parents=True,exist_ok=True)
+for name in ['report.json','source-identity.json','startup.json','exit.json','ready.json','process.json','cleanup.json','native-events.jsonl','build.txt','app-output.txt','linked-frameworks.txt']:
+ shutil.copy2(base/name,out/name)
+for p in base.glob('*-ax.txt'):shutil.copy2(p,out/p.name)
+for name in ['reference.m','file_focus_darwin.m','prepare.py','run.py','closeout.py']:shutil.copy2(base/name,out/(name+'.txt'))
+print(json.dumps(dict(reference_complete=True,compiled_inputs_unchanged=1354,prior_hashes_preserved=len(prior),exit_code=report['exit']['exit_code'],native_checks_still_open=report['native_checks_still_open'])))

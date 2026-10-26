@@ -1,0 +1,21 @@
+{
+  "scope": "Owned standard NSApplication event-loop comparison; same instrumented production temporary Edit helper, no GLFW or Vellum",
+  "sha256": {
+    "reference.m": "4fc58c2aad520be3b7ba088c77e9936fc12769613b59e0ea1a24b000e6d92bed",
+    "file_focus_darwin.m": "0d15e35de415953cb77a4fad36702678dda217c5f45cf9dce56f5da712bfdf23",
+    "ELabSaveReference": "0fa6410f39439fbf30273b7ad31c572c655647c2afed7f6bdcba60aca719a1c6"
+  },
+  "command": [
+    "/usr/bin/clang",
+    "-Wall",
+    "-Wextra",
+    "-Wno-unused-parameter",
+    "-fblocks",
+    "-framework",
+    "AppKit",
+    "/Users/dshills/Development/projects/ELab/build/offline-quality/save-panel-reference/reference.m",
+    "/Users/dshills/Development/projects/ELab/build/offline-quality/save-panel-reference/file_focus_darwin.m",
+    "-o",
+    "/Users/dshills/Development/projects/ELab/build/offline-quality/save-panel-reference/ELabSaveReference.app/Contents/MacOS/ELabSaveReference"
+  ]
+}

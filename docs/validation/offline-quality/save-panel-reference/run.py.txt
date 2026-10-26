@@ -1,0 +1,18 @@
+from pathlib import Path
+import subprocess,os,time,json
+base=Path('/Users/dshills/Development/projects/ELab/build/offline-quality/save-panel-reference')
+ready=base/'ready.json'
+assert not ready.exists(),'Do not duplicate an existing fixture; inspect it first'
+env=dict(os.environ,ELAB_REFERENCE_READY=str(ready),ELAB_REFERENCE_DIRECTORY=str(base/'fixtures'),ELAB_SAVE_DIAGNOSTIC_LOG=str(base/'native-events.jsonl'))
+with (base/'app-output.txt').open('wb') as output:
+ started=time.time()
+ p=subprocess.Popen([str(base/'ELabSaveReference.app/Contents/MacOS/ELabSaveReference')],env=env,stdout=output,stderr=subprocess.STDOUT)
+ (base/'process.json').write_text(json.dumps(dict(pid=p.pid,started_unix_s=started),indent=2)+'\n')
+ deadline=time.monotonic()+8
+ while time.monotonic()<deadline and not ready.exists() and p.poll() is None: time.sleep(.05)
+ state=dict(pid=p.pid,ready=ready.exists(),exit_code=p.poll(),startup_elapsed_s=time.time()-started)
+ (base/'startup.json').write_text(json.dumps(state,indent=2)+'\n');print(json.dumps(state),flush=True)
+ # Retain an ordinary software-test parent for a normal native Quit; UI remains CUA-only.
+ code=p.wait()
+ (base/'exit.json').write_text(json.dumps(dict(pid=p.pid,exit_code=code,ended_unix_s=time.time()),indent=2)+'\n')
+ print(json.dumps(dict(exit_code=code)),flush=True)

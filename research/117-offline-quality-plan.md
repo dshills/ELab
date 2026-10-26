@@ -287,3 +287,34 @@ Do not change security/approval settings or infer missing owner permission.
 Compare the reference with the instrumented GLFW/Vellum case before any focus
 or menu repair. If unavailable, continue evidenced source/agent/offscreen work.
 Pause the heartbeat and finish a safe checkpoint on a direct human return/stop.
+
+## Standard AppKit Save control, October 26
+
+The bounded standard NSApplication/NSSavePanel reference reproduces Command-A's
+filename failure without GLFW/Vellum: Alpha Circuit + Right/Command-A/Beta yields
+Alpha CircuitBeta. The same temporary production Edit-menu helper is retained,
+with exactly the earlier diagnostic's nonmutating app-local observers. Native
+Edit → Select All selects the whole name and the independent Gamma replacement
+probe succeeds. Remote-view responder/target observations match the ELab case;
+no parent key events are observed during the panel. This narrows the comparison,
+not a demonstrated CUA/AppKit/menu-helper cause. No product repair is justified.
+
+Software-test startup is ready in0.380s under an8s deadline, but attaching CUA to
+the already-running fixture still takes2690.6643s despite timeout_ms15000. Cause
+unreported; no approval rejection or missing authorization. No duplicate launch.
+The panel cancels, Edit disappears, empty fixture directory remains empty, and
+normal window close exits0; CUA confirms cleanup. All1354 qualified source/test
+inputs and nine package/SDK identities remain exact. No full gates/package repeat.
+[Evidence and exact recipes](../docs/validation/offline-quality/save-panel-reference/README.md).
+
+Checks3/6/9/11 stay open. Do not repeat uncontrolled native attachment attempts or
+identical Save trials. Next useful available batch: inspect retained in-use menu
+actions across intervening public agent revisions/document replacement. Require
+an actual driver-queue and service-agent reproduction before changes, preserving
+intentional programmatic/selector/Switch/ToggleButton contracts. Existing held
+slider agent-invalidation tests already cover that route. A permanent standard
+Edit menu remains a possible separate native control when attachment can be
+bounded; this is not a proposed production fix. Continue native checks when
+tools can establish their actual queue/rate scope. No new components/features,
+solver-limit changes, owner writes or uploads. Pause the heartbeat and checkpoint
+on the owner's direct return/stop instruction.

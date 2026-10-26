@@ -1,0 +1,203 @@
+//go:build darwin && cgo
+
+#import <AppKit/AppKit.h>
+#import <dispatch/dispatch.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+static void elabDiagnosticStart(void);
+static void elabDiagnosticStop(void);
+static void elabDiagnosticSnapshot(NSString *phase, NSDictionary *event);
+
+// ELab admits one picker at a time. Keep only primitive identity on the main
+// queue, without retaining a window or synchronously waiting on AppKit during
+// shutdown. Capture is enqueued before the worker asks AppKit to show a panel.
+static uint64_t elabFileFocusToken;
+static NSInteger elabFileFocusWindowNumber;
+
+// AppKit text fields obtain Command-X/C/V/A from responder-chain menu actions.
+// ELab's application menu has no Edit group. Supply those actions only while a
+// native picker owns input, without routing text edits into schematic commands.
+static uint64_t elabFileEditingToken;
+static NSMenuItem *elabFileEditingGroup;
+
+static BOOL elabHasNativeSelectAll(NSMenu *menu) {
+    for (NSMenuItem *item in menu.itemArray) {
+        if (item.action == @selector(selectAll:) ||
+            (item.submenu && elabHasNativeSelectAll(item.submenu))) return YES;
+    }
+    return NO;
+}
+
+static void elabRemoveFileEditingGroup(void) {
+    if (!elabFileEditingGroup) return;
+    NSMenu *parent = elabFileEditingGroup.menu;
+    if (parent) [parent removeItem:elabFileEditingGroup];
+    [elabFileEditingGroup release];
+    elabFileEditingGroup = nil;
+}
+
+static void elabBeginFileEditing(uint64_t token, NSMenu *menu) {
+    if (!token) return;
+    elabRemoveFileEditingGroup();
+    elabFileEditingToken = token;
+    if (!menu || elabHasNativeSelectAll(menu)) return;
+    NSMenu *edit = [[NSMenu alloc] initWithTitle:@"Edit"];
+    edit.autoenablesItems = YES;
+    NSArray *titles = @[@"Undo", @"Redo", @"", @"Cut", @"Copy", @"Paste", @"", @"Select All"];
+    NSArray *actions = @[@"undo:", @"redo:", @"", @"cut:", @"copy:", @"paste:", @"", @"selectAll:"];
+    NSArray *keys = @[@"z", @"z", @"", @"x", @"c", @"v", @"", @"a"];
+    for (NSUInteger i = 0; i < titles.count; i++) {
+        if (![titles[i] length]) {
+            [edit addItem:[NSMenuItem separatorItem]];
+            continue;
+        }
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:titles[i]
+            action:NSSelectorFromString(actions[i]) keyEquivalent:keys[i]];
+        item.target = nil;
+        item.keyEquivalentModifierMask = NSEventModifierFlagCommand |
+            (i == 1 ? NSEventModifierFlagShift : 0);
+        [edit addItem:item];
+        [item release];
+    }
+    elabFileEditingGroup = [[NSMenuItem alloc] initWithTitle:@"Edit" action:nil keyEquivalent:@""];
+    elabFileEditingGroup.submenu = edit;
+    [edit release];
+    [menu insertItem:elabFileEditingGroup atIndex:MIN((NSInteger)2, menu.numberOfItems)];
+}
+
+static void elabEndFileEditing(uint64_t token) {
+    if (token != elabFileEditingToken) return;
+    elabRemoveFileEditingGroup();
+    elabFileEditingToken = 0;
+}
+
+void elabCaptureFileDialogFocus(uint64_t token) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @autoreleasepool {
+            elabDiagnosticStart();
+            elabDiagnosticSnapshot(@"capture-before-menu", nil);
+            NSWindow *window = [NSApp keyWindow];
+            if (window == nil || [window isKindOfClass:[NSPanel class]]) {
+                window = [NSApp mainWindow];
+            }
+            elabFileFocusToken = token;
+            elabFileFocusWindowNumber = 0;
+            elabBeginFileEditing(token, NSApp.mainMenu);
+            elabDiagnosticSnapshot(@"capture-after-menu", nil);
+            if (window.isVisible && !window.isMiniaturized &&
+                ![window isKindOfClass:[NSPanel class]]) {
+                elabFileFocusWindowNumber = window.windowNumber;
+            }
+        }
+    });
+}
+
+void elabRestoreFileDialogFocus(uint64_t token) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @autoreleasepool {
+            if (token != elabFileFocusToken) return;
+            NSInteger number = elabFileFocusWindowNumber;
+            elabFileFocusToken = 0;
+            elabFileFocusWindowNumber = 0;
+            elabDiagnosticSnapshot(@"restore-before-menu-removal", nil);
+            elabEndFileEditing(token);
+            elabDiagnosticSnapshot(@"restore-after-menu-removal", nil);
+            elabDiagnosticStop();
+            if (number <= 0) return;
+            NSWindow *key = [NSApp keyWindow];
+            // A newly focused window or another live panel takes precedence.
+            if (key.isVisible && key.windowNumber != number) return;
+            for (NSWindow *window in [NSApp windows]) {
+                if (window.windowNumber == number && window.isVisible &&
+                    !window.isMiniaturized && window.canBecomeKeyWindow) {
+                    // Restore keyboard routing; do not activate the app or
+                    // order it in front of another application.
+                    [window makeKeyWindow];
+                    break;
+                }
+            }
+        }
+    });
+}
+
+// Diagnostic-only app-local observers. No event, responder, activation, menu or
+// field is modified. No text, window titles, paths or other-app data are logged.
+static id elabDiagnosticMonitor;
+static NSMutableArray *elabDiagnosticObservers;
+static NSUInteger elabDiagnosticSequence;
+static NSUInteger elabDiagnosticWrites;
+static void elabDiagnosticSnapshot(NSString *phase, NSDictionary *event) {
+    const char *path = getenv("ELAB_SAVE_DIAGNOSTIC_LOG");
+    if (!path || !*path || ![NSThread isMainThread] || elabDiagnosticWrites++ >= 512) return;
+    NSWindow *window = NSApp.keyWindow;
+    NSResponder *responder = window.firstResponder;
+    id target = [NSApp targetForAction:@selector(selectAll:)];
+    NSMutableDictionary *row = [@{@"phase": phase, @"pid": @(getpid()),
+        @"unix_s": @([NSDate timeIntervalSinceReferenceDate] + NSTimeIntervalSince1970),
+        @"main_thread": @([NSThread isMainThread]), @"active": @(NSApp.active),
+        @"key_window": @(window.windowNumber), @"key_class": window ? NSStringFromClass(window.class) : @"",
+        @"main_window": @(NSApp.mainWindow.windowNumber),
+        @"first_responder_class": responder ? NSStringFromClass(responder.class) : @"",
+        @"select_all_target_class": target ? NSStringFromClass([target class]) : @"",
+        @"app_window_count": @(NSApp.windows.count), @"edit_group_present": @(elabFileEditingGroup != nil)} mutableCopy];
+    if ([responder isKindOfClass:NSTextView.class]) {
+        NSTextView *text = (NSTextView *)responder;
+        NSRange range = text.selectedRange;
+        row[@"selection_location"] = @(range.location == NSNotFound ? -1 : (NSInteger)range.location);
+        row[@"selection_length"] = @(range.length);
+        row[@"text_length"] = @(text.string.length);
+    }
+    if (elabFileEditingGroup) for (NSMenuItem *item in elabFileEditingGroup.submenu.itemArray) {
+        if (item.action != @selector(selectAll:)) continue;
+        row[@"select_all_menu_enabled"] = @(item.enabled);
+        row[@"select_all_menu_mask"] = @(item.keyEquivalentModifierMask);
+        row[@"select_all_menu_has_explicit_target"] = @(item.target != nil);
+    }
+    if (event) row[@"event"] = event;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:row options:NSJSONWritingSortedKeys error:NULL];
+    if (data) {
+        int fd = open(path, O_WRONLY|O_CREAT|O_APPEND, 0600);
+        if (fd >= 0) { write(fd, data.bytes, data.length); write(fd, "\n", 1); close(fd); }
+    }
+    [row release];
+}
+static void elabDiagnosticStart(void) {
+    if (elabDiagnosticMonitor || !getenv("ELAB_SAVE_DIAGNOSTIC_LOG")) return;
+    elabDiagnosticMonitor = [[NSEvent addLocalMonitorForEventsMatchingMask:
+        (NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskFlagsChanged)
+        handler:^NSEvent *(NSEvent *event) {
+            NSDictionary *metadata = [@{@"sequence": @(++elabDiagnosticSequence),
+                @"type": @(event.type), @"key_code": @(event.keyCode),
+                @"modifiers": @(event.modifierFlags), @"event_window": @(event.windowNumber),
+                @"event_timestamp": @(event.timestamp)} retain];
+            elabDiagnosticSnapshot(@"local-event-before", metadata);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                elabDiagnosticSnapshot(@"local-event-after", metadata);
+                [metadata release];
+            });
+            return event;
+        }] retain];
+    elabDiagnosticObservers = [NSMutableArray new];
+    NSArray *names = @[NSWindowDidBecomeKeyNotification, NSWindowDidResignKeyNotification,
+        NSApplicationDidBecomeActiveNotification, NSApplicationDidResignActiveNotification,
+        NSMenuWillSendActionNotification, NSMenuDidSendActionNotification];
+    for (NSNotificationName name in names) {
+        id observer = [[NSNotificationCenter defaultCenter] addObserverForName:name object:nil
+            queue:nil usingBlock:^(NSNotification *notification) {
+                NSMutableDictionary *metadata = [NSMutableDictionary dictionary];
+                for (id value in notification.userInfo.allValues) if ([value isKindOfClass:NSMenuItem.class]) {
+                    NSMenuItem *item = value;
+                    metadata[@"menu_action"] = item.action ? NSStringFromSelector(item.action) : @"";
+                }
+                elabDiagnosticSnapshot(notification.name, metadata);
+            }];
+        [elabDiagnosticObservers addObject:observer];
+    }
+}
+static void elabDiagnosticStop(void) {
+    if (elabDiagnosticMonitor) { [NSEvent removeMonitor:elabDiagnosticMonitor]; [elabDiagnosticMonitor release]; elabDiagnosticMonitor = nil; }
+    for (id observer in elabDiagnosticObservers) [[NSNotificationCenter defaultCenter] removeObserver:observer];
+    [elabDiagnosticObservers release]; elabDiagnosticObservers = nil;
+}

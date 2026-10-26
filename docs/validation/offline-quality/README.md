@@ -106,3 +106,12 @@ unqualified. No production repair or new package results. It includes the long
 launch-call delay and inconclusive modal-target control without assigning an
 unsupported cause. The owned fixture/picker close normally; all qualified bytes
 remain exact. The next bounded control uses ordinary NSApplication/NSSavePanel.
+
+The [standard AppKit Save reference](save-panel-reference/README.md) reproduces
+that shortcut failure without GLFW/Vellum, while the native menu selection and
+replacement control work. The temporary Edit helper remains shared, so no cause
+or production repair is asserted. An eight-second startup bound succeeds, but
+CUA attachment still takes44.8 minutes despite its requested15s timeout. The
+owned panel/app close normally; qualified inputs/packages stay exact. Native
+acceptance remains open, with source/agent queue investigation next while this
+attachment limitation persists.

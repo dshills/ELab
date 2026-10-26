@@ -1,0 +1,22 @@
+The following is a diff from the previous accessibility tree for Window: "Save" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~1 standard window Save, ID: save-panel, Secondary Actions: Raise
+~	2 split group
+~		3 text Value: Where:, ID: whereLabel
+~		4 pop up button Where:, Value: fixtures, ID: where popup
+~		5 disclosure triangle Description: show more options, Value: 0
+~		6 text Value: Save As:, ID: nameFieldLabel
+~		7 text field (settable) Value: Alpha CircuitBeta, ID: saveAsNameTextField
+~		8 text Value: Tags:, ID: tagsLabel
++		9 text field (settable) tag editor
++		10 button Cancel, ID: CancelButton
++		11 button Save, ID: OKButton
++	12 text Save
++13 menu bar
++	14 ELabSaveReference
++	15 File
++	16 Edit
+Selected text: ```
+Alpha CircuitBeta
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).

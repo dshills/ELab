@@ -1,0 +1,18 @@
+from pathlib import Path
+import shutil,plistlib,subprocess,hashlib,json
+root=Path('/Users/dshills/Development/projects/ELab')
+base=root/'build/offline-quality/save-panel-reference'
+helper=root/'build/offline-quality/save-panel-diagnostic/source/file_focus_darwin.m'
+assert hashlib.sha256(helper.read_bytes()).hexdigest()=='0d15e35de415953cb77a4fad36702678dda217c5f45cf9dce56f5da712bfdf23'
+assert hashlib.sha256((root/'desktop/file_focus_darwin.m').read_bytes()).hexdigest()=='f23cddd9c93c5c566c69dd8075e00555d9d4e76aa759974bba17164de31c04c4'
+shutil.copy2(helper,base/'file_focus_darwin.m')
+app=base/'ELabSaveReference.app'; binary=app/'Contents/MacOS/ELabSaveReference'; binary.parent.mkdir(parents=True,exist_ok=True)
+with (app/'Contents/Info.plist').open('wb') as f:
+ plistlib.dump(dict(CFBundleExecutable='ELabSaveReference',CFBundleIdentifier='com.dshills.elab.save-reference',CFBundleName='ELabSaveReference',CFBundlePackageType='APPL',CFBundleVersion='1',NSHighResolutionCapable=True),f)
+cmd=['/usr/bin/clang','-Wall','-Wextra','-Wno-unused-parameter','-fblocks','-framework','AppKit',str(base/'reference.m'),str(base/'file_focus_darwin.m'),'-o',str(binary)]
+r=subprocess.run(cmd,capture_output=True,text=True,timeout=45)
+(base/'build.txt').write_text(r.stdout+r.stderr)
+assert r.returncode==0,r.stderr
+rows={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [base/'reference.m',base/'file_focus_darwin.m',binary]}
+(base/'source-identity.json').write_text(json.dumps(dict(scope='Owned standard NSApplication event-loop comparison; same instrumented production temporary Edit helper, no GLFW or Vellum',sha256=rows,command=cmd),indent=2)+'\n')
+print(json.dumps(dict(built=True,sha256=rows)))

@@ -1,0 +1,111 @@
+{
+  "investigation_completed": true,
+  "production_change": false,
+  "new_package": false,
+  "native_checks_still_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "comparison_scope": "Standard NSApplication main event loop and NSSavePanel, same byte-identical instrumented temporary Edit-menu helper as earlier GLFW/Vellum diagnostic; no GLFW or Vellum in this reference.",
+  "startup": {
+    "pid": 3454,
+    "ready": true,
+    "exit_code": null,
+    "startup_elapsed_s": 0.37985730171203613
+  },
+  "cua_attach_reported_wall_seconds": 2690.6643,
+  "cua_attach_requested_timeout_ms": 15000,
+  "attach_limit": "Process was already ready in 0.380 s; documented getApp attachment nevertheless took about 44.8 minutes. Cause unavailable; timeout did not bound tool wall time. No approval rejection reported. No duplicate launch.",
+  "command_a_probe": {
+    "before": "Alpha Circuit",
+    "actions": [
+      "Right",
+      "Command-A",
+      "type Beta"
+    ],
+    "after": "Alpha CircuitBeta",
+    "selected_all": false
+  },
+  "menu_control": {
+    "actions": [
+      "Edit > Select All",
+      "type Gamma"
+    ],
+    "selected_text": "Alpha CircuitBeta",
+    "after": "Gamma",
+    "entire_filename_replaced": true
+  },
+  "local_parent_key_event_records": 0,
+  "menu_observations": [
+    {
+      "active": true,
+      "app_window_count": 4,
+      "edit_group_present": 1,
+      "event": {
+        "menu_action": "selectAll:"
+      },
+      "first_responder_class": "NSRemoteView",
+      "key_class": "NSSavePanel",
+      "key_window": 190766,
+      "main_thread": true,
+      "main_window": 190766,
+      "phase": "NSMenuWillSendActionNotification",
+      "pid": 3454,
+      "select_all_menu_enabled": true,
+      "select_all_menu_has_explicit_target": 0,
+      "select_all_menu_mask": 1048576,
+      "select_all_target_class": "NSFakeServiceResponder",
+      "unix_s": 1793004852.1697068
+    },
+    {
+      "active": true,
+      "app_window_count": 4,
+      "edit_group_present": 1,
+      "event": {
+        "menu_action": "selectAll:"
+      },
+      "first_responder_class": "NSRemoteView",
+      "key_class": "NSSavePanel",
+      "key_window": 190766,
+      "main_thread": true,
+      "main_window": 190766,
+      "phase": "NSMenuDidSendActionNotification",
+      "pid": 3454,
+      "select_all_menu_enabled": true,
+      "select_all_menu_has_explicit_target": 0,
+      "select_all_menu_mask": 1048576,
+      "select_all_target_class": "NSFakeServiceResponder",
+      "unix_s": 1793004852.173307
+    }
+  ],
+  "limits": [
+    "The failure is reproduced without GLFW/Vellum; this does not establish CUA, AppKit, remote-view or shared menu-helper cause.",
+    "No event is observed at the exact failing chord in the parent process; activation and responder metadata at menu transitions do not prove chord delivery.",
+    "The temporary menu helper remains common to both runs; a standard permanent Edit menu is a possible separate control, not an established repair.",
+    "This instrumented reference is not normal-package acceptance or hardware-rate/native-queue qualification."
+  ],
+  "temporary_edit_removed_after_cancel": true,
+  "save_buttons_pressed": false,
+  "files_written_by_panel": false,
+  "clipboard_commands_used": false,
+  "exit": {
+    "pid": 3454,
+    "exit_code": 0,
+    "ended_unix_s": 1793004884.30791
+  },
+  "cua_remaining_owned_apps": [],
+  "compiled_inputs_verified_unchanged": 1354,
+  "preserved_prior_hashes": {
+    "build/releases/ELab-0.195.4-macos-arm64.zip": "81e8e4a858663e4391214e82be0498e5fb6d62b2280ea623088638c1b549c10d",
+    "build/releases/ELab-0.195.3-macos-arm64.zip": "31fa3386d57850e5d68ead285d65f2c8a7319ef1e4866ba3e6f070ea76c85fe1",
+    "build/releases/ELab-0.194.5-macos-arm64.zip": "4132046779dd14442187e37baa426de55ccff4c9f5f7b587d691bc31c5ae857a",
+    "build/releases/ELab-0.181.4-macos-arm64.zip": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+    "third_party/vellum/vellum-f9dee54-elab5.tar.gz": "a282a68ab47a230869d297614a126cdc46a2815d8140c0c40c92fb306f16c71f",
+    "build/releases/ELab-0.195.5-macos-arm64.zip": "cbc3f687068d932fa148d2a580b4116f4755582184435b2ec6718d80be37a863",
+    "third_party/vellum/vellum-f9dee54-elab6.tar.gz": "11978f6e30ef98200daddb75b6541fdeb36ff13ee7b05a38873bd6d66dd338a1",
+    "build/releases/ELab-0.195.6-macos-arm64.zip": "fac6d6a47c73443956c44e525ff22eb3079866add0a5a5828a7c9cf475902cd3",
+    "third_party/vellum/vellum-f9dee54-elab8.tar.gz": "c7eb11585a80dc2fdb3054b1c7cccaf07ec6a6b94d150b765c9823070f00af7d"
+  }
+}
