@@ -115,3 +115,24 @@ closed; intentional SIGKILL applies only to two disposable recovery producers.
 30-minute heartbeat continues with the four pending native checks listed above
 until the owner returns. This closeout does not claim those older checks, owner
 walkthrough, separate-account installation, hardware or participant acceptance.
+
+## Native continuation, October 25 evening
+
+/265 native Save-panel Command-A still fails via the current CUA route; menu
+Select All works. Command-Z likewise does not undo the filename. No save or
+clipboard change is made; Cancel preserves graph/document/physics/history. The
+initial full-state comparison differed only by a legitimate pending viewport
+publication after loading RC; the settled divider baseline is exact.
+
+Native divider click preserves the full state. One -97 px off-center drag moves
+the canvas -96 px and preserves physics/history, but subsequent inverse CUA drags
+have no effect; native rate/dispatch remains unqualified. Restore uses the public
+layout command and the owned app closes normally. No speculative product repair.
+
+A new retained-widget rendered regression passes repeated quick and classified
+forward/inverse off-center drags with one-pixel geometry tolerance and unchanged
+physics. Lint passes; no full gates or package repeat for test/evidence-only work.
+All four original native checks remain open; next investigate the driver split
+callback-origin lead with an actual queued ELab/agent reproduction before any SDK
+contract change, while preserving the native observations separately.
+[Detailed evidence](../docs/validation/offline-quality/native-round2-265/README.md).
