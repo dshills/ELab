@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "crash_exit_code": -9,
+  "embedded_samples": 21,
+  "live_restart_time_s": 0,
+  "explicit_saved_file_preserved": true,
+  "checks": [
+    "record-only dirty autosave",
+    "actual SIGKILL",
+    "inactive crashed lease",
+    "bounded recovery metadata/rows",
+    "complete captured asset restore",
+    "fresh paused live startup",
+    "unassociated copy / Save As",
+    "original file unchanged"
+  ]
+}

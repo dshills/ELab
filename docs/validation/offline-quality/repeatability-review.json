@@ -1,0 +1,25 @@
+{
+  "source_commit": "1d4ff4602585a33a6a548fac4c4949466ad71cb6",
+  "candidate": 265,
+  "scope": "Release tooling review using existing strict helpers; no new distribution service",
+  "guards": [
+    "clean source before sealed candidate build",
+    "matching clean vcs revision in native/agent",
+    "verified SDK source/archive/manifest",
+    "independent post-sign executable SHA",
+    "full quality gate required before archive",
+    "source/IP-denied copied runtime required",
+    "strict ad-hoc bundle verification",
+    "exclusive archive/extraction paths",
+    "every ZIP member bytes/mode/path checked",
+    "macOS extraction equality and extracted example reopen",
+    "prior qualified ZIP hashes preserved"
+  ],
+  "reproduction_scripts": {
+    "package.py": "3d4334ed345aafaec3e8166d628ef3ed4ca07b6ceab1ebb813488f91ad0925bc",
+    "assemble.py": "3d342520fb59d32b7280d969d19340324f388ce4d73224628720d1ffefeb7c6d",
+    "readme.py": "618909408033c1b96c250958042752e5dbe53ca71cd255750f6ebf9e21a96a02",
+    "archive.py": "dc6a20f0517ef40fb8c672ecc4c3be127506403b2a702d762ae78087e2fbca32"
+  },
+  "full_quality_pending": false
+}

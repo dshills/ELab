@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "ordinary_interval_s": 2,
+  "failure_visible_s": 2.000157707836479,
+  "automatic_retry_s": 0.49295895802788436,
+  "edits_during_fault": 35,
+  "error": "fdopendir /Users/dshills/Development/projects/ELab/build/offline-quality/recovery-failure/recovery: not a directory",
+  "last_good_capsule_sha256": "54bc14d81d4292178a37db8e897a137f81e37542684b6f299b704b1cb5ac7bc9",
+  "retry_capsule_sha256": "4cbcf005b857d55f470c8164060bc982cf7a1a9866a27f2659d390fdba3fc6ea",
+  "manual_source_sha256": "368e988ab3c50b8db05e051a5385e5b4ae3c3f007c386a4f1d999e0e8e8ce9bb",
+  "recorded_rows": 209,
+  "manual_source_and_previous_capsule_unchanged": true,
+  "retry_document_exact": true,
+  "disable_control": {
+    "disable_s": 0.0005688751116394997,
+    "both_disable_aliases_completed": true,
+    "catalog_applied_on_disable": false,
+    "last_error_and_catalog_preserved": true,
+    "reenable_refused_while_unavailable": true,
+    "available_storage_held_disabled_s": 3.0128494170494378,
+    "disabled_file_set_unchanged": true,
+    "reenable_catalog_applied": true
+  },
+  "retry_timing_origin": "reenable dispatch",
+  "checks": [
+    "actual interrupted private storage",
+    "automatic error during repeated editing",
+    "no manual checkpoint/scan for failure or retry",
+    "latest dirty graph and full kept record saved automatically",
+    "manual source and last complete capsule unchanged",
+    "editor/history/physics preserved by status publication"
+  ],
+  "limits": [
+    "Owned cooperating filesystem fault on this workstation; not power-loss/hostile-filesystem qualification",
+    "Controlled core tests separately force an edit exactly between filesystem preparation and publication"
+  ]
+}

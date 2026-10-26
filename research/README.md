@@ -125,3 +125,5 @@ Capacitors and live RC simulation: [implementation, shared commands, and analyti
 - [PWM, amplifier dynamics, shift registers and sound plan](111-hobbyist-devices-plan.md): the four additions following the H-bridge; [model and command guide](../docs/hobbyist-devices.md) documents examples, shared controls, numerical scope and explicit audio preview.
 
 - [Reliability, workflow, release and examples closeout](116-reliability-release-and-examples-plan.md): all five ordered items complete; ELab 0.195.3 /264 unsigned download, unchanged 53 component kinds and 62 examples, shared browser commands, native keyboard/mouse/save checks, full race/rendered gates and extracted offline qualification.
+
+- [Offline quality plan and progress](117-offline-quality-plan.md): /265 repairs modal background input and missing active device parameters in exports; complete source/native/package checks and bounded persistence/recovery workflows pass. Continued native acceptance work is scheduled until the owner returns.

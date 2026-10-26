@@ -62,3 +62,56 @@ focused race/export/narrow-page and unchanged legacy-report regressions pass.
 Mounted modal/browser/scope/sweep/navigation checks pass in 10.454 s. No command,
 component, model, saved file or simulation limit changes. Full combined package
 qualification remains pending; /264 stays the qualified download.
+
+## Combined candidate and remaining work
+
+Clean candidate /265 (0.195.4), source 1d4ff460, contains both repairs. Native RC
+background plot/schematic clicks and object shortcuts under the sheet preserve
+an exact snapshot; a deliberate agent cursor still sets 10 ms, and after Escape
+normal native plotting sets 2.4307304785894206 ms (snapped sample 2 ms). The
+owned app closes normally. This is representative physical routing evidence,
+separate from the deterministic fresh-context handler regressions.
+
+The exact copied /265 app passes native smoke and four-adapter electrical/
+project/inductor/op-amp/storage/capacity suites under source/developer-file and
+outbound-IP denial. All 102 external processes exit normally. The six existing
+configurable-device examples pass captures, fresh reopening and SVG/PDF/PNG;
+representative PNG reports visually retain the newly included active settings.
+Silent audio rendering never plays audio.
+
+Record-only and inductor crash restoration, storage-fault disable/re-enable
+(35 edits during the fault), fresh persistence and recovery-worker contracts pass.
+Original manual files stay exact. These are bounded engineering workflows, not
+an overnight-duration or hardware/user study. Packaging repeatability is audited
+using existing strict primitives; exact scripts and identity receipts are retained.
+Complete ordinary/rendered suites and final archive/extracted checks still run.
+
+Next offline batches after this candidate is qualified: revisit the four explicitly
+unqualified native checks from docs/validation/native-keyboard-223/
+native-acceptance-pending.json (3: Save-panel first-responder text editing;
+6: slow/fast off-center divider; 9/11: native pre-agent parser-callback origin).
+Do not infer those checks passed from SDK/source or modal receipts. Use current
+owned disposable fixtures, no new components, and retain actual hardware/queue
+limits honestly. Prioritize any newly reproduced defect. Pause the thread
+heartbeat and finish a safe checkpoint when the owner returns.
+
+## First-batch closeout
+
+The five scoped projects above have a completed engineering batch. Full portable,
+ordinary and rendered desktop race suites pass: 867 /339 /462 top-level tests
+(1,950 /839 /1,417 including subtests), plus lint/imports, Python, PRD, root and
+both desktop vets, and build. Production source stays 1d4ff460 throughout the
+combined qualification. No component, API, model or solver limit changes.
+
+ELab 0.195.4 /265 is a qualified additional unsigned local download:
+`build/releases/ELab-0.195.4-macos-arm64.zip`, 38,747,134 bytes /375 files.
+SHA-256 `81e8e4a858663e4391214e82be0498e5fb6d62b2280ea623088638c1b549c10d`.
+Every extracted byte/mode matches, the integrity seal verifies, and the extracted
+agent reopens all62 paused examples cleanly with exact graphs and accepted
+startup. Prior /264, /260 and /205 ZIPs remain exact. Native owned sessions are
+closed; intentional SIGKILL applies only to two disposable recovery producers.
+
+[Evidence index](../docs/validation/offline-quality/README.md). The active
+30-minute heartbeat continues with the four pending native checks listed above
+until the owner returns. This closeout does not claim those older checks, owner
+walkthrough, separate-account installation, hardware or participant acceptance.

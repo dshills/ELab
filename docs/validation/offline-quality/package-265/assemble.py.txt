@@ -1,0 +1,33 @@
+"""Assemble current, matching app/agent and immutable examples without replacing releases."""
+from pathlib import Path
+import importlib.util,json,subprocess,sys,shutil,hashlib
+root=Path('/Users/dshills/Development/projects/ELab');stage=root/'build/offline-quality/package-265';sys.path.insert(0,str(root/'scripts'))
+spec=importlib.util.spec_from_file_location('client',root/'scripts/viewport-fit-demo.py');v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
+package=json.loads((stage/'package.json').read_text());out=root/'build/releases/ELab-0.195.4-macos-arm64';out.mkdir(exist_ok=False)
+shutil.copytree(package['app'],out/'ELab.app');shutil.copyfile(package['agent'],out/'elab-agent');(out/'elab-agent').chmod(0o755)
+class Client(v.Client):
+ def __init__(self):
+  self.process=subprocess.Popen([str(out/'elab-agent')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True);self.sequence=0
+c=Client();examples=out/'Examples';examples.mkdir()
+try:
+ catalog=c.ask('examples.list');(examples/'CATALOG.json').write_text(json.dumps(catalog,indent=2)+'\n')
+ index=['# Included circuit examples','', 'Open a `.elab` file, then Resume or Step. These are editable paused copies of existing examples. No sound plays automatically.','']
+ for e in catalog:
+  c.ask('example.load',{'id':e['id'],'discard_changes':True},True);c.ask('simulation.pause',{},True);c.ask('simulation.wait')
+  saved=c.ask('project.save',{'path':str(examples/(e['id']+'.elab'))},True)
+  assert not saved['document']['dirty']
+  c.ask('export.schematic.svg',{'path':str(examples/(e['id']+'.svg'))},True)
+  index+=['## '+e['title'],'',e['question'],'',e['expected'],'', '**Try:** '+e['try'],'', '**Model limits:** '+e['limitation'],'']
+ (examples/'README.md').write_text('\n'.join(index)+'\n')
+finally:c.close()
+licenses=out/'Licenses/Vellum';licenses.mkdir(parents=True);sdk=root/'build/.vellum-sdk-f9dee54-elab5'
+for name in ['LICENSE','PRIVATE_BUILD.txt','THIRD_PARTY_INVENTORY.json']:
+ shutil.copyfile(sdk/name,licenses/name)
+shutil.copytree(sdk/'THIRD_PARTY_NOTICES',licenses/'THIRD_PARTY_NOTICES');shutil.copyfile(root/'third_party/vellum/sdk.lock.json',licenses/'sdk.lock.json')
+doc=out/'Documentation';doc.mkdir()
+for path in (root/'docs').glob('*.md'):shutil.copyfile(path,doc/path.name)
+shutil.copyfile(root/'docs/agent-api.md',out/'AGENT_PROTOCOL.md')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(out/'ELab.app/Contents/MacOS/ELab')==package['app_executable_sha256'] and sha(out/'elab-agent')==package['agent_sha256']
+(stage/'assembled.json').write_text(json.dumps(dict(folder=str(out),example_count=len(catalog),matching_package=package),indent=2)+'\n')
+print(json.dumps(dict(folder=str(out),example_count=len(catalog))))

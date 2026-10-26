@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "transport": "headless-stdio",
+  "producer": "fresh-owned-headless",
+  "crash_exit_code": -9,
+  "candidate_sha256": "c1abc8e34af19d513eba43a3aa4ab34cac64575a9695de5966919a606a8d416c",
+  "original_sha256": "a5d8abc8c6472c00808dc595cba9640cd249f7707040597df1e8f48e5fa2ce81",
+  "live_before_crash": {
+    "id": "L1",
+    "voltage_v": 5.185727544838979,
+    "current_a": -0.0018572754483897965,
+    "energy_j": 1.7247360455957597e-06
+  },
+  "live_after_restore": {
+    "id": "L1",
+    "voltage_v": 7.000000000000001,
+    "current_a": -0.02,
+    "energy_j": 0.0002
+  },
+  "captured_initial_current_a": 0.03,
+  "captured_samples": 6,
+  "max_reference_error_a": 2.61034249771086e-13,
+  "max_reference_error_v": 2.6103785799591606e-11,
+  "refused_corruptions": [
+    "missing-coil-result",
+    "duplicate-coil-result",
+    "foreign-coil-result",
+    "wrong-energy",
+    "overflow-current",
+    "wrong-coil-model",
+    "startup-on-resistor",
+    "missing-final-row"
+  ],
+  "refused_symlink": true,
+  "checks": [
+    "record-only dirty autosave",
+    "actual producer SIGKILL and inactive lease",
+    "exact recovery metadata and sample rows",
+    "paused t=0 restore of saved -20 mA intent",
+    "retained independent +30 mA scenario capture",
+    "fresh local import identity",
+    "byte-identical portable re-export",
+    "atomic corrupt import refusals",
+    "original saved file unchanged"
+  ]
+}
