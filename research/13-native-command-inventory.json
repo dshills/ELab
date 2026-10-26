@@ -18,7 +18,7 @@
     "desktop/dc_sweep_canvas.go": "457023ebaf9d3d5a07602597975e78f5cea11cb3f77c7cbfe770d0fe363a9331",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
-    "desktop/document_workspace.go": "130574f08669ac76d9dc7667175533f01c1da57081eda473d7ecdbfcbb0da616",
+    "desktop/document_workspace.go": "b1082b104cb388d77c75dbdb74cd5fffdde7747f9bf984dece3d960411517355",
     "desktop/drawing.go": "aae5e8bf06c04ac8ed6dfa11624f86002f541b5560ee34f6eb2ea0d7ce049be9",
     "desktop/example_browser.go": "6784c01fa1ab6eddb605f08cf3a5d9a84835d42625525ffc28f1cc38bb360aae",
     "desktop/example_load.go": "055a905403e3bb6c79ea0e4cc490f130d23e788e2d358358ede818b9eeb2ab5a",
@@ -73,7 +73,7 @@
     "desktop/sampling.go": "9caef58d4d66e4b9d90806e682cd5985567dd923262bf41daed39b2d3572faf4",
     "desktop/schematic_keyboard.go": "5d33c95abaed2f59b52101e925dc08dfebffa2947b6c947be59e0be3b1afc97d",
     "desktop/schematic_pointer_context.go": "80cd906ba1f61f2cd60079f89d601b08122955fcb1fcd1136f8bbb1b552ac457",
-    "desktop/scope.go": "5cd32eff0856f84791f18d20a8ee27418036a17f5731e304edcd7df4f842b92b",
+    "desktop/scope.go": "23191ce9b7ae16cf034faf2530b1f2b56338fef12143da0435a6a55431c473da",
     "desktop/scope_context.go": "4a1463abdf9bbb27f80e8c862f6b206b0bc81b10de914e746d0587b60936de34",
     "desktop/scope_interval_rejection.go": "5a9ea95402c45cef271466499720e4955f99d765099535fe35b01f4ece948c97",
     "desktop/scope_overlay.go": "90c6ebc19d47b237257d1358c77f6ccd9ba7ac7910cff5d54504ad74c0ea1f38",
@@ -89,7 +89,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "38fd47121b77c4e6333e3ff616a941f67fc4f32678b631154bf790aa9551b065",
+    "desktop/view.go": "01ee3facbdbb7ff17582887e02c53c1a009c5caacdfde0ba5110fc9d954a4e1e",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -3904,7 +3904,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 272,
+      "line": 276,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"input-\"+mode, modeLabels[mode], \"simulation.input.set\", workbench.InputParams{Mode: mode})",
@@ -3915,7 +3915,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 285,
+      "line": 289,
       "function": "*screen.scopePanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})\n}",
@@ -3923,7 +3923,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 290,
+      "line": 294,
       "function": "*screen.scopePanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"scope.trace.select\", workbench.IDParams{ID: id})",
@@ -3934,7 +3934,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 292,
+      "line": 296,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"transient-step\", \"Step +1 sample\", \"simulation.step.start\", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})",
@@ -3945,7 +3945,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 294,
+      "line": 298,
       "function": "*screen.scopePanel",
       "kind": "registry-button",
       "expression": "s.button(\"simulation.restart\", \"Restart\")",
@@ -3956,7 +3956,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 303,
+      "line": 307,
       "function": "*screen.scopePanel",
       "kind": "action-factory",
       "expression": "s.action(\"step-work-cancel\", \"Cancel step\", \"simulation.work.cancel\", workbench.IDParams{ID: work.ID})",
@@ -3967,7 +3967,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 321,
+      "line": 325,
       "function": "*screen.scopePanel",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil) }",
@@ -3975,7 +3975,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 321,
+      "line": 325,
       "function": "*screen.scopePanel",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.scope.csv\", true, workbench.SaveParams{}, nil)",
@@ -3986,7 +3986,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 326,
+      "line": 330,
       "function": "*screen.scopePanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -3994,7 +3994,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 394,
+      "line": 398,
       "function": "*screen.transientInspector",
       "kind": "callback-factory",
       "expression": "timeField(\"setting-\"+setting.id, setting.text, setting.value, false, func(text string) {\n\ts.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)\n})",
@@ -4002,7 +4002,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 395,
+      "line": 399,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"simulation.transient.set\", textFieldParams(cfg, field, text), state.CommandRevision)",
@@ -4013,7 +4013,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 399,
+      "line": 403,
       "function": "*screen.transientInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\n\tvalue := float64(e.Number)\n\tif e.Number == float32(setting.min) {\n\t\tvalue = setting.min\n\t}\n\tif e.Number == float32(setting.max) {\n\t\tvalue = setting.max\n\t}\n\tsetting.set(\u0026next, value/setting.scale)\n\ts.invoke(\"simulation.transient.set\", next)\n}",
@@ -4021,7 +4021,7 @@
     },
     {
       "file": "desktop/scope.go",
-      "line": 412,
+      "line": 416,
       "function": "*screen.transientInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"simulation.transient.set\", next)",
@@ -4704,7 +4704,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 547,
+      "line": 554,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -4712,7 +4712,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 560,
+      "line": 567,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",
