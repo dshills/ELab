@@ -1,0 +1,60 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/draft
+    collection_origin_offscreen_test.go:96: queued collection select borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "rc"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/draft
+    collection_origin_offscreen_test.go:96: queued collection select-all borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "led"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/draft
+    collection_origin_offscreen_test.go:96: queued collection activate borrowed agent draft context: revision 6 -> 7; generation 2 -> 3; selected "led" -> "led"; draft "2k" -> ""; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select/draft
+    collection_origin_offscreen_test.go:96: queued collection select borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "rc"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select-all/draft
+    collection_origin_offscreen_test.go:96: queued collection select-all borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "led"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/activate/draft
+    collection_origin_offscreen_test.go:96: queued collection activate borrowed agent draft context: revision 6 -> 7; generation 2 -> 3; selected "led" -> "led"; draft "2k" -> ""; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/select/draft
+    collection_origin_offscreen_test.go:96: queued collection select borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "rc"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/select-all/draft
+    collection_origin_offscreen_test.go:96: queued collection select-all borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "led"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/activate/draft
+    collection_origin_offscreen_test.go:96: queued collection activate borrowed agent draft context: revision 6 -> 7; generation 2 -> 3; selected "led" -> "led"; draft "2k" -> ""; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select/draft
+    collection_origin_offscreen_test.go:96: queued collection select borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "rc"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select-all/draft
+    collection_origin_offscreen_test.go:96: queued collection select-all borrowed agent draft context: revision 6 -> 7; generation 2 -> 2; selected "led" -> "led"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/activate/draft
+    collection_origin_offscreen_test.go:96: queued collection activate borrowed agent draft context: revision 6 -> 7; generation 2 -> 3; selected "led" -> "led"; draft "2k" -> ""; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/component
+    collection_origin_offscreen_test.go:96: queued collection activate borrowed agent component context: revision 6 -> 6; generation 2 -> 2; selected "led" -> "led"; draft "" -> ""; pending "example.load"
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/replace
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/replace
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/replace
+--- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext (10.92s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/draft (0.80s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/draft (0.47s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/draft (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select/draft (0.66s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select-all/draft (0.51s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/activate/draft (0.50s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/system/select/draft (0.66s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/system/select-all/draft (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/system/activate/draft (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select/draft (0.66s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select-all/draft (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/activate/draft (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/component (0.48s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/search (0.54s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/search (0.51s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/search (0.62s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/replace (0.77s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/replace (0.67s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/replace (0.68s)
+=== RUN   TestMountedQueuedCollectionOwnKeysContinueWithoutLosingFocus
+--- PASS: TestMountedQueuedCollectionOwnKeysContinueWithoutLosingFocus (0.91s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	12.515s
+FAIL

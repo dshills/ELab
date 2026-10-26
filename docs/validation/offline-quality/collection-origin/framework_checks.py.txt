@@ -1,0 +1,42 @@
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor,as_completed
+import os,subprocess,json,time,hashlib,threading,signal
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/collection-origin';source=root/'build/vellum-update-source';driver=source/'drivers/cogent'
+env=dict(os.environ,GOMAXPROCS='2',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'))
+commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip()
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=source,text=True).strip()
+changed=subprocess.check_output(['git','diff','--name-only','0650083e',commit],cwd=source,text=True).splitlines()
+assert sorted(changed)==['drivers/cogent/collection_origin_offscreen_test.go','drivers/cogent/collection_view.go','drivers/cogent/list_selection.go'],changed
+previous_manifest=json.loads((root/'build/.vellum-sdk-f9dee54-elab8/SDK_MANIFEST.json').read_text())['files']
+portable=[p for p in previous_manifest if not p.startswith('drivers/') and (p.endswith('.go') or Path(p).name in ['go.mod','go.sum'])]
+assert len(portable)==556,len(portable)
+for rel in portable:
+ assert hashlib.sha256((source/rel).read_bytes()).hexdigest()==previous_manifest[rel],rel
+(base/'framework-portable-scope.json').write_text(json.dumps(dict(source_commit=commit,compared_to='0650083e179aae67c3f67aff406ac7a1b5206486',changed=changed,unchanged_portable_go_module_inputs=portable,portable_test_receipt_carried_from='docs/validation/offline-quality/discrete-origin/framework-complete.json'),indent=2)+'\n')
+failed=threading.Event();results=[]
+def run(name,cmd):
+ start=time.monotonic()
+ with (base/name).open('w') as output:
+  p=subprocess.Popen(cmd,cwd=driver,env=env,stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
+  with (base/name).open() as reader:
+   tail=''
+   while p.poll() is None:
+    tail=(tail+reader.read())[-65536:]
+    if '"Action":"fail"' in tail:failed.set()
+    if failed.is_set():
+     try:os.killpg(p.pid,signal.SIGTERM)
+     except ProcessLookupError:pass
+     break
+    time.sleep(.25)
+  rc=p.wait()
+ row=dict(log=name,command=cmd,exit_code=rc,wall_s=time.monotonic()-start);print(json.dumps(row),flush=True)
+ return row
+with ThreadPoolExecutor(max_workers=2) as pool:
+ futures=[pool.submit(run,*c) for c in [('framework-ordinary.jsonl',['go','test','-race','-json','-count=1','-timeout=12m','./...']),('framework-rendered.jsonl',['go','test','-race','-tags=offscreen','-json','-count=1','-timeout=15m','./...'])]]
+ for future in as_completed(futures):
+  results.append(future.result());(base/'framework-progress.json').write_text(json.dumps(results,indent=2)+'\n')
+assert all(r['exit_code']==0 for r in results),results
+for name,cmd in [('framework-vet.txt',['go','vet','./...']),('framework-rendered-vet.txt',['go','vet','-tags=offscreen','./...'])]:
+ results.append(run(name,cmd));assert results[-1]['exit_code']==0
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=source,text=True).strip()
+(base/'framework-complete.json').write_text(json.dumps(dict(passed=True,source_commit=commit,checks=results,portable_inputs_unchanged=len(portable),portable_scope='Verified556 non-driver Go/module inputs byte-identical to qualified0650083e; portable SDK race receipt carried unchanged',scope='Complete fresh ordinary/rendered driver race and both vets for collection-only repair; intentional non-collection callbacks unchanged'),indent=2)+'\n')

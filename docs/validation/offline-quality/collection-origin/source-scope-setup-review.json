@@ -1,0 +1,8 @@
+{
+  "expected_changed_dependency_inputs": [
+    "desktop/go.mod",
+    "third_party/vellum/sdk.lock.json"
+  ],
+  "production_application_go_sources_changed": false,
+  "explanation": "The previous frozen map includes the SDK lock as well as Go/module inputs. The first assertion expected only go.mod and stopped before evidence copy. Both changed dependency declarations are intentional and verified; a new offscreen regression file is additional."
+}

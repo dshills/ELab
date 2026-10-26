@@ -1,0 +1,24 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/select/draft
+    collection_origin_offscreen_test.go:84: queued collection select borrowed agent draft context: revision 5 -> 6; generation 2 -> 2; selected "led" -> "rc"; draft "2k" -> "2k"; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/draft
+    collection_origin_offscreen_test.go:84: queued collection activate borrowed agent draft context: revision 5 -> 6; generation 2 -> 3; selected "led" -> "led"; draft "2k" -> ""; pending ""
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/component
+    collection_origin_offscreen_test.go:84: queued collection activate borrowed agent component context: revision 5 -> 5; generation 2 -> 2; selected "led" -> "led"; draft "" -> ""; pending "example.load"
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/select/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/select/replace
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/replace
+--- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext (3.43s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/select/draft (0.76s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/draft (0.46s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/component (0.45s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/select/search (0.45s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/search (0.46s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/select/replace (0.43s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/replace (0.43s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	4.068s
+FAIL

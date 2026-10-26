@@ -385,3 +385,52 @@ contracts without contrary evidence. Native checks retain priority when tools
 can establish exact scope without an uncontrolled attachment. No unchanged full
 gates, identical Save retries, new components/features or solver-limit changes.
 Pause the heartbeat and safe-checkpoint on a direct human return/stop instruction.
+
+## Collection-origin investigation in progress
+
+Actual assembled collection input reproduces13 stale callbacks: queued arrow,
+Command-A and Return across four themes, plus Return after a real component edit.
+Return after an agent value draft reopens the clean example, increments generation
+and erases that draft; after a component edit it opens an unwanted file prompt.
+Six catalog/document replacement controls already refuse. Prior held descriptor
+replays did not establish this actual driver-queue scope.
+
+Owned SDK sourcecdd596c narrows callback admission to collections only. Activation,
+selection and Select All retain their admitted application wrapper, with current
+eligibility/catalog/retirement guards. Non-collection multiple choices retain
+latest callbacks, with two explicit controls; other prior SDK contracts remain.
+All19 application cases and uninterrupted queued own navigation pass against the
+isolated candidate; targeted framework tests pass. Native checks3/6/9/11 stay open.
+
+Fresh complete ordinary/rendered driver race/vet gates are running via
+build/offline-quality/collection-origin/framework_checks.py. Exactly556 exported
+portable Go/module inputs match elab8 and carry prior portable qualification.
+The first setup count included159 additional unexported prototype/tool/doc files;
+that assertion stopped before full tests. Scope is corrected and recorded.
+No SDK9 archive/pin or app package yet. /268 and all qualified bytes stay exact.
+Next complete SDK gates, export/pin a new immutable elab9 archive only after they
+pass, run final app gates and qualify a matching exclusive /269 package. Preserve
+owner files and sessions; no push/upload, new components/features or solver limits.
+[Scope record](../docs/validation/offline-quality/collection-origin/README.md).
+
+Collection source closeout: clean SDK source cdd596c2ea75ee483869678a6b2354d5e214cee0
+passes complete fresh ordinary/rendered driver race suites, 542 /998 top-level
+(774 /1,930 including subtests), and both vets. The 556 byte-identical exported
+portable inputs carry prior portable qualification. Immutable elab9 export/pin
+passes all 8,740 member hashes; SHA-256
+50a08e750f3734dc4e53ec3a7fcd4a1575523024baa13edff24b3940f9eeaa4a.
+Only two driver implementations, a new test and generated SDK documentation differ
+from elab8. Non-collection and pure CollectionView contracts stay exact. A
+validation fixture's nonexistent filename is corrected before pinning, reusing
+identical archive bytes. The full cumulative patch is gzip-preserved with an
+exact decompression/git-diff comparison and trusted hash verification; no gate is
+weakened and old SDK/cache bytes are untouched.
+
+Complete application gates pass 867 /339 /472 top-level race tests
+(1,950 /839 /1,467 with subtests), lint/imports, Python, PRD, all vets and build.
+Final build consumes the compressed patch pin and all 68 Python tests pass again
+after that metadata representation change. Only dependency declarations change
+among previous app inputs, plus the new regression. Ten prior package/SDK
+identities remain exact. Next commit the reviewed source cleanly and qualify
+exclusive unsigned 0.195.8 /269 copied runtime, archive and extracted examples.
+Original native checks 3/6/9/11 remain open; no CUA attachment is repeated.

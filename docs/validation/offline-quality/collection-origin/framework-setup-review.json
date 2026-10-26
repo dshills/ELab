@@ -1,0 +1,11 @@
+{
+  "initial_source_count_assertion": 715,
+  "expected_exported_count": 556,
+  "source_only_inputs": 159,
+  "source_only_roots": {
+    "prototypes": 81,
+    "tools": 71,
+    "docs": 7
+  },
+  "explanation": "The initial fixture counted all tracked source Go/module files, including159 inputs excluded from SDK export. All715 were byte-compared to0650083e before the count assertion. The final gate uses the prior exported manifest for the exact556 carried portable inputs; no framework tests had begun at the initial assertion."
+}

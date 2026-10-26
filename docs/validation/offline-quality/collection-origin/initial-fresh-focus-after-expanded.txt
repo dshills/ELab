@@ -1,0 +1,53 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/component
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/search
+    collection_origin_offscreen_test.go:114: fresh selection did not resume the shared command
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/search
+    collection_origin_offscreen_test.go:114: fresh selection did not resume the shared command
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/search
+    collection_origin_offscreen_test.go:111: fresh activation did not resume protected example loading
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/replace
+    collection_origin_offscreen_test.go:114: fresh selection did not resume the shared command
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/replace
+    collection_origin_offscreen_test.go:114: fresh selection did not resume the shared command
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/replace
+    collection_origin_offscreen_test.go:111: fresh activation did not resume protected example loading
+--- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext (10.36s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/draft (0.80s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/draft (0.48s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select/draft (0.66s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select-all/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/system/select/draft (0.67s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/system/select-all/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/system/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select/draft (0.67s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select-all/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/component (0.50s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/search (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/search (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/search (0.48s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/replace (0.57s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/replace (0.57s)
+    --- FAIL: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/replace (0.57s)
+=== RUN   TestMountedQueuedCollectionOwnKeysContinueWithoutLosingFocus
+--- PASS: TestMountedQueuedCollectionOwnKeysContinueWithoutLosingFocus (0.90s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	11.973s
+FAIL

@@ -1,0 +1,43 @@
+# github.com/dshills/vellum/drivers/cogent [github.com/dshills/vellum/drivers/cogent.test]
+accessibility_darwin.m:661:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:662:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/vellum/drivers/cogent.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select-all
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor/activate
+--- PASS: TestCollectionQueuedCallbacksRetainAdmittedDescriptor (0.25s)
+    --- PASS: TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select (0.10s)
+    --- PASS: TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select-all (0.08s)
+    --- PASS: TestCollectionQueuedCallbacksRetainAdmittedDescriptor/activate (0.08s)
+=== RUN   TestNonCollectionMultipleChoicesKeepLatestCallback
+=== RUN   TestNonCollectionMultipleChoicesKeepLatestCallback/select
+=== RUN   TestNonCollectionMultipleChoicesKeepLatestCallback/select-all
+--- PASS: TestNonCollectionMultipleChoicesKeepLatestCallback (0.12s)
+    --- PASS: TestNonCollectionMultipleChoicesKeepLatestCallback/select (0.06s)
+    --- PASS: TestNonCollectionMultipleChoicesKeepLatestCallback/select-all (0.06s)
+=== RUN   TestMacCollectionResponsiveColumnsAndRoutedKeyboard
+--- PASS: TestMacCollectionResponsiveColumnsAndRoutedKeyboard (0.19s)
+=== RUN   TestMacCollectionActivationRetirementAndThumbnailPlan
+--- PASS: TestMacCollectionActivationRetirementAndThumbnailPlan (0.17s)
+=== RUN   TestMacCollectionSameIDPresentationTransitions
+--- PASS: TestMacCollectionSameIDPresentationTransitions (0.13s)
+=== RUN   TestMacCollectionRoutedCommandClicksAndDoubleActivation
+--- PASS: TestMacCollectionRoutedCommandClicksAndDoubleActivation (0.15s)
+=== RUN   TestMacCollectionReplacementRetiresSelectionActivationAndAX
+=== RUN   TestMacCollectionReplacementRetiresSelectionActivationAndAX/new-owner
+=== RUN   TestMacCollectionReplacementRetiresSelectionActivationAndAX/presentation-aba
+--- PASS: TestMacCollectionReplacementRetiresSelectionActivationAndAX (0.21s)
+    --- PASS: TestMacCollectionReplacementRetiresSelectionActivationAndAX/new-owner (0.10s)
+    --- PASS: TestMacCollectionReplacementRetiresSelectionActivationAndAX/presentation-aba (0.11s)
+=== RUN   TestMacCollectionCenteredLabelsAtDemoWidth
+=== RUN   TestMacCollectionCenteredLabelsAtDemoWidth/darkfalse
+=== RUN   TestMacCollectionCenteredLabelsAtDemoWidth/darktrue
+--- PASS: TestMacCollectionCenteredLabelsAtDemoWidth (0.19s)
+    --- PASS: TestMacCollectionCenteredLabelsAtDemoWidth/darkfalse (0.10s)
+    --- PASS: TestMacCollectionCenteredLabelsAtDemoWidth/darktrue (0.09s)
+PASS
+ok  	github.com/dshills/vellum/drivers/cogent	3.016s

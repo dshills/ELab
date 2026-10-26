@@ -1,0 +1,41 @@
+from pathlib import Path
+import json,hashlib,subprocess,tarfile,os,sys,gzip
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/collection-origin';source=root/'build/vellum-update-source'
+framework=json.loads((base/'framework-complete.json').read_text());assert framework['passed']
+commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip();assert commit==framework['source_commit']
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=source,text=True).strip()
+lock=root/'third_party/vellum/sdk.lock.json';old=json.loads(lock.read_text());assert old['cache']=='build/.vellum-sdk-f9dee54-elab8'
+archive=root/'third_party/vellum/vellum-f9dee54-elab9.tar.gz';patch=root/'third_party/vellum/patches/elab-f9dee54-collection-origin-compat.patch.gz';cache='build/.vellum-sdk-f9dee54-elab9'
+assert not patch.exists() and not (root/cache).exists()
+env=dict(os.environ,GOMAXPROCS='2',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'))
+if archive.exists():
+ assert sys.argv[1:]==['--reuse-export']
+ exported=json.loads((base/'sdk-export.txt').read_text())
+ assert hashlib.sha256(archive.read_bytes()).hexdigest()==exported['sha256']=='50a08e750f3734dc4e53ec3a7fcd4a1575523024baa13edff24b3940f9eeaa4a'
+else:
+ assert not sys.argv[1:]
+ with (base/'sdk-export.txt').open('w') as output:subprocess.run(['python3','-B','scripts/release-sdk.py','--output',str(archive)],cwd=source,env=env,stdout=output,stderr=subprocess.STDOUT,check=True,timeout=180)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+with tarfile.open(archive) as t:
+ prefix=old['prefix'];raw=t.extractfile(prefix+'/SDK_MANIFEST.json').read();manifest=json.loads(raw)
+ assert manifest['source']==dict(clean=True,commit=commit) and manifest['private_build'] and not manifest['untracked_files']
+ actual={}
+ for member in t:
+  assert member.isfile() and member.name.startswith(prefix+'/')
+  name=member.name[len(prefix)+1:]
+  if name!='SDK_MANIFEST.json':actual[name]=sha(t.extractfile(member).read())
+ assert actual==manifest['files']
+ previous=json.loads((root/old['cache']/'SDK_MANIFEST.json').read_text())['files']
+ assert all(actual[k]==h for k,h in old['bootstrap'].items())
+ for name in ['ui/collection_view.go','ui/collection_view_test.go','drivers/cogent/controls.go','drivers/cogent/choices.go','drivers/cogent/menu_button.go']:
+  assert actual[name]==previous[name],name
+ diff=subprocess.check_output(['git','diff','--binary',old['upstream_commit'],commit],cwd=source);encoded=gzip.compress(diff,mtime=0);patch.write_bytes(encoded)
+ new=dict(old,source_commit=commit,archive=str(archive.relative_to(root)),archive_bytes=archive.stat().st_size,sha256=sha(archive.read_bytes()),manifest_sha256=sha(raw),cache=cache,files=len(actual),compatibility_patch=dict(path=str(patch.relative_to(root)),sha256=sha(encoded)),bootstrap={k:actual[k] for k in old['bootstrap']})
+ (base/'previous-sdk.lock.json').write_bytes(lock.read_bytes());lock.write_text(json.dumps(new,indent=2)+'\n')
+ p=root/'desktop/go.mod';s=p.read_text();assert s.count('.vellum-sdk-f9dee54-elab8')==4;p.write_text(s.replace('.vellum-sdk-f9dee54-elab8','.vellum-sdk-f9dee54-elab9'))
+ report=dict(passed=True,upstream_commit=old['upstream_commit'],source_commit=commit,archive_sha256=new['sha256'],manifest_sha256=new['manifest_sha256'],files=len(actual),changed=sorted(k for k in previous.keys()&actual.keys() if previous[k]!=actual[k]),added=sorted(actual.keys()-previous.keys()),removed=sorted(previous.keys()-actual.keys()),all_members_match=True,bootstrap_scripts_unchanged=True,legacy_and_pure_collection_view_sources_unchanged=True)
+ (base/'sdk-comparison.json').write_text(json.dumps(report,indent=2)+'\n')
+p=root/'third_party/vellum/README.md';s=p.read_text().replace('## Current dependency · October 25, 2026','## Current dependency · October 26, 2026',1).replace('0650083e179aae67c3f67aff406ac7a1b5206486',commit,1).replace('The active archive is `vellum-f9dee54-elab8.tar.gz`','The active archive is `vellum-f9dee54-elab9.tar.gz`',1).replace('`build/.vellum-sdk-f9dee54-elab8`','`build/.vellum-sdk-f9dee54-elab9`',1)
+s+='''\n## Collection input origin · October 26, 2026\n\nThe elab9 SDK retains admitted collection selection, Select All and activation\nwrappers while checking current row/catalog/retirement eligibility. Actual ELab\nqueue/agent interleavings reproduce stale Return erasing a newer value draft,\nunwanted replacement prompts and stale selection in all four themes. Ordinary\nmultiple choices retain latest callbacks, with explicit controls. Pure\nCollectionView live callbacks, selectors, Switch/ToggleButton and programmatic\nbutton contracts remain unchanged. The exact cumulative compatibility patch is\n[here](patches/elab-f9dee54-collection-origin-compat.patch.gz). The elab8 archive and\nqualified /268 package remain preserved. [Qualification](../../docs/validation/offline-quality/collection-origin/README.md)\ndistinguishes driver/service evidence from still-open native OS queue/rate checks.\n''';p.write_text(s)
+with (base/'sdk-prepare.txt').open('w') as output:subprocess.run(['python3','-B','scripts/prepare-vellum.py'],cwd=root,env=env,stdout=output,stderr=subprocess.STDOUT,check=True,timeout=240)
+print(json.dumps(report))

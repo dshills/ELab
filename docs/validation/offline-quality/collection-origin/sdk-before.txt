@@ -1,0 +1,27 @@
+# github.com/dshills/vellum/drivers/cogent [github.com/dshills/vellum/drivers/cogent.test]
+accessibility_darwin.m:661:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:662:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/vellum/drivers/cogent.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select
+    collection_origin_offscreen_test.go:54: queued collection input adopted refreshed wrapper [1]
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select-all
+    collection_origin_offscreen_test.go:54: queued collection input adopted refreshed wrapper [1]
+=== RUN   TestCollectionQueuedCallbacksRetainAdmittedDescriptor/activate
+    collection_origin_offscreen_test.go:54: queued collection input adopted refreshed wrapper [1]
+--- FAIL: TestCollectionQueuedCallbacksRetainAdmittedDescriptor (0.24s)
+    --- FAIL: TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select (0.10s)
+    --- FAIL: TestCollectionQueuedCallbacksRetainAdmittedDescriptor/select-all (0.07s)
+    --- FAIL: TestCollectionQueuedCallbacksRetainAdmittedDescriptor/activate (0.07s)
+=== RUN   TestNonCollectionMultipleChoicesKeepLatestCallback
+=== RUN   TestNonCollectionMultipleChoicesKeepLatestCallback/select
+=== RUN   TestNonCollectionMultipleChoicesKeepLatestCallback/select-all
+--- PASS: TestNonCollectionMultipleChoicesKeepLatestCallback (0.11s)
+    --- PASS: TestNonCollectionMultipleChoicesKeepLatestCallback/select (0.05s)
+    --- PASS: TestNonCollectionMultipleChoicesKeepLatestCallback/select-all (0.05s)
+FAIL
+FAIL	github.com/dshills/vellum/drivers/cogent	0.983s
+FAIL

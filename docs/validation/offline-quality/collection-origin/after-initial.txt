@@ -1,0 +1,25 @@
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:661:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:662:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/component
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/select/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/select/replace
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/activate/replace
+--- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext (3.47s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/select/draft (0.68s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/draft (0.45s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/component (0.45s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/select/search (0.46s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/search (0.54s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/select/replace (0.45s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/activate/replace (0.44s)
+PASS
+ok  	github.com/dshills/elab/desktop	5.119s

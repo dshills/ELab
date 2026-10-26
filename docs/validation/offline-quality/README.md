@@ -131,3 +131,10 @@ The SDK remains exact. The first unqualified assembly's missing README is repair
 before final archive qualification; initial receipts and controlled fixture/tool
 errors remain explicit. All prior releases stay preserved and native checks
 3/6/9/11 remain open.
+
+The [collection-origin follow-up](collection-origin/README.md) reproduces an old
+queued Return reopening an example and erasing a newer agent draft. The narrow
+elab9 dependency repair preserves admitted collection wrappers and current
+eligibility, keeping non-collection contracts unchanged. All 19 application
+interleavings, own queued navigation, complete new SDK driver gates and application
+gates pass. /269 package qualification follows separately; /268 remains preserved.

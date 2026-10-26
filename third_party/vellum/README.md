@@ -1,6 +1,6 @@
 # Pinned Vellum SDK from public source
 
-## Current dependency · October 25, 2026
+## Current dependency · October 26, 2026
 
 ELab consumes Vellum **v0.1.0-personal.1** from the owner's newly pushed
 [`f9dee54`](https://github.com/dshills/vellum/commit/f9dee54fdb2a9e73a38fdd3fb67c8871dc0f6c40) on
@@ -17,10 +17,10 @@ Undo boundaries. Upstream's newer controls, secure text and focus reveal remain.
 ELab adjusts explicit action padding for the new reserved keyboard-focus border.
 Six compatibility dependency stages follow upstream's 106 stages, numbered
 107–112; preparation verifies the complete ordered recipe and each input/output
-hash. The private derived source is `0650083e179aae67c3f67aff406ac7a1b5206486`.
+hash. The private derived source is `cdd596c2ea75ee483869678a6b2354d5e214cee0`.
 
-The active archive is `vellum-f9dee54-elab8.tar.gz`; all four native module
-replacements resolve into `build/.vellum-sdk-f9dee54-elab8`. The lock pins source, complete
+The active archive is `vellum-f9dee54-elab9.tar.gz`; all four native module
+replacements resolve into `build/.vellum-sdk-f9dee54-elab9`. The lock pins source, complete
 archive/manifest, compatibility patch and all bootstrap scripts before execution.
 The SDK is a **private compatibility build**, not an upstream release or a public
 redistribution approval. The SDK compatibility changes add no electronics models,
@@ -326,3 +326,16 @@ provenance differ from elab13. Dependencies, notices, release metadata and boots
 scripts are unchanged. ELab application checks and changed-candidate native
 qualification remain separate. The existing /223 app and /205 download are
 preserved. [Repair status](../../research/110-queued-field-origin.md).
+
+## Collection input origin · October 26, 2026
+
+The elab9 SDK retains admitted collection selection, Select All and activation
+wrappers while checking current row/catalog/retirement eligibility. Actual ELab
+queue/agent interleavings reproduce stale Return erasing a newer value draft,
+unwanted replacement prompts and stale selection in all four themes. Ordinary
+multiple choices retain latest callbacks, with explicit controls. Pure
+CollectionView live callbacks, selectors, Switch/ToggleButton and programmatic
+button contracts remain unchanged. The exact cumulative compatibility patch is
+[here](patches/elab-f9dee54-collection-origin-compat.patch.gz). The elab8 archive and
+qualified /268 package remain preserved. [Qualification](../../docs/validation/offline-quality/collection-origin/README.md)
+distinguishes driver/service evidence from still-open native OS queue/rate checks.

@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "source_commit": "cdd596c2ea75ee483869678a6b2354d5e214cee0",
+  "checks": [
+    {
+      "log": "framework-ordinary.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-count=1",
+        "-timeout=12m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 89.98445712495595
+    },
+    {
+      "log": "framework-rendered.jsonl",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-count=1",
+        "-timeout=15m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 495.70180349983275
+    },
+    {
+      "log": "framework-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 17.96940004103817
+    },
+    {
+      "log": "framework-rendered-vet.txt",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "wall_s": 17.78612579102628
+    }
+  ],
+  "portable_inputs_unchanged": 556,
+  "portable_scope": "Verified556 non-driver Go/module inputs byte-identical to qualified0650083e; portable SDK race receipt carried unchanged",
+  "scope": "Complete fresh ordinary/rendered driver race and both vets for collection-only repair; intentional non-collection callbacks unchanged"
+}

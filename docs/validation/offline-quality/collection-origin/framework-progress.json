@@ -1,0 +1,31 @@
+[
+  {
+    "log": "framework-ordinary.jsonl",
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-json",
+      "-count=1",
+      "-timeout=12m",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 89.98445712495595
+  },
+  {
+    "log": "framework-rendered.jsonl",
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "-tags=offscreen",
+      "-json",
+      "-count=1",
+      "-timeout=15m",
+      "./..."
+    ],
+    "exit_code": 0,
+    "wall_s": 495.70180349983275
+  }
+]

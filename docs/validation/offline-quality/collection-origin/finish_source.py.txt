@@ -1,0 +1,37 @@
+from pathlib import Path
+import json,gzip,hashlib,shutil
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/collection-origin';out=root/'docs/validation/offline-quality/collection-origin'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+q=json.loads((base/'full-quality/quality-complete.json').read_text());framework=json.loads((base/'framework-complete.json').read_text());assert q['passed'] and framework['passed']
+counts={}
+for name in ['root-race.jsonl','desktop-race.jsonl','mounted-race.jsonl']:
+ rows=[json.loads(x) for x in (base/'full-quality'/name).read_text().splitlines() if x.startswith('{')];assert not [r for r in rows if r.get('Action')=='fail']
+ passed={(r['Package'],r['Test']) for r in rows if r.get('Action')=='pass' and r.get('Test')}
+ counts[name]=dict(top_level=sum('/' not in test for package,test in passed),including_subtests=len(passed))
+assert [counts[n]['top_level'] for n in counts]==[867,339,472],counts
+assert counts['mounted-race.jsonl']['including_subtests']==1467
+(base/'test-counts.json').write_text(json.dumps(counts,indent=2)+'\n')
+sdk_counts={}
+for name in ['framework-ordinary.jsonl','framework-rendered.jsonl']:
+ rows=[json.loads(x) for x in (base/name).read_text().splitlines() if x.startswith('{')];assert not [r for r in rows if r.get('Action')=='fail']
+ passed={(r['Package'],r['Test']) for r in rows if r.get('Action')=='pass' and r.get('Test')}
+ sdk_counts[name]=dict(top_level=sum('/' not in test for package,test in passed),including_subtests=len(passed))
+ if 'rendered' in name:
+  assert any(test=='TestCollectionQueuedCallbacksRetainAdmittedDescriptor' for package,test in passed)
+  assert any(test=='TestNonCollectionMultipleChoicesKeepLatestCallback' for package,test in passed)
+(base/'framework-test-counts.json').write_text(json.dumps(sdk_counts,indent=2)+'\n')
+previous=json.loads(gzip.decompress((root/'docs/validation/offline-quality/menu-origin/source-scope.json.gz').read_bytes()))
+changed=[p for p,h in previous['files_sha256'].items() if sha(root/p)!=h];assert changed==['desktop/go.mod','third_party/vellum/sdk.lock.json'],changed
+prior=json.loads((root/'docs/validation/offline-quality/menu-origin/scope-review.json').read_text())['prior_package_sdk_hashes'];prior['build/releases/ELab-0.195.7-macos-arm64.zip']='0c04f6348098bbcd4c0206da5cb613ea7931d5d674bb10be6e801a5147772f60';assert all(sha(root/p)==h for p,h in prior.items())
+lock=json.loads((root/'third_party/vellum/sdk.lock.json').read_text());assert lock['source_commit']==framework['source_commit'] and sha(root/lock['archive'])==lock['sha256']
+(base/'scope-review.json').write_text(json.dumps(dict(application_production_go_sources_unchanged=True,prior_source_inputs_changed=changed,added_regression='desktop/collection_origin_offscreen_test.go',sdk_source=lock['source_commit'],sdk_archive_sha256=lock['sha256'],legacy_contracts_preserved=True,prior_package_sdk_hashes=prior,native_checks_still_open=[3,6,9,11]),indent=2)+'\n')
+for p in base.iterdir():
+ if not p.is_file() or p.name.endswith('.mod') or p.name.endswith('.sum') or p.suffix=='.patch':continue
+ if p.suffix=='.py':shutil.copy2(p,out/(p.name+'.txt'))
+ elif p.name in ['framework-ordinary.jsonl','framework-rendered.jsonl','framework-portable-scope.json']:(out/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+ elif p.suffix in ['.txt','.json']:shutil.copy2(p,out/p.name)
+quality=out/'full-quality';quality.mkdir(exist_ok=True)
+for p in (base/'full-quality').iterdir():
+ if p.suffix in ['.txt','.jsonl']:(quality/(p.name+'.gz')).write_bytes(gzip.compress(p.read_bytes(),mtime=0))
+ elif p.suffix=='.json':shutil.copy2(p,quality/p.name)
+print(json.dumps(dict(application=counts,framework=sdk_counts,prior_identities_preserved=len(prior))))

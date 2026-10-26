@@ -1,0 +1,46 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/dark/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/system/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select-all/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/activate/draft
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/component
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/search
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/replace
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/replace
+=== RUN   TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/replace
+--- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext (11.03s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/draft (0.82s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select/draft (0.72s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/select-all/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/dark/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/system/select/draft (0.67s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/system/select-all/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/system/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select/draft (0.67s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/select-all/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/apollo/activate/draft (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/component (0.49s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/search (0.53s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/search (0.51s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/search (0.61s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select/replace (0.77s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/select-all/replace (0.66s)
+    --- PASS: TestMountedQueuedExampleCollectionKeepsAgentContext/light/activate/replace (0.67s)
+=== RUN   TestMountedQueuedCollectionOwnKeysContinueWithoutLosingFocus
+--- PASS: TestMountedQueuedCollectionOwnKeysContinueWithoutLosingFocus (0.88s)
+PASS
+ok  	github.com/dshills/elab/desktop	14.103s

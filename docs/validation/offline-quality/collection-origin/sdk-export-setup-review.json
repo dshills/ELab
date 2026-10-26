@@ -1,0 +1,8 @@
+{
+  "initial_failure": "KeyError: drivers/cogent/switch.go",
+  "cause": "A validation fixture guessed nonexistent per-control filenames. The handlers reside in controls.go; choices.go and menu_button.go hold other unchanged contracts.",
+  "corrected_guard": "Byte-compare actual controls.go/choices.go/menu_button.go and ui/collection_view.go/test.go against prior SDK manifest",
+  "exported_archive_reused_without_replacing_bytes": true,
+  "archive_sha256": "50a08e750f3734dc4e53ec3a7fcd4a1575523024baa13edff24b3940f9eeaa4a",
+  "lock_not_changed_before_failure": true
+}
