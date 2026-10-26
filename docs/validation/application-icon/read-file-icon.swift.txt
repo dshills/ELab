@@ -1,0 +1,15 @@
+import AppKit
+import Foundation
+let source = CommandLine.arguments[1]
+let output = URL(fileURLWithPath: CommandLine.arguments[2])
+let icon = NSWorkspace.shared.icon(forFile: source)
+let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: 256, pixelsHigh: 256,
+    bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+    colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
+NSGraphicsContext.saveGraphicsState()
+NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
+icon.draw(in: NSRect(x: 0, y: 0, width: 256, height: 256), from: .zero,
+          operation: .sourceOver, fraction: 1)
+NSGraphicsContext.restoreGraphicsState()
+try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+print("NSWorkspace file-icon lookup rendered 256x256; resource lookup, not a screen capture")

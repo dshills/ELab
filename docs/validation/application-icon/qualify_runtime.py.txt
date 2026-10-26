@@ -1,0 +1,13 @@
+from pathlib import Path
+import argparse,hashlib,importlib.util,json,sys
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/app-icon';p=json.loads((b/'package.json').read_text());out=Path('/private/tmp/elab-icon273-'+p['packaging_source'][:8]);assert not out.exists()
+sys.path.insert(0,str(r/'scripts'))
+spec=importlib.util.spec_from_file_location('runtime',r/'scripts/runtime_isolation.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+original=m.sandbox_profile
+m.sandbox_profile=lambda roots:original(roots)+'(deny file-write* (subpath '+m.sb_string(str(Path.home()/'Library/Cogent Core'))+'))\n'
+args=argparse.Namespace(app=Path(p['app']),app_executable_sha256=p['app_executable_sha256'],agent_binary=Path(p['agent']),conformance_binary=r/'build/elab-conformance',artifacts=out)
+(b/'runtime-invocation.json').write_text(json.dumps(dict(controller='scripts/runtime_isolation.py',controller_sha256=hashlib.sha256((r/'scripts/runtime_isolation.py').read_bytes()).hexdigest(),arguments={k:str(v) for k,v in vars(args).items()},extra_policy='deny shared Library/Cogent Core writes; existing development-file/IP restrictions preserved',production_security_settings_changed=False),indent=2)+'\n')
+report=m.run(args);assert report['passed']
+exits=[json.loads(f.read_text()) for f in (out/'public').rglob('process-exit.json')];assert len(exits)==102 and all(e['exit_code']==0 and not e['graceful_wait_timed_out'] for e in exits)
+(b/'runtime-result.json').write_text(json.dumps(dict(passed=True,directory=str(out),normal_external_exits=len(exits),native_smoke='passed',public_adapters=['in-process','headless-stdio','headless-socket','native-socket']),indent=2)+'\n')
+print(json.dumps(dict(passed=True,directory=str(out),normal_external_exits=len(exits))))

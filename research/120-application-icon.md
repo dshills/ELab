@@ -25,3 +25,14 @@ the existing SDK lock remain untouched.
 77 ELab Python tests and seven upstream icon tests pass. New bundle/native
 checks and their precise scopes follow in the validation record; metadata or
 resource decoding alone must not be called a verified Finder/Dock screenshot.
+
+## Complete
+
+Runnable **0.196.0 /273** has the icon embedded and ad-hoc sealed before
+publication. Ten decoded representations and macOS file-icon lookup show the
+expected artwork. The unsealed executable and matching agent are identical to
+/272. Fresh copied native smoke and four public adapters pass; all 102 external
+processes exit normally. All 126 example files and thirteen prior release/SDK
+archive identities stay exact. No owner session command or project edit was
+sent. No UI runtime upgrade, new component, solver-limit change, push or upload.
+[Detailed evidence and boundaries](../docs/validation/application-icon/README.md).

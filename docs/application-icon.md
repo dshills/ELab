@@ -47,5 +47,6 @@ These include PNG/ICNS decoding, source mutation, invalid artwork, hash changes,
 and icon/plist tampering around signing. Packaging-file integrity regressions
 cover changed helpers, extra imports and symlinks. Runtime Go/module/native
 sources are unchanged from /272; prior full source and agent qualification
-remain applicable to those exact inputs. New bundle checks are recorded under
-`docs/validation/application-icon/` after packaging.
+remain applicable to those exact inputs. The exact copied /273 app passes native smoke and all four public agent adapters;
+all 102 external processes exit normally. Ten representations and macOS file-icon
+lookup resolve the artwork. [Bundle checks and limits](validation/application-icon/README.md).
