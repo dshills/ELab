@@ -88,3 +88,47 @@ Apply in Light/Dark/System/Apollo. Light and Apollo are visually inspected;
 these are owned rendered scenes, not desktop screenshots or native queue proof.
 [Visual comparison](visual-comparison.json), [Light](visual/light-proposal.png),
 [Apollo](visual/apollo-proposal.png), [focused check](visual-check.txt).
+
+## Runnable candidate /274
+
+**ELab 0.196.1 /274** is available at
+[the updated app](../../../build/ELab-0.196.1-274-Vellum/ELab.app), with its matching
+agent, original icon, updated SDK notices and all 62 existing examples. Clean
+binary source is `500e39541b3d8d612046a3e5b04a4bd9e42c2aef`; final documentation
+is a later checkpoint. [Package identities](candidate274/package.json),
+[summary](candidate274/summary.json), [final seals](candidate274/final-signatures.txt).
+
+The exact copied app passes full native smoke and all four public adapters with
+development-file/outbound-IP denial and fixture-only shared-geometry write denial.
+All **102 external conformance processes exit 0 normally**. The copied bundle,
+source bundle, matching agent and controller remain exact.
+[Runtime receipt](candidate274/runtime-report.json.gz),
+[public adapters](candidate274/public-report.json.gz),
+[normal process exits](candidate274/external-process-exits.json.gz).
+
+The **entire command/schema and component catalogs are identical** to the
+pre-update baseline: **194 commands /53 component kinds**. Existing drawing,
+explanation, plotting, experiment and proposal walkthroughs pass through the
+copied native service and matching headless agent. The feature fixture closes
+with exit 0 and endpoint removal. These are shared-command workflows, not
+physical mouse/keyboard or native OS queue acceptance.
+[Catalog comparison](candidate274/catalog-comparison.json),
+[native walkthrough](candidate274/native-feature-new-workflows.json),
+[headless walkthrough](candidate274/headless-features.json).
+
+All **62 examples** reopen paused and clean with exact graphs, and all 62
+matching agents exit 0. All **126 packaged example files** match the earlier
+qualified ZIP. All **1,383 frozen application inputs** and **19 protected prior
+archive/executable identities** remain exact. Current and previous SDK caches
+are reverified against their complete manifests. The four representative theme
+captures are byte-identical to the previous runtime, with actual routed Apply
+working in each theme. No app code, test assertion, model or solver limit is
+changed to accommodate the upgrade.
+[Examples](candidate274/examples.json),
+[preservation](candidate274/preservation-after.json).
+
+The owned native fixtures are closed normally; no owner app/project command is
+sent. The previously qualified download is preserved, and /274 remains a
+separate development candidate. No new endurance, participant, clean-account,
+public signing/notarization or original native 3/6/9/11 acceptance is claimed.
+No push, upload, security weakening or heartbeat restart occurs.

@@ -65,3 +65,22 @@ subtests), all vets, lint/imports, 77 Python tests, PRD and build. No app-source
 model, command or solver-limit change is needed after the compatibility merge.
 Existing assertions remain intact. Packaging/native qualification follows the
 clean source checkpoint; previous apps and qualified releases stay preserved.
+
+## Complete
+
+**0.196.1 /274**, clean binary source `500e3954`, uses Vellum v1.0.0 public source
+4cf0176 with qualified compatibility source 19c9ebc. The icon remains intact.
+Exact copied native smoke and all four public adapters pass; all 102 external
+processes exit normally. Native/headless workbench walkthroughs pass. Entire
+194-command and 53-kind catalogs match the original baseline. All 62 examples
+reopen paused/clean with exact graphs; all 126 example files match the qualified
+ZIP. Matching agents exit normally. Current/previous caches, 1,383 frozen app
+inputs and all 19 protected identities remain exact. Four representative theme
+captures are byte-identical to the old runtime, with routed Apply working.
+
+Owned fixtures close normally. No existing owner session/project commands, app
+code/assertion changes, model/solver-limit changes, new components, push/upload,
+security changes or heartbeat restart. Original native acceptance checks and
+participant/clean-account/public-signing limits stay open. The prior download is
+preserved; the new development candidate is ready without waiting for review.
+[Evidence and limits](../docs/validation/vellum-v1-runtime/README.md).

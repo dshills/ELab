@@ -1,0 +1,19 @@
+from pathlib import Path
+import hashlib,json,sys,zipfile
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/vellum-runtime-refresh';p=json.loads((b/'package.json').read_text());folder=Path(p['app']).parent;sys.path.insert(0,str(r/'scripts'));from acceptance_client import AcceptanceClient
+rows=[]
+with zipfile.ZipFile(r/'build/releases/ELab-0.195.9-macos-arm64.zip') as archive:
+ source={name.split('/',1)[1]:archive.read(name) for name in archive.namelist() if '/Examples/' in name}
+ for name,data in source.items():assert (folder/name).read_bytes()==data
+ for file in sorted((folder/'Examples').glob('*.elab')):
+  expected=json.loads(file.read_text());client=AcceptanceClient(p['agent'])
+  try:
+   client.ask('project.load',dict(path=str(file)),mutate=True);state=client.ask('simulation.wait')
+   assert state['paused'] and not state['document']['dirty'] and state['status'] not in ('error','unsupported')
+   assert dict(components=state['components'],wires=state['wires'])==expected['graph'],file
+   assert len(client.ask('parts.list'))==53 and len(client.ask('capabilities.list')['capabilities'])==194
+  finally:client.close()
+  rows.append(dict(name=file.name,sha256=hashlib.sha256(file.read_bytes()).hexdigest(),paused_clean=True,exact_graph=True,agent_exit_code=client.process.returncode))
+assert len(rows)==62 and len(source)==126
+report=dict(passed=True,agent_sha256=p['agent_sha256'],examples_reopened=62,example_files_equal_qualified_zip=126,examples=rows,scope='Exact matching packaged headless agent; not physical UI input or hardware validation')
+(b/'examples.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(dict(passed=True,examples=62,example_files=126)))

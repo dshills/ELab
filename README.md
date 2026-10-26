@@ -13,12 +13,16 @@ explicit live plotting, experiment comparisons and shared edit proposals.
 The existing 53 component kinds and solver limits are unchanged; users and agents
 share 194 commands. See the [workflow guide](docs/workbench-workflows.md) and
 [engineering checks](docs/validation/workbench-improvements/README.md).
-**Runnable workbench candidate: [ELab 0.196.0 /273](build/ELab-0.196.0-273-Icon/ELab.app)**,
+**Runnable workbench candidate: [ELab 0.196.1 /274](build/ELab-0.196.1-274-Vellum/ELab.app)**,
 with a new [application icon](docs/application-icon.md), the matching agent and
 all 62 examples alongside it. Native smoke, four
 public adapters and new-workflow checks pass; all packaged examples reopen clean.
 This development candidate keeps the qualified /270 download below preserved
 separately; existing native-input and participant acceptance limits remain open.
+
+The UI runtime now uses Vellum v1.0.0 public source `4cf0176` with ELab’s
+existing input/ownership compatibility fixes. All shared command/component
+catalogs are unchanged. [Runtime upgrade checks](docs/validation/vellum-v1-runtime/README.md).
 
 ## Downloadable release
 

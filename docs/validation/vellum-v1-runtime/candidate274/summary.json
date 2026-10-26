@@ -1,0 +1,327 @@
+{
+  "passed": true,
+  "version": "0.196.1",
+  "build": 274,
+  "clean_binary_source": "500e39541b3d8d612046a3e5b04a4bd9e42c2aef",
+  "upstream_commit": "4cf01763c1fd5501648ea19b4bb406fe62446319",
+  "private_sdk_source": "19c9ebc37ed9f06daa824e024b331caf9700f4b0",
+  "sdk_archive_sha256": "a77bca8b644f1ce94107376bb020a3cc5b23d23cdc422ec1af6485343ba0efcb",
+  "sdk_files": 8862,
+  "frozen_application_inputs": 1383,
+  "source_gate_results": {
+    "passed": true,
+    "steps": [
+      {
+        "name": "prd",
+        "command": [
+          "python3",
+          "scripts/prd-audit.py",
+          "--verify",
+          "research/11-prd-implementation-audit.json"
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab",
+        "exit_code": 0,
+        "wall_s": 0.02814358309842646
+      },
+      {
+        "name": "lint",
+        "command": [
+          "sh",
+          "scripts/lint.sh"
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab",
+        "exit_code": 0,
+        "wall_s": 39.64909099997021
+      },
+      {
+        "name": "python",
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "test_*.py"
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab",
+        "exit_code": 0,
+        "wall_s": 2.258547875098884
+      },
+      {
+        "name": "portable-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-json",
+          "-count=1",
+          "-timeout=30m",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab",
+        "exit_code": 0,
+        "wall_s": 395.9163407080341
+      },
+      {
+        "name": "root-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab",
+        "exit_code": 0,
+        "wall_s": 4.66601641708985
+      },
+      {
+        "name": "desktop-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-json",
+          "-count=1",
+          "-timeout=30m",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+        "exit_code": 0,
+        "wall_s": 239.24390925001353
+      },
+      {
+        "name": "desktop-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+        "exit_code": 0,
+        "wall_s": 2.722254749853164
+      },
+      {
+        "name": "rendered-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-json",
+          "-tags=offscreen",
+          "-count=1",
+          "-timeout=30m",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+        "exit_code": 0,
+        "wall_s": 491.4161092089489
+      },
+      {
+        "name": "rendered-vet",
+        "command": [
+          "go",
+          "vet",
+          "-tags=offscreen",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+        "exit_code": 0,
+        "wall_s": 16.323607499944046
+      },
+      {
+        "name": "build",
+        "command": [
+          "sh",
+          "scripts/build.sh"
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab",
+        "exit_code": 0,
+        "wall_s": 8.273406291846186
+      }
+    ],
+    "frozen_inputs": 1383,
+    "changed_inputs": []
+  },
+  "framework_gate_results": {
+    "passed": true,
+    "source_commit": "19c9ebc37ed9f06daa824e024b331caf9700f4b0",
+    "steps": [
+      {
+        "name": "native-prepare-python",
+        "command": [
+          "python3",
+          "-B",
+          "drivers/cogent/prepare_test.py"
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176",
+        "exit_code": 0,
+        "wall_s": 0.3794489169958979
+      },
+      {
+        "name": "sdk-python",
+        "command": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "*_test.py"
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176",
+        "exit_code": 0,
+        "wall_s": 7.178483041934669
+      },
+      {
+        "name": "portable-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-json",
+          "-count=1",
+          "-timeout=20m",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176",
+        "exit_code": 0,
+        "wall_s": 32.33645279100165
+      },
+      {
+        "name": "portable-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176",
+        "exit_code": 0,
+        "wall_s": 2.6218089580070227
+      },
+      {
+        "name": "api-tool-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-json",
+          "-count=1",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/tools/apicompat",
+        "exit_code": 0,
+        "wall_s": 2.4443824160844088
+      },
+      {
+        "name": "api-tool-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/tools/apicompat",
+        "exit_code": 0,
+        "wall_s": 0.43513320782221854
+      },
+      {
+        "name": "api-check",
+        "command": [
+          "go",
+          "run",
+          ".",
+          "check",
+          "-root",
+          "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176",
+          "-baseline",
+          "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/release/api/v1"
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/tools/apicompat",
+        "exit_code": 0,
+        "wall_s": 0.8357450838666409
+      },
+      {
+        "name": "driver-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-json",
+          "-count=1",
+          "-timeout=20m",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/drivers/cogent",
+        "exit_code": 0,
+        "wall_s": 123.69451262499206
+      },
+      {
+        "name": "driver-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/drivers/cogent",
+        "exit_code": 0,
+        "wall_s": 39.20693929097615
+      },
+      {
+        "name": "rendered-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "-json",
+          "-tags=offscreen",
+          "-count=1",
+          "-timeout=20m",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/drivers/cogent",
+        "exit_code": 0,
+        "wall_s": 528.3556988751516
+      },
+      {
+        "name": "rendered-vet",
+        "command": [
+          "go",
+          "vet",
+          "-tags=offscreen",
+          "./..."
+        ],
+        "cwd": "/Users/dshills/Development/projects/ELab/build/vellum-runtime-4cf0176/drivers/cogent",
+        "exit_code": 0,
+        "wall_s": 27.26938745798543
+      }
+    ]
+  },
+  "commands": 194,
+  "component_kinds": 53,
+  "whole_catalogs_identical": true,
+  "representative_four_theme_captures_byte_identical": true,
+  "example_count": 62,
+  "example_files_exact": 126,
+  "normal_conformance_external_exits": 102,
+  "owned_native_feature_exit": 0,
+  "owned_endpoint_removed": true,
+  "protected_identities": 19,
+  "all_protected_exact": true,
+  "current_and_previous_sdk_caches_verified": true,
+  "original_native_checks_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "participant_study_not_performed": true,
+  "owner_session_commands_sent": false,
+  "security_settings_changed": false,
+  "release_promoted": false,
+  "heartbeat_restarted": false,
+  "push_or_upload": false,
+  "icon_packager_matches_runtime_upstream": true,
+  "application_icon_retained": true
+}

@@ -1,0 +1,106 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/vellum-runtime-refresh';d=r/'docs/validation/vellum-v1-runtime';out=d/'candidate274';out.mkdir(exist_ok=False)
+load=lambda p:json.loads(p.read_text())
+def sha(path):
+ with path.open('rb') as stream:return hashlib.file_digest(stream,'sha256').hexdigest()
+p=load(b/'package.json');before=load(b/'before.json');rr=load(b/'runtime-result.json');runtime=Path(rr['directory']);report=load(runtime/'runtime-report.json');nf=load(b/'native-features.json');hf=load(b/'headless-features.json');ex=load(b/'examples.json');catalog=load(b/'catalog-comparison.json')
+assert all(x['passed'] for x in (rr,report,nf,hf,ex,catalog))
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()==p['source_commit']
+assert sha(Path(p['app'])/'Contents/MacOS/ELab')==p['app_executable_sha256'] and sha(Path(p['agent']))==p['agent_sha256']
+frozen=load(b/'application/frozen-inputs.json');assert len(frozen)==1383 and all(sha(r/f)==h for f,h in frozen.items())
+assert all(sha(r/f)==h for f,h in before['protected_identities'].items())
+assert nf['native_exit_code']==0 and load(runtime/'features/final-process-state.json')==dict(pid=nf['pid'],exit_code=0,endpoint_exists=False)
+assert hf['agent_exit_code']==0 and load(runtime/'features/new-workflows.json')['agent_exit_code']==0
+assert ex['examples_reopened']==62 and ex['example_files_equal_qualified_zip']==126 and all(x['agent_exit_code']==0 for x in ex['examples'])
+exits=[dict(path=str(f.relative_to(runtime)),result=load(f)) for f in sorted((runtime/'public').rglob('process-exit.json'))];assert len(exits)==102 and all(x['result']['exit_code']==0 and not x['result']['graceful_wait_timed_out'] for x in exits)
+assert [x['name'] for x in load(runtime/'public/report.json')['adapters']]==rr['public_adapters']
+signatures=[]
+for app in (Path(p['app']),runtime/'ELab.app'):
+ q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True,capture_output=True,text=True);signatures.append(q.stdout+q.stderr)
+(out/'final-signatures.txt').write_text('\n'.join(signatures))
+# Fresh integrity verification of the current and previous immutable caches.
+import sys
+sys.path.insert(0,str(r/'scripts'));import importlib.util
+spec=importlib.util.spec_from_file_location('elab_sdk_prepare',r/'scripts/prepare-vellum.py');module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+current=module.load_pin(r);module.verify_archive_identity(r/current['archive'],current);module.verify_cache(r/current['cache'],current);module.verify_replacements(r,r/current['cache']);module.verify_archive_identity(r/before['runtime_sdk']['archive'],before['runtime_sdk']);module.verify_cache(r/before['runtime_sdk']['cache'],before['runtime_sdk'])
+for name in ('package.json','packager-output.txt','signature.txt','clean-build.txt','native-build-info.txt','agent-build-info.txt','runtime-invocation.json','runtime-result.json','runtime-output.txt','native-features.json','native-features-output.txt','headless-features.json','headless-features-output.txt','examples.json','examples-output.txt','catalog-comparison.json'):
+ shutil.copyfile(b/name,out/name)
+for name in ('runtime-report.json','native-smoke.log.txt','public-suites.log.txt','public/report.json'):
+ (out/(name.replace('/','-')+'.gz')).write_bytes(gzip.compress((runtime/name).read_bytes(),mtime=0))
+(out/'external-process-exits.json.gz').write_bytes(gzip.compress((json.dumps(exits,indent=2)+'\n').encode(),mtime=0))
+for name in ('startup.json','new-workflows.json','native-output.txt','controller.txt','final-process-state.json'):
+ shutil.copyfile(runtime/'features'/name,out/('native-feature-'+name))
+for name in ('package.py','qualify_runtime.py','native_features.py','check_examples.py','finalize.py'):
+ shutil.copyfile(b/name,out/(name+'.txt'))
+visual=load(d/'visual-comparison.json');assert all(x['byte_identical_to_previous'] for x in visual['images'])
+summary=dict(passed=True,version=p['version'],build=p['build'],clean_binary_source=p['source_commit'],upstream_commit=current['upstream_commit'],private_sdk_source=current['source_commit'],sdk_archive_sha256=current['sha256'],sdk_files=current['files'],frozen_application_inputs=len(frozen),source_gate_results=load(b/'application/report.json'),framework_gate_results=load(b/'framework/report.json'),commands=194,component_kinds=53,whole_catalogs_identical=True,representative_four_theme_captures_byte_identical=True,example_count=62,example_files_exact=126,normal_conformance_external_exits=102,owned_native_feature_exit=0,owned_endpoint_removed=True,protected_identities=len(before['protected_identities']),all_protected_exact=True,current_and_previous_sdk_caches_verified=True,icon_packager_matches_runtime_upstream=current['upstream_commit']==load(r/'third_party/vellum/packager.lock.json')['upstream_commit'],application_icon_retained=p['icon']==load(r/'docs/validation/application-icon/package.json')['icon'],original_native_checks_open=[3,6,9,11],participant_study_not_performed=True,owner_session_commands_sent=False,security_settings_changed=False,release_promoted=False,heartbeat_restarted=False,push_or_upload=False)
+(out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+(out/'preservation-after.json').write_text(json.dumps(dict(identities=before['protected_identities'],all_exact=True,current_sdk=current,previous_sdk_cache_verified=True),indent=2)+'\n')
+with (d/'README.md').open('a') as f:f.write('''
+## Runnable candidate /274
+
+**ELab 0.196.1 /274** is available at
+[the updated app](../../../build/ELab-0.196.1-274-Vellum/ELab.app), with its matching
+agent, original icon, updated SDK notices and all 62 existing examples. Clean
+binary source is `500e39541b3d8d612046a3e5b04a4bd9e42c2aef`; final documentation
+is a later checkpoint. [Package identities](candidate274/package.json),
+[summary](candidate274/summary.json), [final seals](candidate274/final-signatures.txt).
+
+The exact copied app passes full native smoke and all four public adapters with
+development-file/outbound-IP denial and fixture-only shared-geometry write denial.
+All **102 external conformance processes exit 0 normally**. The copied bundle,
+source bundle, matching agent and controller remain exact.
+[Runtime receipt](candidate274/runtime-report.json.gz),
+[public adapters](candidate274/public-report.json.gz),
+[normal process exits](candidate274/external-process-exits.json.gz).
+
+The **entire command/schema and component catalogs are identical** to the
+pre-update baseline: **194 commands /53 component kinds**. Existing drawing,
+explanation, plotting, experiment and proposal walkthroughs pass through the
+copied native service and matching headless agent. The feature fixture closes
+with exit 0 and endpoint removal. These are shared-command workflows, not
+physical mouse/keyboard or native OS queue acceptance.
+[Catalog comparison](candidate274/catalog-comparison.json),
+[native walkthrough](candidate274/native-feature-new-workflows.json),
+[headless walkthrough](candidate274/headless-features.json).
+
+All **62 examples** reopen paused and clean with exact graphs, and all 62
+matching agents exit 0. All **126 packaged example files** match the earlier
+qualified ZIP. All **1,383 frozen application inputs** and **19 protected prior
+archive/executable identities** remain exact. Current and previous SDK caches
+are reverified against their complete manifests. The four representative theme
+captures are byte-identical to the previous runtime, with actual routed Apply
+working in each theme. No app code, test assertion, model or solver limit is
+changed to accommodate the upgrade.
+[Examples](candidate274/examples.json),
+[preservation](candidate274/preservation-after.json).
+
+The owned native fixtures are closed normally; no owner app/project command is
+sent. The previously qualified download is preserved, and /274 remains a
+separate development candidate. No new endurance, participant, clean-account,
+public signing/notarization or original native 3/6/9/11 acceptance is claimed.
+No push, upload, security weakening or heartbeat restart occurs.
+''')
+with (r/'research/121-vellum-v1-runtime.md').open('a') as f:f.write('''
+## Complete
+
+**0.196.1 /274**, clean binary source `500e3954`, uses Vellum v1.0.0 public source
+4cf0176 with qualified compatibility source 19c9ebc. The icon remains intact.
+Exact copied native smoke and all four public adapters pass; all 102 external
+processes exit normally. Native/headless workbench walkthroughs pass. Entire
+194-command and 53-kind catalogs match the original baseline. All 62 examples
+reopen paused/clean with exact graphs; all 126 example files match the qualified
+ZIP. Matching agents exit normally. Current/previous caches, 1,383 frozen app
+inputs and all 19 protected identities remain exact. Four representative theme
+captures are byte-identical to the old runtime, with routed Apply working.
+
+Owned fixtures close normally. No existing owner session/project commands, app
+code/assertion changes, model/solver-limit changes, new components, push/upload,
+security changes or heartbeat restart. Original native acceptance checks and
+participant/clean-account/public-signing limits stay open. The prior download is
+preserved; the new development candidate is ready without waiting for review.
+[Evidence and limits](../docs/validation/vellum-v1-runtime/README.md).
+''')
+pth=r/'README.md';v=pth.read_text().replace('[ELab 0.196.0 /273](build/ELab-0.196.0-273-Icon/ELab.app)','[ELab 0.196.1 /274](build/ELab-0.196.1-274-Vellum/ELab.app)');v=v.replace('The qualified /270','The qualified /270');marker='separately; existing native-input and participant acceptance limits remain open.';v=v.replace(marker,marker+'\n\nThe UI runtime now uses Vellum v1.0.0 public source `4cf0176` with ELab’s\nexisting input/ownership compatibility fixes. All shared command/component\ncatalogs are unchanged. [Runtime upgrade checks](docs/validation/vellum-v1-runtime/README.md).',1);pth.write_text(v)
+print(json.dumps(dict(passed=True,build=274,source=p['source_commit'],commands=194,kinds=53,examples=62,protected_identities=len(before['protected_identities']))))

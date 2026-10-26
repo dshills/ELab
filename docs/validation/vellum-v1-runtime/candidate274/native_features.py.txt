@@ -1,0 +1,32 @@
+from pathlib import Path
+import json,subprocess,sys,time
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/vellum-runtime-refresh';p=json.loads((b/'package.json').read_text());runtime=Path(json.loads((b/'runtime-result.json').read_text())['directory'])
+sys.path.insert(0,str(r/'scripts'));from acceptance_client import AcceptanceClient
+out=runtime/'features';out.mkdir(exist_ok=False);endpoint=out/'endpoint.json';log=(out/'native-output.txt').open('w')
+argv=[str(runtime/'native'),'--agent-endpoint',str(endpoint),'--no-recovery','--appearance-file',str(out/'appearance.json')]
+app=subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT);started=time.monotonic();closed=False
+try:
+ deadline=started+8
+ while not endpoint.exists():
+  if app.poll() is not None:raise RuntimeError('owned native fixture exited before readiness')
+  if time.monotonic()>=deadline:raise TimeoutError('owned native fixture endpoint not ready within 8 seconds; inspect this PID before relaunch')
+  time.sleep(.05)
+ (out/'startup.json').write_text(json.dumps(dict(pid=app.pid,argv=argv,ready_seconds=time.monotonic()-started,bounded_startup_seconds=8),indent=2)+'\n')
+ command=[sys.executable,str(r/'scripts/workbench-workflows-demo.py'),'--agent',str(runtime/'agent'),'--connect',str(endpoint),'--output',str(out/'new-workflows.json')]
+ with (out/'controller.txt').open('w') as stream:subprocess.run(command,cwd=runtime/'empty-working-directory',stdout=stream,stderr=subprocess.STDOUT,timeout=90,check=True)
+ client=AcceptanceClient(runtime/'agent',endpoint)
+ try:client.ask('app.close',dict(discard_changes=True),mutate=True);closed=True
+ finally:client.close()
+ code=app.wait(timeout=15);assert code==0
+ report=dict(passed=True,scope='New public commands against exact copied native runtime via isolated forwarding agent; not physical UI input or native OS queue acceptance',pid=app.pid,native_exit_code=code,app_sha256=p['app_executable_sha256'],matching_agent_sha256=p['agent_sha256'],native_output=str(out/'native-output.txt'),features=str(out/'new-workflows.json'))
+ (b/'native-features.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
+finally:
+ if app.poll() is None and endpoint.exists() and not closed:
+  try:
+   cleanup=AcceptanceClient(runtime/'agent',endpoint)
+   try:cleanup.ask('app.close',dict(discard_changes=True),mutate=True)
+   finally:cleanup.close()
+   app.wait(timeout=15)
+  except Exception as e:(out/'cleanup-error.txt').write_text(repr(e)+'\n')
+ log.close()
+ (out/'final-process-state.json').write_text(json.dumps(dict(pid=app.pid,exit_code=app.poll(),endpoint_exists=endpoint.exists()),indent=2)+'\n')
