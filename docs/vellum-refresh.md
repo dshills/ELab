@@ -1,5 +1,13 @@
 # Current Vellum SDK integration
 
+## Application-icon packaging · October 26, 2026
+
+The icon-only update independently pins Vellum’s latest public main packager
+`4cf0176` (v1.0.0 metadata). It supplies the new `--icon` conversion, manifest and
+pre/post-signing checks. The compiled UI runtime stays at the existing elab9
+SDK in `third_party/vellum/sdk.lock.json`; historical integration stages below
+are not new runtime migrations. See [application icons](application-icon.md).
+
 ## Current dependency · October 25, 2026
 
 ELab consumes Vellum **v0.1.0-personal.1** from the owner's newly pushed

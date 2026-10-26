@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "version": "v1.0.0",
+  "module": "github.com/dshills/vellum",
+  "namespace_status": "selected",
+  "license_status": "selected",
+  "third_party_distribution_audit": "pending",
+  "managed_replay": {
+    "status": "experimental",
+    "backend": "offscreen",
+    "builtin_workbench": true,
+    "workbench_target_helpers": [
+      "ManualWorkbenchControlID",
+      "ManualWorkbenchTabID"
+    ],
+    "professional_workspace_qualified": false,
+    "protocol": 2,
+    "professional_workspace_software_record": true
+  },
+  "automation": {
+    "protocol": 1,
+    "targets": [
+      "darwin"
+    ],
+    "opt_in": true,
+    "status": "experimental"
+  },
+  "support": {
+    "darwin": "personal-use",
+    "windows": "unqualified",
+    "linux-x11": "unqualified",
+    "linux-wayland": "unsupported"
+  },
+  "license": "MIT",
+  "palette_placement": {
+    "status": "experimental",
+    "same_window_only": true,
+    "physical_pointer_qualified": false,
+    "demo": "examples/placement"
+  },
+  "personal_use": {
+    "status": "private-candidate",
+    "feature_frozen": true,
+    "contract": "specs/personal-macos-v01.md",
+    "public_publication_authorized": false,
+    "historical": true,
+    "version": "v0.1.0-personal.1"
+  },
+  "macos_v1": {
+    "status": "private-release",
+    "contract": "specs/macos-v1-release.md",
+    "support_matrix": "docs/macos-v1.md",
+    "platform": "darwin-arm64",
+    "human_ime": "unqualified",
+    "human_voiceover": "unqualified",
+    "experimental_rendering": false,
+    "public_publication_authorized": false
+  },
+  "api_compatibility": {
+    "status": "stable-v1",
+    "contract": "specs/stable-api.md",
+    "root_packages": [
+      "github.com/dshills/vellum",
+      "github.com/dshills/vellum/app",
+      "github.com/dshills/vellum/ui",
+      "github.com/dshills/vellum/command",
+      "github.com/dshills/vellum/history",
+      "github.com/dshills/vellum/document",
+      "github.com/dshills/vellum/editor",
+      "github.com/dshills/vellum/tasks",
+      "github.com/dshills/vellum/execution",
+      "github.com/dshills/vellum/virtual",
+      "github.com/dshills/vellum/canvas",
+      "github.com/dshills/vellum/placement",
+      "github.com/dshills/vellum/workbench"
+    ],
+    "native_driver": "scoped-facade",
+    "experimental_packages": [
+      "github.com/dshills/vellum/replay",
+      "github.com/dshills/vellum/automation"
+    ]
+  }
+}

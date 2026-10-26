@@ -339,3 +339,16 @@ button contracts remain unchanged. The exact cumulative compatibility patch is
 [here](patches/elab-f9dee54-collection-origin-compat.patch.gz). The elab8 archive and
 qualified /268 package remain preserved. [Qualification](../../docs/validation/offline-quality/collection-origin/README.md)
 distinguishes driver/service evidence from still-open native OS queue/rate checks.
+
+## Application-icon packager · October 26, 2026
+
+`packager.lock.json` independently pins the latest public main packaging tools
+at `4cf0176` (v1.0.0 metadata). The 12 selected files in `packager-4cf0176/` are
+unmodified upstream bytes, including the MIT license and icon regressions.
+`scripts/package_app.py` verifies the complete tool inventory and hashes before
+executing it. The `--icon` option converts/embeds artwork before signing.
+
+This is a packaging dependency, not a runtime SDK upgrade. The active runtime
+continues to use the existing elab9 SDK lock/cache and its qualified compatibility
+changes. No verified SDK cache or sibling source was edited. See
+[the application-icon guide](../../docs/application-icon.md).
