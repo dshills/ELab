@@ -1,0 +1,16 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/default/draft
+    modal_origin_offscreen_test.go:82: no immediate effect or deferred modal action {1 0 0}
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/default/replace
+    modal_origin_offscreen_test.go:82: no immediate effect or deferred modal action {1 0 0}
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/default/component
+    modal_origin_offscreen_test.go:82: no immediate effect or deferred modal action {1 0 0}
+--- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits (5.20s)
+    --- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits/default/draft (1.81s)
+    --- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits/default/replace (1.67s)
+    --- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits/default/component (1.72s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	5.847s
+FAIL

@@ -1,0 +1,138 @@
+//go:build offscreen
+
+package main
+
+import (
+	"image"
+	"reflect"
+	"testing"
+
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/events/key"
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/drivers/cogent"
+	"github.com/dshills/vellum/ui"
+)
+
+// Keep the real assembled Sheet and its separate modal scene. This exercises
+// the driver's modal routes, without claiming physical macOS queue acceptance.
+func mountedExampleSheet(t *testing.T, s *screen, focus string) *mountedControlWindow {
+	t.Helper()
+	return newMountedControlWindowSize(t, s, func() ui.Node {
+		full := s.view()
+		sheet, ok := findNode(full, exampleBrowserID)
+		if !ok || !sheet.Sheet {
+			t.Fatal("actual assembled sheet missing")
+		}
+		opener, _ := findNode(full, "examples-menu")
+		search, _ := findNode(full, "part-search")
+		root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Theme: full.Theme, Children: []ui.Node{opener, search, sheet}}
+		if sheet.Open {
+			root.Focus = ui.FocusRequest{ID: focus, Sequence: 1}
+		}
+		return root
+	}, 1000, 900, inspectorLayoutTestTheme())
+}
+
+func TestMountedExampleSheetActionsAcrossAgentEdits(t *testing.T) {
+	for _, action := range []string{"escape", "confirm", "cancel", "default"} {
+		for _, interleave := range []string{"draft", "replace", "component"} {
+			t.Run(action+"/"+interleave, func(t *testing.T) {
+				s, cleanup := testScreen(t)
+				defer cleanup()
+				agentAction(t, s.service, "example.reset", workbench.ReplaceParams{})
+				agentAction(t, s.service, "simulation.pause", struct{}{})
+				agentAction(t, s.service, "examples.visibility.set", workbench.ScopeVisibilityParams{Visible: true})
+				seedExampleBrowserImage(t, s)
+				focus := ui.SheetConfirmID(exampleBrowserID)
+				code := key.CodeReturnEnter
+				if action == "cancel" {
+					focus = ui.SheetCancelID(exampleBrowserID)
+				} else if action == "escape" {
+					focus, code = "example-search", key.CodeEscape
+				} else if action == "default" {
+					focus = "example-search"
+				}
+				m := mountedExampleSheet(t, s, focus)
+				// Shown/default focus belongs to the actual modal scene. Reach
+				// the target through real Tab routing after that initialization.
+				for n := 0; m.snapshot().FocusedID != focus && n < 8; n++ {
+					m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeTab})
+				}
+				if m.snapshot().FocusedID != focus {
+					t.Fatal("fixture could not Tab to actual modal target", m.snapshot().FocusedID, focus)
+				}
+				if action == "default" {
+					clickMountedControl(t, m, exampleBrowserID+"/sheet/title")
+					if m.snapshot().FocusedID != "" {
+						t.Fatal("title click did not reach unmanaged modal focus")
+					}
+				}
+				before := s.service.Snapshot()
+				if err := m.manual.Input(m.ctx, cogent.ManualInput{Window: "main", WindowIncarnation: m.window.Incarnation, Type: events.KeyChord, Code: code}); err != nil {
+					t.Fatal(err)
+				}
+				step, err := m.manual.Step(m.ctx, 1)
+				if err != nil || step.Events != 1 {
+					t.Fatal("modal input boundary unavailable", step, err)
+				}
+				atBoundary := s.service.Snapshot()
+				synchronous := !reflect.DeepEqual(before, atBoundary)
+				if !synchronous && s.app.Pending().Ordinary == 0 {
+					t.Fatal("no immediate effect or deferred modal action", step)
+				}
+				t.Logf("boundary synchronous=%v events=%d callbacks=%d pending=%d revision=%d->%d", synchronous, step.Events, step.OwnerCallbacks, s.app.Pending().Ordinary, before.CommandRevision, atBoundary.CommandRevision)
+				if interleave == "draft" {
+					agentAction(t, s.service, "editor.value.set", workbench.DraftParams{Value: "2k"})
+				} else if interleave == "component" {
+					agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "2k"})
+				} else {
+					agentAction(t, s.service, "project.clear", workbench.ReplaceParams{DiscardChanges: true})
+				}
+				agent := s.service.Snapshot()
+				if err := s.app.Invalidate("main"); err != nil {
+					t.Fatal(err)
+				}
+				if err := m.manual.Input(m.ctx, cogent.ManualInput{Window: "main", WindowIncarnation: m.window.Incarnation, Type: events.MouseMove, Position: image.Pt(980, 880)}); err != nil {
+					t.Fatal(err)
+				}
+				m.settle()
+				after := s.service.Snapshot()
+				if !reflect.DeepEqual(agent, after) || s.pendingCommand != "" {
+					t.Fatalf("old modal %s changed agent context (synchronous=%v): revision %d->%d generation %d->%d browser %v->%v draft %q->%q pending=%q", action, synchronous, agent.CommandRevision, after.CommandRevision, agent.Document.Generation, after.Document.Generation, agent.ExampleBrowser.Visible, after.ExampleBrowser.Visible, agent.Drawing.Value, after.Drawing.Value, s.pendingCommand)
+				}
+			})
+		}
+	}
+}
+
+func TestMountedExampleSheetDefaultRouteReachability(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	agentAction(t, s.service, "example.reset", workbench.ReplaceParams{})
+	agentAction(t, s.service, "simulation.pause", struct{}{})
+	agentAction(t, s.service, "examples.visibility.set", workbench.ScopeVisibilityParams{Visible: true})
+	seedExampleBrowserImage(t, s)
+	m := mountedExampleSheet(t, s, "example-search")
+	before := s.service.Snapshot()
+	for _, id := range []string{exampleBrowserID + "/sheet/title", "example-preview-image"} {
+		e := mountedControlElement(t, m, id)
+		at := e.Bounds.Min.Add(e.Bounds.Size().Div(2))
+		for _, typ := range []events.Types{events.MouseDown, events.MouseUp} {
+			m.input(cogent.ManualInput{Type: typ, Button: events.Left, Position: at})
+		}
+		t.Logf("pointer target %s: focus %q bounds=%v", id, m.snapshot().FocusedID, e.Bounds)
+		if !reflect.DeepEqual(before, s.service.Snapshot()) {
+			t.Fatal("noninteractive pointer control changed the model")
+		}
+	}
+	card := mountedControlElement(t, m, exampleBrowserID)
+	at := card.Bounds.Min.Add(image.Pt(3, 3))
+	for _, typ := range []events.Types{events.MouseDown, events.MouseUp} {
+		m.input(cogent.ManualInput{Type: typ, Button: events.Left, Position: at})
+	}
+	t.Logf("sheet-padding pointer: focus %q card=%v", m.snapshot().FocusedID, card.Bounds)
+	if !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("sheet padding changed the model")
+	}
+}

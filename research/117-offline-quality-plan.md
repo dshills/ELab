@@ -466,3 +466,24 @@ original native checks prioritized when tooling can establish exact scope with
 bounded attachment. No unchanged gates, identical Save trials, new components/
 features, owner-file writes, solver-limit changes or publication. Pause the
 heartbeat and finish a safe checkpoint on a direct human return/stop instruction.
+
+## Owner-return checkpoint, October 26
+
+The bounded actual-Sheet audit passes nine routed scenarios: Escape, Confirm and
+Cancel against agent draft, replacement and dirty component edits, including
+fresh actions and protected dirty confirmation. Escape executes synchronously at
+the observed event boundary (three cases); Confirm/Cancel are genuinely queued
+and refuse stale context (six cases). No production repair is justified.
+
+Unmanaged-focus Return after title/preview/padding clicks yields no model action
+or ordinary owner post at the isolated boundary. Its deferred default route is
+not established; failed exploratory fixtures are not product defects or native
+acceptance. Focus setup, a no-matching-tests command and staticcheck cache scope
+corrections remain explicit. Focused race, imports, offscreen staticcheck/vet pass.
+All 1,356 /269 frozen inputs and its ZIP remain exact. No full gate/package repeat.
+[Audit evidence](../docs/validation/offline-quality/modal-origin/README.md).
+
+The owner has returned and asked for next priorities. The overnight heartbeat is
+PAUSED by the standing return instruction. Save this test/evidence checkpoint and
+hand off; do not begin another autonomous batch. /269 remains the qualified build,
+with original native checks 3/6/9/11 and recorded acceptance deferrals still open.

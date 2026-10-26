@@ -1,0 +1,25 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/escape/draft
+    modal_origin_offscreen_test.go:71: boundary synchronous=true events=1 callbacks=0 pending=0 revision=4->5
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/escape/replace
+    modal_origin_offscreen_test.go:71: boundary synchronous=true events=1 callbacks=0 pending=0 revision=4->5
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/confirm/draft
+    modal_origin_offscreen_test.go:56: fixture did not focus actual modal target example-search examples-browser/sheet/confirm
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/confirm/replace
+    modal_origin_offscreen_test.go:56: fixture did not focus actual modal target example-search examples-browser/sheet/confirm
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/cancel/draft
+    modal_origin_offscreen_test.go:56: fixture did not focus actual modal target example-search examples-browser/sheet/cancel
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/cancel/replace
+    modal_origin_offscreen_test.go:56: fixture did not focus actual modal target example-search examples-browser/sheet/cancel
+--- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits (9.33s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/escape/draft (1.84s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/escape/replace (1.60s)
+    --- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits/confirm/draft (1.46s)
+    --- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits/confirm/replace (1.49s)
+    --- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits/cancel/draft (1.47s)
+    --- FAIL: TestMountedExampleSheetActionsAcrossAgentEdits/cancel/replace (1.46s)
+FAIL
+FAIL	github.com/dshills/elab/desktop	10.002s
+FAIL

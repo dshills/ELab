@@ -1,0 +1,24 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/escape/draft
+    modal_origin_offscreen_test.go:76: boundary synchronous=true events=1 callbacks=0 pending=0 revision=4->5
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/escape/replace
+    modal_origin_offscreen_test.go:76: boundary synchronous=true events=1 callbacks=0 pending=0 revision=4->5
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/confirm/draft
+    modal_origin_offscreen_test.go:76: boundary synchronous=false events=1 callbacks=0 pending=1 revision=4->4
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/confirm/replace
+    modal_origin_offscreen_test.go:76: boundary synchronous=false events=1 callbacks=0 pending=1 revision=4->4
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/cancel/draft
+    modal_origin_offscreen_test.go:76: boundary synchronous=false events=1 callbacks=0 pending=1 revision=4->4
+=== RUN   TestMountedExampleSheetActionsAcrossAgentEdits/cancel/replace
+    modal_origin_offscreen_test.go:76: boundary synchronous=false events=1 callbacks=0 pending=1 revision=4->4
+--- PASS: TestMountedExampleSheetActionsAcrossAgentEdits (14.19s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/escape/draft (1.79s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/escape/replace (1.59s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/confirm/draft (3.08s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/confirm/replace (2.44s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/cancel/draft (2.96s)
+    --- PASS: TestMountedExampleSheetActionsAcrossAgentEdits/cancel/replace (2.33s)
+PASS
+ok  	github.com/dshills/elab/desktop	15.919s

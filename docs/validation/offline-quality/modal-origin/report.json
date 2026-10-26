@@ -1,0 +1,28 @@
+{
+  "production_repair_justified": false,
+  "qualified_release": "0.195.8 /269",
+  "qualified_source_inputs_unchanged": 1356,
+  "qualified_archive_sha256": "4ff827a087e40888adf40fd1778cbd4f5046003b51522226199d57011265404e",
+  "new_regression": "desktop/modal_origin_offscreen_test.go",
+  "passed_routed_cases": 9,
+  "synchronous_escape_cases": 3,
+  "queued_confirm_cancel_cases": 6,
+  "fresh_intent_and_dirty_document_protection_pass": true,
+  "scope": "Actual assembled Sheet with separate modal scene and real driver input/service-agent interleavings; not native macOS OS-queue/rate acceptance",
+  "default_fallback_limit": "Title/preview/padding clicks clear managed focus, but Return yields no model effect or ordinary owner post at the isolated event boundary. No deferred default-action interleaving is established; do not label its exploratory fixture failures product defects.",
+  "original_native_checks_still_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "checks": {
+    "focused_race": true,
+    "goimports": true,
+    "offscreen_staticcheck": true,
+    "offscreen_vet": true
+  },
+  "no_full_gate_or_package_repeat": true,
+  "owner_returned": true,
+  "automation_paused": true
+}
