@@ -434,3 +434,35 @@ among previous app inputs, plus the new regression. Ten prior package/SDK
 identities remain exact. Next commit the reviewed source cleanly and qualify
 exclusive unsigned 0.195.8 /269 copied runtime, archive and extracted examples.
 Original native checks 3/6/9/11 remain open; no CUA attachment is repeated.
+
+## Collection follow-up qualification closeout
+
+Additional unsigned **0.195.8 /269** is qualified from clean binary source
+8a4be9495ff6e14f8726e865ad8b86e4756adb90, with SDK cdd596c2ea75ee483869678a6b2354d5e214cee0 /
+elab9. Full source and SDK receipts above remain exact. Copied native smoke and
+complete four-adapter public suites pass under development-file and outbound-IP
+denial; all 102 conformance external processes exit0 normally. The extracted
+matching agent reopens all 62 projects paused/clean with exact graphs, 53 kinds
+and 187 commands, then exits normally. No owned native session remains running.
+
+Final 375-member ZIP verifies every byte/mode, OS extraction and strict seal;
+the corrected recipe includes complete top-level guidance on the first assembly.
+All 126 Examples files match /268 bytes, including saved projects and SVGs.
+All 1,356 frozen executable/test/dependency inputs and ten prior package/SDK
+identities remain exact. Native checks 3/6/9/11 remain OPEN: no CUA attachment,
+native OS queue/rate acceptance, alternate capture or security change is inferred.
+No component, public command, model or solver-limit changes; no push/upload.
+
+ZIP build/releases/ELab-0.195.8-macos-arm64.zip, 38,786,921 bytes.
+SHA-256 4ff827a087e40888adf40fd1778cbd4f5046003b51522226199d57011265404e.
+[Complete closeout](../docs/validation/offline-quality/collection-origin/README.md).
+
+Next bounded source/routed batch: actual Examples sheet dismissal/default-action
+queues across public agent edits/document replacement. Existing descriptor replays
+and button-origin tests do not establish every routed modal action. Establish
+reachability and reproduce failures before changing contracts; if already guarded,
+record the passing control and pursue another evidenced reliability gap. Keep
+original native checks prioritized when tooling can establish exact scope with
+bounded attachment. No unchanged gates, identical Save trials, new components/
+features, owner-file writes, solver-limit changes or publication. Pause the
+heartbeat and finish a safe checkpoint on a direct human return/stop instruction.

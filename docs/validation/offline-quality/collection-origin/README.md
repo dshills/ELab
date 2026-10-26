@@ -1,7 +1,7 @@
 # Examples collection input origin
 
-October 26, 2026. Source and dependency qualification complete; **/268 remains the qualified
-release while /269 package checks are pending**. No component, public-command, model or solver-limit changes.
+October 26, 2026. Qualified additional unsigned **0.195.8 /269**; /268 and every earlier
+release remain preserved. No component, public-command, model or solver-limit changes.
 
 The actual assembled collection, detached application wrappers and scoped theme
 are mounted in a reduced host. A real driver KeyChord is routed while its owner
@@ -81,6 +81,49 @@ lint/imports, Python, PRD, all vets and build. [Quality](full-quality/quality-co
 regression file is additional and dependency declarations intentionally change.
 Ten prior package/SDK identities stay exact. [Scope review](scope-review.json).
 
-Next package the clean source as exclusive unsigned **0.195.8 /269** and qualify
-the exact copied runtime and extraction. Do not repeat the complete source/SDK
-gates without a justified new change. /268 and prior releases remain preserved.
+The clean source is packaged and qualified separately below. Do not repeat the
+complete source/SDK gates without a justified new change.
+
+
+## Qualified copied runtime and archive
+
+Clean binary source **8a4be9495ff6e14f8726e865ad8b86e4756adb90** produces the
+matching app and agent. Their exact copied runtime passes native smoke and the
+complete public project/electrical/inductor/op-amp/storage/capacity suites across
+four adapters, under development-file and outbound-IP denial. All **102**
+conformance external processes exit0 normally; no owned fixture remains running.
+[Runtime](runtime-report.json.gz), [public suites](public-report.json.gz),
+[process exits](runtime-process-exits.json), [package identity](package.json).
+Raw tab-formatted build metadata is preserved as exact gzip:
+[native](native-build-info.txt.gz), [agent](agent-build-info.txt.gz).
+
+The corrected assembly recipe carries forward the complete top-level run/model/
+agent guidance. This archive needs no assembly correction. Its **375** members
+match every expected byte/mode, OS extraction and strict ad-hoc seal. The exact
+extracted matching agent freshly opens all **62** examples paused/clean with
+exact graphs, **53** kinds and **187** commands, then exits normally under the
+same denial profile. All **126** Examples files are byte-identical to /268,
+including all saved projects and SVG previews; every visible SVG node/static
+metadata also matches. No output is replaced to force equality.
+[Archive](archive.json), [offline examples](offline-examples.json),
+[distribution comparison](distribution-comparison.json).
+
+All **1,356** frozen executable/test/dependency inputs remain exact through
+packaging. Ten prior package/SDK archive identities stay exact; new SDK archive
+and cache match the verified cdd596c source. [Frozen scope](source-scope.json.gz),
+[qualification](qualification.json). No new full gates are repeated for packaging.
+Owner/clean-account/participant deferrals and native checks **3,6,9,11 remain
+open**. Copied native smoke/socket commands and routed queues do not qualify
+native OS queue origin, controlled hardware rates or modal placement. No CUA
+attachment, alternate capture, security-setting change, push or upload occurs.
+
+ZIP: build/releases/ELab-0.195.8-macos-arm64.zip, **38,786,921 bytes**.
+SHA-256: `4ff827a087e40888adf40fd1778cbd4f5046003b51522226199d57011265404e`.
+App: build/ELab-0.195.8-269-Collections/ELab.app, with adjacent matching agent.
+
+Next bounded investigation: actual Examples sheet dismissal/default-action
+queues across public agent edits and document replacement. Prior descriptor
+replays and button-origin tests do not establish every routed modal action.
+Reproduce reachable failures before any repair; if the control already refuses,
+record that result without changing contracts. Keep native checks prioritized
+when tools can establish their exact scope without uncontrolled attachment.

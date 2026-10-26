@@ -138,3 +138,11 @@ elab9 dependency repair preserves admitted collection wrappers and current
 eligibility, keeping non-collection contracts unchanged. All 19 application
 interleavings, own queued navigation, complete new SDK driver gates and application
 gates pass. /269 package qualification follows separately; /268 remains preserved.
+
+The [collection-origin repair](collection-origin/README.md) is separately qualified
+in unsigned **0.195.8 /269**, clean binary source8a4be949, SDKcdd596c/elab9. Full
+SDK driver/application gates, exact copied native/public runtime,102 normal
+conformance exits and all62 extracted examples pass. All375 archive members and
+all126 prior example files match their expected bytes. Final ZIP SHA-256:
+`4ff827a087e40888adf40fd1778cbd4f5046003b51522226199d57011265404e`.
+All previous packages/SDKs remain preserved; native checks3/6/9/11 stay open.
