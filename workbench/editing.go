@@ -118,6 +118,10 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "edit.proposal.set", "edit.proposal.apply", "edit.proposal.dismiss":
+		return s.proposalCommandLocked(command, raw)
+	case "scope.probe.plot":
+		return s.plotProbeLocked(raw)
 	case "examples.visibility.set", "examples.category.set", "examples.search.set", "examples.select":
 		return s.applyExampleBrowserLocked(command, raw)
 	case "simulation.sampling.fit":

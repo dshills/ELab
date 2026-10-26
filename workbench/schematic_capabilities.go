@@ -3,6 +3,14 @@ package workbench
 // These details describe public schematic operations, not private pointer or
 // native focus mechanics. Dynamic inventories come from the current snapshot.
 func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
+	if id == "drawing.preview" {
+		for _, axis := range []string{"x", "y"} {
+			p := inputProperty(schema, "position."+axis)
+			p["minimum"], p["maximum"] = -10000, 10000
+		}
+		schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "schematic-drawing-preview", Preconditions: []string{"Complete finite world position; current drawing tool/kind and zoom come from project.inspect"}, Effects: []string{"Pure query: preserves graph, IDs, revisions, history, dirty state and live simulation", "Invalid candidates return valid=false and an explanation; malformed input is invalid-params", "Only the closest unambiguous terminal is targeted; geometry/crossings never connect implicitly", "Preview command/params reuse existing edit commands. Commit with expected_command_revision and expected_document_generation from the result; preview does not reserve or promise a component/wire ID"}, Completion: &commandCompletionDetail{Mode: "immediate pure query"}}
+		return true
+	}
 	switch id {
 	case "parts.category.set", "parts.search.set", "component.duplicate", "component.move", "component.rotate", "component.select", "object.delete", "drawing.tool.set", "drawing.position.set", "drawing.cancel", "wire.connect", "wire.begin", "wire.terminals.set", "wire.junction.insert", "editor.value.set":
 	default:

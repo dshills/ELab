@@ -40,6 +40,8 @@ var eventTopics = []string{"state", "project", "editor", "view", "simulation", "
 func commandEventTopics(command string, documentChanged bool) []string {
 	topics := []string{}
 	switch {
+	case command == "scope.probe.plot":
+		topics = append(topics, "measurements", "view", "recordings", "preferences")
 	case strings.HasPrefix(command, "audio."):
 		topics = append(topics, "preview", "jobs")
 	case strings.HasPrefix(command, "selection."):

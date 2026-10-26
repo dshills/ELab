@@ -256,6 +256,15 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	if part.Kind != "opamp" {
 		inspector = append(inspector, s.partGeometryControls(state, part)...)
 	}
+	if explanation := state.Explanation; explanation != nil && explanation.ID == part.ID {
+		inspector = append(inspector, section("component-explanation-title", "Understand this component"), quiet("component-explanation-summary", explanation.Summary))
+		for i, fact := range explanation.Facts {
+			inspector = append(inspector, quiet(fmt.Sprintf("component-fact-%d", i), fact))
+		}
+		for i, help := range explanation.Guidance {
+			inspector = append(inspector, quiet(fmt.Sprintf("component-guidance-%d", i), help.Summary+" "+help.Action))
+		}
+	}
 	for i := range inspector {
 		scopeComponentControlState(&inspector[i], part.ID)
 		if inspector[i].ID == "cap-initial" || inspector[i].ID == "inductor-initial" {

@@ -5,6 +5,16 @@ ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PN
 The [first-version completion checklist](docs/v1-release-checklist.md) freezes
 the existing feature scope and records required checks and acceptance limits.
 
+## Current development
+
+The workbench update adds snapped placement ghosts, pending wire previews,
+nearest unambiguous terminal targeting, canvas shortcuts, component explanations,
+explicit live plotting, experiment comparisons and shared edit proposals.
+The existing 53 component kinds and solver limits are unchanged; users and agents
+share 194 commands. See the [workflow guide](docs/workbench-workflows.md) and
+[engineering checks](docs/validation/workbench-improvements/README.md).
+The qualified /270 download below remains preserved separately.
+
 ## Downloadable release
 
 **ELab 0.195.9 /270** packages the current 53 component kinds and all 62 existing

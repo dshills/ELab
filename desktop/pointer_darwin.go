@@ -32,6 +32,7 @@ type pointerBridge struct {
 	mu           sync.Mutex
 	frame        pointerFrame
 	active       bool
+	hovered      bool
 	lastX, lastY float64
 }
 
@@ -96,7 +97,20 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 		return 0
 	}
 	inside := px >= frame.x && py >= frame.y && px < frame.x+frame.view.Width && py < frame.y+frame.view.Height
-	if phase == 3 {
+	if phase == 4 {
+		if frame.pane != "schematic" {
+			b.mu.Unlock()
+			return 0
+		}
+		if !inside {
+			if !b.hovered {
+				b.mu.Unlock()
+				return 0
+			}
+			phase = 5
+		}
+		b.hovered = inside
+	} else if phase == 3 {
 		if !inside {
 			b.mu.Unlock()
 			return 0
@@ -113,9 +127,9 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 		return 0
 	}
 	delta := workbench.Point{X: (px - b.lastX) / frame.view.Zoom, Y: (py - b.lastY) / frame.view.Zoom}
-	if phase != 3 {
+	if phase <= 2 {
 		b.lastX, b.lastY = px, py
-	} else {
+	} else if phase == 3 {
 		delta = workbench.Point{Y: float64(scroll)}
 	}
 	if phase == 2 {
@@ -129,6 +143,9 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 		b.active = false
 		b.mu.Unlock()
 		return 0
+	}
+	if phase >= 4 {
+		return 0 // Passive hover must not consume AppKit/GLFW movement.
 	}
 	return 1
 }

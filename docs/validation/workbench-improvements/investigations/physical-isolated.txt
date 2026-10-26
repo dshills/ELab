@@ -1,0 +1,9 @@
+--- FAIL: TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast (0.61s)
+    hbridge_test.go:267: simulation.step: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (106 attempted, maximum 512; 100.037 ms elapsed, maximum 100 ms); reduce sample step at 0.0601674402 s, step 1.88e-08: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (105 attempted, maximum 512; 100.013 ms elapsed, maximum 100 ms); reduce sample step}
+--- FAIL: TestMixedCapacitanceSetsFlasherPeriod (1.43s)
+    mixed_test.go:93: mixed integration exceeded its work budget: elapsed-time limit (25 attempted, maximum 512; 100.100 ms elapsed, maximum 100 ms); reduce sample step at 0.63687208 s, step 3.58e-05: ratio +Inf, errors mixed integration exceeded its work budget: elapsed-time limit (24 attempted, maximum 512; 100.059 ms elapsed, maximum 100 ms); reduce sample step / mixed integration exceeded its work budget: elapsed-time limit (24 attempted, maximum 512; 100.061 ms elapsed, maximum 100 ms); reduce sample step / <nil>
+--- FAIL: TestMixedServiceHistoryPersistenceAndRuntime (0.21s)
+    mixed_test.go:207: simulation.step: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (23 attempted, maximum 512; 100.046 ms elapsed, maximum 100 ms); reduce sample step at 0.115800651 s, step 6.77e-06: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (22 attempted, maximum 512; 100.030 ms elapsed, maximum 100 ms); reduce sample step}
+FAIL
+FAIL	github.com/dshills/elab/workbench	3.330s
+FAIL

@@ -135,9 +135,9 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 	}
 	return nil
 }
-func (s *Service) batchLocked(p BatchParams) error {
+func (s *Service) stageBatchLocked(p BatchParams) (*Service, error) {
 	if strings.TrimSpace(p.Name) == "" || len(p.Name) > 80 || len(p.Edits) == 0 || len(p.Edits) > 100 {
-		return fmt.Errorf("batch requires a name of 1–80 bytes and 1–100 edits")
+		return nil, fmt.Errorf("batch requires a name of 1–80 bytes and 1–100 edits")
 	}
 	staged := &Service{graph: s.graph.Clone(), drawing: s.drawing, selected: s.selected, usedIDs: map[string]bool{}, transientSettings: s.transientSettings}
 	for id, used := range s.usedIDs {
@@ -145,15 +145,23 @@ func (s *Service) batchLocked(p BatchParams) error {
 	}
 	for i, edit := range p.Edits {
 		if !slices.Contains(atomicBatchCommands[:], edit.Command) {
-			return fmt.Errorf("batch edit %d: command %q is not an atomic schematic edit", i+1, edit.Command)
+			return nil, fmt.Errorf("batch edit %d: command %q is not an atomic schematic edit", i+1, edit.Command)
 		}
 		if err := staged.applyLocked(edit.Command, edit.Params); err != nil {
-			return fmt.Errorf("batch edit %d (%s): %w", i+1, edit.Command, err)
+			return nil, fmt.Errorf("batch edit %d (%s): %w", i+1, edit.Command, err)
 		}
 	}
 	// Final graph equality can suppress outer document-change normalization.
 	// Still retire selection/gesture references to staged objects now deleted.
 	staged.normalizeDrawingLocked()
+	return staged, nil
+}
+
+func (s *Service) batchLocked(p BatchParams) error {
+	staged, err := s.stageBatchLocked(p)
+	if err != nil {
+		return err
+	}
 	s.graph = staged.graph
 	s.transientSettings = staged.transientSettings
 	s.usedIDs = staged.usedIDs

@@ -1,0 +1,5 @@
+--- FAIL: TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast (0.41s)
+    hbridge_test.go:267: simulation.step: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (113 attempted, maximum 512; 100.061 ms elapsed, maximum 100 ms); reduce sample step at 0.0601722177 s, step 2.41e-06: ratio +Inf, errors mixed integration exceeded its work budget: elapsed-time limit (112 attempted, maximum 512; 100.007 ms elapsed, maximum 100 ms); reduce sample step / mixed integration exceeded its work budget: elapsed-time limit (112 attempted, maximum 512; 100.009 ms elapsed, maximum 100 ms); reduce sample step / <nil>}
+FAIL
+FAIL	github.com/dshills/elab/workbench	3.879s
+FAIL

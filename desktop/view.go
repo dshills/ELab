@@ -298,6 +298,7 @@ func (s *screen) view() ui.Node {
 		inspector = append(inspector, inspectorGroup("output", "Schematic output", s.schematicPageControls(state))...)
 	}
 	inspector = append(inspector, inspectorGroup("guidance", "Circuit guidance", s.diagnosticControls(state))...)
+	inspector = append(inspector, inspectorGroup("proposal", "Proposed changes", s.proposalControls(state))...)
 	inspector = append(inspector, inspectorGroup("project-work", "File progress", s.projectWorkControls(state))...)
 	inspector = append(inspector, inspectorGroup("input-work", "Input progress", s.inputWorkControls(state))...)
 
@@ -336,7 +337,7 @@ func (s *screen) view() ui.Node {
 		Padding: ui.Some(ui.Insets{Top: 3, Bottom: 3}), Gap: ui.Some(float32(8)), Align: ui.Some(ui.AlignCenter),
 	}, Children: []ui.Node{cancel, {ID: "tool-spacer", Kind: ui.ToolbarFlexibleSpace}, secondaryDrawingActions(state.CommandRevision,
 		s.action("sweep-open", "Sweeps", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit)}})
-	hints := "Click a part, terminal or wire to inspect · drag parts/readings · scroll to zoom"
+	hints := "Drag parts to move · R rotate · Delete remove · W wire · scroll to zoom"
 	switch state.Drawing.Tool {
 	case "wire":
 		hints = "Click two terminal dots to connect them · Esc cancels"

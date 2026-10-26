@@ -55,7 +55,7 @@ func TestOpAmpBlankNativeConstructionInspectorAndAgentParity(t *testing.T) {
 	}
 	for _, probe := range []string{"v:" + ids["U1"], "v:" + ids["U1"] + ".input-difference", "v:" + ids["U1"] + ".supply", "i:" + ids["U1"]} {
 		uiAction(t, user, "plot-"+probe, nil)
-		agentAction(t, agent, "scope.probes.set", workbench.ProbeParams{IDs: withProbe(agent.Snapshot().Scope.Selected, probe)})
+		agentAction(t, agent, "scope.probe.plot", workbench.IDParams{ID: probe})
 	}
 	if !reflect.DeepEqual(user.service.Snapshot().Scope.Selected, agent.Snapshot().Scope.Selected) {
 		t.Fatal("op-amp plots bypass shared probe commands")
@@ -128,7 +128,7 @@ func TestOpAmpGuidedMenuEditsPlotsAndProtectedReload(t *testing.T) {
 					t.Fatal("compact plot action lost full accessible name", probe, n)
 				}
 				uiAction(t, user, n.ID, nil)
-				agentAction(t, agent, "scope.probes.set", workbench.ProbeParams{IDs: withProbe(agent.Snapshot().Scope.Selected, probe.id)})
+				agentAction(t, agent, "scope.probe.plot", workbench.IDParams{ID: probe.id})
 			}
 			if !reflect.DeepEqual(user.service.Snapshot().Scope.Selected, agent.Snapshot().Scope.Selected) {
 				t.Fatal("guided plot actions differ")

@@ -1,0 +1,7 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestDrawingGhostDoesNotBorrowAcceptedSwitchStateByPlaceholderID (0.02s)
+    drawing_preview_test.go:143: new default switch ghost borrowed the existing Preview component's live state <nil>
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.539s
+FAIL

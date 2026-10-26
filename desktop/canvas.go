@@ -28,6 +28,7 @@ type commandCanvas struct {
 	dragGeneration          uint64
 	widget                  *core.WidgetBase
 	pointer                 *pointerBridge
+	hover                   *drawingHover
 }
 
 func (c *commandCanvas) world(e events.Event, w *core.WidgetBase) workbench.Point {
@@ -77,6 +78,13 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 			c.pointerGesture = c.withPreparedPointer(context, func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })
 		})
 		e.SetHandled()
+	})
+	w.OnFirst(events.MouseMove, func(e events.Event) {
+		context := c.pointerContext.Load()
+		withWindowOwner(c.Owner, window, func() { c.previewPointer(context, c.world(e, w)) })
+	})
+	w.OnFirst(events.MouseLeave, func(e events.Event) {
+		withWindowOwner(c.Owner, window, c.clearHover)
 	})
 	w.OnFirst(events.SlideMove, func(e events.Event) {
 		withWindowOwner(c.Owner, window, func() {
@@ -152,15 +160,8 @@ func hitComponent(state workbench.Snapshot, p workbench.Point) string {
 	return ""
 }
 func terminalHit(state workbench.Snapshot, p workbench.Point, tolerance float64) string {
-	for _, part := range state.Components {
-		for _, terminal := range part.Terminals {
-			position, _ := workbench.TerminalPosition(part, terminal)
-			if math.Hypot(position.X-p.X, position.Y-p.Y) <= tolerance {
-				return part.ID + "." + terminal
-			}
-		}
-	}
-	return ""
+	ref, _ := workbench.TerminalAt(workbench.Graph{Components: state.Components, Wires: state.Wires}, p, tolerance)
+	return ref
 }
 func wirePath(graph workbench.Graph, w workbench.Wire) []canvas.Point {
 	return routedWirePath(graph, w)
@@ -215,17 +216,13 @@ func (s *screen) canvasClick(p workbench.Point) {
 		}
 		s.invoke("component.place", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: p, Value: value})
 	case "wire":
-		ref := terminalHit(state, p, math.Max(6, 10/state.View.Zoom))
-		if ref == "" {
-			s.errorMessage = "Click a terminal dot, or use the named terminal controls."
+		preview := workbench.PreviewDrawing(state, p)
+		if !preview.Valid {
+			s.errorMessage = preview.Message
 			s.app.Invalidate("main")
 			return
 		}
-		if state.Drawing.WireStart == "" {
-			s.invoke("wire.begin", map[string]string{"terminal": ref})
-		} else {
-			s.invoke("wire.connect", workbench.ConnectParams{From: state.Drawing.WireStart, To: ref})
-		}
+		s.invoke(preview.Command, preview.Params)
 	case "select":
 		if hitPinnedReading(state, p) != "" {
 			return
@@ -280,7 +277,11 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if s.reduceMotion.Load() {
 		state.Display.Animate = false
 	}
-	return schematicWithPalette(state, v, phase, s.colorsForTheme(state.Theme))
+	mesh, err := schematicWithPalette(state, v, phase, s.colorsForTheme(state.Theme))
+	if err != nil || s.drawing == nil {
+		return mesh, err
+	}
+	return s.drawing.withDrawingPreview(mesh, state, v)
 }
 
 // pointer routes precise native packets through the same intent functions and
@@ -382,6 +383,14 @@ func (s *screen) routeNativePointer(pane string, phase int, p, delta workbench.P
 		}
 	case "schematic":
 		if !sourcePaneHidden(state) {
+			if phase == 4 {
+				s.drawing.previewPointer(s.drawing.pointerContext.Load(), p)
+				return
+			}
+			if phase == 5 {
+				s.drawing.clearHover()
+				return
+			}
 			s.drawing.routePreparedPointer(phase, p, delta)
 		}
 	}

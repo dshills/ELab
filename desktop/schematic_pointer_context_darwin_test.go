@@ -12,6 +12,30 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
+func TestSchematicNativeHoverCannotAdoptNewAgentTool(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "resistor"})
+	prepareSchematicPointer(t, s)
+	b := &pointerBridge{route: s.routeNativePointer}
+	b.enabled.Store(true)
+	b.publish(0, 0, *s.drawing.View, "schematic", s.drawing.pointerToken())
+	old := b.frame
+	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "led"})
+	prepareSchematicPointer(t, s)
+	b.publish(0, 0, *s.drawing.View, "schematic", s.drawing.pointerToken())
+	before := s.service.Snapshot()
+	s.app.Do(func() { b.deliver(old, 4, workbench.Point{}, workbench.Point{}) })
+	if s.drawing.hover != nil || !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("old hover packet borrowed newer placement intent")
+	}
+	s.app.Do(func() { b.deliver(b.frame, 4, workbench.Point{}, workbench.Point{}) })
+	p := s.drawing.drawingPreview(s.service.Snapshot())
+	if p == nil || p.Component == nil || p.Component.Kind != "led" || !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("fresh owner-delivered hover failed or changed accepted state")
+	}
+}
+
 // Exercise the actual owner-delivery method without installing an OS monitor.
 func TestSchematicNativeQueuedFrameCannotAdoptRepaint(t *testing.T) {
 	s, cleanup := testScreen(t)

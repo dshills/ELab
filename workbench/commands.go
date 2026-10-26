@@ -82,6 +82,13 @@ var commonSchemas = []struct {
 	ID   string
 }{
 	{reflect.TypeOf(Point{}), "urn:elab:point:1"},
+	{reflect.TypeOf(DrawingPreview{}), "urn:elab:drawing-preview:1"},
+	{reflect.TypeOf(ComponentExplanation{}), "urn:elab:component-explanation:1"},
+	{reflect.TypeOf(BatchPreview{}), "urn:elab:batch-preview:1"},
+	{reflect.TypeOf(EditProposal{}), "urn:elab:edit-proposal:1"},
+	{reflect.TypeOf(EditChange{}), "urn:elab:edit-change:1"},
+	{reflect.TypeOf(MeasurementInspection{}), "urn:elab:measurement-inspection:1"},
+	{reflect.TypeOf(AppearanceWork{}), "urn:elab:appearance-work:1"},
 	{reflect.TypeOf(ExampleInfo{}), "urn:elab:example-info:1"},
 	{reflect.TypeOf(ExamplePreview{}), "urn:elab:example-preview:1"},
 	{reflect.TypeOf(ProjectWork{}), "urn:elab:project-work:1"},
@@ -339,6 +346,13 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		queryCapability("edit.batch.preview", "Preview exact atomic batch admission and component/wire/settings differences without editing or solving; commit with returned revision/document guards", reflect.TypeOf(BatchParams{}), reflect.TypeOf(BatchPreview{})),
+		typedCapability("edit.proposal.set", "Stage or refresh an atomic edit proposal for shared review; no circuit change, solve or Undo entry", reflect.TypeOf(BatchParams{})),
+		typedCapability("edit.proposal.apply", "Apply the exact current non-stale proposal as one guarded undoable edit", reflect.TypeOf(IDParams{})),
+		typedCapability("edit.proposal.dismiss", "Dismiss the exact current edit proposal without changing the circuit", reflect.TypeOf(IDParams{})),
+		typedCapability("scope.probe.plot", "Plot and highlight one live probe, reveal the live scope, preserve existing traces; refuse a seventh trace without mutation", reflect.TypeOf(IDParams{})),
+		queryCapability("component.explain", "Explain a component using accepted signed readings, connectivity, related diagnostics and educational model limits; pure query", reflect.TypeOf(IDParams{}), reflect.TypeOf(ComponentExplanation{})),
+		queryCapability("drawing.preview", "Preview the current tool at a world position: snapped ghost, nearest unambiguous pin, exact route and guarded command; no mutation or solve", reflect.TypeOf(PositionParams{}), reflect.TypeOf(DrawingPreview{})),
 		typedCapability("simulation.sampling.fit", "Fit source/LC-reference sample step (at least 1 µs), never coarsening; cap playback at 1000 samples/wall-second. Ordinary settings restart rules apply.", reflect.TypeOf(struct{}{})),
 		typedCapability("source.sine.set", "Set per-source sine amplitude, offset, frequency and phase; ordinary schematic restart semantics", reflect.TypeOf(SineParams{})),
 		typedCapability("source.pulse.set", "Set per-source finite pulse levels, phase lengths and linear rise/fall; ordinary schematic restart semantics", reflect.TypeOf(PulseParams{})),

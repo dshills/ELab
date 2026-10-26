@@ -1,5 +1,12 @@
 # ELab agent protocol, version 1
 
+Current development adds noncommitting drawing and atomic-batch previews,
+component explanations, an explicit plot-and-focus action and shared edit
+proposals. See [the workbench workflow contract](workbench-workflows.md) for
+revision guards, stale-source handling and corresponding UI actions. The
+qualified 0.195.9 /270 package predates these additions; discover the command
+catalog from the actual running build rather than assuming availability.
+
 All semantic commands use `workbench.Service.Dispatch`. Vellum widget callbacks, keyboard commands, canvas gestures, built-in Go clients, headless stdio, and the external socket client share this entry point. An agent does not need screenshots or simulated clicks to operate the implemented circuit slice.
 
 ## Request and response

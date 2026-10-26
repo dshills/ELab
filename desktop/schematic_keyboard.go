@@ -18,7 +18,7 @@ func schematicKeySupported(chord string) bool {
 		return true
 	}
 	switch chord {
-	case "leftarrow", "rightarrow", "uparrow", "downarrow", "escape", "delete", "backspace":
+	case "leftarrow", "rightarrow", "uparrow", "downarrow", "escape", "delete", "backspace", "v", "w", "h", "r":
 		return true
 	}
 	return false
@@ -86,6 +86,16 @@ func schematicKeyCommand(state workbench.Snapshot, chord string) (string, any) {
 		return "selection.navigate", workbench.NavigateParams{Direction: direction, Center: true}
 	}
 	switch chord {
+	case "v", "w", "h":
+		tool := map[string]string{"v": "select", "w": "wire", "h": "pan"}[chord]
+		return "drawing.tool.set", workbench.ToolParams{Tool: tool}
+	case "r":
+		if state.Drawing.Tool == "select" {
+			if _, ok := (workbench.Graph{Components: state.Components}).Component(state.Selected); ok {
+				return "component.rotate", workbench.IDParams{ID: state.Selected}
+			}
+		}
+		return "", nil
 	case "escape":
 		return "drawing.cancel", struct{}{}
 	case "delete", "backspace":

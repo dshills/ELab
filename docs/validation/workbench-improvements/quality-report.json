@@ -1,0 +1,132 @@
+{
+  "passed": true,
+  "steps": [
+    {
+      "name": "prd",
+      "command": [
+        "python3",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 0.048743125051259995
+    },
+    {
+      "name": "lint",
+      "command": [
+        "sh",
+        "scripts/lint.sh"
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 15.91396424989216
+    },
+    {
+      "name": "python",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 2.6433096250984818
+    },
+    {
+      "name": "portable-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 6.320654124952853
+    },
+    {
+      "name": "root-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 4.254188582999632
+    },
+    {
+      "name": "desktop-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-timeout=30m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 221.63042999990284
+    },
+    {
+      "name": "desktop-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 0.8431136659346521
+    },
+    {
+      "name": "rendered-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-tags=offscreen",
+        "-timeout=30m",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 487.6576868328266
+    },
+    {
+      "name": "rendered-vet",
+      "command": [
+        "go",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab/desktop",
+      "exit_code": 0,
+      "wall_s": 3.8596600419841707
+    },
+    {
+      "name": "build",
+      "command": [
+        "sh",
+        "scripts/build.sh"
+      ],
+      "cwd": "/Users/dshills/Development/projects/ELab",
+      "exit_code": 0,
+      "wall_s": 10.29254783410579
+    }
+  ],
+  "frozen_inputs": 1371,
+  "changed_inputs": []
+}

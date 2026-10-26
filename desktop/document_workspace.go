@@ -49,9 +49,13 @@ func (s *screen) documentTitle(state workbench.Snapshot) ui.Node {
 // Group existing controls by the task they serve. Every control keeps its
 // semantic command, revision guards and ID; page selection is shared with agents.
 func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Snapshot) ([]ui.Node, []ui.Node) {
-	var parts, document, help []ui.Node
+	var parts, document, help, experiment []ui.Node
 	reachedOutput := false
 	for _, n := range library {
+		if strings.HasPrefix(n.ID, "example-") || n.ID == "example.current.reset" {
+			experiment = append(experiment, n)
+			continue
+		}
 		if n.ID == "print-preview" {
 			reachedOutput = true
 		}
@@ -85,7 +89,7 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 		}
 		section := "component"
 		switch strings.TrimPrefix(group.ID, "inspector-group-") {
-		case "guidance":
+		case "guidance", "proposal":
 			// Errors belong to the current task. Moving to another page clears
 			// request feedback, so an Inspect-only group is unreachable elsewhere.
 			for page := range pages {
@@ -100,8 +104,11 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 		pages[section] = append(pages[section], group)
 	}
 	pages["document"] = append(pages["document"], inspectorGroup("document-actions", "Share and print", document)...)
-	pages["document"] = append(pages["document"], inspectorGroup("document-help", "Help and examples", help)...)
+	pages["document"] = append(pages["document"], inspectorGroup("document-help", "Help and examples", append(help, experiment...))...)
+	pages["simulation"] = append(pages["simulation"], inspectorGroup("experiment", "Experiment", experiment)...)
 	priority := map[string]int{"source-sampling": 0, "transient": 1, "probes": 2, "verification": 3, "sweep": 4, "circuit": 5, "document-actions": 0, "output": 1, "appearance": 2, "display": 3, "recovery": 4, "project-work": 5, "document-help": 6}
+	priority["proposal"] = -2
+	priority["experiment"] = 3
 	if state.InspectorSection != "component" {
 		priority["guidance"] = -1
 	}

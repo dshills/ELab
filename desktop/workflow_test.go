@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -63,10 +64,14 @@ func TestNextWorkflowControlsUseAgentCommands(t *testing.T) {
 	}
 	uiAction(t, user, "selection", &ui.ChangeEvent{SelectedID: "C2"})
 	agentAction(t, agent, "component.select", workbench.IDParams{ID: "C2"})
-	uiAction(t, user, "plot-v:C2", nil)
+	// Plot preserves all requested traces. Make the replacement explicit in
+	// both clients rather than relying on the former silent last-slot eviction.
 	ids := append([]string{}, agent.Snapshot().Scope.Selected...)
-	ids[len(ids)-1] = "v:C2"
-	agentAction(t, agent, "scope.probes.set", workbench.ProbeParams{IDs: ids})
+	remove := ids[len(ids)-1]
+	uiAction(t, user, fmt.Sprintf("probe-%d", len(ids)-1), &ui.ChangeEvent{SelectedID: "__none"})
+	agentAction(t, agent, "scope.probe.remove", workbench.IDParams{ID: remove})
+	uiAction(t, user, "plot-v:C2", nil)
+	agentAction(t, agent, "scope.probe.plot", workbench.IDParams{ID: "v:C2"})
 	uiAction(t, user, "scope-latest-window", nil)
 	a := agent.Snapshot()
 	agentAction(t, agent, "scope.window.set", workbench.ScopeWindow{Mode: "fixed", Start: a.Transient.Sample.Time - .2, End: a.Transient.Sample.Time})

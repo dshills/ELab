@@ -10,7 +10,7 @@ import (
 
 func (s *screen) measurementInspector(state workbench.Snapshot) []ui.Node {
 	inspection := state.MeasurementInspection
-	nodes := []ui.Node{section("measurement-title", "Live measurements"), quiet("measurement-help", "Plot adds a trace, replacing the last if six are shown. Pin keeps a reading on the sheet.")}
+	nodes := []ui.Node{section("measurement-title", "Live measurements"), quiet("measurement-help", "Plot live opens the scope and highlights the source. Keeps existing traces (six maximum). Pin adds a reading to the sheet.")}
 	selectTarget := func(kind, name string, options []ui.Option) ui.Node {
 		selected := "__none"
 		if inspection.Target != nil && inspection.Target.Kind == kind {
@@ -79,7 +79,7 @@ func (s *screen) measurementInspector(state workbench.Snapshot) []ui.Node {
 		if reading.Reason != "" {
 			nodes = append(nodes, quiet("measurement-status-"+id, reading.Reason))
 		}
-		plot := s.action("measurement-plot-"+id, "Plot", "scope.probes.set", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, id)})
+		plot := s.action("measurement-plot-"+id, "Plot live", "scope.probe.plot", workbench.IDParams{ID: id})
 		plot.Disabled = state.Transient == nil || !inspection.Available
 		pin := s.action("measurement-pin-"+id, "Pin", "measurement.pin.add", workbench.PinSpec{ID: id, Position: defaultPinPosition(state, id)})
 		pin.Disabled = pinned[id] || len(state.PinnedReadings) >= workbench.MaxPinnedReadings || !inspection.Available

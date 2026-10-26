@@ -9,7 +9,7 @@ static id elabPointerMonitor = nil;
 void elabInstallPointerMonitor(void) {
     void (^install)(void) = ^{
         if (elabPointerMonitor != nil) return;
-        NSEventMask mask = NSEventMaskLeftMouseDown | NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp | NSEventMaskScrollWheel;
+        NSEventMask mask = NSEventMaskLeftMouseDown | NSEventMaskLeftMouseDragged | NSEventMaskLeftMouseUp | NSEventMaskScrollWheel | NSEventMaskMouseMoved;
         elabPointerMonitor = [[NSEvent addLocalMonitorForEventsMatchingMask:mask handler:^NSEvent *(NSEvent *event) {
             NSWindow *window = [event window];
             if (window == nil || ![[window title] isEqualToString:@"ELab · Live electronics"]) return event;
@@ -19,7 +19,7 @@ void elabInstallPointerMonitor(void) {
             NSView *view = [window contentView];
             NSPoint point = [view convertPoint:[event locationInWindow] fromView:nil];
             CGFloat scale = [window backingScaleFactor];
-            int phase = [event type] == NSEventTypeScrollWheel ? 3 : ([event type] == NSEventTypeLeftMouseDown ? 0 : ([event type] == NSEventTypeLeftMouseDragged ? 1 : 2));
+            int phase = [event type] == NSEventTypeMouseMoved ? 4 : ([event type] == NSEventTypeScrollWheel ? 3 : ([event type] == NSEventTypeLeftMouseDown ? 0 : ([event type] == NSEventTypeLeftMouseDragged ? 1 : 2)));
             // Use the location carried by this event. GLFW's button callback
             // queries the current hardware cursor instead, which can differ
             // after queued movement or targeted desktop automation.

@@ -1,11 +1,11 @@
 package workbench
 
 func addEditHistoryDetails(id string, schema map[string]any) bool {
-	if id != "edit.batch" && id != "edit.undo" && id != "edit.redo" {
+	if id != "edit.batch" && id != "edit.batch.preview" && id != "edit.proposal.set" && id != "edit.undo" && id != "edit.redo" {
 		return false
 	}
 	c := commandContractDetail{Version: 1, Scope: "atomic-edits-and-history", Preconditions: []string{"Common protocol/revision/document/actor/retry guards apply before the command; one outer mutation guard and key cover the entire operation"}, Effects: []string{"Successful admission advances command revision even for unchanged final content. Successful retries return independently owned original snapshots before new guard checks, not a fresh snapshot or another edit", "Saved-file association/baselines and kept captured assets are independent of schematic history. Dirty flags compare current contents with the latest saved baseline, not the existence of an undo entry"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Malformed/unknown/duplicate fields or command-specific domain validation"}}, Completion: &commandCompletionDetail{Mode: "immediate schematic/history commit; electrical edits use existing startup/paused stale rules", Observe: []string{"project.inspect", "simulation.wait", "events.poll"}}}
-	if id == "edit.batch" {
+	if id == "edit.batch" || id == "edit.batch.preview" || id == "edit.proposal.set" {
 		p := inputProperty(schema, "name")
 		p["minLength"], p["maxLength"], p["x-max-utf8-bytes"] = 1, 80, 80
 		p["description"] = "Required non-null name, not all whitespace, 1–80 UTF-8 bytes including surrounding whitespace. Stored verbatim if final document content adds an undo entry."
@@ -27,6 +27,16 @@ func addEditHistoryDetails(id string, schema map[string]any) bool {
 		c.Preconditions = append(c.Preconditions, "After common guards and parameter decoding: requested stack nonempty, optional exact tip revision matches, then original tip actor equals caller or allow_other_actor=true")
 		c.Errors = append(c.Errors, commandFailureDetail{"unavailable", "admission", "No entry on the requested stack"}, commandFailureDetail{"history-conflict", "admission", "Exact tip revision differs, or another actor owns the tip without acknowledgment"})
 		c.Effects = append(c.Effects, "Restores one graph/transient-settings/pinned/display/example history state and moves the counterpart to the opposite stack under the original name/actor/entry revision, even when another actor explicitly acknowledges it", "History is session-local and bounded, not loaded from project/recovery files. A later changed document edit clears redo; presentation-only session controls and accepted final-content no-op batches do not necessarily clear it", "Preserves file association/baselines, document generation, kept recordings/sweeps/viewer membership, viewport/pause and lifetime ID reservations. Undoing New/Open does not reassociate an older saved path or resurrect removed captured assets", "Does not rewind numerical time/charge or jobs. Cancels pending input work; electrical/settings differences advance requested run/electrical revision and follow paused stale/restart rules, while geometry/presentation differences preserve accepted physics. Drawing references/selection may normalize when restored objects differ", "Admitted history actions may affect eligibility of pending captured file/analysis work through their usual current-source guards; they do not roll back a publishing file or an external artifact")
+	}
+	if id == "edit.batch.preview" || id == "edit.proposal.set" {
+		c.Effects = []string{"Uses the exact atomic batch admission and lifetime ID rules on a disposable graph; never solves, reserves IDs, changes the circuit or creates Undo history", "Returns deterministic before/after component, wire and transient-settings changes. The batch name is supplied purpose, not an inferred physical explanation", "No-op batches can still have session/ID effects when committed. A preview predicts document differences, not solver results"}
+		c.Completion = &commandCompletionDetail{Mode: "immediate staged admission without solving"}
+		if id == "edit.batch.preview" {
+			c.Preconditions = []string{"Typed atomic batch input; no key or revision guard required for this pure query"}
+			c.Effects = append(c.Effects, "Preserves every revision and proposal; commit edit.batch with the returned command_revision/document_generation as envelope guards")
+		} else {
+			c.Effects = append(c.Effects, "Ordinary mutation guards/key apply to staging. Replaces one session-only proposal with a fresh exact ID and submitting actor; project.inspect exposes it to UI and agents", "Changed graph/settings, document or lifetime ID reservations make the proposal stale; pan, selection, live samples and pause alone do not. Apply requires the exact current proposal ID and a non-stale source", "Refresh by sending edit.proposal.set with the batch again; this creates a new proposal ID and a newly reviewed diff. Document replacement clears the proposal")
+		}
 	}
 	schema["x-command-contract"] = c
 	return true

@@ -15,8 +15,9 @@ type ExampleInfo struct {
 	Limitation string `json:"limitation"`
 }
 type ExampleContext struct {
-	Info     ExampleInfo `json:"info"`
-	Modified bool        `json:"modified"`
+	Info     ExampleInfo  `json:"info"`
+	Modified bool         `json:"modified"`
+	Changes  []EditChange `json:"changes"`
 }
 type ExampleLoadParams struct {
 	ID                 string  `json:"id"`
@@ -465,13 +466,19 @@ func (s *Service) exampleContextLocked() *ExampleContext {
 	if !ok {
 		return nil
 	}
-	return &ExampleContext{Info: d.info, Modified: contentHash(s.graph, s.transientSettings) != contentHash(d.graph, d.settings)}
+	source := contentHash(s.graph, s.transientSettings)
+	if s.exampleDiffID != s.exampleID || s.exampleDiffSource != source {
+		s.exampleDiff = schematicChanges(d.graph, s.graph, d.settings, s.transientSettings)
+		s.exampleDiffID, s.exampleDiffSource = s.exampleID, source
+	}
+	return &ExampleContext{Info: d.info, Modified: source != contentHash(d.graph, d.settings), Changes: cloneEditChanges(s.exampleDiff)}
 }
 func cloneExampleContext(in *ExampleContext) *ExampleContext {
 	if in == nil {
 		return nil
 	}
 	out := *in
+	out.Changes = cloneEditChanges(in.Changes)
 	return &out
 }
 func (s *Service) loadExampleLocked(id string, discard bool) error {

@@ -6,8 +6,8 @@
     "desktop/actuation_controls.go": "7440a002d8fb8556463fda10e1f152529a3aa7cd79173455ed4af1a9066ca0e6",
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/audio_controls.go": "145150962fa7aea606b0dbec0f3fc674bf2786120ca7054679fa1e9ba89d60a3",
-    "desktop/canvas.go": "a134b038959129ecc41500eccaede06cbf55e1457c241eb0e75f6b14793471e8",
-    "desktop/component_inspector.go": "6636a8a17aa5588848b4fa6e5dea819ce3da6421c9413db4a0375aa682a1f053",
+    "desktop/canvas.go": "4ddcb098e374a748fce353551998443e231c97a4be46eb191a4e2ff1c1f953cf",
+    "desktop/component_inspector.go": "b0ff6f724bdc42140c4544a2db1ce66d49506af9313e03b0c55186230f335197",
     "desktop/component_palette.go": "554968a6746c02a80cc8c8f3fb853e422f0e45e97afa0d68cb95e2eb00da4a9a",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
@@ -18,12 +18,14 @@
     "desktop/dc_sweep_canvas.go": "457023ebaf9d3d5a07602597975e78f5cea11cb3f77c7cbfe770d0fe363a9331",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
-    "desktop/document_workspace.go": "b1082b104cb388d77c75dbdb74cd5fffdde7747f9bf984dece3d960411517355",
-    "desktop/drawing.go": "aae5e8bf06c04ac8ed6dfa11624f86002f541b5560ee34f6eb2ea0d7ce049be9",
+    "desktop/document_workspace.go": "41bedab4921ec48632727ae69aa2e460910b5ff869da1d2f72fdad5d4a5c1313",
+    "desktop/drawing.go": "1e762e9c82993edd8d659e22877fdb292bf0941cf225e55d3e99fef0edcd6fa1",
+    "desktop/drawing_preview.go": "c5faa6a382db37aa8748cafa9dcc9e655cc40a3d71218684facc88cb2ccf3a6c",
+    "desktop/edit_proposal.go": "85b9470a7665f55758da21fe42f802c033101887faea9ec7889a2ceb055ab1df",
     "desktop/example_browser.go": "6784c01fa1ab6eddb605f08cf3a5d9a84835d42625525ffc28f1cc38bb360aae",
     "desktop/example_load.go": "055a905403e3bb6c79ea0e4cc490f130d23e788e2d358358ede818b9eeb2ab5a",
     "desktop/example_thumbnails.go": "b2f7d3a90d0915813cfbbceaf342e9c961c7e7df3f94f104e5ed42bbf1ee5fed",
-    "desktop/examples.go": "e072cde40cfd291300dbb08f127ea8bff5d520b3b70604d1d9622b9755c12ad8",
+    "desktop/examples.go": "dc3a29a60642f4530f3bbdf465464430bfc414f63c7acb7692ba795fed6331f7",
     "desktop/extended_controls.go": "343b8028c73e22f4caf18c6266abf5e5258b702bdf109a010e221c444c0127ff",
     "desktop/field_context.go": "615916cc47caeb68e7b0e69feddf10d4ca5b057f0064eb5e80de4dc7bc68e39c",
     "desktop/file_decision.go": "0eefa5e911d9914966b47ca3fa439ec64c73f5da2868657a79d5ed899de62a67",
@@ -39,7 +41,7 @@
     "desktop/layout.go": "1b780e66e228784016e71d4d2d3300620551eb9bb83d47fdc696296a9b2b456d",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/main.go": "08f5a52a32753807269ff727d4ba340c88dab5c39572bd69bd2df6b066aea3e9",
-    "desktop/measurement_inspection.go": "7c0601e0b5ab03a305c4618c781ff6a7a2ceb675f9e4005d2ecaaaea03377fff",
+    "desktop/measurement_inspection.go": "06ad8838f3c6a3853e28b42127a0203f632fd1307f0b78e94988916d88e13050",
     "desktop/menus.go": "fb92050da67ff3e2832fdbc153507c9547d39c779ae426bc21977a2ffdc92d71",
     "desktop/menus_darwin.go": "9608dec0abb6de6953e28c0fed26207f99ec40ec9fc4dfff7d38e8a46adadbfe",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
@@ -51,7 +53,7 @@
     "desktop/output_page_actions.go": "92b5592e3bb9ead8363e4c6f6c6b4ae9ac892926e253eb415a97a98bbdf8a923",
     "desktop/pinned_readings.go": "40fc42f6d46c79f97a303b6a8fa660c6a47702c5bf36cf835a1d21e62009a251",
     "desktop/placement_actions.go": "312deb732a7f065a31cf45d094daf201d637dc92398eaf3660e2fc558786f63e",
-    "desktop/pointer_darwin.go": "09175294279643312573835e431bf0c391cd559d7cf193afc101ab7f8267ff3a",
+    "desktop/pointer_darwin.go": "6687056dfbf5fb66327cb7a527030271fffdcf591b5f2ff9c9ab9bd67f7662df",
     "desktop/pointer_other.go": "7c451ae4f8235e78e3e2803086c738488ee5463e878b003a203b9929497461c1",
     "desktop/power_controls.go": "00b6884b7fe13467c6a300f63bca06b253cc23e1ace582176c5c4d7c5bf3510c",
     "desktop/print_page.go": "76e88a8fa60a99d9465f31782fc19905e2c82c725d5cc32ad43d8f047d3a12bf",
@@ -71,7 +73,7 @@
     "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
     "desktop/routing.go": "4898c4c1de9d7de3c5f8ad751b15d7c0f199234243f62ec6ea949ee8d9ad2c1c",
     "desktop/sampling.go": "9caef58d4d66e4b9d90806e682cd5985567dd923262bf41daed39b2d3572faf4",
-    "desktop/schematic_keyboard.go": "5d33c95abaed2f59b52101e925dc08dfebffa2947b6c947be59e0be3b1afc97d",
+    "desktop/schematic_keyboard.go": "287130fcbd278eb02b044be568b8f977a647b85c0f4293dc1a55e1fb4ddf4590",
     "desktop/schematic_pointer_context.go": "80cd906ba1f61f2cd60079f89d601b08122955fcb1fcd1136f8bbb1b552ac457",
     "desktop/scope.go": "49c46bf21796fb0cfdf74125037a76ebdcd0f37c44f92624eb115a4367d0d484",
     "desktop/scope_context.go": "4a1463abdf9bbb27f80e8c862f6b206b0bc81b10de914e746d0587b60936de34",
@@ -89,14 +91,14 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "01ee3facbdbb7ff17582887e02c53c1a009c5caacdfde0ba5110fc9d954a4e1e",
+    "desktop/view.go": "85e784e2ce5ed8b9b7e8fcb7fc7095bc41e575655d0726ecda6e84f1840aa8e5",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
     "desktop/window_minimum.go": "f6c1590898646b8b570abac29c857162bf13b50d14f39809c8f7f92bee9d180e",
     "desktop/window_minimum_darwin.go": "b7c9fe1d3bb1b7350f70dc4b1ba29708b8975ef0b507ba0595d730c4ddb607e8",
     "desktop/window_minimum_other.go": "1acf27d143422fd66ad4e691aa191afd844510f24004de9aec1f3c8030ca0225",
-    "desktop/workflow.go": "18031c2ecefdb50cc74306f898e6ae81d1c944f406d9154feffb9737d1c654e9",
+    "desktop/workflow.go": "cf04febc47d208a166b6c901b6385b9322151444b1bdae36310f03cc08af9544",
     "desktop/workspace.go": "b35de04775d1a1f058a3fb043ff19e85b1c62973ce5f2c3a5db9f39022f9fa32",
     "desktop/workspace_tabs.go": "9108731d1b6756faf6cdbb12f296e057869b52b6e4909bea94ed1cb5ee47f985"
   },
@@ -121,6 +123,7 @@
     "capacitor.initial.set",
     "circuit.connection.set",
     "component.duplicate",
+    "component.explain",
     "component.move",
     "component.place",
     "component.rotate",
@@ -131,8 +134,13 @@
     "display.preferences.set",
     "drawing.cancel",
     "drawing.position.set",
+    "drawing.preview",
     "drawing.tool.set",
     "edit.batch",
+    "edit.batch.preview",
+    "edit.proposal.apply",
+    "edit.proposal.dismiss",
+    "edit.proposal.set",
     "edit.redo",
     "edit.undo",
     "editor.value.set",
@@ -235,6 +243,7 @@
     "scope.cursor.clear",
     "scope.cursor.select",
     "scope.cursor.set",
+    "scope.probe.plot",
     "scope.probe.remove",
     "scope.probes.set",
     "scope.trace.select",
@@ -661,7 +670,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 57,
+      "line": 58,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.Scroll, func(e events.Event) {\n\tif scroll, ok := e.(*events.MouseScroll); ok {\n\t\tcontext := c.pointerContext.Load()\n\t\twithWindowOwner(c.Owner, window, func() {\n\t\t\tc.withPreparedPointer(context, func() {\n\t\t\t\tanchor := c.world(e, w)\n\t\t\t\tfactor := math.Max(.25, math.Min(4, math.Exp(-float64(scroll.Delta.Y)*.003)))\n\t\t\t\tc.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": anchor})\n\t\t\t})\n\t\t})\n\t\te.SetHandled()\n\t}\n})",
@@ -669,7 +678,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 64,
+      "line": 65,
       "function": "*commandCanvas.Mount",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": anchor})",
@@ -680,7 +689,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 70,
+      "line": 71,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.MouseDown, func(e events.Event) {\n\tcontext := c.pointerContext.Load()\n\twithWindowOwner(c.Owner, window, func() {\n\t\tif e.MouseButton() != events.Left {\n\t\t\tc.pointerGesture = nil\n\t\t\treturn\n\t\t}\n\t\tc.pointerGesture = c.withPreparedPointer(context, func() { c.routePointer(0, c.world(e, w), workbench.Point{}) })\n\t})\n\te.SetHandled()\n})",
@@ -688,7 +697,23 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 81,
+      "line": 82,
+      "function": "*commandCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.MouseMove, func(e events.Event) {\n\tcontext := c.pointerContext.Load()\n\twithWindowOwner(c.Owner, window, func() { c.previewPointer(context, c.world(e, w)) })\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 86,
+      "function": "*commandCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.MouseLeave, func(e events.Event) {\n\twithWindowOwner(c.Owner, window, c.clearHover)\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/canvas.go",
+      "line": 89,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.SlideMove, func(e events.Event) {\n\twithWindowOwner(c.Owner, window, func() {\n\t\tdelta := e.PrevDelta()\n\t\tc.routePreparedPointer(1, c.world(e, w), workbench.Point{X: float64(delta.X) / c.View.Zoom, Y: float64(delta.Y) / c.View.Zoom})\n\t})\n\te.SetHandled()\n})",
@@ -696,7 +721,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 88,
+      "line": 96,
       "function": "*commandCanvas.Mount",
       "kind": "event-or-dispatch-router",
       "expression": "w.OnFirst(events.SlideStop, func(e events.Event) {\n\twithWindowOwner(c.Owner, window, func() { c.routePreparedPointer(2, c.world(e, w), workbench.Point{}) })\n\te.SetHandled()\n})",
@@ -704,7 +729,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 202,
+      "line": 203,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"drawing.position.set\", workbench.PositionParams{Position: point})",
@@ -715,7 +740,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 208,
+      "line": 209,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: ids, Position: \u0026point})",
@@ -726,7 +751,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 216,
+      "line": 217,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.place\", workbench.PlaceParams{Kind: state.Drawing.Kind, Position: p, Value: value})",
@@ -740,26 +765,12 @@
       "line": 225,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
-      "expression": "s.invoke(\"wire.begin\", map[string]string{\"terminal\": ref})",
-      "public_commands": [
-        "wire.begin"
-      ],
-      "status": "literal-public-route"
+      "expression": "s.invoke(preview.Command, preview.Params)",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/canvas.go",
-      "line": 227,
-      "function": "*screen.canvasClick",
-      "kind": "domain-ingress",
-      "expression": "s.invoke(\"wire.connect\", workbench.ConnectParams{From: state.Drawing.WireStart, To: ref})",
-      "public_commands": [
-        "wire.connect"
-      ],
-      "status": "literal-public-route"
-    },
-    {
-      "file": "desktop/canvas.go",
-      "line": 234,
+      "line": 231,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"measurement.select\", workbench.MeasurementSelectParams{Kind: \"terminal\", ID: ref})",
@@ -770,7 +781,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 241,
+      "line": 238,
       "function": "*screen.canvasClick",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -781,7 +792,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 342,
+      "line": 343,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"view.pan\", map[string]float64{\"dx\": -delta.X, \"dy\": -delta.Y})",
@@ -792,7 +803,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 346,
+      "line": 347,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"view.zoom\", map[string]any{\"factor\": factor, \"anchor\": p})",
@@ -803,7 +814,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 353,
+      "line": 354,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"measurement.pin.move\", workbench.MoveParams{ID: strings.TrimPrefix(c.dragID, \"pin|\"), Position: position, PreviousPosition: \u0026c.dragOrigin})",
@@ -814,7 +825,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 355,
+      "line": 356,
       "function": "*commandCanvas.routePointer",
       "kind": "domain-ingress",
       "expression": "c.screen.invoke(\"component.move\", workbench.MoveParams{ID: c.dragID, Position: position, PreviousPosition: \u0026c.dragOrigin})",
@@ -825,7 +836,7 @@
     },
     {
       "file": "desktop/canvas.go",
-      "line": 411,
+      "line": 420,
       "function": "*commandCanvas.navigateObject",
       "kind": "domain-ingress",
       "expression": "c.screen.invokeAtCommandRevision(\"selection.navigate\", workbench.NavigateParams{Direction: direction, Center: true}, revision, generation)",
@@ -916,7 +927,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 269,
+      "line": 278,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -927,7 +938,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 270,
+      "line": 279,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -938,7 +949,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 273,
+      "line": 282,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -949,7 +960,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 274,
+      "line": 283,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -1514,12 +1525,45 @@
     },
     {
       "file": "desktop/document_workspace.go",
-      "line": 123,
+      "line": 130,
       "function": "*screen.inspectorRail",
       "kind": "action-factory",
       "expression": "s.action(\"inspector-section-\"+item.id, item.label, \"workspace.inspector.set\", workbench.InspectorParams{Section: item.id})",
       "public_commands": [
         "workspace.inspector.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/edit_proposal.go",
+      "line": 28,
+      "function": "*screen.proposalControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"proposal-apply\", \"Apply changes\", \"edit.proposal.apply\", workbench.IDParams{ID: p.ID})",
+      "public_commands": [
+        "edit.proposal.apply"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/edit_proposal.go",
+      "line": 30,
+      "function": "*screen.proposalControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"proposal-refresh\", \"Refresh preview\", \"edit.proposal.set\", p.Batch)",
+      "public_commands": [
+        "edit.proposal.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/edit_proposal.go",
+      "line": 31,
+      "function": "*screen.proposalControls",
+      "kind": "action-factory",
+      "expression": "s.action(\"proposal-dismiss\", \"Dismiss proposal\", \"edit.proposal.dismiss\", workbench.IDParams{ID: p.ID})",
+      "public_commands": [
+        "edit.proposal.dismiss"
       ],
       "status": "literal-public-route"
     },
@@ -1712,7 +1756,7 @@
     },
     {
       "file": "desktop/examples.go",
-      "line": 18,
+      "line": 20,
       "function": "*screen.exampleGuidance",
       "kind": "registry-button",
       "expression": "s.button(\"example.current.reset\", \"Reset example\")",
@@ -1723,7 +1767,7 @@
     },
     {
       "file": "desktop/examples.go",
-      "line": 20,
+      "line": 22,
       "function": "*screen.exampleGuidance",
       "kind": "callback-assignment",
       "expression": "reset.Activate = func() {\n\ts.requestReplace(\"example.current.reset\", workbench.ExampleResetParams{ExpectedID: info.ID, ExpectedGeneration: \u0026generation})\n}",
@@ -1731,7 +1775,7 @@
     },
     {
       "file": "desktop/examples.go",
-      "line": 21,
+      "line": 23,
       "function": "*screen.exampleGuidance",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(\"example.current.reset\", workbench.ExampleResetParams{ExpectedID: info.ID, ExpectedGeneration: \u0026generation})",
@@ -2508,9 +2552,9 @@
       "line": 82,
       "function": "*screen.measurementInspector",
       "kind": "action-factory",
-      "expression": "s.action(\"measurement-plot-\"+id, \"Plot\", \"scope.probes.set\", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, id)})",
+      "expression": "s.action(\"measurement-plot-\"+id, \"Plot live\", \"scope.probe.plot\", workbench.IDParams{ID: id})",
       "public_commands": [
-        "scope.probes.set"
+        "scope.probe.plot"
       ],
       "status": "literal-public-route"
     },
@@ -4660,7 +4704,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 320,
+      "line": 321,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -4671,7 +4715,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 327,
+      "line": 328,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -4682,7 +4726,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 329,
+      "line": 330,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Cancel\")",
@@ -4693,7 +4737,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 338,
+      "line": 339,
       "function": "*screen.view",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"Sweeps\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -4704,7 +4748,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 554,
+      "line": 555,
       "function": "*screen.view",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -4712,7 +4756,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 567,
+      "line": 568,
       "function": "*screen.view",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",
@@ -4842,18 +4886,18 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 147,
+      "line": 133,
       "function": "*screen.partPlotControls",
       "kind": "action-factory",
-      "expression": "s.action(\"plot-\"+probe.ID, text, \"scope.probes.set\", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, probe.ID)})",
+      "expression": "s.action(\"plot-\"+probe.ID, text, \"scope.probe.plot\", workbench.IDParams{ID: probe.ID})",
       "public_commands": [
-        "scope.probes.set"
+        "scope.probe.plot"
       ],
       "status": "literal-public-route"
     },
     {
       "file": "desktop/workflow.go",
-      "line": 203,
+      "line": 190,
       "function": "*screen.scopeWindowControls",
       "kind": "callback-factory",
       "expression": "timeField(\"window-\"+side, \"Scope interval \"+side, value, t == nil || t.Stale, func(text string) {\n\ts.changeIntervalTime(state, side, text, \"\")\n})",
@@ -4861,7 +4905,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 239,
+      "line": 226,
       "function": "*screen.scopeWindowControls",
       "kind": "request-command-field",
       "expression": "Command: \"component.set\"",
@@ -4872,7 +4916,7 @@
     },
     {
       "file": "desktop/workflow.go",
-      "line": 241,
+      "line": 228,
       "function": "*screen.scopeWindowControls",
       "kind": "action-factory",
       "expression": "s.action(\"cap-pair-\"+value, \"Both capacitors · \"+value, \"edit.batch\", workbench.BatchParams{Name: \"Set both capacitors to \" + value, Edits: edits})",
@@ -4925,6 +4969,9 @@
     "drawing.position.set",
     "drawing.tool.set",
     "edit.batch",
+    "edit.proposal.apply",
+    "edit.proposal.dismiss",
+    "edit.proposal.set",
     "edit.redo",
     "edit.undo",
     "editor.value.set",
@@ -5009,6 +5056,7 @@
     "scope.cursor.clear",
     "scope.cursor.select",
     "scope.cursor.set",
+    "scope.probe.plot",
     "scope.probe.remove",
     "scope.probes.set",
     "scope.trace.select",
@@ -5051,7 +5099,6 @@
     "view.selection.center",
     "view.viewport.set",
     "view.zoom",
-    "wire.begin",
     "wire.connect",
     "wire.junction.insert",
     "wire.terminals.set",
@@ -5067,7 +5114,10 @@
     "audio.read",
     "capabilities.list",
     "circuit.connection.set",
+    "component.explain",
     "display.inspect",
+    "drawing.preview",
+    "edit.batch.preview",
     "events.poll",
     "examples.list",
     "measurement.inspect",
@@ -5090,7 +5140,8 @@
     "simulation.wait",
     "sweep.import.start",
     "sweep.inspect",
-    "verification.import.start"
+    "verification.import.start",
+    "wire.begin"
   ],
   "issues": [],
   "limitations": [

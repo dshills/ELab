@@ -1,0 +1,30 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestOwnedDrawingPreviewRasterReview (0.04s)
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/light/placement (0.01s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/light-placement.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/light/occupied (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/light-occupied.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/light/wire (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/light-wire.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/dark/placement (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/dark-placement.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/dark/occupied (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/dark-occupied.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/dark/wire (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/dark-wire.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/system/placement (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/system-placement.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/system/occupied (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/system-occupied.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/system/wire (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/system-wire.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/apollo/placement (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/apollo-placement.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/apollo/occupied (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/apollo-occupied.png: no such file or directory
+    --- FAIL: TestOwnedDrawingPreviewRasterReview/apollo/wire (0.00s)
+        zz_owned_preview_render_test.go:32: open /Users/dshills/Development/projects/ELab/build/workbench-improvements/preview-pixels/apollo-wire.png: no such file or directory
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.684s
+FAIL

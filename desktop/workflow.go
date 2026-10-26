@@ -10,20 +10,6 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-func withProbe(ids []string, id string) []string {
-	out := append([]string{}, ids...)
-	for _, old := range out {
-		if old == id {
-			return out
-		}
-	}
-	if len(out) == workbench.MaxScopeProbes {
-		out[len(out)-1] = id
-	} else {
-		out = append(out, id)
-	}
-	return out
-}
 func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Component) []ui.Node {
 	nodes := []ui.Node{}
 	for _, probe := range state.Scope.Available {
@@ -144,7 +130,8 @@ func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Componen
 					text = "Plot collector current"
 				}
 			}
-			n := s.action("plot-"+probe.ID, text, "scope.probes.set", workbench.ProbeParams{IDs: withProbe(state.Scope.Selected, probe.ID)})
+			n := s.action("plot-"+probe.ID, text, "scope.probe.plot", workbench.IDParams{ID: probe.ID})
+			n.Accessibility.Help = "Show this live trace and highlight its source. Existing traces are kept; remove one if six are already plotted."
 			n.Disabled = state.Transient == nil
 			nodes = append(nodes, n)
 		}

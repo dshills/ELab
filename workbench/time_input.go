@@ -71,6 +71,9 @@ var timeCommandFields = map[string][]string{
 }
 
 func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, error) {
+	if command == "edit.batch.preview" || command == "edit.proposal.set" {
+		command = "edit.batch"
+	}
 	fields := timeCommandFields[command]
 	if len(fields) == 0 && len(waveformQuantityFields[command]) == 0 && command != "edit.batch" {
 		return raw, nil
@@ -138,7 +141,7 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 		for i := range edits {
 			// Nested batches are unsupported; let the existing domain validator refuse
 			// them without recursively processing their parameter trees.
-			if edits[i].Command == "edit.batch" {
+			if edits[i].Command == "edit.batch" || edits[i].Command == "edit.batch.preview" || edits[i].Command == "edit.proposal.set" {
 				continue
 			}
 			normalized, err := normalizeTimeInput(edits[i].Command, edits[i].Params)

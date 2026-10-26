@@ -77,6 +77,12 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 	grid := palette.Grid
 	selectedColor := color.NRGBA{R: 40, G: 158, B: 180, A: 255}
 	pendingColor := color.NRGBA{R: 212, G: 138, B: 28, A: 255}
+	proposed := map[string]bool{}
+	if state.Proposal != nil && !state.Proposal.Stale {
+		for _, change := range state.Proposal.Preview.Changes {
+			proposed[change.ID] = true
+		}
+	}
 	minPoint, maxPoint := view.World(canvas.Point{}), view.World(canvas.Point{X: view.Width, Y: view.Height})
 	minX, maxX := math.Max(-10000, minPoint.X), math.Min(10000, maxPoint.X)
 	minY, maxY := math.Max(-10000, minPoint.Y), math.Min(10000, maxPoint.Y)
@@ -131,6 +137,9 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 			c = displayColor(reading.Color)
 		}
 		width := 2.5
+		if proposed[w.ID] {
+			c, width = palette.Accent, 4
+		}
 		if measurementWires[w.ID] {
 			c, width = measurementColor, 3.5
 		}
@@ -188,6 +197,11 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 		}
 		if part.ID == state.Selected {
 			stroke(selectedColor, 1.8, canvas.Point{X: -outlineW, Y: -outlineH}, canvas.Point{X: outlineW, Y: -outlineH}, canvas.Point{X: outlineW, Y: outlineH}, canvas.Point{X: -outlineW, Y: outlineH}, canvas.Point{X: -outlineW, Y: -outlineH})
+		}
+		if proposed[part.ID] {
+			// A second inset outline identifies the currently affected source;
+			// the proposal list supplies exact before/after data without editing.
+			stroke(palette.Accent, 2, canvas.Point{X: -outlineW - 10, Y: -outlineH - 10}, canvas.Point{X: outlineW + 10, Y: -outlineH - 10}, canvas.Point{X: outlineW + 10, Y: outlineH + 10}, canvas.Point{X: -outlineW - 10, Y: outlineH + 10}, canvas.Point{X: -outlineW - 10, Y: -outlineH - 10})
 		}
 		for _, terminal := range part.Terminals {
 			ref := part.ID + "." + terminal

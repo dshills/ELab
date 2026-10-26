@@ -16,6 +16,8 @@ import (
 )
 
 type Snapshot struct {
+	Proposal               *EditProposal          `json:"edit_proposal,omitempty"`
+	Explanation            *ComponentExplanation  `json:"component_explanation,omitempty"`
 	ExampleBrowser         ExampleBrowser         `json:"example_browser"`
 	Audio                  *AudioPreview          `json:"audio_preview,omitempty"`
 	InspectorSection       string                 `json:"inspector_section"`
@@ -120,6 +122,8 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	proposal                         *editProposalState
+	proposalSerial                   uint64
 	exampleBrowser                   ExampleBrowser
 	audio                            *audioJob
 	audioWorkers                     int
@@ -173,6 +177,9 @@ type Service struct {
 	inputSerial                      uint64
 	inputSolve                       inputSolveFunc
 	exampleID                        string
+	exampleDiffID                    string
+	exampleDiffSource                [32]byte
+	exampleDiff                      []EditChange
 	diagnosticDetails                bool
 	displayPreferences               DisplayPreferences
 	measurementTarget                *MeasurementTarget
@@ -348,6 +355,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		Proposal:               s.proposalViewLocked(),
 		WorkspaceLayout:        s.workspaceLayout,
 		InspectorSection:       s.inspectorSection,
 		Viewport:               cloneViewport(s.viewport),
@@ -514,6 +522,13 @@ func (s *Service) snapshotLocked() Snapshot {
 			r.Nodes[k] = v
 		}
 		out.Result = &r
+	}
+	if _, ok := graph.Component(s.selected); ok {
+		var inspection *MeasurementInspection
+		if target := out.MeasurementInspection.Target; target != nil && target.Kind == "object" && target.ID == s.selected {
+			inspection = &out.MeasurementInspection
+		}
+		out.Explanation, _ = s.componentExplanationLocked(compiled, s.selected, inspection)
 	}
 	return out
 }
@@ -768,6 +783,49 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		return fail("unknown-command", "enumerate capabilities.list for supported commands")
 	}
 	if !cap.Mutation {
+		if r.Command == "edit.batch.preview" {
+			normalized, err := normalizeTimeInput(r.Command, r.Params)
+			if err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			var p BatchParams
+			if err := params(normalized, &p, "name", "edits"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			result, err := s.previewBatchLocked(p)
+			if err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = result
+			return out
+		}
+		if r.Command == "component.explain" {
+			var p IDParams
+			if err := params(r.Params, &p, "id"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			compiled, _, _ := s.graph.Compile()
+			result, err := s.componentExplanationLocked(compiled, p.ID, nil)
+			if err != nil {
+				return fail("not-found", err.Error())
+			}
+			out.Result = result
+			return out
+		}
+		if r.Command == "drawing.preview" {
+			var p PositionParams
+			if err := params(r.Params, &p, "position"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			if err := validatePointParam(r.Params, "position"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			if _, err := snapPoint(p.Position); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = PreviewDrawing(s.snapshotLocked(), p.Position)
+			return out
+		}
 		if r.Command == "appearance.work.inspect" {
 			var p IDParams
 			if err := params(r.Params, &p, "id"); err != nil {
@@ -1029,6 +1087,9 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 		}
 		return fail("invalid-params", err.Error())
 	}
+	if r.Command == "edit.proposal.set" && s.proposal != nil {
+		s.proposal.view.Actor = actor
+	}
 	changedGraph := !reflect.DeepEqual(before.Graph, s.graph)
 	changedSettings := before.Settings != s.transientSettings
 	changedPins := !reflect.DeepEqual(clonePins(before.Pins), clonePins(s.pins))
@@ -1154,6 +1215,8 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Proposal = cloneEditProposal(state.Proposal)
+	state.Explanation = cloneComponentExplanation(state.Explanation)
 	if state.Audio != nil {
 		v := *state.Audio
 		if v.Error != nil {

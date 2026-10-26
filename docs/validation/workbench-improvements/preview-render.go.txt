@@ -1,0 +1,34 @@
+package main
+import("image";"image/color";"image/png";"math";"os";"path/filepath";"testing";"github.com/dshills/elab/workbench";"github.com/dshills/vellum/canvas")
+// Review-only software raster of actual production mesh triangles, not native pixels.
+func previewReviewRaster(mesh *canvas.Mesh,v canvas.Viewport,bg color.NRGBA)*image.NRGBA{
+ im:=image.NewNRGBA(image.Rect(0,0,int(v.Width),int(v.Height)))
+ for y:=0;y<im.Bounds().Dy();y++{for x:=0;x<im.Bounds().Dx();x++{im.SetNRGBA(x,y,bg)}}
+ vertices,indices:=mesh.Vertices(),mesh.Indices()
+ cross:=func(a,b,p canvas.Point)float64{return (b.X-a.X)*(p.Y-a.Y)-(b.Y-a.Y)*(p.X-a.X)}
+ for i:=0;i<len(indices);i+=3{
+  va,vb,vc:=vertices[indices[i]],vertices[indices[i+1]],vertices[indices[i+2]]
+  a,b,c:=v.Screen(va.Position),v.Screen(vb.Position),v.Screen(vc.Position)
+  area:=cross(a,b,c);if math.Abs(area)<1e-12{continue}
+  loX,hiX:=max(0,int(math.Floor(min(a.X,b.X,c.X)))),min(im.Bounds().Dx()-1,int(math.Ceil(max(a.X,b.X,c.X))))
+  loY,hiY:=max(0,int(math.Floor(min(a.Y,b.Y,c.Y)))),min(im.Bounds().Dy()-1,int(math.Ceil(max(a.Y,b.Y,c.Y))))
+  for y:=loY;y<=hiY;y++{for x:=loX;x<=hiX;x++{p:=canvas.Point{X:float64(x)+.5,Y:float64(y)+.5};u,w,z:=cross(a,b,p)/area,cross(b,c,p)/area,cross(c,a,p)/area;if u>=-1e-9&&w>=-1e-9&&z>=-1e-9{im.SetNRGBA(x,y,va.Color)}}}
+ }
+ return im
+}
+func TestOwnedDrawingPreviewRasterReview(t *testing.T){
+ for _,mode:=range []string{"light","dark","system","apollo"}{for _,scene:=range []string{"placement","occupied","wire"}{t.Run(mode+"/"+scene,func(t *testing.T){
+  s,cleanup:=testScreen(t);defer cleanup()
+  agentAction(t,s.service,"example.reset",workbench.ReplaceParams{DiscardChanges:true});agentAction(t,s.service,"simulation.pause",struct{}{})
+  agentAction(t,s.service,"appearance.theme.set",map[string]string{"theme":mode})
+  at:=workbench.Point{X:160,Y:170}
+  if scene=="wire"{state:=s.service.Snapshot();agentAction(t,s.service,"object.delete",workbench.IDParams{ID:state.Wires[0].ID});agentAction(t,s.service,"wire.begin",map[string]string{"terminal":"V1.positive"});part,_:=(workbench.Graph{Components:state.Components}).Component("R1");at,_=workbench.TerminalPosition(part,"1")
+  }else{agentAction(t,s.service,"drawing.tool.set",workbench.ToolParams{Tool:"place",Kind:"resistor"});if scene=="occupied"{part,_:=(workbench.Graph{Components:s.service.Snapshot().Components}).Component("R1");at=part.Position}}
+  prepareSchematicPointer(t,s)
+  var mesh *canvas.Mesh;var err error
+  s.app.Do(func(){s.routeNativePointer("schematic",4,at,workbench.Point{});mesh,err=s.mesh(*s.drawing.View)})
+  if err!=nil{t.Fatal(err)};p:=s.drawing.drawingPreview(s.service.Snapshot());if p==nil||p.Valid!=(scene!="occupied"){t.Fatal("scene has unexpected preview",p)}
+  im:=previewReviewRaster(mesh,*s.drawing.View,s.colorsForTheme(mode).Paper)
+  out:=filepath.Join(os.Getenv("ELAB_PREVIEW_REVIEW"),mode+"-"+scene+".png");f,err:=os.OpenFile(out,os.O_WRONLY|os.O_CREATE|os.O_EXCL,0600);if err!=nil{t.Fatal(err)};e:=png.Encode(f,im);c:=f.Close();if e!=nil||c!=nil{t.Fatal(e,c)}
+ })}}
+}

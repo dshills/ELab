@@ -201,6 +201,9 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 	if code == "invalid-params" && r.Command == "component.set" {
 		componentValueRequestHelp(s.graph, r.Params, &help)
 	}
+	if code == "invalid-params" && r.Command == "scope.probe.plot" {
+		s.plotProbeRequestHelpLocked(r.Params, &help)
+	}
 	if code == "invalid-params" && (r.Command == "scope.cursor.set" || r.Command == "recording.cursor.set") {
 		s.cursorTimeRequestHelpLocked(r, &help)
 	}
