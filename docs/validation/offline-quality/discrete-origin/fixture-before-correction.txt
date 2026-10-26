@@ -1,0 +1,16 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext (0.27s)
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/checkbox-output (0.05s)
+        discrete_origin_offscreen_test.go:57: ui: node "pdf-color": ui: maximum size is smaller than minimum size
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/checkbox-motor (0.06s)
+        discrete_origin_offscreen_test.go:57: ui: node "motor-locked": ui: maximum size is smaller than minimum size
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/keyboard-button (0.03s)
+        discrete_origin_offscreen_test.go:24: missing assembled control display-voltage
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/disclosure (0.03s)
+        discrete_origin_offscreen_test.go:57: ui: node "diagnostic-details": ui: maximum size is smaller than minimum size
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/component-list (0.10s)
+        discrete_origin_offscreen_test.go:105: queued part-list borrowed newer agent context: revision 3 -> 4, actor "user", drawing {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:2k} -> {Tool:place Kind:resistor Position:{X:-200 Y:0} WireStart: From: To: Value:2k}
+FAIL
+FAIL	github.com/dshills/elab/desktop	0.942s
+FAIL

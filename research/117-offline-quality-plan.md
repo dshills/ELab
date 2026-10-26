@@ -190,3 +190,19 @@ agent-origin hazard, reproducing through real driver queues before any SDK
 contract change. Prioritize demonstrated reliability gaps, add no components or
 unrelated features, preserve all qualified packages and stop at a safe checkpoint
 when the owner returns. The thread heartbeat remains active until that return.
+
+## Discrete queue continuation
+
+Five newly reproduced assembled-control cases adopt a refreshed agent context:
+output Color, locked motor, voltage-color keyboard action, diagnostic disclosure
+and component selection. The corrected baseline dispatches a real originating
+key with owner delivery withheld, performs a public service agent edit, then
+reconciles before delivery. All five fail before the SDK change. Separate
+fixture size/inspector errors are retained and corrected without product edits.
+
+SDK d7ec9809 /elab7 retains these admitted callbacks. Intentional programmatic
+button, selector and non-list group contracts remain; this is not a claim about
+all pointer-down or native/AX paths. Focused regressions and fresh independent
+input pass; complete qualification is in progress. No new components, commands,
+models or solver changes. Preserve /266 and every earlier qualified package.
+[Scoped evidence](../docs/validation/offline-quality/discrete-origin/README.md).

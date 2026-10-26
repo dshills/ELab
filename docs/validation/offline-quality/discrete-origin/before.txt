@@ -1,0 +1,16 @@
+# github.com/dshills/elab/desktop.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext (0.52s)
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/checkbox-output (0.10s)
+        discrete_origin_offscreen_test.go:105: queued pdf-color borrowed newer agent context: revision 4 -> 5, actor "user", drawing {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:} -> {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:}
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/checkbox-motor (0.15s)
+        discrete_origin_offscreen_test.go:105: queued motor-locked borrowed newer agent context: revision 6 -> 7, actor "user", drawing {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:} -> {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:}
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/keyboard-button (0.08s)
+        discrete_origin_offscreen_test.go:105: queued display-voltage borrowed newer agent context: revision 4 -> 5, actor "user", drawing {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:} -> {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:}
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/disclosure (0.09s)
+        discrete_origin_offscreen_test.go:105: queued diagnostic-details borrowed newer agent context: revision 3 -> 4, actor "user", drawing {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:} -> {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:}
+    --- FAIL: TestMountedQueuedDiscreteInputCannotBorrowAgentContext/component-list (0.10s)
+        discrete_origin_offscreen_test.go:105: queued part-list borrowed newer agent context: revision 3 -> 4, actor "user", drawing {Tool:select Kind:dc-source Position:{X:-200 Y:0} WireStart: From: To: Value:2k} -> {Tool:place Kind:resistor Position:{X:-200 Y:0} WireStart: From: To: Value:2k}
+FAIL
+FAIL	github.com/dshills/elab/desktop	1.159s
+FAIL

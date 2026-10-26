@@ -1,0 +1,28 @@
+{
+  "schema": 2,
+  "repository": "https://github.com/dshills/vellum",
+  "upstream_commit": "f9dee54fdb2a9e73a38fdd3fb67c8871dc0f6c40",
+  "source_commit": "d7ec98093a892f8889a30622640623883ca75859",
+  "compatibility_patch": {
+    "path": "third_party/vellum/patches/elab-f9dee54-discrete-origin-compat.patch",
+    "sha256": "86b9ad254582da78227d483237227d39a32e5fcab588727a335b594d1258fa96"
+  },
+  "archive": "third_party/vellum/vellum-f9dee54-elab7.tar.gz",
+  "archive_bytes": 20860834,
+  "sha256": "3cf8c19d31c96001e8f397e9d27bac3f847e8e7da79bdc1b2ade7f279b5e8915",
+  "manifest_sha256": "f5ab2d0eeb6654b2630106d43f3da3ca11c7e1aa9e7e58b159ff6f6012a56678",
+  "prefix": "vellum-v0.1.0-personal.1",
+  "cache": "build/.vellum-sdk-f9dee54-elab7",
+  "private_build": true,
+  "module": "github.com/dshills/vellum",
+  "version": "v0.1.0-personal.1",
+  "files": 8739,
+  "bootstrap": {
+    "scripts/check-sdk.py": "68c14ab36454a07a04b005cbfbddf15132edaaec52cf467c97901a0db44b368f",
+    "scripts/child_process.py": "f907c7c6ce54871c9693be9fd8a9088cf09bd22cabc4e48d3abc7191f75bc7e6",
+    "scripts/sdk_environment.py": "e100d93ed7ca190725c8e10d1b721cb56f2d86a5f12643b53b4ee198a79b4311",
+    "scripts/native_gpu.py": "25fc2caf4696a75dff141756d883eb7727b07195e90af6eb965e2a6bda4acc6e",
+    "scripts/native_archive.py": "b186e30cf34577b0c1ccc4d25f5c090981afac25a0840942de0e83087ca4b541",
+    "scripts/native_linkers.py": "18fb7c193157035cf940259a202b816b18e227c0ceb125a2727b629340f99af7"
+  }
+}
