@@ -252,3 +252,38 @@ activation/focus as the cause before evidence. The four original native checks
 3/6/9/11 remain open. Continue other in-use queue audits only with real reachable
 ELab/agent reproductions before altering intentional SDK contracts. Pause the
 thread heartbeat and finish a safe checkpoint on the owner's direct return.
+
+## Native Save diagnostic checkpoint, October 26
+
+An owned instrumented copy observes NSApp active, NSSavePanel key and the
+successful Select All menu action routed through NSRemoteView to
+NSFakeServiceResponder. CUA Command-A still fails the filename replacement
+probe (Alpha Circuit → Alpha CircuitBeta); menu Select All works. A post-menu
+shortcut readout has no selection annotation, but no replacement probe, so no
+second selection-success/failure verdict is claimed. No inactive-app/focus repair is supported.
+No key events reach the parent local monitor during the panel, while an ordinary
+GLFW-window Escape control records key down/up. This is a route lead, not proof
+of CUA/AppKit/GLFW/ELab fault. No production code or qualified bytes change.
+
+The initial launch tool call reports 11,984.9751 seconds; process startup occurs
+at 07:28:21 UTC. Its cause is not reported. The already-running process is then
+attached without relaunch or another permission question. A modal reattachment
+control is guarded by the UI tool and yields no second shortcut result; a fresh
+state read precedes further action. Its root window becomes key while its picker
+remains pending. Normal public close cancels that owned picker and CUA confirms
+no fixture remains running. This is not a direct user return/stop instruction.
+
+The first snapshot comparison contains a delayed 32px viewport publication only;
+after that settled baseline the complete snapshot remains exact. The synthetic
+saved file is preserved. All 1,354 qualified compiled/test inputs and eight prior
+package/SDK hashes stay exact. No full-gate or package repeat. Check 3 and the
+other native checks 6/9/11 remain explicitly open. [Exact evidence and limits](../docs/validation/offline-quality/save-panel-diagnostic/README.md).
+
+Next bounded control: minimal owned standard NSApplication/NSSavePanel with the
+same production temporary Edit-menu helper, driven via documented CUA input.
+Use a bounded software-test startup runner and attach to an already-running
+owned fixture; do not leave work waiting indefinitely on a fresh launch call.
+Do not change security/approval settings or infer missing owner permission.
+Compare the reference with the instrumented GLFW/Vellum case before any focus
+or menu repair. If unavailable, continue evidenced source/agent/offscreen work.
+Pause the heartbeat and finish a safe checkpoint on a direct human return/stop.

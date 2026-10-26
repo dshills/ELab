@@ -1,0 +1,4 @@
+Initial CUA getApp fixture call reported11984.9751 seconds, then running application not found for the exec wrapper. Endpoint and stdout timestamp prove actual process startup at2026-10-26T07:28:21 UTC. Attachment to the actual running app took0.1349 seconds; it was not relaunched. Cause of launch-call delay is unknown.
+
+Modal reattachment control produced: The user changed the diagnostic app. Re-query the latest state with get_app_state before sending more actions.
+A documented getAXState read followed before any further action. No shortcut result is claimed for this control. Root Escape was then observed by the app-local key monitor; normal public app.close canceled the still-pending owned picker.

@@ -99,3 +99,10 @@ Owner walkthrough, clean-account/Gatekeeper, screen-reader/IME/participant and
 physical hardware checks retain their recorded deferrals/limits. No Developer
 ID/notarization, external upload or push. User projects and prior releases stay
 preserved; this record does not claim complete PRD acceptance.
+
+The [native Save diagnostic](save-panel-diagnostic/README.md) records an active
+app and remote-view responder/menu routing, but the CUA shortcut failure remains
+unqualified. No production repair or new package results. It includes the long
+launch-call delay and inconclusive modal-target control without assigning an
+unsupported cause. The owned fixture/picker close normally; all qualified bytes
+remain exact. The next bounded control uses ordinary NSApplication/NSSavePanel.

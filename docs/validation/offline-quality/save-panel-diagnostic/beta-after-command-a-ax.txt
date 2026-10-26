@@ -1,0 +1,21 @@
+Window: "Save project", App: ELab.
+0 standard window Save project, ID: save-panel, Secondary Actions: Raise
+	1 split group
+		2 text Value: Where:, ID: whereLabel
+		3 pop up button Where:, Value: fixtures, ID: where popup
+		4 disclosure triangle Description: show more options, Value: 0
+		5 text Value: Save As:, ID: nameFieldLabel
+		6 text field (settable) Value: Alpha CircuitBeta, ID: saveAsNameTextField
+		7 text Value: Tags:, ID: tagsLabel
+		8 text field (settable) tag editor
+		9 button Cancel, ID: CancelButton
+		10 button Save, ID: OKButton
+	11 text Save project
+12 menu bar
+	13 ELab
+	14 File
+	15 Edit
+	16 Examples
+	17 Appearance
+
+The focused UI element is 6 text field (settable) Value: Alpha CircuitBeta, ID: saveAsNameTextField

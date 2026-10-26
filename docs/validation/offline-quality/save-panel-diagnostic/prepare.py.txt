@@ -1,0 +1,100 @@
+from pathlib import Path
+import hashlib,json,shutil
+root=Path('/Users/dshills/Development/projects/ELab');base=root/'build/offline-quality/save-panel-diagnostic';source=base/'source'
+shutil.copytree(root/'desktop',source,ignore=shutil.ignore_patterns('build','__pycache__','.DS_Store'))
+s=(source/'go.mod').read_text().replace('../build/.vellum-sdk-f9dee54-elab8',str(root/'build/.vellum-sdk-f9dee54-elab8')).replace('github.com/dshills/elab => ..','github.com/dshills/elab => '+str(root));(source/'go.mod').write_text(s)
+p=source/'file_focus_darwin.m';s=p.read_text()
+s=s.replace('#include <stdint.h>','#include <stdint.h>\n#include <fcntl.h>\n#include <unistd.h>\n#include <stdlib.h>\nstatic void elabDiagnosticStart(void);\nstatic void elabDiagnosticStop(void);\nstatic void elabDiagnosticSnapshot(NSString *phase, NSDictionary *event);',1)
+s=s.replace('NSWindow *window = [NSApp keyWindow];','elabDiagnosticStart();\n            elabDiagnosticSnapshot(@"capture-before-menu", nil);\n            NSWindow *window = [NSApp keyWindow];',1)
+s=s.replace('elabBeginFileEditing(token, NSApp.mainMenu);','elabBeginFileEditing(token, NSApp.mainMenu);\n            elabDiagnosticSnapshot(@"capture-after-menu", nil);',1)
+s=s.replace('elabEndFileEditing(token);','elabDiagnosticSnapshot(@"restore-before-menu-removal", nil);\n            elabEndFileEditing(token);\n            elabDiagnosticSnapshot(@"restore-after-menu-removal", nil);\n            elabDiagnosticStop();',1)
+s+='''
+// Diagnostic-only app-local observers. No event, responder, activation, menu or
+// field is modified. No text, window titles, paths or other-app data are logged.
+static id elabDiagnosticMonitor;
+static NSMutableArray *elabDiagnosticObservers;
+static NSUInteger elabDiagnosticSequence;
+static NSUInteger elabDiagnosticWrites;
+static void elabDiagnosticSnapshot(NSString *phase, NSDictionary *event) {
+    const char *path = getenv("ELAB_SAVE_DIAGNOSTIC_LOG");
+    if (!path || !*path || ![NSThread isMainThread] || elabDiagnosticWrites++ >= 512) return;
+    NSWindow *window = NSApp.keyWindow;
+    NSResponder *responder = window.firstResponder;
+    id target = [NSApp targetForAction:@selector(selectAll:)];
+    NSMutableDictionary *row = [@{@"phase": phase, @"pid": @(getpid()),
+        @"unix_s": @([NSDate timeIntervalSinceReferenceDate] + NSTimeIntervalSince1970),
+        @"main_thread": @([NSThread isMainThread]), @"active": @(NSApp.active),
+        @"key_window": @(window.windowNumber), @"key_class": window ? NSStringFromClass(window.class) : @"",
+        @"main_window": @(NSApp.mainWindow.windowNumber),
+        @"first_responder_class": responder ? NSStringFromClass(responder.class) : @"",
+        @"select_all_target_class": target ? NSStringFromClass([target class]) : @"",
+        @"app_window_count": @(NSApp.windows.count), @"edit_group_present": @(elabFileEditingGroup != nil)} mutableCopy];
+    if ([responder isKindOfClass:NSTextView.class]) {
+        NSTextView *text = (NSTextView *)responder;
+        NSRange range = text.selectedRange;
+        row[@"selection_location"] = @(range.location == NSNotFound ? -1 : (NSInteger)range.location);
+        row[@"selection_length"] = @(range.length);
+        row[@"text_length"] = @(text.string.length);
+    }
+    if (elabFileEditingGroup) for (NSMenuItem *item in elabFileEditingGroup.submenu.itemArray) {
+        if (item.action != @selector(selectAll:)) continue;
+        row[@"select_all_menu_enabled"] = @(item.enabled);
+        row[@"select_all_menu_mask"] = @(item.keyEquivalentModifierMask);
+        row[@"select_all_menu_has_explicit_target"] = @(item.target != nil);
+    }
+    if (event) row[@"event"] = event;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:row options:NSJSONWritingSortedKeys error:NULL];
+    if (data) {
+        int fd = open(path, O_WRONLY|O_CREAT|O_APPEND, 0600);
+        if (fd >= 0) { write(fd, data.bytes, data.length); write(fd, "\\n", 1); close(fd); }
+    }
+    [row release];
+}
+static void elabDiagnosticStart(void) {
+    if (elabDiagnosticMonitor || !getenv("ELAB_SAVE_DIAGNOSTIC_LOG")) return;
+    elabDiagnosticMonitor = [[NSEvent addLocalMonitorForEventsMatchingMask:
+        (NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskFlagsChanged)
+        handler:^NSEvent *(NSEvent *event) {
+            NSDictionary *metadata = [@{@"sequence": @(++elabDiagnosticSequence),
+                @"type": @(event.type), @"key_code": @(event.keyCode),
+                @"modifiers": @(event.modifierFlags), @"event_window": @(event.windowNumber),
+                @"event_timestamp": @(event.timestamp)} retain];
+            elabDiagnosticSnapshot(@"local-event-before", metadata);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                elabDiagnosticSnapshot(@"local-event-after", metadata);
+                [metadata release];
+            });
+            return event;
+        }] retain];
+    elabDiagnosticObservers = [NSMutableArray new];
+    NSArray *names = @[NSWindowDidBecomeKeyNotification, NSWindowDidResignKeyNotification,
+        NSApplicationDidBecomeActiveNotification, NSApplicationDidResignActiveNotification,
+        NSMenuWillSendActionNotification, NSMenuDidSendActionNotification];
+    for (NSNotificationName name in names) {
+        id observer = [[NSNotificationCenter defaultCenter] addObserverForName:name object:nil
+            queue:nil usingBlock:^(NSNotification *notification) {
+                NSMutableDictionary *metadata = [NSMutableDictionary dictionary];
+                for (id value in notification.userInfo.allValues) if ([value isKindOfClass:NSMenuItem.class]) {
+                    NSMenuItem *item = value;
+                    metadata[@"menu_action"] = item.action ? NSStringFromSelector(item.action) : @"";
+                }
+                elabDiagnosticSnapshot(notification.name, metadata);
+            }];
+        [elabDiagnosticObservers addObject:observer];
+    }
+}
+static void elabDiagnosticStop(void) {
+    if (elabDiagnosticMonitor) { [NSEvent removeMonitor:elabDiagnosticMonitor]; [elabDiagnosticMonitor release]; elabDiagnosticMonitor = nil; }
+    for (id observer in elabDiagnosticObservers) [[NSNotificationCenter defaultCenter] removeObserver:observer];
+    [elabDiagnosticObservers release]; elabDiagnosticObservers = nil;
+}
+'''
+p.write_text(s)
+changed=[]
+for original in (root/'desktop').rglob('*'):
+ if original.is_file() and (source/original.relative_to(root/'desktop')).is_file():
+  copy=source/original.relative_to(root/'desktop')
+  if copy.read_bytes()!=original.read_bytes():changed.append(str(original.relative_to(root/'desktop')))
+assert sorted(changed)==['file_focus_darwin.m','go.mod'],changed
+(base/'source-identity.json').write_text(json.dumps(dict(scope='Unqualified owned diagnostic; original source copies differ only in app-local observers and absolute module replacements',changed=changed,original_focus_sha256=hashlib.sha256((root/'desktop/file_focus_darwin.m').read_bytes()).hexdigest(),diagnostic_focus_sha256=hashlib.sha256(p.read_bytes()).hexdigest()),indent=2)+'\n')
+print(json.dumps(dict(prepared=True,changed=changed)))

@@ -1,0 +1,50 @@
+"""Use only the owned power-candidate descriptor, via its matching public agent."""
+import argparse
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import sys
+root=Path('/Users/dshills/Development/projects/ELab')
+stage=root/'build/offline-quality/save-panel-diagnostic'
+agent=root/'build/ELab-0.195.6-267-Discrete/elab-agent'
+sys.path.insert(0,str(root/'scripts'))
+spec=importlib.util.spec_from_file_location('owned_viewport_client',root/'scripts/viewport-fit-demo.py')
+helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+class Client(helper.Client):
+ def __init__(self):
+  self.process=subprocess.Popen([str(agent),'--connect',str(stage/'endpoint.json')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
+  self.sequence=0
+p=argparse.ArgumentParser()
+
+p.add_argument('--load')
+p.add_argument('--step',type=float)
+p.add_argument('--theme')
+p.add_argument('--select')
+p.add_argument('--section')
+p.add_argument('--command')
+p.add_argument('--params',default='{}')
+p.add_argument('--mutate',action='store_true')
+p.add_argument('--save')
+a=p.parse_args()
+stage=root/'build/offline-quality/save-panel-diagnostic'
+c=Client()
+try:
+ if a.load:
+  c.ask('example.load',dict(id=a.load,discard_changes=True),True)
+  c.ask('simulation.pause',{},True)
+  c.ask('simulation.restart',{},True)
+  c.ask('simulation.wait')
+ if a.theme:c.ask('appearance.theme.set',dict(theme=a.theme),True)
+ if a.select:c.ask('component.select',dict(id=a.select),True)
+ if a.section:c.ask('workspace.inspector.set',dict(section=a.section),True)
+ if a.step is not None:
+  c.ask('simulation.step',dict(duration_s=a.step),True)
+  c.ask('simulation.wait')
+ result=c.ask(a.command,json.loads(a.params),a.mutate) if a.command else c.ask('project.inspect')
+ state=c.ask('project.inspect')
+ if a.save:
+  assert '/' not in a.save and a.save.endswith('.json')
+  (stage/a.save).write_text(json.dumps(state,indent=2)+'\n')
+ print(json.dumps(dict(example=state.get('example'),selected=state.get('selected'),paused=state['paused'],diagnostic=state.get('diagnostic'),power_parts=[v for v in state['components'] if v.get('power')],mixed={k:v for k,v in (state.get('mixed') or {}).items() if k in ('time_s','stale','hbridges','batteries','motors','optocouplers','transformers','regulators','leds','pwm_controllers','shift_registers','opamp_dynamics','opamps','sounders','power_residual_w','kcl_residual_a')},audio_preview=state.get('audio_preview'),command=a.command,operation=result.get('operation') if isinstance(result,dict) else None)))
+finally:c.close()

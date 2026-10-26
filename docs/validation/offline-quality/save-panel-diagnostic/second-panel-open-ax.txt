@@ -1,0 +1,22 @@
+The following is a diff from the previous accessibility tree for Window: "Save project" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 21-122
+~18 standard window Save project, ID: save-panel, Secondary Actions: Raise
+~	19 split group
+~		20 text Value: Where:, ID: whereLabel
++		21 pop up button Where:, Value: fixtures, ID: where popup
++		22 disclosure triangle Description: show more options, Value: 0
++		23 text Value: Save As:, ID: nameFieldLabel
++		24 text field (settable) Value: Native-Save-Fixture, ID: saveAsNameTextField
++		25 text Value: Tags:, ID: tagsLabel
++		26 text field (settable) tag editor
++		27 button Cancel, ID: CancelButton
++		28 button Save, ID: OKButton
++	29 text Save project
+~	16 Edit
+~	17 Examples
++	30 Appearance
+Selected text: ```
+Native-Save-Fixture
+```
+
+Note: Pay special attention to the content selected by the user. If the user asks a question or refers to the content they are looking at on-screen, they might be referring to the selected content (but they might be referring to something else that's visible, too).

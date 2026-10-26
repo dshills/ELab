@@ -1,0 +1,136 @@
+{
+  "investigation_completed": true,
+  "native_check3_qualified": false,
+  "original_native_checks_open": [
+    3,
+    6,
+    9,
+    11
+  ],
+  "production_change": false,
+  "diagnostic_scope": "Owned app-local observers; no event/responder/menu/activation mutation by instrumentation; private bundle identity and synthetic saved LED fixture.",
+  "diagnostic_app_sha256": "6d04ef5c6de149c9967f519675fe746c34dc93103fdffabb1f85f1d4a6b73a67",
+  "source_identity": {
+    "scope": "Unqualified owned diagnostic; original source copies differ only in app-local observers and absolute module replacements",
+    "changed": [
+      "go.mod",
+      "file_focus_darwin.m"
+    ],
+    "original_focus_sha256": "f23cddd9c93c5c566c69dd8075e00555d9d4e76aa759974bba17164de31c04c4",
+    "diagnostic_focus_sha256": "0d15e35de415953cb77a4fad36702678dda217c5f45cf9dce56f5da712bfdf23"
+  },
+  "trace_records": 21,
+  "observed_menu_action": {
+    "active": true,
+    "app_window_count": 5,
+    "edit_group_present": 1,
+    "event": {
+      "menu_action": "selectAll:"
+    },
+    "first_responder_class": "NSRemoteView",
+    "key_class": "NSSavePanel",
+    "key_window": 190696,
+    "main_thread": true,
+    "main_window": 190696,
+    "phase": "NSMenuDidSendActionNotification",
+    "pid": 92307,
+    "select_all_menu_enabled": true,
+    "select_all_menu_has_explicit_target": 0,
+    "select_all_menu_mask": 1048576,
+    "select_all_target_class": "NSFakeServiceResponder",
+    "unix_s": 1793000109.1912189
+  },
+  "ordinary_root_monitor_control": [
+    {
+      "active": true,
+      "app_window_count": 5,
+      "edit_group_present": 1,
+      "event": {
+        "event_timestamp": 1530150.423082666,
+        "event_window": 190678,
+        "key_code": 53,
+        "modifiers": 0,
+        "sequence": 1,
+        "type": 10
+      },
+      "first_responder_class": "VellumManagedInput_VellumAXView_GLFWContentView",
+      "key_class": "GLFWWindow",
+      "key_window": 190678,
+      "main_thread": true,
+      "main_window": 190678,
+      "phase": "local-event-before",
+      "pid": 92307,
+      "select_all_menu_enabled": false,
+      "select_all_menu_has_explicit_target": 0,
+      "select_all_menu_mask": 1048576,
+      "select_all_target_class": "",
+      "unix_s": 1793000604.219997
+    },
+    {
+      "active": true,
+      "app_window_count": 5,
+      "edit_group_present": 1,
+      "event": {
+        "event_timestamp": 1530150.423267208,
+        "event_window": 190678,
+        "key_code": 53,
+        "modifiers": 0,
+        "sequence": 2,
+        "type": 11
+      },
+      "first_responder_class": "VellumManagedInput_VellumAXView_GLFWContentView",
+      "key_class": "GLFWWindow",
+      "key_window": 190678,
+      "main_thread": true,
+      "main_window": 190678,
+      "phase": "local-event-before",
+      "pid": 92307,
+      "select_all_menu_enabled": false,
+      "select_all_menu_has_explicit_target": 0,
+      "select_all_menu_mask": 1048576,
+      "select_all_target_class": "",
+      "unix_s": 1793000604.220718
+    }
+  ],
+  "panel_parent_key_events_observed": 0,
+  "command_a_replaced_filename": false,
+  "command_a_probe": "Alpha Circuit followed by Right, Command-A and Beta produces Alpha CircuitBeta",
+  "menu_select_all_selected_entire_filename": true,
+  "escape_canceled_first_panel": true,
+  "initial_snapshot_comparison": {
+    "changed_fields": [
+      "command_revision",
+      "last_actor",
+      "revision",
+      "viewport"
+    ],
+    "explanation": "The first baseline preceded the LED layout publication: removing its incomplete-circuit banner adds32 px to the viewport. Only workspace publication revisions/actor/viewport differ; document/graph/physics/history remain exact."
+  },
+  "settled_snapshot_unchanged_through_modal_target_control": true,
+  "modal_target_control": "Inconclusive: after reattachment the UI tool guarded an unexpected app/window change before producing a second trial result. App-local trace then shows the GLFW window key while the native picker remains pending. No second shortcut outcome is claimed.",
+  "tool_guard": "The user changed the diagnostic app; re-query the latest state before more actions.",
+  "initial_launch_tool_wall_seconds": 11984.9751,
+  "initial_launch_delay_cause": "Unavailable; no rejection or missing authorization was reported. Endpoint startup occurred at07:28:21 UTC. Attached to that running process without relaunch.",
+  "saved_fixture_sha256": "febac5ff38940946128e6a9d9b978b14490bdc764ee7ac23aca09645cb030c58",
+  "saved_fixture_mtime_unchanged_after_first_record": true,
+  "save_buttons_never_pressed": true,
+  "clipboard_commands_used": false,
+  "normal_close_command_used": true,
+  "cua_confirmed_owned_app_not_running": true,
+  "compiled_inputs_unchanged": 1354,
+  "prior_file_hashes_preserved": {
+    "build/releases/ELab-0.195.4-macos-arm64.zip": "81e8e4a858663e4391214e82be0498e5fb6d62b2280ea623088638c1b549c10d",
+    "build/releases/ELab-0.195.3-macos-arm64.zip": "31fa3386d57850e5d68ead285d65f2c8a7319ef1e4866ba3e6f070ea76c85fe1",
+    "build/releases/ELab-0.194.5-macos-arm64.zip": "4132046779dd14442187e37baa426de55ccff4c9f5f7b587d691bc31c5ae857a",
+    "build/releases/ELab-0.181.4-macos-arm64.zip": "d13973f02f9c2895d353d24338ed060492a3a2200ff8a91e3606bfa867f4946b",
+    "third_party/vellum/vellum-f9dee54-elab5.tar.gz": "a282a68ab47a230869d297614a126cdc46a2815d8140c0c40c92fb306f16c71f",
+    "build/releases/ELab-0.195.5-macos-arm64.zip": "cbc3f687068d932fa148d2a580b4116f4755582184435b2ec6718d80be37a863",
+    "third_party/vellum/vellum-f9dee54-elab6.tar.gz": "11978f6e30ef98200daddb75b6541fdeb36ff13ee7b05a38873bd6d66dd338a1",
+    "build/releases/ELab-0.195.6-macos-arm64.zip": "fac6d6a47c73443956c44e525ff22eb3079866add0a5a5828a7c9cf475902cd3"
+  },
+  "normal_package_retested": false,
+  "no_new_package": true,
+  "no_push_or_upload": true,
+  "after_menu_selected_text_annotation_present": false,
+  "post_menu_shortcut_limit": "No selected-text annotation was returned after Right/Command-A, but no replacement probe was run; this is not an independent success/failure verdict."
+}
