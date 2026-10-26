@@ -16,7 +16,7 @@ observer. It returns every event unchanged and never activates a window,
 changes a responder or sends an editing action. The private bundle identity
 isolates picker preferences; appearance/recovery paths and the LED project are
 owned fixtures. This is an unqualified diagnostic, not a replacement /267 build.
-[Source identity](source-identity.json), [diagnostic-only patch](diagnostic-only.patch),
+[Source identity](source-identity.json), [diagnostic-only patch](diagnostic-only.patch.gz),
 [preparation recipe](prepare.py.txt). Build succeeds; its optional Go module-stat
 cache write is sandbox-denied, as retained in build.txt. No security settings or
 new accessibility/capture grants are used.
