@@ -17,10 +17,10 @@ Undo boundaries. Upstream's newer controls, secure text and focus reveal remain.
 ELab adjusts explicit action padding for the new reserved keyboard-focus border.
 Six compatibility dependency stages follow upstream's 106 stages, numbered
 107–112; preparation verifies the complete ordered recipe and each input/output
-hash. The private derived source is `d7ec98093a892f8889a30622640623883ca75859`.
+hash. The private derived source is `0650083e179aae67c3f67aff406ac7a1b5206486`.
 
-The active archive is `vellum-f9dee54-elab7.tar.gz`; all four native module
-replacements resolve into `build/.vellum-sdk-f9dee54-elab7`. The lock pins source, complete
+The active archive is `vellum-f9dee54-elab8.tar.gz`; all four native module
+replacements resolve into `build/.vellum-sdk-f9dee54-elab8`. The lock pins source, complete
 archive/manifest, compatibility patch and all bootstrap scripts before execution.
 The SDK is a **private compatibility build**, not an upstream release or a public
 redistribution approval. The SDK compatibility changes add no electronics models,
@@ -79,12 +79,12 @@ are recorded in [the divider evidence](../../docs/validation/offline-quality/spl
 
 ## Discrete input origin · October 25–26, 2026
 
-The elab7 SDK retains the callbacks that admit boolean changes, ordinary single
+The elab8 SDK retains the callbacks that admit checkbox changes, ordinary single
 list selections, disclosure proposals and keyboard-origin button activation.
 Five rendered ELab/agent interleavings demonstrate why refreshing these
 callbacks can admit stale user commands. Fresh input, list eligibility/FIFO,
 disclosure state revocation and existing pointer button behavior remain.
-Programmatic Send(Click), selectors and non-list choice groups keep their
+Programmatic Send(Click), Switch/ToggleButton, selectors and non-list choice groups keep their
 separate existing contracts. This repair starts at event admission, not every
 pointer-down/native accessibility route. [Complete compatibility patch](patches/elab-f9dee54-discrete-origin-compat.patch)
 and [qualification scope](../../docs/validation/offline-quality/discrete-origin/README.md).

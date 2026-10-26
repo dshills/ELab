@@ -206,3 +206,11 @@ all pointer-down or native/AX paths. Focused regressions and fresh independent
 input pass; complete qualification is in progress. No new components, commands,
 models or solver changes. Preserve /266 and every earlier qualified package.
 [Scoped evidence](../docs/validation/offline-quality/discrete-origin/README.md).
+
+The initial discrete SDK's full framework run exposed five pre-existing
+Switch/ToggleButton latest-callback expectations. Those controls have no new
+ELab reproduction, so the final SDK 0650083e /elab8 narrows the repair to Checkbox
+and preserves the other contracts. Their tests remain unchanged. This is a
+scope correction, not a weakening of the reproduced five ELab refusals. Initial
+application/SDK gate logs remain separately labeled. Final pin qualification
+will be run once on the frozen narrowed source before any package is qualified.

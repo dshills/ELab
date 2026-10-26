@@ -17,10 +17,10 @@ precise native macOS queue or hardware-rate acceptance. Initial fixture errors
 inspector for a display control) are retained separately; product code is not
 changed to accommodate those fixture mistakes.
 
-SDK elab7 captures admitted boolean and single-list-selection callbacks,
+SDK elab8 captures admitted checkbox and single-list-selection callbacks,
 disclosure proposals and keyboard-origin button activation. Existing pointer
 button origin remains. Genuinely programmatic Send(Click) retains its established
-latest-binding contract, as do selectors and non-list choice groups. Existing
+latest-binding contract, as do Switch/ToggleButton, selectors and non-list choice groups. Existing
 list eligibility, FIFO proposals, disabled/retired controls and disclosure
 accepted-state revocation remain enforced. The old list/disclosure tests that
 required callback refresh are deliberately changed after these ELab/agent
@@ -35,5 +35,12 @@ models, project formats or solver limits change. All prior SDK archives and
 qualified /266, /265, /264, /260 and /205 packages remain preserved.
 
 Status: focused ELab and framework regressions pass on isolated repaired SDK
-source d7ec9809, elab7. Complete source/dependency qualification is in progress.
+source 0650083e, elab8. Complete source/dependency qualification is in progress.
 Original native acceptance checks 3,6,9,11 remain open with their prior limits.
+
+The initial elab7 candidate also changed unused Switch/ToggleButton callback
+contracts. Complete framework tests caught five existing expectations (three
+Chrome container cases and two expanded-boolean cases). The final elab8 repair
+narrows production handling to the proven ELab Checkbox path and preserves
+those other contracts; their tests are not rewritten. The earlier SDK/application
+gates are retained as initial-phase evidence, with final qualification separate.

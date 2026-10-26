@@ -537,7 +537,7 @@ index 0000000..ae65662
 +	}
 +}
 diff --git a/drivers/cogent/controls.go b/drivers/cogent/controls.go
-index b862ac7..291d292 100644
+index b862ac7..db1ba79 100644
 --- a/drivers/cogent/controls.go
 +++ b/drivers/cogent/controls.go
 @@ -12,6 +12,7 @@ import (
@@ -671,7 +671,7 @@ index b862ac7..291d292 100644
  	switch w := r.widget.(type) {
  	case *core.Switch:
  		change.Checked = w.IsChecked()
-@@ -427,10 +491,16 @@ func dispatchControl(r *record, e events.Event) {
+@@ -427,10 +491,17 @@ func dispatchControl(r *record, e events.Event) {
  	}
  	fieldEpoch := r.control.fieldChanges.Load()
  	postControl(r, func() {
@@ -682,15 +682,16 @@ index b862ac7..291d292 100644
 -		if r.control.disabled || r.node.Change == nil {
 +		// Commits retain the callback that admitted their value. A queued
 +		// checkbox must not borrow a newer actor/form's command context either.
-+		// Chooser delivery retains its independent legacy selector contract.
-+		if change.Kind == ui.Selector {
++		// Selector, Switch and ToggleButton keep their separate legacy contracts;
++		// this repair is scoped to the actual ELab checkbox reproductions.
++		if change.Kind == ui.Selector || change.Kind == ui.Switch || change.Kind == ui.ToggleButton {
 +			callback = r.node.Change
 +		}
 +		if r.control.disabled || r.node.Change == nil || callback == nil {
  			requestControlRestore(r)
  			return
  		}
-@@ -463,7 +533,7 @@ func dispatchControl(r *record, e events.Event) {
+@@ -463,7 +534,7 @@ func dispatchControl(r *record, e events.Event) {
  		if change.Kind == ui.TextField {
  			r.control.fieldDelivered = change.Text
  		}
@@ -699,7 +700,7 @@ index b862ac7..291d292 100644
  		r.control.committed = true
  		r.control.a.Invalidate(r.control.window)
  	})
-@@ -1013,6 +1083,9 @@ func disposeControl(r *record) {
+@@ -1013,6 +1084,9 @@ func disposeControl(r *record) {
  	if r == nil {
  		return
  	}
@@ -709,7 +710,7 @@ index b862ac7..291d292 100644
  	if r.control != nil {
  		disposePlacement(r)
  		disposeShortcutRecorder(r)
-@@ -1022,6 +1095,8 @@ func disposeControl(r *record) {
+@@ -1022,6 +1096,8 @@ func disposeControl(r *record) {
  		r.widget.AsWidget().DeleteProperty(toolbarContextOwnerProperty)
  		r.widget.AsWidget().DeleteProperty(toolbarOverflowHiddenProperty)
  		r.control.retired = true
@@ -980,7 +981,7 @@ index 8089e50..9bb5c80 100644
  		return true
 diff --git a/drivers/cogent/field_change_context_test.go b/drivers/cogent/field_change_context_test.go
 new file mode 100644
-index 0000000..70cdab5
+index 0000000..9a4eaee
 --- /dev/null
 +++ b/drivers/cogent/field_change_context_test.go
 @@ -0,0 +1,73 @@
@@ -995,7 +996,7 @@ index 0000000..70cdab5
 +)
 +
 +func TestQueuedScalarChangeRetainsEventCallbackAcrossRebind(t *testing.T) {
-+	for _, kind := range []ui.Kind{ui.TextField, ui.NumberField, ui.Checkbox, ui.Switch, ui.ToggleButton} {
++	for _, kind := range []ui.Kind{ui.TextField, ui.NumberField, ui.Checkbox} {
 +		t.Run(string(kind), func(t *testing.T) {
 +			a, err := app.New(app.Config{})
 +			if err != nil {
@@ -1043,7 +1044,7 @@ index 0000000..70cdab5
 +			if oldCalls != 1 || newCalls != 0 {
 +				t.Fatalf("queued field borrowed refreshed callback: origin=%d refreshed=%d", oldCalls, newCalls)
 +			}
-+			if kind == ui.TextField && oldEvent.Text != "oops" || kind == ui.NumberField && oldEvent.Number != 3 || (kind == ui.Checkbox || kind == ui.Switch || kind == ui.ToggleButton) && !oldEvent.Checked {
++			if kind == ui.TextField && oldEvent.Text != "oops" || kind == ui.NumberField && oldEvent.Number != 3 || kind == ui.Checkbox && !oldEvent.Checked {
 +				t.Fatal("originating event payload changed", oldEvent)
 +			}
 +			submit("fresh", 4)
@@ -1051,7 +1052,7 @@ index 0000000..70cdab5
 +			if oldCalls != 1 || newCalls != 1 {
 +				t.Fatal("fresh independent change did not use the new callback", oldCalls, newCalls)
 +			}
-+			if kind == ui.TextField && newEvent.Text != "fresh" || kind == ui.NumberField && newEvent.Number != 4 || (kind == ui.Checkbox || kind == ui.Switch || kind == ui.ToggleButton) && !newEvent.Checked {
++			if kind == ui.TextField && newEvent.Text != "fresh" || kind == ui.NumberField && newEvent.Number != 4 || kind == ui.Checkbox && !newEvent.Checked {
 +				t.Fatal("fresh event payload changed", newEvent)
 +			}
 +		})

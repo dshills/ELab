@@ -1,0 +1,59 @@
+# github.com/dshills/vellum/drivers/cogent
+accessibility_darwin.m:661:43: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+accessibility_darwin.m:662:42: warning: 'accessibilityIsAttributeSettable:' is deprecated: first deprecated in macOS 10.10 - Use the NSAccessibility protocol methods instead (see NSAccessibilityProtocols.h) [-Wdeprecated-declarations]
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSAccessibility.h:33:1: note: 'accessibilityIsAttributeSettable:' has been explicitly marked deprecated here
+# github.com/dshills/vellum/drivers/cogent.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+--- FAIL: TestChromeRetainsManagedChildrenAndPrivateCaptions (0.00s)
+    --- FAIL: TestChromeRetainsManagedChildrenAndPrivateCaptions/toolbar (0.00s)
+        chrome_test.go:49: retained reorder changed binding, draft, or latest callback 1
+    --- FAIL: TestChromeRetainsManagedChildrenAndPrivateCaptions/status-bar (0.00s)
+        chrome_test.go:49: retained reorder changed binding, draft, or latest callback 1
+    --- FAIL: TestChromeRetainsManagedChildrenAndPrivateCaptions/form-group (0.00s)
+        chrome_test.go:49: retained reorder changed binding, draft, or latest callback 1
+--- FAIL: TestExpandedBooleanControlsRetainedOwnerDelivery (0.00s)
+    --- FAIL: TestExpandedBooleanControlsRetainedOwnerDelivery/switch (0.00s)
+        expanded_controls_test.go:55: queued event used stale callback/value [{control switch true 0  } {control switch true 0  }]
+    --- FAIL: TestExpandedBooleanControlsRetainedOwnerDelivery/toggle-button (0.00s)
+        expanded_controls_test.go:55: queued event used stale callback/value [{control toggle-button true 0  } {control toggle-button true 0  }]
+FAIL
+FAIL	github.com/dshills/vellum/drivers/cogent	18.568s
+?   	github.com/dshills/vellum/drivers/cogent/cmd/accessibility-smoke	[no test files]
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/breadcrumb-smoke	1.205s
+# github.com/dshills/vellum/drivers/cogent/cmd/docking-smoke.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/docking-smoke	1.543s
+# github.com/dshills/vellum/drivers/cogent/cmd/file-drop-smoke.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/file-drop-smoke	1.499s
+# github.com/dshills/vellum/drivers/cogent/cmd/gallery.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/gallery	3.400s
+?   	github.com/dshills/vellum/drivers/cogent/cmd/history-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/mainqueue-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/multiwindow-smoke	[no test files]
+# github.com/dshills/vellum/drivers/cogent/cmd/platform-smoke.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/platform-smoke	1.831s
+?   	github.com/dshills/vellum/drivers/cogent/cmd/render-smoke	[no test files]
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/tab-close-smoke	1.197s
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/window-cycle-smoke	1.221s [no tests to run]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/window-handoff-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/window-lifetime-smoke	[no test files]
+?   	github.com/dshills/vellum/drivers/cogent/cmd/window-size-smoke	[no test files]
+# github.com/dshills/vellum/drivers/cogent/cmd/workbench.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent/cmd/workbench	11.118s
+# github.com/dshills/vellum/drivers/cogent/internal/acceptance.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent/internal/acceptance	1.552s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/mailbox	1.219s
+# github.com/dshills/vellum/drivers/cogent/internal/nativefixture.test
+ld: warning: ignoring duplicate libraries: '-lobjc'
+ok  	github.com/dshills/vellum/drivers/cogent/internal/nativefixture	1.497s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/platformio	4.430s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/presentation	1.219s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/textinput	1.766s
+ok  	github.com/dshills/vellum/drivers/cogent/internal/transport	1.624s
+FAIL
