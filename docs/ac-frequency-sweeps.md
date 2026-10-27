@@ -33,14 +33,16 @@ ideal voltage sources are AC grounded. AC amplitude is independent of configured
 waveform amplitude. The solver uses the analytic real device Jacobian plus jωC
 and −jωL branch terms, with a complex linear solve at each frequency. Supported
 parts include R/L/C, potentiometers, resistive sensors, static switches,
-ideal sources, grounds/labels/junctions, transformers, the generic powered
+ideal sources, grounds/labels/junctions, transformers, loudspeakers, the generic powered
 op-amp, NPN/PNP BJTs, N/P-channel MOSFETs, LEDs and silicon/Schottky/Zener
 diodes. Other parts explicitly refuse; hysteretic/digital state requires
 transient simulation. Semiconductor tangent conductances use the solved DC
 bias, not the live transient vector or the capacitor's initial charge. At the
 exact piecewise Zener knee the blocking-side derivative is used.
-The op-amp model has no intrinsic bandwidth/slew rate: external feedback RC sets
-filter response, and large-signal clipping needs transient simulation.
+The default op-amp model has no intrinsic bandwidth/slew rate; enabling its
+optional dynamics adds the declared compensation model. Configurable bipolar
+profiles add their explicit constant junction capacitances. External feedback
+RC also shapes response. Large-signal clipping needs transient simulation.
 
 Gain is differential Vout / selected source's differential voltage. Exact
 complex values are retained. Phase unwrap follows requested point order.

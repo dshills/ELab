@@ -385,3 +385,22 @@ remain the complete shared user/AI path. No new command or model is introduced.
 Snapshots report 16 for `npn_transistors`, `pnp_transistors` and
 `bipolar_transistors_total`; this is one combined budget, including embedded
 optocoupler phototransistors. See the [amplifier guide](discrete-class-ab.md).
+
+## Analysis and device expansion
+
+Users and agents share semiconductor AC sweeps through `sweep.start`, recorded
+FFT/THD through `spectrum.settings.set` / `spectrum.analyze` / `spectrum.export`,
+versioned bipolar profiles through `transistor.profile.set`, seeded component
+tolerances through `tolerance.settings.set` / `tolerance.run` /
+`tolerance.cancel` / `tolerance.export`, and loudspeaker configuration through
+`speaker.configure`. Use detailed `capabilities.list` for the complete schemas,
+units, bounds and revision guards; `project.inspect` exposes analysis status,
+results and exact export IDs. New device edits also support ordinary atomic
+edit batches, undo and redo.
+
+See [AC sweeps](ac-frequency-sweeps.md), [spectrum/THD](spectrum-analysis.md),
+[transistor profiles](transistor-profiles.md), [tolerance analysis](tolerance-analysis.md)
+and [loudspeakers](loudspeaker.md) for reproducible workflows and model limits.
+Derived spectrum and tolerance results are session-only: export them explicitly.
+The original captured recording and model-bearing circuit can be saved in the
+ordinary project format. Preview rendering and playback remain explicit actions.

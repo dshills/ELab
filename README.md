@@ -12,11 +12,35 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
-**Latest candidate: [ELab 0.197.0 /275](build/ELab-0.197.0-275-Discrete/ELab.app)**
-expands combined NPN/PNP capacity to **16** and adds an **eight-transistor,
+**Latest candidate: [ELab 0.198.0 /276](build/ELab-0.198.0-276-Analysis/ELab.app)**
+adds five analysis and device capabilities, with the same controls available
+to users and AI agents:
+
+- [Semiconductor AC/Bode sweeps](docs/ac-frequency-sweeps.md), including the
+  all-discrete amplifier's response about its DC bias.
+- [Recorded FFT and harmonic distortion](docs/spectrum-analysis.md), with
+  explicit sampling/window assumptions and exact-result JSON/CSV exports.
+- [Configurable transistor profiles](docs/transistor-profiles.md), with gain,
+  Early effect and constant junction capacitances; educational parameters rather
+  than unvalidated manufacturer identities.
+- [Seeded component tolerances](docs/tolerance-analysis.md), with independent
+  trials, parameter draws, failed outcomes, repeatable statistics and exports.
+- [Loudspeaker electrical loads](docs/loudspeaker.md), with resonance, coil
+  current, heat/energy and an explicit optional waveform preview.
+
+The matching app/agent package contains **67 examples**, **54 component kinds**
+and **203 shared commands**. Try the clipping, transistor-profile, RC-tolerance
+and speaker-amplifier examples. Playback remains explicit. Resource, numerical
+accuracy and integration work limits are unchanged. Combining the original fast
+class-AB compensation with the speaker's slower LC states can reach the work
+guard; that combination is not qualified for progressing waveforms. The
+powered-follower speaker example is qualified. [Checks and review evidence](docs/validation/electronics-five/README.md).
+
+The preserved [0.197.0 /275 candidate](build/ELab-0.197.0-275-Discrete/ELab.app)
+expanded combined NPN/PNP capacity to **16** and added an **eight-transistor,
 all-discrete class-AB amplifier**. Search Examples for “class AB”, or use
-`example.load {"id":"discrete-class-ab"}`. The matching agent and all **63**
-example projects are included. There are still 53 component kinds and the same
+`example.load {"id":"discrete-class-ab"}`. That package includes its matching
+agent and **63** example projects, with 53 component kinds and
 194 shared commands. Other capacities, electrical models and numerical
 accuracy/work guards remain unchanged. [Amplifier guide](docs/discrete-class-ab.md),
 [electrical and package checks](docs/validation/discrete-class-ab/README.md).
@@ -128,7 +152,7 @@ python3 -B scripts/package_app.py --binary build/elab \
 The wrapper verifies the separately pinned Vellum packager, includes ELab’s
 application icon and applies an ad-hoc integrity seal. It requires a new output
 path and preserves existing bundles. This command creates a local development
-bundle; use the candidate linked above for the qualified /275 executable and
+bundle; use the candidate linked above for the qualified /276 executable and
 matching agent. See [packaging and icon details](docs/application-icon.md).
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).

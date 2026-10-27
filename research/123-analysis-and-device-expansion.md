@@ -69,3 +69,11 @@ Item 5: passive electrical loudspeaker equivalent, saved parameters, amplifier e
 The original eight-BJT, 1 nF compensation plus speaker LC combination reaches the unchanged 100 ms work guard during startup. A 10 nF control also did. This is explicitly unqualified for waveform progress; its regression verifies bounded refusal and unchanged accepted state. The powered-follower speaker example and independent passive references are the passing waveform evidence. No limit or original amplifier example was changed to hide this.
 
 Combined checks: the initial full portable gate caught missing spectrum contract version/scope and the expected native-inventory change; both are repaired. One existing RL conformance run reached its 100 ms budget; three isolated pre-optimization controls pass, so no electrical/causal repair is claimed. Default tolerance settings now avoid rebuilding the probe inventory twice per live snapshot. A ±12 V global capacitor-setting profile control passes without a production change. Final full gates are running against frozen source/test inputs. Qualified SDK/package bytes remain protected.
+
+All five implementation commits are complete: `ed98095f`, `cd7ff887`,
+`0377a10b`, `9cbad84d`, `f70ca402`. Final integration caught a test-only atomic
+allowlist count still expecting 27 instead of 29; the fixture now explicitly
+checks both new device edits. Full workbench race tests and full isolated
+conformance tests pass. The ordered portable run's RL work-guard failure remains
+recorded; isolated workflow controls also pass, without a claimed cause or
+solver-limit change. Desktop/routed/offscreen and package checks are continuing.

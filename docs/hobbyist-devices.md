@@ -167,6 +167,15 @@ physics, history and document dirty state unchanged.
 
 ## References and model scope
 
+The current workbench also supports [configurable bipolar profiles](transistor-profiles.md)
+and [passive loudspeaker electrical loads](loudspeaker.md). Profiles are
+versioned educational parameter sets, with constant junction capacitances and
+no manufacturer identity. Loudspeaker previews illustrate terminal-voltage
+waveforms; they do not predict calibrated acoustics. Both use the existing
+storage and simulation work limits. [Semiconductor AC](ac-frequency-sweeps.md),
+[recorded FFT/THD](spectrum-analysis.md) and [seeded tolerances](tolerance-analysis.md)
+provide complementary analysis of the same saved circuits.
+
 The design references explain the underlying concepts; numerical values above
 are explicitly ELab choices, not copied hardware specifications:
 

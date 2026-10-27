@@ -3,7 +3,7 @@
 Choose **Examples** in the toolbar, or **Examples → Browse examples…** in the
 application menu. Start here offers six approachable circuits. Each card shows
 its schematic and name; selecting it shows a larger drawing, what to observe,
-what to try and the model limits. The current catalog contains **63 examples**,
+what to try and the model limits. The current catalog contains **67 examples**,
 including the all-discrete class-AB amplifier.
 
 Choose a topic to narrow the collection, or enter words in Search and press
