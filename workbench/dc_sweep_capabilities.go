@@ -45,13 +45,15 @@ func sweepSettingsInputSchema() map[string]any {
 	probes := inputProperty(schema, "probe_ids")
 	probes["minItems"], probes["maxItems"], probes["uniqueItems"] = 1, MaxScopeProbes, true
 	probes["type"] = []string{"array", "null"}
-	probes["description"] = "Omit or null for automatic target readings. DC arrays require 1–6 distinct IDs; AC frequency accepts 1–3 voltage output IDs from snapshot.dc_sweep.available_probes; empty arrays are refused."
+	probes["description"] = "Omit or null for automatic target readings. DC arrays require 1–6 distinct IDs; AC frequency accepts 1–3 voltage output IDs from snapshot.dc_sweep.available_probes; loop-frequency accepts only loop:<component_id> or automatic; empty arrays are refused."
 	schema["x-parameter-domains"] = sweepDomains()
 	schema["x-ac-small-signal"] = acAssumptions()
+	schema["x-loop-return-ratio"] = loopAssumptions()
+	schema["x-loop-band-order"] = "loop-frequency requires 0 < start < stop; other parameters retain ascending/descending support"
 	schema["x-relations"] = []map[string]any{
 		{"operator": "positive-if-logarithmic", "fields": []string{"start", "stop"}, "when": "spacing=logarithmic", "after": "parameter-unit-normalization"},
 		{"operator": "different", "fields": []string{"start", "stop"}, "after": "parameter-unit-normalization"},
-		{"operator": "distinct-representable-axis", "fields": []string{"start", "stop", "points"}, "endpoints": "inclusive", "descending": true},
+		{"operator": "distinct-representable-axis", "fields": []string{"start", "stop", "points"}, "endpoints": "inclusive", "descending": true, "except": "loop-frequency requires ascending positive frequencies"},
 	}
 	schema["x-inventory"] = map[string]string{"targets": "snapshot.dc_sweep.targets", "probes": "snapshot.dc_sweep.available_probes"}
 	return schema
@@ -153,7 +155,7 @@ func addSweepCapabilityDetails(id string, schema map[string]any) bool {
 	case "sweep.import", "sweep.import.start":
 		file()
 		schema["x-max-file-bytes"] = MaxProjectBytes
-		schema["x-file-format"] = map[string]any{"format": "elab.dc-sweep", "version": 1, "engines": []string{DCSweepEngineID, ACSweepEngineID}, "ac_format": "elab.ac-sweep"}
+		schema["x-file-format"] = map[string]any{"format": "elab.dc-sweep", "version": 1, "engines": []string{DCSweepEngineID, ACSweepEngineID, LoopGainEngineID}, "ac_format": "elab.ac-sweep", "loop_format": "elab.loop-gain-sweep"}
 		contract.Preconditions = append(contract.Preconditions, "Source is a regular file, not a symlink/special file, up to 8 MiB", "A retained curve slot is available at admission and publication")
 		fail("invalid-sweep", "work", "Captured JSON fails strict format/model/source/axis/probe/count/extrema validation")
 		fail("record-limit", "admission-or-publication", "Kept/active curves consume all eight retained slots")

@@ -85,3 +85,19 @@ transconductance/pole AC and nonlinear transient ODE checks pass, as do
 capture/reopen/forgery, history, capacity and ordinary/offscreen shared controls.
 Discovery keeps its 64 KiB bound by sharing existing save/load/step schemas.
 Catalog: 58 kinds /207 commands /76 examples. Prism completed all seven Anthropic Opus 5.5 chunks; one medium and eight low findings are fixed or dispositioned in the JFET evidence README. Fresh race controls cover review changes.
+
+Item 4 committed as `89a367f7`. Item 5 adds a dedicated dynamic-op-amp controlled-
+source return-ratio target through existing sweep commands, closed-bias injection,
+all sampled gain/phase crossings, explicit unavailable margins, captured method,
+source identity, keep/export/reopen and existing cancellation guards. It is not
+ordinary signal gain or a stability certificate. Discrete-transistor physical-wire
+loop injection is not silently claimed. Captured step-response set/query commands
+require explicit initial/final references, band and hold; saved linear segments
+and jumps give direction-normalized overshoot and observed settling only.
+Loaded two-pole electrical return ratio/unity reference, independent three-pole
+margin estimates, RC settling, synthetic overshoot/jump/falling/short/unsettled
+controls, purity/ownership/reopen, cancellation and both desktop drivers pass.
+Two teaching examples added. The initial RC fixture had zero source and an
+excess 2000-step capture; it now explicitly uses 5 V and the existing 1000-step
+bound. No simulation limit changed. Catalog:58 kinds /209 commands /78 examples.
+Discovery, source inventory and lint pass. Prism completed all nine Anthropic Opus 5.5 chunks; two medium/ten low observations are fixed or dispositioned in analysis/README.md. Fresh focused controls cover the changes before final combined qualification.

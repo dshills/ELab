@@ -88,6 +88,7 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 	}
 
 	nodes = append(nodes, s.recordingStatisticsControls(state)...)
+	nodes = append(nodes, s.stepResponseControls(state)...)
 	nodes = append(nodes, s.recordingTimingControls(state)...)
 	nodes = append(nodes, s.recordingComparisonControls(state)...)
 
@@ -126,6 +127,9 @@ func (s *screen) recordingInspector(state workbench.Snapshot) []ui.Node {
 		}
 		if r.Comparison != nil && strings.HasPrefix(nodes[i].ID, "recorded-compare-") {
 			owner += ":comparison:" + r.Comparison.Settings.ReferenceID
+		}
+		if r.StepResponse != nil && strings.HasPrefix(nodes[i].ID, "step-response-") {
+			owner += ":step-response:" + r.StepResponse.Settings.ProbeID
 		}
 		if r.Timing != nil && strings.HasPrefix(nodes[i].ID, "recorded-timing-") {
 			// Thresholds and interval drafts belong to this captured channel,

@@ -1,0 +1,399 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "26c47dae36e450fe371adae739f08530",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "89a367f74da1aaf23b0f77fcc3d2686726c1f79a",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 10,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "0b896b8c19aff2e4",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Nil loop drive falls through to rhs[-1] panic",
+      "message": "The drive mode is chosen by `loopDrive != nil` instead of by the sweep parameter. In loop mode `sourceIndex` stays -1. If `openLoopControl` returns a nil or empty slice with no error, the code falls through to `rhs[-1] = 1` and panics with an index out of range. A drive vector longer than `len(jac)` would also panic.",
+      "suggestion": "Choose the branch from `plan.settings.Parameter == \"loop-frequency\"`, or from a boolean set alongside `loopDrive`. In the loop branch, check that `len(loopDrive) == len(jac)` and return an error if it is not, before the frequency loop starts.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/ac_sweep.go",
+          "lines": {
+            "start": 167,
+            "end": 173
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "index",
+        "location-corrected"
+      ],
+      "evidence": "\t\tif loopDrive != nil {\n\t\t\tfor k, v := range loopDrive {\n\t\t\t\trhs[k] = complex(v, 0)\n\t\t\t}\n\t\t} else {\n\t\t\trhs[sourceIndex] = 1\n\t\t}",
+      "fix": {
+        "before": "\t\tif loopDrive != nil {\n\t\t\tfor k, v := range loopDrive {\n\t\t\t\trhs[k] = complex(v, 0)\n\t\t\t}\n\t\t} else {\n\t\t\trhs[sourceIndex] = 1\n\t\t}",
+        "after": "\t\tif plan.settings.Parameter == \"loop-frequency\" {\n\t\t\tfor k, v := range loopDrive {\n\t\t\t\trhs[k] = complex(v, 0)\n\t\t\t}\n\t\t} else {\n\t\t\trhs[sourceIndex] = 1\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "9b9458ecd64b10c9",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unbounded crossing loop on untrusted phase data",
+      "message": "`loopMargins` is also called from `validateLoopMargins` on loaded, untrusted records. The odd-180 crossing loop advances one turn at a time from `lo` to `hi`. A segment with a huge phase span runs for an enormous number of iterations. At magnitudes like 1e300, `turn++` no longer changes the float, so the loop never ends. Unless every caller validates phase bounds and continuity before this point, a crafted project file can hang the service. The function also indexes `Values[0]` and `Values[1]` without checking the length.",
+      "suggestion": "Guard `loopMargins` before the crossing loop. Reject or skip points with non-finite or out-of-range phase, or a per-segment phase jump larger than about 360°. Also check `len(a.Values) \u003e= 2` before indexing. Alternatively, have `validateLoopMargins` verify point bounds before calling `loopMargins`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/loop_gain.go",
+          "lines": {
+            "start": 85,
+            "end": 89
+          }
+        }
+      ],
+      "tags": [
+        "dos",
+        "untrusted-input"
+      ],
+      "evidence": "for turn := math.Ceil((lo + 180) / 360); -180+turn*360 \u003c= hi; turn++ {",
+      "fix": {
+        "before": "for turn := math.Ceil((lo + 180) / 360); -180+turn*360 \u003c= hi; turn++ {",
+        "after": "if hi-lo \u003e 360*64 || !finite(lo) || !finite(hi) {\n\t\t\tcontinue\n\t\t}\n\t\tfor turn := math.Ceil((lo + 180) / 360); -180+turn*360 \u003c= hi; turn++ {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "91b93bb8b8e63f58",
+      "severity": "low",
+      "category": "testing",
+      "title": "Failure message may print a pointer address",
+      "message": "`op.Error` is probably a pointer (elsewhere the code uses `op.Error.Message`). If so, `t.Fatal(op.Error)` prints only an address or nil. A failing sweep would then give no useful diagnostic.",
+      "suggestion": "Print the error contents, for example `t.Fatalf(\"agent loop sweep failed: %+v\", op.Error)`. This also adds context to the message.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/analysis_tools_test.go",
+          "lines": {
+            "start": 57,
+            "end": 59
+          }
+        }
+      ],
+      "tags": [
+        "test-diagnostics"
+      ],
+      "evidence": "\t\t\t\t\tif op.Status == \"failed\" {\n\t\t\t\t\t\tt.Fatal(op.Error)\n\t\t\t\t\t}",
+      "fix": {
+        "before": "\t\t\t\t\tif op.Status == \"failed\" {\n\t\t\t\t\t\tt.Fatal(op.Error)\n\t\t\t\t\t}",
+        "after": "\t\t\t\t\tif op.Status == \"failed\" {\n\t\t\t\t\t\tt.Fatalf(\"agent loop sweep failed: %+v\", op.Error)\n\t\t\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "7adad0a71fdcef68",
+      "severity": "low",
+      "category": "testing",
+      "title": "Marshal error ignored in test",
+      "message": "The test ignores the error from `json.Marshal`. If marshaling fails, the dispatch gets nil params and the test fails with a misleading mismatch instead of the real cause.",
+      "suggestion": "Check the error and call `t.Fatal(err)` if it is non-nil.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/analysis_tools_test.go",
+          "lines": {
+            "start": 85,
+            "end": 85
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "location-corrected"
+      ],
+      "evidence": "\traw, _ := json.Marshal(workbench.StepResponseParams(result.Settings))",
+      "fix": {
+        "before": "\traw, _ := json.Marshal(workbench.StepResponseParams(result.Settings))",
+        "after": "\traw, err := json.Marshal(workbench.StepResponseParams(result.Settings))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d164258b5d5b8b37",
+      "severity": "low",
+      "category": "bug",
+      "title": "Default settings can be invalid when no samples cover the interval",
+      "message": "Defaults are built from `r.LastSampleTime`. If a recording has a positive duration but no samples, or its last sample is at t=0, `End` and `Hold` both become 0. The docs require a positive hold that fits the covered interval, so the very first selection sends an invalid set command. The user sees a failure instead of a clear unavailable message.",
+      "suggestion": "Before offering probe options, check `r.LastSampleTime \u003e 0`. If it is not, return a quiet unavailable node, mirroring the `Duration \u003c= 0` branch. Otherwise clamp `Hold` to a positive minimum.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/recording_step_response.go",
+          "lines": {
+            "start": 33,
+            "end": 35
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "defaults"
+      ],
+      "evidence": "p.End = math.Min(r.Duration, r.LastSampleTime)\n\t\t\tp.Initial, p.Final, p.Tolerance, p.Hold = 0, 1, .02, math.Min(.002, p.End/10)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "146a1b422a6df2eb",
+      "severity": "low",
+      "category": "bug",
+      "title": "Closure captures loop variable f",
+      "message": "The `Change` closures capture the range variable `f`. If the module's go directive is older than 1.22, every closure shares the final iteration's `f` (hold). Editing any field would then write `Hold` and compare against the wrong value.",
+      "suggestion": "Confirm go.mod targets Go 1.22 or later. Otherwise add `f := f` at the top of the loop body.",
+      "confidence": 0.25,
+      "locations": [
+        {
+          "path": "desktop/recording_step_response.go",
+          "lines": {
+            "start": 57,
+            "end": 57
+          }
+        }
+      ],
+      "tags": [
+        "closure",
+        "loop-variable",
+        "location-corrected"
+      ],
+      "evidence": "if e.Number == float32(f.value) {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "eae1d1ddd01e5dd7",
+      "severity": "low",
+      "category": "bug",
+      "title": "Possible nil dereference of Sine in example graph",
+      "message": "`Sine` is used elsewhere as a nillable pointer (for example `p.Sine = nil`). If the base follower example's VIN is not a sine source, this line dereferences a nil pointer and panics when the example is built.",
+      "suggestion": "Check that `Sine` is non-nil before setting the amplitude, or initialize it explicitly.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/analysis_examples.go",
+          "lines": {
+            "start": 10,
+            "end": 11
+          }
+        }
+      ],
+      "tags": [
+        "nil-pointer"
+      ],
+      "evidence": "\t\t\tg.Components[k].Sine.Amplitude = .1",
+      "fix": {
+        "before": "\t\t\tg.Components[k].Sine.Amplitude = .1",
+        "after": "\t\t\tif g.Components[k].Sine != nil {\n\t\t\t\tg.Components[k].Sine.Amplitude = .1\n\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "be4c5035e8a393ec",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Target-not-found error omits loop-frequency targets",
+      "message": "The new `loop-frequency` target domain was added to `sweepTargets`. The 'target not found' error still lists only the old target kinds, so the message misleads users who pick a loop target on a component without dynamics.",
+      "suggestion": "Mention loop-frequency targets in the error message.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep.go",
+          "lines": {
+            "start": 164,
+            "end": 164
+          }
+        }
+      ],
+      "tags": [
+        "error-message",
+        "location-corrected"
+      ],
+      "evidence": "\t\treturn plan, fmt.Errorf(\"choose an existing DC bias, resistance, wiper or AC frequency target\")",
+      "fix": {
+        "before": "\t\treturn plan, fmt.Errorf(\"choose an existing DC bias, resistance, wiper or AC frequency target\")",
+        "after": "\t\treturn plan, fmt.Errorf(\"choose an existing DC bias, resistance, wiper, AC frequency or loop-frequency target\")"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "31853f75b280eb5b",
+      "severity": "low",
+      "category": "docs",
+      "title": "Published schema advertises descending ranges, but loop sweeps reject them",
+      "message": "The detailed schema says descending ranges are allowed for every parameter. Admission now rejects descending bands for `loop-frequency` (\"loop sweep requires an ascending positive frequency band\"). Clients or agents that trust the published relation will build settings that get refused. The test also had to special-case this.",
+      "suggestion": "Add a relation saying descending ranges are not allowed when `parameter=loop-frequency`, e.g. `{\"operator\": \"ascending\", \"fields\": [\"start\",\"stop\"], \"when\": \"parameter=loop-frequency\"}`. Alternatively, note the exception in the start/stop descriptions.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep_capabilities.go",
+          "lines": {
+            "start": 55,
+            "end": 55
+          }
+        }
+      ],
+      "tags": [
+        "schema",
+        "contract",
+        "location-corrected"
+      ],
+      "evidence": "{\"operator\": \"distinct-representable-axis\", \"fields\": []string{\"start\", \"stop\", \"points\"}, \"endpoints\": \"inclusive\", \"descending\": true},",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0e453c33d33d215b",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Set action skips time-input normalization used by query",
+      "message": "`stepResponseQueryLocked` passes its input through `normalizeTimeInput` before decoding, but `setStepResponseLocked` decodes the raw params directly. The same settings payload (for example, time values with units) may therefore be accepted by the query and rejected or misread by the set action.",
+      "suggestion": "Normalize time input in `setStepResponseLocked` the same way the query does, unless the caller already does this.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/recording_step_response.go",
+          "lines": {
+            "start": 175,
+            "end": 177
+          }
+        }
+      ],
+      "tags": [
+        "consistency"
+      ],
+      "evidence": "func (s *Service) setStepResponseLocked(raw json.RawMessage) error {\n\tvar p StepResponseParams\n\tif err := params(raw, \u0026p, \"id\", \"probe_id\", \"start_s\", \"end_s\", \"initial_value\", \"final_value\", \"tolerance_fraction\", \"minimum_hold_s\"); err != nil {",
+      "fix": {
+        "before": "func (s *Service) setStepResponseLocked(raw json.RawMessage) error {\n\tvar p StepResponseParams\n\tif err := params(raw, \u0026p, \"id\", \"probe_id\", \"start_s\", \"end_s\", \"initial_value\", \"final_value\", \"tolerance_fraction\", \"minimum_hold_s\"); err != nil {",
+        "after": "func (s *Service) setStepResponseLocked(raw json.RawMessage) error {\n\tnormalized, err := normalizeTimeInput(\"recording.step-response\", raw)\n\tif err != nil {\n\t\treturn err\n\t}\n\tvar p StepResponseParams\n\tif err := params(normalized, \u0026p, \"id\", \"probe_id\", \"start_s\", \"end_s\", \"initial_value\", \"final_value\", \"tolerance_fraction\", \"minimum_hold_s\"); err != nil {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "acfac444e34a1417",
+      "severity": "low",
+      "category": "testing",
+      "title": "stepQuery ignores marshal error and uses unchecked type assertion",
+      "message": "The helper discards the json.Marshal error and uses an unchecked type assertion on r.Result. A result type change makes the test panic instead of failing with a clear message.",
+      "suggestion": "Check the Marshal error and use the comma-ok assertion, calling t.Fatalf on mismatch.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/recording_step_response_test.go",
+          "lines": {
+            "start": 14,
+            "end": 19
+          }
+        }
+      ],
+      "tags": [
+        "test-helper"
+      ],
+      "evidence": "\traw, _ := json.Marshal(p)\n\tr := s.Dispatch(context.Background(), Request{Version: 1, ID: \"step-query\", Command: \"recording.step-response\", Params: raw}, \"agent\")\n\tif r.Error != nil {\n\t\tt.Fatal(r.Error)\n\t}\n\treturn r.Result.(*StepResponse)",
+      "fix": {
+        "before": "\traw, _ := json.Marshal(p)\n\tr := s.Dispatch(context.Background(), Request{Version: 1, ID: \"step-query\", Command: \"recording.step-response\", Params: raw}, \"agent\")\n\tif r.Error != nil {\n\t\tt.Fatal(r.Error)\n\t}\n\treturn r.Result.(*StepResponse)",
+        "after": "\traw, err := json.Marshal(p)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tr := s.Dispatch(context.Background(), Request{Version: 1, ID: \"step-query\", Command: \"recording.step-response\", Params: raw}, \"agent\")\n\tif r.Error != nil {\n\t\tt.Fatal(r.Error)\n\t}\n\tres, ok := r.Result.(*StepResponse)\n\tif !ok {\n\t\tt.Fatalf(\"unexpected result type %T\", r.Result)\n\t}\n\treturn res"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1da5977c623ad5f2",
+      "severity": "low",
+      "category": "testing",
+      "title": "Capability schema check can panic and ignores unmarshal error",
+      "message": "caps[0] is indexed without a length check, so an empty result panics instead of failing the test. The json.Unmarshal error is also discarded, so a malformed schema is reported only as a missing contract.",
+      "suggestion": "Assert that len(caps) \u003e 0 and check the Unmarshal error.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/recording_step_response_test.go",
+          "lines": {
+            "start": 133,
+            "end": 134
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness"
+      ],
+      "evidence": "\t\tvar schema map[string]any\n\t\t_ = json.Unmarshal(caps[0].Input, \u0026schema)",
+      "fix": {
+        "before": "\t\tvar schema map[string]any\n\t\t_ = json.Unmarshal(caps[0].Input, \u0026schema)",
+        "after": "\t\tif len(caps) == 0 {\n\t\t\tt.Fatal(\"no capabilities for\", id)\n\t\t}\n\t\tvar schema map[string]any\n\t\tif err := json.Unmarshal(caps[0].Input, \u0026schema); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 130868,
+    "totalMs": 31817
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 37,
+    "bytes": 163131,
+    "chunks": 9,
+    "llmCalls": 9,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 98294,
+        "output": 12614,
+        "costUSD": 0.645456
+      }
+    ],
+    "widenedFiles": 14,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

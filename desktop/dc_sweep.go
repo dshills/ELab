@@ -69,7 +69,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		next.ProbeIDs = nil
 		next.Spacing = ""
 		switch next.Parameter {
-		case "frequency":
+		case "frequency", "loop-frequency":
 			next.Start, next.Stop, next.Spacing = "1 Hz", "100 kHz", "logarithmic"
 		case "resistance":
 			next.Start, next.Stop = "100 Ω", "10k Ω"
@@ -108,6 +108,9 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	}})
 	probeOptions := []ui.Option{{ID: "__auto", Label: "Auto readings"}}
 	for _, p := range sweep.Available {
+		if cfg.Parameter == "loop-frequency" && p.ID != "loop:"+cfg.ComponentID {
+			continue
+		}
 		if cfg.Parameter == "frequency" && p.Unit != "V" {
 			continue
 		}
@@ -137,7 +140,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 				}
 			}
 			limit := workbench.MaxScopeProbes
-			if cfg.Parameter == "frequency" {
+			if workbench.IsFrequencySweep(cfg.Parameter) {
 				limit = 3
 			}
 			if len(next.ProbeIDs) >= limit {
@@ -178,8 +181,10 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	start := s.sweepStartAction(state)
 	_, _, diagnostic := (workbench.Graph{Components: state.Components, Wires: state.Wires}).Compile()
 	start.Disabled = start.Disabled || active || !valid || diagnostic != nil
-	if cfg.Parameter == "frequency" {
-		nodes = append(nodes, start, quiet("sweep-assumptions", "AC · small signal at DC bias"), quiet("sweep-source-help", "Selected source: normalized 1 V"), quiet("sweep-time-help", "Other sources: AC ground"), quiet("sweep-ac-bandwidth", "Op-amp: no intrinsic bandwidth"))
+	if cfg.Parameter == "loop-frequency" {
+		nodes = append(nodes, start, quiet("sweep-assumptions", "Loop return ratio · closed-bias control injection"), quiet("sweep-source-help", "One dynamic op-amp differential control; loading retained"), quiet("sweep-time-help", "Other loops stay closed; no stability certification"))
+	} else if cfg.Parameter == "frequency" {
+		nodes = append(nodes, start, quiet("sweep-assumptions", "AC · small signal at DC bias"), quiet("sweep-source-help", "Selected source: normalized 1 V"), quiet("sweep-time-help", "Other sources: AC ground"), quiet("sweep-ac-bandwidth", "Bandwidth follows configured op-amp dynamics"))
 	} else {
 		nodes = append(nodes, start, quiet("sweep-assumptions", "Capacitors: open"), quiet("sweep-source-help", "Sine: offset / pulse: low"), quiet("sweep-time-help", "Startup/time ignored"))
 	}
@@ -207,6 +212,9 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 			}
 		}
 	}
+	if sweep.Result != nil && sweep.Result.Loop != nil {
+		nodes = append(nodes, loopMarginReadouts(sweep.Result.Loop)...)
+	}
 	return nodes
 }
 func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
@@ -220,8 +228,11 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 		return append(nodes, quiet("sweep-no-record", "Build a supported circuit, choose a range, then run a sweep."))
 	}
 	caption := op.ID + " · " + op.Status + " · independent DC points"
-	if sweep.Result != nil && sweep.Result.Target.Parameter == "frequency" {
+	if sweep.Result != nil && workbench.IsFrequencySweep(sweep.Result.Target.Parameter) {
 		caption = op.ID + " · " + op.Status + " · AC small-signal at DC bias"
+	}
+	if sweep.Result != nil && sweep.Result.Loop != nil {
+		caption = op.ID + " · " + op.Status + " · differential loop return ratio"
 	}
 	if op.Kind == "sweep-import" {
 		caption += " · imported recorded data"

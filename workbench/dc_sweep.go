@@ -47,6 +47,7 @@ type SweepStatistics struct {
 	Maximum float64 `json:"maximum"`
 }
 type SweepResult struct {
+	Loop       *LoopMargins      `json:"loop_margins,omitempty"`
 	AC         []ACBand          `json:"ac_bands,omitempty"`
 	Target     SweepTarget       `json:"target"`
 	Spacing    string            `json:"spacing,omitempty"`
@@ -74,7 +75,7 @@ type sweepDomain struct {
 }
 
 func sweepDomains() []sweepDomain {
-	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}}
+	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}, {"loop-frequency", "Hz", .01, 1e9}}
 }
 
 func sweepTargets(g Graph) []SweepTarget {
@@ -84,6 +85,10 @@ func sweepTargets(g Graph) []SweepTarget {
 		for _, d := range domains {
 			label := ""
 			switch d.Parameter {
+			case "loop-frequency":
+				if hasDynamics(p) {
+					label = "Loop return ratio / differential control injection"
+				}
 			case "frequency":
 				if IsVoltageSource(p.Kind) && p.Kind != "battery" {
 					label = "AC frequency / 1 V excitation"
@@ -132,7 +137,7 @@ func newSweepPlan(g Graph, settings SweepSettings) (sweepPlan, error) {
 }
 func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (sweepPlan, error) {
 	plan := sweepPlan{graph: g.Clone(), settings: settings}
-	if settings.Parameter == "frequency" {
+	if IsFrequencySweep(settings.Parameter) {
 		if err := acSupported(g); err != nil {
 			return plan, err
 		}
@@ -156,7 +161,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		}
 	}
 	if !found {
-		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper or AC frequency target")
+		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper, AC frequency or configured dynamic-op-amp loop target")
 	}
 	if settings.Points < 2 || settings.Points > MaxDCSweepPoints {
 		return plan, fmt.Errorf("sweep requires 2–201 points")
@@ -170,7 +175,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 			unit = ""
 		}
 		value, err := ParseValue(text, unit)
-		if plan.target.Parameter == "frequency" {
+		if IsFrequencySweep(plan.target.Parameter) {
 			value, err = parseWaveformQuantity(text, "Hz")
 		}
 		if plan.target.Parameter == "wiper" {
@@ -211,6 +216,19 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 
 	if _, _, diagnostic := g.Compile(); requireComplete && diagnostic != nil {
 		return plan, &actionError{"unavailable", "Complete a supported circuit before sweeping: " + diagnostic.Message}
+	}
+	if settings.Parameter == "loop-frequency" {
+		if plan.start <= 0 || plan.stop <= plan.start {
+			return plan, fmt.Errorf("loop sweep requires an ascending positive frequency band")
+		}
+		probe := loopProbe(settings.ComponentID)
+		if settings.ProbeIDs != nil && (len(settings.ProbeIDs) != 1 || settings.ProbeIDs[0] != probe.ID) {
+			return plan, fmt.Errorf("loop sweep accepts only %s", probe.ID)
+		}
+		plan.probes = []Probe{probe}
+		plan.settings.ProbeIDs = []string{probe.ID}
+		plan.sources = dcSourceLevels(g)
+		return plan, nil
 	}
 	available := probeInventory(g)
 	if settings.Parameter == "frequency" {
@@ -333,7 +351,7 @@ func solveDCOperatingPoint(ctx context.Context, g Graph, levels []SweepSource) (
 	return result, mixedSample(compiled, result, 0), nil
 }
 func computeDCSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*SweepResult, error) {
-	if plan.settings.Parameter == "frequency" {
+	if IsFrequencySweep(plan.settings.Parameter) {
 		return computeACSweep(ctx, plan, progress)
 	}
 	out := &SweepResult{Target: plan.target, Spacing: plan.settings.Spacing, Start: plan.start, Stop: plan.stop, Probes: append([]Probe{}, plan.probes...), Points: []SweepPoint{}, Statistics: []SweepStatistics{}}
@@ -395,6 +413,7 @@ func cloneSweepResult(in *SweepResult) *SweepResult {
 		return nil
 	}
 	out := *in
+	out.Loop = cloneLoopMargins(in.Loop)
 	out.Probes = append([]Probe{}, in.Probes...)
 	out.AC = append([]ACBand(nil), in.AC...)
 	for i := range out.AC {

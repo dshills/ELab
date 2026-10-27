@@ -41,6 +41,9 @@ func acProbes(probes []Probe) []Probe {
 	return out
 }
 func acFormat(parameter string) (string, string) {
+	if parameter == "loop-frequency" {
+		return "elab.loop-gain-sweep", LoopGainEngineID
+	}
 	if parameter == "frequency" {
 		return "elab.ac-sweep", ACSweepEngineID
 	}
@@ -134,13 +137,24 @@ func computeACSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*S
 	// The real rank check eliminates in place; restore the physical Jacobian.
 	jac, _ = n.equations(state.x, nil, 0, t, 0)
 	sourceIndex := -1
-	for k, p := range n.sources {
-		if p.ID == plan.target.ComponentID {
-			sourceIndex = len(n.nodes) + k
+	var loopDrive []float64
+	if plan.settings.Parameter == "loop-frequency" {
+		loopDrive, err = n.openLoopControl(plan.target.ComponentID, state.x, jac)
+		if err != nil {
+			return nil, err
 		}
-	}
-	if sourceIndex < 0 {
-		return nil, fmt.Errorf("AC source not found")
+		if len(loopDrive) != len(jac) {
+			return nil, fmt.Errorf("invalid loop injection dimension")
+		}
+	} else {
+		for k, p := range n.sources {
+			if p.ID == plan.target.ComponentID {
+				sourceIndex = len(n.nodes) + k
+			}
+		}
+		if sourceIndex < 0 {
+			return nil, fmt.Errorf("AC source not found")
+		}
 	}
 	out := &SweepResult{Target: plan.target, Spacing: plan.settings.Spacing, Start: plan.start, Stop: plan.stop, Probes: acProbes(plan.probes), Points: []SweepPoint{}, Statistics: []SweepStatistics{}}
 	previous := make([]float64, len(plan.probes))
@@ -153,7 +167,13 @@ func computeACSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*S
 		w := 2 * math.Pi * frequency
 		a := make([][]complex128, len(jac))
 		rhs := make([]complex128, len(jac))
-		rhs[sourceIndex] = 1
+		if plan.settings.Parameter == "loop-frequency" {
+			for k, v := range loopDrive {
+				rhs[k] = complex(v, 0)
+			}
+		} else {
+			rhs[sourceIndex] = 1
+		}
 		for row := range a {
 			a[row] = make([]complex128, len(jac))
 			for col, v := range jac[row] {
@@ -231,6 +251,12 @@ func computeACSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*S
 		out.Statistics = append(out.Statistics, s)
 	}
 	out.AC = acBands(out)
+	if plan.settings.Parameter == "loop-frequency" {
+		out.Loop, err = loopMargins(out)
+		if err != nil {
+			return nil, err
+		}
+	}
 	return out, ctx.Err()
 }
 func complexVoltage(x []complex128, index int) complex128 {
@@ -305,7 +331,7 @@ func acNode(n *mixedNetwork, id string) int {
 }
 
 func validateACRecord(plan sweepPlan, r *SweepResult) error {
-	if plan.settings.Parameter != "frequency" {
+	if !IsFrequencySweep(plan.settings.Parameter) {
 		if len(r.AC) > 0 {
 			return fmt.Errorf("DC record contains AC measurements")
 		}
@@ -314,7 +340,7 @@ func validateACRecord(plan sweepPlan, r *SweepResult) error {
 				return fmt.Errorf("DC point contains AC response")
 			}
 		}
-		return nil
+		return validateLoopMargins(plan, r)
 	}
 	previous := make([]float64, len(plan.probes))
 	hasPrevious := make([]bool, len(previous))
@@ -338,7 +364,7 @@ func validateACRecord(plan sweepPlan, r *SweepResult) error {
 	if !reflectACBands(r.AC, acBands(r)) {
 		return fmt.Errorf("AC band estimates differ from captured points")
 	}
-	return nil
+	return validateLoopMargins(plan, r)
 }
 func reflectACBands(a, b []ACBand) bool {
 	if len(a) != len(b) {

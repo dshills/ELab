@@ -120,7 +120,9 @@ func (s *screen) changeSweepField(state workbench.Snapshot, id, text string) {
 
 func (s *screen) sweepStartAction(state workbench.Snapshot) ui.Node {
 	label := "Run DC sweep"
-	if state.DCSweep.Settings.Parameter == "frequency" {
+	if state.DCSweep.Settings.Parameter == "loop-frequency" {
+		label = "Run loop analysis"
+	} else if state.DCSweep.Settings.Parameter == "frequency" {
 		label = "Run AC sweep"
 	}
 	return buttonStyle(ui.Node{ID: "sweep-start", Kind: ui.Button, Text: label, Accessibility: ui.Accessibility{Name: label}, Disabled: s.pendingSweepStart != nil, Activate: func() {

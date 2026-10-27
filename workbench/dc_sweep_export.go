@@ -21,7 +21,7 @@ func encodeSweepExport(record *SweepRecord, format string) ([]byte, error) {
 	for _, p := range record.Result.Probes {
 		header = append(header, p.ID+" ["+p.Unit+"]")
 	}
-	if record.Metadata.Settings.Parameter == "frequency" {
+	if IsFrequencySweep(record.Metadata.Settings.Parameter) {
 		for _, id := range record.Metadata.Settings.ProbeIDs {
 			header = append(header, id+" real [V/V]", id+" imaginary [V/V]", id+" phase_defined")
 		}

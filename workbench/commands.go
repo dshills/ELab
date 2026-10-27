@@ -193,6 +193,11 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(CursorSelectParams{}), "urn:elab:cursor-select:1"},
 	{reflect.TypeOf(ProbeParams{}), "urn:elab:probe-selection:1"},
 	{reflect.TypeOf(ComponentValueDomain{}), "urn:elab:component-value-domain:1"},
+	{reflect.TypeOf(StepResponseParams{}), "urn:elab:step-response-input:1"},
+	{reflect.TypeOf(StepResponseSettings{}), "urn:elab:step-response-settings:1"},
+	{reflect.TypeOf(StepResponse{}), "urn:elab:step-response:1"},
+	{reflect.TypeOf(LoopMargins{}), "urn:elab:loop-margins:1"},
+	{reflect.TypeOf(LoopCrossing{}), "urn:elab:loop-crossing:1"},
 	{reflect.TypeOf(RecordingStatisticsParams{}), "urn:elab:recording-statistics-input:1"},
 	{reflect.TypeOf(RecordingStatisticsSettings{}), "urn:elab:recording-statistics-settings:1"},
 	{reflect.TypeOf(RecordingStatistics{}), "urn:elab:recording-statistics:1"},
@@ -319,6 +324,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		if common.Type == reflect.TypeOf(RecordingCompareParams{}) {
 			schema = timeInputSchema("recording.compare", schema)
+		}
+		if common.Type == reflect.TypeOf(StepResponseParams{}) {
+			schema = timeInputSchema("recording.step-response", schema)
 		}
 		if common.Type == reflect.TypeOf(RecordingStatisticsParams{}) {
 			schema = timeInputSchema("recording.statistics", schema)
@@ -455,6 +463,8 @@ func Catalog() []Capability {
 		typedCapability("recording.keep.set", "Include/exclude a completed recording in project saves and recovery; exclusion keeps session replay/export; kept records are never silently evicted", reflect.TypeOf(RecordingKeepParams{})),
 		typedCapability("verification.import.start", "Read/validate a recorded JSON asset in background; inspect project_work; keeps live circuit/state and later viewer choice", reflect.TypeOf(RecordingImportParams{})),
 		typedCapability("verification.import", "Validate and load a complete elab.verification v1 JSON record into an independent recorded viewer; never changes live circuit/state", reflect.TypeOf(RecordingImportParams{})),
+		typedCapability("recording.step-response.set", "Measure selected capture overshoot and observed settling against explicit initial/final references; empty probe and zero settings clear.", reflect.TypeOf(StepResponseParams{})),
+		queryCapability("recording.step-response", "Read captured linear-step overshoot and observed settling; no inferred steady state or live mutation.", reflect.TypeOf(StepResponseParams{}), reflect.TypeOf(StepResponse{})),
 		typedCapability("recording.statistics.set", "Measure selected capture interval; empty probe clears; session only", reflect.TypeOf(RecordingStatisticsParams{})),
 		queryCapability("recording.statistics", "Time-weighted mean, RMS, AC ripple RMS and extrema of saved linear segments", reflect.TypeOf(RecordingStatisticsParams{}), reflect.TypeOf(RecordingStatistics{})),
 		typedCapability("recording.timing.set", "Configure selected capture threshold timing; empty probe clears; session only", reflect.TypeOf(RecordingTimingParams{})),

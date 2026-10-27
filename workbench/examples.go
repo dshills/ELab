@@ -78,6 +78,8 @@ func buildExampleCatalog() []ExampleInfo {
 		{ID: "bipolar-push-pull", Title: "Complementary transistor buffer", Question: "How can an NPN/PNP pair source and sink load current?", Expected: "Q1 supplies the positive half-cycle, Q2 the negative half-cycle. The unbiased stage has a visible crossover dead band near zero input.", Try: "Plot VIN, the shared emitters and both collector currents. Pause and compare positive, negative and near-zero input samples.", Limitation: "Unbiased educational class-B stage with illustrative complementary parameters; no thermal behavior, internal charge, real matched pair or physical power ratings."},
 		{ID: "capacitor-loss", Title: "Capacitor ESR and leakage", Question: "Why do capacitor terminal voltage and stored voltage differ?", Expected: "ESR creates an immediate terminal-voltage step; leakage lowers the final charge and dissipates power.", Try: "Select C1, compare stored voltage and total current, then disable electrical losses and Restart. Change ESR or leakage resistance and compare captures.", Limitation: passiveLossDescription},
 		{ID: "winding-loss", Title: "Coil winding loss and damping", Question: "How does winding resistance change ringing and energy loss?", Expected: "The coil's series resistance increases damping and dissipates I²R while magnetic energy remains L I²/2.", Try: "Select L1, compare winding heat and storage voltage, then disable losses or change winding resistance. Record C1 voltage and L1 current.", Limitation: passiveLossDescription},
+		{ID: "feedback-loop", Title: "Feedback loop and capacitive load", Question: "How does load capacitance change return-ratio margins?", Expected: "A dynamic op-amp follower drives CL. The Loop target injects its differential compensation control at the closed-circuit bias; unity/phase crossings show sampled margins.", Try: "Run the default loop sweep; compare CL 1µF and 10µF. Compare with the ordinary VIN signal Bode target and captured transient behavior.", Limitation: "Selected dynamic op-amp controlled-source return ratio, other loops remain closed. No Nyquist/RHP-pole or physical stability certification; sampled bands can miss crossings."},
+		{ID: "step-response", Title: "RC step response and settling", Question: "When does a charging capacitor remain close to a final reference?", Expected: "R1=1k and C1=1µF charge toward 5 V. A 2% final-value band is reached in about 3.912 ms, with no overshoot in the ideal model.", Try: "Verify 20 ms with a 20µs step, open the recording, then choose C1 step response with initial 0 and final 5 V, tolerance 2%, and 2ms hold. Measurements use explicit references and saved linear segments.", Limitation: "Observed settling through the captured interval, not a guarantee of future behavior or hidden peaks. Initial/final references must describe the chosen step."},
 		{ID: "jfet-preamp", Title: "JFET audio preamplifier", Question: "How does reverse gate bias control an amplifier?", Expected: "A self-biased N-channel depletion JFET amplifies and inverts a small 100 Hz signal. COUT removes the drain DC bias.", Try: "Inspect J1 gate/source/drain readings. Change IDSS, cutoff or RD; compare DC bias and VIN to RL Bode response.", Limitation: jfetDescription},
 		{ID: "jfet-current", Title: "Self-biased JFET current sink", Question: "Can a normally-on transistor set current with one resistor?", Expected: "Source resistance reverse-biases the gate, reducing drain current below IDSS.", Try: "Change RSET or J1 IDSS/cutoff and sweep V1 to see compliance.", Limitation: jfetDescription},
 		{ID: "pjfet-current", Title: "P-channel JFET current source", Question: "How does JFET polarity reverse the same circuit?", Expected: "A P-channel device sources current from the positive rail with signed negative drain current.", Try: "Compare signed terminal currents with the N-channel sink.", Limitation: jfetDescription},
@@ -448,6 +450,14 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.selected = "Q6"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0005, .02
 		d.probes = []string{"v:VIN.positive", "v:RL", "i:Q6.collector", "i:Q7.collector", "i:Q8.collector", "v:C1"}
+	case "feedback-loop":
+		d.graph, d.selected = FeedbackLoopExampleGraph(), "U1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0001, .02
+		d.probes = []string{"v:VIN.positive", "v:U1", "v:CL"}
+	case "step-response":
+		d.graph, d.selected = StepResponseExampleGraph(), "C1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00002, .01
+		d.probes = []string{"v:C1", "i:C1", "v:V1.positive"}
 	case "jfet-preamp":
 		d.graph, d.selected = JFETPreampExampleGraph(), "J1"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0001, .02

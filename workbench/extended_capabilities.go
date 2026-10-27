@@ -9,6 +9,23 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	c := commandContractDetail{Version: 1, Scope: "hobbyist-device-configuration", Preconditions: []string{"Ordinary revision, document-generation, retry and closed-service guards apply"}, Effects: []string{}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing, extra, wrong-type, null-required, out-of-range or wrong-target fields preserve accepted state"}}}
 	switch id {
+	case "recording.step-response", "recording.step-response.set":
+		c.Scope = "captured-step-response"
+		bounds("initial_value", "captured probe SI unit", -1e6, 1e6)
+		bounds("final_value", "captured probe SI unit", -1e6, 1e6)
+		bounds("tolerance_fraction", "fraction of step amplitude", 0, .5)
+		if p := inputProperty(schema, "tolerance_fraction"); p != nil {
+			p["x-enabled-minimum"] = .0001
+			p["description"] = "0 only when clearing with empty probe/all-zero settings; otherwise 0.0001–0.5"
+		}
+		schema["x-inventory"] = map[string]string{"ids": "retained completed operations; set requires snapshot.recording.id", "probe_ids": "operation.inspect metadata.probes", "time_bounds": "actual saved first/last timestamps inside nominal duration"}
+		c.Preconditions = []string{"Retained completed recording, captured probe and fully covered positive interval"}
+		c.Errors = append(c.Errors, commandFailureDetail{"not-ready", "admission", "Capture absent or incomplete"}, commandFailureDetail{"not-found", "admission", "Probe absent"}, commandFailureDetail{"unavailable", "admission", "Actual timestamps do not cover the interval"}, commandFailureDetail{"conflict", "admission", "Set names a changed selected capture"})
+		c.Completion = &commandCompletionDetail{Mode: "bounded in-memory saved-row analysis; no file IO/worker", Observe: []string{"recording.step-response", "project.inspect"}}
+		c.Effects = []string{"Pure query or session-only selected recording settings, no graph/physics/history mutation. Requires fully covered positive interval, explicit distinct initial/final references (±1e6 SI), tolerance 0.0001–0.5 of step amplitude and 0 < minimum_hold_s ≤ interval. Full fields required; set with empty probe and all-zero settings disables.", "Direction-normalized overshoot and last arrival into supplied final-value band, linearly interpolated saved segments including duplicate-time jumps. Observed settling is reported only if the trace then stays in band for the requested hold through end_s. Unsettled/short captures have a reason, no fabricated settling value. No inferred steady-state reference, unseen peaks, future guarantee or hardware qualification. Retained recording identity/engine and settings accompany every result."}
+		if id == "recording.step-response.set" {
+			c.Preconditions = append(c.Preconditions, "Exact currently selected retained recording ID; stale controls/replaced document refuse")
+		}
 	case "jfet.configure":
 		c.Effects = []string{jfetDescription, "Complete saved undoable electrical edit, all fields required. Cutoff sign must match N/P kind. Existing combined two-FET budget includes MOSFETs and JFETs."}
 	case "current-source.configure", "load.configure":
@@ -62,6 +79,10 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	schema["x-command-contract"] = c
 	schema["x-model-id"] = ExtendedModelID
+	if id == "recording.step-response" || id == "recording.step-response.set" {
+		delete(schema, "x-model-id")
+		schema["x-method-id"] = StepResponseMethod
+	}
 	if id == "jfet.configure" {
 		schema["x-model-id"] = JFETModelID
 	}

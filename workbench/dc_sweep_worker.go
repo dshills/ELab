@@ -182,6 +182,9 @@ func (s *Service) sweepSettingsLocked() SweepSettings {
 	if s.sweeps != nil && s.sweeps.settings != nil {
 		return cloneSweepSettings(*s.sweeps.settings)
 	}
+	if s.exampleID == "feedback-loop" {
+		return SweepSettings{ComponentID: "U1", Parameter: "loop-frequency", Spacing: "logarithmic", Start: ".1 Hz", Stop: "100 kHz", Points: 201, ProbeIDs: []string{"loop:U1"}}
+	}
 	if s.exampleID == "class-ab-speaker" || s.exampleID == "speaker-amplifier" || s.exampleID == "rc-tolerance" || s.exampleID == "transistor-profile" || s.exampleID == "ac-rc" || s.exampleID == "ac-rlc" || s.exampleID == "ac-opamp" || s.exampleID == "discrete-class-ab" {
 		source, probe := "V1", "v:C1"
 		if s.exampleID == "ac-opamp" {
@@ -216,7 +219,7 @@ func sweepGraphHash(g Graph) [32]byte { data, _ := json.Marshal(g); return sha25
 func (s *Service) sweepSummaryLocked(job *sweepJob) SweepSummary {
 	out := job.summary
 	out.Kept = job.keep
-	out.SourceUnchanged = (job.summary.Kind == "dc-sweep" || job.summary.Kind == "ac-sweep") && job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
+	out.SourceUnchanged = (job.summary.Kind == "dc-sweep" || job.summary.Kind == "ac-sweep" || job.summary.Kind == "loop-gain-sweep") && job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
 	if out.Error != nil {
 		e := *out.Error
 		out.Error = &e
@@ -229,6 +232,9 @@ func (s *Service) sweepStateLocked() *SweepState {
 		return nil
 	}
 	state := &SweepState{Settings: s.sweepSettingsLocked(), Targets: targets, Available: probeInventory(s.graph), Operations: []SweepSummary{}}
+	if state.Settings.Parameter == "loop-frequency" {
+		state.Available = []Probe{loopProbe(state.Settings.ComponentID)}
+	}
 	if s.sweeps != nil {
 		store := s.sweeps
 		state.Selected, state.Visible, state.TraceID = store.selected, store.visible, store.traceID
@@ -290,17 +296,23 @@ func (s *Service) startDCSweepLocked(p SweepStartParams) error {
 	// This capture is a source document, not a recursive collection of other runs.
 	metadata := SweepMetadata{Format: "elab.dc-sweep", Version: 1, Engine: DCSweepEngineID, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), DocumentGeneration: s.documentGeneration, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, Source: source, Settings: cloneSweepSettings(plan.settings), Sources: append([]SweepSource{}, plan.sources...), Assumptions: []string{"Independent DC operating points; no time advancement or hysteresis continuation", "Capacitors open; startup voltages ignored", "Sine sources use offset; finite pulses use low level; ideal pulses use zero; swept source uses the requested DC bias", "Configured switch states and accepted wiper positions; live held inputs and pending actuation are not applied", "Existing generic device assumptions and limits remain in force"}}
 	metadata.Format, metadata.Engine = acFormat(cfg.Parameter)
-	if cfg.Parameter == "frequency" {
+	if IsFrequencySweep(cfg.Parameter) {
 		metadata.Assumptions = acAssumptions()
+		if cfg.Parameter == "loop-frequency" {
+			metadata.Assumptions = loopAssumptions()
+		}
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	job := &sweepJob{summary: SweepSummary{ID: id, Kind: "dc-sweep", Status: "queued", Total: cfg.Points}, metadata: metadata, sourceHash: sweepGraphHash(s.graph), ctx: ctx, cancel: cancel}
 	s.retainSweepJobLocked(job)
 	s.sweepViewerRevision++
 	traceID := plan.probes[0].ID
-	if cfg.Parameter == "frequency" {
+	if IsFrequencySweep(cfg.Parameter) {
 		traceID = "gain:" + traceID
 		job.summary.Kind = "ac-sweep"
+		if cfg.Parameter == "loop-frequency" {
+			job.summary.Kind = "loop-gain-sweep"
+		}
 	}
 	store.selected, store.visible, store.traceID, store.cursor = id, true, traceID, nil
 	s.dismissPrintPreviewLocked()

@@ -53,6 +53,7 @@ func ParseTimeSeconds(text string) (float64, error) {
 // Only public command inputs accept unit strings. Persisted documents, recorded
 // rows and output schemas retain strict numeric SI fields.
 var timeCommandFields = map[string][]string{
+	"recording.step-response": {"start_s", "end_s", "minimum_hold_s"}, "recording.step-response.set": {"start_s", "end_s", "minimum_hold_s"},
 	"spectrum.settings.set":    {"start_s", "end_s"},
 	"spectrum.analyze":         {"start_s", "end_s"},
 	"simulation.transient.set": {"step_s", "high_s", "low_s"},

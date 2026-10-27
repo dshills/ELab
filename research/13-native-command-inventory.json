@@ -14,8 +14,8 @@
     "desktop/current_controls.go": "75e51b78555dbdc0787eb321697c1f5f0af87e085e8149fee2b6586d8b1a77e7",
     "desktop/cursor_actions.go": "fefec629a794097a6ce7c11d1badc9a9e1a35a17704683de58a673d547130486",
     "desktop/cursor_rejection.go": "d635c20a969208dbaf163fe1b66b3b5de6b624154739529b326aeea4e3b839da",
-    "desktop/dc_sweep.go": "323f6b4812987b0a5775c247a3eff5dfebf64aac9f61c0717fadccebc07fc0d7",
-    "desktop/dc_sweep_actions.go": "a6ee672b0469b3d68547aa423f91a66fc528c2ad7586bb880f0e8098b52631e9",
+    "desktop/dc_sweep.go": "da5e6b626b5c1dbbe4234cadace004a4dc938c11f91ca7a9c164ca61693a5fd4",
+    "desktop/dc_sweep_actions.go": "7ce13dd030b8758e71f0ba27d7528d9ff4015081b34756e568be5664fe99e54a",
     "desktop/dc_sweep_canvas.go": "457023ebaf9d3d5a07602597975e78f5cea11cb3f77c7cbfe770d0fe363a9331",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
@@ -42,6 +42,7 @@
     "desktop/keyboard_workflow.go": "b191362c5d182dac02e265925c30bdfcaf5db3bf6a9ef0a189d0e264917c7349",
     "desktop/layout.go": "1b780e66e228784016e71d4d2d3300620551eb9bb83d47fdc696296a9b2b456d",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
+    "desktop/loop_gain.go": "578aa3446a020722d073b9397893c7919e66ea6594e131fff3cc48fcb288881a",
     "desktop/main.go": "2701d86c4e35518c170285d7d1ee32092c3189104c83fd5029130715132ac4fa",
     "desktop/measurement_inspection.go": "06ad8838f3c6a3853e28b42127a0203f632fd1307f0b78e94988916d88e13050",
     "desktop/menus.go": "fb92050da67ff3e2832fdbc153507c9547d39c779ae426bc21977a2ffdc92d71",
@@ -66,11 +67,12 @@
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
     "desktop/recorded_playback_actions.go": "a6f7687f201a3b2ea3f91480979ead96e21b54150e54812e0b3e32a24c8b9045",
     "desktop/recorded_timing_actions.go": "32de7374bceba81ba4dc6843765cfa8dd1611a9f6a1508530a3dcf8b5ec6e2a7",
-    "desktop/recording.go": "6ca7a59d24ef2b0222ac0de0de9c632c44f0beccffae64959e29115e135e3541",
+    "desktop/recording.go": "0035d9b88aefa50b2e14a617f2f6b873b250f8eea6b63848a5be5683f5adc6ae",
     "desktop/recording_compare.go": "af60b6affd995bec97e7033c63ebb393974610868b5af759875c38e49ba343d0",
     "desktop/recording_comparison_entry.go": "1452a354f4a134b2bbb7049c03e2918be9141e399ce100aa153c4e6275a4d74f",
     "desktop/recording_statistics.go": "27a4c3968b9971673a0703e56acfa36d66e8c8ab7affdf4937376ebfcb4347be",
     "desktop/recording_statistics_entry.go": "adb7636ffbd10e508ee8ff2ccc37c8c419ff8cdf11b40b79df8c99628a00a07a",
+    "desktop/recording_step_response.go": "e5c6cfea4181162c5bacc7dca1d104078a6c10dfef0268c2d01dce39bc008bfb",
     "desktop/recording_timing.go": "a7ceb35ed3cd66fed4ca88ff07600a7c44c7280db3e436f99092874b3262d3f0",
     "desktop/recovery.go": "861a98a5411f432028f371925192b9ffb68198de6dd92246d8846d37fd9902fa",
     "desktop/recovery_read.go": "3f536a3af7ea2480b69a8142f600b24c194ce2f06148b46cc29634a7431a5ede",
@@ -228,6 +230,8 @@
     "recording.statistics",
     "recording.statistics.set",
     "recording.step",
+    "recording.step-response",
+    "recording.step-response.set",
     "recording.timing",
     "recording.timing.set",
     "recording.view.set",
@@ -1247,7 +1251,7 @@
       "line": 62,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tnext.Spacing = \"\"\n\tswitch next.Parameter {\n\tcase \"frequency\":\n\t\tnext.Start, next.Stop, next.Spacing = \"1 Hz\", \"100 kHz\", \"logarithmic\"\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tnext.Spacing = \"\"\n\tswitch next.Parameter {\n\tcase \"frequency\", \"loop-frequency\":\n\t\tnext.Start, next.Stop, next.Spacing = \"1 Hz\", \"100 kHz\", \"logarithmic\"\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
@@ -1298,15 +1302,15 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 129,
+      "line": 132,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.ProbeIDs = nil\n\tif e.SelectedID != \"__auto\" {\n\t\tnext.ProbeIDs = append([]string{}, cfg.ProbeIDs...)\n\t\tfor _, id := range next.ProbeIDs {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tlimit := workbench.MaxScopeProbes\n\t\tif cfg.Parameter == \"frequency\" {\n\t\t\tlimit = 3\n\t\t}\n\t\tif len(next.ProbeIDs) \u003e= limit {\n\t\t\ts.errorMessage = \"Remove a sweep reading before adding another\"\n\t\t\ts.app.Invalidate(\"main\")\n\t\t\treturn\n\t\t}\n\t\tnext.ProbeIDs = append(next.ProbeIDs, e.SelectedID)\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.ProbeIDs = nil\n\tif e.SelectedID != \"__auto\" {\n\t\tnext.ProbeIDs = append([]string{}, cfg.ProbeIDs...)\n\t\tfor _, id := range next.ProbeIDs {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tlimit := workbench.MaxScopeProbes\n\t\tif workbench.IsFrequencySweep(cfg.Parameter) {\n\t\t\tlimit = 3\n\t\t}\n\t\tif len(next.ProbeIDs) \u003e= limit {\n\t\t\ts.errorMessage = \"Remove a sweep reading before adding another\"\n\t\t\ts.app.Invalidate(\"main\")\n\t\t\treturn\n\t\t}\n\t\tnext.ProbeIDs = append(next.ProbeIDs, e.SelectedID)\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 150,
+      "line": 153,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.settings.set\", next)",
@@ -1317,7 +1321,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 165,
+      "line": 168,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-probe-remove-\"+id, \"Remove \"+id, \"sweep.settings.set\", next)",
@@ -1328,7 +1332,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 173,
+      "line": 176,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-cancel-\"+op.ID, \"Cancel sweep\", \"sweep.cancel\", workbench.IDParams{ID: op.ID})",
@@ -1339,7 +1343,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 191,
+      "line": 196,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -1347,7 +1351,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 191,
+      "line": 196,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -1358,7 +1362,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 192,
+      "line": 197,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-show\", \"View sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -1369,7 +1373,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 198,
+      "line": 203,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})\n}",
@@ -1377,7 +1381,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 199,
+      "line": 204,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})",
@@ -1388,7 +1392,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 203,
+      "line": 208,
       "function": "*screen.sweepInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)\n}",
@@ -1396,7 +1400,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 204,
+      "line": 209,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)",
@@ -1407,7 +1411,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 216,
+      "line": 224,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-back\", \"Back to circuit\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: false})",
@@ -1418,7 +1422,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 262,
+      "line": 273,
       "function": "*screen.sweepPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -1426,7 +1430,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 262,
+      "line": 273,
       "function": "*screen.sweepPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -1437,7 +1441,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 262,
+      "line": 273,
       "function": "*screen.sweepPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.sweepDrawing",
@@ -1445,7 +1449,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 277,
+      "line": 288,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-cursor-clear\", \"Clear point\", \"sweep.cursor.set\", workbench.SweepCursorParams{OperationID: sweep.Selected})",
@@ -1467,7 +1471,7 @@
     },
     {
       "file": "desktop/dc_sweep_actions.go",
-      "line": 126,
+      "line": 128,
       "function": "*screen.sweepStartAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\tif s.pendingSweepStart != nil {\n\t\treturn\n\t}\n\tpending := \u0026sweepStartWork{context: actionContext{state.CommandRevision, state.Document.Generation}, settings: state.DCSweep.Settings}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.sweepSettingsAccepted; accepted != nil \u0026\u0026 accepted.from.generation == pending.context.generation \u0026\u0026 accepted.from.revision \u003c= pending.context.revision \u0026\u0026 pending.context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tpending.context, pending.settings = accepted.to, accepted.settings\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation {\n\t\ts.finishSweepStart(pending)\n\t\treturn\n\t}\n\ts.pendingSweepStart = pending\n\ts.settleSweepStart(pending, 0)\n}",
@@ -1475,7 +1479,7 @@
     },
     {
       "file": "desktop/dc_sweep_actions.go",
-      "line": 188,
+      "line": 190,
       "function": "*screen.finishSweepStart",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"sweep.start\", workbench.SweepStartParams{Settings: \u0026pending.settings}, pending.context.revision, pending.context.generation)",
@@ -3545,7 +3549,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 96,
+      "line": 97,
       "function": "*screen.recordingInspector",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), workbench.Request{Version: 1, ID: \"ui-recorded-source\", Command: \"operation.inspect\", Params: raw}, \"user\")",
@@ -3553,7 +3557,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 96,
+      "line": 97,
       "function": "*screen.recordingInspector",
       "kind": "request-command-field",
       "expression": "Command: \"operation.inspect\"",
@@ -3564,7 +3568,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 147,
+      "line": 151,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-back-live\", \"View live\", \"recording.view.set\", workbench.RecordingViewParams{Mode: \"live\"})",
@@ -3575,7 +3579,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 150,
+      "line": 154,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "s.recordedPlaybackAction(state, direction)",
@@ -3583,7 +3587,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 157,
+      "line": 161,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "s.recordedPlaybackAction(state, \"\")",
@@ -3591,7 +3595,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 158,
+      "line": 162,
       "function": "*screen.recordingPanel",
       "kind": "action-factory",
       "expression": "s.action(\"recorded-pause\", \"Pause\", \"recording.pause\", struct{}{})",
@@ -3602,7 +3606,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 172,
+      "line": 176,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\n\ts.changeRecordedPlaybackField(state, \"recorded-index\", e)\n}",
@@ -3610,7 +3614,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 178,
+      "line": 182,
       "function": "*screen.recordingPanel",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-time\", \"Recorded seek time\", r.Time, false, func(text string) {\n\ts.changeRecordedPlaybackField(state, \"recorded-time\", ui.ChangeEvent{Text: text})\n})",
@@ -3618,7 +3622,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 187,
+      "line": 191,
       "function": "*screen.recordingPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeRecordedPlaybackField(state, \"recorded-speed\", e)\n}",
@@ -3626,7 +3630,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 203,
+      "line": 207,
       "function": "*screen.recordingPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.scope",
@@ -3634,7 +3638,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 215,
+      "line": 219,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-select-\"+c.id, strings.ToUpper(c.id), \"recording.cursor.select\", c.id)",
@@ -3645,7 +3649,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 220,
+      "line": 224,
       "function": "*screen.recordingCursors",
       "kind": "callback-factory",
       "expression": "timeField(\"recorded-cursor-\"+c.id, \"Recorded cursor \"+strings.ToUpper(c.id), at, false, func(text string) {\n\ts.changeCursorTimeFor(state, c.id, text, r.ID)\n})",
@@ -3653,7 +3657,7 @@
     },
     {
       "file": "desktop/recording.go",
-      "line": 225,
+      "line": 229,
       "function": "*screen.recordingCursors",
       "kind": "action-factory",
       "expression": "s.recordedCursorAction(state, \"recorded-cursor-clear-\"+c.id, \"×\", \"recording.cursor.clear\", c.id)",
@@ -3773,6 +3777,44 @@
       "expression": "s.invokeAtCommandRevision(\"recording.statistics.set\", textFieldParams(cfg, side+\"_s\", text), state.CommandRevision, state.Document.Generation)",
       "public_commands": [
         "recording.statistics.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_step_response.go",
+      "line": 29,
+      "function": "*screen.stepResponseControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.StepResponseParams{ID: r.ID}\n\tif e.SelectedID != \"__none\" {\n\t\tp.ProbeID = e.SelectedID\n\t\tp.End = math.Min(r.Duration, r.LastSampleTime)\n\t\tp.Initial, p.Final, p.Tolerance, p.Hold = 0, 1, .02, math.Min(.002, p.End/10)\n\t}\n\ts.invokeAtCommandRevision(\"recording.step-response.set\", p, state.CommandRevision, state.Document.Generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_step_response.go",
+      "line": 36,
+      "function": "*screen.stepResponseControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.step-response.set\", p, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "recording.step-response.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/recording_step_response.go",
+      "line": 56,
+      "function": "*screen.stepResponseControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Number == float32(f.value) {\n\t\treturn\n\t}\n\tvalue, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)\n\tif err != nil {\n\t\treturn\n\t}\n\tnext := cfg\n\tf.set(\u0026next, value)\n\ts.invokeAtCommandRevision(\"recording.step-response.set\", next, state.CommandRevision, state.Document.Generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/recording_step_response.go",
+      "line": 66,
+      "function": "*screen.stepResponseControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"recording.step-response.set\", next, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "recording.step-response.set"
       ],
       "status": "literal-public-route"
     },
@@ -5431,6 +5473,7 @@
     "recording.speed.set",
     "recording.statistics.set",
     "recording.step",
+    "recording.step-response.set",
     "recording.timing.set",
     "recording.view.set",
     "recording.window.set",
@@ -5526,6 +5569,7 @@
     "project.work.inspect",
     "recording.compare",
     "recording.statistics",
+    "recording.step-response",
     "recording.timing",
     "recovery.checkpoint",
     "recovery.dismiss",

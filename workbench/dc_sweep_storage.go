@@ -56,7 +56,7 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 	}
 	r := &record.Result
 	probes := plan.probes
-	if m.Settings.Parameter == "frequency" {
+	if IsFrequencySweep(m.Settings.Parameter) {
 		probes = acProbes(probes)
 	}
 	if !reflect.DeepEqual(m.Sources, plan.sources) || r.Target != plan.target || r.Spacing != m.Settings.Spacing || r.Start != plan.start || r.Stop != plan.stop || !reflect.DeepEqual(r.Probes, probes) || len(r.Points) != m.Settings.Points || len(r.Statistics) != len(r.Probes) {
@@ -124,7 +124,7 @@ func validateSweepFields(data []byte) error {
 			return fmt.Errorf("sweep point %d: %w", i, err)
 		}
 	}
-	if metadata.Settings.Parameter == "frequency" {
+	if IsFrequencySweep(metadata.Settings.Parameter) {
 		if err := validateACFields(raw.Result, arrays.Points); err != nil {
 			return err
 		}

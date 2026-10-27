@@ -115,6 +115,7 @@ func (s *Service) recordingViewLocked() *RecordingView {
 	}
 	out.Timing = cloneRecordingTiming(s.recording.timing)
 	out.Statistics = cloneRecordingStatistics(s.recording.statistics)
+	out.StepResponse = cloneStepResponse(s.recording.stepResponse)
 	return out
 }
 
@@ -160,6 +161,7 @@ func cloneRecordingView(view *RecordingView) *RecordingView {
 	out.ReferenceOverlay = cloneRecordingOverlay(view.ReferenceOverlay)
 	out.Timing = cloneRecordingTiming(view.Timing)
 	out.Statistics = cloneRecordingStatistics(view.Statistics)
+	out.StepResponse = cloneStepResponse(view.StepResponse)
 	out.Readings = append([]VerificationReading{}, view.Readings...)
 	return &out
 }

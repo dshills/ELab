@@ -61,6 +61,10 @@ func TestPublishedSweepDomainsAndLimitsMatchAdmission(t *testing.T) {
 		if parameter == "frequency" {
 			graph = ACRCExampleGraph()
 		}
+		if parameter == "loop-frequency" {
+			graph = FeedbackLoopExampleGraph()
+			target = "U1"
+		}
 		if parameter == "resistance" {
 			target = "R1"
 		}
@@ -73,7 +77,11 @@ func TestPublishedSweepDomainsAndLimitsMatchAdmission(t *testing.T) {
 			t.Fatal("published endpoints rejected", parameter, err)
 		}
 		cfg.Start, cfg.Stop = cfg.Stop, cfg.Start
-		if _, err := newSweepPlan(graph, cfg); err != nil {
+		if _, err := newSweepPlan(graph, cfg); parameter == "loop-frequency" {
+			if err == nil {
+				t.Fatal("descending loop band accepted")
+			}
+		} else if err != nil {
 			t.Fatal("published descending range rejected", parameter, err)
 		}
 		for _, outside := range []float64{math.Nextafter(min, math.Inf(-1)), math.Nextafter(max, math.Inf(1))} {

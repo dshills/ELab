@@ -25,6 +25,7 @@ type RecordingWindowParams struct {
 	End   float64 `json:"end_s"`
 }
 type RecordingView struct {
+	StepResponse     *StepResponse         `json:"step_response,omitempty"`
 	Statistics       *RecordingStatistics  `json:"interval_statistics,omitempty"`
 	LastSampleTime   float64               `json:"last_sample_time_s"`
 	ReferenceOverlay *RecordingOverlay     `json:"reference_overlay,omitempty"`
@@ -48,6 +49,7 @@ type RecordingView struct {
 }
 
 type recordingState struct {
+	stepResponse     *StepResponse
 	statistics       *RecordingStatistics
 	timing           *RecordingTiming
 	comparison       *RecordingCompareParams

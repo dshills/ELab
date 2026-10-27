@@ -371,6 +371,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			}
 		}
 		return s.insertJunctionLocked(p)
+	case "recording.step-response.set":
+		return s.setStepResponseLocked(raw)
 	case "recording.statistics.set":
 		return s.setRecordingStatisticsLocked(raw)
 	case "recording.timing.set":

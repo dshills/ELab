@@ -14,6 +14,7 @@ func (s *Service) selectRecordingLocked(id string) {
 	s.recording.comparison = nil
 	s.recording.timing = nil
 	s.recording.statistics = nil
+	s.recording.stepResponse = nil
 	s.selectedOperation = id
 	s.recording.playing = false
 	s.recording.index = 0
