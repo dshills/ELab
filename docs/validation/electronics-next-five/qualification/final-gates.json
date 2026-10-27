@@ -1,0 +1,133 @@
+{
+  "source": "9984b36c73904d3880b62e1dd0d477d66b0c2fb5",
+  "results": [
+    {
+      "name": "root-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-json",
+        "-count=1",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 1,
+      "seconds": 324.089
+    },
+    {
+      "name": "desktop-race",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "-race",
+        "-json",
+        "-count=1",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 228.232
+    },
+    {
+      "name": "offscreen-race",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "-json",
+        "-count=1",
+        "-timeout=30m",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 499.63
+    },
+    {
+      "name": "root-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 6.653
+    },
+    {
+      "name": "desktop-vet",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 0.796
+    },
+    {
+      "name": "offscreen-vet",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 2.481
+    },
+    {
+      "name": "lint",
+      "command": [
+        "scripts/lint.sh"
+      ],
+      "exit_code": 0,
+      "seconds": 11.693
+    },
+    {
+      "name": "python",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "seconds": 2.273
+    },
+    {
+      "name": "prd",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/prd-audit.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.028
+    },
+    {
+      "name": "inventory",
+      "command": [
+        "go",
+        "run",
+        "./cmd/elab-ui-audit",
+        "--verify",
+        "research/13-native-command-inventory.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.339
+    }
+  ]
+}

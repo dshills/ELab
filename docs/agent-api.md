@@ -7,6 +7,16 @@ revision guards, stale-source handling and corresponding UI actions. The
 qualified 0.195.9 /270 package predates these additions; discover the command
 catalog from the actual running build rather than assuming availability.
 
+The /277 electronics candidate exposes 58 component kinds and 209 commands.
+Use `passive.configure`, `current-source.configure`, `load.configure` and
+`jfet.configure` for its saved electrical settings. Loop return ratio uses the
+existing sweep commands with `parameter: "loop-frequency"`; captured measurements
+use `recording.step-response.set` and the pure `recording.step-response` query.
+Full versioned parameters and bounds are available through discovery. See the
+[passive](passive-losses.md), [current/load](current-devices.md), [JFET](jfets.md)
+and [feedback/step](feedback-and-step-response.md) guides. Ordinary drawing,
+project, history, probe and export commands remain shared with the UI.
+
 All semantic commands use `workbench.Service.Dispatch`. Vellum widget callbacks, keyboard commands, canvas gestures, built-in Go clients, headless stdio, and the external socket client share this entry point. An agent does not need screenshots or simulated clicks to operate the implemented circuit slice.
 
 ## Request and response

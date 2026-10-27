@@ -39,4 +39,5 @@ input and returns the unchanged accepted x before a correction; the perturbation
 is within declared residual tolerance. A correction/reseed must fail that test.
 Low 2847b65a4fe85a16 spacing is corrected. Low a2e5079590bcb9ca is dispositioned:
 raw local receipts preserve the authorized repository identity consistently with
-existing validation evidence; they contain no credential or external upload.
+existing validation evidence; they contain no credentials. Review diffs, including staged receipts, were sent
+only to the explicitly authorized Anthropic reviewer.

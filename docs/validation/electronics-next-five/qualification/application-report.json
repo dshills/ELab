@@ -1,0 +1,20 @@
+{
+  "scope": "Exact final production/test inputs; aggregate coverage, not a single clean race invocation",
+  "all_portable_tests_covered": true,
+  "full_invocation_passed": false,
+  "passing_top_level": 955,
+  "passing_with_subtests": 2151,
+  "full_failures": [
+    "TestRelayProtectedDriverAndPulseRelease",
+    "TestRelaySharedCaptureAndProjectReopen",
+    "TestSensorExampleThresholdsAndRelayStorage"
+  ],
+  "isolated_all_three_passed": true,
+  "ordinary_driver_full_top_level": 361,
+  "ordinary_driver_full_with_subtests": 885,
+  "offscreen_driver_full_top_level": 498,
+  "offscreen_driver_full_with_subtests": 1556,
+  "desktop_scope": "Complete suites before the narrow resistive fallback correction, plus fresh final ordinary/offscreen current-source boundary controls; widget implementation unchanged",
+  "python_tests": 77,
+  "solver_limits_changed": false
+}

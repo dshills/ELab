@@ -116,3 +116,12 @@ ordinary Newton refusal; accepted caller guesses remain unchanged; the unchanged
 residual, range and work checks accept/refuse the guess. Floating source, zero
 drive, excluded-device scope and both desktop drivers pass. No capacity/accuracy/
 work limit changes. Final correction review and portable qualification follow.
+
+All five feature items are committed, followed by reviewed boundary/compatibility
+repairs in 8976ae93. Corrected portable coverage is complete in aggregate: three
+relay/sensor race time-guard failures in the full invocation all pass together
+in the isolated exact-source control. No test/solver time guard was increased.
+Complete desktop suites plus final focused fallback controls, vets, lint, Python,
+PRD and inventory checks are retained separately. A fresh 0.199.0 /277 candidate
+and matching agent are being built from clean committed source; older packages
+and all 27 protected package/SDK identities remain exact.

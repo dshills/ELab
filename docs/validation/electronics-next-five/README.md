@@ -2,7 +2,8 @@
 
 October 27, 2026. Implemented in order with electrical reference tests, working
 examples, shared user/AI commands, and complete Prism reviews through Anthropic
-Claude Opus 5.5. No source upload/push or solver-limit increase.
+Claude Opus 5.5. No repository push, release upload or solver-limit increase. Review diffs were
+sent to the explicitly authorized Anthropic provider.
 
 | Item | Implementation commit | Evidence and review dispositions |
 | --- | --- | --- |
@@ -26,3 +27,21 @@ hold; it measures observed data without inferring an unseen final steady state.
 Routed/software tests do not qualify native OS queue or hardware-rate acceptance.
 Original native checks 3/6/9/11, participant and clean-account gates remain open.
 Old qualified downloads/candidates, owner projects and sessions remain preserved.
+
+## Combined source checks
+
+[Application matrix](qualification/application-report.json): the complete portable
+race invocation passed every package except three relay/sensor time-guard cases.
+All three passed together in an exact-source isolated race control (3.327 s).
+This is aggregate coverage, not a falsely clean single invocation. Raw full and
+isolated receipts are retained. All complete ordinary/offscreen desktop suites
+passed (361/498 top-level; 885/1556 including subtests) before the narrow resistive
+fallback; final focused controls pass both drivers after that correction. All vets,
+lint/imports, 77 Python tests and PRD/source-inventory verification pass. No solver
+limit changed. Native OS queue/hardware acceptance is separate.
+
+The first portable attempt had blocked Unix sockets, obsolete test metadata and
+a preview-test panic. The corrected full run completed all tests; the focused
+controls close its three resource-time refusals. A mistakenly named inventory
+script was a controller-only failed invocation, excluded from passing evidence;
+the actual Go inventory verifier is used.
