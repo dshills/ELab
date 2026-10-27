@@ -67,7 +67,11 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, device := range r.Controls {
 		hasRelay = hasRelay || device.Kind == "relay"
 	}
-	if len(r.Transformers) > 0 || len(r.Inductors) > 0 || hasRelay || len(r.Motors) > 0 || len(r.Batteries) > 0 {
+	hasProfile := false
+	for _, q := range r.Transistors {
+		hasProfile = hasProfile || q.Model.ID == TransistorProfileModelID+".npn" || q.Model.ID == TransistorProfileModelID+".pnp"
+	}
+	if hasProfile || len(r.Speakers) > 0 || len(r.Transformers) > 0 || len(r.Inductors) > 0 || hasRelay || len(r.Motors) > 0 || len(r.Batteries) > 0 {
 		p.Energy = 0
 		for _, part := range r.Inductors {
 			p.Energy += part.Energy
@@ -82,6 +86,14 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, b := range r.Batteries {
 		p.Energy += b.Energy
 	}
+	for _, q := range r.Transistors {
+		p.Energy += q.JunctionEnergy
+	}
+	// Public storage arrays exclude private speaker/profile elements. Add
+	// their one public energy summary once, rather than losing or doubling it.
+	for _, q := range r.Speakers {
+		p.Energy += q.Energy
+	}
 	for _, s := range r.Sounds {
 		p.Energy += s.Energy
 	}
@@ -93,6 +105,11 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		for k, pin := range shiftPins {
 			currents[u.ID+"."+pin] = u.PinCurrents[k]
 		}
+	}
+	for _, u := range r.Speakers {
+		currents[u.ID] = u.Current
+		currents[u.ID+".positive"] = u.Current
+		currents[u.ID+".negative"] = -u.Current
 	}
 	for _, u := range r.Sounds {
 		currents[u.ID] = u.Current

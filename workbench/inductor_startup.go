@@ -44,6 +44,12 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "opamp":
+			// Inputs exchange current only through the differential resistance.
+			// Output and rails have their own physical bleed/drive/supply paths.
+			join(p, "noninverting", "inverting")
+			join(p, "out", "vminus")
+			join(p, "vplus", "vminus")
 		case "shift-register":
 			for _, pin := range shiftPins {
 				join(p, pin, "gnd")

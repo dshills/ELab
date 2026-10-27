@@ -79,22 +79,20 @@ type toleranceJob struct {
 
 func defaultTolerance(g Graph) ToleranceSettings {
 	p := ToleranceSettings{Mode: "ac-gain", Trials: 16, Seed: 1, Frequency: 1000, Resistance: .05, Capacitance: .1, Beta: .2}
-	for _, s := range dcSourceLevels(g) {
-		p.SourceID = s.ID
-		break
-	}
-	for _, v := range probeInventory(g) {
-		if len(v.ID) > 2 && v.ID[:2] == "v:" {
-			p.ProbeID = v.ID
-			break
+	// Derive defaults without rebuilding the full probe inventory on every
+	// live snapshot. These are the same first pin / C1 differential probes.
+	for _, c := range g.Components {
+		if p.SourceID == "" && IsVoltageSource(c.Kind) && c.Kind != "battery" {
+			p.SourceID = c.ID
+		}
+		if p.ProbeID == "" && len(c.Terminals) > 0 {
+			p.ProbeID = "v:" + c.ID + "." + c.Terminals[0]
+		}
+		if c.ID == "C1" && len(c.Terminals) == 2 {
+			p.ProbeID = "v:C1"
 		}
 	}
-	for _, v := range probeInventory(g) {
-		if v.ID == "v:C1" {
-			p.ProbeID = v.ID
-			break
-		}
-	}
+
 	return p
 }
 func cloneToleranceResult(r *ToleranceResult) *ToleranceResult {

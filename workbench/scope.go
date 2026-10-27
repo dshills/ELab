@@ -96,7 +96,7 @@ func probeInventory(g Graph) []Probe {
 				ref := p.ID + "." + pin
 				out = append(out, Probe{"i:" + ref, ref + " into register", "A", ref, "into register"})
 			}
-		case "piezo", "active-buzzer":
+		case "speaker", "piezo", "active-buzzer":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " sounder current", "A", p.ID + ".positive", "positive to negative"})
 		case "pwm-controller":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " PWM output", "V", p.ID + ".out", p.ID + ".gnd"})

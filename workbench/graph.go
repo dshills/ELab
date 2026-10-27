@@ -159,6 +159,7 @@ type Part struct {
 func libraryParts() []Part {
 	return []Part{
 		{Kind: "shift-register", Name: "8-bit shift / latch register", Terminals: append([]string{}, shiftPins...), Model: ExtendedModelID},
+		{Kind: "speaker", Name: "Loudspeaker", Terminals: []string{"positive", "negative"}, Model: ExtendedModelID},
 		{Kind: "piezo", Name: "Piezo sounder", Terminals: []string{"positive", "negative"}, Model: ExtendedModelID},
 		{Kind: "active-buzzer", Name: "Active buzzer", Terminals: []string{"positive", "negative"}, Model: ExtendedModelID},
 		{Kind: "pwm-controller", Name: "PWM controller", Terminals: append([]string{}, pwmPins...), Model: ExtendedModelID},
@@ -342,7 +343,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 	p := Point{}
 	found := true
 	switch c.Kind {
-	case "pwm-controller", "shift-register", "piezo", "active-buzzer":
+	case "speaker", "pwm-controller", "shift-register", "piezo", "active-buzzer":
 		p, found = ExtendedTerminalLocal(c.Kind, name)
 	case "hbridge":
 		p, found = HBridgeTerminalLocal(name)
@@ -537,7 +538,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 				hasSwitch = true
 			}
 			sources = append(sources, c)
-		case "shift-register", "piezo", "active-buzzer", "pwm-controller", "hbridge", "transformer", "optocoupler", "dc-motor", "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
+		case "speaker", "shift-register", "piezo", "active-buzzer", "pwm-controller", "hbridge", "transformer", "optocoupler", "dc-motor", "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true

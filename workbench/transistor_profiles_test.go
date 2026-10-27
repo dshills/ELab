@@ -45,6 +45,14 @@ func TestTransistorProfileCaptureHistoryAndPersistence(t *testing.T) {
 		t.Fatal(before.Diagnostics)
 	}
 	q := before.Mixed.Transistors[0]
+	c, _, d := (Graph{Components: before.Components, Wires: before.Wires}).Compile()
+	if d != nil {
+		t.Fatal(d)
+	}
+	sample := mixedSample(c, before.Mixed, 0)
+	if math.Abs(sample.Energy-q.JunctionEnergy) > 1e-20 {
+		t.Fatal("scope energy excluded private junctions", sample.Energy, q.JunctionEnergy)
+	}
 	if q.Model.ID != TransistorProfileModelID+".npn" || q.JunctionEnergy <= 0 || q.JunctionBECurrent != 0 || q.JunctionBCCurrent != 0 || math.Abs(q.EmitterCurrent-q.BaseCurrent-q.CollectorCurrent) > 1e-14 {
 		t.Fatal("biased junction startup", q)
 	}
@@ -230,5 +238,33 @@ func TestTransistorProfileBiasDoesNotImposeRedundantJunctionVoltages(t *testing.
 	}
 	if _, _, d := g.Compile(); d == nil || d.Code != "mixed-limit" {
 		t.Fatal("existing storage budget weakened", d)
+	}
+}
+
+func TestTransistorProfileBiasIgnoresExperimentCapacitorInitialVoltage(t *testing.T) {
+	d, ok := findExample("transistor-profile")
+	if !ok {
+		t.Fatal("missing profile fixture")
+	}
+	c, _, diagnostic := d.graph.Compile()
+	if diagnostic != nil {
+		t.Fatal(diagnostic)
+	}
+	var reference *MixedResult
+	for _, initial := range []float64{0, 12, -12} {
+		settings := d.settings
+		settings.InitialVoltage = initial
+		k, err := newSimulationKernel(t.Context(), kernelPlan{compiled: c, settings: settings, mode: "auto", run: 1, revision: 1})
+		if err != nil {
+			t.Fatalf("global capacitor initial %g affected biased intrinsic startup: %v", initial, err)
+		}
+		if reference == nil {
+			reference = k.mixed.result
+		} else {
+			a, b := reference.Transistors[0], k.mixed.result.Transistors[0]
+			if math.Abs(a.VBE-b.VBE) > 1e-8 || math.Abs(a.VCE-b.VCE) > 1e-8 {
+				t.Fatal("intrinsic bias depended on an ignored global capacitor setting", initial, a, b)
+			}
+		}
 	}
 }

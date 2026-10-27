@@ -13,14 +13,14 @@ type ExtendedModel struct {
 	Dynamics string `json:"opamp_dynamics"`
 	Shift    string `json:"shift_register"`
 	Sound    string `json:"sound"`
+	Speaker  string `json:"loudspeaker,omitempty"`
 }
 
 func ExtendedDeviceModel() ExtendedModel {
-	return ExtendedModel{ExtendedModelID,
-		"Generic powered PWM clock: configurable 10..1000 Hz and 10..90 percent duty. Rise/fall each occupy 5 percent of a period. Duty includes the rising phase. Output uses complementary 50 ohm paths, 1 Gohm off bleed, 1 Mohm supply load and smooth supply enable from 2 to 3 V. No feedback compensation, current limit, temporal dead time, switching loss, noise or hardware rating. Buck examples simulate external switched power stages, not an averaged converter.",
-		"Optional dominant-pole and slew-limited compensation for the unchanged generic op-amp output stage. Gain-bandwidth and slew rate are saved settings; a private 1 nF compensation capacitor charges from the modeled rails, preserving KCL, energy and explicit dissipation. The output target remains bounded by the present rails even when stored compensation voltage outlasts a falling supply. Existing op-amps without dynamics retain their original equations. No fitted silicon identity, noise, offset, multiple poles, protection or thermal ratings.",
-		"Generic 8-bit serial-in parallel-out register with separate positive-edge shift and output-latch clocks, active-low shift clear, active-low parallel output enable, and serial cascade output independent of output enable. State starts cleared; power loss clears both registers. Sixteen internal D memories reuse sequential-v1 edge/guard laws; internal data uses ideal logic rails with explicit 1 Gohm loading, while finite 50 ohm drive is applied only at public Q/SERIAL outputs. A logic-v1 inverter maps active-low clear. Simultaneous shift/latch/cascade clocks sample pre-edge data. Parallel buffers use 50 ohm paths when enabled and 1 Gohm to their selected rail when disabled; OE interpolates across the declared 30/70 percent input interval. Serial has its own 50 ohm buffer. No package pinout, propagation or setup/hold timing, metastability, current/thermal ratings.",
-		"Generic capacitive piezo sounder and DC-powered active buzzer. Passive piezo uses explicit capacitance and leakage; acoustic preview is a normalized illustrative terminal-voltage signal, not calibrated SPL or a mechanical/room simulation. Active buzzer uses a passive voltage-dependent DC load and an ideal acoustic oscillator; no electrical oscillator ripple. Opening or simulating a project never plays audio. Preview rendering, playback, stopping and WAV export are explicit shared commands."}
+	return ExtendedModel{ID: ExtendedModelID, PWM: "Generic powered PWM clock: configurable 10..1000 Hz and 10..90 percent duty. Rise/fall each occupy 5 percent of a period. Duty includes the rising phase. Output uses complementary 50 ohm paths, 1 Gohm off bleed, 1 Mohm supply load and smooth supply enable from 2 to 3 V. No feedback compensation, current limit, temporal dead time, switching loss, noise or hardware rating. Buck examples simulate external switched power stages, not an averaged converter.",
+		Dynamics: "Optional dominant-pole and slew-limited compensation for the unchanged generic op-amp output stage. Gain-bandwidth and slew rate are saved settings; a private 1 nF compensation capacitor charges from the modeled rails, preserving KCL, energy and explicit dissipation. The output target remains bounded by the present rails even when stored compensation voltage outlasts a falling supply. Existing op-amps without dynamics retain their original equations. No fitted silicon identity, noise, offset, multiple poles, protection or thermal ratings.",
+		Shift:    "Generic 8-bit serial-in parallel-out register with separate positive-edge shift and output-latch clocks, active-low shift clear, active-low parallel output enable, and serial cascade output independent of output enable. State starts cleared; power loss clears both registers. Sixteen internal D memories reuse sequential-v1 edge/guard laws; internal data uses ideal logic rails with explicit 1 Gohm loading, while finite 50 ohm drive is applied only at public Q/SERIAL outputs. A logic-v1 inverter maps active-low clear. Simultaneous shift/latch/cascade clocks sample pre-edge data. Parallel buffers use 50 ohm paths when enabled and 1 Gohm to their selected rail when disabled; OE interpolates across the declared 30/70 percent input interval. Serial has its own 50 ohm buffer. No package pinout, propagation or setup/hold timing, metastability, current/thermal ratings.",
+		Sound:    "Generic capacitive piezo sounder and DC-powered active buzzer. Passive piezo uses explicit capacitance and leakage; acoustic preview is a normalized illustrative terminal-voltage signal, not calibrated SPL or a mechanical/room simulation. Active buzzer uses a passive voltage-dependent DC load and an ideal acoustic oscillator; no electrical oscillator ripple. Opening or simulating a project never plays audio. Preview rendering, playback, stopping and WAV export are explicit shared commands."}
 }
 
 type PWMConfig struct {
@@ -36,6 +36,7 @@ type SoundConfig struct {
 	Frequency   float64 `json:"frequency_hz"`
 }
 type DeviceParameters struct {
+	Speaker  *SpeakerConfig     `json:"speaker,omitempty"`
 	Bipolar  *TransistorProfile `json:"bipolar,omitempty"`
 	PWM      *PWMConfig         `json:"pwm,omitempty"`
 	Dynamics *OpAmpDynamics     `json:"opamp_dynamics,omitempty"`
@@ -47,6 +48,10 @@ func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
 		return nil
 	}
 	o := *p
+	if p.Speaker != nil {
+		v := *p.Speaker
+		o.Speaker = &v
+	}
 	if p.Bipolar != nil {
 		v := *p.Bipolar
 		o.Bipolar = &v
@@ -70,19 +75,26 @@ func hasDynamics(p Component) bool {
 }
 func isSoundKind(k string) bool { return k == "piezo" || k == "active-buzzer" }
 func isExtendedKind(k string) bool {
-	return k == "pwm-controller" || k == "shift-register" || isSoundKind(k)
+	return k == "speaker" || k == "pwm-controller" || k == "shift-register" || isSoundKind(k)
 }
 func extendedModelForGraph(g Graph) *ExtendedModel {
 	for _, p := range g.Components {
 		if isExtendedKind(p.Kind) || hasDynamics(p) {
 			m := ExtendedDeviceModel()
+			if hasSpeakers(g) {
+				m.Speaker = speakerDescription
+			}
 			return &m
 		}
 	}
 	return nil
 }
 func validateExtendedModel(g Graph, m *ExtendedModel) error {
-	if m != nil && *m != ExtendedDeviceModel() {
+	expected := ExtendedDeviceModel()
+	if hasSpeakers(g) {
+		expected.Speaker = speakerDescription
+	}
+	if m != nil && *m != expected {
 		return fmt.Errorf("unsupported extended device model")
 	}
 	if extendedModelForGraph(g) != nil && m == nil {
@@ -91,6 +103,10 @@ func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	return nil
 }
 func defaultDeviceParameters(p *Component) {
+	if p.Kind == "speaker" {
+		v := DefaultSpeakerConfig()
+		p.Device = &DeviceParameters{Speaker: &v}
+	}
 	if p.Kind == "pwm-controller" {
 		p.Device = &DeviceParameters{PWM: &PWMConfig{500, .45}}
 	}
@@ -101,12 +117,15 @@ func defaultDeviceParameters(p *Component) {
 func validateDeviceParameters(p Component) error {
 	d := p.Device
 	if d == nil {
-		if p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
+		if p.Kind == "speaker" || p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
 			return fmt.Errorf("device requires explicit parameters")
 		}
 		return nil
 	}
 	count := 0
+	if d.Speaker != nil {
+		count++
+	}
 	if d.Bipolar != nil {
 		count++
 	}
@@ -121,6 +140,9 @@ func validateDeviceParameters(p Component) error {
 	}
 	if count != 1 {
 		return fmt.Errorf("device parameters must match one component model")
+	}
+	if p.Kind == "speaker" && d.Speaker != nil {
+		return validateSpeaker(*d.Speaker)
 	}
 	if IsBipolarKind(p.Kind) && d.Bipolar != nil {
 		return validateTransistorProfile(*d.Bipolar)
@@ -157,6 +179,8 @@ func validateDeviceFields(raw json.RawMessage, p Component) error {
 		return err
 	}
 	switch {
+	case p.Device.Speaker != nil:
+		return paramsNested(f["device_parameters"], "speaker", &SpeakerConfig{}, speakerRequiredFields()...)
 	case p.Device.Bipolar != nil:
 		return paramsNested(f["device_parameters"], "bipolar", &TransistorProfile{}, "version", "forward_beta", "reverse_beta", "saturation_current_a", "early_voltage_v", "base_emitter_capacitance_f", "base_collector_capacitance_f")
 	case p.Device.PWM != nil:

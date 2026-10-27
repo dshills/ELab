@@ -9,10 +9,10 @@ func TestPartBrowserGroupsAndGlobalSearch(t *testing.T) {
 	s := New()
 	defer s.Close()
 	before := s.Snapshot()
-	if before.PartCategory != "common" || len(before.MatchingParts) != 6 || len(Library()) != 53 {
+	if before.PartCategory != "common" || len(before.MatchingParts) != 6 || len(Library()) != 54 {
 		t.Fatal("default catalog", before.PartCategory, len(before.MatchingParts))
 	}
-	expected := map[string]int{"common": 6, "all": 53, "sources": 5, "motors": 3, "passives": 9, "semiconductors": 10, "amplifiers": 4, "logic": 15, "switches": 4, "connections": 3}
+	expected := map[string]int{"common": 6, "all": 54, "sources": 5, "motors": 3, "passives": 10, "semiconductors": 10, "amplifiers": 4, "logic": 15, "switches": 4, "connections": 3}
 	seen := map[string]bool{}
 	for _, category := range before.PartCategories {
 		call(t, s, "parts.category.set", PartCategoryParams{category.ID}, "category-"+category.ID)
@@ -32,7 +32,7 @@ func TestPartBrowserGroupsAndGlobalSearch(t *testing.T) {
 			}
 		}
 	}
-	if len(seen) != 53 {
+	if len(seen) != 54 {
 		t.Fatal("missing parts", seen)
 	}
 	call(t, s, "parts.category.set", PartCategoryParams{"passives"}, "passives")
@@ -41,7 +41,7 @@ func TestPartBrowserGroupsAndGlobalSearch(t *testing.T) {
 		t.Fatal("search must escape browsing category")
 	}
 	call(t, s, "parts.search.set", SearchParams{"  "}, "clear")
-	if len(s.Snapshot().MatchingParts) != 9 {
+	if len(s.Snapshot().MatchingParts) != 10 {
 		t.Fatal("empty query did not restore category")
 	}
 	call(t, s, "parts.search.set", SearchParams{"battery"}, "alias")

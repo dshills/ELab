@@ -29,7 +29,7 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			for _, pin := range shiftPins {
 				set(pin, p.ID+"."+pin, 1)
 			}
-		case "piezo", "active-buzzer":
+		case "speaker", "piezo", "active-buzzer":
 			set("positive", p.ID, 1)
 			set("negative", p.ID, -1)
 		case "pwm-controller":

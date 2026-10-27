@@ -4,6 +4,8 @@ func partAliases(kind string) []string {
 	switch kind {
 	case "shift-register":
 		return []string{"74HC595", "serial", "SIPO", "latch", "cascade"}
+	case "speaker":
+		return []string{"audio", "loudspeaker", "voice coil", "resonance", "impedance", "sound"}
 	case "piezo", "active-buzzer":
 		return []string{"sound", "audio", "alarm", "tone"}
 	case "pwm-controller":
@@ -91,6 +93,8 @@ func partAliases(kind string) []string {
 }
 func partLimitations(kind string) string {
 	switch kind {
+	case "speaker":
+		return speakerDescription
 	case "shift-register":
 		return ExtendedDeviceModel().Shift
 	case "piezo", "active-buzzer":

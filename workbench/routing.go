@@ -64,7 +64,7 @@ func routeBody(p Component) routeRect {
 	switch p.Kind {
 	case "shift-register":
 		w, h = 95, 185
-	case "pwm-controller", "piezo", "active-buzzer", "hbridge":
+	case "speaker", "pwm-controller", "piezo", "active-buzzer", "hbridge":
 		w, h = 65, 75
 	case "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor":
 		w, h = 42, 42

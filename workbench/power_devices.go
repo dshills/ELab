@@ -184,6 +184,10 @@ func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 			parts = append(parts, lowerShift(&c, p)...)
 			continue
 		}
+		if p.Kind == "speaker" {
+			parts = append(parts, lowerSpeaker(&c, p)...)
+			continue
+		}
 		if isSoundKind(p.Kind) {
 			parts = append(parts, lowerSound(&c, p)...)
 			continue
@@ -316,6 +320,9 @@ func validateRecordedPower(c Compiled, g Graph, r *MixedResult) error {
 	return nil
 }
 func (n *mixedNetwork) restorePowerNodes(r *MixedResult, x []float64) error {
+	if err := n.restoreSpeakers(r, x); err != nil {
+		return err
+	}
 	if err := n.restoreJunctions(r, x); err != nil {
 		return err
 	}
@@ -374,6 +381,13 @@ type powerResourceUsage struct{ parts, caps, inductors, resistors, sources, node
 
 func powerResources(g Graph) (u powerResourceUsage) {
 	for _, p := range g.Components {
+		if p.Kind == "speaker" {
+			u.parts += 5
+			u.inductors += 2
+			u.caps++
+			u.resistors += 2
+			u.nodes += 2
+		}
 		if hasTransistorProfile(p) {
 			for _, v := range []float64{p.Device.Bipolar.CBE, p.Device.Bipolar.CBC} {
 				if v > 0 {

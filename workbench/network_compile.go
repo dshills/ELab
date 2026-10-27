@@ -26,7 +26,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		switch p.Kind {
 		case "shift-register":
 			sequential = append(sequential, p)
-		case "piezo", "active-buzzer":
+		case "speaker", "piezo", "active-buzzer":
 			bridges = append(bridges, p)
 		case "pwm-controller":
 			bridges = append(bridges, p)
@@ -123,11 +123,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			out.Analysis = NetworkTransientAnalysis
 		}
 	}
-	if len(inductors)+len(motors)+len(transformers) > 0 {
+	if hasSpeakers(g) || len(inductors)+len(motors)+len(transformers) > 0 {
 		out.Analysis = InductorAnalysis
 	}
 	for _, p := range bridges {
-		if p.Kind == "pwm-controller" && len(inductors)+len(motors)+len(transformers) == 0 {
+		if p.Kind == "pwm-controller" && !hasSpeakers(g) && len(inductors)+len(motors)+len(transformers) == 0 {
 			out.Analysis = WaveformAnalysis
 		}
 	}

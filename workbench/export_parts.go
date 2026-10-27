@@ -16,6 +16,14 @@ func schematicPartDescription(p Component) string {
 	if p.Unit != "" {
 		text += " · " + displayPartValue(p)
 	}
+	if p.Kind == "speaker" && p.Device != nil && p.Device.Speaker != nil {
+		c := p.Device.Speaker
+		text += fmt.Sprintf(" · coil R %.6g Ω · L %.6g H · fs %.6g Hz · motional R %.6g Ω · L %.6g H · %s", c.Resistance, c.Inductance, c.Resonance, c.MotionalResistance, c.MotionalInductance, c.Version)
+	}
+	if hasTransistorProfile(p) {
+		c := p.Device.Bipolar
+		text += fmt.Sprintf(" · β %.6g/%.6g · IS %.6g A · VA %.6g V · CBE %.6g F · CBC %.6g F · %s", c.ForwardBeta, c.ReverseBeta, c.SaturationCurrent, c.EarlyVoltage, c.CBE, c.CBC, c.Version)
+	}
 	if p.Kind == "transformer" {
 		c := p.Power.Transformer
 		polarity := "same dots"

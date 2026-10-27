@@ -1,0 +1,333 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "075828b358bd80e104ff8c7f22aaf452",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "9cbad84d42cc9d34e37e7a4301ddd73f5df241d1",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 7,
+      "medium": 3,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "b4b325abc16a88b8",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Speaker schema bounds may target wrong property paths",
+      "message": "Every other device command here looks up parameters with a `parameters.` prefix, e.g. `parameters.frequency_hz` and `parameters.forward_beta`. `addSpeakerSchema` looks up bare names such as `coil_resistance_ohm` and `version`. If the speaker command nests its fields under `parameters` like the others, `inputProperty` returns nil. The schema would then silently get no minimum, maximum, unit or version enum. That bounds information is part of the published command contract.",
+      "suggestion": "Use the same property path convention as the other commands, e.g. `parameters.coil_resistance_ohm` and `parameters.version`, if the speaker input is nested under `parameters`. Also add a test asserting the bounds appear in the generated schema.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 88,
+            "end": 101
+          }
+        }
+      ],
+      "tags": [
+        "schema",
+        "contract"
+      ],
+      "evidence": "}{{\"coil_resistance_ohm\", \"ohm\", 1, 100}, {\"coil_inductance_h\", \"H\", 1e-5, .1}, {\"resonance_hz\", \"Hz\", 20, 1000}, {\"motional_resistance_ohm\", \"ohm\", 1, 1000}, {\"motional_inductance_h\", \"H\", .0001, 1}} {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d926175cd3a669f9",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Junction energy added unconditionally may double-count",
+      "message": "The other storage terms are recomputed only inside the `hasProfile || ...` block, after `p.Energy` is reset to 0. Transistor `JunctionEnergy` is instead added unconditionally, outside that block. When the block does not run, `p.Energy` keeps the value set earlier in this function, and junction energy is added on top. If that earlier value already includes transistor or capacitor storage, the reported energy is double-counted. This would affect circuits without profiled transistors.",
+      "suggestion": "Add `JunctionEnergy` only where `p.Energy` is rebuilt from component arrays, i.e. inside the reset block. Alternatively, confirm that the earlier energy calculation never includes junction storage, and add a test covering a circuit without profiled transistors.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/mixed_transient.go",
+          "lines": {
+            "start": 89,
+            "end": 91
+          }
+        }
+      ],
+      "tags": [
+        "energy",
+        "double-count"
+      ],
+      "evidence": "\tfor _, q := range r.Transistors {\n\t\tp.Energy += q.JunctionEnergy\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "fe09c29014fb7f19",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible nil dereference of Device.Speaker during lowering",
+      "message": "`lowerSpeaker` reads `p.Device.Speaker` fields with no nil check. `speakerCapacitance` does the same. Elsewhere, `speakerResult` and `validateRecordedSpeakers` explicitly guard against a nil Device or Speaker, so a nil value appears to be a case the code expects. If a speaker component reaches lowering without device parameters, this code panics.",
+      "suggestion": "Add a nil check in `lowerSpeaker`, or make `lowerPowerDevices` return an error for a speaker that has no device parameters.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/speaker.go",
+          "lines": {
+            "start": 47,
+            "end": 48
+          }
+        }
+      ],
+      "tags": [
+        "nil-deref",
+        "location-corrected"
+      ],
+      "evidence": "\tv := p.Device.Speaker\n\tcoil, motion := speakerPrivate(p.ID, \"coil\"), speakerPrivate(p.ID, \"motion\")",
+      "fix": {
+        "before": "\tv := p.Device.Speaker\n\tcoil, motion := speakerPrivate(p.ID, \"coil\"), speakerPrivate(p.ID, \"motion\")",
+        "after": "\tif p.Device == nil || p.Device.Speaker == nil {\n\t\treturn []Component{p}\n\t}\n\tv := p.Device.Speaker\n\tcoil, motion := speakerPrivate(p.ID, \"coil\"), speakerPrivate(p.ID, \"motion\")"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "19adc3735130a1a9",
+      "severity": "low",
+      "category": "correctness",
+      "title": "decimalControlSI returns NaN which is forwarded to commands",
+      "message": "On a parse error, `decimalControlSI` returns NaN. The callers pass that NaN straight into the device config and send it as a command. A NaN parameter can poison the simulation, or make the command fail with an unclear error. It is not silently ignored. NaN or Inf inputs from the number field would take this path.",
+      "suggestion": "Fall back to plain multiplication, e.g. `return value * math.Pow10(exponent)`. Alternatively, have callers skip `apply` when the result is not finite.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "desktop/extended_controls.go",
+          "lines": {
+            "start": 175,
+            "end": 177
+          }
+        }
+      ],
+      "tags": [
+        "numeric",
+        "robustness",
+        "location-corrected"
+      ],
+      "evidence": "\tif err != nil {\n\t\treturn math.NaN()\n\t}",
+      "fix": {
+        "before": "\tif err != nil {\n\t\treturn math.NaN()\n\t}",
+        "after": "\tif err != nil {\n\t\treturn value * math.Pow10(exponent)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "daf676a3f82d88eb",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Preview normalization amplifies near-floor residue to full gain",
+      "message": "Peak normalization scales any signal just above the 1 µV floor to full selected gain. A barely-driven speaker, such as one carrying only a few µV of solver residue or startup transient, then sounds as loud as a fully driven one. Previews of tiny residues become indistinguishable from real output, which undermines the stated purpose of the floor.",
+      "suggestion": "Use a more meaningful floor, for example one relative to the supply or input amplitude. Alternatively, cap the normalization gain, e.g. `scale := 1/math.Max(peak, referenceVolts)`, so that very small signals stay quiet.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/audio.go",
+          "lines": {
+            "start": 302,
+            "end": 307
+          }
+        }
+      ],
+      "tags": [
+        "audio",
+        "normalization"
+      ],
+      "evidence": "\tif peak \u003c speakerPreviewFloorVolts {\n\t\treturn\n\t}\n\tfor i, v := range samples {\n\t\tpcm[i] = int16(math.Round(v / peak * gain * audioPreviewFade(i, len(samples)) * 32767))\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6383c1979942446d",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Duplicated speaker/sound kind predicate",
+      "message": "The check `isSoundKind(x) || x == \"speaker\"` is repeated in three functions in this file. Other places in this diff list speaker kinds separately as well. A future change could update one copy and miss the others, which would cause symbol, terminal and label behavior to diverge.",
+      "suggestion": "Introduce a helper such as `func isTwoTerminalSoundSymbol(kind string) bool { return isSoundKind(kind) || kind == \"speaker\" }` and use it in all three places.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/extended_symbol.go",
+          "lines": {
+            "start": 16,
+            "end": 28
+          }
+        }
+      ],
+      "tags": [
+        "duplication"
+      ],
+      "evidence": "\tif isSoundKind(kind) || kind == \"speaker\" {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d437b3586210c7af",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Speaker restore runs before other node restores it depends on",
+      "message": "`restoreSpeakers` now runs before `restoreJunctions` and `restoreDynamics`. It derives the private coil and motion node voltages from the positive and negative pin voltages already in `x`. If either terminal net is one that a later restore step overwrites, the derived private node voltages will be stale.",
+      "suggestion": "Call `restoreSpeakers` after the other restore steps in `restorePowerNodes`, so that the terminal node voltages are final before the private nodes are derived from them.",
+      "confidence": 0.25,
+      "locations": [
+        {
+          "path": "workbench/speaker.go",
+          "lines": {
+            "start": 164,
+            "end": 164
+          }
+        }
+      ],
+      "tags": [
+        "ordering",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tx[coil] = voltage(x, n.pin(p, \"positive\")) - p.Device.Speaker.Resistance*q.Current",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "3214da2cbdd668dc",
+      "severity": "low",
+      "category": "testing",
+      "title": "Fake audio player state read without synchronization",
+      "message": "The test reads `player.plays` and `player.data` directly while the service may write them from its own goroutines (render and play workers). Unless `fakeAudioPlayer` synchronizes access, this can be flagged by `-race` or produce flaky results.",
+      "suggestion": "Read the player's state through a mutex-protected accessor, or confirm that all writes happen synchronously before `call` returns.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/speaker_test.go",
+          "lines": {
+            "start": 142,
+            "end": 142
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "flaky",
+        "location-corrected"
+      ],
+      "evidence": "\tif audio.Status != \"completed\" || audio.Playing || player.plays != 0 {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "2b6b4e1c12958fd5",
+      "severity": "low",
+      "category": "testing",
+      "title": "Uninformative failure when capability count is wrong",
+      "message": "When `err` is nil but `len(caps) != 1`, the test fails with only `\u003cnil\u003e` as its message, which makes the failure hard to diagnose.",
+      "suggestion": "Include the capability count and context in the failure message.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/speaker_test.go",
+          "lines": {
+            "start": 303,
+            "end": 306
+          }
+        }
+      ],
+      "tags": [
+        "diagnostics",
+        "location-corrected"
+      ],
+      "evidence": "\tcaps, err := detailedCapabilities(\"speaker.configure\")\n\tif err != nil || len(caps) != 1 {\n\t\tt.Fatal(err)\n\t}",
+      "fix": {
+        "before": "\tcaps, err := detailedCapabilities(\"speaker.configure\")\n\tif err != nil || len(caps) != 1 {\n\t\tt.Fatal(err)\n\t}",
+        "after": "\tcaps, err := detailedCapabilities(\"speaker.configure\")\n\tif err != nil || len(caps) != 1 {\n\t\tt.Fatal(\"speaker.configure capabilities\", len(caps), err)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d69a715911a38a8b",
+      "severity": "low",
+      "category": "testing",
+      "title": "Compile failure can panic on c.Analysis",
+      "message": "If `Compile` returns diagnostics, the compiled result may be nil or zero. The failure message still reads `c.Analysis`, so a nil pointer would panic instead of reporting the diagnostics. The message also wrongly blames an analysis overwrite.",
+      "suggestion": "Check `err` first with its own `t.Fatal(err)`, then compare `c.Analysis` separately.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/speaker_test.go",
+          "lines": {
+            "start": 341,
+            "end": 343
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness",
+        "location-corrected",
+        "unverified"
+      ],
+      "evidence": "\t\tc, _, err := g.Compile()\n\t\tif err != nil || c.Analysis != Timer555Analysis {\n\t\t\tt.Fatal(\"speaker overwrote latch analysis\", c.Analysis, err)",
+      "fix": {
+        "before": "\t\tc, _, err := g.Compile()\n\t\tif err != nil || c.Analysis != Timer555Analysis {\n\t\t\tt.Fatal(\"speaker overwrote latch analysis\", c.Analysis, err)",
+        "after": "\t\tc, _, err := g.Compile()\n\t\tif err != nil {\n\t\t\tt.Fatal(\"compile\", err)\n\t\t}\n\t\tif c.Analysis != Timer555Analysis {\n\t\t\tt.Fatal(\"speaker overwrote latch analysis\", c.Analysis)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 87903,
+    "totalMs": 23250
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 41,
+    "bytes": 145251,
+    "chunks": 7,
+    "llmCalls": 5,
+    "cacheHit": false,
+    "cachedChunks": 2,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 63551,
+        "output": 8884,
+        "costUSD": 0.431884
+      }
+    ],
+    "widenedFiles": 17,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

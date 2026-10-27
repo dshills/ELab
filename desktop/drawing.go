@@ -301,7 +301,7 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		b.stroke(c, width, transformed...)
 	}
 	switch part.Kind {
-	case "pwm-controller", "shift-register", "piezo", "active-buzzer":
+	case "speaker", "pwm-controller", "shift-register", "piezo", "active-buzzer":
 		for _, path := range workbench.ExtendedSymbolPaths(part.Kind) {
 			points := make([]canvas.Point, len(path))
 			for k, p := range path {

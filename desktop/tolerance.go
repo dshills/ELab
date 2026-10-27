@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/dshills/elab/workbench"
-	"github.com/dshills/vellum/ui"
 	"strconv"
 	"strings"
+
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/ui"
 )
 
 func (s *screen) toleranceInspector(state workbench.Snapshot) []ui.Node {

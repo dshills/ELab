@@ -1,0 +1,336 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "8fe38bc4849a8728dba60ca59ff83f1f",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "9cbad84d42cc9d34e37e7a4301ddd73f5df241d1",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 5,
+      "medium": 5,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "54b6c7a22eb24824",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Peak normalization amplifies numerical noise to full scale",
+      "message": "Speaker preview samples are normalized whenever `peak \u003e 0`. If the speaker is essentially silent (DC bias settling, solver round-off around 1e-12 V), that residue is scaled to full gain. The preview then plays loud noise or clicks where the circuit is actually quiet, which misrepresents the circuit's behavior.",
+      "suggestion": "Only normalize when the peak exceeds a meaningful threshold, e.g. `if peak \u003e 1e-6`, or cap the normalization gain. Otherwise output silence or the unnormalized samples.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/audio.go",
+          "lines": {
+            "start": 291,
+            "end": 296
+          }
+        }
+      ],
+      "tags": [
+        "audio",
+        "normalization"
+      ],
+      "evidence": "\t\tif peak \u003e 0 {\n\t\t\tfor i, v := range speakerSamples {\n\t\t\t\tfade := math.Min(1, math.Min(float64(i)/60, float64(count-1-i)/60))\n\t\t\t\tpcm[i] = int16(math.Round(v / peak * p.Gain * fade * 32767))",
+      "fix": {
+        "before": "\t\tif peak \u003e 0 {",
+        "after": "\t\tif peak \u003e 1e-9 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b4b325abc16a88b8",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Speaker schema bounds may target wrong property paths",
+      "message": "Every other device command here looks up parameters with a `parameters.` prefix, e.g. `parameters.frequency_hz` and `parameters.forward_beta`. `addSpeakerSchema` looks up bare names such as `coil_resistance_ohm` and `version`. If the speaker command nests its fields under `parameters` like the others, `inputProperty` returns nil. The schema would then silently get no minimum, maximum, unit or version enum. That bounds information is part of the published command contract.",
+      "suggestion": "Use the same property path convention as the other commands, e.g. `parameters.coil_resistance_ohm` and `parameters.version`, if the speaker input is nested under `parameters`. Also add a test asserting the bounds appear in the generated schema.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 88,
+            "end": 101
+          }
+        }
+      ],
+      "tags": [
+        "schema",
+        "contract"
+      ],
+      "evidence": "}{{\"coil_resistance_ohm\", \"ohm\", 1, 100}, {\"coil_inductance_h\", \"H\", 1e-5, .1}, {\"resonance_hz\", \"Hz\", 20, 1000}, {\"motional_resistance_ohm\", \"ohm\", 1, 1000}, {\"motional_inductance_h\", \"H\", .0001, 1}} {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f73cd8efc96cb137",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Speaker energy likely double-counted in trace total",
+      "message": "mixed.go says the speaker's R/L/C primitives already account for storage and that the speaker result is only a public summary. mixedSample adds energy from r.Inductors and r.Capacitors, which likely include those primitives, and then adds Speaker.Energy as well. If so, the stored energy of every speaker is counted twice in the trace's total energy.",
+      "suggestion": "Do not add speaker summary energy to the total when the primitives are already reported in r.Inductors and r.Capacitors. Alternatively, exclude the speaker's internal primitives from those loops.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/mixed_transient.go",
+          "lines": {
+            "start": 94,
+            "end": 96
+          }
+        }
+      ],
+      "tags": [
+        "energy",
+        "double-count"
+      ],
+      "evidence": "\tfor _, q := range r.Speakers {\n\t\tp.Energy += q.Energy\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "00fa7509390e827a",
+      "severity": "medium",
+      "category": "bug",
+      "title": "PWM rule overrides speaker-induced InductorAnalysis",
+      "message": "Speakers now force InductorAnalysis, but the following loop still switches a circuit with a pwm-controller to WaveformAnalysis whenever there are no inductors, motors or transformers. A PWM controller driving a speaker therefore drops back to WaveformAnalysis, and the speaker's voice-coil inductance and motional dynamics are lost.",
+      "suggestion": "Add the speaker condition to the PWM downgrade check, e.g. `p.Kind == \"pwm-controller\" \u0026\u0026 !hasSpeakers(g) \u0026\u0026 len(inductors)+len(motors)+len(transformers) == 0`.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 126,
+            "end": 131
+          }
+        }
+      ],
+      "tags": [
+        "analysis-selection",
+        "speaker"
+      ],
+      "evidence": "if hasSpeakers(g) || len(inductors)+len(motors)+len(transformers) \u003e 0 {\n\t\tout.Analysis = InductorAnalysis\n\t}\n\tfor _, p := range bridges {\n\t\tif p.Kind == \"pwm-controller\" \u0026\u0026 len(inductors)+len(motors)+len(transformers) == 0 {\n\t\t\tout.Analysis = WaveformAnalysis",
+      "fix": {
+        "before": "\t\tif p.Kind == \"pwm-controller\" \u0026\u0026 len(inductors)+len(motors)+len(transformers) == 0 {",
+        "after": "\t\tif p.Kind == \"pwm-controller\" \u0026\u0026 !hasSpeakers(g) \u0026\u0026 len(inductors)+len(motors)+len(transformers) == 0 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "54c8ef8a4c8b3b22",
+      "severity": "medium",
+      "category": "bug",
+      "title": "x",
+      "message": "`speakerResult` and `restoreSpeakers` only check the upper bound of `inductorIndex` and `capacitorIndex`. In DC mode the comment says capacitors have no current slot. If that is signalled with a negative index, `x[index]` panics instead of producing an invalid result or an error. The function treats these slots as untrusted (recorded data) everywhere else, so the lower bound should be checked too.",
+      "suggestion": "Check `index \u003c 0 || index \u003e= len(x)` everywhere an index is taken from `inductorIndex` or `capacitorIndex`, in both `speakerResult` and `restoreSpeakers`.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/speaker.go",
+          "lines": {
+            "start": 127,
+            "end": 130
+          }
+        }
+      ],
+      "tags": [
+        "bounds",
+        "panic",
+        "location-corrected"
+      ],
+      "evidence": "\t\tindex := n.capacitorIndex(k)\n\t\tif index \u003e= len(x) {\n\t\t\treturn invalidSpeakerResult(p.ID)\n\t\t}",
+      "fix": {
+        "before": "\t\tindex := n.capacitorIndex(k)\n\t\tif index \u003e= len(x) {\n\t\t\treturn invalidSpeakerResult(p.ID)\n\t\t}",
+        "after": "\t\tindex := n.capacitorIndex(k)\n\t\tif index \u003c 0 || index \u003e= len(x) {\n\t\t\treturn invalidSpeakerResult(p.ID)\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f98b9d01e36e79d1",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Numeric rounding gated on ID string prefix",
+      "message": "The generic `field` helper chooses float32→decimal rounding by checking prefixes of the control ID string. This is fragile: renaming an ID silently changes numeric behavior. Other controls are left inconsistent, e.g. `sound-capacitance` still uses `v / 1e9`, which can produce inexact values the new path was meant to avoid.",
+      "suggestion": "Apply the decimal-preserving float32→float64 conversion to all fields unconditionally, or add an explicit parameter to `field`. Use `decimalControlSI` for the remaining unit conversions as well (sound capacitance, PWM duty).",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/extended_controls.go",
+          "lines": {
+            "start": 18,
+            "end": 18
+          }
+        }
+      ],
+      "tags": [
+        "consistency",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\tif strings.HasPrefix(id, \"speaker-\") || strings.HasPrefix(id, \"transistor-\") {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "beabdb897ca4e7f5",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Fallback returns unscaled value",
+      "message": "When parsing fails, `decimalControlSI` returns the input unchanged. That skips the unit scaling. For example, a value meant to be multiplied by 1e-15 would come back 1e15 times too large. Parsing fails for non-finite inputs such as NaN or ±Inf, because `FormatFloat` yields \"NaN\" or \"+Inf\" and appending an exponent produces an unparsable string.",
+      "suggestion": "Make the fallback scale the value instead of returning it unscaled, e.g. `return value * math.Pow10(exponent)`. Alternatively, reject non-finite values before formatting. Add the `math` import if needed.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "desktop/extended_controls.go",
+          "lines": {
+            "start": 172,
+            "end": 178
+          }
+        }
+      ],
+      "tags": [
+        "units",
+        "error-handling"
+      ],
+      "evidence": "\tv, err := strconv.ParseFloat(strconv.FormatFloat(value, 'f', -1, 64)+\"e\"+strconv.Itoa(exponent), 64)\n\tif err != nil {\n\t\treturn value\n\t}",
+      "fix": {
+        "before": "\tv, err := strconv.ParseFloat(strconv.FormatFloat(value, 'f', -1, 64)+\"e\"+strconv.Itoa(exponent), 64)\n\tif err != nil {\n\t\treturn value\n\t}",
+        "after": "\tv, err := strconv.ParseFloat(strconv.FormatFloat(value, 'f', -1, 64)+\"e\"+strconv.Itoa(exponent), 64)\n\tif err != nil {\n\t\treturn value * math.Pow10(exponent)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "65c5f9420c8e9626",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Duplicated fade logic and redundant PCM writes for speaker",
+      "message": "For speakers, the main loop computes and writes clamped PCM values that are then overwritten by the normalization pass. The fade formula is also duplicated in both places. This is wasted work, and the two copies of the fade can drift apart.",
+      "suggestion": "For speakers, skip the PCM write in the main loop. Factor the fade into a helper, e.g. `fadeAt(i, count)`, and use it in both places.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/audio.go",
+          "lines": {
+            "start": 292,
+            "end": 292
+          }
+        }
+      ],
+      "tags": [
+        "duplication",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\tfade := math.Min(1, math.Min(float64(i)/60, float64(count-1-i)/60))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ce394ebf3a3cf2bd",
+      "severity": "low",
+      "category": "testing",
+      "title": "Test silently passes on budget refusal",
+      "message": "The test passes as soon as the first advance hits the integration budget. In that case it checks no speaker behaviour at all, so the test can stay green even if the speaker stamping regresses badly enough that every step fails.",
+      "suggestion": "Require at least one accepted step before tolerating the budget refusal. Alternatively, assert on the specific expected refusal and use t.Skip so the lack of coverage is visible.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/speaker_test.go",
+          "lines": {
+            "start": 266,
+            "end": 271
+          }
+        }
+      ],
+      "tags": [
+        "weak-assertion"
+      ],
+      "evidence": "t.Log(\"Stiff all-discrete/LC startup reached the existing integration guard; no progress or waveform qualification claimed:\", budget.code)\n\t\t\treturn",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "74406ade0cf20aa9",
+      "severity": "low",
+      "category": "bug",
+      "title": "Possible nil dereference when compile fails",
+      "message": "If Compile returns a nil compiled circuit with a non-nil diagnostic, `c.Analysis` is still read, both in the condition and in the t.Fatal arguments. The test would then panic instead of reporting the compile failure.",
+      "suggestion": "Check the error first and fail with it. Inspect c.Analysis only after compilation succeeds.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/speaker_test.go",
+          "lines": {
+            "start": 338,
+            "end": 339
+          }
+        }
+      ],
+      "tags": [
+        "nil-deref",
+        "test",
+        "location-corrected"
+      ],
+      "evidence": "if err != nil || c.Analysis != Timer555Analysis {\n\t\t\tt.Fatal(\"speaker overwrote latch analysis\", c.Analysis, err)",
+      "fix": {
+        "before": "if err != nil || c.Analysis != Timer555Analysis {\n\t\t\tt.Fatal(\"speaker overwrote latch analysis\", c.Analysis, err)",
+        "after": "if err != nil {\n\t\t\tt.Fatal(\"compile failed\", err)\n\t\t}\n\t\tif c.Analysis != Timer555Analysis {\n\t\t\tt.Fatal(\"speaker overwrote latch analysis\", c.Analysis, err)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 113469,
+    "totalMs": 24887
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 38,
+    "bytes": 141177,
+    "chunks": 7,
+    "llmCalls": 7,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 85318,
+        "output": 10959,
+        "costUSD": 0.560452
+      }
+    ],
+    "widenedFiles": 17,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

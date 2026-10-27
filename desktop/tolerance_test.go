@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/dshills/elab/workbench"
-	"github.com/dshills/vellum/ui"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/ui"
 )
 
 func waitNativeTolerance(t *testing.T, s *workbench.Service) *workbench.ToleranceState {

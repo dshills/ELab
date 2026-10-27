@@ -300,6 +300,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if err := validateRecordedShifts(c, m.Graph, r); err != nil {
 			return err
 		}
+		if err := validateRecordedSpeakers(c, m.Graph, r); err != nil {
+			return err
+		}
 		if err := validateRecordedSounds(c, m.Graph, r); err != nil {
 			return err
 		}

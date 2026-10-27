@@ -9,6 +9,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	c := commandContractDetail{Version: 1, Scope: "hobbyist-device-configuration", Preconditions: []string{"Ordinary revision, document-generation, retry and closed-service guards apply"}, Effects: []string{}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing, extra, wrong-type, null-required, out-of-range or wrong-target fields preserve accepted state"}}}
 	switch id {
+	case "speaker.configure":
+		c.Effects = []string{"Complete saved undoable passive loudspeaker configuration, version elab.loudspeaker-impedance.v1. Series coil R/L and parallel motional R/L/C, with C derived from resonance_hz and motional_inductance_h. Zero-energy startup; no calibrated acoustic output or manufacturer rating", "Two private inductors, one capacitor, two resistors and two nodes count against existing budgets. AC and transient use the same passive equivalent. Voltage/current, terminal power, coil and motional heat, stored energy and internal state are captured and validated", "Simulation is silent. Existing explicit audio.render/play/stop/read and WAV export support a normalized terminal-voltage illustration, not SPL/cone/radiation prediction"}
+		schema["x-speaker-version"] = SpeakerModelID
 	case "transistor.profile.set":
 		schema["x-profile-version"] = TransistorProfileModelID
 		bounds("parameters.forward_beta", "ratio", 1, 1000)
@@ -35,7 +38,7 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 		bounds("start_s", "s", 0, 1)
 		bounds("duration_s", "s", .02, .25)
 		bounds("gain", "fraction", 0, .25)
-		c.Effects = []string{"Admit one silent asynchronous independent experiment; 12 kHz mono; requested start/duration round to nearest sample and metadata reports the actual grid. At most 3000 captured samples plus 12000 pre-roll steps; 30-second cooperative budget. Each solver output retains existing attempt/time/accuracy limits", "Snapshot.audio_preview reports ID, status, source_current, source generation/revision, byte count, digest and failure. No live state, history, project data or dirty changes. No autoplay", "Replacement, electrical/content edit or Close cancels work and stops playback. Keep only the latest preview; an outstanding worker must retire before another render"}
+		c.Effects = []string{"Admit one silent asynchronous independent experiment; 12 kHz mono; requested start/duration round to nearest sample and metadata reports the actual grid. At most 3000 captured samples plus 12000 pre-roll steps; 30-second cooperative budget. Each solver output retains existing attempt/time/accuracy limits", "Snapshot.audio_preview reports ID, status, source_current, source generation/revision, byte count, digest and failure. No live state, history, project data or dirty changes. No autoplay. Loudspeaker previews use 100 Hz high-pass terminal voltage, peak-normalized before gain; piezo/buzzer behavior is unchanged", "Replacement, electrical/content edit or Close cancels work and stops playback. Keep only the latest preview; an outstanding worker must retire before another render"}
 		c.Completion = &commandCompletionDetail{Mode: "Immediate admission; completion is asynchronous", Observe: []string{"project.inspect", "audio.read", "events.poll"}, Cancel: "audio.stop", CooperativeDeadlineSeconds: 30}
 	case "audio.play":
 		c.Errors = append(c.Errors, commandFailureDetail{"audio-unavailable", "admission", "Playback backend cannot start; existing accepted playback and captured WAV remain unchanged"})
@@ -52,6 +55,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	schema["x-command-contract"] = c
 	schema["x-model-id"] = ExtendedModelID
+	if id == "speaker.configure" {
+		schema["x-model-id"] = SpeakerModelID
+	}
 	if id == "transistor.profile.set" {
 		schema["x-model-id"] = TransistorProfileModelID
 	}
@@ -79,4 +85,18 @@ func addTransistorProfileSchema(schema map[string]any) {
 	delete(p, "type")
 	p["anyOf"] = []any{map[string]any{"type": "number", "enum": []int{0}}, map[string]any{"type": "number", "minimum": 1, "maximum": 1000}}
 	p["x-unit"] = "V"
+}
+
+func addSpeakerSchema(schema map[string]any) {
+	if p := inputProperty(schema, "version"); p != nil {
+		p["enum"] = []string{SpeakerModelID}
+	}
+	for _, f := range []struct {
+		name, unit string
+		min, max   float64
+	}{{"coil_resistance_ohm", "ohm", 1, 100}, {"coil_inductance_h", "H", 1e-5, .1}, {"resonance_hz", "Hz", 20, 1000}, {"motional_resistance_ohm", "ohm", 1, 1000}, {"motional_inductance_h", "H", .0001, 1}} {
+		if p := inputProperty(schema, f.name); p != nil {
+			p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
+		}
+	}
 }

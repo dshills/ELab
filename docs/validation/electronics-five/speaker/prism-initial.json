@@ -1,0 +1,405 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "74205c9fed6d64d5ee4806adf5f75df3",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "9cbad84d42cc9d34e37e7a4301ddd73f5df241d1",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 6,
+      "medium": 7,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "94619e266dcae3eb",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unchecked nil dereference of speaker device config",
+      "message": "The speaker inspector dereferences `p.Device.Speaker` without checking that `p.Device` or `p.Device.Speaker` is non-nil. The inspector can render a speaker loaded from an older or hand-edited project, a partially constructed component, or a component in a mid-edit state. If either pointer is nil, the UI goroutine panics. The opamp branch guards its pointer, but this new branch does not.",
+      "suggestion": "Guard the dereference and fall back to defaults, e.g. `c := workbench.DefaultSpeakerConfig(); if p.Device != nil \u0026\u0026 p.Device.Speaker != nil { c = *p.Device.Speaker }`.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "desktop/extended_controls.go",
+          "lines": {
+            "start": 57,
+            "end": 57
+          }
+        }
+      ],
+      "tags": [
+        "nil-pointer",
+        "panic",
+        "location-corrected"
+      ],
+      "evidence": "\t\tc := *p.Device.Speaker",
+      "fix": {
+        "before": "\t\tc := *p.Device.Speaker",
+        "after": "\t\tc := workbench.DefaultSpeakerConfig()\n\t\tif p.Device != nil \u0026\u0026 p.Device.Speaker != nil {\n\t\t\tc = *p.Device.Speaker\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b0643faacd39f695",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Speaker schema property paths may not match nested parameters",
+      "message": "Other device commands look up configuration fields with a `parameters.` prefix, for example `parameters.forward_beta` and `parameters.frequency_hz`. The speaker schema helper looks up `version` and `coil_resistance_ohm` with no prefix. If speaker.configure also nests its fields under `parameters`, `inputProperty` returns nil. The nil check then skips the field silently, so the published schema has no bounds, units or version enum. That would make the advertised contract disagree with what the server actually validates.",
+      "suggestion": "Check where the speaker.configure input fields live in the schema and use matching property paths, for example `parameters.coil_resistance_ohm`. Add a test that asserts the minimum, maximum and x-unit values appear in the generated schema.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 88,
+            "end": 101
+          }
+        }
+      ],
+      "tags": [
+        "schema",
+        "contract"
+      ],
+      "evidence": "}{{\"coil_resistance_ohm\", \"ohm\", 1, 100}, {\"coil_inductance_h\", \"H\", 1e-5, .1}, {\"resonance_hz\", \"Hz\", 20, 1000}, {\"motional_resistance_ohm\", \"ohm\", 1, 1000}, {\"motional_inductance_h\", \"H\", .0001, 1}} {\n\t\tif p := inputProperty(schema, f.name); p != nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "e2c8167b3b1650a2",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Speaker dissipation not included in total power",
+      "message": "Every other dissipating device in this switch adds its power to `powers`. The speaker result is appended without doing so. The total power and the power-balance checks will miss the energy dissipated in the speaker's voice coil.",
+      "suggestion": "Store the result in a variable and add its power, e.g. `device := n.speakerResult(p, x); r.Speakers = append(r.Speakers, device); powers += device.Power`. This applies if SpeakerResult exposes a power field.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/mixed.go",
+          "lines": {
+            "start": 788,
+            "end": 788
+          }
+        }
+      ],
+      "tags": [
+        "power"
+      ],
+      "evidence": "\t\t\tr.Speakers = append(r.Speakers, n.speakerResult(p, x))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "caaaf74acc1d583d",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Speaker unconditionally overrides selected analysis",
+      "message": "Every other branch only upgrades the analysis when it is still NetworkDCAnalysis. The speaker branch overwrites out.Analysis unconditionally. Any analysis already chosen for other parts of the circuit, such as network transient for dynamics or timers, is silently replaced. This can make the solver path depend on component order.",
+      "suggestion": "Override the analysis only when the current one is less capable. For example, guard it with `if out.Analysis == NetworkDCAnalysis`, or use an explicit precedence check.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 150,
+            "end": 152
+          }
+        }
+      ],
+      "tags": [
+        "analysis"
+      ],
+      "evidence": "\t\tif p.Kind == \"speaker\" {\n\t\t\tout.Analysis = InductorAnalysis\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d849e8da2fdd68db",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Category counts not updated for new speaker part",
+      "message": "The library grew to 54 parts and \"speaker\" is now in the \"passives\" category, but the expected counts still say all=53 and passives=9. The per-category loop will fail. So will the later check that clearing the search restores 9 passives.",
+      "suggestion": "Update the expected counts to all=54 and passives=10. Also change the `!= 9` check after clearing the search to `!= 10`.",
+      "confidence": 0.85,
+      "locations": [
+        {
+          "path": "workbench/part_browser_test.go",
+          "lines": {
+            "start": 15,
+            "end": 15
+          }
+        }
+      ],
+      "tags": [
+        "test"
+      ],
+      "evidence": "expected := map[string]int{\"common\": 6, \"all\": 53, \"sources\": 5, \"motors\": 3, \"passives\": 9, \"semiconductors\": 10, \"amplifiers\": 4, \"logic\": 15, \"switches\": 4, \"connections\": 3}",
+      "fix": {
+        "before": "expected := map[string]int{\"common\": 6, \"all\": 53, \"sources\": 5, \"motors\": 3, \"passives\": 9, \"semiconductors\": 10, \"amplifiers\": 4, \"logic\": 15, \"switches\": 4, \"connections\": 3}",
+        "after": "expected := map[string]int{\"common\": 6, \"all\": 54, \"sources\": 5, \"motors\": 3, \"passives\": 10, \"semiconductors\": 10, \"amplifiers\": 4, \"logic\": 15, \"switches\": 4, \"connections\": 3}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6aa3c4de062b5385",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Passives count after search clear is stale",
+      "message": "The passives category now has 10 parts because the speaker was added. This check will fail after the search is cleared.",
+      "suggestion": "Change the expected count to 10.",
+      "confidence": 0.8,
+      "locations": [
+        {
+          "path": "workbench/part_browser_test.go",
+          "lines": {
+            "start": 44,
+            "end": 44
+          }
+        }
+      ],
+      "tags": [
+        "test",
+        "location-corrected"
+      ],
+      "evidence": "\tif len(s.Snapshot().MatchingParts) != 9 {",
+      "fix": {
+        "before": "\tif len(s.Snapshot().MatchingParts) != 9 {",
+        "after": "\tif len(s.Snapshot().MatchingParts) != 10 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f2bf8296e5aeac92",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Missing private-net lookup silently writes node 0",
+      "message": "`n.index[...]` on a missing key returns 0. If a private speaker net is absent from the index (e.g. it was merged or renamed during compile), the code silently overwrites unknown 0 instead of failing. That corrupts the restored state of another node. `speakerResult` has the same problem and would read the wrong node.",
+      "suggestion": "Use the comma-ok form and return an error when the net is missing: `i, ok := n.index[speakerPrivate(p.ID, \"motion\")]; if !ok { return fmt.Errorf(\"missing speaker motion node\") }`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/speaker.go",
+          "lines": {
+            "start": 121,
+            "end": 122
+          }
+        }
+      ],
+      "tags": [
+        "state-restore",
+        "map-lookup",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tx[n.index[speakerPrivate(p.ID, \"motion\")]] = negative + q.MotionalVoltage\n\t\t\tx[n.index[speakerPrivate(p.ID, \"coil\")]] = voltage(x, n.pin(p, \"positive\")) - p.Device.Speaker.Resistance*q.Current",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "acc3f5d20991f7ea",
+      "severity": "low",
+      "category": "correctness",
+      "title": "High-pass startup transient can dominate speaker peak normalization",
+      "message": "The high-pass filter starts with `previous = 0`. If the speaker terminal has a DC operating point at t=0, the first sample produces a step `y = alpha*v` that then decays. Speaker output is now peak-normalized over the whole window. When `start_s` is 0 or small, this startup transient can set the peak, so the real audio signal is scaled down to near silence. Fade-in does not prevent this, because the peak is computed before fade is applied.",
+      "suggestion": "Prime the filter with the first sample, for example by setting `previous = v` on the first iteration without updating `y`. Alternatively, run a short warm-up before `pre` and exclude the initial transient from the peak calculation. Declaring a `primed` flag is only the first step; the filter update must also check it, e.g. `if !primed { previous = v; primed = true }` before computing `y`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/audio.go",
+          "lines": {
+            "start": 245,
+            "end": 245
+          }
+        }
+      ],
+      "tags": [
+        "audio",
+        "dsp",
+        "location-corrected"
+      ],
+      "evidence": "\tprevious, y := 0., 0.",
+      "fix": {
+        "before": "\tprevious, y := 0., 0.",
+        "after": "\tprevious, y := 0., 0.\n\tprimed := false"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "170fe1e12b8d4cce",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Speaker field allow-list duplicated",
+      "message": "The list of allowed `SpeakerConfig` JSON fields is hard-coded twice: once in `speaker.configure` and once in `validateDeviceFields`. If a field is later added to `SpeakerConfig` and only one list is updated, one path will reject it. The command would then refuse valid parameters, or saved documents with that field would fail to load.",
+      "suggestion": "Define the field list once, for example `var speakerConfigFields = []string{\"version\", ...}`, and pass `speakerConfigFields...` in both places.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/editing.go",
+          "lines": {
+            "start": 192,
+            "end": 200
+          }
+        }
+      ],
+      "tags": [
+        "duplication",
+        "schema"
+      ],
+      "evidence": "if err := paramsNested(raw, \"parameters\", \u0026SpeakerConfig{}, \"version\", \"coil_resistance_ohm\", \"coil_inductance_h\", \"resonance_hz\", \"motional_resistance_ohm\", \"motional_inductance_h\"); err != nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4697d33138949b9a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "device_components inclusion depends on unrelated predicate",
+      "message": "Adding a speaker or a transistor profile changes what goes into `device_components`. The list is filtered only on `Device != nil`, so it also picks up unrelated devices such as PWM, op-amp dynamics and sound parts. The same circuit's SVG metadata then varies depending on whether a speaker is present, which can break deterministic export comparisons and goes beyond what the field name implies.",
+      "suggestion": "Either always emit `device_components` for every part with a non-nil Device, or filter to parts with `p.Device.Speaker != nil` or a transistor profile so the output stays consistent.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/export.go",
+          "lines": {
+            "start": 245,
+            "end": 253
+          }
+        }
+      ],
+      "tags": [
+        "export",
+        "metadata"
+      ],
+      "evidence": "\tif hasSpeakers(g) || hasTransistorProfiles(g) {\n\t\tdevices := []Component{}\n\t\tfor _, p := range g.Components {\n\t\t\tif p.Device != nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f73cd8efc96cb137",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Possible double-counted stored energy",
+      "message": "The speaker is lowered into internal inductors and a capacitor (see lowerSpeaker and powerResources). If those lowered elements also appear in r.Inductors or r.Capacitors, their energy is counted twice: once in the inductor/capacitor sums and again through q.Energy. JunctionEnergy may be double counted the same way against the lowered CBE/CBC capacitors.",
+      "suggestion": "Make sure the internal elements of lowered speakers and transistor junctions are excluded from r.Inductors and r.Capacitors. Otherwise, do not add the aggregated speaker and junction energy on top of them.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/mixed_transient.go",
+          "lines": {
+            "start": 91,
+            "end": 96
+          }
+        }
+      ],
+      "tags": [
+        "energy"
+      ],
+      "evidence": "\tfor _, q := range r.Speakers {\n\t\tp.Energy += q.Energy\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c23e88577cabdb62",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Capacitor current silently zero when slot missing",
+      "message": "When the capacitor current slot is out of range, `speakerResult` leaves `CapacitorCurrent` at 0 and reports nothing. `restoreSpeakers` treats the same condition as an error. Live results can therefore report a capacitor current of 0 that violates motional KCL, and the inconsistency is only caught later during recording validation.",
+      "suggestion": "Handle a missing slot the same way in both places. Either guarantee the slot always exists, or surface an error or diagnostic instead of silently reporting 0.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/speaker.go",
+          "lines": {
+            "start": 96,
+            "end": 96
+          }
+        }
+      ],
+      "tags": [
+        "consistency",
+        "location-corrected"
+      ],
+      "evidence": "\t\tif q.ID == speakerPrivate(p.ID, \"cm\") \u0026\u0026 n.capacitorIndex(k) \u003c len(x) {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f6d5460c3f92fa4f",
+      "severity": "low",
+      "category": "bug",
+      "title": "Ignored component lookup result in recording validation",
+      "message": "The lookup result is discarded. If `recordedObjectIDs` does not guarantee the component exists and is a speaker, `p` is a zero `Component`. Dereferencing `p.Device.Speaker` and dividing by `MotionalResistance` could then panic or produce NaN.",
+      "suggestion": "Check the result: `p, ok := g.Component(q.ID); if !ok || p.Kind != \"speaker\" { return fmt.Errorf(\"unknown recorded speaker\") }`.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/speaker.go",
+          "lines": {
+            "start": 163,
+            "end": 163
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "location-corrected"
+      ],
+      "evidence": "\t\tp, _ := g.Component(q.ID)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 99965,
+    "totalMs": 22235
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 38,
+    "bytes": 131350,
+    "chunks": 7,
+    "llmCalls": 7,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 80578,
+        "output": 9527,
+        "costUSD": 0.512852
+      }
+    ],
+    "widenedFiles": 17,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

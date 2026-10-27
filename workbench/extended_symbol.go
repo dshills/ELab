@@ -13,7 +13,7 @@ func ExtendedTerminalLocal(kind, pin string) (Point, bool) {
 			return Point{0, 100}, true
 		}
 	}
-	if isSoundKind(kind) {
+	if isSoundKind(kind) || kind == "speaker" {
 		if pin == "positive" {
 			return Point{0, -65}, true
 		}
@@ -48,9 +48,11 @@ func ExtendedSymbolPaths(kind string) [][]Point {
 		w, h = 95, 185
 		pins = shiftPins
 	}
-	if isSoundKind(kind) {
+	if isSoundKind(kind) || kind == "speaker" {
 		paths := [][]Point{{{0, -65}, {0, -25}}, {{-22, -25}, {22, -25}, {22, 25}, {-22, 25}, {-22, -25}}, {{0, 25}, {0, 65}}, {{30, -20}, {40, -10}, {40, 10}, {30, 20}}, {{46, -30}, {58, -15}, {58, 15}, {46, 30}}}
-		if kind == "active-buzzer" {
+		if kind == "speaker" {
+			paths = append(paths, []Point{{22, -25}, {-5, -12}, {-5, 12}, {22, 25}}, []Point{{-16, -10}, {-16, 10}})
+		} else if kind == "active-buzzer" {
 			paths = append(paths, []Point{{-12, 6}, {-12, -6}, {0, -6}, {0, 6}, {12, 6}, {12, -6}})
 		} else {
 			paths = append(paths, []Point{{-14, -7}, {14, -7}}, []Point{{-14, 7}, {14, 7}})
@@ -83,7 +85,7 @@ func ExtendedSymbolLabels(p Component) []OpAmpSymbolLabel {
 	if p.Kind == "shift-register" {
 		pins = shiftPins
 	}
-	if isSoundKind(p.Kind) {
+	if isSoundKind(p.Kind) || p.Kind == "speaker" {
 		return nil
 	}
 	labels := []OpAmpSymbolLabel{}

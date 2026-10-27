@@ -136,6 +136,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(ExampleLoadParams{}), "urn:elab:load-example:1"},
 	{reflect.TypeOf(ExampleResetParams{}), "urn:elab:reset-example:1"},
 	{reflect.TypeOf(SearchParams{}), "urn:elab:search-input:1"},
+	{reflect.TypeOf(SpeakerConfig{}), "urn:elab:speaker-config:1"},
+	{reflect.TypeOf(SpeakerParams{}), "urn:elab:speaker-configure:1"},
 	{reflect.TypeOf(TransistorProfile{}), "urn:elab:transistor-profile:1"},
 	{reflect.TypeOf(TransistorProfileParams{}), "urn:elab:transistor-profile-set:1"},
 	{reflect.TypeOf(PWMParams{}), "urn:elab:pwm-configure:1"},
@@ -259,6 +261,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Input-only shared definitions retain command unit text without
 		// widening numeric output/settings schemas.
+		if common.Type == reflect.TypeOf(SpeakerConfig{}) {
+			addSpeakerSchema(schema)
+		}
 		if common.Type == reflect.TypeOf(TransistorProfile{}) {
 			addTransistorProfileSchema(schema)
 		}
@@ -394,6 +399,7 @@ func Catalog() []Capability {
 		typedCapability("audio.stop", "Stop exact preview playback and cancel its rendering.", reflect.TypeOf(IDParams{})),
 		queryCapability("audio.read", "Read owned preview metadata and WAV bytes.", reflect.TypeOf(IDParams{}), reflect.TypeOf(AudioData{})),
 		typedCapability("pwm.configure", "Set powered PWM controller frequency and duty.", reflect.TypeOf(PWMParams{})),
+		typedCapability("speaker.configure", "Configure a saved passive loudspeaker electrical load; explicit audio preview uses existing shared commands.", reflect.TypeOf(SpeakerParams{})),
 		typedCapability("transistor.profile.set", "Enable/configure a saved versioned educational BJT profile or restore generic v1; same undoable user/agent electrical edit.", reflect.TypeOf(TransistorProfileParams{})),
 		typedCapability("opamp.dynamics.set", "Enable or disable op-amp dominant-pole and slew limiting.", reflect.TypeOf(DynamicsParams{})),
 		typedCapability("sound.configure", "Set a piezo capacitance or active sounder tone.", reflect.TypeOf(SoundParams{})),

@@ -1,0 +1,233 @@
+[
+  {
+    "review": "prism-initial.json",
+    "id": "94619e266dcae3eb",
+    "severity": "medium",
+    "title": "Unchecked nil dereference of speaker device config",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "b0643faacd39f695",
+    "severity": "medium",
+    "title": "Speaker schema property paths may not match nested parameters",
+    "disposition": "The helper annotates SpeakerConfig itself in SchemaRegistry, not SpeakerParams. The command parameters property references urn:elab:speaker-config:1. Tests inspect that reference and every referenced bound/unit; no missing annotation was reproduced."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "e2c8167b3b1650a2",
+    "severity": "medium",
+    "title": "Speaker dissipation not included in total power",
+    "disposition": "Private R primitives add their heat before the private/public filter; private L/C add instantaneous storage power but are omitted from public storage arrays. The speaker parent is a summary. Tests assert empty public private-storage arrays, exact scope energy equal to the one speaker summary, independent ODE/AC laws and strict power residual. Generic transistor JunctionEnergy is exactly zero; profiled devices trigger the reset/sum path and have independent scope-energy regression."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "caaaf74acc1d583d",
+    "severity": "medium",
+    "title": "Speaker unconditionally overrides selected analysis",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "d849e8da2fdd68db",
+    "severity": "medium",
+    "title": "Category counts not updated for new speaker part",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "6aa3c4de062b5385",
+    "severity": "medium",
+    "title": "Passives count after search clear is stale",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "f2bf8296e5aeac92",
+    "severity": "medium",
+    "title": "Missing private-net lookup silently writes node 0",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "acc3f5d20991f7ea",
+    "severity": "low",
+    "title": "High-pass startup transient can dominate speaker peak normalization",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "170fe1e12b8d4cce",
+    "severity": "low",
+    "title": "Speaker field allow-list duplicated",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "4697d33138949b9a",
+    "severity": "low",
+    "title": "device_components inclusion depends on unrelated predicate",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "f73cd8efc96cb137",
+    "severity": "low",
+    "title": "Possible double-counted stored energy",
+    "disposition": "Private R primitives add their heat before the private/public filter; private L/C add instantaneous storage power but are omitted from public storage arrays. The speaker parent is a summary. Tests assert empty public private-storage arrays, exact scope energy equal to the one speaker summary, independent ODE/AC laws and strict power residual. Generic transistor JunctionEnergy is exactly zero; profiled devices trigger the reset/sum path and have independent scope-energy regression."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "c23e88577cabdb62",
+    "severity": "low",
+    "title": "Capacitor current silently zero when slot missing",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "f6d5460c3f92fa4f",
+    "severity": "low",
+    "title": "Ignored component lookup result in recording validation",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "54b6c7a22eb24824",
+    "severity": "medium",
+    "title": "Peak normalization amplifies numerical noise to full scale",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "b4b325abc16a88b8",
+    "severity": "medium",
+    "title": "Speaker schema bounds may target wrong property paths",
+    "disposition": "The helper annotates SpeakerConfig itself in SchemaRegistry, not SpeakerParams. The command parameters property references urn:elab:speaker-config:1. Tests inspect that reference and every referenced bound/unit; no missing annotation was reproduced."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "f73cd8efc96cb137",
+    "severity": "medium",
+    "title": "Speaker energy likely double-counted in trace total",
+    "disposition": "Private R primitives add their heat before the private/public filter; private L/C add instantaneous storage power but are omitted from public storage arrays. The speaker parent is a summary. Tests assert empty public private-storage arrays, exact scope energy equal to the one speaker summary, independent ODE/AC laws and strict power residual. Generic transistor JunctionEnergy is exactly zero; profiled devices trigger the reset/sum path and have independent scope-energy regression."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "00fa7509390e827a",
+    "severity": "medium",
+    "title": "PWM rule overrides speaker-induced InductorAnalysis",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "54c8ef8a4c8b3b22",
+    "severity": "medium",
+    "title": "x",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "f98b9d01e36e79d1",
+    "severity": "low",
+    "title": "Numeric rounding gated on ID string prefix",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "beabdb897ca4e7f5",
+    "severity": "low",
+    "title": "Fallback returns unscaled value",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "65c5f9420c8e9626",
+    "severity": "low",
+    "title": "Duplicated fade logic and redundant PCM writes for speaker",
+    "disposition": "Repaired in final source, with focused electrical/codec/desktop regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "ce394ebf3a3cf2bd",
+    "severity": "low",
+    "title": "Test silently passes on budget refusal",
+    "disposition": "This is deliberately a separate high-complexity atomic-refusal regression, not a waveform test. Independent positive speaker transient tests require 50 successful advances against an ODE; the powered-follower example completes capture/audio/round trips. The class-AB/LC work-limit finding remains explicit in the guide and report."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "74406ade0cf20aa9",
+    "severity": "low",
+    "title": "Possible nil dereference when compile fails",
+    "disposition": "Compiled is a concrete Go struct returned by value, not a pointer. Reading its zero-value Analysis cannot nil-dereference; diagnostics are included in the failure."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "b4b325abc16a88b8",
+    "severity": "medium",
+    "title": "Speaker schema bounds may target wrong property paths",
+    "disposition": "The helper annotates SpeakerConfig itself in SchemaRegistry, not SpeakerParams. The command parameters property references urn:elab:speaker-config:1. Tests inspect that reference and every referenced bound/unit; no missing annotation was reproduced."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "d926175cd3a669f9",
+    "severity": "medium",
+    "title": "Junction energy added unconditionally may double-count",
+    "disposition": "Private R primitives add their heat before the private/public filter; private L/C add instantaneous storage power but are omitted from public storage arrays. The speaker parent is a summary. Tests assert empty public private-storage arrays, exact scope energy equal to the one speaker summary, independent ODE/AC laws and strict power residual. Generic transistor JunctionEnergy is exactly zero; profiled devices trigger the reset/sum path and have independent scope-energy regression."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "fe09c29014fb7f19",
+    "severity": "medium",
+    "title": "Possible nil dereference of Device.Speaker during lowering",
+    "disposition": "Graph.Compile validates explicit device parameters before lowering. Saved/recorded graphs go through the same admission; a dedicated missing-config test proves refusal before this private helper. No valid public route supplies an unvalidated component."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "19adc3735130a1a9",
+    "severity": "low",
+    "title": "decimalControlSI returns NaN which is forwarded to commands",
+    "disposition": "Intentional invalid-entry refusal: encoding/json refuses NaN before service Dispatch; device validators also require finite values. It cannot enter accepted physics. Ordinary finite UI minima/maxima are separately tested with exact decimal SI conversion."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "daf676a3f82d88eb",
+    "severity": "low",
+    "title": "Preview normalization amplifies near-floor residue to full gain",
+    "disposition": "Peak normalization is an explicitly labeled waveform illustration, not acoustic loudness. A 1 microvolt raw-signal floor suppresses numerical residue, with tests for residue silence, DC filter priming, meaningful normalized PCM and gain bounds. No calibrated SPL or electrical noise-floor claim."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "6383c1979942446d",
+    "severity": "low",
+    "title": "Duplicated speaker/sound kind predicate",
+    "disposition": "Small explicit symbol/terminal/label cases are retained; the full new-kind drawing and descriptor tests cover their consistency. No demonstrated defect warrants widening legacy sound-kind contracts."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "d437b3586210c7af",
+    "severity": "low",
+    "title": "Speaker restore runs before other node restores it depends on",
+    "disposition": "Speaker terminals are authored public nets, populated from result.Nodes before any private restore. Later restores modify only reserved private nodes; callers cannot connect authored terminals to those generated nodes. Missing private-node guards are explicit."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "3214da2cbdd668dc",
+    "severity": "low",
+    "title": "Fake audio player state read without synchronization",
+    "disposition": "Render never calls the player. Fake Play/data writes happen synchronously through guarded service commands before the test reads them; asynchronous stop only changes its distinct stop counter. Race tests pass. No hardware audibility is claimed."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "2b6b4e1c12958fd5",
+    "severity": "low",
+    "title": "Uninformative failure when capability count is wrong",
+    "disposition": "Low test-diagnostic observation only; explicit companion discovery regression reports count and error and verifies the referenced schema. No product defect."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "d69a715911a38a8b",
+    "severity": "low",
+    "title": "Compile failure can panic on c.Analysis",
+    "disposition": "Compiled is a concrete Go struct returned by value, not a pointer. Reading its zero-value Analysis cannot nil-dereference; diagnostics are included in the failure."
+  }
+]

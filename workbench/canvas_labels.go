@@ -48,6 +48,10 @@ func (l CanvasAnnotationLayout) Position(text string, index int) Point {
 // drawing and Fit use CanvasPartLabelPositionAtZoom when enlarging captions.
 func CanvasPartLabel(part Component) (Point, string) {
 	title := part.ID
+	if part.Kind == "speaker" && part.Device != nil && part.Device.Speaker != nil {
+		c := part.Device.Speaker
+		title += fmt.Sprintf(" %.4g Ω · %.4g Hz", c.Resistance, c.Resonance)
+	}
 	if part.Kind == "hbridge" {
 		title += " H-bridge"
 	}
@@ -115,7 +119,7 @@ func CanvasPartLabelPosition(part Component, title string) Point {
 		return Point{part.Position.X + 90, part.Position.Y - 15}
 	}
 	switch part.Kind {
-	case "pwm-controller", "piezo", "active-buzzer":
+	case "speaker", "pwm-controller", "piezo", "active-buzzer":
 		return Point{part.Position.X + 110, part.Position.Y - 95}
 	case "shift-register":
 		return Point{part.Position.X + 140, part.Position.Y - 200}

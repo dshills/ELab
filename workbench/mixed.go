@@ -44,6 +44,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Speakers           []SpeakerResult       `json:"speakers,omitempty"`
 	Shifts             []ShiftResult         `json:"shift_registers,omitempty"`
 	Sounds             []SoundResult         `json:"sounders,omitempty"`
 	Dynamics           []DynamicsResult      `json:"opamp_dynamics,omitempty"`
@@ -87,6 +88,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Speakers = append([]SpeakerResult(nil), r.Speakers...)
 	o.Shifts = append([]ShiftResult(nil), r.Shifts...)
 	o.Sounds = append([]SoundResult(nil), r.Sounds...)
 	o.Dynamics = append([]DynamicsResult(nil), r.Dynamics...)
@@ -181,7 +183,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
 		n.hasGeneralBipolar = n.hasGeneralBipolar || hasTransistorProfile(p) || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
 		switch p.Kind {
-		case "thermistor", "ldr", "resistor", "capacitor", "inductor", "switch", "potentiometer":
+		case "speaker", "thermistor", "ldr", "resistor", "capacitor", "inductor", "switch", "potentiometer":
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		case "ground", "junction", "net-label":
 		default:
@@ -690,6 +692,11 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				if result.result.KCLResidual > 1e-9 {
 					return nil, fmt.Errorf("RLC currents do not satisfy physical node current balance")
 				}
+				for _, p := range result.result.Speakers {
+					if !finite(p.Voltage) || !finite(p.Current) || !finite(p.Power) || !finite(p.Energy) || !finite(p.CoilHeat) || !finite(p.MotionalHeat) || !finite(p.CapacitorCurrent) {
+						return nil, fmt.Errorf("speaker %s exceeds the finite state range", p.ID)
+					}
+				}
 				for _, p := range result.result.Inductors {
 					if !finite(p.Voltage) || !finite(p.Current) || !finite(p.Energy) {
 						return nil, fmt.Errorf("inductor %s exceeds the finite state range", p.ID)
@@ -782,6 +789,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			device := n.shiftResult(p, x)
 			r.Shifts = append(r.Shifts, device)
 			powers += device.Power
+		// Speaker R/L/C primitives below already count dissipation/storage;
+		// this authored-parent result is a public summary, not another load.
+		case "speaker":
+			r.Speakers = append(r.Speakers, n.speakerResult(p, x))
 		case "piezo", "active-buzzer":
 			device := n.soundResult(p, x)
 			r.Sounds = append(r.Sounds, device)

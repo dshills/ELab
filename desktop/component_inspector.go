@@ -91,7 +91,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
-	if workbench.IsBipolarKind(part.Kind) || part.Kind == "pwm-controller" || part.Kind == "opamp" || part.Kind == "shift-register" || part.Kind == "piezo" || part.Kind == "active-buzzer" {
+	if part.Kind == "speaker" || workbench.IsBipolarKind(part.Kind) || part.Kind == "pwm-controller" || part.Kind == "opamp" || part.Kind == "shift-register" || part.Kind == "piezo" || part.Kind == "active-buzzer" {
 		inspector = append(inspector, s.extendedControls(state, part)...)
 	}
 	if part.Kind == "hbridge" {

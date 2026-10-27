@@ -15,6 +15,7 @@ import (
 
 const audioRate = 12000
 const maxAudioSamples = 3000
+const speakerPreviewFloorVolts = 1e-6
 
 // Preview uses an independent experiment, never the editor's live state.
 type AudioRenderParams struct {
@@ -24,6 +25,7 @@ type AudioRenderParams struct {
 	Gain     float64 `json:"gain"`
 }
 type AudioPreview struct {
+	Signal             string   `json:"signal,omitempty"`
 	ID                 string   `json:"id"`
 	Component          string   `json:"component_id"`
 	Status             string   `json:"status"`
@@ -158,8 +160,8 @@ func (s *Service) startAudioLocked(p AudioRenderParams) error {
 		return &actionError{"busy", "Finish or stop the current audio render first"}
 	}
 	part, ok := s.graph.Component(p.ID)
-	if !ok || !isSoundKind(part.Kind) {
-		return fmt.Errorf("choose a piezo or active buzzer")
+	if !ok || !isSoundKind(part.Kind) && part.Kind != "speaker" {
+		return fmt.Errorf("choose a loudspeaker, piezo or active buzzer")
 	}
 	c, status, d := s.graph.Compile()
 	if status != "" || d != nil {
@@ -169,6 +171,9 @@ func (s *Service) startAudioLocked(p AudioRenderParams) error {
 	s.audioSerial++
 	ctx, cancel := context.WithCancel(context.Background())
 	job := &audioJob{ctx: ctx, cancel: cancel, hash: contentHash(s.graph, s.transientSettings), view: AudioPreview{ID: fmt.Sprintf("audio-%d", s.audioSerial), Component: p.ID, Status: "running", ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration, Start: p.Start, Duration: p.Duration, Rate: audioRate, Gain: p.Gain}}
+	if part.Kind == "speaker" {
+		job.view.Signal = "Terminal voltage; 100 Hz high-pass; peak normalized above 1 µV before selected gain; no calibrated acoustic output"
+	}
 	s.audio = job
 	s.audioWorkers++
 	s.liveWorkers.Add(1)
@@ -215,6 +220,11 @@ func renderAudio(ctx context.Context, c Compiled, settings TransientSettings, pa
 	}
 	sample := func() (float64, error) {
 		if kernel.mixed != nil {
+			for _, r := range kernel.mixed.result.Speakers {
+				if r.ID == part.ID {
+					return r.Voltage, nil
+				}
+			}
 			for _, r := range kernel.mixed.result.Sounds {
 				if r.ID == part.ID {
 					return r.Voltage, nil
@@ -229,6 +239,10 @@ func renderAudio(ctx context.Context, c Compiled, settings TransientSettings, pa
 	}
 	pre := int(math.Round(p.Start * audioRate))
 	pcm := make([]int16, count)
+	var speakerSamples []float64
+	if part.Kind == "speaker" {
+		speakerSamples = make([]float64, count)
+	}
 	previous, y := 0., 0.
 	alpha := math.Exp(-2 * math.Pi * 100 / audioRate)
 	for k := 0; k < pre+count; k++ {
@@ -245,23 +259,57 @@ func renderAudio(ctx context.Context, c Compiled, settings TransientSettings, pa
 			return nil, err
 		}
 		a := 0.
-		if part.Kind == "piezo" {
+		if k == 0 && part.Kind == "speaker" {
+			previous = v
+		}
+		if part.Kind == "piezo" || part.Kind == "speaker" {
 			y = alpha * (y + v - previous)
 			previous = v
 			a = y / 5
+			if part.Kind == "speaker" {
+				a = y
+			}
 		} else {
 			en, _ := smoothLevel(v, 2, 3)
 			a = en * math.Sin(2*math.Pi*part.Device.Sound.Frequency*float64(k)/audioRate)
 		}
 		if k >= pre {
 			index := k - pre
-			fade := math.Min(1, math.Min(float64(index)/60, float64(count-1-index)/60))
+			if speakerSamples != nil {
+				if !finite(a) {
+					return nil, fmt.Errorf("nonfinite speaker preview")
+				}
+				speakerSamples[index] = a
+				continue
+			}
+			fade := audioPreviewFade(index, count)
 			value := math.Max(-1, math.Min(1, a)) * p.Gain * fade
 			pcm[index] = int16(math.Round(value * 32767))
 		}
 	}
+	if speakerSamples != nil {
+		fillSpeakerPCM(pcm, speakerSamples, p.Gain)
+	}
 	return encodeAudioWAV(pcm), nil
 }
+func audioPreviewFade(index, count int) float64 {
+	return math.Min(1, math.Min(float64(index)/60, float64(count-1-index)/60))
+}
+
+// Only preview normalization uses this floor; electrical accuracy/work guards do not change.
+func fillSpeakerPCM(pcm []int16, samples []float64, gain float64) {
+	peak := 0.
+	for _, v := range samples {
+		peak = math.Max(peak, math.Abs(v))
+	}
+	if peak < speakerPreviewFloorVolts {
+		return
+	}
+	for i, v := range samples {
+		pcm[i] = int16(math.Round(v / peak * gain * audioPreviewFade(i, len(samples)) * 32767))
+	}
+}
+
 func encodeAudioWAV(pcm []int16) []byte {
 	b := new(bytes.Buffer)
 	b.WriteString("RIFF")

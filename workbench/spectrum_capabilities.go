@@ -4,7 +4,7 @@ func addSpectrumCapabilityDetails(id string, schema map[string]any) bool {
 	if id != "spectrum.analyze" && id != "spectrum.settings.set" && id != "spectrum.export" {
 		return false
 	}
-	c := commandContractDetail{Effects: []string{"Session-only captured-data analysis; does not change live physics, time, graph or Undo history"}}
+	c := commandContractDetail{Version: 1, Scope: "captured-spectrum-analysis", Errors: []commandFailureDetail{{"invalid-params", "admission", "Malformed or out-of-range interval, probe, grid, window, fundamental or export format; accepted state is preserved"}, {"not-ready", "admission", "A retained completed recording/current exact spectrum result is required"}}, Effects: []string{"Session-only captured-data analysis; does not change live physics, time, graph or Undo history"}}
 	if id == "spectrum.export" {
 		inputProperty(schema, "format")["enum"] = []string{"json", "csv"}
 		c.Preconditions = []string{"id equals snapshot.spectrum.result.id of the exact current completed spectrum; normal project-file destination and generation guards apply"}
