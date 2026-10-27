@@ -1,0 +1,286 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "525e472f84eb7d7d28e728d87546db02",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "cd7ff887b15e1a6cad59f6f1b80e9b10be60dcce",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 5,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "b2493a236ba44804",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unchecked index write into state vector in restoreJunctions",
+      "message": "junctionReading guards `n.capacitorIndex(k) \u003c len(x)` because capacitor current unknowns may not exist (e.g. DC solve), but restoreJunctions writes x[n.capacitorIndex(k)] unconditionally. Restoring a recording (untrusted saved data) in a configuration without capacitor-current slots will panic with index out of range instead of returning an error.",
+      "suggestion": "Apply the same bounds check as junctionReading before writing, or return an error when the index is out of range.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles.go",
+          "lines": {
+            "start": 139,
+            "end": 146
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "recording"
+      ],
+      "evidence": "\t\t\tfor k, c := range n.caps {\n\t\t\t\tif c.ID == junctionCapID(p.ID, \"be\") {\n\t\t\t\t\tx[n.capacitorIndex(k)] = q.JunctionBECurrent\n\t\t\t\t}\n\t\t\t\tif c.ID == junctionCapID(p.ID, \"bc\") {\n\t\t\t\t\tx[n.capacitorIndex(k)] = q.JunctionBCCurrent\n\t\t\t\t}\n\t\t\t}",
+      "fix": {
+        "before": "\t\t\tfor k, c := range n.caps {\n\t\t\t\tif c.ID == junctionCapID(p.ID, \"be\") {\n\t\t\t\t\tx[n.capacitorIndex(k)] = q.JunctionBECurrent\n\t\t\t\t}\n\t\t\t\tif c.ID == junctionCapID(p.ID, \"bc\") {\n\t\t\t\t\tx[n.capacitorIndex(k)] = q.JunctionBCCurrent\n\t\t\t\t}\n\t\t\t}",
+        "after": "\t\t\tfor k, c := range n.caps {\n\t\t\t\tidx := n.capacitorIndex(k)\n\t\t\t\tif idx \u003c 0 || idx \u003e= len(x) {\n\t\t\t\t\tcontinue\n\t\t\t\t}\n\t\t\t\tif c.ID == junctionCapID(p.ID, \"be\") {\n\t\t\t\t\tx[idx] = q.JunctionBECurrent\n\t\t\t\t}\n\t\t\t\tif c.ID == junctionCapID(p.ID, \"bc\") {\n\t\t\t\t\tx[idx] = q.JunctionBCCurrent\n\t\t\t\t}\n\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "58d77f0acbbefdbe",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Unsynchronized access to s.graph and unchecked nil deref",
+      "message": "Earlier in this test, `s.operations` is read under `s.mu`. Here `s.graph` is read without that lock, even though the session may still be running its simulation loop. The race detector can flag this. If undo leaves `Device` nil, the test also panics instead of failing with a clear message.",
+      "suggestion": "Take `s.mu` while reading `s.graph`, or read through the public `Snapshot()` API. Check that `p.Device` and `p.Device.Bipolar` are non-nil before dereferencing them.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles_test.go",
+          "lines": {
+            "start": 86,
+            "end": 87
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "nil",
+        "location-corrected"
+      ],
+      "evidence": "\tp, _ := s.graph.Component(\"Q1\")\n\tif p.Device.Bipolar.ForwardBeta != 100 {",
+      "fix": {
+        "before": "\tp, _ := s.graph.Component(\"Q1\")\n\tif p.Device.Bipolar.ForwardBeta != 100 {",
+        "after": "\ts.mu.Lock()\n\tp, _ := s.graph.Component(\"Q1\")\n\ts.mu.Unlock()\n\tif p.Device == nil || p.Device.Bipolar == nil || p.Device.Bipolar.ForwardBeta != 100 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "9bbf19ed3eb8141a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Early voltage control permits invalid (0,1) range",
+      "message": "According to the docs, VA=0 disables the Early term and otherwise VA must be 1–1000 V. The number field still allows any value in [0, 1000]. Entering a value in (0, 1) passes UI bounds but should fail command validation, so the edit fails with an error instead of being clamped by the control. Similarly, the IS field has min .001 but step 1.",
+      "suggestion": "Snap or clamp values in (0,1) to 0 or 1 in the change callback, or align the field's min/step with the validated domain.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "desktop/extended_controls.go",
+          "lines": {
+            "start": 37,
+            "end": 37
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "validation",
+        "location-corrected"
+      ],
+      "evidence": "field(\"transistor-early\", \"Early voltage · V (0 off)\", c.EarlyVoltage, 0, 1000, 1, func(v float64) { n := c; n.EarlyVoltage = v; apply(n, true) })",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "65f707079a3cd138",
+      "severity": "low",
+      "category": "correctness",
+      "title": "ConductiveHeat zeroed for generic transistors",
+      "message": "For generic (unprofiled) transistors, `ConductiveHeat` is forced to 0, yet these devices still dissipate `vbe*ib + vce*ic`. Generic devices have no junction capacitors, so their conductive heat equals `TransistorPower`. Reporting 0 is misleading. Any consumer that sums `ConductiveHeat` for energy accounting will undercount generic transistors.",
+      "suggestion": "Report the conductive heat for all devices. If the field must stay absent for generic devices to keep existing recordings or hashes unchanged, document that and use omitempty or a pointer rather than a misleading zero.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/bipolar.go",
+          "lines": {
+            "start": 100,
+            "end": 102
+          }
+        }
+      ],
+      "tags": [
+        "readings",
+        "energy",
+        "location-corrected"
+      ],
+      "evidence": "\tif !hasTransistorProfile(p) {\n\t\theat = 0\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "23af27a504b7500e",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Early voltage schema bounds don't express the excluded (0,1) range",
+      "message": "The advertised schema allows Early voltage values from 0 up to 1000 V. The contract text says that 0 disables the Early term and that positive values must be at least 1 V. A schema-driven client would therefore treat values in (0, 1) as valid, and the command would then reject them.",
+      "suggestion": "Make the schema match the actual rule. One option is a oneOf with `{const: 0}` and `{minimum: 1, maximum: 1000}`. Another is an `x-` annotation that documents the excluded (0, 1) range so clients can validate it.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 17,
+            "end": 17
+          }
+        }
+      ],
+      "tags": [
+        "schema",
+        "validation",
+        "location-corrected"
+      ],
+      "evidence": "bounds(\"parameters.early_voltage_v\", \"V\", 0, 1000)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "05c9a355b72abb51",
+      "severity": "low",
+      "category": "testing",
+      "title": "Absolute 1e-15 tolerance on mA-scale currents is fragile",
+      "message": "At Vbe=0.63V the collector current is in the mA range. An absolute tolerance of 1e-15 amounts to roughly 1e-13 relative precision. That is close to float64 rounding noise, so a harmless reordering of operations in the implementation could make this test fail.",
+      "suggestion": "Use a relative tolerance, for example `math.Abs(got-want) \u003e 1e-12*math.Max(1e-12, math.Abs(want))`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles_test.go",
+          "lines": {
+            "start": 21,
+            "end": 23
+          }
+        }
+      ],
+      "tags": [
+        "flaky"
+      ],
+      "evidence": "if math.Abs(ib-sign*(f/v.ForwardBeta+r/v.ReverseBeta)) \u003e 1e-15 || math.Abs(ic-sign*(f-r*(1+1/v.ReverseBeta)+f*4/v.EarlyVoltage)) \u003e 1e-15 {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0a933a58546b4292",
+      "severity": "low",
+      "category": "testing",
+      "title": "Unchecked slice indexing in AC test",
+      "message": "`result.Transistors[0]` is indexed without a length check, and so is `p.AC[0]` later. A regression would surface as an index-out-of-range panic rather than a clear test failure.",
+      "suggestion": "Check the lengths and call `t.Fatal` with useful context before indexing.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles_test.go",
+          "lines": {
+            "start": 157,
+            "end": 177
+          }
+        }
+      ],
+      "tags": [
+        "robustness"
+      ],
+      "evidence": "\tq := result.Transistors[0]",
+      "fix": {
+        "before": "\tq := result.Transistors[0]",
+        "after": "\tif len(result.Transistors) != 1 {\n\t\tt.Fatal(\"expected one transistor\", result.Transistors)\n\t}\n\tq := result.Transistors[0]"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 77687,
+    "totalMs": 30259
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 21,
+    "bytes": 76674,
+    "chunks": 4,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 47285,
+        "output": 8003,
+        "costUSD": 0.3492
+      }
+    ],
+    "widenedFiles": 9,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "7859d22026227ff2",
+        "severity": "medium",
+        "category": "correctness",
+        "title": "Profile forcing of network analysis skipped when there is no ground",
+        "message": "The hasTransistorProfile check that forces the general network solver is inside `if len(grounds) \u003e 0`. A circuit with profiled transistors but no ground marker (with capacitors present) can still be routed to the specialized NPN/RC analysis, which uses the fixed default model and silently ignores the profile parameters and junction capacitors.",
+        "suggestion": "Evaluate the profile check independently of grounds, e.g. loop over qs before the grounds check to set generalBipolar when any transistor has a profile.",
+        "confidence": 0.35,
+        "locations": [
+          {
+            "path": "workbench/network_compile.go",
+            "lines": {
+              "start": 93,
+              "end": 97
+            }
+          }
+        ],
+        "tags": [
+          "routing"
+        ],
+        "evidence": "\tif len(grounds) \u003e 0 {\n\t\tfor _, q := range qs {\n\t\t\tgeneralBipolar = generalBipolar || hasTransistorProfile(q) || out.TerminalNet[q.ID+\".emitter\"] != out.TerminalNet[grounds[0].ID+\".reference\"]",
+        "fix": {
+          "before": "\tif len(grounds) \u003e 0 {\n\t\tfor _, q := range qs {\n\t\t\tgeneralBipolar = generalBipolar || hasTransistorProfile(q) || out.TerminalNet[q.ID+\".emitter\"] != out.TerminalNet[grounds[0].ID+\".reference\"]",
+          "after": "\tfor _, q := range qs {\n\t\tgeneralBipolar = generalBipolar || hasTransistorProfile(q)\n\t}\n\tif len(grounds) \u003e 0 {\n\t\tfor _, q := range qs {\n\t\t\tgeneralBipolar = generalBipolar || out.TerminalNet[q.ID+\".emitter\"] != out.TerminalNet[grounds[0].ID+\".reference\"]"
+        },
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in workbench/network_compile.go"
+    }
+  ],
+  "suppressed": []
+}

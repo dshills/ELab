@@ -29,6 +29,11 @@ type RecordingKeepParams struct {
 func recordingModelHashes(m VerificationMetadata) map[string]string {
 	out := map[string]string{}
 	for _, part := range m.Graph.Components {
+		if hasTransistorProfile(part) {
+			data, _ := json.Marshal(componentBipolarModel(part))
+			digest := sha256.Sum256(data)
+			out[part.ID+":"+TransistorProfileModelID] = hex.EncodeToString(digest[:])
+		}
 		var data []byte
 		switch part.Model {
 		case ModelID:

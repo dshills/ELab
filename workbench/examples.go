@@ -76,6 +76,7 @@ func buildExampleCatalog() []ExampleInfo {
 		{ID: "pnp", Title: "PNP high-side LED switch", Question: "How does a PNP transistor switch the supply side?", Expected: "Low base drive lights D1; high drive turns it off. PNP base and collector currents are negative under the shared into-device convention.", Try: "Choose Low / High under the scope. Plot Q1 VBE and collector current; increase RB and compare.", Limitation: "Generic complementary Ebers–Moll model; no device identity, breakdown, heating, internal capacitance or switching delay. LED brightness is illustrative."},
 		{ID: "emitter-follower", Title: "NPN emitter follower", Question: "Why does the emitter follow the base with a voltage drop?", Expected: "The emitter follows the 10 Hz input below the base voltage; RL carries much more current than the base resistor.", Try: "Compare VIN, Q1 base and emitter voltages and base/emitter currents. Change RB or RL to see loading.", Limitation: "Generic transistor with instantaneous response; no high-frequency bandwidth, Early effect, heating or physical ratings."},
 		{ID: "bipolar-push-pull", Title: "Complementary transistor buffer", Question: "How can an NPN/PNP pair source and sink load current?", Expected: "Q1 supplies the positive half-cycle, Q2 the negative half-cycle. The unbiased stage has a visible crossover dead band near zero input.", Try: "Plot VIN, the shared emitters and both collector currents. Pause and compare positive, negative and near-zero input samples.", Limitation: "Unbiased educational class-B stage with illustrative complementary parameters; no thermal behavior, internal charge, real matched pair or physical power ratings."},
+		{ID: "transistor-profile", Title: "Transistor gain, Early effect and capacitance", Question: "How do device parameters change amplifier response?", Expected: "An emitter follower uses a configurable educational NPN profile. Change gain, Early voltage or junction capacitance and compare bias, transient readings and Bode sweeps.", Try: "Select Q1; compare forward beta 50 and 300. Increase base-emitter capacitance to 100 nF and sweep VIN to the emitter. Disable the profile to restore generic v1.", Limitation: "Educational constant-capacitance model at 27 C, biased startup; no manufacturer identity, diffusion charge, thermal effects or component ratings."},
 		{ID: "amplifier-distortion", Title: "Amplifier clipping and harmonic distortion", Question: "How does overdriving an amplifier change its spectrum?", Expected: "A 10 Hz input overdrives the inverting gain-of-two amplifier. Captured output shows clipping and additional harmonics; reducing VIN amplitude removes clipping.", Try: "Verify 200 ms with a 500 us sample step and VIN/output probes, then analyze the recorded output with a 10 Hz fundamental. Reduce VIN amplitude from 3 V to 0.5 V and compare THD.", Limitation: "Educational memoryless op-amp and resistor load; no physical audio bandwidth, noise or thermal model. FFT analyzes sampled recorded data; THD is not THD+N."},
 		{ID: "discrete-class-ab", Title: "All-discrete class-AB amplifier", Question: "How do a differential pair, current mirror and voltage-gain stage drive a class-AB output without an op-amp?", Expected: "The eight-transistor circuit amplifies the 10 Hz input by about eleven. Q6 sources positive load current and Q7 sinks negative current; both conduct near zero input. The tail current is about 1 mA and the feedback loop has a small DC offset.", Try: "Compare VIN and RL voltage, Q6/Q7 collector currents and the Q8 tail current. Change RF from 1k to 2k to increase gain, or C1 from 1nF to 10nF to explore the external compensation state.", Limitation: "Generic matched Ebers–Moll devices, not named power transistors. No heating, breakdown, safe operating area or internal junction charge/bandwidth. C1 starts at an explicit 7.55 V biased initial condition; this is not a zero-energy power-on or physical stability qualification."},
 		{ID: "npn", Title: "Transistor LED switch", Question: "How does a small base current control the LED?", Expected: "Low base drive turns the LED off; higher drive increases collector current until the transistor approaches saturation.", Try: "Choose base 0 V, 0.8 V and 5 V, then change RB and compare base/collector currents.", Limitation: "Educational Ebers–Moll NPN; no physical transistor identity, heating, breakdown or internal charge storage."},
@@ -398,6 +399,18 @@ func findExample(id string) (exampleDefinition, bool) {
 			d.graph = ComplementaryBipolarExampleGraph()
 			d.probes = []string{"v:VIN.positive", "v:Q1.emitter", "i:Q1.collector", "i:Q2.collector"}
 		}
+	case "transistor-profile":
+		d.graph = EmitterFollowerExampleGraph()
+		for i, p := range d.graph.Components {
+			if p.ID == "Q1" {
+				v := DefaultTransistorProfile()
+				d.graph.Components[i].Device = &DeviceParameters{Bipolar: &v}
+			}
+		}
+		d.selected = "Q1"
+		d.probes = []string{"v:VIN.positive", "v:Q1.emitter", "i:Q1.base", "i:Q1.collector"}
+		d.settings.StepSeconds = .0005
+		d.settings.PlaybackSpeed = .02
 	case "amplifier-distortion":
 		d.graph = OpAmpInvertingExampleGraph()
 		for i, p := range d.graph.Components {

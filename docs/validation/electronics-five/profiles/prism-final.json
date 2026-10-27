@@ -1,0 +1,220 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "4f8f5d924ab04a7d3074ed76067693da",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "cd7ff887b15e1a6cad59f6f1b80e9b10be60dcce",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 5,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "4d1aaec23c102876",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Analysis switched to transient after the capacitor-dependent setup",
+      "message": "Analysis is changed to transient only after the earlier branch, which keys off `len(caps) \u003e 0` when it picks the analysis and its setup. A circuit whose only storage is profile junction capacitors may miss whatever that branch configures for transient runs, such as step or sampling defaults. Its analysis also differs from the result of the original selection path.",
+      "suggestion": "Count profile junction capacitors as storage in the original analysis-selection condition, alongside `len(caps) \u003e 0`, so transient setup runs the same way as for authored capacitors.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 156,
+            "end": 158
+          }
+        }
+      ],
+      "tags": [
+        "analysis-selection",
+        "location-corrected"
+      ],
+      "evidence": "if hasTransistorProfile(p) \u0026\u0026 (p.Device.Bipolar.CBE \u003e 0 || p.Device.Bipolar.CBC \u003e 0) \u0026\u0026 out.Analysis == NetworkDCAnalysis {\n\t\t\tout.Analysis = NetworkTransientAnalysis\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6f0ba8a493cfc98d",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Disabling a profile still requires valid parameters",
+      "message": "`transistor.profile.set` always requires and validates a full `parameters` object, even when `enabled` is false. When `enabled` is false the parameters are thrown away (`d` stays nil). A client that tries to disable a profile by sending an empty or zero-valued `parameters` object is therefore refused. It cannot return the transistor to the generic model without providing a fully valid profile it does not need.",
+      "suggestion": "Run the nested-field check and `validateTransistorProfile` only when `p.Enabled` is true. Alternatively, document that disabling requires a valid profile and confirm that every client sends one.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/editing.go",
+          "lines": {
+            "start": 182,
+            "end": 190
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "api"
+      ],
+      "evidence": "if err := validateTransistorProfile(p.Parameters); err != nil {\n\t\t\treturn err\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "23af27a504b7500e",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Early voltage bounds disagree with the 0-or-≥1 rule",
+      "message": "The command schema accepts any Early voltage from 0 to 1000. The documented rule, and `addTransistorProfileSchema`, allow only 0 (disabled) or a value from 1 to 1000. A client reading the `transistor.profile.set` schema will think values such as 0.5 V are valid, but the server rejects them.",
+      "suggestion": "Use the same anyOf form as `addTransistorProfileSchema`: either 0, or a number from 1 to 1000. Define the profile bounds in one table and use it from both functions so the two schemas cannot drift apart.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 17,
+            "end": 17
+          }
+        }
+      ],
+      "tags": [
+        "schema",
+        "validation"
+      ],
+      "evidence": "bounds(\"parameters.early_voltage_v\", \"V\", 0, 1000)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "81b3b7c86b226508",
+      "severity": "low",
+      "category": "performance",
+      "title": "Collocation enabled for profiles without junction capacitors",
+      "message": "Any transistor with a profile turns on collocation integration, even when it has no CBE or CBC capacitor and adds no dynamic state. This makes the solver more expensive and may change numerical results with no need for it.",
+      "suggestion": "Turn on collocation only when the profile actually adds storage: `hasTransistorProfile(p) \u0026\u0026 (p.Device.Bipolar.CBE \u003e 0 || p.Device.Bipolar.CBC \u003e 0)`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/power_devices.go",
+          "lines": {
+            "start": 366,
+            "end": 366
+          }
+        }
+      ],
+      "tags": [
+        "solver",
+        "location-corrected"
+      ],
+      "evidence": "if p.Kind == \"piezo\" || hasDynamics(p) || hasTransistorProfile(p) || p.Kind == \"battery\" || p.Kind == \"dc-motor\" {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5a334b8d00f016ae",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Exponential clamp makes Jacobian inconsistent with currents",
+      "message": "Past the ±80·VT clamp, the currents stop changing but `gf`/`gr` still report the clamped exponential slope. The Jacobian then no longer matches the function. Newton can stall or oscillate when an iterate overshoots the clamp, for example at large forward bias during startup.",
+      "suggestion": "Make the Jacobian consistent with the function. One option is to continue the exponential linearly beyond the limit, so the current is `exp(80)*(1+x-80)` with slope `exp(80)`. Alternatively, set the slope to zero when clamped.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles.go",
+          "lines": {
+            "start": 62,
+            "end": 62
+          }
+        }
+      ],
+      "tags": [
+        "numerics",
+        "newton",
+        "location-corrected"
+      ],
+      "evidence": "eb, ec := math.Exp(math.Max(-80, math.Min(80, b/vt))), math.Exp(math.Max(-80, math.Min(80, (b-c)/vt)))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "fa8ebc4ba9becfcd",
+      "severity": "low",
+      "category": "testing",
+      "title": "Unchecked index into transistor results",
+      "message": "The test indexes `Transistors[0]` without checking the slice length. A regression that drops the transistor result would panic instead of producing a clear failure.",
+      "suggestion": "Check that the slice has length 1 before indexing.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles_test.go",
+          "lines": {
+            "start": 216,
+            "end": 216
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness",
+        "location-corrected"
+      ],
+      "evidence": "q := state.result.Transistors[0]",
+      "fix": {
+        "before": "q := state.result.Transistors[0]",
+        "after": "if len(state.result.Transistors) != 1 {\n\t\tt.Fatal(\"missing transistor result\")\n\t}\n\tq := state.result.Transistors[0]"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 65833,
+    "totalMs": 24476
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 22,
+    "bytes": 84095,
+    "chunks": 4,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 51112,
+        "output": 6254,
+        "costUSD": 0.329528
+      }
+    ],
+    "widenedFiles": 9,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

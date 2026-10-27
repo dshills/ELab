@@ -11,6 +11,9 @@ const NPNEngineID = "elab.npn-switch-dc.v1"
 const NPNAnalysis = "NPN DC operating point"
 
 type NPNModel struct {
+	EarlyVoltage      float64 `json:"early_voltage_v,omitempty"`
+	CBE               float64 `json:"base_emitter_capacitance_f,omitempty"`
+	CBC               float64 `json:"base_collector_capacitance_f,omitempty"`
 	ID                string  `json:"id"`
 	SaturationCurrent float64 `json:"saturation_current_a"`
 	ForwardBeta       float64 `json:"forward_beta"`
@@ -20,7 +23,7 @@ type NPNModel struct {
 }
 
 func TransistorModel() NPNModel {
-	return NPNModel{NPNModelID, 1e-14, 100, 1, 27, "Educational Ebers–Moll model; no named physical device, breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing. LED reverse current is neglected."}
+	return NPNModel{ID: NPNModelID, SaturationCurrent: 1e-14, ForwardBeta: 100, ReverseBeta: 1, Temperature: 27, Limitations: "Educational Ebers–Moll model; no named physical device, breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing. LED reverse current is neglected."}
 }
 
 type NPNResult struct {

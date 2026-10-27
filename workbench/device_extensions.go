@@ -36,9 +36,10 @@ type SoundConfig struct {
 	Frequency   float64 `json:"frequency_hz"`
 }
 type DeviceParameters struct {
-	PWM      *PWMConfig     `json:"pwm,omitempty"`
-	Dynamics *OpAmpDynamics `json:"opamp_dynamics,omitempty"`
-	Sound    *SoundConfig   `json:"sound,omitempty"`
+	Bipolar  *TransistorProfile `json:"bipolar,omitempty"`
+	PWM      *PWMConfig         `json:"pwm,omitempty"`
+	Dynamics *OpAmpDynamics     `json:"opamp_dynamics,omitempty"`
+	Sound    *SoundConfig       `json:"sound,omitempty"`
 }
 
 func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
@@ -46,6 +47,10 @@ func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
 		return nil
 	}
 	o := *p
+	if p.Bipolar != nil {
+		v := *p.Bipolar
+		o.Bipolar = &v
+	}
 	if p.PWM != nil {
 		v := *p.PWM
 		o.PWM = &v
@@ -102,6 +107,9 @@ func validateDeviceParameters(p Component) error {
 		return nil
 	}
 	count := 0
+	if d.Bipolar != nil {
+		count++
+	}
 	if d.PWM != nil {
 		count++
 	}
@@ -113,6 +121,9 @@ func validateDeviceParameters(p Component) error {
 	}
 	if count != 1 {
 		return fmt.Errorf("device parameters must match one component model")
+	}
+	if IsBipolarKind(p.Kind) && d.Bipolar != nil {
+		return validateTransistorProfile(*d.Bipolar)
 	}
 	if p.Kind == "pwm-controller" && d.PWM != nil {
 		v := *d.PWM
@@ -146,6 +157,8 @@ func validateDeviceFields(raw json.RawMessage, p Component) error {
 		return err
 	}
 	switch {
+	case p.Device.Bipolar != nil:
+		return paramsNested(f["device_parameters"], "bipolar", &TransistorProfile{}, "version", "forward_beta", "reverse_beta", "saturation_current_a", "early_voltage_v", "base_emitter_capacitance_f", "base_collector_capacitance_f")
 	case p.Device.PWM != nil:
 		return paramsNested(f["device_parameters"], "pwm", &PWMConfig{}, "frequency_hz", "duty_fraction")
 	case p.Device.Dynamics != nil:
@@ -308,8 +321,9 @@ func validateRecordedPWM(c Compiled, g Graph, r *MixedResult) error {
 	return nil
 }
 
-// Composite capacitors participate in the same independent startup constraints
-// as authored storage. Do not introduce an impulse or an arbitrary current split.
+// Composite storage normally uses the same independent startup voltage
+// constraints as authored capacitors. Profile junctions explicitly initialize at
+// solved bias with zero current and therefore add no voltage constraint.
 func validateExtendedConstraints(c Compiled) error {
 	if extendedModelForGraph(c.MixedGraph) == nil {
 		return nil
@@ -327,6 +341,11 @@ func validateExtendedConstraints(c Compiled) error {
 		return parent[a]
 	}
 	for _, p := range lowered.MixedGraph.Components {
+		// Profile junctions start at solved bias with zero current, not an
+		// imposed startup voltage. They add no ideal voltage constraint.
+		if isJunctionCap(p) {
+			continue
+		}
 		if p.Kind != "dc-source" && p.Kind != "pulse-source" && !IsWaveformSource(p.Kind) && p.Kind != "capacitor" {
 			continue
 		}

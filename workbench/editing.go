@@ -179,6 +179,26 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.startExportLocked(ExportStartParams{Kind: "spectrum-" + p.Format, ID: p.ID, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
 	case "audio.render", "audio.play", "audio.stop":
 		return s.audioCommandLocked(command, raw)
+	case "transistor.profile.set":
+		var p TransistorProfileParams
+		if err := params(raw, &p, "id", "enabled", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &TransistorProfile{}, "version", "forward_beta", "reverse_beta", "saturation_current_a", "early_voltage_v", "base_emitter_capacitance_f", "base_collector_capacitance_f"); err != nil {
+			return err
+		}
+		if err := validateTransistorProfile(p.Parameters); err != nil {
+			return err
+		}
+		part, ok := s.graph.Component(p.ID)
+		if !ok || !IsBipolarKind(part.Kind) {
+			return fmt.Errorf("choose an NPN or PNP transistor")
+		}
+		var d *DeviceParameters
+		if p.Enabled {
+			d = &DeviceParameters{Bipolar: &p.Parameters}
+		}
+		return s.configureDeviceLocked(p.ID, part.Kind, d)
 	case "pwm.configure":
 		var p PWMParams
 		if err := params(raw, &p, "id", "parameters"); err != nil {

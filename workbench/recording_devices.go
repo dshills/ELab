@@ -29,14 +29,18 @@ func validateRecordedBipolars(c Compiled, graph Graph, result *MixedResult) erro
 	for _, actual := range result.Transistors {
 		part, _ := graph.Component(actual.TransistorID)
 		expected := n.bipolarResult(part, x)
+		if hasTransistorProfile(part) && !recordingNear(actual.ConductiveHeat, expected.ConductiveHeat) {
+			return fmt.Errorf("recorded profile heat disagrees with state")
+		}
 		validModel := actual.Model == expected.Model
-		if part.Kind == "npn" {
+		if part.Kind == "npn" && !hasTransistorProfile(part) {
 			validModel = supportedNPNModel(actual.Model)
 		}
 		if !validModel || actual.State != expected.State || !recordingNear(actual.EmitterCurrent, actual.BaseCurrent+actual.CollectorCurrent) {
 			return fmt.Errorf("invalid recorded bipolar model, region or terminal-current convention")
 		}
 		for _, pair := range [][2]float64{
+			{actual.JunctionEnergy, expected.JunctionEnergy},
 			{actual.VBE, expected.VBE}, {actual.VCE, expected.VCE},
 			{actual.BaseCurrent, expected.BaseCurrent}, {actual.CollectorCurrent, expected.CollectorCurrent},
 			{actual.EmitterCurrent, expected.EmitterCurrent}, {actual.TransistorPower, expected.TransistorPower},

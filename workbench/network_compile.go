@@ -91,7 +91,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	generalBipolar := hasBipolarPolarity(qs, "pnp")
 	if len(grounds) > 0 {
 		for _, q := range qs {
-			generalBipolar = generalBipolar || out.TerminalNet[q.ID+".emitter"] != out.TerminalNet[grounds[0].ID+".reference"]
+			generalBipolar = generalBipolar || hasTransistorProfile(q) || out.TerminalNet[q.ID+".emitter"] != out.TerminalNet[grounds[0].ID+".reference"]
 		}
 	}
 	if len(logic) > 0 || len(opamps) > 0 || len(mos) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 || generalBipolar {
@@ -104,6 +104,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 					out.Analysis = NetworkTransientAnalysis
 				}
 			}
+		}
+	}
+	for _, p := range qs {
+		if hasTransistorProfile(p) && (p.Device.Bipolar.CBE > 0 || p.Device.Bipolar.CBC > 0) && out.Analysis == NetworkDCAnalysis {
+			out.Analysis = NetworkTransientAnalysis
 		}
 	}
 	for _, source := range sources {

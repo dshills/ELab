@@ -9,6 +9,15 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	c := commandContractDetail{Version: 1, Scope: "hobbyist-device-configuration", Preconditions: []string{"Ordinary revision, document-generation, retry and closed-service guards apply"}, Effects: []string{}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing, extra, wrong-type, null-required, out-of-range or wrong-target fields preserve accepted state"}}}
 	switch id {
+	case "transistor.profile.set":
+		schema["x-profile-version"] = TransistorProfileModelID
+		bounds("parameters.forward_beta", "ratio", 1, 1000)
+		bounds("parameters.reverse_beta", "ratio", .1, 100)
+		bounds("parameters.saturation_current_a", "A", 1e-18, 1e-10)
+		schema["x-early-voltage"] = "0 disables; otherwise 1–1000 V, as defined by the referenced profile schema"
+		bounds("parameters.base_emitter_capacitance_f", "F", 0, 1e-6)
+		bounds("parameters.base_collector_capacitance_f", "F", 0, 1e-6)
+		c.Effects = []string{"Complete saved, undoable NPN/PNP educational profile. All fields required and validated even when disabling. Enabled=false restores exact generic-v1 law. Early voltage zero disables Early term; positive values must be at least 1 V. No manufacturer identity or full SPICE-card fidelity is claimed", "Optional constant CBE/CBC use biased startup and consume the existing four-capacitor and total-part budgets, including other private device storage. Transient and AC stamps include charge, terminal currents and stored energy; edits restart the experiment. Profile in device_parameters and per-result model parameters are captured and validated"}
 	case "pwm.configure":
 		bounds("parameters.frequency_hz", "Hz", 10, 1000)
 		bounds("parameters.duty_fraction", "fraction", .1, .9)
@@ -43,5 +52,31 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	schema["x-command-contract"] = c
 	schema["x-model-id"] = ExtendedModelID
+	if id == "transistor.profile.set" {
+		schema["x-model-id"] = TransistorProfileModelID
+	}
 	return true
+}
+
+func addTransistorProfileSchema(schema map[string]any) {
+	if p := inputProperty(schema, "version"); p != nil {
+		p["enum"] = []string{TransistorProfileModelID}
+	}
+	for _, f := range []struct {
+		name, unit string
+		min, max   float64
+	}{{"forward_beta", "ratio", 1, 1000}, {"reverse_beta", "ratio", .1, 100}, {"saturation_current_a", "A", 1e-18, 1e-10}, {"base_emitter_capacitance_f", "F", 0, 1e-6}, {"base_collector_capacitance_f", "F", 0, 1e-6}} {
+		p := inputProperty(schema, f.name)
+		if p == nil {
+			continue
+		}
+		p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
+	}
+	p := inputProperty(schema, "early_voltage_v")
+	if p == nil {
+		return
+	}
+	delete(p, "type")
+	p["anyOf"] = []any{map[string]any{"type": "number", "enum": []int{0}}, map[string]any{"type": "number", "minimum": 1, "maximum": 1000}}
+	p["x-unit"] = "V"
 }

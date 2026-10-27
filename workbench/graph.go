@@ -639,7 +639,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	bipolarNetwork := len(transistors) > 0 && (len(transistors) != 1 || transistors[0].Kind == "pnp" || len(resistors) != 2 || len(leds) > 1)
 	if len(grounds) > 0 {
 		for _, q := range transistors {
-			bipolarNetwork = bipolarNetwork || out.TerminalNet[q.ID+".emitter"] != out.TerminalNet[grounds[0].ID+".reference"] || out.TerminalNet[q.ID+".base"] == out.TerminalNet[q.ID+".collector"]
+			bipolarNetwork = bipolarNetwork || hasTransistorProfile(q) || out.TerminalNet[q.ID+".emitter"] != out.TerminalNet[grounds[0].ID+".reference"] || out.TerminalNet[q.ID+".base"] == out.TerminalNet[q.ID+".collector"]
 		}
 		for _, source := range sources {
 			if source.Kind == "dc-source" && out.TerminalNet[source.ID+".negative"] != out.TerminalNet[grounds[0].ID+".reference"] {

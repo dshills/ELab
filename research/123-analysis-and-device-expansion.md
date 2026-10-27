@@ -54,4 +54,8 @@ and ordinary/rendered focused tests pass. New discovery initially exceeded its
 without dropping fields or relaxing the limit. Focused discovery/time/core race
 tests now pass. Three complete Anthropic Prism reviews are recorded with explicit dispositions. Final source fixes actual-row defaults, omitted-parameter normalization, appearance invalidation, exact export identity/provenance, defensive grid/export checks and test assertions. Public unit-text and object-only protocol tests resolve the remaining medium observations. Focused core and desktop race tests pass. Item 2 is complete; committing the reviewed batch.
 
-Items 3–5: planned, not yet qualified or committed.
+Item 2 is committed as `cd7ff887`.
+
+Item 3: versioned educational NPN/PNP profiles, Early effect and explicit junction capacitance are implemented with shared undoable controls, saved/captured parameters, a working follower example and independent DC/Jacobian/AC references. Biased startup avoids imposing redundant junction voltage constraints; existing four-storage and total-part bounds remain unchanged. Three Anthropic Prism reviews and findings dispositions are retained. Actual inspector mounting, stale callbacks, core race and offscreen-build handler/theme tests pass. Early fixture/compiler and unrecognized-tag trials are excluded from successful evidence. Manufacturer SPICE-card fidelity is deliberately not claimed. Committing this reviewed batch.
+
+Items 4–5: implementation in progress, not yet qualified or committed.

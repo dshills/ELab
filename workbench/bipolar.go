@@ -62,7 +62,7 @@ func bipolarLinear(kind string, vbe, vce float64) (ib, ic, bb, bc, cb, cc float6
 // assumed to be grounded; add and inject omit the actual reference node.
 func (n *mixedNetwork) stampBipolar(p Component, x []float64, add func(int, int, float64), f []float64) {
 	b, c, e := n.pin(p, "base"), n.pin(p, "collector"), n.pin(p, "emitter")
-	ib, ic, bb, bc, cb, cc := bipolarLinear(p.Kind, voltage(x, b)-voltage(x, e), voltage(x, c)-voltage(x, e))
+	ib, ic, bb, bc, cb, cc := componentBipolarLinear(p, voltage(x, b)-voltage(x, e), voltage(x, c)-voltage(x, e))
 	inject := func(row int, current float64) {
 		if row >= 0 {
 			f[row] += current
@@ -85,7 +85,7 @@ func (n *mixedNetwork) stampBipolar(p Component, x []float64, add func(int, int,
 func (n *mixedNetwork) bipolarResult(p Component, x []float64) MixedTransistor {
 	vbe := voltage(x, n.pin(p, "base")) - voltage(x, n.pin(p, "emitter"))
 	vce := voltage(x, n.pin(p, "collector")) - voltage(x, n.pin(p, "emitter"))
-	ib, ic, _, _, _, _ := bipolarLinear(p.Kind, vbe, vce)
+	ib, ic, _, _, _, _ := componentBipolarLinear(p, vbe, vce)
 	state := "active"
 	sign := bipolarPolarity(p.Kind)
 	if math.Abs(ib) < 1e-8 && math.Abs(ic) < 1e-8 {
@@ -95,7 +95,15 @@ func (n *mixedNetwork) bipolarResult(p Component, x []float64) MixedTransistor {
 	} else if sign*vce < 0 {
 		state = "reverse-active"
 	}
-	return MixedTransistor{TransistorID: p.ID, Model: bipolarModel(p.Kind), BaseCurrent: ib, CollectorCurrent: ic, EmitterCurrent: ib + ic, VBE: vbe, VCE: vce, TransistorPower: vbe*ib + vce*ic, State: state}
+	be, bc, energy := n.junctionReading(p, x)
+	heat := vbe*ib + vce*ic
+	// Optional profile-only reading; omit it for historical generic-v1 results.
+	if !hasTransistorProfile(p) {
+		heat = 0
+	}
+	ib += be + bc
+	ic -= bc
+	return MixedTransistor{JunctionBECurrent: be, JunctionBCCurrent: bc, JunctionEnergy: energy, ConductiveHeat: heat, TransistorID: p.ID, Model: componentBipolarModel(p), BaseCurrent: ib, CollectorCurrent: ic, EmitterCurrent: ib + ic, VBE: vbe, VCE: vce, TransistorPower: vbe*ib + vce*ic, State: state}
 }
 
 // Old saved NPN parameters are still the same model. Accept only the exact

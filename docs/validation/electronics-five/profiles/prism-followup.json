@@ -1,0 +1,224 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "e933f24bbe395681cc1f6b2a2da3bd13",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "cd7ff887b15e1a6cad59f6f1b80e9b10be60dcce",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 4,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "db13f5d26295e799",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Junction capacitors skipped in startup constraint check",
+      "message": "The function's doc comment says composite capacitors take part in the same independent startup constraints as authored storage, with no impulse and no arbitrary current split. The new code skips junction capacitors entirely. A voltage source wired directly across base-emitter or base-collector would then form a source/capacitor loop that is no longer detected. That loop gives redundant or inconsistent startup constraints, which can make the system singular or impose an arbitrary initial charge.",
+      "suggestion": "Keep junction capacitors in the union-find check, treating them like other capacitors with the terminals of the lowered capacitor. If they really must be excluded, say why and update the doc comment. Then make sure the startup solver handles source/junction-capacitor loops explicitly, for example by rejecting them with a clear error.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/device_extensions.go",
+          "lines": {
+            "start": 343,
+            "end": 345
+          }
+        }
+      ],
+      "tags": [
+        "simulation",
+        "constraints"
+      ],
+      "evidence": "\t\tif isJunctionCap(p) {\n\t\t\tcontinue\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "97fa6f9817ccd609",
+      "severity": "medium",
+      "category": "bug",
+      "title": "x",
+      "message": "`addTransistorProfileSchema` writes directly into the map returned by `inputProperty`. The `bounds` helper in the same file checks that return value for nil, so `inputProperty` can evidently return nil. Writing to a nil map panics. That applies to `version`, each loop field, and `early_voltage_v` (where `delete` is safe but the later assignments are not). A schema missing any of these properties would crash schema generation.",
+      "suggestion": "Check each `inputProperty` result for nil before writing, as `bounds` does. Alternatively, fail loudly with a clear message if the schema is expected to always contain these properties.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 62,
+            "end": 62
+          }
+        }
+      ],
+      "tags": [
+        "nil-map",
+        "panic",
+        "location-corrected"
+      ],
+      "evidence": "\tinputProperty(schema, \"version\")[\"enum\"] = []string{TransistorProfileModelID}",
+      "fix": {
+        "before": "\tinputProperty(schema, \"version\")[\"enum\"] = []string{TransistorProfileModelID}",
+        "after": "\tif v := inputProperty(schema, \"version\"); v != nil {\n\t\tv[\"enum\"] = []string{TransistorProfileModelID}\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4ed8005d59b89bf1",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Early-effect checkbox applies even when state unchanged",
+      "message": "Unlike the profile and op-amp checkboxes, this Change handler never compares the event against the current state. A redundant Change event with `Checked` true resets a user-chosen Early voltage (e.g. 250 V) back to 100 V. It also issues an extra undoable edit that restarts the simulation.",
+      "suggestion": "Return early when `e.Checked == (c.EarlyVoltage \u003e 0)`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/extended_controls.go",
+          "lines": {
+            "start": 38,
+            "end": 45
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "undo"
+      ],
+      "evidence": "\t\t\tnodes = append(nodes, ui.Node{ID: \"transistor-early-enabled\", Kind: ui.Checkbox, Text: \"Include Early effect\", Checked: c.EarlyVoltage \u003e 0, Accessibility: ui.Accessibility{Name: \"Include transistor Early effect\"}, Change: func(e ui.ChangeEvent) {\n\t\t\t\tn := c\n\t\t\t\tn.EarlyVoltage = 0\n\t\t\t\tif e.Checked {\n\t\t\t\t\tn.EarlyVoltage = 100\n\t\t\t\t}\n\t\t\t\tapply(n, true)\n\t\t\t}})",
+      "fix": {
+        "before": "\t\t\tnodes = append(nodes, ui.Node{ID: \"transistor-early-enabled\", Kind: ui.Checkbox, Text: \"Include Early effect\", Checked: c.EarlyVoltage \u003e 0, Accessibility: ui.Accessibility{Name: \"Include transistor Early effect\"}, Change: func(e ui.ChangeEvent) {\n\t\t\t\tn := c\n\t\t\t\tn.EarlyVoltage = 0\n\t\t\t\tif e.Checked {\n\t\t\t\t\tn.EarlyVoltage = 100\n\t\t\t\t}\n\t\t\t\tapply(n, true)\n\t\t\t}})",
+        "after": "\t\t\tnodes = append(nodes, ui.Node{ID: \"transistor-early-enabled\", Kind: ui.Checkbox, Text: \"Include Early effect\", Checked: c.EarlyVoltage \u003e 0, Accessibility: ui.Accessibility{Name: \"Include transistor Early effect\"}, Change: func(e ui.ChangeEvent) {\n\t\t\t\tif e.Checked == (c.EarlyVoltage \u003e 0) {\n\t\t\t\t\treturn\n\t\t\t\t}\n\t\t\t\tn := c\n\t\t\t\tn.EarlyVoltage = 0\n\t\t\t\tif e.Checked {\n\t\t\t\t\tn.EarlyVoltage = 100\n\t\t\t\t}\n\t\t\t\tapply(n, true)\n\t\t\t}})"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8b03c69d255ed3b2",
+      "severity": "low",
+      "category": "correctness",
+      "title": "ConductiveHeat zeroed for generic transistors",
+      "message": "Generic (non-profiled) transistors always report `ConductiveHeat` as 0, even though they dissipate `vbe*ib + vce*ic`. This field sits next to a non-zero `TransistorPower`, so consumers can read it as \"no dissipation\" rather than \"field not applicable\". If the zero only exists to keep old serialized output unchanged, that intent is not visible here.",
+      "suggestion": "Report the actual conductive heat for all devices. If you need old-output compatibility, make the field a pointer or document the sentinel meaning explicitly.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/bipolar.go",
+          "lines": {
+            "start": 98,
+            "end": 101
+          }
+        }
+      ],
+      "tags": [
+        "readings",
+        "physics"
+      ],
+      "evidence": "\theat := vbe*ib + vce*ic\n\tif !hasTransistorProfile(p) {\n\t\theat = 0\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "83fdf25146ed8ce0",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Early-effect term makes Jacobian discontinuous at VCE=0",
+      "message": "The Early term `f*c/VA` is only applied when `c \u003e 0`. The current stays continuous at VCE=0, but its slope dIC/dVCE jumps by `f/VA`. Newton iterations that cross VCE≈0 (saturation edge, startup) can oscillate or converge slowly on this kink.",
+      "suggestion": "Smooth the `max(VCE,0)` term with a C1-continuous approximation, for example a softplus with a small width, so the Jacobian stays continuous. Alternatively, document the kink and add a convergence test that sweeps through VCE=0.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles.go",
+          "lines": {
+            "start": 67,
+            "end": 71
+          }
+        }
+      ],
+      "tags": [
+        "numerics",
+        "newton"
+      ],
+      "evidence": "\tif m.EarlyVoltage \u003e 0 \u0026\u0026 f \u003e 0 \u0026\u0026 c \u003e 0 {\n\t\tic += f * c / m.EarlyVoltage\n\t\tcb += gf * c / m.EarlyVoltage\n\t\tcc += f / m.EarlyVoltage\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4a3bce9d35b2014c",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Missing junction state slot silently reads as zero current",
+      "message": "`junctionReading` silently reports zero junction current when the capacitor state slot is out of range. `restoreJunctions` treats the same condition as an error. A malformed state could therefore yield plausible-looking zero readings instead of surfacing the inconsistency.",
+      "suggestion": "Make `junctionReading` handle a missing slot the same way as `restoreJunctions`: propagate an error or a validity flag rather than defaulting to 0.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/transistor_profiles.go",
+          "lines": {
+            "start": 104,
+            "end": 107
+          }
+        }
+      ],
+      "tags": [
+        "consistency",
+        "location-corrected"
+      ],
+      "evidence": "\t\tcurrent := 0.\n\t\tif n.capacitorIndex(k) \u003c len(x) {\n\t\t\tcurrent = x[n.capacitorIndex(k)]\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 78600,
+    "totalMs": 28294
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 22,
+    "bytes": 80464,
+    "chunks": 4,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 49198,
+        "output": 7675,
+        "costUSD": 0.350292
+      }
+    ],
+    "widenedFiles": 9,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

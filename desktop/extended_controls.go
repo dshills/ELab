@@ -16,6 +16,43 @@ func (s *screen) extendedControls(state workbench.Snapshot, p workbench.Componen
 			}
 		}})
 	}
+	if workbench.IsBipolarKind(p.Kind) {
+		enabled := p.Device != nil && p.Device.Bipolar != nil
+		c := workbench.DefaultTransistorProfile()
+		if enabled {
+			c = *p.Device.Bipolar
+		}
+		apply := func(v workbench.TransistorProfile, on bool) {
+			s.invokeAtCommandRevision("transistor.profile.set", workbench.TransistorProfileParams{ID: p.ID, Enabled: on, Parameters: v}, state.CommandRevision, state.Document.Generation)
+		}
+		nodes = append(nodes, section("transistor-profile-title", "Transistor model"), ui.Node{ID: "transistor-profile-enabled", Kind: ui.Checkbox, Text: "Use configurable educational profile", Checked: enabled, Accessibility: ui.Accessibility{Name: "Enable transistor profile"}, Change: func(e ui.ChangeEvent) {
+			if e.Checked != enabled {
+				apply(c, e.Checked)
+			}
+		}})
+		if enabled {
+			field("transistor-beta", "Forward gain · β", c.ForwardBeta, 1, 1000, 1, func(v float64) { n := c; n.ForwardBeta = v; apply(n, true) })
+			field("transistor-reverse-beta", "Reverse gain", c.ReverseBeta, .1, 100, .1, func(v float64) { n := c; n.ReverseBeta = v; apply(n, true) })
+			field("transistor-is", "Transport IS · fA", c.SaturationCurrent*1e15, .001, 1e5, .001, func(v float64) { n := c; n.SaturationCurrent = v * 1e-15; apply(n, true) })
+			nodes = append(nodes, ui.Node{ID: "transistor-early-enabled", Kind: ui.Checkbox, Text: "Include Early effect", Checked: c.EarlyVoltage > 0, Accessibility: ui.Accessibility{Name: "Include transistor Early effect"}, Change: func(e ui.ChangeEvent) {
+				if e.Checked == (c.EarlyVoltage > 0) {
+					return
+				}
+				n := c
+				n.EarlyVoltage = 0
+				if e.Checked {
+					n.EarlyVoltage = 100
+				}
+				apply(n, true)
+			}})
+			if c.EarlyVoltage > 0 {
+				field("transistor-early", "Early voltage · V", c.EarlyVoltage, 1, 1000, 1, func(v float64) { n := c; n.EarlyVoltage = v; apply(n, true) })
+			}
+			field("transistor-cbe", "Base–emitter · pF", c.CBE*1e12, 0, 1e6, 1, func(v float64) { n := c; n.CBE = v * 1e-12; apply(n, true) })
+			field("transistor-cbc", "Base–collector · pF", c.CBC*1e12, 0, 1e6, 1, func(v float64) { n := c; n.CBC = v * 1e-12; apply(n, true) })
+			nodes = append(nodes, quiet("transistor-profile-help", "Fixed 27 °C · constant junction capacitance\nBiased startup · uses existing storage budget\nEducational parameters; no manufacturer identity."))
+		}
+	}
 	if p.Kind == "pwm-controller" {
 		c := *p.Device.PWM
 		apply := func(v workbench.PWMConfig) {

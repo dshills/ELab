@@ -28,15 +28,19 @@ type BranchResult struct {
 	Power   float64 `json:"power_w"`
 }
 type MixedTransistor struct {
-	TransistorID     string   `json:"transistor_id"`
-	Model            NPNModel `json:"model"`
-	BaseCurrent      float64  `json:"base_current_a"`
-	CollectorCurrent float64  `json:"collector_current_a"`
-	EmitterCurrent   float64  `json:"emitter_current_a"`
-	VBE              float64  `json:"vbe_v"`
-	VCE              float64  `json:"vce_v"`
-	TransistorPower  float64  `json:"power_w"`
-	State            string   `json:"state"`
+	JunctionBECurrent float64  `json:"junction_be_current_a,omitempty"`
+	JunctionBCCurrent float64  `json:"junction_bc_current_a,omitempty"`
+	JunctionEnergy    float64  `json:"junction_energy_j,omitempty"`
+	ConductiveHeat    float64  `json:"conductive_heat_w,omitempty"`
+	TransistorID      string   `json:"transistor_id"`
+	Model             NPNModel `json:"model"`
+	BaseCurrent       float64  `json:"base_current_a"`
+	CollectorCurrent  float64  `json:"collector_current_a"`
+	EmitterCurrent    float64  `json:"emitter_current_a"`
+	VBE               float64  `json:"vbe_v"`
+	VCE               float64  `json:"vce_v"`
+	TransistorPower   float64  `json:"power_w"`
+	State             string   `json:"state"`
 }
 
 type MixedResult struct {
@@ -175,7 +179,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		n.hasOptocoupler = n.hasOptocoupler || p.Kind == "optocoupler"
 		n.hasRegulator = n.hasRegulator || IsRegulatorKind(p.Kind)
 		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
-		n.hasGeneralBipolar = n.hasGeneralBipolar || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
+		n.hasGeneralBipolar = n.hasGeneralBipolar || hasTransistorProfile(p) || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
 		switch p.Kind {
 		case "thermistor", "ldr", "resistor", "capacitor", "inductor", "switch", "potentiometer":
 		case "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
@@ -441,7 +445,21 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	for k, p := range n.caps {
 		u, v := n.pin(p, "1"), n.pin(p, "2")
 		if dt == 0 {
-			branch(u, v, n.capacitorIndex(k), old[k])
+			if isJunctionCap(p) {
+				row := n.capacitorIndex(k)
+				f[row] = x[row]
+				add(row, row, 1)
+				if u >= 0 {
+					f[u] += x[row]
+				}
+				if v >= 0 {
+					f[v] -= x[row]
+				}
+				add(u, row, 1)
+				add(v, row, -1)
+			} else {
+				branch(u, v, n.capacitorIndex(k), old[k])
+			}
 		} else {
 			g := p.Value / dt
 			flow(u, v, g*(voltage(x, u)-voltage(x, v)-old[k]), g)
@@ -837,7 +855,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			r.OpAmps = append(r.OpAmps, device)
 		case "npn", "pnp":
 			device := n.bipolarResult(p, x)
-			powers += device.TransistorPower
+			powers += device.TransistorPower - device.VBE*device.JunctionBECurrent - (device.VBE-device.VCE)*device.JunctionBCCurrent
 			r.Transistors = append(r.Transistors, device)
 		}
 	}

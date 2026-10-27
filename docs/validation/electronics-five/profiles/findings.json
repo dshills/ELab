@@ -1,0 +1,135 @@
+[
+  {
+    "review": "prism-initial.json",
+    "id": "b2493a236ba44804",
+    "severity": "medium",
+    "title": "Unchecked index write into state vector in restoreJunctions",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "58d77f0acbbefdbe",
+    "severity": "medium",
+    "title": "Unsynchronized access to s.graph and unchecked nil deref",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "9bbf19ed3eb8141a",
+    "severity": "low",
+    "title": "Early voltage control permits invalid (0,1) range",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "65f707079a3cd138",
+    "severity": "low",
+    "title": "ConductiveHeat zeroed for generic transistors",
+    "disposition": "Optional profile-only JSON field (omitempty); generic output retains historical bytes and power_w. Added source comment; generic heat equals power_w but is deliberately not duplicated in the new optional profile reading."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "23af27a504b7500e",
+    "severity": "low",
+    "title": "Early voltage schema bounds don't express the excluded (0,1) range",
+    "disposition": "Final referenced profile schema expresses Early voltage as enum 0 OR range 1..1000; conflicting broad command annotation removed. Nil schema-property guards added. Checkbox separates off from the positive numeric field."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "05c9a355b72abb51",
+    "severity": "low",
+    "title": "Absolute 1e-15 tolerance on mA-scale currents is fragile",
+    "disposition": "Independent reference at the exact chosen bias passes the strict bound on this platform; precision assertion remains meaningful and deterministic. No accuracy relaxation."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "0a933a58546b4292",
+    "severity": "low",
+    "title": "Unchecked slice indexing in AC test",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "db13f5d26295e799",
+    "severity": "medium",
+    "title": "Junction capacitors skipped in startup constraint check",
+    "disposition": "Intentional biased startup, not imposed capacitor voltages. MNA stamps zero junction current at dt=0; explicit direct ideal-source BE/BC fixture solves without redundant constraints and verifies bias energy. Updated stale constraint-helper prose. Authored and other composite capacitor rules remain unchanged."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "97fa6f9817ccd609",
+    "severity": "medium",
+    "title": "x",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "4ed8005d59b89bf1",
+    "severity": "low",
+    "title": "Early-effect checkbox applies even when state unchanged",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "8b03c69d255ed3b2",
+    "severity": "low",
+    "title": "ConductiveHeat zeroed for generic transistors",
+    "disposition": "Optional profile-only JSON field (omitempty); generic output retains historical bytes and power_w. Added source comment; generic heat equals power_w but is deliberately not duplicated in the new optional profile reading."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "83fdf25146ed8ce0",
+    "severity": "low",
+    "title": "Early-effect term makes Jacobian discontinuous at VCE=0",
+    "disposition": "Declared forward-only Early law has blocking-side derivative at VCE=0. Current is continuous, tests independently verify both polarity derivatives and bias/capture/conservation. No reproduced convergence defect warrants inventing a different model law."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "4a3bce9d35b2014c",
+    "severity": "low",
+    "title": "Missing junction state slot silently reads as zero current",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "4d1aaec23c102876",
+    "severity": "medium",
+    "title": "Analysis switched to transient after the capacitor-dependent setup",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "6f0ba8a493cfc98d",
+    "severity": "low",
+    "title": "Disabling a profile still requires valid parameters",
+    "disposition": "Intentional full-config command, matching existing opamp.dynamics.set. Required parameters, enabled=false restoration and validation are explicit in guide/schema and exercised by public tests."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "23af27a504b7500e",
+    "severity": "low",
+    "title": "Early voltage bounds disagree with the 0-or-\u22651 rule",
+    "disposition": "Final referenced profile schema expresses Early voltage as enum 0 OR range 1..1000; conflicting broad command annotation removed. Nil schema-property guards added. Checkbox separates off from the positive numeric field."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "81b3b7c86b226508",
+    "severity": "low",
+    "title": "Collocation enabled for profiles without junction capacitors",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "5a334b8d00f016ae",
+    "severity": "low",
+    "title": "Exponential clamp makes Jacobian inconsistent with currents",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "fa8ebc4ba9becfcd",
+    "severity": "low",
+    "title": "Unchecked index into transistor results",
+    "disposition": "Addressed in final source with focused core/desktop regression coverage."
+  }
+]

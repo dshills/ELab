@@ -172,7 +172,7 @@ func batteryNode(id string) string         { return "$" + id + "_ocv" }
 // ports, net names and saved graphs retain their original identities.
 func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 	original := c.MixedGraph
-	if powerModelForGraph(original) == nil && extendedModelForGraph(original) == nil {
+	if powerModelForGraph(original) == nil && extendedModelForGraph(original) == nil && !hasTransistorProfiles(original) {
 		return c, Graph{}
 	}
 	c.MixedGraph = original.Clone()
@@ -186,6 +186,10 @@ func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 		}
 		if isSoundKind(p.Kind) {
 			parts = append(parts, lowerSound(&c, p)...)
+			continue
+		}
+		if hasTransistorProfile(p) {
+			parts = append(parts, lowerTransistorProfile(&c, p)...)
 			continue
 		}
 		if hasDynamics(p) {
@@ -312,6 +316,9 @@ func validateRecordedPower(c Compiled, g Graph, r *MixedResult) error {
 	return nil
 }
 func (n *mixedNetwork) restorePowerNodes(r *MixedResult, x []float64) error {
+	if err := n.restoreJunctions(r, x); err != nil {
+		return err
+	}
 	if err := n.restoreDynamics(r, x); err != nil {
 		return err
 	}
@@ -356,7 +363,7 @@ func (n *mixedNetwork) usesCollocation() bool {
 		return true
 	}
 	for _, p := range n.authored.Components {
-		if p.Kind == "piezo" || hasDynamics(p) || p.Kind == "battery" || p.Kind == "dc-motor" {
+		if p.Kind == "piezo" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == "battery" || p.Kind == "dc-motor" {
 			return !n.dc
 		}
 	}
@@ -367,6 +374,14 @@ type powerResourceUsage struct{ parts, caps, inductors, resistors, sources, node
 
 func powerResources(g Graph) (u powerResourceUsage) {
 	for _, p := range g.Components {
+		if hasTransistorProfile(p) {
+			for _, v := range []float64{p.Device.Bipolar.CBE, p.Device.Bipolar.CBC} {
+				if v > 0 {
+					u.parts++
+					u.caps++
+				}
+			}
+		}
 		if hasDynamics(p) {
 			u.parts++
 			u.caps++
