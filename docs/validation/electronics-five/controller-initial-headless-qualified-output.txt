@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 169, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 159, in main
+    report=exercise(c,out)
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 130, in exercise
+    audio = poll(lambda: c.ask('project.inspect')['audio'],
+        lambda x: x['status'] in ('completed','failed','canceled'))
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 22, in poll
+    value = read()
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 130, in <lambda>
+    audio = poll(lambda: c.ask('project.inspect')['audio'],
+                         ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 'audio'

@@ -1,6 +1,15 @@
 # Analysis and device expansion qualification
 
-October 27, 2026. Five requested additions are implemented through shared
+October 27, 2026.
+
+Runnable unsigned/ad-hoc candidate **ELab 0.198.0 /276** is
+[available here](../../../build/ELab-0.198.0-276-Analysis/ELab.app), with its matching
+agent and **67** saved example projects. Clean binary source:
+`323f5e7a9e9969629a23289391666dfc41d0c29b`. The current catalog has **54** component
+kinds and **203** shared commands. The downloadable /270 and every previous
+candidate remain preserved. [Package identities](package.json), [summary](summary.json).
+
+Five requested additions are implemented through shared
 user/agent commands. Existing component, storage, numerical accuracy and
 integration work limits remain unchanged. The SDK and all earlier packages are
 preserved. No push or public upload.
@@ -58,6 +67,47 @@ extended fixture incorrectly assumed focus survived removal of the MOSFET row;
 final independent focus is explicit, and that failed assumption is preserved.
 Only the atomic-edit and browser test fixtures changed during this continuation;
 all production and other test inputs retained for coverage are exact.
+
+## Exact package and normal-runtime checks
+
+The exact matching packaged headless agent and copied native service both pass
+all five workflows: 101-point semiconductor AC, 401-row clipping capture,
+7.5929% declared-model THD, exact saved-recording spectrum recomputation,
+profile edit/undo/redo/reopen, 16 seeded tolerance trials repeated exactly,
+21-row speaker capture and a silent, explicit 524-byte preview render/read.
+They also each complete all **70** original flasher steps in the normal build.
+Preview playback was not requested; no audio hardware claim is made.
+[Headless checks](headless-checks.json), [native checks](native-checks.json),
+[public-command controller](new_workflows.py.txt).
+The native feature receipt hashes its sandbox forwarding wrapper under
+`agent_sha256`; the actual matching packaged agent is independently pinned in
+[package](package.json) and [runtime](runtime-report.json.gz) receipts.
+
+The copied native smoke and all four public conformance adapters pass under
+outbound IP and development-file denial, with shared geometry writes denied
+only inside the fixture. All **102** external processes exit 0 normally.
+The separate owned feature app exits 0 and removes its endpoint. No owner
+session, project or preference was used as a fixture.
+[Runtime](runtime-report.json.gz), [public adapters](public-report.json.gz),
+[normal feature close](native-final-process-state.json).
+
+All **67** saved projects reopen paused/clean with exact graphs using the exact
+matching agent. All **126** old project/SVG files and all 63 old catalog entries
+remain exact. Only the copied Examples README/catalog are extended with four new
+examples. All **25** protected package/SDK identities and all **1409** frozen
+source/test/module inputs remain exact. Source and copied app seals verify
+strictly. [Examples](examples.json), [preservation](preservation-before.json),
+[seals](final-signatures.txt), [source inputs](qualified-inputs.json.gz).
+
+The initial sandboxed icon conversion reported Invalid Iconset; the exact same
+pinned packager passed outside that sandbox, preserving the original icon hash.
+No packager, SDK, permission or security setting was changed. Original build
+logs retain nonfatal module stat-cache write warnings and the existing duplicate
+`-lobjc` linker warning. Early workflow-controller trials used the wrong spacing
+spelling, omitted required audio start, used an incorrect snapshot key and
+compared state against the pre-Undo run identity. Each was a controller error;
+all are retained and excluded from passing product evidence. Final receipts use
+the corrected explicit schema and a settled post-Undo baseline.
 
 ## Material limitations
 

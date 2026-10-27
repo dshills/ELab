@@ -1,0 +1,47 @@
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_16x16.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_16x16@2x.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_32x32.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_32x32@2x.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_128x128.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_128x128@2x.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_256x256.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_256x256@2x.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_512x512.png
+/private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/source.png
+  /private/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset/icon_512x512@2x.png
+/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset:Invalid Iconset.
+/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset:Invalid Iconset.
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    runpy.run_path(str(tool), run_name='__main__')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 292, in run_path
+  File "<frozen runpy>", line 97, in _run_module_code
+  File "<frozen runpy>", line 87, in _run_code
+  File "/Users/dshills/Development/projects/ELab/third_party/vellum/packager-4cf0176/scripts/package-app.py", line 303, in <module>
+    if __name__=="__main__":main()
+                            ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/third_party/vellum/packager-4cf0176/scripts/package-app.py", line 300, in main
+    print(json.dumps(package(args.binary.absolute(),args.output.absolute(),args.name,args.identifier,args.version,args.target,args.sign_identity,args.build_version,args.notice_bundle,public=args.public,icon=args.icon),indent=2))
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/third_party/vellum/packager-4cf0176/scripts/package-app.py", line 229, in package
+    manifest["app_icon"] = app_icons.install(icon, resources)
+                           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/third_party/vellum/packager-4cf0176/scripts/app_icons.py", line 77, in install
+    tool(["/usr/bin/iconutil", "--convert", "icns", "--output", str(converted), str(iconset)])
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/third_party/vellum/packager-4cf0176/scripts/app_icons.py", line 41, in tool
+    run_child(argv, check=True, env=child_environment(), timeout=TOOL_TIMEOUT_SECONDS)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/third_party/vellum/packager-4cf0176/scripts/child_process.py", line 210, in run_child
+    raise subprocess.CalledProcessError(completed.returncode, arguments, output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command ['/usr/bin/iconutil', '--convert', 'icns', '--output', '/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.icns', '/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/.vellum-icon-1jdxmc6s/AppIcon.iconset'] returned non-zero exit status 1.

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 169, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 159, in main
+    report=exercise(c,out)
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 58, in exercise
+    state = c.ask('sweep.start', dict(settings=dict(component_id='VIN',
+        parameter='frequency', spacing='log', start='1 Hz', stop='100 kHz',
+        points=101, probe_ids=['v:RL'])), mutate=True)
+  File "/Users/dshills/Development/projects/ELab/scripts/acceptance_client.py", line 73, in ask
+    raise AssertionError(f'{command}: expected {expect}, got {response.get("error")}')
+AssertionError: sweep.start: expected None, got {'code': 'invalid-params', 'message': 'sweep spacing must be linear or logarithmic'}

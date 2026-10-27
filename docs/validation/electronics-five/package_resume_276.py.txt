@@ -1,0 +1,23 @@
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/electronics-five';out=r/'build/ELab-0.198.0-276-Analysis';bins=b/'binaries-276'
+assert out.is_dir() and bins.is_dir() and not (out/'ELab.app').exists()
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=r,text=True).strip(), 'Commit source before building'
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+pin=json.loads((r/'third_party/vellum/sdk.lock.json').read_text())
+env=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+app=out/'ELab.app';shutil.copyfile(bins/'elab-agent',out/'elab-agent');(out/'elab-agent').chmod(0o755)
+with (b/'packager-output.txt').open('w') as stream:
+ subprocess.run(['python3','-B','scripts/package_app.py','--binary',str(bins/'elab'),'--output',str(app),'--version','0.198.0','--build-version','276'],cwd=r,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=180)
+for label,path in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent')]:
+ info=subprocess.check_output(['go','version','-m',str(path)],text=True);assert 'vcs.revision='+source in info and 'vcs.modified=false' in info;(b/(label+'-build-info.txt')).write_text(info)
+q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True,capture_output=True,text=True);(b/'signature.txt').write_text(q.stdout+q.stderr)
+old=r/'build/ELab-0.197.0-275-Discrete';shutil.copytree(old/'Examples',out/'Examples');shutil.copytree(old/'Licenses',out/'Licenses')
+for src,dst in [('docs/agent-api.md','AGENT_PROTOCOL.md'),('docs/workbench-workflows.md','WORKBENCH_WORKFLOWS.md'),('docs/application-icon.md','APPLICATION_ICON.md'),('docs/discrete-class-ab.md','DISCRETE_CLASS_AB.md')]:shutil.copyfile(r/src,out/dst)
+for name in ['ac-frequency-sweeps','spectrum-analysis','transistor-profiles','tolerance-analysis','loudspeaker']:
+ shutil.copyfile(r/'docs'/(name+'.md'),out/(name+'.md'))
+(out/'README.md').write_text('ELab 0.198.0 /276 analysis and device candidate\n\nSemiconductor Bode sweeps, captured FFT/THD, configurable educational transistor profiles, deterministic seeded tolerance analysis and passive loudspeaker loads with explicit preview. See the included guides. No sound plays automatically. Matching agent, 67 examples, 54 component kinds and 203 shared commands.\n\nThe original eight-BJT class-AB startup combined with speaker LC can hit the unchanged 100 ms integration guard; that combination is not qualified for progressing waveforms. The powered-follower speaker example is qualified. Model/resource/accuracy/work limits remain explicit and unchanged. Profiles do not represent validated manufacturer parts; preview is not calibrated acoustics.\n\nAd-hoc signed; no Developer ID or notarization. Original native checks 3/6/9/11, participant and clean-account acceptance remain open. Prior releases and owner sessions are preserved.\n')
+manifest=json.loads((app/'Contents/Resources/APP_MANIFEST.json').read_text());assert manifest['app_icon']['source_sha256']==sha(r/'assets/app-icon.png')
+p=dict(version='0.198.0',build=276,source_commit=source,clean_source=True,app=str(app),agent=str(out/'elab-agent'),conformance=str(bins/'elab-conformance'),app_executable_sha256=sha(app/'Contents/MacOS/ELab'),agent_sha256=sha(out/'elab-agent'),strict_adhoc_signature=True,upstream_commit=pin['upstream_commit'],sdk_source=pin['source_commit'],sdk_archive_sha256=pin['sha256'],component_kinds=54,public_commands=203,examples=67,icon=manifest['app_icon'],release_promoted=False)
+(b/'package.json').write_text(json.dumps(p,indent=2)+'\n');print(json.dumps(p))

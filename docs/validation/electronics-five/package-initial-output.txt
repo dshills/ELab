@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/package_276.py", line 16, in <module>
+    subprocess.run(['python3','-B','scripts/package_app.py','--binary',str(bins/'elab'),'--output',str(app),'--version','0.198.0','--build-version','276'],cwd=r,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=180)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.2/Frameworks/Python.framework/Versions/3.15/lib/python3.15/subprocess.py", line 692, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command ['python3', '-B', 'scripts/package_app.py', '--binary', '/Users/dshills/Development/projects/ELab/build/electronics-five/binaries-276/elab', '--output', '/Users/dshills/Development/projects/ELab/build/ELab-0.198.0-276-Analysis/ELab.app', '--version', '0.198.0', '--build-version', '276'] returned non-zero exit status 1.

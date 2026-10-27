@@ -56,7 +56,7 @@ def exercise(c, output):
     c.ask('simulation.pause', mutate=True)
     before = load(c, 'discrete-class-ab')
     state = c.ask('sweep.start', dict(settings=dict(component_id='VIN',
-        parameter='frequency', spacing='log', start='1 Hz', stop='100 kHz',
+        parameter='frequency', spacing='logarithmic', start='1 Hz', stop='100 kHz',
         points=101, probe_ids=['v:RL'])), mutate=True)
     sweep = poll(lambda: c.ask('project.inspect')['dc_sweep'],
         lambda x: bool(x['operations']) and x['operations'][-1]['status'] in ('completed', 'failed', 'canceled'))
@@ -124,23 +124,30 @@ def exercise(c, output):
     parameters['resonance_hz'] = 150
     c.ask('speaker.configure', dict(id='SP1',parameters=parameters), mutate=True)
     c.ask('edit.undo', mutate=True)
-    assert c.ask('simulation.wait')['components'] == speaker_before['components']
+    speaker_after_undo = c.ask('simulation.wait')
+    assert speaker_after_undo['components'] == speaker_before['components']
     record(c, output, 'speaker-recording', .002, .0001, ['v:SP1','i:SP1'])
-    c.ask('audio.render', dict(id='SP1', duration_s=.02, gain=.1), mutate=True)
-    audio = poll(lambda: c.ask('project.inspect')['audio'],
+    c.ask('audio.render', dict(id='SP1', start_s=0, duration_s=.02, gain=.1), mutate=True)
+    audio = poll(lambda: c.ask('project.inspect')['audio_preview'],
         lambda x: x['status'] in ('completed','failed','canceled'))
     assert audio['status']=='completed' and not audio['playing'] and audio['signal'], audio
     wav = c.ask('audio.read', dict(id=audio['id']))
     data = base64.b64decode(wav['wav_base64'])
     assert data[:4]==b'RIFF' and len(data)==524
     (output/'speaker-preview.wav').write_bytes(data)
-    assert c.ask('project.inspect')['mixed'] == speaker_before['mixed']
+    assert c.ask('project.inspect')['mixed'] == speaker_after_undo['mixed']
+    load(c, 'flasher')
+    for _ in range(70):
+        c.ask('simulation.step', dict(duration_s=.005), mutate=True)
+        flasher = c.ask('simulation.wait')
+        assert flasher['step_work']['status']=='completed', flasher['step_work']
+    assert abs(flasher['mixed']['time_s']-.35)<1e-10
     c.ask('project.clear', dict(discard_changes=True), mutate=True)
     return dict(passed=True, scope=__doc__.strip(), component_kinds=54, commands=203,
         semiconductor_low_frequency_gain=gain, clipping_thd_percent=spectrum['thd_percent'],
         recorded_spectrum_reopened_exact=True, configurable_profile_undo_redo_reopen=True,
         seeded_tolerance_trials=16, tolerance_repeated_exact=True,
-        speaker_capture_rows=21, speaker_preview_bytes=len(data), autoplay=False,
+        flasher_successful_steps=70, speaker_capture_rows=21, speaker_preview_bytes=len(data), autoplay=False,
         native_input_acceptance=False, hardware_audio_qualification=False)
 
 

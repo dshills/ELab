@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 169, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 159, in main
+    report=exercise(c,out)
+  File "/Users/dshills/Development/projects/ELab/build/electronics-five/new_workflows.py", line 129, in exercise
+    c.ask('audio.render', dict(id='SP1', duration_s=.02, gain=.1), mutate=True)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/scripts/acceptance_client.py", line 73, in ask
+    raise AssertionError(f'{command}: expected {expect}, got {response.get("error")}')
+AssertionError: audio.render: expected None, got {'code': 'invalid-params', 'message': 'required field "start_s" is missing'}

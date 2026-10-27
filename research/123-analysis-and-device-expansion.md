@@ -90,3 +90,31 @@ mounted keyboard speaker selection. Its initial focus assumption is documented;
 final independent focus and three repetitions pass. All 1409 final inputs are
 pinned, with production inputs unchanged during the continuation. Building a
 new clean-source /276 candidate next; old packages remain preserved.
+
+Complete: unsigned/ad-hoc **ELab 0.198.0 /276** is packaged at
+`build/ELab-0.198.0-276-Analysis/ELab.app`, with matching agent and 67 examples.
+Clean binary source `323f5e7a9e9969629a23289391666dfc41d0c29b`;
+app executable SHA-256 `afe6d851773ebb5736264a923a4db7b818ae9328ad54ff2f813b871d1c5342b8`,
+agent SHA-256 `d8934a8f60c0088e39c7309d6b037ca3e71f470f9a72b72e6983e735ec414b28`.
+
+All five public workflows pass through both the exact packaged headless agent
+and an owned copied native service, including 101-point Bode, captured clipping
+THD, exact recording reanalysis, profile undo/redo/reopen, repeated seeded trials,
+speaker recording and silent explicit preview. Both normal builds also complete
+the original 70-step flasher workflow. Native smoke and four public adapters pass
+under development-file/IP denial; all 102 external processes exit 0 normally.
+All owned native fixtures close normally and their endpoints are removed.
+All 67 projects reopen paused/clean with exact graphs; 126 old project/SVG bytes
+and all 63 old catalog entries remain exact. All 25 protected package/SDK
+identities and 1409 final executable/test/module inputs remain exact. Strict
+source/copied-app seals pass. Native acceptance 3/6/9/11 and the all-discrete
+speaker-LC work-limit caveat remain explicit; no numerical limit was raised.
+
+The initial iconutil attempt failed in the sandbox; the unchanged pinned
+packager succeeded outside it, retaining the original icon hash. Four early
+public-controller mistakes (spacing spelling, required audio start, snapshot
+key and pre-Undo run identity) are saved separately and excluded from product
+claims. Final evidence, controllers, raw failures/controls, package identities
+and all 15 Anthropic Opus 5.5 Prism reviews/dispositions are in
+`docs/validation/electronics-five/`. Existing downloadable releases remain
+preserved. No push or release upload.

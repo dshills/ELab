@@ -1,0 +1,82 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/electronics-five';out=r/'docs/validation/electronics-five';p=json.loads((b/'package.json').read_text());runtime=Path(json.loads((b/'runtime-result.json').read_text())['directory'])
+sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
+frozen=json.loads((b/'qualified-inputs.json').read_text());assert all(sha(r/name)==h for name,h in frozen.items())
+protected=json.loads((b/'combined/preservation-before.json').read_text());assert all(sha(r/name)==h for name,h in protected.items())
+assert sha(Path(p['app'])/'Contents/MacOS/ELab')==p['app_executable_sha256'];assert sha(Path(p['agent']))==p['agent_sha256']
+assert json.loads((b/'native-features.json').read_text())['passed']
+assert json.loads((runtime/'features/final-process-state.json').read_text())==dict(pid=json.loads((runtime/'features/final-process-state.json').read_text())['pid'],exit_code=0,endpoint_exists=False)
+checks=json.loads((b/'headless-accepted/checks.json').read_text());native=json.loads((runtime/'features/analysis/checks.json').read_text());assert checks['passed'] and native['passed'] and checks['flasher_successful_steps']==native['flasher_successful_steps']==70
+assert checks['agent_sha256']==p['agent_sha256']
+q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',p['app']],capture_output=True,text=True,check=True);(b/'final-signatures.txt').write_text(q.stdout+q.stderr)
+q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(runtime/'ELab.app')],capture_output=True,text=True,check=True)
+with (b/'final-signatures.txt').open('a') as f:f.write(q.stdout+q.stderr)
+def copy(src,dst,compress=False):
+ data=src.read_bytes();(out/dst).write_bytes(gzip.compress(data,mtime=0) if compress else data)
+for name in ['package.json','native-features.json','examples.json','runtime-invocation.json','runtime-result.json','final-signatures.txt','signature.txt','native-build-info.txt','agent-build-info.txt','clean-build.txt','packager-output.txt','packager-initial-output.txt','package-initial-output.txt','package-resume-output.txt']:
+ copy(b/name,name)
+for name in ['package_276.py','package_resume_276.py','check_examples.py','new_workflows.py','qualify_runtime.py','native_features.py','finalize.py']:copy(b/name,name+'.txt')
+for name in ['headless-output.txt','headless-final-output.txt','headless-qualified-output.txt','headless-complete-output.txt']:copy(b/name,'controller-initial-'+name)
+for source,dest in [(b/'headless-accepted/checks.json','headless-checks.json'),(runtime/'features/analysis/checks.json','native-checks.json'),(runtime/'features/final-process-state.json','native-final-process-state.json'),(runtime/'features/startup.json','native-startup.json')]:copy(source,dest)
+for source,dest in [(runtime/'runtime-report.json','runtime-report.json.gz'),(runtime/'public/report.json','public-report.json.gz'),(runtime/'features/native-output.txt','native-output.txt.gz'),(runtime/'features/controller.txt','native-controller.txt.gz')]:copy(source,dest,True)
+for name in ['semiconductor-ac.json','spectrum.json','tolerance.json','distortion-recording.json','speaker-recording.json','recorded-distortion.elab','configured-profile.elab']:
+ copy(b/'headless-accepted'/name,'headless-'+name+'.gz',True)
+exits=[json.loads(f.read_text()) for f in (runtime/'public').rglob('process-exit.json')];assert len(exits)==102 and all(x['exit_code']==0 and not x['graceful_wait_timed_out'] for x in exits)
+(out/'external-process-exits.json').write_text(json.dumps(exits,indent=2)+'\n')
+summary=dict(passed=True,version='0.198.0',build=276,clean_binary_source=p['source_commit'],app=p['app'],agent=p['agent'],app_sha256=p['app_executable_sha256'],agent_sha256=p['agent_sha256'],source_coverage=json.loads((b/'application-report.json').read_text())['counts'],source_inputs_exact=len(frozen),protected_package_sdk_identities_exact=len(protected),examples_reopened=67,prior_example_files_exact=126,component_kinds=54,public_commands=203,all_five_headless_and_native_workflows=True,flasher_steps_headless_and_native=70,external_processes_normal_exit=102,owned_native_feature_exit_code=0,owned_endpoint_removed=True,strict_source_and_copy_seals=True,prism_provider='anthropic',prism_model='claude-opus-5-5',prism_complete_reviews=15,solver_limits_changed=False,release_download_replaced=False,pushed=False,release_uploaded=False,remaining_limits=['Original fast-compensated all-discrete class AB plus speaker LC can reach the 100ms work guard; waveform progress unqualified','Timing-sensitive ordered race failures and exact-source isolated controls retained','Original physical native input checks 3/6/9/11 remain open','No manufacturer-profile, hardware acoustics, participant or separate-account qualification'])
+(b/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');copy(b/'summary.json','summary.json')
+text=(out/'README.md').read_text();intro="""Runnable unsigned/ad-hoc candidate **ELab 0.198.0 /276** is
+[available here](../../../build/ELab-0.198.0-276-Analysis/ELab.app), with its matching
+agent and **67** saved example projects. Clean binary source:
+`"""+p['source_commit']+"""`. The current catalog has **54** component
+kinds and **203** shared commands. The downloadable /270 and every previous
+candidate remain preserved. [Package identities](package.json), [summary](summary.json).
+
+"""
+text=text.replace('October 27, 2026. Five requested additions', 'October 27, 2026.\n\n'+intro+'Five requested additions',1)
+start=text.index('## Material limitations')
+package="""## Exact package and normal-runtime checks
+
+The exact matching packaged headless agent and copied native service both pass
+all five workflows: 101-point semiconductor AC, 401-row clipping capture,
+7.5929% declared-model THD, exact saved-recording spectrum recomputation,
+profile edit/undo/redo/reopen, 16 seeded tolerance trials repeated exactly,
+21-row speaker capture and a silent, explicit 524-byte preview render/read.
+They also each complete all **70** original flasher steps in the normal build.
+Preview playback was not requested; no audio hardware claim is made.
+[Headless checks](headless-checks.json), [native checks](native-checks.json),
+[public-command controller](new_workflows.py.txt).
+The native feature receipt hashes its sandbox forwarding wrapper under
+`agent_sha256`; the actual matching packaged agent is independently pinned in
+[package](package.json) and [runtime](runtime-report.json.gz) receipts.
+
+The copied native smoke and all four public conformance adapters pass under
+outbound IP and development-file denial, with shared geometry writes denied
+only inside the fixture. All **102** external processes exit 0 normally.
+The separate owned feature app exits 0 and removes its endpoint. No owner
+session, project or preference was used as a fixture.
+[Runtime](runtime-report.json.gz), [public adapters](public-report.json.gz),
+[normal feature close](native-final-process-state.json).
+
+All **67** saved projects reopen paused/clean with exact graphs using the exact
+matching agent. All **126** old project/SVG files and all 63 old catalog entries
+remain exact. Only the copied Examples README/catalog are extended with four new
+examples. All **25** protected package/SDK identities and all **1409** frozen
+source/test/module inputs remain exact. Source and copied app seals verify
+strictly. [Examples](examples.json), [preservation](preservation-before.json),
+[seals](final-signatures.txt), [source inputs](qualified-inputs.json.gz).
+
+The initial sandboxed icon conversion reported Invalid Iconset; the exact same
+pinned packager passed outside that sandbox, preserving the original icon hash.
+No packager, SDK, permission or security setting was changed. Original build
+logs retain nonfatal module stat-cache write warnings and the existing duplicate
+`-lobjc` linker warning. Early workflow-controller trials used the wrong spacing
+spelling, omitted required audio start, used an incorrect snapshot key and
+compared state against the pre-Undo run identity. Each was a controller error;
+all are retained and excluded from passing product evidence. Final receipts use
+the corrected explicit schema and a settled post-Undo baseline.
+
+"""
+text=text[:start]+package+text[start:];(out/'README.md').write_text(text)
+print(json.dumps(summary,indent=2))
