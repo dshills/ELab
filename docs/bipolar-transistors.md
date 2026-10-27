@@ -22,6 +22,7 @@ edits and model limitations for each template.
 
 | ID | Menu example | What to observe |
 |---|---|---|
+| `discrete-class-ab` | All-discrete class-AB amplifier | Eight BJTs provide differential input, current mirror, tail sink, voltage gain and complementary output. ±9 V rails, 100 mV peak / 10 Hz input, nominal gain eleven and 100 Ω load. See the [amplifier guide](discrete-class-ab.md). |
 | `pnp` | PNP high-side LED | A 5 V emitter supply, 10 kΩ base resistor, 100 kΩ pull-up and 1 kΩ LED load. High input turns the LED off; low input turns it on. The default square source switches every 50 ms. |
 | `emitter-follower` | NPN emitter follower | A 10 Hz sine with 2.5 V offset and 1 V amplitude drives the base through 1 kΩ. The emitter drives 1 kΩ to ground and follows below the base voltage. Compare input, base, emitter and terminal currents. |
 | `bipolar-push-pull` | Complementary transistor buffer | A 10 Hz ±2.5 V sine drives an NPN/PNP pair from ±5 V rails. Each base has 1 kΩ resistance; the shared emitters drive 1 kΩ. The NPN sources the positive half-cycle and PNP sinks the negative half-cycle. The unbiased crossover dead band is intentional. |
@@ -29,7 +30,7 @@ edits and model limitations for each template.
 Templates start clean, protect subsequent unsaved edits, and support Reset
 current example. Pause and use Step, the existing scope probes and cursors to
 compare exact stored samples. Playback speed defaults to 0.1 simulated seconds
-per wall second for these examples.
+per wall second for the original examples; the class-AB example uses 0.02 and a 500 µs sample interval.
 
 ## Signed measurements and model
 
@@ -58,8 +59,8 @@ storage, intrinsic switching delay and physical ratings. External capacitors
 provide circuit timing. Regions are cutoff, active, saturation and
 reverse-active; cutoff uses the existing 10 nA current threshold.
 
-The existing limit of two bipolar transistors is **combined across NPN and
-PNP**, within the other [network bounds](circuit-capacity.md). Snapshots expose
+The limit of sixteen bipolar transistors is **combined across NPN and
+PNP, including embedded optocoupler phototransistors**, within the other [network bounds](circuit-capacity.md). Snapshots expose
 `pnp_transistors` and `bipolar_transistors_total` alongside the retained
 `npn_transistors` limit key.
 

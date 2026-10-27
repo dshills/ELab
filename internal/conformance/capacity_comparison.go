@@ -127,6 +127,13 @@ func capacityLimitsCompatible(actual workbench.CircuitLimits) bool {
 	if actual == current {
 		return true
 	}
+	// Before the discrete-amplifier expansion, all published bipolar limits
+	// were two. Keep those exact historical envelopes, not arbitrary mixtures
+	// of old discovery fields and the new capacity.
+	current.Transistors, current.PNP, current.CombinedBipolar = 2, 2, 2
+	if actual == current {
+		return true
+	}
 	current.Timers555 = 0
 	if actual == current {
 		return true

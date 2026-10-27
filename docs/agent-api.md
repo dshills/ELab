@@ -69,7 +69,7 @@ Inspector navigation is also shared: `workspace.inspector.set` accepts `section:
 
 `parts.list` includes `npn` with named `base`, `collector`, and `emitter` pins. Place it through `component.place`; connect wires and edit source/resistor values through the existing commands. `example.npn` loads the editable 5 V supply / separate 5 V drive / 10 kΩ base / 1 kΩ LED load example, with `discard_changes:true` required if the current document is dirty.
 
-Wire input → base resistor → base; emitter and source negatives → ground; supply → load resistor / forward LED → collector. One shared DC source is also supported, and the LED is optional for a resistor-only load. Either resistor orientation and LED-before-resistor order work. Pulse base drive is now supported as described below; the single-switch engines retain their topology limits. Capacitor networks with up to two NPNs use the mixed engine described below.
+Wire input → base resistor → base; emitter and source negatives → ground; supply → load resistor / forward LED → collector. One shared DC source is also supported, and the LED is optional for a resistor-only load. Either resistor orientation and LED-before-resistor order work. Pulse base drive is now supported as described below; the single-switch engines retain their topology limits. Capacitor networks with up to sixteen combined NPN/PNP devices use the network engine; see the [capacity bounds](circuit-capacity.md).
 
 The UI drive buttons call `component.set` on the discovered input source with `0 V`, `0.8 V`, or `5 V`. These are undoable, saved electrical edits. Find the source ID in a valid `snapshot.npn.input_id`, or derive it from the graph while a first solve is pending. `simulation.wait` waits for DC calculation. Pause/edit/Resume follows the same stale-reading rules as LED DC.
 
@@ -373,3 +373,15 @@ The catalog now has 187 commands. Existing `examples.list` metadata and protecte
 `example.load` behavior are retained. Shared example-info, example-preview and
 project-work schemas keep ordinary enumeration within its existing 64 KiB bound;
 resolve `$ref` values through the returned local schema registry.
+
+## All-discrete amplifier
+
+`example.load {"id":"discrete-class-ab"}` opens the same eight-transistor
+class-AB template offered in the Examples browser. `examples.list` describes
+its experiments and model limitations. Existing `component.place`,
+`wire.connect`, source/value/initial-condition edits, `simulation.step`,
+`simulation.verify`, scope, history, project and schematic export commands
+remain the complete shared user/AI path. No new command or model is introduced.
+Snapshots report 16 for `npn_transistors`, `pnp_transistors` and
+`bipolar_transistors_total`; this is one combined budget, including embedded
+optocoupler phototransistors. See the [amplifier guide](discrete-class-ab.md).

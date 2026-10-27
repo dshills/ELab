@@ -1,5 +1,10 @@
 # Capacitor-timed RC/NPN LED flasher
 
+This records the original mixed-engine implementation. Current networks admit
+**16 combined NPN/PNP devices with ungrounded emitters** within the other
+[capacity bounds](circuit-capacity.md); see the [all-discrete amplifier](discrete-class-ab.md).
+Historical measurements and engine identities below retain their original scope.
+
 Implemented October 13, 2026. ELab now solves coupled resistor/capacitor/NPN/LED transient networks and includes a self-oscillating two-transistor LED flasher powered by a constant DC source. Timing comes from the circuit's capacitor state; the example has no pulse generator, hidden timer, or precomputed switching schedule.
 
 ## Try it
@@ -28,7 +33,7 @@ There are at most 100 Newton iterations per attempt, 512 adaptive attempts and a
 
 The NPN remains an educational, memoryless junction model with no physical part calibration, breakdown, heating, Early effect, junction capacitance or intrinsic switching/storage delay. The external capacitors now provide genuine dynamic state. Capacitors are ideal and unpolarized, with no ESR/leakage. LED reverse current is neglected. Node solutions are bounded to ±30 V; source and component value limits remain unchanged.
 
-The mixed engine supports **100 nodes including ground and 64 simulated parts**, with **3 sources, 4 capacitors, 2 grounded-emitter NPNs, 64 resistors and 4 LEDs**; other supported network parts retain their [published bounds](circuit-capacity.md). Waveform source negatives must be grounded; [DC sources may float within a ground-referenced network](floating-dc-sources.md). At least one capacitor and NPN are required to select this engine. Open pins, disconnected islands, shorts, unknown models and excess complexity are diagnosed. Direct ideal-source/capacitor connections and redundant source/capacitor constraint loops are refused: impulse or indeterminate startup-current cases are not modeled. Existing simpler LED, RC and pulse-NPN engines remain available.
+The original mixed slice supported **100 nodes including ground and 64 simulated parts**, with **3 sources, 4 capacitors, 2 grounded-emitter NPNs, 64 resistors and 4 LEDs**; other supported network parts retain their [published bounds](circuit-capacity.md). Waveform source negatives must be grounded; [DC sources may float within a ground-referenced network](floating-dc-sources.md). At least one capacitor and NPN are required to select this engine. Open pins, disconnected islands, shorts, unknown models and excess complexity are diagnosed. Direct ideal-source/capacitor connections and redundant source/capacitor constraint loops are refused: impulse or indeterminate startup-current cases are not modeled. Existing simpler LED, RC and pulse-NPN engines remain available.
 
 ## Shared commands and persistence
 

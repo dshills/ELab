@@ -21,13 +21,18 @@ func TestCapacityLimitEnvelopeAcceptsOnlyExactHistoricalOrCurrentFields(t *testi
 	if !capacityLimitsCompatible(current) {
 		t.Fatal("current limits refused")
 	}
-	legacy := current
+	preExpansion := current
+	preExpansion.Transistors, preExpansion.PNP, preExpansion.CombinedBipolar = 2, 2, 2
+	if !capacityLimitsCompatible(preExpansion) {
+		t.Fatal("pre-expansion limits refused")
+	}
+	legacy := preExpansion
 	legacy.Timers555 = 0
 	legacy.PNP, legacy.CombinedBipolar = 0, 0
 	if !capacityLimitsCompatible(legacy) {
 		t.Fatal("historical limits refused")
 	}
-	previous := current
+	previous := preExpansion
 	previous.Timers555 = 0
 	if !capacityLimitsCompatible(previous) {
 		t.Fatal("pre-timer limits refused")
@@ -39,11 +44,31 @@ func TestCapacityLimitEnvelopeAcceptsOnlyExactHistoricalOrCurrentFields(t *testi
 		func(l *workbench.CircuitLimits) { l.ElectricalNodes = 99 },
 		func(l *workbench.CircuitLimits) { l.Transistors = 99 },
 	} {
-		for _, value := range []workbench.CircuitLimits{current, legacy} {
+		for _, value := range []workbench.CircuitLimits{current, preExpansion, previous, legacy} {
 			mutate(&value)
 			if capacityLimitsCompatible(value) {
 				t.Fatal("changed capacity limits accepted", value)
 			}
+		}
+	}
+	for _, field := range []string{"timer", "pnp", "combined", "old-npn", "old-pnp", "old-combined"} {
+		invalid := current
+		switch field {
+		case "timer":
+			invalid.Timers555 = 0
+		case "pnp":
+			invalid.PNP = 0
+		case "combined":
+			invalid.CombinedBipolar = 0
+		case "old-npn":
+			invalid.Transistors = 2
+		case "old-pnp":
+			invalid.PNP = 2
+		case "old-combined":
+			invalid.CombinedBipolar = 2
+		}
+		if capacityLimitsCompatible(invalid) {
+			t.Fatal("unpublished hybrid capacity accepted", field)
 		}
 	}
 }

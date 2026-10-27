@@ -119,6 +119,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 }
 
 type mixedNetwork struct {
+	startupSourceScale           *float64
 	authored                     Graph
 	dc                           bool
 	nonlinear                    bool
@@ -249,7 +250,11 @@ func voltage(x []float64, i int) float64 {
 	return x[i]
 }
 func (n *mixedNetwork) sourceVoltage(p Component, t *Transient, at float64) float64 {
-	return sourceVoltageAt(p, t, at, p.ID == n.c.Source.ID)
+	v := sourceVoltageAt(p, t, at, p.ID == n.c.Source.ID)
+	if n.startupSourceScale != nil {
+		v *= *n.startupSourceScale
+	}
+	return v
 }
 func (n *mixedNetwork) sourceStimulus(p Component, t *Transient, at, dt float64) float64 {
 	// Legacy squares retain left-hand phase integration at discontinuities.
@@ -567,6 +572,13 @@ func (n *mixedNetwork) solveAnalogContext(ctx context.Context, guess, old []floa
 	for _, p := range n.c.MixedGraph.Components {
 		if IsBipolarKind(p.Kind) {
 			qs = append(qs, p)
+		}
+	}
+	if len(guess) == 0 && len(qs) > 2 && n.canStepBipolarSources() {
+		if result, e := n.bipolarSourceStep(ctx, old, dt, t, at); e == nil {
+			return result, nil
+		} else if ctx.Err() != nil {
+			return nil, ctx.Err()
 		}
 	}
 	for choice := 0; choice < len(qs); choice++ {

@@ -3,6 +3,7 @@ package workbench
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"math"
 	"os"
 	"path/filepath"
@@ -305,8 +306,13 @@ func TestBipolarCancellationAndCombinedLimit(t *testing.T) {
 	if _, err := newMixedNetwork(c).solveContext(ctx, nil, nil, 0, &Transient{}, 0); err != context.Canceled {
 		t.Fatal("solver cancellation", err)
 	}
-	q, _ := MakeComponent("Q3", "pnp", Point{700, 0}, "")
-	g.Components = append(g.Components, q)
+	for i := 3; i <= MaxNetworkTransistors+1; i++ {
+		q, err := MakeComponent(fmt.Sprintf("Q%d", i), "pnp", Point{700, float64(100 * i)}, "")
+		if err != nil {
+			t.Fatal(err)
+		}
+		g.Components = append(g.Components, q)
+	}
 	if _, _, d := g.Compile(); d == nil || d.Code != "mixed-limit" {
 		t.Fatal("combined transistor limit not enforced", d)
 	}

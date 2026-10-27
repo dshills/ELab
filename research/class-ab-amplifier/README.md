@@ -1,3 +1,7 @@
+> Historical /274 artifact: this op-amp-assisted circuit predates the transistor
+> capacity expansion. The new built-in [all-discrete amplifier](../../docs/discrete-class-ab.md)
+> uses eight BJTs within a combined limit of sixteen. Original data below is preserved.
+
 # Class-AB amplifier example
 
 Open **[class-ab-amplifier.elab](class-ab-amplifier.elab)** in ELab using File →

@@ -18,7 +18,7 @@ The tested envelope admits **64 simulated parts and 100 electrical nodes includi
 | MOSFETs, NMOS/PMOS combined | 2 |
 | Powered op-amps | 2 |
 | 555 timers | 2 |
-| Bipolar transistors, NPN/PNP combined | 2 |
+| Bipolar transistors, NPN/PNP combined, including optocoupler phototransistors | 16 |
 | Resistors / potentiometers | 64 each, subject to combined part/node bounds |
 | SPST switches / silicon, Schottky and Zener diodes combined | 8 switches; 8 total diodes |
 | Generic red LEDs | 4 |
@@ -40,7 +40,7 @@ The optional `elab-conformance --capacity-suite` adds all four adapters, complet
 
 The [555 extension](timer555.md) admits two stateful timers without expanding existing node/storage/work limits. Historical capacity fixtures do not qualify timer capacity; exact pre-timer envelopes remain accepted for those passive/RC/MOSFET fixtures.
 
-The [bipolar extension](bipolar-transistors.md) admits PNPs and ungrounded emitters within the combined two-transistor bound. The original capacity fixtures below remain passive/RC/MOSFET evidence; their exact historical limit envelope does not claim PNP capacity qualification.
+The [bipolar extension](bipolar-transistors.md) admits PNPs and ungrounded emitters within the combined sixteen-transistor bound. The original capacity fixtures below remain passive/RC/MOSFET evidence; their exact historical limit envelope does not claim PNP capacity qualification.
 
 Basic logic gates count toward the existing 64 simulated-part and 100-node
 envelope. No separate gate-count limit is introduced. Each single gate has
@@ -50,3 +50,9 @@ four (NOT) or five named terminals; supply, input and output nets count normally
 part/node limits without a separate device-count field. Every connected input,
 power and output net counts normally. The original boundary fixtures do not
 qualify arbitrary sequential networks or their event-integration work cost.
+
+The [all-discrete amplifier extension](discrete-class-ab.md) expands the bipolar
+budget from 2 to 16. Independent 16-device NPN, PNP and mixed load-line fixtures
+and a 17-device editable/savable refusal qualify this bound. Other resource and
+accuracy/work guards remain unchanged. A bounded cold-start source-stepping
+fallback is restricted to newly admitted purely algebraic discrete networks.

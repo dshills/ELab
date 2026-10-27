@@ -13,7 +13,7 @@ const (
 	MaxMixedNodes            = MaxElectricalNodes - 1
 	MaxNetworkSources        = 3
 	MaxNetworkCapacitors     = 4
-	MaxNetworkTransistors    = 2
+	MaxNetworkTransistors    = 16
 	MaxNetworkMOSFETs        = 2
 	MaxNetworkOpAmps         = 2
 	MaxNetworkResistors      = 64
