@@ -9,6 +9,8 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	c := commandContractDetail{Version: 1, Scope: "hobbyist-device-configuration", Preconditions: []string{"Ordinary revision, document-generation, retry and closed-service guards apply"}, Effects: []string{}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing, extra, wrong-type, null-required, out-of-range or wrong-target fields preserve accepted state"}}}
 	switch id {
+	case "current-source.configure", "load.configure":
+		c.Effects = []string{currentDeviceDescription, "Complete saved undoable startup edit; all fields and pulse timing required even in DC. Source 0–1 A/compliance 1–24 V; load cc 0–1 A or cp 0–24 W, minimum 0.1–12 V, current limit 0.001–1 A. Low level must not exceed high. Pulse phase/edge rules match finite source timing. No solver-limit changes."}
 	case "passive.configure":
 		schema["x-passive-version"] = PassiveLossModelID
 		c.Effects = []string{"Saved undoable capacitor/inductor configuration; all fields required, including when disabling. Unused kind-specific fields must be zero. Enabled=false removes parameters and restores the exact original ideal model. Version elab.passive-loss.v1.", "Capacitor ESR is series with ideal storage; leakage is parallel across external terminals. Initial voltage and energy refer to internal storage, external probes report total terminal voltage/current. Inductor winding loss is series resistance. Results include storage voltage/current and each nonnegative heat loss; captures validate them. No extra storage slots or solver-limit changes."}
@@ -58,6 +60,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	schema["x-command-contract"] = c
 	schema["x-model-id"] = ExtendedModelID
+	if id == "current-source.configure" || id == "load.configure" {
+		schema["x-model-id"] = CurrentDeviceModelID
+	}
 	if id == "passive.configure" {
 		schema["x-model-id"] = PassiveLossModelID
 	}
@@ -122,4 +127,37 @@ func addPassiveSchema(schema map[string]any) {
 		}
 	}
 	schema["x-unused-fields"] = "capacitor requires winding_resistance_ohm=0; inductor requires esr_ohm=0 and leakage_resistance_ohm=0"
+}
+
+func addCurrentSchema(schema map[string]any, kind string) {
+	bounds := func(name, unit string, min, max float64) {
+		if p := inputProperty(schema, name); p != nil {
+			p["minimum"], p["maximum"], p["x-unit"] = min, max, unit
+		}
+	}
+	if kind == "timing" {
+		for _, name := range []string{"high_s", "low_s", "rise_s", "fall_s"} {
+			bounds(name, "s", 1e-6, 10)
+		}
+		schema["x-relations"] = "period ≥ 1 ms; rise ≤ high phase; fall ≤ low phase. All fields required even when pulsed=false."
+		return
+	}
+	if p := inputProperty(schema, "version"); p != nil {
+		p["enum"] = []string{CurrentDeviceModelID}
+	}
+	if kind == "source" {
+		bounds("current_a", "A", 0, 1)
+		bounds("low_current_a", "A", 0, 1)
+		bounds("compliance_v", "V", 1, 24)
+	} else {
+		if p := inputProperty(schema, "mode"); p != nil {
+			p["enum"] = []string{"cc", "cp"}
+		}
+		bounds("level", "A in cc; W in cp", 0, 24)
+		bounds("low_level", "A in cc; W in cp", 0, 24)
+		bounds("minimum_voltage_v", "V", .1, 12)
+		bounds("maximum_current_a", "A", .001, 1)
+		schema["x-mode-bound"] = "CC levels ≤ 1 A; CP levels ≤ 24 W"
+	}
+	schema["x-level-relation"] = "low ≤ high; DC uses high level, pulse timing is independent of primary input mode"
 }

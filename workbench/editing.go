@@ -199,6 +199,30 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.configurePassiveLocked(p)
+	case "current-source.configure":
+		var p CurrentParams
+		if err := params(raw, &p, "id", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &CurrentConfig{}, currentFields()...); err != nil {
+			return err
+		}
+		if err := validateCurrentTimingFields(raw, "parameters"); err != nil {
+			return err
+		}
+		return s.configureDeviceLocked(p.ID, "current-source", &DeviceParameters{Current: &p.Parameters})
+	case "load.configure":
+		var p ElectronicLoadParams
+		if err := params(raw, &p, "id", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &LoadConfig{}, loadFields()...); err != nil {
+			return err
+		}
+		if err := validateCurrentTimingFields(raw, "parameters"); err != nil {
+			return err
+		}
+		return s.configureDeviceLocked(p.ID, "electronic-load", &DeviceParameters{Load: &p.Parameters})
 	case "speaker.configure":
 		var p SpeakerParams
 		if err := params(raw, &p, "id", "parameters"); err != nil {
@@ -789,7 +813,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"speaker": "SP", "shift-register": "U", "piezo": "BZ", "active-buzzer": "BZ", "pwm-controller": "U", "hbridge": "U", "transformer": "T", "optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"current-source": "I", "electronic-load": "LOAD", "speaker": "SP", "shift-register": "U", "piezo": "BZ", "active-buzzer": "BZ", "pwm-controller": "U", "hbridge": "U", "transformer": "T", "optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

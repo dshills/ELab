@@ -1,0 +1,507 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "8f375551192d458f5c2eca0b61e2e831",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "923728279905ce6639e90c4750417c43e88b29f9",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 9,
+      "medium": 6,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "229dc92c3dd92251",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unchecked nil dereference of device config",
+      "message": "The inspector dereferences `p.Device.Current` and `p.Device.Load` without a nil check. If a component has a current-device kind but its config pointer is nil, rendering the inspector panics. That could happen with a legacy or partially loaded project, or a snapshot taken mid-update. The defaults were already computed, so falling back to them or skipping the controls is cheap.",
+      "suggestion": "Guard the dereferences. Either fall back to the defaults or return nil when the config pointer is nil.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/current_controls.go",
+          "lines": {
+            "start": 17,
+            "end": 21
+          }
+        }
+      ],
+      "tags": [
+        "nil-pointer",
+        "panic"
+      ],
+      "evidence": "\tif p.Kind == \"current-source\" {\n\t\tc = *p.Device.Current\n\t} else {\n\t\tl = *p.Device.Load\n\t}",
+      "fix": {
+        "before": "\tif p.Kind == \"current-source\" {\n\t\tc = *p.Device.Current\n\t} else {\n\t\tl = *p.Device.Load\n\t}",
+        "after": "\tif p.Kind == \"current-source\" {\n\t\tif p.Device.Current == nil {\n\t\t\treturn nil\n\t\t}\n\t\tc = *p.Device.Current\n\t} else {\n\t\tif p.Device.Load == nil {\n\t\t\treturn nil\n\t\t}\n\t\tl = *p.Device.Load\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ca8ad0b2ebd257ed",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible nil map write panic on missing schema property",
+      "message": "`inputProperty` can return nil, which is why the local `bounds` helper checks for it. These two lines index the result directly: `inputProperty(schema, \"version\")` and `inputProperty(schema, \"mode\")`. If the property is missing, the write is to a nil map. That panics during schema construction, e.g. when the field is renamed or `kind` is passed incorrectly.",
+      "suggestion": "Guard both writes with a nil check, as `bounds` does:\n```go\nif p := inputProperty(schema, \"mode\"); p != nil {\n    p[\"enum\"] = []string{\"cc\", \"cp\"}\n}\n```\nAlternatively, fail explicitly if a required schema property is absent.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 146,
+            "end": 146
+          }
+        }
+      ],
+      "tags": [
+        "nil-map",
+        "panic",
+        "location-corrected"
+      ],
+      "evidence": "\tinputProperty(schema, \"version\")[\"enum\"] = []string{CurrentDeviceModelID}",
+      "fix": {
+        "before": "\tinputProperty(schema, \"version\")[\"enum\"] = []string{CurrentDeviceModelID}",
+        "after": "\tif p := inputProperty(schema, \"version\"); p != nil {\n\t\tp[\"enum\"] = []string{CurrentDeviceModelID}\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "3c51e61a620a96df",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unguarded nil map write for load mode enum",
+      "message": "This is the same unguarded `inputProperty` result as on line 148. If the `mode` property is absent from the load schema, assigning to the nil map panics.",
+      "suggestion": "Nil-check the returned map before assigning `enum`.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 152,
+            "end": 152
+          }
+        }
+      ],
+      "tags": [
+        "nil-map",
+        "panic"
+      ],
+      "evidence": "\t\tinputProperty(schema, \"mode\")[\"enum\"] = []string{\"cc\", \"cp\"}",
+      "fix": {
+        "before": "\t\tinputProperty(schema, \"mode\")[\"enum\"] = []string{\"cc\", \"cp\"}",
+        "after": "\t\tif p := inputProperty(schema, \"mode\"); p != nil {\n\t\t\tp[\"enum\"] = []string{\"cc\", \"cp\"}\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "3108f2173af3fd76",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Current source can be selected as primary voltage supply",
+      "message": "`current-source` is now added to `sources`, so it can be `sources[0]` and become the primary source. `out.Supply` then becomes the current source's positive net, and `out.Circuit = Circuit{out.Source.Value, ...}` reads a current in amps as a supply voltage. This can produce a wrong supply/output net and wrong legacy circuit values when the circuit also has a battery or DC source.",
+      "suggestion": "When choosing `out.Source`, prefer voltage sources over `current-source`. Fall back to the current source only when no voltage source exists, and handle that case explicitly in the `Circuit` construction.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 305,
+            "end": 307
+          }
+        }
+      ],
+      "tags": [
+        "current-source",
+        "supply",
+        "location-corrected"
+      ],
+      "evidence": "\tout.Source = sources[0]\n\tfor _, v := range sources {\n\t\tif v.Kind == \"pulse-source\" {",
+      "fix": {
+        "before": "\tout.Source = sources[0]\n\tfor _, v := range sources {\n\t\tif v.Kind == \"pulse-source\" {",
+        "after": "\tout.Source = sources[0]\n\tfor _, v := range sources {\n\t\tif v.Kind != \"current-source\" {\n\t\t\tout.Source = v\n\t\t\tbreak\n\t\t}\n\t}\n\tfor _, v := range sources {\n\t\tif v.Kind == \"pulse-source\" {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c870343042628beb",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible nil dereference of Device.Load",
+      "message": "`p.Device.Load.Mode` is read with no nil check. If `Device` or `Load` is a pointer that can be unset, for example on a freshly placed load or on a malformed graph, building annotations panics while the service lock is held.",
+      "suggestion": "Check for nil before the read: `p.Device != nil \u0026\u0026 p.Device.Load != nil \u0026\u0026 p.Device.Load.Mode == \"cp\"`. Better still, read the mode through the same accessor that `currentWaveform` uses.",
+      "confidence": 0.25,
+      "locations": [
+        {
+          "path": "workbench/source_annotations.go",
+          "lines": {
+            "start": 50,
+            "end": 50
+          }
+        }
+      ],
+      "tags": [
+        "nil",
+        "location-corrected"
+      ],
+      "evidence": "if p.Kind == \"electronic-load\" \u0026\u0026 p.Device.Load.Mode == \"cp\" {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f495af733b2bafd4",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Corner/step logic uses p.Pulse while annotations use currentWaveform",
+      "message": "The annotations get a current device's pulse from `currentWaveform(p)`, but the step and corner logic reads `p.Pulse` directly. If current-device pulses are stored somewhere other than `p.Pulse`, edge corners and step limits are skipped. The integrator could then step over the current pulse transitions.",
+      "suggestion": "Get the pulse from the same place everywhere. For example, use `currentWaveform(p).Pulse` for current devices in `nextSourceCorner` and `maximumWaveformStep`, or check that `currentWaveform` always returns `p.Pulse`.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/waveforms.go",
+          "lines": {
+            "start": 199,
+            "end": 199
+          }
+        }
+      ],
+      "tags": [
+        "waveform",
+        "consistency",
+        "location-corrected"
+      ],
+      "evidence": "\t\tnext = math.Min(next, nextSourceCorner(p, t, at, p.ID == n.c.Source.ID \u0026\u0026 !IsCurrentDevice(p.Kind)))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "3a4dfd19815a894e",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Closure captures loop variable f",
+      "message": "The setter closure captures the range variable `f`. If the module targets a Go version before 1.22, every timing field would call the last entry's setter, so every field would edit the fall time.",
+      "suggestion": "Shadow the loop variable (`f := f`) before creating the closure, or confirm go.mod targets Go 1.22 or later.",
+      "confidence": 0.25,
+      "locations": [
+        {
+          "path": "desktop/current_controls.go",
+          "lines": {
+            "start": 87,
+            "end": 87
+          }
+        }
+      ],
+      "tags": [
+        "closure",
+        "loop-variable",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tfield(f.id, f.label, f.value*1000, .001, 10000, .1, func(v float64) { t := timing; f.set(\u0026t, decimalControlSI(v, -3)); setTiming(t) })",
+      "fix": {
+        "before": "\t\t\tfield(f.id, f.label, f.value*1000, .001, 10000, .1, func(v float64) { t := timing; f.set(\u0026t, decimalControlSI(v, -3)); setTiming(t) })",
+        "after": "\t\t\tf := f\n\t\t\tfield(f.id, f.label, f.value*1000, .001, 10000, .1, func(v float64) { t := timing; f.set(\u0026t, decimalControlSI(v, -3)); setTiming(t) })"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "cfb044a92caf57f7",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Model description appended as a Fact instead of Limitations",
+      "message": "Every other case that applies a model-level description puts it in `out.Model`/`out.Limitations`, as the passive-loss branches do. Here the long model ID and limitations text is appended to `Facts` instead. Facts are meant to describe this component in the current circuit. The result is a duplicated, misclassified paragraph in the explanation. `Model` and `Limitations` may also stay at whatever `part.Model`/`partLimitations` produced.",
+      "suggestion": "Set `out.Model, out.Limitations = CurrentDeviceModelID, currentDeviceDescription` and only append `currentDeviceName(part)` to Facts.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/component_explanation.go",
+          "lines": {
+            "start": 96,
+            "end": 97
+          }
+        }
+      ],
+      "tags": [
+        "explanation",
+        "location-corrected"
+      ],
+      "evidence": "\tcase \"current-source\", \"electronic-load\":\n\t\tout.Facts = append(out.Facts, currentDeviceName(part), currentDeviceDescription)",
+      "fix": {
+        "before": "\tcase \"current-source\", \"electronic-load\":\n\t\tout.Facts = append(out.Facts, currentDeviceName(part), currentDeviceDescription)",
+        "after": "\tcase \"current-source\", \"electronic-load\":\n\t\tout.Model, out.Limitations = CurrentDeviceModelID, currentDeviceDescription\n\t\tout.Facts = append(out.Facts, currentDeviceName(part))"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0c51be4fb81ea6bd",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Hard current clamp creates non-smooth Jacobian",
+      "message": "The current source uses `smoothLevel` so Newton iterations see a continuous derivative. The load's maximum-current limit is a hard clamp, so the derivative jumps from a positive value to 0 at the limit. The CP linear-region boundary at MinimumVoltage also has a slope discontinuity, from level/Vmin² to -level/Vmin². These kinks can make Newton oscillate across the boundary and slow or break convergence in transient steps.",
+      "suggestion": "Use a smooth limiter, for example the same `smoothLevel` helper or a soft-min, so the current and its derivative are continuous at the limit.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/current_devices.go",
+          "lines": {
+            "start": 124,
+            "end": 127
+          }
+        }
+      ],
+      "tags": [
+        "numerics",
+        "newton"
+      ],
+      "evidence": "\tif i \u003e= c.MaximumCurrent {\n\t\ti = c.MaximumCurrent\n\t\tdi = 0\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d7a3053b171a4a08",
+      "severity": "low",
+      "category": "testing",
+      "title": "Initial readout assertion can pass vacuously",
+      "message": "The initial-readout assertion only runs when `state.Transient` is non-nil. If a regression leaves `Transient` nil, the check is skipped silently and the test passes without verifying the initial voltage trace.",
+      "suggestion": "Assert that `state.Transient` is non-nil first, or fail when it is nil, before comparing the values.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/current_devices_test.go",
+          "lines": {
+            "start": 268,
+            "end": 268
+          }
+        }
+      ],
+      "tags": [
+        "vacuous-test",
+        "location-corrected"
+      ],
+      "evidence": "\tif state.Transient != nil \u0026\u0026 math.Abs(state.Transient.Sample.Input-state.Mixed.Sources[0].Voltage) \u003e 1e-10 {",
+      "fix": {
+        "before": "\tif state.Transient != nil \u0026\u0026 math.Abs(state.Transient.Sample.Input-state.Mixed.Sources[0].Voltage) \u003e 1e-10 {",
+        "after": "\tif state.Transient == nil || math.Abs(state.Transient.Sample.Input-state.Mixed.Sources[0].Voltage) \u003e 1e-10 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "20bd83d81804db06",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Redundant current-device dispatch in waveformComponents",
+      "message": "`withDeviceWaveform` already returns `currentWaveform(p)` for current devices. The extra if/else in `waveformComponents` repeats that dispatch, so the two code paths can drift apart if one is changed later.",
+      "suggestion": "Remove the branch and always call `withDeviceWaveform(p)`.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/device_extensions.go",
+          "lines": {
+            "start": 315,
+            "end": 319
+          }
+        }
+      ],
+      "tags": [
+        "duplication"
+      ],
+      "evidence": "\t\t\tif IsCurrentDevice(p.Kind) {\n\t\t\t\tresult = append(result, currentWaveform(p))\n\t\t\t} else {\n\t\t\t\tresult = append(result, withDeviceWaveform(p))\n\t\t\t}",
+      "fix": {
+        "before": "\t\t\tif IsCurrentDevice(p.Kind) {\n\t\t\t\tresult = append(result, currentWaveform(p))\n\t\t\t} else {\n\t\t\t\tresult = append(result, withDeviceWaveform(p))\n\t\t\t}",
+        "after": "\t\t\tresult = append(result, withDeviceWaveform(p))"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "dbaabbd46f8ab6ac",
+      "severity": "low",
+      "category": "testing",
+      "title": "Test bumps command count without asserting the new commands",
+      "message": "The test raises the expected command count from 30 to 32 but never checks that `current-source.configure` and `load.configure` are the two commands that were added. Any two unrelated commands would make it pass.",
+      "suggestion": "Add `current-source.configure` and `load.configure` to the `found` checks.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/edit_history_contracts_test.go",
+          "lines": {
+            "start": 31,
+            "end": 33
+          }
+        }
+      ],
+      "tags": [
+        "coverage"
+      ],
+      "evidence": "\t\t\tif len(commands) != 32 || inputProperty(schema, \"edits\")[\"maxItems\"] != float64(100) || inputProperty(schema, \"name\")[\"x-max-utf8-bytes\"] != float64(80) {",
+      "fix": {
+        "before": "\t\t\tif !found[\"passive.configure\"] || !found[\"speaker.configure\"] || !found[\"transistor.profile.set\"] {",
+        "after": "\t\t\tif !found[\"passive.configure\"] || !found[\"speaker.configure\"] || !found[\"transistor.profile.set\"] || !found[\"current-source.configure\"] || !found[\"load.configure\"] {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d9a1153376b8afff",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Dead x-model-id assignment overwritten after switch",
+      "message": "The new case sets `schema[\"x-model-id\"]` inside the switch. After the switch, `schema[\"x-model-id\"] = ExtendedModelID` unconditionally overwrites it, and the new `if` then restores it. The in-switch assignment has no effect. This is misleading: a later edit to the post-switch block could silently change the model ID.",
+      "suggestion": "Remove the dead assignment inside the case. Better, compute the model ID in each case and assign it once after the switch, instead of chaining `if id == ...` overrides.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 14,
+            "end": 14
+          }
+        }
+      ],
+      "tags": [
+        "dead-code"
+      ],
+      "evidence": "\t\tschema[\"x-model-id\"] = CurrentDeviceModelID",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "a6043df1a52b402a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "No cutset validation for ideal current sources",
+      "message": "Current sources are skipped in the grounding check, the ideal-capacitor check and the constraint union-find. However, there is no check for topologies that are ill-posed for an ideal current source. Examples are a current source with an open circuit or a cutset made only of current sources and inductors, such as two current sources in series. These topologies have an indeterminate node voltage or KCL inconsistency. Voltage-source loops are rejected explicitly, but the dual cutset case is not.",
+      "suggestion": "Add a dual check that rejects networks where a current source forms a cutset with only other current sources or inductors. Alternatively, require a resistive or conductive path in parallel or series as appropriate, and fail with an `ideal-constraint-cutset` diagnostic.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 231,
+            "end": 231
+          }
+        }
+      ],
+      "tags": [
+        "current-source",
+        "topology",
+        "location-corrected"
+      ],
+      "evidence": "\t\tif v.Kind != \"current-source\" \u0026\u0026 v.Kind != \"battery\" \u0026\u0026 v.Kind != \"dc-source\" \u0026\u0026 net(v, \"negative\") != out.Ground {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c9e4b89548a05e2a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Electronic-load unit only handles cp mode",
+      "message": "The unit is \"A\" for every load mode except constant power. Loads usually also have constant-resistance (Ω) and constant-voltage (V) modes. If this load supports them, the pulse annotation shows the wrong unit for those modes.",
+      "suggestion": "Choose the unit with a switch on every supported load mode, for example cc→A, cp→W, cr→Ω and cv→V. You could also add a helper that returns the unit for a given mode.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/source_annotations.go",
+          "lines": {
+            "start": 50,
+            "end": 53
+          }
+        }
+      ],
+      "tags": [
+        "units",
+        "annotation"
+      ],
+      "evidence": "\t\t\t\tunit := \"A\"\n\t\t\t\tif p.Kind == \"electronic-load\" \u0026\u0026 p.Device.Load.Mode == \"cp\" {\n\t\t\t\t\tunit = \"W\"\n\t\t\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 125357,
+    "totalMs": 26006
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 47,
+    "bytes": 156457,
+    "chunks": 8,
+    "llmCalls": 8,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 93610,
+        "output": 12766,
+        "costUSD": 0.62976
+      }
+    ],
+    "widenedFiles": 17,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "beadcacf85e6d937",
+        "severity": "low",
+        "category": "correctness",
+        "title": "AC sweep accepts electronic loads without regard to CP mode linearization",
+        "message": "AC analysis now accepts `electronic-load` for both CC and CP modes. A CP load has an operating-point-dependent incremental conductance of G = −P/V². In its bounded low-voltage continuation region it behaves differently again. If the AC stamping (not visible in this part) treats the load as an ideal current sink (open circuit), CP-mode small-signal results will be silently wrong. Pulsed sources and pulsed loads also need a defined AC treatment.",
+        "suggestion": "Check that the AC linearization stamps the CP-mode incremental conductance at the DC operating point. If it does not, reject `electronic-load` in CP mode in `acSupported` with a clear message. Add a test covering AC with a CP load.",
+        "confidence": 0.3,
+        "locations": [
+          {
+            "path": "workbench/ac_sweep.go",
+            "lines": {
+              "start": 32,
+              "end": 32
+            }
+          }
+        ],
+        "tags": [
+          "ac-analysis",
+          "electronic-load"
+        ],
+        "evidence": "case \"current-source\", \"electronic-load\", \"speaker\", \"npn\",",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in workbench/ac_sweep.go"
+    }
+  ],
+  "suppressed": []
+}

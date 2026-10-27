@@ -95,6 +95,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if workbench.IsCurrentDevice(part.Kind) {
+		inspector = append(inspector, s.currentControls(state, part)...)
+	}
 	if workbench.IsPassiveStorageKind(part.Kind) {
 		inspector = append(inspector, s.passiveControls(state, part)...)
 	}

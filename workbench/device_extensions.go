@@ -14,6 +14,7 @@ type ExtendedModel struct {
 	Shift    string `json:"shift_register"`
 	Sound    string `json:"sound"`
 	Speaker  string `json:"loudspeaker,omitempty"`
+	Current  string `json:"current_devices,omitempty"`
 	Passive  string `json:"passive_losses,omitempty"`
 }
 
@@ -37,6 +38,8 @@ type SoundConfig struct {
 	Frequency   float64 `json:"frequency_hz"`
 }
 type DeviceParameters struct {
+	Current  *CurrentConfig     `json:"current_source,omitempty"`
+	Load     *LoadConfig        `json:"electronic_load,omitempty"`
 	Passive  *PassiveConfig     `json:"passive,omitempty"`
 	Speaker  *SpeakerConfig     `json:"speaker,omitempty"`
 	Bipolar  *TransistorProfile `json:"bipolar,omitempty"`
@@ -50,6 +53,14 @@ func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
 		return nil
 	}
 	o := *p
+	if p.Current != nil {
+		v := *p.Current
+		o.Current = &v
+	}
+	if p.Load != nil {
+		v := *p.Load
+		o.Load = &v
+	}
 	if p.Passive != nil {
 		v := *p.Passive
 		o.Passive = &v
@@ -81,12 +92,15 @@ func hasDynamics(p Component) bool {
 }
 func isSoundKind(k string) bool { return k == "piezo" || k == "active-buzzer" }
 func isExtendedKind(k string) bool {
-	return k == "speaker" || k == "pwm-controller" || k == "shift-register" || isSoundKind(k)
+	return IsCurrentDevice(k) || k == "speaker" || k == "pwm-controller" || k == "shift-register" || isSoundKind(k)
 }
 func extendedModelForGraph(g Graph) *ExtendedModel {
 	for _, p := range g.Components {
 		if isExtendedKind(p.Kind) || hasDynamics(p) || hasPassiveLoss(p) {
 			m := ExtendedDeviceModel()
+			if hasCurrentDevices(g) {
+				m.Current = currentDeviceDescription
+			}
 			if hasPassiveLosses(g) {
 				m.Passive = passiveLossDescription
 			}
@@ -100,6 +114,9 @@ func extendedModelForGraph(g Graph) *ExtendedModel {
 }
 func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	expected := ExtendedDeviceModel()
+	if hasCurrentDevices(g) {
+		expected.Current = currentDeviceDescription
+	}
 	if hasPassiveLosses(g) {
 		expected.Passive = passiveLossDescription
 	}
@@ -115,6 +132,14 @@ func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	return nil
 }
 func defaultDeviceParameters(p *Component) {
+	if p.Kind == "current-source" {
+		v := DefaultCurrentConfig()
+		p.Device = &DeviceParameters{Current: &v}
+	}
+	if p.Kind == "electronic-load" {
+		v := DefaultLoadConfig()
+		p.Device = &DeviceParameters{Load: &v}
+	}
 	if p.Kind == "speaker" {
 		v := DefaultSpeakerConfig()
 		p.Device = &DeviceParameters{Speaker: &v}
@@ -129,12 +154,18 @@ func defaultDeviceParameters(p *Component) {
 func validateDeviceParameters(p Component) error {
 	d := p.Device
 	if d == nil {
-		if p.Kind == "speaker" || p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
+		if IsCurrentDevice(p.Kind) || p.Kind == "speaker" || p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
 			return fmt.Errorf("device requires explicit parameters")
 		}
 		return nil
 	}
 	count := 0
+	if d.Current != nil {
+		count++
+	}
+	if d.Load != nil {
+		count++
+	}
 	if d.Passive != nil {
 		count++
 	}
@@ -155,6 +186,12 @@ func validateDeviceParameters(p Component) error {
 	}
 	if count != 1 {
 		return fmt.Errorf("device parameters must match one component model")
+	}
+	if p.Kind == "current-source" && d.Current != nil {
+		return validateCurrent(*d.Current)
+	}
+	if p.Kind == "electronic-load" && d.Load != nil {
+		return validateLoad(*d.Load)
 	}
 	if IsPassiveStorageKind(p.Kind) && d.Passive != nil {
 		return validatePassiveConfig(p.Kind, *d.Passive)
@@ -197,6 +234,16 @@ func validateDeviceFields(raw json.RawMessage, p Component) error {
 		return err
 	}
 	switch {
+	case p.Device.Current != nil:
+		if err := paramsNested(f["device_parameters"], "current_source", &CurrentConfig{}, currentFields()...); err != nil {
+			return err
+		}
+		return validateCurrentTimingFields(f["device_parameters"], "current_source")
+	case p.Device.Load != nil:
+		if err := paramsNested(f["device_parameters"], "electronic_load", &LoadConfig{}, loadFields()...); err != nil {
+			return err
+		}
+		return validateCurrentTimingFields(f["device_parameters"], "electronic_load")
 	case p.Device.Passive != nil:
 		return paramsNested(f["device_parameters"], "passive", &PassiveConfig{}, passiveRequiredFields()...)
 	case p.Device.Speaker != nil:
@@ -246,6 +293,9 @@ func pwmWaveform(p Component) PulseWaveform {
 	return PulseWaveform{HighVoltage: 1, LowVoltage: 0, HighSeconds: period * c.Duty, LowSeconds: period * (1 - c.Duty), RiseSeconds: period * .05, FallSeconds: period * .05}
 }
 func withDeviceWaveform(p Component) Component {
+	if IsCurrentDevice(p.Kind) {
+		return currentWaveform(p)
+	}
 	if p.Kind == "pwm-controller" {
 		v := pwmWaveform(p)
 		p.Pulse = &v
@@ -255,7 +305,7 @@ func withDeviceWaveform(p Component) Component {
 func (n *mixedNetwork) waveformComponents() []Component {
 	result := n.sources
 	for _, p := range n.c.MixedGraph.Components {
-		if p.Kind == "pwm-controller" {
+		if p.Kind == "pwm-controller" || IsCurrentDevice(p.Kind) {
 			if len(result) == len(n.sources) {
 				result = append([]Component(nil), result...)
 			}

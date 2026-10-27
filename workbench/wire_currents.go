@@ -29,7 +29,7 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			for _, pin := range shiftPins {
 				set(pin, p.ID+"."+pin, 1)
 			}
-		case "speaker", "piezo", "active-buzzer":
+		case "electronic-load", "speaker", "piezo", "active-buzzer":
 			set("positive", p.ID, 1)
 			set("negative", p.ID, -1)
 		case "pwm-controller":
@@ -51,7 +51,7 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 		case "dc-motor":
 			set("positive", p.ID, 1)
 			set("negative", p.ID, -1)
-		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		case "current-source", "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			set("positive", p.ID, -1)
 			set("negative", p.ID, 1)
 		case "nmos", "pmos":

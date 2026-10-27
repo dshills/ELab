@@ -45,6 +45,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Loads              []BranchResult        `json:"electronic_loads,omitempty"`
 	Speakers           []SpeakerResult       `json:"speakers,omitempty"`
 	Shifts             []ShiftResult         `json:"shift_registers,omitempty"`
 	Sounds             []SoundResult         `json:"sounders,omitempty"`
@@ -89,6 +90,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Loads = append([]BranchResult(nil), r.Loads...)
 	o.Speakers = append([]SpeakerResult(nil), r.Speakers...)
 	o.Shifts = append([]ShiftResult(nil), r.Shifts...)
 	o.Sounds = append([]SoundResult(nil), r.Sounds...)
@@ -360,6 +362,15 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 	}
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "current-source", "electronic-load":
+			u, v := n.pin(p, "positive"), n.pin(p, "negative")
+			current, g := currentDeviceLaw(p, voltage(x, u)-voltage(x, v), at)
+			if p.Kind == "current-source" && n.startupSourceScale != nil { // homotopy scales drive, retaining bleed/compliance derivative.
+				scale := *n.startupSourceScale
+				current = scale*(current-(voltage(x, u)-voltage(x, v))*1e-9) + (voltage(x, u)-voltage(x, v))*1e-9
+				g = scale*(g-1e-9) + 1e-9
+			}
+			flow(u, v, current, g)
 		case "shift-register":
 			n.stampShift(p, x, add, f)
 		case "piezo", "active-buzzer":
@@ -781,6 +792,15 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	energyRate := 0.
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "current-source", "electronic-load":
+			br := n.currentDeviceResult(p, x, at)
+			if p.Kind == "current-source" {
+				r.Sources = append(r.Sources, br)
+				sourcePower += br.Power
+			} else {
+				r.Loads = append(r.Loads, br)
+				powers += br.Power
+			}
 		case "resistor", "led", "switch", "diode", "zener", "schottky":
 			a, b := "1", "2"
 			if p.Kind == "led" || IsDiodeKind(p.Kind) {

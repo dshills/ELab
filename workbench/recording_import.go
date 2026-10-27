@@ -342,6 +342,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 				return err
 			}
 		}
+		if err := validateRecordedCurrentDevices(c, m.Graph, r); err != nil {
+			return err
+		}
 		if err := validateRecordedMOSFETs(c, m.Graph, r); err != nil {
 			return err
 		}
@@ -485,7 +488,7 @@ func (s *Service) retainOperationLocked(operation *verificationOperation) {
 func recordedObjectIDs(graph Graph, kind string, ids []string) error {
 	expected := map[string]bool{}
 	for _, part := range graph.Components {
-		if part.Kind == kind || kind == "source" && IsVoltageSource(part.Kind) {
+		if part.Kind == kind || kind == "source" && (IsVoltageSource(part.Kind) || part.Kind == "current-source") {
 			expected[part.ID] = true
 		}
 	}

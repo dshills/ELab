@@ -96,6 +96,8 @@ func probeInventory(g Graph) []Probe {
 				ref := p.ID + "." + pin
 				out = append(out, Probe{"i:" + ref, ref + " into register", "A", ref, "into register"})
 			}
+		case "electronic-load":
+			out = append(out, Probe{"i:" + p.ID, p.ID + " load current", "A", p.ID + ".positive", "into positive"})
 		case "speaker", "piezo", "active-buzzer":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " sounder current", "A", p.ID + ".positive", "positive to negative"})
 		case "pwm-controller":
@@ -124,7 +126,7 @@ func probeInventory(g Graph) []Probe {
 			}
 		case "dc-motor":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " armature current", "A", p.ID + ".positive", "into positive"})
-		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		case "current-source", "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			out = append(out, Probe{"i:" + p.ID, p.ID + " delivered current", "A", p.ID + ".positive", "out of positive"})
 		case "potentiometer":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " track voltage", "V", p.ID + ".1", p.ID + ".2"})

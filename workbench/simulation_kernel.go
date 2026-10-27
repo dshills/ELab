@@ -68,7 +68,7 @@ func newSimulationKernel(ctx context.Context, input kernelPlan) (*simulationKern
 		}
 		k.mixed = state
 		input := n.sourceVoltage(c.Source, t, 0)
-		if c.Source.Kind == "battery" {
+		if c.Source.Kind == "battery" || c.Source.Kind == "current-source" {
 			input = mixedSourceVoltage(c, state.result)
 		}
 		t.Sample = mixedSample(c, state.result, input)

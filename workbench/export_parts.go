@@ -10,6 +10,9 @@ import (
 // describe saved intent rather than a momentary live result.
 func schematicPartDescription(p Component) string {
 	text := p.ID + " · " + p.Name
+	if IsCurrentDevice(p.Kind) {
+		text += " · " + currentDeviceName(p) + " · " + CurrentDeviceModelID
+	}
 	if p.Kind == "net-label" {
 		text += " · " + p.Label
 	}

@@ -40,7 +40,7 @@ func partGroup(kind string) (category string, common bool) {
 		category = "logic"
 	case "hbridge", "dc-motor", "pwm-controller":
 		category = "motors"
-	case "battery", "dc-source", "sine-source", "finite-pulse-source", "pulse-source":
+	case "current-source", "electronic-load", "battery", "dc-source", "sine-source", "finite-pulse-source", "pulse-source":
 		category = "sources"
 	case "speaker", "piezo", "active-buzzer", "transformer", "thermistor", "ldr", "resistor", "capacitor", "inductor", "potentiometer":
 		category = "passives"

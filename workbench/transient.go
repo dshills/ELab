@@ -377,6 +377,9 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 		if d != nil || !IsTransientAnalysis(c.Analysis) || s.transient == nil || s.transient.Stale {
 			return &actionError{"unavailable", "complete and simulate a supported transient circuit before changing its input"}
 		}
+		if c.Source.Kind == "current-source" {
+			return fmt.Errorf("configure the current source through current-source.configure; its pulse is independent of voltage input mode")
+		}
 		if c.Source.Kind == "battery" {
 			return fmt.Errorf("a battery remains connected; use a schematic switch to control its load")
 		}

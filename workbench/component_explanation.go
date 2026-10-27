@@ -93,6 +93,9 @@ func (s *Service) componentExplanationLocked(c Compiled, id string, inspection *
 		}
 	}
 	switch part.Kind {
+	case "current-source", "electronic-load":
+		out.Model, out.Limitations = CurrentDeviceModelID, currentDeviceDescription
+		out.Facts = append(out.Facts, currentDeviceName(part))
 	case "resistor":
 		out.Facts = append(out.Facts, "In this ideal model, voltage across the resistor equals current times resistance (V = I × R).")
 	case "capacitor":

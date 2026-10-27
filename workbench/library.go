@@ -44,6 +44,8 @@ func partAliases(kind string) []string {
 		return []string{"motor", "DC motor", "PWM", "RPM", "brushed", "fan", "back EMF"}
 	case "battery":
 		return []string{"cell", "battery pack", "charge", "internal resistance", "voltage sag"}
+	case "current-source", "electronic-load":
+		return []string{"current", "load", "CC", "CP", "compliance", "Norton"}
 	case "dc-source":
 		return []string{"power supply", "voltage supply", "ideal voltage source"}
 	case "resistor":
@@ -93,6 +95,8 @@ func partAliases(kind string) []string {
 }
 func partLimitations(kind string) string {
 	switch kind {
+	case "current-source", "electronic-load":
+		return currentDeviceDescription
 	case "speaker":
 		return speakerDescription
 	case "shift-register":

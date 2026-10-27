@@ -141,6 +141,11 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(SearchParams{}), "urn:elab:search-input:1"},
 	{reflect.TypeOf(SpeakerConfig{}), "urn:elab:speaker-config:1"},
 	{reflect.TypeOf(PassiveParams{}), "urn:elab:passive-configure:1"},
+	{reflect.TypeOf(CurrentConfig{}), "urn:elab:current-source-config:1"},
+	{reflect.TypeOf(LoadConfig{}), "urn:elab:load-config:1"},
+	{reflect.TypeOf(CurrentTiming{}), "urn:elab:current-timing:1"},
+	{reflect.TypeOf(CurrentParams{}), "urn:elab:current-source-configure:1"},
+	{reflect.TypeOf(ElectronicLoadParams{}), "urn:elab:load-configure:1"},
 	{reflect.TypeOf(PassiveConfig{}), "urn:elab:passive-loss-parameters:1"},
 	{reflect.TypeOf(PassiveReading{}), "urn:elab:passive-loss-readings:1"},
 	{reflect.TypeOf(SpeakerParams{}), "urn:elab:speaker-configure:1"},
@@ -267,6 +272,15 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Input-only shared definitions retain command unit text without
 		// widening numeric output/settings schemas.
+		if common.Type == reflect.TypeOf(CurrentConfig{}) {
+			addCurrentSchema(schema, "source")
+		}
+		if common.Type == reflect.TypeOf(LoadConfig{}) {
+			addCurrentSchema(schema, "load")
+		}
+		if common.Type == reflect.TypeOf(CurrentTiming{}) {
+			addCurrentSchema(schema, "timing")
+		}
 		if common.Type == reflect.TypeOf(PassiveConfig{}) {
 			addPassiveSchema(schema)
 		}
@@ -409,6 +423,8 @@ func Catalog() []Capability {
 		queryCapability("audio.read", "Read owned preview metadata and WAV bytes.", reflect.TypeOf(IDParams{}), reflect.TypeOf(AudioData{})),
 		typedCapability("pwm.configure", "Set powered PWM controller frequency and duty.", reflect.TypeOf(PWMParams{})),
 		typedCapability("passive.configure", "Configure saved capacitor ESR/leakage or inductor winding resistance, or restore ideal behavior; shared undoable electrical edit.", reflect.TypeOf(PassiveParams{})),
+		typedCapability("current-source.configure", "Configure DC or finite pulsed current delivery with explicit compliance.", reflect.TypeOf(CurrentParams{})),
+		typedCapability("load.configure", "Configure a one-quadrant CC/CP electronic load with finite pulse ramps and bounded low-voltage continuation.", reflect.TypeOf(ElectronicLoadParams{})),
 		typedCapability("speaker.configure", "Configure a saved passive loudspeaker electrical load; explicit audio preview uses existing shared commands.", reflect.TypeOf(SpeakerParams{})),
 		typedCapability("transistor.profile.set", "Enable/configure a saved versioned educational BJT profile or restore generic v1; same undoable user/agent electrical edit.", reflect.TypeOf(TransistorProfileParams{})),
 		typedCapability("opamp.dynamics.set", "Enable or disable op-amp dominant-pole and slew limiting.", reflect.TypeOf(DynamicsParams{})),

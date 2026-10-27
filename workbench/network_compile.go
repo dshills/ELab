@@ -26,7 +26,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		switch p.Kind {
 		case "shift-register":
 			sequential = append(sequential, p)
-		case "speaker", "piezo", "active-buzzer":
+		case "electronic-load", "speaker", "piezo", "active-buzzer":
 			bridges = append(bridges, p)
 		case "pwm-controller":
 			bridges = append(bridges, p)
@@ -38,7 +38,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			optos = append(optos, p)
 		case "dc-motor":
 			motors = append(motors, p)
-		case "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+		case "current-source", "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 			sources = append(sources, p)
 		case "capacitor":
 			caps = append(caps, p)
@@ -88,6 +88,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			out.Analysis = NetworkTransientAnalysis
 		}
 	}
+
 	generalBipolar := hasBipolarPolarity(qs, "pnp")
 	if len(grounds) > 0 {
 		for _, q := range qs {
@@ -100,7 +101,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			out.Analysis = NetworkTransientAnalysis
 		} else {
 			for _, source := range sources {
-				if source.Kind == "pulse-source" || IsWaveformSource(source.Kind) {
+				if source.Kind == "current-source" && source.Device.Current.Timing.Pulsed || source.Kind == "pulse-source" || IsWaveformSource(source.Kind) {
 					out.Analysis = NetworkTransientAnalysis
 				}
 			}
@@ -127,6 +128,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		out.Analysis = InductorAnalysis
 	}
 	for _, p := range bridges {
+		if p.Kind == "electronic-load" && p.Device.Load.Timing.Pulsed && !hasSpeakers(g) && len(inductors)+len(motors)+len(transformers) == 0 {
+			out.Analysis = WaveformAnalysis
+		}
 		if p.Kind == "pwm-controller" && !hasSpeakers(g) && len(inductors)+len(motors)+len(transformers) == 0 {
 			out.Analysis = WaveformAnalysis
 		}
@@ -165,7 +169,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers)+len(bridges) == 0 && !hasPassiveDissipation(g) {
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers)+len(bridges) == 0 && !hasPassiveDissipation(g) && !hasCurrentDevices(g) {
 		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop counter, or saved capacitor/inductor loss to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
@@ -224,10 +228,10 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 	for _, v := range sources {
-		if v.Kind != "battery" && v.Kind != "dc-source" && net(v, "negative") != out.Ground {
+		if v.Kind != "current-source" && v.Kind != "battery" && v.Kind != "dc-source" && net(v, "negative") != out.Ground {
 			return fail("unsupported", "unsupported-topology", "Waveform sources must have their negative terminal grounded; DC sources may float in a ground-referenced network.", v.ID+".negative")
 		}
-		if v.Kind == "battery" {
+		if v.Kind == "battery" || v.Kind == "current-source" {
 			continue
 		}
 		for _, c := range caps {
@@ -265,7 +269,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return true
 	}
 	for _, p := range sources {
-		if p.Kind == "battery" {
+		if p.Kind == "battery" || p.Kind == "current-source" {
 			continue
 		}
 		if !join(net(p, "positive"), net(p, "negative")) {
@@ -299,6 +303,15 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	}
 	out.MixedGraph = g.Clone()
 	out.Source = sources[0]
+	// Prefer a voltage input when current and voltage sources coexist.
+	if out.Source.Kind == "current-source" {
+		for _, v := range sources {
+			if IsVoltageSource(v.Kind) {
+				out.Source = v
+				break
+			}
+		}
+	}
 	for _, v := range sources {
 		if v.Kind == "pulse-source" {
 			out.Source = v

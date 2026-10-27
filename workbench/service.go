@@ -353,7 +353,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	liveModes := []string{}
 	if diagnostic == nil {
 		liveModes = LiveInputModes(compiled.Analysis)
-		if compiled.Source.Kind == "battery" {
+		if compiled.Source.Kind == "battery" || compiled.Source.Kind == "current-source" {
 			liveModes = []string{}
 		}
 	}

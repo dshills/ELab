@@ -158,6 +158,8 @@ type Part struct {
 
 func libraryParts() []Part {
 	return []Part{
+		{Kind: "current-source", Name: "DC / pulsed current source", Terminals: []string{"positive", "negative"}, Model: CurrentDeviceModelID},
+		{Kind: "electronic-load", Name: "CC / CP electronic load", Terminals: []string{"positive", "negative"}, Model: CurrentDeviceModelID},
 		{Kind: "shift-register", Name: "8-bit shift / latch register", Terminals: append([]string{}, shiftPins...), Model: ExtendedModelID},
 		{Kind: "speaker", Name: "Loudspeaker", Terminals: []string{"positive", "negative"}, Model: ExtendedModelID},
 		{Kind: "piezo", Name: "Piezo sounder", Terminals: []string{"positive", "negative"}, Model: ExtendedModelID},
@@ -351,7 +353,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		p, found = TransformerTerminalLocal(name)
 	case "optocoupler":
 		p, found = OptocouplerTerminalLocal(name)
-	case "dc-motor", "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
+	case "current-source", "electronic-load", "dc-motor", "battery", "dc-source", "pulse-source", "sine-source", "finite-pulse-source":
 		switch name {
 		case "positive":
 			p = Point{0, -34}
@@ -649,7 +651,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		}
 	}
 	// Optional storage losses require the general network equations, not the ideal RC shortcut.
-	if hasPassiveLosses(g) || hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasCurrentDevices(g) || hasPassiveLosses(g) || hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

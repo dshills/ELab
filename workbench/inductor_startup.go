@@ -54,7 +54,7 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 			for _, pin := range shiftPins {
 				join(p, pin, "gnd")
 			}
-		case "piezo", "active-buzzer":
+		case "current-source", "electronic-load", "piezo", "active-buzzer":
 			join(p, "positive", "negative")
 		case "pwm-controller":
 			join(p, "vcc", "gnd")

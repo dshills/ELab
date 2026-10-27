@@ -250,7 +250,7 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, cap := range r.Capacitors {
 		currents[cap.ID] = cap.Current
 	}
-	for _, parts := range [][]BranchResult{r.LEDs, r.Resistors, r.Sources, r.Switches, r.Diodes} {
+	for _, parts := range [][]BranchResult{r.Loads, r.LEDs, r.Resistors, r.Sources, r.Switches, r.Diodes} {
 		for _, part := range parts {
 			currents[part.ID] = part.Current
 		}

@@ -63,3 +63,13 @@ discovery exceeded its existing 64 KiB bound; sharing existing schema definition
 restored it without deleting fields or raising the limit. The native source
 ledger adds only passive.configure and its inspector route; native acceptance
 3/6/9/11 remains open. Prism completed 7/7 Anthropic Opus 5.5 chunks; four medium/nine low observations are fixed or dispositioned in the passives evidence README. Fresh focused core/desktop checks cover the fixes.
+
+Item 2 committed as `92372827`. Item 3 adds versioned Norton DC/pulsed current
+sources and one-quadrant CC/CP electronic loads. Source compliance, explicit
+bleed, bounded low-voltage continuation and finite pulse ramps are documented.
+Independent resistor/compliance roots, CC/CP supply roots, RC ODE, derivatives,
+passivity, current-driven capacitor, storage-free pulse classification, combined
+source budget, capture/reopen/forgery, initial voltage trace and ordinary/offscreen
+shared inspector/agent checks pass. Source count remains four; no solver-limit
+changes. Catalog is 56 kinds /206 commands /73 examples. Model/print/export
+metadata and sampling advice retain full settings. Prism completed all eight Anthropic Opus 5.5 chunks; findings are fixed or explicitly dispositioned against tests and declared model scope in the current-devices evidence README. Fresh controls cover the review changes.

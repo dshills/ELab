@@ -241,10 +241,10 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 		}
 	}
 	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
-	if hasSpeakers(g) || hasTransistorProfiles(g) || hasPassiveLosses(g) {
+	if hasCurrentDevices(g) || hasSpeakers(g) || hasTransistorProfiles(g) || hasPassiveLosses(g) {
 		devices := []Component{}
 		for _, p := range g.Components {
-			if p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
+			if IsCurrentDevice(p.Kind) || p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
 				devices = append(devices, p)
 			}
 		}
@@ -458,6 +458,14 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
+		case "current-source", "electronic-load":
+			for _, path := range CurrentSymbolPaths(p.Kind) {
+				b.WriteString(`<polyline points="`)
+				for _, at := range path {
+					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
+				}
+				b.WriteString(`"/>`)
+			}
 		case "speaker", "pwm-controller", "shift-register", "piezo", "active-buzzer":
 			for _, path := range ExtendedSymbolPaths(p.Kind) {
 				b.WriteString(`<polyline points="`)
@@ -651,6 +659,9 @@ func schematicLabelWidth(text string) float64 { return float64(len([]rune(text))
 func schematicPartLabel(p Component) (float64, float64, string) {
 	x, y := p.Position.X+31, p.Position.Y-3
 	text := p.ID
+	if IsCurrentDevice(p.Kind) {
+		text += " · " + currentDeviceName(p)
+	}
 	if p.Kind == "speaker" && p.Device != nil && p.Device.Speaker != nil {
 		c := p.Device.Speaker
 		text += fmt.Sprintf(" · %.4g Ω · %.4g Hz", c.Resistance, c.Resonance)

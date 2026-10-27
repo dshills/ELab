@@ -7,10 +7,11 @@
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/audio_controls.go": "145150962fa7aea606b0dbec0f3fc674bf2786120ca7054679fa1e9ba89d60a3",
     "desktop/canvas.go": "420e572313c6a1dbc29ffe94736e668d7fc52326e4a4872fa941d52e5d560ef0",
-    "desktop/component_inspector.go": "1aabd764ffcba34efec4cc169b3f7c67a3ba66e3b2facd55c1d7ad46a1c13f53",
+    "desktop/component_inspector.go": "908e630336442126188d7c78485b99759ffcedd66b85b1c5fd154e3e9e43e0a8",
     "desktop/component_palette.go": "554968a6746c02a80cc8c8f3fb853e422f0e45e97afa0d68cb95e2eb00da4a9a",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
+    "desktop/current_controls.go": "75e51b78555dbdc0787eb321697c1f5f0af87e085e8149fee2b6586d8b1a77e7",
     "desktop/cursor_actions.go": "fefec629a794097a6ce7c11d1badc9a9e1a35a17704683de58a673d547130486",
     "desktop/cursor_rejection.go": "d635c20a969208dbaf163fe1b66b3b5de6b624154739529b326aeea4e3b839da",
     "desktop/dc_sweep.go": "323f6b4812987b0a5775c247a3eff5dfebf64aac9f61c0717fadccebc07fc0d7",
@@ -19,7 +20,7 @@
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
     "desktop/document_workspace.go": "41bedab4921ec48632727ae69aa2e460910b5ff869da1d2f72fdad5d4a5c1313",
-    "desktop/drawing.go": "a0e018cd2c24b1929d3914ba7bcd4cc2c6debf13f6200fb6b8d750c9c7bf7f91",
+    "desktop/drawing.go": "df63108c645dd1387a8e6780e354562e1d5ea2862caf3920100adfc966f39b5d",
     "desktop/drawing_preview.go": "c5faa6a382db37aa8748cafa9dcc9e655cc40a3d71218684facc88cb2ccf3a6c",
     "desktop/edit_proposal.go": "85b9470a7665f55758da21fe42f802c033101887faea9ec7889a2ceb055ab1df",
     "desktop/example_browser.go": "6784c01fa1ab6eddb605f08cf3a5d9a84835d42625525ffc28f1cc38bb360aae",
@@ -132,6 +133,7 @@
     "component.rotate",
     "component.select",
     "component.set",
+    "current-source.configure",
     "diagnostics.details.set",
     "display.inspect",
     "display.preferences.set",
@@ -170,6 +172,7 @@
     "export.scope.csv",
     "export.start",
     "inductor.initial.set",
+    "load.configure",
     "measurement.inspect",
     "measurement.pin.add",
     "measurement.pin.move",
@@ -860,7 +863,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 166,
+      "line": 169,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -868,7 +871,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 166,
+      "line": 169,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
@@ -876,7 +879,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 200,
+      "line": 203,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -884,7 +887,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 200,
+      "line": 203,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
@@ -892,7 +895,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 209,
+      "line": 212,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -900,7 +903,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 209,
+      "line": 212,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -908,7 +911,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 222,
+      "line": 225,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeComponentStartup(state, part, fmt.Sprintf(\"%.9g V\", e.Number))\n}",
@@ -916,7 +919,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 224,
+      "line": 227,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.componentStartupDefault(state, part)",
@@ -924,7 +927,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 225,
+      "line": 228,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -932,7 +935,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 225,
+      "line": 228,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -940,7 +943,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 285,
+      "line": 288,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -951,7 +954,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 286,
+      "line": 289,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -962,7 +965,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 289,
+      "line": 292,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -973,7 +976,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 290,
+      "line": 293,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -1109,6 +1112,52 @@
         "simulation.restart"
       ],
       "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/current_controls.go",
+      "line": 27,
+      "function": "*screen.currentControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"current-source.configure\", workbench.CurrentParams{ID: p.ID, Parameters: c}, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "current-source.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/current_controls.go",
+      "line": 29,
+      "function": "*screen.currentControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"load.configure\", workbench.ElectronicLoadParams{ID: p.ID, Parameters: l}, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "load.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/current_controls.go",
+      "line": 33,
+      "function": "*screen.currentControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Number == float32(value) {\n\t\treturn\n\t}\n\tparsed, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)\n\tif err != nil {\n\t\treturn\n\t}\n\tset(parsed)\n\tapply()\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/current_controls.go",
+      "line": 54,
+      "function": "*screen.currentControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Checked == (l.Mode == \"cp\") {\n\t\treturn\n\t}\n\tl.Mode = \"cc\"\n\tif e.Checked {\n\t\tl.Mode = \"cp\"\n\t}\n\tl.Level, l.Low = .01, 0\n\tapply()\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/current_controls.go",
+      "line": 75,
+      "function": "*screen.currentControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Checked == timing.Pulsed {\n\t\treturn\n\t}\n\tt := timing\n\tt.Pulsed = e.Checked\n\tsetTiming(t)\n\tapply()\n}",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/cursor_actions.go",
@@ -5279,6 +5328,7 @@
     "component.rotate",
     "component.select",
     "component.set",
+    "current-source.configure",
     "diagnostics.details.set",
     "display.preferences.set",
     "drawing.cancel",
@@ -5312,6 +5362,7 @@
     "export.scope.csv",
     "export.start",
     "inductor.initial.set",
+    "load.configure",
     "measurement.pin.add",
     "measurement.pin.move",
     "measurement.pin.remove",

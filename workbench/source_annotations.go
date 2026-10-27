@@ -41,6 +41,17 @@ func configuredSourceAnnotations(g Graph, settings TransientSettings) []SourceAn
 	for _, p := range g.Components {
 		var lines []string
 		switch {
+		case IsCurrentDevice(p.Kind):
+			q := currentWaveform(p)
+			lines = []string{p.ID + " | " + currentDeviceName(p)}
+			if q.Pulse != nil {
+				w := q.Pulse
+				unit := "A"
+				if p.Kind == "electronic-load" && p.Device != nil && p.Device.Load != nil && p.Device.Load.Mode == "cp" {
+					unit = "W"
+				}
+				lines = append(lines, fmt.Sprintf("low %.6g %s | high %.6g %s", w.LowVoltage, unit, w.HighVoltage, unit), "high "+annotationTime(w.HighSeconds)+" | low "+annotationTime(w.LowSeconds), "rise "+annotationTime(w.RiseSeconds)+" | fall "+annotationTime(w.FallSeconds))
+			}
 		case p.Kind == "sine-source" && p.Sine != nil:
 			w := p.Sine
 			lines = []string{p.ID + " | sine", fmt.Sprintf("%.6g Vpk | %.6g Hz", w.Amplitude, w.Frequency), fmt.Sprintf("offset %.6g V | phase %.6g deg", w.Offset, w.Phase)}
@@ -95,7 +106,8 @@ func (s *Service) sourceAnnotationsLocked() []SourceAnnotation {
 				continue
 			}
 			out[i].State = "current"
-			if out[i].ID != s.transient.SourceID {
+			p, _ := s.graph.Component(out[i].ID)
+			if IsCurrentDevice(p.Kind) || out[i].ID != s.transient.SourceID {
 				continue
 			}
 			out[i].Mode = s.transient.Mode
