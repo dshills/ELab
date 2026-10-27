@@ -55,7 +55,7 @@ func cloneMixedState(state *mixedState) *mixedState {
 	if state == nil {
 		return nil
 	}
-	return &mixedState{net: state.net, x: append([]float64{}, state.x...), capV: append([]float64{}, state.capV...), result: cloneMixed(state.result)}
+	return &mixedState{net: state.net, x: append([]float64{}, state.x...), capV: append([]float64{}, state.capV...), result: cloneMixed(state.result), inductorStep: state.inductorStep, inductorCeiling: state.inductorCeiling}
 }
 
 func manualStepTargetTime(start, end, step float64, sample int) float64 {

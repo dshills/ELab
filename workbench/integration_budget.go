@@ -35,6 +35,7 @@ type integrationBudget struct {
 	started          time.Time
 	attempts         int
 	newtonIterations int                  // Private diagnostic work count; not an added budget.
+	modalAnalyses    int                  // Private work count; adaptive attempts retain their existing meaning.
 	roundoffRetries  int                  // Failed trials retried at a larger, independently checked interval.
 	elapsed          func() time.Duration // Test clock; nil uses the production monotonic clock.
 }

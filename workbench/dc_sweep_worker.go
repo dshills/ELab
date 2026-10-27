@@ -182,12 +182,12 @@ func (s *Service) sweepSettingsLocked() SweepSettings {
 	if s.sweeps != nil && s.sweeps.settings != nil {
 		return cloneSweepSettings(*s.sweeps.settings)
 	}
-	if s.exampleID == "speaker-amplifier" || s.exampleID == "rc-tolerance" || s.exampleID == "transistor-profile" || s.exampleID == "ac-rc" || s.exampleID == "ac-rlc" || s.exampleID == "ac-opamp" || s.exampleID == "discrete-class-ab" {
+	if s.exampleID == "class-ab-speaker" || s.exampleID == "speaker-amplifier" || s.exampleID == "rc-tolerance" || s.exampleID == "transistor-profile" || s.exampleID == "ac-rc" || s.exampleID == "ac-rlc" || s.exampleID == "ac-opamp" || s.exampleID == "discrete-class-ab" {
 		source, probe := "V1", "v:C1"
 		if s.exampleID == "ac-opamp" {
 			source, probe = "VIN", "v:U1"
 		}
-		if s.exampleID == "speaker-amplifier" {
+		if s.exampleID == "speaker-amplifier" || s.exampleID == "class-ab-speaker" {
 			source, probe = "VIN", "v:SP1"
 		}
 		if s.exampleID == "transistor-profile" {

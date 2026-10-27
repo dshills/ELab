@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
 
 func speakerTestGraph() Graph {
@@ -223,60 +224,21 @@ func TestOpAmpInductorStartupPreservesIndependentInputCurrentPath(t *testing.T) 
 	}
 }
 
-func TestDiscreteClassABSpeakerRespectsIntegrationBudget(t *testing.T) {
-	g := DiscreteClassABExampleGraph()
-	for i, p := range g.Components {
-		if p.ID == "RL" {
-			speaker, err := MakeComponent("SP1", "speaker", p.Position, "")
-			if err != nil {
-				t.Fatal(err)
-			}
-			speaker.Rotation = p.Rotation
-			g.Components[i] = speaker
-		}
-		if p.ID == "VIN" {
-			g.Components[i].Sine.Amplitude = .01
-			g.Components[i].Value = .01
-		}
+func TestClassABSpeakerWorkLimitAtomicity(t *testing.T) {
+	state, trace := initializeInductorTest(t, ClassABSpeakerExampleGraph())
+	beforeX, beforeCaps := append([]float64{}, state.x...), append([]float64{}, state.capV...)
+	beforeStep, beforeCeiling := state.inductorStep, state.inductorCeiling
+	before, err := json.Marshal(state.result)
+	if err != nil {
+		t.Fatal(err)
 	}
-	for i, w := range g.Wires {
-		switch w.From {
-		case "RL.1":
-			g.Wires[i].From = "SP1.positive"
-		case "RL.2":
-			g.Wires[i].From = "SP1.negative"
-		}
-		switch w.To {
-		case "RL.1":
-			g.Wires[i].To = "SP1.positive"
-		case "RL.2":
-			g.Wires[i].To = "SP1.negative"
-		}
-	}
-	state, tr := initializeInductorTest(t, g)
-	if len(state.result.Transistors) != 8 || len(state.result.Speakers) != 1 {
-		t.Fatal("amplifier/speaker inventory")
-	}
-	for i := 1; i <= 10; i++ {
-		var err error
-		prior := state
-		before, marshalErr := json.Marshal(state.result)
-		if marshalErr != nil {
-			t.Fatal(marshalErr)
-		}
-		state, err = state.advance(tr, float64(i)*.0001)
-		if err != nil {
-			var budget *integrationBudgetError
-			after, marshalErr := json.Marshal(prior.result)
-			if !errors.As(err, &budget) || marshalErr != nil || string(before) != string(after) {
-				t.Fatalf("bounded refusal: typed budget=%t accepted state changed=%t: %v", errors.As(err, &budget), string(before) != string(after), err)
-			}
-			t.Log("Stiff all-discrete/LC startup reached the existing integration guard; no progress or waveform qualification claimed:", budget.code)
-			return
-		}
-		if state.result.KCLResidual > 1e-8 || math.Abs(state.result.PowerResidual) > 1e-7 {
-			t.Fatal("all-discrete speaker conservation", state.result)
-		}
+	budget := newIntegrationBudget()
+	budget.elapsed = func() time.Duration { return MaxIntegrationWallTime + time.Nanosecond }
+	next, err := state.advanceBudget(trace, .0001, budget)
+	var limit *integrationBudgetError
+	after, marshalErr := json.Marshal(state.result)
+	if next != nil || !errors.As(err, &limit) || limit.code != "integration-time-limit" || marshalErr != nil || string(before) != string(after) || !reflect.DeepEqual(beforeX, state.x) || !reflect.DeepEqual(beforeCaps, state.capV) || state.inductorStep != beforeStep || state.inductorCeiling != beforeCeiling {
+		t.Fatal("deadline failed to preserve accepted state", next, err, marshalErr)
 	}
 }
 

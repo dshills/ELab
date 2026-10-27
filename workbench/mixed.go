@@ -155,6 +155,9 @@ type mixedState struct {
 	net     *mixedNetwork
 	x, capV []float64
 	result  *MixedResult
+	// Private proposal only; every trial still passes the full error checks.
+	inductorStep    float64
+	inductorCeiling float64
 }
 
 func newMixedNetwork(c Compiled) *mixedNetwork {
@@ -919,7 +922,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	}
 	n.publishPower(r, x)
 	r.PowerResidual = sourcePower - powers - energyRate - r.NumericalDamping
-	return &mixedState{n, x, capV, r}
+	return &mixedState{net: n, x: x, capV: capV, result: r}
 }
 
 // Compare one full step with two half steps and accept the latter. Capacitor

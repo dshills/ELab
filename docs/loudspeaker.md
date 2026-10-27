@@ -56,3 +56,7 @@ checks bounded refusal and preservation of the accepted state; it is not counted
 as a successful all-discrete speaker simulation. A 10 nF control also reached
 the guard. No solver budget, precision, or preserved amplifier example was
 changed to conceal this limitation.
+
+The subsequent source update adds a positive all-discrete/speaker example and
+checked local-mode stepping; see [the combined amplifier guide](class-ab-speaker.md).
+The /276 binary and its recorded limitations remain preserved.

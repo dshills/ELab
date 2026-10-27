@@ -53,6 +53,9 @@ replace (
 	github.com/go-text/typesetting => ../build/.vellum-sdk-4cf0176-elab1/drivers/cogent/build/typesetting
 )
 
-require github.com/dshills/elab v0.0.0
+require (
+	github.com/dshills/elab v0.0.0
+	gonum.org/v1/gonum v0.17.0 // indirect
+)
 
 replace github.com/dshills/elab => ..

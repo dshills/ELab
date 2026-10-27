@@ -1,0 +1,18 @@
+=== RUN   TestClassABSpeakerProgressWithinExistingLimits
+    inductor_modes_test.go:17: state Jacobian [[-263.1894506957163 0 3973.8353063184404 -628.3185307179587] [0 -567297.4904153376 -28957.075694528376 0] [-3973.8353063184413 -1.3829720206037574e+06 -83289.33023443168 0] [628.3185307179588 0 0 0]] valid true true rate 3.692752475970718e-06 old ceiling 1.767766952966369e-08 new ceiling 6770.017801810078
+    inductor_modes_test.go:32: 10 positive outputs; peak 80.126458ms
+--- PASS: TestClassABSpeakerProgressWithinExistingLimits (0.15s)
+=== RUN   TestStorageJacobianAgainstIndependentSeriesRLC
+--- PASS: TestStorageJacobianAgainstIndependentSeriesRLC (0.00s)
+=== RUN   TestModalRateDistinguishesDecayRotationGrowthAndDefectiveBasis
+--- PASS: TestModalRateDistinguishesDecayRotationGrowthAndDefectiveBasis (0.00s)
+=== RUN   TestModalLegacyFallbackDeadlineAndOldNetworkPreservation
+--- PASS: TestModalLegacyFallbackDeadlineAndOldNetworkPreservation (0.00s)
+=== RUN   TestClassABSpeakerOutputRefinementAndBothPolarities
+--- PASS: TestClassABSpeakerOutputRefinementAndBothPolarities (19.13s)
+=== RUN   TestClassABSpeakerSharedCaptureAndSavedExample
+--- PASS: TestClassABSpeakerSharedCaptureAndSavedExample (0.86s)
+=== RUN   TestClassABSpeakerWorkLimitAtomicity
+--- PASS: TestClassABSpeakerWorkLimitAtomicity (0.00s)
+PASS
+ok  	github.com/dshills/elab/workbench	21.480s

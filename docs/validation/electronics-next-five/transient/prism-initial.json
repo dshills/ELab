@@ -1,0 +1,254 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "2c4c3879a5ddcf49e1685508f2941728",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "861e2aa57afdd57041aaa8c142a24f237b06f8cb",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 4,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "5dd3cd1d403d1b56",
+      "severity": "medium",
+      "category": "performance",
+      "title": "x",
+      "message": "Every candidate step that passes the error check runs two full modal analyses. Each analysis does one dense MNA solve per storage state, plus an eigendecomposition and a complex inverse. Accepted results then pay this cost a second time. None of this work is charged through budget.take(); only wall time is checked. That can greatly slow large BJT/speaker runs while the attempt/work accounting under-reports the real cost.",
+      "suggestion": "Reuse the endpoint ceiling of an accepted step as the next step's starting ceiling, since the endpoint state is the same. Compute the midpoint ceiling only when the endpoint ceiling changes substantially. Charge the modal analysis work to the integration budget.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/inductor_advance.go",
+          "lines": {
+            "start": 58,
+            "end": 59
+          }
+        }
+      ],
+      "tags": [
+        "performance",
+        "budget",
+        "location-corrected"
+      ],
+      "evidence": "middle := n.transientLCCeiling(half, trace, at+h/2, budget)\n\t\t\tnextCeiling = n.transientLCCeiling(refined, trace, at+h, budget)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4c0e1d1ab0bb312e",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Wall-clock budget makes test flaky",
+      "message": "This test uses the real wall-clock integration budget and fails if a sample exceeds `MaxIntegrationWallTime`. Slow or loaded CI machines can trip the deadline. So can runs under `-race` or with coverage instrumentation. The test is therefore timing-dependent and likely to be flaky.",
+      "suggestion": "Inject a deterministic `budget.elapsed` clock that never reaches the deadline. Assert on attempts or Newton iteration counts instead of wall time. Alternatively, skip the timing aspect under `testing.Short()` or when the race detector is enabled.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/inductor_modes_test.go",
+          "lines": {
+            "start": 19,
+            "end": 31
+          }
+        }
+      ],
+      "tags": [
+        "flaky",
+        "timing"
+      ],
+      "evidence": "budget = newIntegrationBudget()\n\t\tnext, err := state.advanceBudget(trace, float64(sample)*.0001, budget)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1ff1f3fd55ae81d9",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Silent no-op if RL load is missing or pin names differ",
+      "message": "If the base DiscreteClassABExampleGraph ever renames or drops `RL`, the function returns silently. The result would be a graph with no speaker, or one whose wires still reference `RL`. The rewrite also only matches the exact pin names `RL.1` and `RL.2`. These failures would surface only later as obscure validation or simulation errors.",
+      "suggestion": "Track whether `RL` was replaced and panic if it was not, matching the existing panic for invalid static definitions. Also verify after the rewrite that no wire endpoint still begins with `RL.`.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/class_ab_speaker.go",
+          "lines": {
+            "start": 8,
+            "end": 36
+          }
+        }
+      ],
+      "tags": [
+        "robustness"
+      ],
+      "evidence": "\tfor i, p := range g.Components {\n\t\tif p.ID == \"RL\" {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "381178f6148a3043",
+      "severity": "low",
+      "category": "testing",
+      "title": "Deadline atomicity check covers only x",
+      "message": "The atomicity check compares only `state.x`. It does not check `capV`, `result` or `inductorStep`, so a deadline refusal that mutates capacitor voltages or the step proposal in place would go undetected.",
+      "suggestion": "Snapshot `capV`, `inductorStep` and the marshalled result before the call. Compare all of them after the refusal.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/inductor_modes_test.go",
+          "lines": {
+            "start": 86,
+            "end": 90
+          }
+        }
+      ],
+      "tags": [
+        "coverage"
+      ],
+      "evidence": "for i, x := range state.x {\n\t\tif x != before[i] {\n\t\t\tt.Fatal(\"deadline changed accepted state\")\n\t\t}\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "fa4575714c8220f1",
+      "severity": "low",
+      "category": "performance",
+      "title": "Long-running refinement test not gated",
+      "message": "This test makes 6000 nonlinear transient advances on a stiff 8-transistor LC network: 2000 coarse steps plus 4000 refined steps. That can noticeably slow the default `go test` run.",
+      "suggestion": "Guard the test with `if testing.Short() { t.Skip(...) }`, or reduce the simulated duration while still covering both polarities.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/inductor_modes_test.go",
+          "lines": {
+            "start": 99,
+            "end": 101
+          }
+        }
+      ],
+      "tags": [
+        "slow-test"
+      ],
+      "evidence": "for sample := 1; sample \u003c= 2000; sample++ {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6f3f5b6431a2b7e5",
+      "severity": "low",
+      "category": "testing",
+      "title": "Aliasing assertion is tautological",
+      "message": "`inductorStep` is a `float64` value field, so assigning to the clone can never affect the original. This check always passes and verifies nothing. The meaningful aliasing risks are the `x` and `capV` slices, and the alias check does not cover them.",
+      "suggestion": "Replace the check with one that mutates `copied.x[0]` and `copied.capV` and confirms `modern` is unchanged. Alternatively, drop the tautological check.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/inductor_modes_test.go",
+          "lines": {
+            "start": 189,
+            "end": 192
+          }
+        }
+      ],
+      "tags": [
+        "tautology"
+      ],
+      "evidence": "copied.inductorStep = 1\n\tif modern.inductorStep == 1 {\n\t\tt.Fatal(\"private proposal aliases\")\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 63042,
+    "totalMs": 28358
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 20,
+    "bytes": 56029,
+    "chunks": 3,
+    "llmCalls": 3,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 33402,
+        "output": 5973,
+        "costUSD": 0.253068
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [
+      {
+        "path": "desktop/go.sum",
+        "reason": "lockfile"
+      },
+      {
+        "path": "go.sum",
+        "reason": "lockfile"
+      }
+    ],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "b146c4b33d999e19",
+        "severity": "low",
+        "category": "testing",
+        "title": "Exact float equality on simulated time",
+        "message": "The step is integrated in adaptive internal sub-steps and then compared to a decimal literal with `!=`. Summing sub-steps in floating point can produce values like 0.00010000000000000002. That would make the test fail for reasons unrelated to user/agent parity. The failure message also omits the actual values, which makes such failures hard to diagnose.",
+        "suggestion": "Compare with a tolerance and include the values in the failure message. Add `math` to the test file's imports for this change.",
+        "confidence": 0.4,
+        "locations": [
+          {
+            "path": "desktop/class_ab_speaker_test.go",
+            "lines": {
+              "start": 32,
+              "end": 32
+            }
+          }
+        ],
+        "tags": [
+          "flaky-test",
+          "float"
+        ],
+        "evidence": "a.Mixed.Time != .0001",
+        "fix": {
+          "before": "a.Mixed.Time != .0001",
+          "after": "math.Abs(a.Mixed.Time-.0001) \u003e 1e-12"
+        },
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in desktop/class_ab_speaker_test.go"
+    }
+  ],
+  "suppressed": []
+}

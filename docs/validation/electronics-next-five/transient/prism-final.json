@@ -1,0 +1,186 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "6220d27b8ff2573ec5ee876ef535e56d",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "861e2aa57afdd57041aaa8c142a24f237b06f8cb",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 3,
+      "medium": 0,
+      "high": 0
+    },
+    "highestSeverity": "low"
+  },
+  "findings": [
+    {
+      "id": "5dd3cd1d403d1b56",
+      "severity": "low",
+      "category": "performance",
+      "title": "x",
+      "message": "Every accepted step runs two full modal analyses. Each analysis performs `count` dense MNA solves, allocating a fresh `size×size` matrix per column, plus a complex eigendecomposition and `count` complex solves to invert the eigenvector matrix. Each `transientLCProposal` call also rescans every authored component through `usesModalLCCeiling`. For long transients with a small output step, this can dominate the Radau work and push runs into the work/time guard. The example limitation text already warns that the guard may be reached.",
+      "suggestion": "Cache `usesModalLCCeiling()` on the network. Reuse one Jacobian scratch buffer across columns. Consider skipping the midpoint analysis when the endpoint ceiling is well above `h`, or re-evaluating the modal ceiling only every few steps or when the step ratio changes significantly.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/inductor_advance.go",
+          "lines": {
+            "start": 64,
+            "end": 65
+          }
+        }
+      ],
+      "tags": [
+        "modal",
+        "allocation",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tmiddle := n.transientLCCeiling(half, trace, at+h/2, budget)\n\t\t\tnextCeiling = n.transientLCCeiling(refined, trace, at+h, budget)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "668343f12394d95c",
+      "severity": "low",
+      "category": "testing",
+      "title": "Modal Jacobian validity is logged but never asserted",
+      "message": "The validity flags from storageJacobian and checkedOscillationRate are only logged. If modal analysis silently fails for the Class-AB example, the code falls back to the legacy ceiling and the test still passes. That means it does not guard the feature it is meant to exercise.",
+      "suggestion": "Assert `ok \u0026\u0026 good`, and assert that `state.net.usesModalLCCeiling()` is true, so this test fails when the modal path is not taken.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/inductor_modes_test.go",
+          "lines": {
+            "start": 16,
+            "end": 18
+          }
+        }
+      ],
+      "tags": [
+        "test-coverage"
+      ],
+      "evidence": "\ta, ok := state.net.storageJacobian(stage, trace, 0, budget)\n\trate, good := checkedOscillationRate(a)\n\tt.Log(\"state Jacobian\", a, \"valid\", ok, good, \"rate\", rate, \"old ceiling\", state.net.maximumInductorStep(), \"new ceiling\", state.net.transientLCCeiling(stage, trace, 0, budget))",
+      "fix": {
+        "before": "\ta, ok := state.net.storageJacobian(stage, trace, 0, budget)\n\trate, good := checkedOscillationRate(a)\n\tt.Log(\"state Jacobian\", a, \"valid\", ok, good, \"rate\", rate, \"old ceiling\", state.net.maximumInductorStep(), \"new ceiling\", state.net.transientLCCeiling(stage, trace, 0, budget))",
+        "after": "\ta, ok := state.net.storageJacobian(stage, trace, 0, budget)\n\trate, good := checkedOscillationRate(a)\n\tif !ok || !good {\n\t\tt.Fatal(\"class-AB speaker modal analysis unavailable\", a, ok, good)\n\t}\n\tt.Log(\"state Jacobian\", a, \"valid\", ok, good, \"rate\", rate, \"old ceiling\", state.net.maximumInductorStep(), \"new ceiling\", state.net.transientLCCeiling(stage, trace, 0, budget))"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "fae27832cfe79576",
+      "severity": "low",
+      "category": "testing",
+      "title": "Test claims positive outputs without checking them",
+      "message": "The test name and log message claim it produces positive outputs. The loop only checks for errors, work bounds and conservation, and it never inspects the speaker output values. A regression that produces zero or wrong-signed output would still pass.",
+      "suggestion": "Assert on `state.result.Speakers[0].Voltage` or `.Current`, for example require a nonzero positive voltage after the first few samples. Alternatively, rename the test so it does not claim output verification.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/inductor_modes_test.go",
+          "lines": {
+            "start": 37,
+            "end": 37
+          }
+        }
+      ],
+      "tags": [
+        "test-coverage",
+        "location-corrected"
+      ],
+      "evidence": "\tt.Log(\"10 positive outputs; peak\", peak)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 61299,
+    "totalMs": 42448
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 21,
+    "bytes": 61086,
+    "chunks": 3,
+    "llmCalls": 2,
+    "cacheHit": false,
+    "cachedChunks": 1,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 23343,
+        "output": 6100,
+        "costUSD": 0.215372
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [
+      {
+        "path": "desktop/go.sum",
+        "reason": "lockfile"
+      },
+      {
+        "path": "go.sum",
+        "reason": "lockfile"
+      }
+    ],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "b146c4b33d999e19",
+        "severity": "low",
+        "category": "testing",
+        "title": "Exact float equality on accumulated simulation time",
+        "message": "The parity test compares the simulated time to `.0001` with exact equality. The step is integrated adaptively and the time is built by summing sub-intervals. Accumulated floating-point rounding (e.g. 0.0001 as a sum of halves or quarters plus a remainder) can produce a value a few ULPs away. That makes the test brittle, or causes it to fail on harmless solver changes.",
+        "suggestion": "Compare with a tolerance, e.g. `math.Abs(a.Mixed.Time-.0001) \u003e 1e-12`, and add the `math` import.",
+        "confidence": 0.4,
+        "locations": [
+          {
+            "path": "desktop/class_ab_speaker_test.go",
+            "lines": {
+              "start": 33,
+              "end": 33
+            }
+          }
+        ],
+        "tags": [
+          "flaky-test",
+          "floating-point"
+        ],
+        "evidence": "a.Mixed.Time != .0001",
+        "fix": {
+          "before": "a.Mixed.Time != .0001",
+          "after": "math.Abs(a.Mixed.Time-.0001) \u003e 1e-12"
+        },
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in desktop/class_ab_speaker_test.go"
+    }
+  ],
+  "suppressed": []
+}

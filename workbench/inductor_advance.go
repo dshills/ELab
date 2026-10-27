@@ -13,6 +13,20 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 	n := state.net
 	current := &inductorStage{x: state.x, capV: state.capV}
 	at, h := state.result.Time, end-state.result.Time
+	modal := n.usesModalLCCeiling()
+	ceiling, initial := n.maximumInductorStep(), math.Inf(1)
+	if modal {
+		if state.inductorCeiling > 0 && !math.IsNaN(state.inductorCeiling) {
+			ceiling = state.inductorCeiling
+		} else {
+			ceiling, initial = n.transientLCProposal(current, trace, at, budget)
+		}
+		proposal := state.inductorStep
+		if !finite(proposal) || proposal <= 0 {
+			proposal = initial
+		}
+		h = math.Min(h, proposal)
+	}
 	lastStep := h
 	failure := ""
 	roundoffRetried := false
@@ -23,7 +37,7 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 		remaining := end - at
 		h = math.Min(h, remaining)
 		h = math.Min(h, n.maximumWaveformStep(trace, at))
-		h = math.Min(h, n.maximumInductorStep())
+		h = math.Min(h, ceiling)
 		// Split the last two intervals evenly rather than leave a tiny tail.
 		// Both proposals stay below the original step bounds and undergo
 		// the complete solves/error check. Never advance reported time by
@@ -45,6 +59,14 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 		if one == nil && two == nil && three == nil {
 			ratio = n.inductorError(current, full, refined)
 		}
+		nextCeiling := ceiling
+		if ratio <= 1 && modal {
+			middle := n.transientLCCeiling(half, trace, at+h/2, budget)
+			nextCeiling = n.transientLCCeiling(refined, trace, at+h, budget)
+			// A changing local mode must also be resolved at the midpoint and
+			// endpoint. Failed probes use the original conservative LC bound.
+			ratio = math.Max(ratio, h/math.Min(middle, nextCeiling))
+		}
 		failure = fmt.Sprintf("ratio %.3g, errors %v / %v / %v", ratio, one, two, three)
 		var roundoff *inductorRoundoffError
 		if !roundoffRetried && (errors.As(one, &roundoff) || errors.As(two, &roundoff) || errors.As(three, &roundoff)) {
@@ -52,7 +74,7 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 			// from the last accepted state, inside the same source/LC bounds.
 			// This is only a proposal: all three solves and the error estimate
 			// must succeed, with the original convergence and work limits.
-			larger := math.Min(end-at, math.Min(n.maximumWaveformStep(trace, at), n.maximumInductorStep()))
+			larger := math.Min(end-at, math.Min(n.maximumWaveformStep(trace, at), ceiling))
 			if larger > 2*h {
 				h, roundoffRetried = larger, true
 				budget.roundoffRetries++
@@ -79,6 +101,7 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 			}
 		}
 		current = refined
+		ceiling = nextCeiling
 		roundoffRetried = false
 		at += h
 		lastStep = h / 2
@@ -94,6 +117,10 @@ func (state *mixedState) advanceInductorBudget(trace *Transient, end float64, bu
 		return nil, err
 	}
 	accepted := n.result(current.x, nil, lastStep, trace, end)
+	if modal {
+		accepted.inductorStep = h
+		accepted.inductorCeiling = ceiling
+	}
 	if !finite(accepted.result.PowerResidual) || !finite(accepted.result.KCLResidual) || accepted.result.KCLResidual > 1e-9 {
 		return nil, fmt.Errorf("RLC accepted output exceeds current/power range")
 	}

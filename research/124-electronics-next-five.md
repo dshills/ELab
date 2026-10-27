@@ -1,0 +1,54 @@
+# Next five electronics capabilities
+
+Authorized October 27, 2026: implement in order, with working examples,
+independent electrical tests, shared UI/agent commands, one completed Prism
+review/finding disposition per item using Anthropic `claude-opus-5-5`, and local
+commits. No OpenAI provider or fallback. No push or public upload. Preserve the
+running owner's /276 session and every qualified package/SDK identity.
+
+1. Complete class-AB/loudspeaker transients by reproducing the stiffness/work
+   failure and repairing the numerical cause. Keep existing residual, error,
+   attempt, wall-time, cancellation and state-publication guarantees. Add a
+   positive amplifier/speaker example and refinement/conservation coverage.
+2. Optional capacitor ESR/leakage and standalone inductor winding resistance,
+   with saved defaults preserving existing ideal models, shared controls,
+   losses/energy/probes and a supply/damping comparison example.
+3. DC/pulsed current sources and bounded constant-current/constant-power loads,
+   shared configuration, load-step/supply examples and independent electrical
+   references. Explicit compliance/low-voltage behavior, no singular 1/V law.
+4. Generic configurable JFET models, drawing/readings, transient/AC behavior,
+   preamplifier/current-source examples, persistence and independent laws.
+5. Dedicated feedback loop analysis with explicit injection/return-ratio scope,
+   gain/phase margins, and captured overshoot/settling measurements. Never call
+   an ordinary closed-loop signal Bode sweep a loop stability measurement.
+
+Every item is integrated with discovery/validation, history where applicable,
+model-bearing captures/projects, exported metadata and routed desktop parity.
+Derived analyses keep source/result identity and cancellation guards. Named
+manufacturer fidelity and hardware validation require separate evidence.
+
+Current starting point: clean main `861e2aa5`, app /276 clean binary source
+`323f5e7a`, 54 kinds / 203 commands / 67 examples. Existing native acceptance
+3/6/9/11 and participant/separate-account gates remain separate. No new native
+OS queue/hardware qualification may be inferred from routed/software evidence.
+
+Item 1 reproduced the 17.7 ns false cross-pair LC ceiling and now uses checked
+local storage modes, strict fallback and carried private proposals/endpoint
+ceilings. Full 200 ms/two-polarity refinement, independent RLC Jacobian/modes,
+original fine-ceiling startup, capture/reopen and routed UI/agent tests pass.
+Numerical correctness tests use deterministic test clocks; separate public
+service/UI steps retain production wall-clock guards. An unrelated old LED
+startup race case hit the work guard in the broad run; three isolated controls
+pass. Initial Prism review (Anthropic Opus 5.5) completed all three chunks,
+with two medium/four low observations; source changes and dispositions address
+them. Follow-up review and final focused checks are running. New Gonum BSD
+notices must be included inside the final app notice bundle and outer Licenses.
+
+Item 1 is complete. Three complete Anthropic Opus 5.5 Prism reviews are retained
+in `docs/validation/electronics-next-five/transient/`; final report has zero
+medium/high and three low observations. Two final test lows are fixed; mandatory
+mode-check overhead is a documented bounded tradeoff. Current positive waveform
+proof includes full two-polarity refinement and production-clock captured/UI
+steps, distinct from deterministic numerical tests. Final focused race controls,
+ordinary/offscreen parity and lint pass. All 27 prior package/SDK identities stay
+exact. Committing the reviewed repair before beginning item 2.

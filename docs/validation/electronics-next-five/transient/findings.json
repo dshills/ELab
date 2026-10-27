@@ -1,0 +1,107 @@
+[
+  {
+    "review": "prism-initial.json",
+    "id": "5dd3cd1d403d1b56",
+    "severity": "medium",
+    "title": "x",
+    "disposition": "Endpoint ceilings now cache across public outputs as well as within one advance. Midpoint checks remain mandatory to avoid weakening resolution. Modal analyses have explicit private work counts; every solve/decomposition checks the unchanged wall deadline. budget.take continues counting adaptive trials, matching its existing public contract, rather than silently redefining the 512-attempt limit."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "4c0e1d1ab0bb312e",
+    "severity": "medium",
+    "title": "Wall-clock budget makes test flaky",
+    "disposition": "Numerical/work-count and full waveform refinement tests now inject a deterministic elapsed clock, keep all error/residual/attempt guards, and are explicitly scoped as non-wall-rate evidence. Shared-service capture/reopen and ordinary/offscreen UI steps retain production clocks; forced-expiry tests retain atomic-refusal checks. No product time limit changed."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "1ff1f3fd55ae81d9",
+    "severity": "low",
+    "title": "Silent no-op if RL load is missing or pin names differ",
+    "disposition": "Static graph construction now checks RL replacement and rejects remaining RL.* endpoints explicitly. The positive inventory, compile, saved capture and browser tests also cover the actual graph."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "381178f6148a3043",
+    "severity": "low",
+    "title": "Deadline atomicity check covers only x",
+    "disposition": "Deadline test now compares x, capV, marshalled full result, proposal and cached ceiling after refusal."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "fa4575714c8220f1",
+    "severity": "low",
+    "title": "Long-running refinement test not gated",
+    "disposition": "Full 200 ms refinement remains in normal test gates, with an explicit testing.Short skip for intentionally shortened developer runs. Default validation does not use -short."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "6f3f5b6431a2b7e5",
+    "severity": "low",
+    "title": "Aliasing assertion is tautological",
+    "disposition": "Removed the scalar-alias assertion. The clone test mutates x and capV and verifies original storage is unchanged, while verifying step/ceiling values were carried."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "ddb274125c41ebd6",
+    "severity": "medium",
+    "title": "Modal eigen-analysis repeated on every trial step",
+    "disposition": "Intentional resolution checks retained. Cache already reuses accepted endpoint modes within/across outputs. A rejected trial at a different step size has different half/refined states, so caching only by step size is unsound; skipping midpoint checks could miss changed oscillation/growth rates. The whitelist excludes all hybrid controls, so no modal result is discarded by a hybrid-guard route. Work remains bounded, counted and wall-charged; positive production-clock public capture/UI controls pass. This observation is a performance tradeoff, not a reproduced correctness or budget-bypass defect."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "b503752074415454",
+    "severity": "medium",
+    "title": "mnaEquations failure ignored before mutating rows",
+    "disposition": "False error-return premise: mixed.go mnaEquations explicitly returns ([][]float64, []float64); second value is the residual vector. It allocates a new denseMatrix on each call and does not cache it. Final source names both returns, validates dimensions/state shape and documents ownership. The independent series-RLC Jacobian test checks actual derivatives. No matrix alias/failure-return bug exists."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "89a43d1f94e68d4e",
+    "severity": "low",
+    "title": "Discrete graph built then discarded for speaker example",
+    "disposition": "Separated the two static example cases; the speaker case builds only its intended graph and defaults."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "ccd457de7492c501",
+    "severity": "low",
+    "title": "Deadline test may not exercise modal probing path",
+    "disposition": "Clock now expires on the third probe check after two sensitivity-column solves; test asserts modalAnalyses>=1 and clockCalls>=3, then verifies complete atomic refusal."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "4c5def6abc4953c2",
+    "severity": "low",
+    "title": "Removed discrete Class AB production-clock coverage",
+    "disposition": "The new graph is the exact prior fixture transformation: original 1nF graph, RL replaced by SP1 and VIN changed to 10mV; no compensation or bias change. Original resistor-loaded graph remains untouched. Separate SharedCaptureAndSavedExample plus ordinary/offscreen BrowserStepAndAgentParity use production clocks and require positive waveform progression; these do not accept a budget refusal as success."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "09111a9e18b6db93",
+    "severity": "low",
+    "title": "Atomicity test ignores storage and proposal fields",
+    "disposition": "The typed-deadline atomicity regression now also compares x, capV and both private proposal/cache fields, in addition to exact public result JSON."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "5dd3cd1d403d1b56",
+    "severity": "low",
+    "title": "x",
+    "disposition": "Bounded, intentional resolution cost. Accepted endpoint mode is cached across outputs; every analysis is counted and charged to the unchanged wall deadline. Midpoint/endpoint mode checks are retained instead of skipping a potentially changing oscillation/growth rate. No demonstrated correctness defect remains; scratch-buffer/classification micro-optimization can be considered only with a measured bottleneck."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "668343f12394d95c",
+    "severity": "low",
+    "title": "Modal Jacobian validity is logged but never asserted",
+    "disposition": "Final test explicitly asserts storage/eigen validity, modal eligibility and a materially larger modal ceiling for the target circuit. Only this test changes after the complete final review; its focused race controls are rerun."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "fae27832cfe79576",
+    "severity": "low",
+    "title": "Test claims positive outputs without checking them",
+    "disposition": "Renamed completed-output/work-count test to remove polarity ambiguity and now explicitly checks exact advanced time, speaker inventory and finite voltage/current. The separate full 200 ms refinement test already asserts both positive and negative >50mV output."
+  }
+]
