@@ -1,0 +1,137 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/discrete-class-ab';d=r/'docs/validation/discrete-class-ab';d.mkdir(exist_ok=False)
+load=lambda p:json.loads(p.read_text())
+def sha(p):
+ with p.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+def compressed(src,dest):
+ with src.open('rb') as a,dest.open('wb') as raw:
+  with gzip.GzipFile(filename='',mode='wb',fileobj=raw,mtime=0) as z:shutil.copyfileobj(a,z)
+p=load(b/'package.json');q=load(b/'application/report.json');rr=load(b/'runtime-result.json');runtime=Path(rr['directory']);nf=load(b/'native-features.json');hf=load(b/'headless/checks.json');native=load(runtime/'features/amplifier/checks.json');examples=load(b/'examples.json');catalog=load(b/'catalogs.json')
+assert all(x['passed'] for x in (q,rr,nf,hf,native,examples,catalog))
+assert hf['agent_exit_code']==0 and native['agent_exit_code']==0 and nf['native_exit_code']==0
+assert load(runtime/'features/final-process-state.json')==dict(pid=nf['pid'],exit_code=0,endpoint_exists=False)
+assert sha(Path(p['app'])/'Contents/MacOS/ELab')==p['app_executable_sha256'] and sha(Path(p['agent']))==p['agent_sha256']
+frozen=load(b/'application/frozen-inputs.json');assert all(sha(r/f)==h for f,h in frozen.items())
+protected=load(b/'preservation-before.json');assert all(sha(r/f)==h for f,h in protected.items())
+exits=[dict(path=str(f.relative_to(runtime)),result=load(f)) for f in sorted((runtime/'public').rglob('process-exit.json'))];assert len(exits)==102 and all(x['result']['exit_code']==0 and not x['result']['graceful_wait_timed_out'] for x in exits)
+assert examples['examples_reopened']==63 and examples['original_62_projects_and_schematics_byte_exact']==124
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()==p['source_commit']
+with (d/'final-signatures.txt').open('w') as f:
+ for app in (Path(p['app']),runtime/'ELab.app'):subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True,stdout=f,stderr=subprocess.STDOUT)
+for name in ['package.json','examples.json','catalogs.json','runtime-result.json','runtime-invocation.json','native-features.json','preservation-before.json','example-experiments.json','native-build-info.txt','agent-build-info.txt','signature.txt','capacity-envelope-focused.txt','focused2.txt','desktop-focused2.txt','clean-build.txt','packager-output.txt']:
+ shutil.copyfile(b/name,d/name)
+for f in (b/'application').iterdir():
+ if f.suffix in ('.jsonl','.json'):
+  compressed(f,d/('application-'+f.name+'.gz'))
+ elif f.suffix=='.txt':shutil.copyfile(f,d/('application-'+f.name))
+for name in ['application_checks.py','continue_checks.py','package.py','qualify_runtime.py','native_features.py','check_examples.py','finalize.py']:
+ shutil.copyfile(b/name,d/(name+'.txt'))
+for name in ['application-output.txt','continuation-output.txt','runtime-output.txt','native-feature-output.txt','headless-output.txt']:
+ shutil.copyfile(b/name,d/name)
+for src,name in [(runtime/'runtime-report.json','runtime-report.json.gz'),(runtime/'public/report.json','public-report.json.gz')]:compressed(src,d/name)
+compressed(runtime/'features/native-output.txt',d/'native-output.txt.gz')
+compressed(runtime/'features/controller.txt',d/'native-controller.txt.gz')
+(d/'external-process-exits.json').write_text(json.dumps(exits,indent=2)+'\n')
+shutil.copyfile(runtime/'features/final-process-state.json',d/'native-final-process-state.json')
+for name in ['checks.json','build-commands.json']:
+ shutil.copyfile(b/'headless'/name,d/('headless-'+name))
+ shutil.copyfile(runtime/'features/amplifier'/name,d/('native-'+name))
+for name in ['response.json','response.csv','refinement.json','refinement.csv']:
+ compressed(b/'headless'/name,d/(name+'.gz'))
+shutil.copyfile(b/'headless/discrete-class-ab.png',d/'discrete-class-ab.png')
+shutil.copyfile(b/'headless/discrete-class-ab.svg',d/'discrete-class-ab.svg')
+compressed(b/'headless/discrete-class-ab.elab',d/'recorded-project.elab.gz')
+summary=dict(passed=True,version=p['version'],build=p['build'],clean_binary_source=p['source_commit'],app_sha256=p['app_executable_sha256'],agent_sha256=p['agent_sha256'],transistor_capacity=16,example_transistors=8,example_parts=27,example_nodes=20,component_kinds=53,public_commands=194,examples=63,source_counts=q['counts'],python_tests=77,source_frozen_inputs=len(frozen),native_external_conformance_normal_exits=102,original_example_graph_files_byte_exact=124,original_catalog_entries_exact=True,protected_identities=len(protected),all_protected_exact=True,new_electrical_models=False,other_resource_accuracy_work_limits_changed=False,source_stepping_only_new_purely_algebraic_cold_envelope=True,owned_feature_native_exit=0,owned_native_endpoint_removed=True,owner_sessions_commands_sent=False,original_native_acceptance_checks_open=[3,6,9,11],security_settings_changed=False,push_or_upload=False,release_promoted=False)
+(d/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+(d/'README.md').write_text(f'''# All-discrete class-AB amplifier qualification
+
+October 27, 2026. Runnable candidate **ELab 0.197.0 /275** is
+[available here](../../../build/ELab-0.197.0-275-Discrete/ELab.app).
+Clean binary source: `{p['source_commit']}`. The matching agent and **63**
+example projects accompany the app. This is the existing unsigned/ad-hoc channel;
+no prior qualified download is replaced or promoted. No push or upload.
+
+The combined NPN/PNP budget rises from **2 to 16**, including embedded
+optocoupler phototransistors. The new **eight-BJT** example includes differential
+input, PNP mirror, tail sink, voltage gain, biased complementary output and
+feedback; it contains no op-amp. It has 27 simulated parts and 20 nodes.
+Other capacities, electrical models, file format, tolerances and integration
+work guards remain unchanged. [User/agent guide](../../discrete-class-ab.md),
+[package identities](package.json), [summary](summary.json).
+
+## Electrical and shared-command coverage
+
+Independent scalar equations check the 0.985326 mA tail and all-NPN/all-PNP/mixed
+16-device load lines. Tests check mirror base-current loading, DC gain/offset,
+class-AB idle overlap, positive/negative handoff, KCL/power, a 17-device refusal
+that remains editable/savable, and the optocoupler's combined-budget slot.
+Cold ±100 mV solves give gain 10.9063 V/V and zero-input offset −21.93 mV.
+A bounded private source-step fallback repairs the reproduced cold negative-input
+failure only in newly admitted purely algebraic discrete networks. Final full
+sources must pass ordinary strict guards. Reactive initial conditions are retained.
+[Electrical tests](../../../workbench/class_ab_test.go), [focused results](focused2.txt).
+
+Both exact packaged headless and copied native-service paths pass 401/801-row
+transient captures, output handoff, half-step refinement, live stepping,
+reconstruction from blank through existing commands, exports and recorded reopen.
+Desktop browser/search/Open, edit/Undo, stepping, probes and mesh validation
+match direct agent commands in ordinary and rendered suites. All **194 command
+IDs** and **53 component definitions** are retained; the example catalog grows
+from 62 to 63. These are semantic/routed software checks, not native hardware-rate
+or precise OS queue acceptance. [Headless](headless-checks.json),
+[native](native-checks.json), [catalogs](catalogs.json),
+[reproduction recipe](../../../scripts/discrete-class-ab-demo.py).
+The native workflow report hashes its sandbox wrapper under `agent_sha256`;
+the underlying exact packaged agent binary is independently pinned in the
+runtime and package receipts.
+
+The compensation capacitor starts at explicit **7.55 V**, not zero stored energy.
+The first frame differs from the settled DC point. Generic models omit thermal,
+breakdown, safe operating area, internal charge and physical bandwidth/stability.
+This low-frequency 100 Ω educational fixture does not qualify a speaker power
+amplifier. The guide distinguishes these limits from simulated measurements.
+
+## Complete source and package checks
+
+Final coverage passes **{q['counts']['portable']['top_level']} portable /
+{q['counts']['desktop']['top_level']} ordinary desktop /
+{q['counts']['rendered']['top_level']} rendered** top-level race tests, with
+**{q['counts']['portable']['including_subtests']} /
+{q['counts']['desktop']['including_subtests']} /
+{q['counts']['rendered']['including_subtests']}** including subtests. Lint/imports,
+77 Python tests, all three vets, PRD audit and build pass. The SDK is unchanged;
+its prior framework qualification is retained. [Final source report](application-report.json.gz).
+
+The first complete portable run found a genuine historical-capacity-report
+compatibility regression. The validator had derived old envelopes from the new
+16-device limit. It now accepts exact historical two-device envelopes and current
+limits, rejecting unpublished hybrids and every existing corruption case.
+The historical report is unchanged. The only two changed inputs are the validator
+and its tests; their full package and only command consumer were rerun. Every
+other passing portable package retains exact-input coverage from the initial
+complete run. The initial failing log is preserved and is not labeled passing.
+All {len(frozen)} final frozen executable/test/module inputs remain exact.
+[Initial run](application-portable-race.jsonl.gz),
+[repaired package](application-portable-repaired-package-race.jsonl.gz),
+[controller/coverage method](continue_checks.py.txt).
+
+The exact copied app passes full native smoke and four public adapters under
+development-file and IP-network denial, with fixture-only shared-geometry write
+denial. All **102** external conformance processes exit 0 normally. The separate
+owned amplifier fixture also closes normally and removes its endpoint.
+[Runtime](runtime-report.json.gz), [public adapters](public-report.json.gz),
+[process exits](external-process-exits.json), [normal feature close](native-final-process-state.json).
+
+All **63** packaged projects reopen paused/clean with exact graphs. The original
+**124 project/SVG files** remain byte-identical, with all 62 original catalog
+entries exact; only copied README/catalog metadata is extended. All **{len(protected)}**
+protected prior package/SDK/lock identities remain exact. Source and copied app
+seals verify strictly. Owner sessions/projects/settings are untouched.
+Original native input checks **3/6/9/11**, participant and separate-account gates
+remain open. [Examples](examples.json), [preservation](preservation-before.json),
+[seals](final-signatures.txt).
+
+![All-discrete amplifier schematic](discrete-class-ab.png)
+''')
+print(json.dumps(summary))

@@ -7,22 +7,28 @@ the existing feature scope and records required checks and acceptance limits.
 
 ## Current development
 
-The workbench update adds snapped placement ghosts, pending wire previews,
+**Latest candidate: [ELab 0.197.0 /275](build/ELab-0.197.0-275-Discrete/ELab.app)**
+expands combined NPN/PNP capacity to **16** and adds an **eight-transistor,
+all-discrete class-AB amplifier**. Search Examples for “class AB”, or use
+`example.load {"id":"discrete-class-ab"}`. The matching agent and all **63**
+example projects are included. There are still 53 component kinds and the same
+194 shared commands. Other capacities, electrical models and numerical
+accuracy/work guards remain unchanged. [Amplifier guide](docs/discrete-class-ab.md),
+[electrical and package checks](docs/validation/discrete-class-ab/README.md).
+
+The earlier workbench update adds snapped placement ghosts, pending wire previews,
 nearest unambiguous terminal targeting, canvas shortcuts, component explanations,
 explicit live plotting, experiment comparisons and shared edit proposals.
-The existing 53 component kinds and solver limits are unchanged; users and agents
-share 194 commands. See the [workflow guide](docs/workbench-workflows.md) and
+See the [workflow guide](docs/workbench-workflows.md) and
 [engineering checks](docs/validation/workbench-improvements/README.md).
-**Runnable workbench candidate: [ELab 0.196.1 /274](build/ELab-0.196.1-274-Vellum/ELab.app)**,
-with a new [application icon](docs/application-icon.md), the matching agent and
-all 62 examples alongside it. Native smoke, four
-public adapters and new-workflow checks pass; all packaged examples reopen clean.
-This development candidate keeps the qualified /270 download below preserved
-separately; existing native-input and participant acceptance limits remain open.
+The [previous /274 runtime candidate](build/ELab-0.196.1-274-Vellum/ELab.app)
+and qualified /270 download below are preserved. Existing native-input,
+participant and separate-account acceptance limits remain open.
 
-The UI runtime now uses Vellum v1.0.0 public source `4cf0176` with ELab’s
-existing input/ownership compatibility fixes. All shared command/component
-catalogs are unchanged. [Runtime upgrade checks](docs/validation/vellum-v1-runtime/README.md).
+The UI runtime uses Vellum v1.0.0 public source `4cf0176` with ELab’s
+existing input/ownership compatibility fixes and the new
+[application icon](docs/application-icon.md).
+[Runtime upgrade checks](docs/validation/vellum-v1-runtime/README.md).
 
 ## Downloadable release
 

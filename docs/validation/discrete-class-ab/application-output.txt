@@ -1,0 +1,8 @@
+Running prd
+{"name": "prd", "command": ["python3", "scripts/prd-audit.py", "--verify", "research/11-prd-implementation-audit.json"], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 0, "wall_s": 0.02586525003425777}
+Running lint
+{"name": "lint", "command": ["sh", "scripts/lint.sh"], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 0, "wall_s": 21.374982625013217}
+Running python
+{"name": "python", "command": ["python3", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_*.py"], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 0, "wall_s": 2.225028666201979}
+Running portable-race
+{"name": "portable-race", "command": ["go", "test", "-race", "-json", "-count=1", "-timeout=30m", "./..."], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 1, "wall_s": 398.1969294580631}

@@ -1,0 +1,33 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+r=Path('/Users/dshills/Development/projects/ELab');out=r/'build/discrete-class-ab/application'
+load=lambda p:json.loads(p.read_text())
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+initial=load(out/'frozen-inputs.json');changed=[p for p,h in initial.items() if sha(r/p)!=h]
+assert sorted(changed)==['internal/conformance/capacity_comparison.go','internal/conformance/capacity_test.go'],changed
+progress=load(out/'progress.json');assert len(progress)==4 and progress[-1]['name']=='portable-race' and progress[-1]['exit_code']==1
+initial_events=[json.loads(l) for l in (out/'portable-race.jsonl').open() if l.startswith('{')]
+assert {x['Package'] for x in initial_events if x['Action']=='fail'}=={'github.com/dshills/elab/internal/conformance'}
+assert {x['Test'] for x in initial_events if x['Action']=='fail' and x.get('Test')}=={'TestCapacityPublicReportRecomputesAndRejectsCorruption'}
+(out/'frozen-inputs-initial.json').write_text(json.dumps(initial,indent=2)+'\n')
+final={p:sha(r/p) for p in initial};(out/'frozen-inputs.json').write_text(json.dumps(final,indent=2)+'\n')
+env=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),STATICCHECK_CACHE=str(r/'build/staticcheck-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+steps=[('lint-final',['sh','scripts/lint.sh'],r),('portable-repaired-package-race',['go','test','-race','-json','-count=1','-timeout=30m','./internal/conformance','./cmd/elab-conformance'],r),('root-vet',['go','vet','./...'],r),('desktop-race',['go','test','-race','-json','-count=1','-timeout=30m','./...'],r/'desktop'),('desktop-vet',['go','vet','./...'],r/'desktop'),('rendered-race',['go','test','-race','-json','-tags=offscreen','-count=1','-timeout=30m','./...'],r/'desktop'),('rendered-vet',['go','vet','-tags=offscreen','./...'],r/'desktop'),('build',['sh','scripts/build.sh'],r)]
+results=[]
+for name,argv,cwd in steps:
+ start=time.monotonic();print('Running '+name,flush=True)
+ with (out/(name+('.jsonl' if '-race' in name else '.txt'))).open('w') as log:q=subprocess.run(argv,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=2100)
+ results.append(dict(name=name,command=argv,cwd=str(cwd),exit_code=q.returncode,wall_s=time.monotonic()-start));(out/'continuation-progress.json').write_text(json.dumps(results,indent=2)+'\n');print(json.dumps(results[-1]),flush=True)
+ if q.returncode:raise SystemExit(q.returncode)
+assert all(sha(r/p)==h for p,h in final.items())
+replaced={'github.com/dshills/elab/internal/conformance','github.com/dshills/elab/cmd/elab-conformance'}
+reused=[x for x in initial_events if x['Package'] not in replaced]
+repaired=[json.loads(l) for l in (out/'portable-repaired-package-race.jsonl').open() if l.startswith('{')]
+assert not any(x['Action']=='fail' for x in reused+repaired)
+counts={}
+for name,events in [('portable',reused+repaired),('desktop',[json.loads(l) for l in (out/'desktop-race.jsonl').open() if l.startswith('{')]),('rendered',[json.loads(l) for l in (out/'rendered-race.jsonl').open() if l.startswith('{')])]:
+ assert not any(x['Action']=='fail' for x in events)
+ tests=[x for x in events if x['Action']=='pass' and x.get('Test')]
+ counts[name]=dict(top_level=sum('/' not in x['Test'] for x in tests),including_subtests=len(tests),skipped_tests=sum(x['Action']=='skip' and bool(x.get('Test')) for x in events))
+report=dict(passed=True,steps=progress[:3]+results,frozen_inputs=len(final),changed_inputs_during_final_checks=[],initial_failure='Historical capacity-report envelope derived from the new limit',only_changed_inputs_after_initial_compile=changed,portable_coverage='Initial complete race run with exact unchanged package inputs; full repaired conformance package and its only command consumer freshly rerun. Initial failure/log preserved, not relabeled passing.',counts=counts)
+(out/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(dict(passed=True,counts=counts)),flush=True)

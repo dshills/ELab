@@ -1,0 +1,17 @@
+Running lint-final
+{"name": "lint-final", "command": ["sh", "scripts/lint.sh"], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 0, "wall_s": 10.210486541036516}
+Running portable-repaired-package-race
+{"name": "portable-repaired-package-race", "command": ["go", "test", "-race", "-json", "-count=1", "-timeout=30m", "./internal/conformance", "./cmd/elab-conformance"], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 0, "wall_s": 125.51108162500896}
+Running root-vet
+{"name": "root-vet", "command": ["go", "vet", "./..."], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 0, "wall_s": 3.7039814172312617}
+Running desktop-race
+{"name": "desktop-race", "command": ["go", "test", "-race", "-json", "-count=1", "-timeout=30m", "./..."], "cwd": "/Users/dshills/Development/projects/ELab/desktop", "exit_code": 0, "wall_s": 213.68474270799197}
+Running desktop-vet
+{"name": "desktop-vet", "command": ["go", "vet", "./..."], "cwd": "/Users/dshills/Development/projects/ELab/desktop", "exit_code": 0, "wall_s": 0.6584499171003699}
+Running rendered-race
+{"name": "rendered-race", "command": ["go", "test", "-race", "-json", "-tags=offscreen", "-count=1", "-timeout=30m", "./..."], "cwd": "/Users/dshills/Development/projects/ELab/desktop", "exit_code": 0, "wall_s": 477.56125966692343}
+Running rendered-vet
+{"name": "rendered-vet", "command": ["go", "vet", "-tags=offscreen", "./..."], "cwd": "/Users/dshills/Development/projects/ELab/desktop", "exit_code": 0, "wall_s": 2.100734416861087}
+Running build
+{"name": "build", "command": ["sh", "scripts/build.sh"], "cwd": "/Users/dshills/Development/projects/ELab", "exit_code": 0, "wall_s": 8.009495666017756}
+{"passed": true, "counts": {"portable": {"top_level": 885, "including_subtests": 1981, "skipped_tests": 0}, "desktop": {"top_level": 348, "including_subtests": 849, "skipped_tests": 0}, "rendered": {"top_level": 485, "including_subtests": 1520, "skipped_tests": 0}}}

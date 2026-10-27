@@ -1,0 +1,34 @@
+from pathlib import Path
+import hashlib,json,sys
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/discrete-class-ab';p=json.loads((b/'package.json').read_text());folder=Path(p['app']).parent
+sys.path.insert(0,str(r/'scripts'));from acceptance_client import AcceptanceClient
+out=folder/'Examples';old=r/'build/ELab-0.196.1-274-Vellum/Examples';client=AcceptanceClient(p['agent'])
+try:
+ client.ask('simulation.pause',mutate=True);client.ask('example.load',dict(id='discrete-class-ab'),mutate=True);client.ask('simulation.pause',mutate=True);client.ask('simulation.restart',mutate=True);client.ask('simulation.wait')
+ client.ask('project.save',dict(path=str(out/'discrete-class-ab.elab')),mutate=True)
+ client.ask('export.schematic.svg',dict(path=str(out/'discrete-class-ab.svg')),mutate=True)
+ catalog=client.ask('examples.list');assert len(catalog)==63
+ info=next(x for x in catalog if x['id']=='discrete-class-ab')
+ previous=json.loads((old/'CATALOG.json').read_text());assert [x for x in catalog if x['id']!='discrete-class-ab']==previous
+ (out/'CATALOG.json').write_text(json.dumps(catalog,indent=2)+'\n')
+ (out/'README.md').write_text((old/'README.md').read_text()+'\n## '+info['title']+'\n\n'+info['question']+'\n\n'+info['expected']+'\n\n**Try:** '+info['try']+'\n\n**Model limits:** '+info['limitation']+'\n')
+finally:client.close()
+rows=[]
+for file in sorted(out.glob('*.elab')):
+ expected=json.loads(file.read_text());c=AcceptanceClient(p['agent'])
+ try:
+  c.ask('project.load',dict(path=str(file)),mutate=True);state=c.ask('simulation.wait')
+  assert state['paused'] and not state['document']['dirty'] and state['status'] not in ('error','unsupported'),file
+  assert dict(components=state['components'],wires=state['wires'])==expected['graph'],file
+  assert len(c.ask('parts.list'))==53 and len(c.ask('capabilities.list')['capabilities'])==194
+ finally:c.close()
+ rows.append(dict(name=file.name,sha256=hashlib.sha256(file.read_bytes()).hexdigest(),paused_clean=True,exact_graph=True,agent_exit_code=c.process.returncode))
+assert len(rows)==63
+unchanged=[]
+for file in sorted(old.iterdir()):
+ if file.suffix in ('.elab','.svg'):
+  assert (out/file.name).read_bytes()==file.read_bytes(),file
+  unchanged.append(file.name)
+assert len(unchanged)==124
+report=dict(passed=True,agent_sha256=p['agent_sha256'],examples_reopened=63,original_62_projects_and_schematics_byte_exact=124,original_62_catalog_entries_exact=True,new_example='discrete-class-ab',changed_existing_metadata=['README.md','CATALOG.json'],examples=rows,scope='Exact matching packaged headless agent; not physical UI input or hardware acceptance')
+(b/'examples.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(dict(passed=True,examples=63,original_graph_files_exact=124)))

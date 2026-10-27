@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,time
+r=Path('/Users/dshills/Development/projects/ELab'); out=r/'build/discrete-class-ab/application'
+out.mkdir(exist_ok=False)
+env=os.environ.copy();env.update(GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),STATICCHECK_CACHE=str(r/'build/staticcheck-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],cwd=r,text=True).splitlines()
+frozen={p:hashlib.sha256((r/p).read_bytes()).hexdigest() for p in paths if (r/p).is_file() and (p.endswith(('.go','.mod','.sum','.py','.m','.h')) or p=='third_party/vellum/sdk.lock.json')}
+(out/'frozen-inputs.json').write_text(json.dumps(frozen,indent=2)+'\n')
+steps=[('prd',['python3','scripts/prd-audit.py','--verify','research/11-prd-implementation-audit.json'],r),('lint',['sh','scripts/lint.sh'],r),('python',['python3','-m','unittest','discover','-s','scripts','-p','test_*.py'],r),('portable-race',['go','test','-race','-json','-count=1','-timeout=30m','./...'],r),('root-vet',['go','vet','./...'],r),('desktop-race',['go','test','-race','-json','-count=1','-timeout=30m','./...'],r/'desktop'),('desktop-vet',['go','vet','./...'],r/'desktop'),('rendered-race',['go','test','-race','-json','-tags=offscreen','-count=1','-timeout=30m','./...'],r/'desktop'),('rendered-vet',['go','vet','-tags=offscreen','./...'],r/'desktop'),('build',['sh','scripts/build.sh'],r)]
+results=[]
+for name,argv,cwd in steps:
+ start=time.monotonic(); print('Running '+name,flush=True)
+ with (out/(name+('.jsonl' if '-race' in name else '.txt'))).open('w') as log:
+  q=subprocess.run(argv,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=2100)
+ results.append(dict(name=name,command=argv,cwd=str(cwd),exit_code=q.returncode,wall_s=time.monotonic()-start))
+ (out/'progress.json').write_text(json.dumps(results,indent=2)+'\n')
+ print(json.dumps(results[-1]),flush=True)
+ if q.returncode:raise SystemExit(q.returncode)
+changed=[p for p,h in frozen.items() if not (r/p).is_file() or hashlib.sha256((r/p).read_bytes()).hexdigest()!=h]
+(out/'report.json').write_text(json.dumps(dict(passed=not changed,steps=results,frozen_inputs=len(frozen),changed_inputs=changed),indent=2)+'\n')
+assert not changed,changed

@@ -1,0 +1,1077 @@
+{
+  "name": "Build an all-discrete class-AB amplifier",
+  "edits": [
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_VIN",
+        "kind": "sine-source",
+        "position": {
+          "x": -1030,
+          "y": -180
+        },
+        "value": "0.1 V"
+      }
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "BUILT_VIN",
+        "waveform": {
+          "amplitude_v": 0.1,
+          "offset_v": 0,
+          "frequency_hz": 10,
+          "phase_degrees": 0
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_GI",
+        "kind": "ground",
+        "position": {
+          "x": -1030,
+          "y": -60
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_LI",
+        "kind": "net-label",
+        "position": {
+          "x": -1030,
+          "y": -300
+        },
+        "value": "INPUT"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_VP",
+        "kind": "dc-source",
+        "position": {
+          "x": 1100,
+          "y": 420
+        },
+        "value": "9 V"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_VN",
+        "kind": "dc-source",
+        "position": {
+          "x": 1100,
+          "y": 620
+        },
+        "value": "9 V"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_GS",
+        "kind": "ground",
+        "position": {
+          "x": 1100,
+          "y": 520
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_LP",
+        "kind": "net-label",
+        "position": {
+          "x": 1100,
+          "y": 300
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_LN",
+        "kind": "net-label",
+        "position": {
+          "x": 1100,
+          "y": 740
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q1",
+        "kind": "npn",
+        "position": {
+          "x": -600,
+          "y": 0
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q2",
+        "kind": "npn",
+        "position": {
+          "x": -240,
+          "y": 0
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q3",
+        "kind": "pnp",
+        "position": {
+          "x": -600,
+          "y": -260
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q4",
+        "kind": "pnp",
+        "position": {
+          "x": -240,
+          "y": -260
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_PF1",
+        "kind": "net-label",
+        "position": {
+          "x": -580,
+          "y": -390
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_PF2",
+        "kind": "net-label",
+        "position": {
+          "x": -220,
+          "y": -390
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RDI1",
+        "kind": "resistor",
+        "position": {
+          "x": -580,
+          "y": 100
+        },
+        "value": "100 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RDI1"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RDI2",
+        "kind": "resistor",
+        "position": {
+          "x": -220,
+          "y": 100
+        },
+        "value": "100 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RDI2"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_JT",
+        "kind": "junction",
+        "position": {
+          "x": -420,
+          "y": 190
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_IF",
+        "kind": "net-label",
+        "position": {
+          "x": -330,
+          "y": -80
+        },
+        "value": "INPUT"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_FB",
+        "kind": "net-label",
+        "position": {
+          "x": -850,
+          "y": 0
+        },
+        "value": "FEEDBACK"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q8",
+        "kind": "npn",
+        "position": {
+          "x": -420,
+          "y": 280
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RT",
+        "kind": "resistor",
+        "position": {
+          "x": -400,
+          "y": 430
+        },
+        "value": "680 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RT"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_NT",
+        "kind": "net-label",
+        "position": {
+          "x": -400,
+          "y": 550
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RREF",
+        "kind": "resistor",
+        "position": {
+          "x": -900,
+          "y": 130
+        },
+        "value": "2200 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RREF"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_GR",
+        "kind": "ground",
+        "position": {
+          "x": -900,
+          "y": 10
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_D3",
+        "kind": "diode",
+        "position": {
+          "x": -900,
+          "y": 300
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_D4",
+        "kind": "diode",
+        "position": {
+          "x": -900,
+          "y": 430
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_ND",
+        "kind": "net-label",
+        "position": {
+          "x": -900,
+          "y": 550
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q5",
+        "kind": "pnp",
+        "position": {
+          "x": 100,
+          "y": -90
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RV",
+        "kind": "resistor",
+        "position": {
+          "x": 130,
+          "y": -260
+        },
+        "value": "47 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RV"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_PV",
+        "kind": "net-label",
+        "position": {
+          "x": 130,
+          "y": -390
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_D1",
+        "kind": "diode",
+        "position": {
+          "x": 300,
+          "y": 30
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_D2",
+        "kind": "diode",
+        "position": {
+          "x": 300,
+          "y": 150
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RPULL",
+        "kind": "resistor",
+        "position": {
+          "x": 300,
+          "y": 390
+        },
+        "value": "3300 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RPULL"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_NP",
+        "kind": "net-label",
+        "position": {
+          "x": 300,
+          "y": 530
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q6",
+        "kind": "npn",
+        "position": {
+          "x": 570,
+          "y": -60
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_Q7",
+        "kind": "pnp",
+        "position": {
+          "x": 570,
+          "y": 240
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_PO",
+        "kind": "net-label",
+        "position": {
+          "x": 600,
+          "y": -200
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_NO",
+        "kind": "net-label",
+        "position": {
+          "x": 600,
+          "y": 390
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RE1",
+        "kind": "resistor",
+        "position": {
+          "x": 730,
+          "y": 20
+        },
+        "value": "22 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RE1"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RE2",
+        "kind": "resistor",
+        "position": {
+          "x": 730,
+          "y": 160
+        },
+        "value": "22 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RE2"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_JO",
+        "kind": "junction",
+        "position": {
+          "x": 860,
+          "y": 90
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_LO",
+        "kind": "net-label",
+        "position": {
+          "x": 980,
+          "y": 90
+        },
+        "value": "OUTPUT"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RL",
+        "kind": "resistor",
+        "position": {
+          "x": 1010,
+          "y": 190
+        },
+        "value": "100 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RL"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_GL",
+        "kind": "ground",
+        "position": {
+          "x": 1010,
+          "y": 320
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RF",
+        "kind": "resistor",
+        "position": {
+          "x": -650,
+          "y": 690
+        },
+        "value": "1000 \u03a9"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_FO",
+        "kind": "net-label",
+        "position": {
+          "x": -500,
+          "y": 690
+        },
+        "value": "OUTPUT"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_FF",
+        "kind": "net-label",
+        "position": {
+          "x": -1000,
+          "y": 690
+        },
+        "value": "FEEDBACK"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_RG",
+        "kind": "resistor",
+        "position": {
+          "x": -1000,
+          "y": 830
+        },
+        "value": "100 \u03a9"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "BUILT_RG"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_GF",
+        "kind": "ground",
+        "position": {
+          "x": -1000,
+          "y": 960
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_C1",
+        "kind": "capacitor",
+        "position": {
+          "x": 280,
+          "y": 690
+        },
+        "value": "1e-09 F"
+      }
+    },
+    {
+      "command": "capacitor.initial.set",
+      "params": {
+        "id": "BUILT_C1",
+        "value": "7.55 V"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_VB",
+        "kind": "net-label",
+        "position": {
+          "x": 0,
+          "y": -170
+        },
+        "value": "VAS_BASE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_VD",
+        "kind": "net-label",
+        "position": {
+          "x": 190,
+          "y": -120
+        },
+        "value": "DRIVE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_CVB",
+        "kind": "net-label",
+        "position": {
+          "x": 280,
+          "y": 570
+        },
+        "value": "VAS_BASE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "BUILT_CVD",
+        "kind": "net-label",
+        "position": {
+          "x": 280,
+          "y": 810
+        },
+        "value": "DRIVE"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_VIN.negative",
+        "to": "BUILT_GI.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_VIN.positive",
+        "to": "BUILT_LI.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_VP.negative",
+        "to": "BUILT_GS.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_VN.positive",
+        "to": "BUILT_GS.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_VP.positive",
+        "to": "BUILT_LP.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_VN.negative",
+        "to": "BUILT_LN.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q3.emitter",
+        "to": "BUILT_PF1.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q4.emitter",
+        "to": "BUILT_PF2.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q3.collector",
+        "to": "BUILT_Q3.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q3.base",
+        "to": "BUILT_Q4.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q1.collector",
+        "to": "BUILT_Q3.collector"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q2.collector",
+        "to": "BUILT_Q4.collector"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q1.emitter",
+        "to": "BUILT_RDI1.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q2.emitter",
+        "to": "BUILT_RDI2.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RDI1.2",
+        "to": "BUILT_JT.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RDI2.2",
+        "to": "BUILT_JT.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q2.base",
+        "to": "BUILT_IF.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q1.base",
+        "to": "BUILT_FB.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q8.collector",
+        "to": "BUILT_JT.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q8.emitter",
+        "to": "BUILT_RT.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RT.2",
+        "to": "BUILT_NT.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RREF.1",
+        "to": "BUILT_GR.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RREF.2",
+        "to": "BUILT_D3.anode"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_D3.cathode",
+        "to": "BUILT_D4.anode"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_D3.anode",
+        "to": "BUILT_Q8.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_D4.cathode",
+        "to": "BUILT_ND.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q2.collector",
+        "to": "BUILT_Q5.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RV.2",
+        "to": "BUILT_Q5.emitter"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RV.1",
+        "to": "BUILT_PV.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q5.collector",
+        "to": "BUILT_D1.anode"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_D1.cathode",
+        "to": "BUILT_D2.anode"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_D2.cathode",
+        "to": "BUILT_RPULL.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RPULL.2",
+        "to": "BUILT_NP.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_D1.anode",
+        "to": "BUILT_Q6.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_D2.cathode",
+        "to": "BUILT_Q7.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q6.collector",
+        "to": "BUILT_PO.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q7.collector",
+        "to": "BUILT_NO.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q6.emitter",
+        "to": "BUILT_RE1.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q7.emitter",
+        "to": "BUILT_RE2.2"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RE1.2",
+        "to": "BUILT_JO.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RE2.1",
+        "to": "BUILT_JO.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_JO.node",
+        "to": "BUILT_LO.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_JO.node",
+        "to": "BUILT_RL.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RL.2",
+        "to": "BUILT_GL.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RF.2",
+        "to": "BUILT_FO.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RF.1",
+        "to": "BUILT_FF.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RF.1",
+        "to": "BUILT_RG.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_RG.2",
+        "to": "BUILT_GF.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q5.base",
+        "to": "BUILT_VB.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_Q5.collector",
+        "to": "BUILT_VD.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_C1.1",
+        "to": "BUILT_CVB.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "BUILT_C1.2",
+        "to": "BUILT_CVD.node"
+      }
+    }
+  ]
+}

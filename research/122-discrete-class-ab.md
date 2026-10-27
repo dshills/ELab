@@ -56,4 +56,37 @@ refusals. The frozen historical report and all its numerical checks are unchange
 Only this package and its command consumer require a new portable race run;
 unchanged packages retain exact-input coverage from the initial complete run.
 
-Qualification and package results will be linked here at completion.
+## Complete: runnable candidate /275
+
+[ELab 0.197.0 /275](../build/ELab-0.197.0-275-Discrete/ELab.app) is qualified
+from clean source `4e79a78c057ba76b6cc7bc74e5bb7e804334d428`. It includes the
+matching agent, 63 examples and the unchanged Vellum v1 runtime/icon. Full
+coverage passes 885 portable /348 desktop /485 rendered top-level race tests
+(1981 /849 /1520 including subtests), with no skipped tests, plus lint/imports,
+77 Python tests, PRD audit, all vets and build. The repaired conformance package
+and its only command consumer were freshly rerun; unchanged portable packages
+retain exact-input passing coverage from the first complete run.
+
+Exact copied native smoke and four public adapters pass under development/IP
+and shared-geometry write denial. All 102 external conformance processes exit
+normally. Exact matching headless and copied native amplifier workflows pass
+401/801-row captures, half-step refinement, both output currents, reconstruction
+through existing editing commands, exports and recorded reopen. The owned
+native fixture closes normally with endpoint removal; owner sessions are untouched.
+
+All 63 projects reopen paused/clean with exact graphs. All 124 original project
+and SVG bytes plus all 62 original catalog entries remain exact; copied README
+and catalog metadata add the new entry. All 23 protected prior archive/executable/
+SDK/lock identities remain exact. No new component kind, public command, model,
+file version or other resource/accuracy/work limit is introduced.
+
+The final exported schematic was visually checked after correcting crowded
+feedback labels. A reused native-controller scope label was corrected from
+“New public commands” to “Existing shared commands”; its original receipt is
+retained and no electrical/test outcome was changed. Original native acceptance
+3/6/9/11, participant and separate-account gates stay open. Nothing is pushed,
+uploaded or promoted over the existing qualified download.
+
+[Complete evidence](../docs/validation/discrete-class-ab/README.md),
+[summary](../docs/validation/discrete-class-ab/summary.json),
+[user/agent guide](../docs/discrete-class-ab.md).

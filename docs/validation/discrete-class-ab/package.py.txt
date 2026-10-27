@@ -1,0 +1,26 @@
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/discrete-class-ab';out=r/'build/ELab-0.197.0-275-Discrete'
+assert not out.exists()
+assert json.loads((b/'application/report.json').read_text())['passed']
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=r,text=True).strip(),'Commit reviewed source before packaging'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+frozen=json.loads((b/'application/frozen-inputs.json').read_text());assert all(sha(r/p)==h for p,h in frozen.items())
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip();pin=json.loads((r/'third_party/vellum/sdk.lock.json').read_text())
+env=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+with (b/'clean-build.txt').open('w') as stream:subprocess.run(['sh','scripts/build.sh'],cwd=r,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=240)
+out.mkdir();app=out/'ELab.app';shutil.copyfile(r/'build/elab-agent',out/'elab-agent');(out/'elab-agent').chmod(0o755)
+with (b/'packager-output.txt').open('w') as stream:subprocess.run(['python3','-B','scripts/package_app.py','--binary',str(r/'build/elab'),'--output',str(app),'--version','0.197.0','--build-version','275'],cwd=r,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=180)
+for label,path in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent')]:
+ info=subprocess.check_output(['go','version','-m',str(path)],text=True);assert 'vcs.revision='+source in info and 'vcs.modified=false' in info;(b/(label+'-build-info.txt')).write_text(info)
+q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True,capture_output=True,text=True);(b/'signature.txt').write_text(q.stdout+q.stderr)
+old=r/'build/ELab-0.196.1-274-Vellum';shutil.copytree(old/'Examples',out/'Examples')
+licenses=out/'Licenses/Vellum';licenses.mkdir(parents=True);sdk=r/pin['cache']
+for name in ('LICENSE','PRIVATE_BUILD.txt','THIRD_PARTY_INVENTORY.json'):shutil.copyfile(sdk/name,licenses/name)
+shutil.copytree(sdk/'THIRD_PARTY_NOTICES',licenses/'THIRD_PARTY_NOTICES');shutil.copyfile(r/'third_party/vellum/sdk.lock.json',licenses/'sdk.lock.json');shutil.copyfile(r/'third_party/vellum/packager-4cf0176/LICENSE',out/'Licenses/Vellum-packager-LICENSE')
+for src,dst in [('docs/agent-api.md','AGENT_PROTOCOL.md'),('docs/workbench-workflows.md','WORKBENCH_WORKFLOWS.md'),('docs/application-icon.md','APPLICATION_ICON.md'),('docs/discrete-class-ab.md','DISCRETE_CLASS_AB.md')]:shutil.copyfile(r/src,out/dst)
+(out/'README.md').write_text("ELab 0.197.0 /275 all-discrete amplifier candidate\n\nCombined bipolar capacity: 16 NPN/PNP devices, including embedded optocoupler phototransistors. New eight-BJT all-discrete class-AB amplifier with differential input, current mirror, tail sink, voltage gain, biased complementary output and feedback.\n\nChoose Examples and search for class AB. The 1 nF compensation capacitor starts at an explicit 7.55 V biased condition. Generic models omit thermal, breakdown, internal charge and physical power/stability qualification. All other numerical accuracy/work and resource limits remain unchanged.\n\nMatching agent, 63 examples, 53 component kinds and the same 194 shared commands. This app is ad-hoc signed and not notarized. All previously qualified downloads and earlier candidates remain preserved. Original native checks 3/6/9/11 and participant/clean-account acceptance remain separate.\n")
+
+manifest=json.loads((app/'Contents/Resources/APP_MANIFEST.json').read_text());assert manifest['app_icon']['source_sha256']==sha(r/'assets/app-icon.png')
+p=dict(version='0.197.0',build=275,source_commit=source,clean_source=True,app=str(app),agent=str(out/'elab-agent'),app_executable_sha256=sha(app/'Contents/MacOS/ELab'),agent_sha256=sha(out/'elab-agent'),strict_adhoc_signature=True,upstream_commit=pin['upstream_commit'],sdk_source=pin['source_commit'],sdk_archive_sha256=pin['sha256'],component_kinds=53,public_commands=194,examples=63,icon=manifest['app_icon'],release_promoted=False)
+(b/'package.json').write_text(json.dumps(p,indent=2)+'\n');print(json.dumps(p))
