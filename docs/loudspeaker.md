@@ -47,9 +47,9 @@ Recordings include model-bearing parameters, internal dynamic state and verified
 terminal/energy readings. Captured source hashes and project round trips retain
 them. SVG metadata and printed parts descriptions include profile/speaker intent.
 
-The powered-follower example and independent passive reference circuits are
-qualified for transient and AC operation. Combining the original 1 nF,
-eight-BJT class-AB startup with the speaker's much slower LC states currently
+In the preserved /276 candidate, the powered-follower example and independent
+passive reference circuits are qualified for transient and AC operation. Combining the original 1 nF,
+eight-BJT class-AB startup with the speaker's much slower LC states
 can exceed the unchanged 100 ms integration budget. Startup is admitted, but
 that combination is not qualified for progressing waveforms. The regression
 checks bounded refusal and preservation of the accepted state; it is not counted

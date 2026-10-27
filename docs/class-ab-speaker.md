@@ -1,6 +1,6 @@
 # All-discrete amplifier and loudspeaker
 
-Implemented in source after the preserved /276 candidate. Choose **All-discrete
+Available in the /277 electronics candidate; the /276 package is preserved. Choose **All-discrete
 amplifier and loudspeaker** in Examples, or use
 `example.load {"id":"class-ab-speaker"}`. The eight-BJT circuit retains the
 original 1 nF compensation and 7.55 V biased capacitor startup. Its 10 mV peak,
@@ -9,7 +9,8 @@ power-on test, a manufacturer amplifier, an acoustic model or a power rating.
 
 Six default traces show input, speaker terminal voltage/current, Q6/Q7 collector
 currents and C1 voltage. The output sample is 100 µs. Compare both polarities,
-change speaker resonance/coil resistance, or capture a run using Verify. Use
+change speaker resonance/coil resistance, or capture a run using Verify. Start
+with a 0.1 s interval and 0.0001 s sample (the existing 1000-step bound). Use
 smaller samples when investigating fast startup; requests can still reach the
 unchanged work guard. Rendering, playback and WAV export remain explicit.
 

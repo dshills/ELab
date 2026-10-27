@@ -12,29 +12,36 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
-**Latest candidate: [ELab 0.198.0 /276](build/ELab-0.198.0-276-Analysis/ELab.app)**
-adds five analysis and device capabilities, with the same controls available
-to users and AI agents:
+**Current electronics candidate: [ELab 0.199.0 /277](build/ELab-0.199.0-277-Electronics/ELab.app)**
+adds five capabilities, with the same validated commands available to users and
+AI agents:
 
-- [Semiconductor AC/Bode sweeps](docs/ac-frequency-sweeps.md), including the
-  all-discrete amplifier's response about its DC bias.
-- [Recorded FFT and harmonic distortion](docs/spectrum-analysis.md), with
-  explicit sampling/window assumptions and exact-result JSON/CSV exports.
-- [Configurable transistor profiles](docs/transistor-profiles.md), with gain,
-  Early effect and constant junction capacitances; educational parameters rather
-  than unvalidated manufacturer identities.
-- [Seeded component tolerances](docs/tolerance-analysis.md), with independent
-  trials, parameter draws, failed outcomes, repeatable statistics and exports.
-- [Loudspeaker electrical loads](docs/loudspeaker.md), with resonance, coil
-  current, heat/energy and an explicit optional waveform preview.
+- [All-discrete class-AB/speaker transients](docs/class-ab-speaker.md), retaining
+  the original fast compensation and numerical/work guards.
+- [Capacitor ESR/leakage and inductor winding loss](docs/passive-losses.md), with
+  explicit terminal, stored-energy and heat readings.
+- [DC/pulsed current sources and CC/CP electronic loads](docs/current-devices.md),
+  with declared compliance and low-voltage behavior.
+- [Configurable N/P-channel JFETs](docs/jfets.md), with preamp and complementary
+  current-source examples within the existing combined two-FET limit.
+- [Controlled-source loop return ratio and captured step response](docs/feedback-and-step-response.md),
+  with gain/phase margins, overshoot and observed settling. Loop injection targets
+  configured dynamic op-amps; discrete-transistor wire-break analysis is not claimed.
 
-The matching app/agent package contains **67 examples**, **54 component kinds**
-and **203 shared commands**. Try the clipping, transistor-profile, RC-tolerance
-and speaker-amplifier examples. Playback remains explicit. Resource, numerical
-accuracy and integration work limits are unchanged. Combining the original fast
-class-AB compensation with the speaker's slower LC states can reach the work
-guard; that combination is not qualified for progressing waveforms. The
-powered-follower speaker example is qualified. [Checks and review evidence](docs/validation/electronics-five/README.md).
+The matching app/agent package contains **78 examples**, **58 component kinds**
+and **209 shared commands**. Electrical references, routed user/agent parity and
+complete Anthropic Claude Opus 5.5 Prism reviews are recorded in the
+[engineering evidence](docs/validation/electronics-next-five/README.md).
+Resource, numerical accuracy and simulation work limits remain unchanged.
+Generic models and sampled margins do not establish manufacturer fidelity or
+hardware stability. Playback remains explicit.
+
+The preserved [0.198.0 /276 candidate](build/ELab-0.198.0-276-Analysis/ELab.app)
+contains semiconductor AC/Bode sweeps, FFT/distortion, configurable transistor
+profiles, seeded tolerances and electrical loudspeaker loads, with 67 examples,
+54 kinds and 203 commands. Its original fast class-AB/speaker transient limitation
+is repaired in /277; the /276 bytes and historical evidence remain preserved.
+[Prior checks](docs/validation/electronics-five/README.md).
 
 The preserved [0.197.0 /275 candidate](build/ELab-0.197.0-275-Discrete/ELab.app)
 expanded combined NPN/PNP capacity to **16** and added an **eight-transistor,
