@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/dshills/Development/projects/ELab/build/electronics-next-five/new_workflows.py", line 74, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/dshills/Development/projects/ELab/build/electronics-next-five/new_workflows.py", line 71, in main
+    try:report=exercise(c,a.output)
+               ~~~~~~~~^^^^^^^^^^^^
+  File "/Users/dshills/Development/projects/ELab/build/electronics-next-five/new_workflows.py", line 35, in exercise
+    cfg=dict(part['device_parameters'][key]);cfg[field]=value
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'current'

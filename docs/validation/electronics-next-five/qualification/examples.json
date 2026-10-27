@@ -1,0 +1,573 @@
+{
+  "passed": true,
+  "agent_sha256": "71c3b8a35dd1a712cedddf1c0ac09907b6a708d7ad3bcec4f63bc39b41fbabc6",
+  "examples_reopened": 78,
+  "original_67_projects_and_schematics_byte_exact": 134,
+  "original_67_catalog_entries_exact": true,
+  "new_examples": [
+    "class-ab-speaker",
+    "capacitor-loss",
+    "winding-loss",
+    "current-led",
+    "load-step",
+    "constant-power-load",
+    "jfet-preamp",
+    "jfet-current",
+    "pjfet-current",
+    "feedback-loop",
+    "step-response"
+  ],
+  "changed_existing_metadata": [
+    "README.md",
+    "CATALOG.json"
+  ],
+  "examples": [
+    {
+      "name": "555-flasher.elab",
+      "sha256": "b0a57db535ec9ee337ea6fdd66e198cad01da64201621729b3192e456643f0ba",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "555-one-shot.elab",
+      "sha256": "eb5bb25b8eb3a1d1c8e7e8fb679f43e0cfdc0feb5cad71df44bbdd2125f63e8b",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "555-oscillator.elab",
+      "sha256": "776104bf3206fc94b12a33a1101e9c6a41bf38114b7f19c939bfba059f77e329",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "555-tone.elab",
+      "sha256": "0139a7013671fd14920d859c856927485e2d3409335bb7586b9ace82d3512609",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "ac-opamp.elab",
+      "sha256": "cd9e790c9a7219c79bc62e75fbb589c594484fc1f5c65a7224a504cee6ab9fc0",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "ac-rc.elab",
+      "sha256": "0e3f0f50f4761cf1dd08643ba4c1e0661661c503d5b36f4bc0a860c7b46e9618",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "ac-rlc.elab",
+      "sha256": "c4eb90ff879c1df77d40f5fe2b41763627211f936bfdf0a370ba621cbb14493b",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "amplifier-distortion.elab",
+      "sha256": "e61f4d8ffa4bb5e862658d0add10e4e7655377e76b83c522b9f5d1018344a8f9",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "battery-led.elab",
+      "sha256": "e3f858151d3d0966082c53a635e21f458f4938b74d658dca9aa7d485e7ca0c24",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "battery-regulator.elab",
+      "sha256": "9260ef7a79eda1d215faaa9b98265351653b43dbf5e5330a7cc416c68be60f51",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "binary-counter.elab",
+      "sha256": "5ae2c2fb7134a2bde3e51d4bbdc4d4f8eef609bf9ca66d3a60e93e2f452dab74",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "bipolar-push-pull.elab",
+      "sha256": "42fb31e050e6c7901eceef7c3b14c72c132c1d304c7343c8de4a9d43f75cb6b2",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "blink.elab",
+      "sha256": "f137179e56b953d4ef14bd21ce380a9fc880c830ec5ddd43e8ef1d34d516f134",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "buck.elab",
+      "sha256": "92e03a7e9f6f6e1a2217f07f76bc95bde3e101c18eeb84c07401ff8f7ee84ae5",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "button-counter.elab",
+      "sha256": "1c16a213a603a0fdb9ede77fd210f9173b3a220e2cd6f343f43cc9f670645c48",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "button-debounce.elab",
+      "sha256": "585934fc32692058b68724f0d7d22703764802a6943a6db9a30177a7a12c6abb",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "capacitor-loss.elab",
+      "sha256": "471918c0da3976f815ee7b1742000094e97ef1ac40e67a2ac676b28ab893a32f",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "class-ab-speaker.elab",
+      "sha256": "42670f2d4a7bb4ddb9073eabd48b155c06f0543f7ff54528accbeca73b0c50ba",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "cmos.elab",
+      "sha256": "0fdfcfc5a2a29ab50f37447138c21f1d53bf8780c1ba42c6fb164192eeceea0e",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "comparator-counter.elab",
+      "sha256": "c0d9d29f804cd8a0dda309e48d35321a9e01d97288bde350788d87156d7f3f7f",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "comparator-threshold.elab",
+      "sha256": "ce316f39c38dd84a36046a77b6824d3182a6852f06fcc28942def7c3351a902a",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "constant-power-load.elab",
+      "sha256": "9153985cba6df3260f5b06dc106f2cf8fad5ce81190c7946ff480fd01fc15bb8",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "coupled-windings.elab",
+      "sha256": "3d7d564a17b6ca3b7db32889a6e5442ce23d9a39c2b6b0290e2829218298d96d",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "current-led.elab",
+      "sha256": "b925978c83fbb0e2764a6c1d57da0b5a049a978ecf7b13e9ba7045efa2bb60f7",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "d-flipflop.elab",
+      "sha256": "c9a8e129637dff6529c2024049a80e6a61f92ebe8fd6e10913383a3b4d375ffe",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "decade-counter.elab",
+      "sha256": "716b6dd7e72b67b2bee78303281b6e9074ef468c7f094dde04ea7c992f5b0e7d",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "discrete-class-ab.elab",
+      "sha256": "b621f253aefec88e4b0e63805c891f49d1ff056c7f39545698296bc868270c51",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "display-counter.elab",
+      "sha256": "7c920fcdb644524486dae2bee5377231731d3747b003e5e6e119bda0c47f6faa",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "emitter-follower.elab",
+      "sha256": "c87decff61f46458b3d682eba0b40560c68641c1a4a4f43c59335506a8f1ad9c",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "feedback-loop.elab",
+      "sha256": "c877f34b653fa237557dd74bcf00fc0ff7709cc6d995db583767dc41f8618958",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "flasher.elab",
+      "sha256": "daa0dd7d711693349ead3c9ecc47fe469ae2b368c196456c71fd8e0936bae9dc",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "flyback.elab",
+      "sha256": "ff54d48126ab6b3db7554aab16ab46fc08d3a02d4bc22c979b0a5e896187fb7e",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "hbridge-motor.elab",
+      "sha256": "dacc978ce586d38d7586c076037b591c11a900e704c7acf08f5932a613d82179",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "jfet-current.elab",
+      "sha256": "c23c0bd0e372b4972527bb98c5221b3212cd054836b48068b263263806fceadf",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "jfet-preamp.elab",
+      "sha256": "f2e6ad174d548d11e034290d7d0d33acb5ac09e7acc3bb2d91a6abab8e6a5830",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "jk-flipflop.elab",
+      "sha256": "716335420f5a84e429bf665ede014e49323d6505685007dde421ae8ca04d3e7e",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "led-fade.elab",
+      "sha256": "9a9d113531b3c4511cd76f0b0ff76c98dc45ee6358081ebf0bebe55b0ace338e",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "led.elab",
+      "sha256": "a11a6d7d0cb43713e0fc1aefbd223729c5a1b82664b72e851ee00e93fe251688",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "light-alarm.elab",
+      "sha256": "ab5f387bf36a488830c326592edb68a46faab6d9036c057a0a66bc179fd55fe8",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "load-step.elab",
+      "sha256": "3aec1491d849a7bd7fdcd730797538a7c3b190ad6e461d4bb2818be56f976482",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "logic-half-adder.elab",
+      "sha256": "9ddb8758a42efede1d7cc2072b5e2267cfc19e89cb6b150979eab10385c5c283",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "logic-inverter.elab",
+      "sha256": "69c6b051ec5cd5ea9a16af265f7178bb3c8372d07b514a5c15faf40071cfeb45",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "logic-switches.elab",
+      "sha256": "847f360f78d6ca4cc0792cb9d53b1c7fbd1b885b3c2ef2be682cdd17e2bbd135",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "motor-dc.elab",
+      "sha256": "c3764c2c2de584d09dda37ac4b57e15d9fd183bf0febf96d50840eac8b2a034f",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "motor-pwm.elab",
+      "sha256": "c2660788c0f0d9731e353992fe05ced6c7ae01ce78e2f03cc6d1696ce604d018",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "night-light.elab",
+      "sha256": "fd3ea7906bfa10702b0d215f11140464248bea9135808a9c27128e83afa41148",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "nmos.elab",
+      "sha256": "899e5088827856c7486ac65f5edcf814b33673aeb04ac52e64a75ee094d9db63",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "npn.elab",
+      "sha256": "8e840a0a225476b3f3e2f7f49164f80b5a11c280f5196d1416cfeb41a3b3cf3f",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "opamp-bandwidth.elab",
+      "sha256": "0b91d6effc8037642e63ba20d39ce6bc80feb2573f970267e2198500a361514c",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "opamp-follower.elab",
+      "sha256": "75816928355ebf7d623cb828628eb1a822acb10bf9248abc7a40ff86476ccc34",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "opamp-inverting.elab",
+      "sha256": "dfd12987718295a61fdb8facf63da214e1056f584e7a036e1ce3fa3c2edb60ca",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "opamp-slew.elab",
+      "sha256": "571f4341102e6f1172e20669cb851457cbb0fd89ac792807b6a76064bf6fe284",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "opto-switch.elab",
+      "sha256": "886000daad7ac098b1f80506e24260200200d3fb67b8ac131f947f6748d6dc49",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "pjfet-current.elab",
+      "sha256": "e3d4f1190036e178921e0b5741f800ed21fc1ff8eb4bb944b68ec1b215d6f906",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "pmos.elab",
+      "sha256": "84a9e59c937c8241e5cd94cd4cf69780a047d163163892fc3526769cf1368479",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "pnp.elab",
+      "sha256": "5052529aa8feb5761ed109b580282ecb8412010895c1248a368981c8b81674ad",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "rc-high-pass.elab",
+      "sha256": "588bbb3cc91c2c1be4efbb4cd3195d134b0a999bbe9611afaa7578a7de864728",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "rc-tolerance.elab",
+      "sha256": "7ee16ee2b5660fd81060fe1fdca31fb00e44438e286207edf5cb6c0dcecf492b",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "rc.elab",
+      "sha256": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "rectifier.elab",
+      "sha256": "77290f997823c822d11a3e05244c8cd616296717f297961699f01f74a1075167",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "regulator-dropout.elab",
+      "sha256": "31a95dd7ff034961b8732d98f3b2e511c1962e7f76868825761c7e0fc25eb11a",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "regulator-supply.elab",
+      "sha256": "ed6458df13d0234dfea551cc2c0124de9f56ebaf99f13db8203325c1d37975cb",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "relay-flasher.elab",
+      "sha256": "b442dbe2017c2a6564b2539f56e38c65043eea810847ec218df689f2b8ceca29",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "relay-switch.elab",
+      "sha256": "16e59d70b489b2f4073e15e92c57e0e4592d4985bef91aecbc771cffaab83511",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "rl.elab",
+      "sha256": "2957f08d15248e686d0a9c7d30c503d73427256b7d997032a4df7f136effa03b",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "rlc.elab",
+      "sha256": "e9d771b1318a8d9079a4703b4c449c287e52a2e732c15c0862fe9a7285824cbb",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "schottky.elab",
+      "sha256": "eedc190b3d1957203cc7993ef7247dbafd58f6097465cd7ccbfb37147c98b4fe",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "shift-register.elab",
+      "sha256": "0acb3a83ff94ac037ef4a76bb45ba7033935e3365023a7407cf163898c00472d",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "speaker-amplifier.elab",
+      "sha256": "92e930bbf25d71bcfa58a26c7e1f6f86b7672e594a12041a361f67eef2f5f2c1",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "split-supply.elab",
+      "sha256": "692692d7557593ec8f7ede6ef9b7bd5d1775fe18824072364315e59c21f154f1",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "step-response.elab",
+      "sha256": "0d4ebb7854bd778d60ae66e5602ada3763cc8e81b49c8c0258662ca17e6587e4",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "switch-npn.elab",
+      "sha256": "af71c78aa8711f522d936d143d29b7cad26254eb4381448fd8cc9d5725e72588",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "t-flipflop.elab",
+      "sha256": "3a4b588d7d57e587aff4a033023af57778154d7141382f3a10ce8b97c68f18ee",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "thermostat.elab",
+      "sha256": "bfc055be7461b70de34706dd3699d0348e78b5144d500a4945663c1973e7dcbf",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "transformer-supply.elab",
+      "sha256": "b695a1f0962ed04fdbc607b9cfc4971332d1dcf3eea0b3583493c27a309f0f02",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "transistor-profile.elab",
+      "sha256": "c98419782e564d3c63f7f862c91aad44b34621b24818a8ef40872561df45808d",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "winding-loss.elab",
+      "sha256": "6ab2429d9e0db6c566dc9199002575f62a7707eb936f573b9f242b54939515bf",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    },
+    {
+      "name": "zener.elab",
+      "sha256": "a78a175b2120a5bf43fe620d12e9d64c8b65bc06b90f4bf6106111d8e935fdcf",
+      "paused_clean": true,
+      "exact_graph": true,
+      "agent_exit_code": 0
+    }
+  ],
+  "scope": "Exact matching packaged headless agent; not physical UI input or hardware acceptance"
+}

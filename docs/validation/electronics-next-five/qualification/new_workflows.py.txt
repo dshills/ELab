@@ -1,0 +1,74 @@
+"""Exact packaged software-service checks; not native OS input qualification."""
+import argparse,hashlib,json,math,sys,time
+from pathlib import Path
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+sys.path.insert(0,str(ROOT/'scripts'))
+from acceptance_client import AcceptanceClient
+
+def poll(read,ready,seconds=45):
+ end=time.monotonic()+seconds
+ while True:
+  x=read()
+  if ready(x):return x
+  if time.monotonic()>end:raise TimeoutError('owned workflow deadline')
+  time.sleep(.02)
+def load(c,name):
+ c.ask('example.load',dict(id=name,discard_changes=True),mutate=True)
+ c.ask('simulation.pause',mutate=True);c.ask('simulation.restart',mutate=True)
+ s=c.ask('simulation.wait');assert s['paused'] and not s['diagnostics'],s['diagnostics'];return s
+def capture(c,out,name,duration,step,probes):
+ s=c.ask('simulation.verify',dict(duration_s=duration,sample_step_s=step,probe_ids=probes),mutate=True);i=s['last_operation']
+ op=poll(lambda:c.ask('operation.inspect',dict(id=i)),lambda x:x['operation']['status'] in ('completed','failed','canceled'))
+ assert op['operation']['status']=='completed',op
+ c.ask('verification.export',dict(id=i,path=str(out/(name+'.json')),format='json'),mutate=True)
+ return i
+
+def exercise(c,out):
+ assert not c.ask('project.inspect')['components']
+ assert len(c.ask('parts.list'))==58 and len(c.ask('capabilities.list')['capabilities'])==209
+ load(c,'class-ab-speaker');capture(c,out,'class-ab-speaker',.01,.0001,['v:SP1','i:SP1'])
+ # Exercise saved undoable parameter commands, independent of UI descriptor routing tests.
+ routes=[('capacitor-loss','capacitor','passive','passive.configure','esr_ohm',20),('winding-loss','inductor','passive','passive.configure','winding_resistance_ohm',30),('current-led','current-source','current_source','current-source.configure','compliance_v',24),('load-step','electronic-load','electronic_load','load.configure','maximum_current_a',.2),('jfet-preamp','njfet','jfet','jfet.configure','idss_a',.006),('pjfet-current','pjfet','jfet','jfet.configure','idss_a',.006)]
+ edited=[]
+ for example,kind,key,command,field,value in routes:
+  s=load(c,example);part=next(x for x in s['components'] if x['kind']==kind)
+  cfg=dict(part['device_parameters'][key]);cfg[field]=value
+  params=dict(id=part['id'],parameters=cfg)
+  if command=='passive.configure':params['enabled']=True
+  c.ask(command,params,mutate=True);changed=c.ask('simulation.wait')
+  actual=next(x for x in changed['components'] if x['id']==part['id'])['device_parameters'][key]
+  assert actual[field]==value,(command,actual)
+  c.ask('edit.undo',mutate=True);assert c.ask('simulation.wait')['components']==s['components']
+  c.ask('edit.redo',mutate=True)
+  path=out/(example+'.elab');c.ask('project.save',dict(path=str(path)),mutate=True)
+  expected=c.ask('project.inspect')['components'];c.ask('project.load',dict(path=str(path),discard_changes=True),mutate=True)
+  assert c.ask('simulation.wait')['components']==expected
+  edited.append(command+':'+kind)
+ load(c,'constant-power-load');capture(c,out,'constant-power-load',.002,.0001,['v:LOAD1','i:LOAD1'])
+ before=load(c,'feedback-loop')
+ c.ask('sweep.start',dict(settings=dict(component_id='U1',parameter='loop-frequency',spacing='logarithmic',start='.1 Hz',stop='100 kHz',points=201)),mutate=True)
+ sweep=poll(lambda:c.ask('project.inspect')['dc_sweep'],lambda x:bool(x['operations']) and x['operations'][-1]['status'] in ('completed','failed','canceled'))
+ assert sweep['operations'][-1]['status']=='completed',sweep['operations']
+ assert len(sweep['result']['points'])==201 and sweep['result'].get('loop_margins'),sweep['result'].keys()
+ assert c.ask('project.inspect')['mixed']==before['mixed']
+ c.ask('sweep.export',dict(id=sweep['selected_operation'],path=str(out/'loop.json'),format='json'),mutate=True)
+ load(c,'step-response');i=capture(c,out,'step-response',.02,.00002,['v:C1'])
+ cfg=dict(id=i,probe_id='v:C1',start_s=0,end_s=.02,initial_value=0,final_value=5,tolerance_fraction=.02,minimum_hold_s=.002)
+ before=c.ask('project.inspect');measurement=c.ask('recording.step-response',cfg)
+ assert c.ask('project.inspect')==before,'pure query mutated snapshot'
+ (out/'step-measurement.json').write_text(json.dumps(measurement,indent=2)+'\n')
+ assert abs(measurement['settling_delay_s']+ .001*math.log(.02))<6e-8,measurement
+ c.ask('recording.step-response.set',cfg,mutate=True)
+ path=out/'step-capture.elab';c.ask('project.save',dict(path=str(path)),mutate=True);c.ask('project.load',dict(path=str(path),discard_changes=True),mutate=True)
+ cfg['id']=c.ask('simulation.wait')['recording']['id'];again=c.ask('recording.step-response',cfg)
+ assert again['settling_delay_s']==measurement['settling_delay_s']
+ c.ask('project.clear',dict(discard_changes=True),mutate=True)
+ return dict(passed=True,component_kinds=58,commands=209,edited_saved_undo_redo=edited,class_ab_capture_rows=101,loop_points=201,step_settling_s=measurement['settling_delay_s'],capture_reopened_exact=True,physical_input_acceptance=False)
+
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--agent',type=Path,required=True);p.add_argument('--connect',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
+ c=AcceptanceClient(a.agent,a.connect)
+ try:report=exercise(c,a.output)
+ finally:c.close()
+ report.update(agent_exit_code=c.process.returncode,agent_sha256=hashlib.sha256(a.agent.read_bytes()).hexdigest());(a.output/'checks.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
+if __name__=='__main__':main()

@@ -125,3 +125,16 @@ Complete desktop suites plus final focused fallback controls, vets, lint, Python
 PRD and inventory checks are retained separately. A fresh 0.199.0 /277 candidate
 and matching agent are being built from clean committed source; older packages
 and all 27 protected package/SDK identities remain exact.
+
+Final /277 qualification is complete. Clean binary source 92d52f48, unsigned
+0.199.0 /277, matching app/agent, 78 exact reopened examples, 58 kinds /209
+commands. Exact copied native smoke and all four public adapters pass; all 102
+external processes exit normally. Both packaged headless and copied native
+services pass all five new workflows, including positive speaker capture and
+3.912070926 ms RC settling/reopen. Owned native fixtures close normally and remove
+their endpoints. All 1169 frozen inputs and 27 protected prior identities remain
+exact. ZIP SHA-256 04a7306d365b910517d3f3a853ca6b8556a7db836700fc5c37dec50b02e38343;
+42,508,652 bytes, 412 payload files verified including extracted bytes/modes and
+strict seals. Gonum notices are embedded and copied outside. Native OS input,
+hardware, participant and separate-account limits remain separately open.
+No solver limits changed, no push/upload, no old download/candidate replacement.
