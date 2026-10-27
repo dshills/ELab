@@ -90,3 +90,7 @@ The initial workflow controller used `current` instead of the actual documented
 preserved and excluded from passing evidence; the corrected controller completes
 without a product change. Build output retains the existing duplicate `-lobjc`
 linker warning. Physical native checks 3/6/9/11 remain open.
+
+Readable Go build-info receipts trim trailing tabs emitted by `go version -m`;
+the original exact output bytes are retained alongside them as `.txt.gz` files.
+No executable, package or test input changed during that evidence formatting.
