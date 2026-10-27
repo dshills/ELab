@@ -1,9 +1,14 @@
 # ELab
 
-ELab is a hobbyist electronics workbench built with Vellum. Draw LED, RC, NPN/PNP, N/P-channel MOSFET and inductor/RLC circuits from blank: place components, connect named terminals, move and rotate parts, and edit exact values while simulation updates live. Users and agents invoke the same validated application commands.
+ELab is a hobbyist electronics workbench built with Vellum. Draw circuits from
+blank, connect named terminals, and edit values while simulation updates live.
+Explore LEDs and RC timing, discrete transistor amplifiers, logic and counters,
+motors, sensors and power supplies. Users and AI agents invoke the same validated
+application commands for drawing, simulation, measurement, saving and export.
 
-The [first-version completion checklist](docs/v1-release-checklist.md) freezes
-the existing feature scope and records required checks and acceptance limits.
+The [first-version completion checklist](docs/v1-release-checklist.md) records
+the earlier private-alpha release scope and acceptance limits. Later authorized
+work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
@@ -32,8 +37,8 @@ existing input/ownership compatibility fixes and the new
 
 ## Downloadable release
 
-**ELab 0.195.9 /270** packages the current 53 component kinds and all 62 existing
-examples with a matching agent. [Open app](build/releases/ELab-0.195.9-macos-arm64/ELab.app),
+**Preserved release: ELab 0.195.9 /270** packages 53 component kinds and the 62
+examples available at that release, with its matching agent. [Open app](build/releases/ELab-0.195.9-macos-arm64/ELab.app),
 [download ZIP](build/releases/ELab-0.195.9-macos-arm64.zip), or
 [verify SHA-256](build/releases/ELab-0.195.9-macos-arm64.zip.sha256).
 
@@ -78,7 +83,7 @@ Audio playback is explicit; opening or simulating a circuit stays silent.
 
 ## Build and run from source
 
-Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned SDK from public Vellum source](third_party/vellum/README.md), including prepared Cogent/typesetting sources and explicit compatibility fixes. The pushed `f9dee54` personal.1 source and compatibility patch/archive hashes are pinned in `third_party/vellum/sdk.lock.json`. A sibling Vellum checkout is not required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
+Use Go 1.25.6 or newer, Python 3.10 or newer, and Vellum's macOS native prerequisites. Normal builds verify and extract the [pinned SDK from public Vellum source](third_party/vellum/README.md), including prepared Cogent/typesetting sources and explicit compatibility fixes. The public Vellum v1.0.0 source `4cf0176` and derived compatibility source `19c9ebc` are pinned with their patch/archive hashes in `third_party/vellum/sdk.lock.json`. A sibling Vellum checkout is not required. ELab's `desktop/go.mod` contains the four explicit local replacements into the verified build cache. Run `python3 scripts/prepare-vellum.py` before invoking native Go tools directly; `build.sh`, `lint.sh` and `check.sh` prepare it automatically.
 
 The SDK lock distinguishes the public repository commit from the compatibility-patched source and unreleased SDK artifact. The [initial baseline](docs/vellum-baseline.json) and [packaged application qualification](docs/vellum-baseline-current.json) retain their historical release identities; changing the source dependency does not promote an application bundle.
 
@@ -116,13 +121,15 @@ Drag a selected part to move it with its wires. Pan drags the sheet; scroll zoom
 For a local double-clickable development bundle, after building:
 
 ```sh
-ELAB_SDK_CACHE=$(python3 -B scripts/prepare-vellum.py | python3 -c 'import json, sys; print(json.load(sys.stdin)["sdk"])')
-python3 -B "$ELAB_SDK_CACHE/scripts/package-app.py" --binary build/elab \
-  --output build/ELab-local.app --name ELab --identifier com.dshills.elab \
-  --version 0.0.0 --build-version 1 --platform darwin
+python3 -B scripts/package_app.py --binary build/elab \
+  --output build/ELab-local/ELab.app --version 0.0.0 --build-version 1
 ```
 
-The packager requires a new output path. This example creates an unreleased development bundle. The canonical app remains `build/ELab.app` at 0.105.0 /120, separate from the current owner-review app linked above. Its previous 0.104 bundle is preserved as `build/ELab-0.104.0-119-preserved.app`.
+The wrapper verifies the separately pinned Vellum packager, includes ELab’s
+application icon and applies an ad-hoc integrity seal. It requires a new output
+path and preserves existing bundles. This command creates a local development
+bundle; use the candidate linked above for the qualified /275 executable and
+matching agent. See [packaging and icon details](docs/application-icon.md).
 
 On macOS, File, Examples, Theme and Inspector dropdowns use native menus with checked current choices. See [native menu behavior](docs/native-menus.md).
 
@@ -155,6 +162,37 @@ Choose **Examples → Load capacitor-timed LED flasher** for a DC-powered, capac
 The generic Ebers–Moll junction model remains instantaneous; physical transistor delay, internal charge storage, heating and breakdown remain unsupported. See the [NPN model](docs/npn-switch.md).
 
 Choose **PNP high-side LED**, **NPN emitter follower**, or **Complementary transistor buffer** from Examples to explore both bipolar polarities and emitters above/below ground. Signed VBE/VCE, base/collector/emitter currents, live transient simulation, saved captures and the same user/agent commands are supported. [Models, examples and electrical checks](docs/bipolar-transistors.md).
+
+## Explore an all-discrete class-AB amplifier
+
+Open **Examples**, search for **class AB**, and choose **All-discrete class-AB
+amplifier** under **Amplifiers & filters**. The eight-BJT circuit includes a
+differential input, current mirror, tail sink, voltage-gain stage and biased
+complementary output with feedback. It uses ±9 V rails and a 100 mV peak / 10 Hz
+input to produce roughly 1.1 V peak into 100 Ω. The combined NPN/PNP capacity
+is 16, including embedded optocoupler phototransistors.
+
+The six default traces show input/output, Q6/Q7 collector currents, tail current
+and compensation-capacitor voltage. Compare the two output currents through a
+zero crossing, or change RF to explore feedback gain. The capacitor starts at
+an explicit 7.55 V biased condition; generic models omit physical thermal,
+breakdown and internal charge behavior. [Circuit walkthrough, probes and model
+limits](docs/discrete-class-ab.md), [test evidence](docs/validation/discrete-class-ab/README.md).
+
+Agents load the same template with `example.load {"id":"discrete-class-ab"}`
+and use existing drawing, value, scope, simulation, history and file commands.
+The reproducible workflow verifies captures, rebuilds the circuit from blank,
+and exports a recorded project plus SVG/PNG:
+
+```sh
+python3 scripts/discrete-class-ab-demo.py \
+  --agent build/elab-agent --output build/my-class-ab-experiment
+```
+
+Choose a new output directory for each run. By default this uses an independent
+headless session; it does not change an open desktop document.
+
+## Explore diodes and timers
 
 Choose **Zener voltage regulator** or **Schottky rectifier** from Examples to explore reverse breakdown and lower forward loss. Both parts support drawing, live simulation, signed probes, saving/exports and the same agent commands. [Models, examples and electrical checks](docs/special-diodes.md).
 
@@ -292,7 +330,7 @@ Manual Step uses a cancellable background worker and publishes the whole request
 
 Network and NPN pulse initialization computes in the background. Paused Restart refreshes all supported DC/transient paths. [Initialization contract and evidence](docs/initialization.md).
 
-The tested envelope supports 64 simulated parts and 100 electrical nodes including ground, within 100 drawing objects and 300 wires. [Capacity definitions, per-device bounds and validation](docs/circuit-capacity.md).
+The tested envelope supports 64 simulated parts, 100 electrical nodes including ground and 16 combined NPN/PNP devices, within 100 drawing objects and 300 wires. [Capacity definitions, per-device bounds and validation](docs/circuit-capacity.md).
 
 Fresh network wiper and running input changes now return background work immediately; the Inspector exposes status and cancellation. Agents inspect `input_work` or wait before dependent commands. See [input work](docs/input-work.md).
 

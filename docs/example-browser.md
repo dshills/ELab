@@ -3,7 +3,8 @@
 Choose **Examples** in the toolbar, or **Examples → Browse examples…** in the
 application menu. Start here offers six approachable circuits. Each card shows
 its schematic and name; selecting it shows a larger drawing, what to observe,
-what to try and the model limits. All 62 existing examples remain available.
+what to try and the model limits. The current catalog contains **63 examples**,
+including the all-discrete class-AB amplifier.
 
 Choose a topic to narrow the collection, or enter words in Search and press
 Return. Search covers every category; all words must match. Short terms such
@@ -12,6 +13,13 @@ the chosen category. A new category clears search. Arrow keys choose an example;
 Return, double-click or **Open example** opens it. Close or Escape dismisses the
 browser and returns focus to the toolbar. Wheel and scrollbar scrolling move
 the collection without changing the selected circuit or simulation.
+
+For the amplifier, choose **Amplifiers & filters**, or search globally for
+**class AB**. Its ID is `discrete-class-ab`; the [circuit guide](discrete-class-ab.md)
+explains the eight transistor stages, default traces and startup condition.
+Agents can use `examples.search.set {"query":"class AB"}`, then
+`examples.select {"id":"discrete-class-ab"}` to preview it, followed by
+`example.load {"id":"discrete-class-ab"}` to open the same template.
 
 Browsing never replaces the document, changes its dirty status or resets the
 simulation. Opening uses the existing protected `example.load` command. Real

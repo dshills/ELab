@@ -1,5 +1,12 @@
 # PWM power, amplifier dynamics, serial registers and sound
 
+This guide covers the `elab.hobbyist-devices.v1` model family. For discrete
+amplifier stages and the combined
+16-device bipolar budget, see [NPN/PNP networks](bipolar-transistors.md) and the
+[all-discrete class-AB amplifier](discrete-class-ab.md). Other device families
+and resource bounds are linked from the [README](../README.md) and
+[capacity guide](circuit-capacity.md).
+
 These additions share ordinary placement/wiring, configuration, scope, project,
 recovery and independent verification commands. The model envelope is
 `elab.hobbyist-devices.v1` (`device_model`). Existing op-amps keep their original

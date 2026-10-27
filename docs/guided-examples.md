@@ -1,6 +1,13 @@
 # Guided editable examples
 
-The component tray identifies the current example and shows its question, template expectation, a suggested experiment and one model limitation. The catalog has 18 templates covering LED, split-rail supply, RC/high-pass, RL/RLC/flyback, NPN/manual switching, NMOS/PMOS/CMOS, op-amp follower/inverting amplifier, pulse blinking, flasher, LED fade and rectifier experiments. All guidance is available through the same immutable `examples.list` catalog to users and agents.
+The component tray identifies the current example and shows its question,
+template expectation, a suggested experiment and one model limitation. The
+current catalog has **63 templates** covering analog and digital circuits,
+timing, sensors, motors and power supplies, including the
+[eight-transistor all-discrete class-AB amplifier](discrete-class-ab.md).
+Use the [Examples browser](example-browser.md) for topic filters, schematic
+previews and global search. Users and agents read the same immutable
+`examples.list` catalog for complete guidance.
 
 Loading an example creates an editable copy and starts a fresh run, including when reloading an unchanged, paused template. The template is its clean starting point: opening, running or switching between untouched examples does not mark the document dirty or require a Save/Discard decision. Value, position, experiment-setting, display/pin and kept-result edits still use ordinary save protection. Undoing all such edits back to the template clears the dirty flag; Reset also establishes a clean template. The title area and footer show the catalog example title until the copy is saved, then show its filename. The legacy LED loader follows this rule too; its previously missing restart could clear results without starting a replacement run. Changing its circuit geometry, topology, values or experiment settings labels it **Based on this example · circuit/experiment edited**. Display settings, pins, live time and navigation do not pretend the template physics changed. The displayed expectation explicitly describes the template, not a guarantee about an edited circuit.
 
@@ -38,4 +45,7 @@ python3 scripts/examples-demo.py --connect build/examples.endpoint.json \
   --artifacts docs/validation/desktop-example-artifacts
 ```
 
-Core/public checks cover all 18 running templates, immutable guidance, edited labeling, rejected reset purity, exact template restoration, fresh paused startup, undo identity, save/reopen and stale example/generation guards. A regression checks repeated loading of every catalog template and all seven legacy loaders. The public demo also checks fresh run/electrical/document identities and available results for each legacy reload. Native tests and actual smoke cover guidance controls, reset/cancel/discard decisions and stale rendered-button refusal. Existing electrical reference tests remain authoritative for the templates' model accuracy. These checks establish engineering behavior, not novice comprehension, participant outcomes or complete keyboard/screen-reader qualification.
+The original guided-example qualification covered 18 running templates; those
+receipts retain their original scope. The current catalog-wide tests cover every
+template, and [candidate /275](validation/discrete-class-ab/README.md) reopens
+all 63 packaged projects paused and clean. Core/public checks cover immutable guidance, edited labeling, rejected reset purity, exact template restoration, fresh paused startup, undo identity, save/reopen and stale example/generation guards. A regression checks repeated loading of every catalog template and all seven legacy loaders. The public demo also checks fresh run/electrical/document identities and available results for each legacy reload. Native tests and actual smoke cover guidance controls, reset/cancel/discard decisions and stale rendered-button refusal. Existing electrical reference tests remain authoritative for the templates' model accuracy. These checks establish engineering behavior, not novice comprehension, participant outcomes or complete keyboard/screen-reader qualification.

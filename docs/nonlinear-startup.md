@@ -10,9 +10,37 @@ The ordinary Newton starting point runs first. If a **cold nonlinear** attempt f
 
 The resulting vector is only a starting guess. The full existing device equations, analytic Jacobians, KCL residuals, voltage bounds and acceptance checks still decide whether a solution exists. No gmin, substitute resistor/device model, artificial gate leakage or arbitrary accepted branch currents are introduced.
 
-Normal successful starts retain their existing solution basin. An accepted warm vector does not use this extra retry; ordinary transient continuation and existing NPN alternate seeds remain. A failed cold start can now spend **one additional Newton attempt**. Each attempt remains limited to **100 iterations**, with **0.2 V nonlinear node corrections** and accepted nodes within **±30 V**. This increases the bounded cold-start work envelope; it does not increase the per-attempt iteration ceiling. Context cancellation and the existing integration attempt/time budgets remain. Detailed `component.place`/`component.set` discovery publishes this distinction under `x-network-numerics`.
+Normal successful starts retain their existing solution basin. An accepted warm vector does not use this extra retry; ordinary transient continuation and existing NPN alternate seeds remain. This grounded-constraint fallback adds **one additional Newton attempt**.
+The later larger-BJT fallback below has its own bounded attempt sequence. Each attempt remains limited to **100 iterations**, with **0.2 V nonlinear node corrections** and accepted nodes within **±30 V**. This increases the bounded cold-start work envelope; it does not increase the per-attempt iteration ceiling. Context cancellation and the existing integration attempt/time budgets remain. Detailed `component.place`/`component.set` discovery publishes this distinction under `x-network-numerics`.
 
 A reference-shifted network or another nonlinear operating point can still fail to converge. Initializing grounded ideal rails is not a universal convergence method. Device parameter/model/engine identities and saved formats are unchanged; fresh calculation may differ in convergence or final-bit roundoff. Stored recording numbers remain stored evidence, rather than being silently recalculated.
+
+## Larger discrete bipolar networks
+
+The [sixteen-device bipolar expansion](discrete-class-ab.md) adds a cold-start
+fallback for networks containing **more than two explicit BJTs**. It runs only
+after ordinary and grounded-constraint starts fail, before the existing
+per-transistor alternate seeds. It is limited to sources, resistors,
+silicon/Schottky/Zener diodes, LEDs, NPN/PNP devices and connectivity helpers.
+Networks containing capacitors, inductors or other device families do not take
+this source-stepping path.
+
+Eight private solves scale the instantaneous authored source voltages from
+one-eighth to full value. The first uses a grounded ideal-constraint seed;
+each following solve uses the preceding accepted vector. A final solve checks
+the original full-source network with ordinary residual, uniqueness and voltage
+guards. A failed stage stops this ramp. No intermediate voltage, current,
+source setting or graph is published or persisted, and context cancellation
+remains active throughout. Each Newton attempt keeps the same 100-iteration
+ceiling and 0.2 V correction bound; integration guards are unchanged.
+
+The regression is a cold −100 mV input operating point of the eight-transistor
+amplifier with C1 removed. Positive/negative operating points, independent tail
+and 16-device load-line references, graph/source immutability, cancellation and
+exclusion of reactive startup are tested. The default transient example retains
+its explicit 7.55 V capacitor condition instead of using this algebraic fallback.
+[Electrical tests](../workbench/class_ab_test.go),
+[qualified source and runtime evidence](validation/discrete-class-ab/README.md).
 
 ## Rejecting undefined zero states
 

@@ -33,6 +33,39 @@ indicates sinking. Both conduct near zero input, demonstrating class-AB bias.
 Default output samples are 500 µs apart, with playback at 0.02 simulated seconds
 per wall second.
 
+## Inspect the default circuit
+
+1. Open the example and leave it running to see the input/output traces and
+   alternating output-device currents. The nominal input period is 100 ms;
+   slowed playback makes one period take about five wall-clock seconds.
+2. Pause, then Restart to return to the explicitly biased startup condition.
+   Restart reruns the current graph; **Reset current example** restores any
+   edited component values as well.
+3. Use Step or the existing Verify panel to inspect 200 ms at a 500 µs sample
+   interval. A captured Verify run leaves the live circuit and time unchanged.
+4. Place scope cursors near the positive and negative output peaks. Q6 has
+   positive collector current on the positive swing; Q7 has negative collector
+   current on the negative swing. Near a zero crossing, both conduct.
+5. Change RF from 1 kΩ to 2 kΩ and Restart to observe increased gain. Undo
+   restores the original value. Save As keeps an editable copy of the circuit;
+   retained Verify captures can be saved in that same project.
+
+| Default probe ID | Measurement |
+|---|---|
+| `v:VIN.positive` | Input relative to ground |
+| `v:RL` | Load pin 1 minus pin 2, the output relative to ground |
+| `i:Q6.collector` | Upper NPN collector current, positive into the device |
+| `i:Q7.collector` | Lower PNP collector current, negative while sinking the output |
+| `i:Q8.collector` | Tail-sink collector current, approximately 0.9853 mA |
+| `v:C1` | Compensation capacitor pin 1 minus pin 2 |
+
+The primary input is a sine source. Edit VIN's amplitude, offset, frequency and
+phase in its source inspector or with `source.sine.set`. Auto follows that
+waveform. The existing primary-input High/Low modes hold offset plus/minus
+amplitude (here +100 mV / −100 mV); they do not change its frequency.
+
+## Measured behavior and model scope
+
 Independent cold DC solves with C1 removed give approximately **−21.93 mV**
 zero-input output offset and **10.9063 V/V** gain between ±100 mV inputs.
 The two-period transient capture gives approximately **+1.06872 / −1.11254 V**
@@ -54,6 +87,12 @@ physical bandwidth/stability or zero-energy power-on behavior.
 
 ## Shared commands and files
 
+Read `capabilities.list` and `project.inspect` before automating. Command/params
+snippets in this guide omit the transport envelope: mutations still require
+version/request ID, a retry key, and the observed command revision and document
+generation described in the [agent protocol](agent-api.md). `simulation.wait`
+observes asynchronous initialization before dependent simulation commands.
+
 Existing placement, `component.set`, `source.sine.set`, `capacitor.initial.set`,
 `wire.connect`, batch/proposal, history, scope/cursor, simulation, project and
 export commands remain shared by users and agents. There are **53 component
@@ -71,6 +110,12 @@ agent, or an explicitly disposable blank native endpoint:
 python3 scripts/discrete-class-ab-demo.py \
   --agent build/elab-agent --output /tmp/my-discrete-amplifier
 ```
+
+The [qualification record](validation/discrete-class-ab/README.md) links exact
+package identities, electrical references, UI/agent parity, captured data and
+all 63 reopened examples. Earlier research's
+[op-amp-assisted amplifier](../research/class-ab-amplifier/README.md) remains a
+historical /274 fixture; it is separate from this fully discrete template.
 
 Cold algebraic networks with more than two BJTs have a narrowly scoped startup
 fallback after ordinary Newton starts fail: eight private source-ramp stages,

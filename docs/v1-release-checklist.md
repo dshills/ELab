@@ -1,5 +1,12 @@
 # First-version candidate freeze
 
+This is the historical October 26 closeout for **0.195.9 /270**, not a freeze
+on later owner-authorized development. The current **0.197.0 /275** candidate
+has 53 component kinds, 63 examples, 194 shared commands and a combined
+16-device bipolar capacity. See the [current README](../README.md) and
+[amplifier qualification](validation/discrete-class-ab/README.md). Original
+release evidence and outstanding acceptance gates below retain their scope.
+
 This checklist is the single closeout for the October 26 completion batch.
 Scope is frozen at **53 component kinds, 62 examples and 187 public commands**.
 The same application commands serve users and agents. No additional components,

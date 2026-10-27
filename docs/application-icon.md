@@ -4,15 +4,14 @@ ELab has an original full-color icon: a circuit-shaped E, resistor and amber LED
 on a blue instrument tile. The editable [SVG](../assets/app-icon.svg) and
 1024×1024 [PNG](../assets/app-icon.png) live in `assets/`.
 
-The latest Vellum source provides this feature through its **packager**. ELab
+The pinned Vellum source provides this feature through its **packager**. ELab
 pins the unmodified packaging tools at
 [`4cf0176`](https://github.com/dshills/vellum/commit/4cf01763c1fd5501648ea19b4bb406fe62446319),
 whose release metadata says v1.0.0. The icon option was introduced in
 [`3fadc8f`](https://github.com/dshills/vellum/commit/3fadc8fcd3db7aa4b1adf6739a00cd4f56ca393d).
-GitHub's published release list still reports alpha.3; the selected tool is from
-the newer public main source. The first icon-only /273 update kept the
-independent elab9 UI runtime. The
-subsequent [runtime upgrade](vellum-refresh.md) now selects the same public v1
+At the icon integration's October 26 inspection, GitHub's release list reported
+alpha.3; the selected tool came from the newer public main source. The first
+icon-only /273 update kept the independent elab9 UI runtime. The subsequent [runtime upgrade](vellum-refresh.md) now selects the same public v1
 source with ELab compatibility fixes. The icon and shared commands are retained.
 
 ## Build an app with its icon
@@ -21,7 +20,7 @@ After compiling with `sh scripts/build.sh`, run:
 
 ```sh
 python3 -B scripts/package_app.py --binary build/elab \
-  --output build/ELab-with-icon/ELab.app --version 0.196.0 --build-version 273
+  --output build/ELab-local/ELab.app --version 0.0.0 --build-version 1
 ```
 
 The wrapper verifies every pinned packaging file before executing the upstream
@@ -37,7 +36,9 @@ and plist before and after signing and publication.
 
 Launch the packaged `.app` to use its icon. Standalone binaries and `go run`
 have no bundle icon. Finder/Dock cache refresh is OS-controlled; a new bundle
-path is used rather than modifying the signed /272 app that the owner is trying.
+path preserves earlier signed bundles. The current
+[candidate /275](../build/ELab-0.197.0-275-Discrete/ELab.app) retains the same icon;
+[its package receipt](validation/discrete-class-ab/package.json) records the exact hash.
 The packager's `sdk_release` field describes its packaging metadata; the runtime
 is independently identified by `third_party/vellum/sdk.lock.json`. The /273 icon
 evidence carries its original elab9 runtime; the later runtime update is separate.
