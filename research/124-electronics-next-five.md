@@ -101,3 +101,18 @@ Two teaching examples added. The initial RC fixture had zero source and an
 excess 2000-step capture; it now explicitly uses 5 V and the existing 1000-step
 bound. No simulation limit changed. Catalog:58 kinds /209 commands /78 examples.
 Discovery, source inventory and lint pass. Prism completed all nine Anthropic Opus 5.5 chunks; two medium/ten low observations are fixed or dispositioned in analysis/README.md. Fresh focused controls cover the changes before final combined qualification.
+
+Item 5 committed as `9984b36c`. Combined ordinary desktop and offscreen race suites
+pass completely; all vets, lint, 77 Python tests, PRD coverage and native inventory
+pass. The initial portable invocation was blocked by sandbox Unix socket binds,
+three outdated metadata/test expectations, and three historical 100 ms race work
+refusals. Raw output and the frozen 1117-input manifest remain under build.
+Corrections preserve exact historical capacity envelopes including paired absence
+of new FET discovery fields, resolve the pooled preview-byte schema in its test,
+and classify all four new nonlinear kinds explicitly. A new 24 V current-source
+boundary test also reproduced ordinary cold/pulse initialization failure. A narrow
+single-current-source/pure-resistor monotone fallback repairs it only after
+ordinary Newton refusal; accepted caller guesses remain unchanged; the unchanged Newton,
+residual, range and work checks accept/refuse the guess. Floating source, zero
+drive, excluded-device scope and both desktop drivers pass. No capacity/accuracy/
+work limit changes. Final correction review and portable qualification follow.

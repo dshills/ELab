@@ -123,21 +123,28 @@ func CompareCapacity(reference, actual CapacityResult) error {
 // added bipolar discovery fields do not retrospectively qualify PNP capacity.
 // All fixture graphs, numerical bounds, samples and other limits stay exact.
 func capacityLimitsCompatible(actual workbench.CircuitLimits) bool {
-	current := workbench.Limits()
-	if actual == current {
-		return true
+	// These frozen passive/RC/MOS reports predate optional JFET discovery fields.
+	// Accept only the exact paired absence, never arbitrary mixed capacities.
+	for _, jfetDiscovery := range []bool{true, false} {
+		current := workbench.Limits()
+		if !jfetDiscovery {
+			current.JFETs, current.CombinedFETs = 0, 0
+		}
+		if actual == current {
+			return true
+		}
+		current.Transistors, current.PNP, current.CombinedBipolar = 2, 2, 2
+		if actual == current {
+			return true
+		}
+		current.Timers555 = 0
+		if actual == current {
+			return true
+		}
+		current.PNP, current.CombinedBipolar = 0, 0
+		if actual == current {
+			return true
+		}
 	}
-	// Before the discrete-amplifier expansion, all published bipolar limits
-	// were two. Keep those exact historical envelopes, not arbitrary mixtures
-	// of old discovery fields and the new capacity.
-	current.Transistors, current.PNP, current.CombinedBipolar = 2, 2, 2
-	if actual == current {
-		return true
-	}
-	current.Timers555 = 0
-	if actual == current {
-		return true
-	}
-	current.PNP, current.CombinedBipolar = 0, 0
-	return actual == current
+	return false
 }

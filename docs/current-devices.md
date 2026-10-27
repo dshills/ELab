@@ -13,7 +13,10 @@ For terminal voltage v and compliance Vc, it delivers
 `Iset * (1-smoothstep(v,Vc-1,Vc)) - v/1e9`.
 Thus the final volt of headroom reduces current smoothly to zero, and a light
 load approaches compliance. This is a finite Norton law, not an ideal voltage
-constraint. Reverse current/sink operation is not a programmable feature.
+constraint. A single-source, purely resistive network retries its monotone compliance
+equation as a Newton guess only after an ordinary solve refuses; floating terminals are supported. Storage,
+semiconductors, multiple sources and controlled loads keep their existing guesses.
+The normal equations, convergence and range/work checks still accept or refuse it. Reverse current/sink operation is not a programmable feature.
 
 The one-quadrant load draws current into positive. At positive voltage above
 Vmin, CC requests Iset, CP requests Pset/v. Below Vmin these become Iset*v/Vmin

@@ -192,3 +192,24 @@ func TestCapacityPublicReportRecomputesAndRejectsCorruption(t *testing.T) {
 		})
 	}
 }
+
+func TestCapacityHistoricalFETDiscoveryAllowsOnlyPairedAbsence(t *testing.T) {
+	for _, base := range []workbench.CircuitLimits{workbench.Limits(), func() workbench.CircuitLimits {
+		v := workbench.Limits()
+		v.Transistors, v.PNP, v.CombinedBipolar = 2, 2, 2
+		return v
+	}()} {
+		old := base
+		old.JFETs, old.CombinedFETs = 0, 0
+		if !capacityLimitsCompatible(old) {
+			t.Fatal("pre-JFET discovery envelope refused", old)
+		}
+		for _, change := range []func(*workbench.CircuitLimits){func(v *workbench.CircuitLimits) { v.JFETs = 0 }, func(v *workbench.CircuitLimits) { v.CombinedFETs = 0 }, func(v *workbench.CircuitLimits) { v.JFETs = 1 }, func(v *workbench.CircuitLimits) { v.CombinedFETs = 3 }} {
+			bad := base
+			change(&bad)
+			if capacityLimitsCompatible(bad) {
+				t.Fatal("mixed FET discovery envelope admitted", bad)
+			}
+		}
+	}
+}

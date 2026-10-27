@@ -1,0 +1,188 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "9eaa6989dd160ad756f59e006221ef1c",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "9984b36c73904d3880b62e1dd0d477d66b0c2fb5",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 4,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "cfe27bde2e6aea99",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Resistive seed ignores negative source levels",
+      "message": "The bisection only searches terminal voltages in [0, compliance]. When `currentLevel` is negative (a reversed or negative-valued source), `v/resistance \u003c level*(1-q)` is never true for v \u003e= 0. `lo` therefore stays at 0, `scale` becomes 0 and the seed is the zero vector. This is not a valid guess, so the retry is wasted. The same issue occurs when `compliance \u003c= 0`: the interval collapses and the seed is always zero.",
+      "suggestion": "Run the bisection on |level| and apply the sign afterwards. For example: `mag := math.Abs(level)`, bisect with `mag`, then `scale := math.Copysign((lo+hi)/2, level) / resistance`. Also return nil when `compliance \u003c= 0`, or when it is too small for the zero-voltage linearization assumption (compliance \u003c 1 V) to hold.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/current_seed.go",
+          "lines": {
+            "start": 57,
+            "end": 66
+          }
+        }
+      ],
+      "tags": [
+        "numerics",
+        "sign"
+      ],
+      "evidence": "\tlo, hi := 0., compliance\n\tfor range 64 {\n\t\tv := (lo + hi) / 2\n\t\tq, _ := smoothLevel(v, compliance-1, compliance)\n\t\tif v/resistance \u003c level*(1-q) {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "a2e5079590bcb9ca",
+      "severity": "low",
+      "category": "security",
+      "title": "Absolute local paths committed in validation artifacts",
+      "message": "The committed validation receipts contain absolute local filesystem paths that include the developer's home directory. This appears in prism-initial.json and in the lint receipts. It leaks machine-specific details and makes the receipts non-portable.",
+      "suggestion": "Redact absolute paths or make them relative to the repo root before committing the receipts.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "docs/validation/electronics-next-five/regressions/prism-initial.json",
+          "lines": {
+            "start": 6,
+            "end": 6
+          }
+        }
+      ],
+      "tags": [
+        "privacy",
+        "receipts"
+      ],
+      "evidence": "    \"root\": \"/Users/dshills/Development/projects/ELab\",",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "2847b65a4fe85a16",
+      "severity": "low",
+      "category": "docs",
+      "title": "Missing spaces in research log text",
+      "message": "The new research paragraph is missing spaces in several places: \"lint,77\", \"historical100 ms\", \"frozen1117-input\" and \"new24 V\". This makes the validation record harder to read and search.",
+      "suggestion": "Add the missing spaces: \"lint, 77\", \"historical 100 ms\", \"frozen 1117-input\" and \"new 24 V\".",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "research/124-electronics-next-five.md",
+          "lines": {
+            "start": 105,
+            "end": 117
+          }
+        }
+      ],
+      "tags": [
+        "typo",
+        "docs"
+      ],
+      "evidence": "pass completely; all vets, lint,77 Python tests, PRD coverage and native inventory",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "baae90be27099448",
+      "severity": "low",
+      "category": "testing",
+      "title": "Exact DeepEqual on Newton result is fragile",
+      "message": "The test requires exact bitwise equality between the solved state and the perturbed warm guess. If Newton takes even one corrective step, this fails even though the scalar seed was never used. If `solve` mutates `warm` in place, the check passes trivially. Either way, the test does not reliably detect whether the seed replaced the warm guess.",
+      "suggestion": "Copy `warm` before calling `solve`. Then assert on a property that distinguishes the warm path from the seed path, or instrument or count seed usage, instead of relying on exact float equality.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/current_devices_test.go",
+          "lines": {
+            "start": 365,
+            "end": 373
+          }
+        }
+      ],
+      "tags": [
+        "flaky"
+      ],
+      "evidence": "\tif !reflect.DeepEqual(result.x, warm) {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4b8941fecc14a624",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Zero-voltage linearization assumes compliance \u003e= 1 V without checking",
+      "message": "The comment says the matrix contains only the resistors plus the bleed resistance, because compliance is assumed to be \u003e= 1 V. The `compliance-1` knee is used unconditionally. With compliance below 1 V, the smooth limiter is already active at 0 V. The Jacobian at zero then includes a control derivative, and the extracted 'resistance' is not the network's Thevenin resistance.",
+      "suggestion": "Guard explicitly with `if compliance \u003c 1 { return nil }`, or assert that `smoothLevel(0, compliance-1, compliance)` has zero derivative before trusting the linear response.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/current_seed.go",
+          "lines": {
+            "start": 38,
+            "end": 51
+          }
+        }
+      ],
+      "tags": [
+        "assumption"
+      ],
+      "evidence": "\ta, _ := n.equations(zero, nil, 0, t, at)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 34793,
+    "totalMs": 22149
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 22,
+    "bytes": 32443,
+    "chunks": 2,
+    "llmCalls": 2,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 20050,
+        "output": 3359,
+        "costUSD": 0.14738
+      }
+    ],
+    "widenedFiles": 3,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

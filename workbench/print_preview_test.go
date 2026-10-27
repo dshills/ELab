@@ -215,7 +215,17 @@ func TestPrintPreviewUnsupportedAndBase64Discovery(t *testing.T) {
 	if err := json.Unmarshal(cap.OutputSchema, &schema); err != nil {
 		t.Fatal(err)
 	}
-	field := schema["properties"].(map[string]any)["png_base64"].(map[string]any)
+	if ref, ok := schema["$ref"].(string); ok {
+		schema = nil
+		if err := json.Unmarshal(SchemaRegistry()[ref], &schema); err != nil {
+			t.Fatal(err)
+		}
+	}
+	field := inputProperty(schema, "png_base64")
+	if field == nil {
+		t.Fatal("missing PNG bytes schema after resolving registry reference")
+	}
+
 	if field["type"] != "string" || field["contentEncoding"] != "base64" {
 		t.Fatal("PNG discovery disagrees with JSON byte encoding")
 	}

@@ -296,3 +296,79 @@ func TestCurrentDevicePrimaryVoltageSelectionAndMissingPresentation(t *testing.T
 		_ = sourceSamplingAdvice(Graph{Components: []Component{p}}, DefaultTransientSettings())
 	}
 }
+
+func TestCurrentSourceMaximumComplianceAtColdStartAndPulse(t *testing.T) {
+	for _, pulsed := range []bool{false, true} {
+		g := currentResistorGraph(t, 100000)
+		for k, p := range g.Components {
+			if p.ID == "I1" {
+				g.Components[k].Device.Current.Compliance = 24
+				g.Components[k].Device.Current.Timing.Pulsed = pulsed
+			}
+		}
+		state, tr := initializeLossRC(t, g)
+		if pulsed {
+			var err error
+			state, err = state.advance(tr, .02)
+			if err != nil {
+				t.Fatal("maximum compliance pulse", err)
+			}
+		}
+		source := state.result.Sources[0]
+		if source.Voltage <= 23 || source.Voltage >= 24 || math.Abs(source.Current-source.Voltage/100000) > 1e-9 || math.Abs(state.result.PowerResidual) > 1e-8 {
+			t.Fatal("maximum-compliance law", source, state.result.PowerResidual)
+		}
+	}
+}
+
+func TestCurrentSourceMaximumComplianceFloatingAndSeedScope(t *testing.T) {
+	b := newExampleBuilder()
+	b.part("I1", "current-source", "", 0, 0, 0)
+	b.graph.Components[0].Device.Current.Compliance = 24
+	b.part("RP", "resistor", "100k", 200, 0, 0)
+	b.part("RN", "resistor", "100k", -200, 0, 0)
+	b.wire("I1.positive", "RP.1")
+	b.wire("I1.negative", "RN.1")
+	b.ground("GP", "RP.2", 200, 180)
+	b.ground("GN", "RN.2", -200, 180)
+	state, _ := initializeLossRC(t, b.graph)
+	q := state.result.Sources[0]
+	if q.Voltage <= 23 || q.Voltage >= 24 || math.Abs(q.Current-q.Voltage/200000) > 1e-10 || math.Abs(state.result.PowerResidual) > 1e-8 {
+		t.Fatal("floating compliance", q)
+	}
+	tr := &Transient{Mode: "auto", Settings: DefaultTransientSettings()}
+	for _, g := range []Graph{CurrentLEDExampleGraph(), ElectronicLoadExampleGraph(false), JFETCurrentExampleGraph(false), lossRCGraph()} {
+		c, _, d := g.Compile()
+		if d != nil {
+			t.Fatal(d)
+		}
+		if seed := newMixedNetwork(c).currentResistiveGuess(tr, 0); seed != nil {
+			t.Fatal("unqualified model selected resistive seed")
+		}
+	}
+	// Disabled drive still solves the declared bleed network at zero.
+	g := currentResistorGraph(t, 100000)
+	for k, p := range g.Components {
+		if p.ID == "I1" {
+			g.Components[k].Device.Current.Current = 0
+		}
+	}
+	state, _ = initializeLossRC(t, g)
+	if state.result.Sources[0].Voltage != 0 || state.result.Sources[0].Current != 0 {
+		t.Fatal("disabled Norton drive", state.result.Sources)
+	}
+}
+
+func TestCurrentResistiveFallbackPreservesAcceptedWarmGuess(t *testing.T) {
+	state, tr := initializeLossRC(t, currentResistorGraph(t, 100))
+	warm := append([]float64{}, state.x...)
+	p, _ := state.net.c.MixedGraph.Component("I1")
+	warm[state.net.pin(p, "positive")] += 1e-9
+	result, err := state.net.solve(warm, nil, 0, tr, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(result.x, warm) {
+		t.Fatal("ordinary accepted warm guess replaced by scalar seed", result.x, warm)
+	}
+}

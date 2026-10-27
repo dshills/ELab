@@ -605,6 +605,19 @@ func (n *mixedNetwork) solveAnalogContext(ctx context.Context, guess, old []floa
 	if err == nil {
 		return result, nil
 	}
+	// Preserve ordinary cold/warm starts. Only an actual refusal in this unique,
+	// purely resistive Norton problem admits one bounded seed retry.
+	if ctx.Err() != nil {
+		return nil, ctx.Err()
+	}
+	if seed := n.currentResistiveGuess(t, at); seed != nil {
+		var retryErr error
+		if result, retryErr = n.newton(ctx, seed, old, dt, t, at); retryErr == nil {
+			return result, nil
+		}
+		err = retryErr
+	}
+
 	// Preserve the normal starting point and its solution basin. If a cold
 	// nonlinear solve fails, make one bounded retry with only grounded ideal
 	// voltages initialized, avoiding an artificial slow ramp of a fixed rail.
