@@ -1,0 +1,5488 @@
+{
+  "metadata": {
+    "waveform_model": {
+      "id": "elab.source-waveforms.v1",
+      "sine_model_id": "elab.ideal-sine-source.v1",
+      "pulse_model_id": "elab.finite-pulse-source.v1",
+      "minimum_transition_s": 0.000001,
+      "maximum_frequency_hz": 1000,
+      "maximum_magnitude_v": 12,
+      "limitations": "Ideal grounded voltage sources with per-component periodic sine or linear pulse ramps. No output resistance, current limit, battery discharge, noise or physical generator identity. Finite pulse high/low phase lengths include rise/fall respectively. Output sampling can alias; internal integration resolves waveform features within its work budget."
+    },
+    "diode_model": {
+      "id": "elab.generic-silicon-diode.v1",
+      "is_a": 1e-9,
+      "n": 1.7,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Generic silicon junction with Shockley forward/reverse leakage and finite series resistance; no reverse breakdown, capacitance, charge storage, thermal dynamics, ratings or physical part identity."
+    },
+    "pnp_model": {
+      "id": "elab.generic-pnp.v1",
+      "saturation_current_a": 1e-14,
+      "forward_beta": 100,
+      "reverse_beta": 1,
+      "temperature_c": 27,
+      "limitations": "Educational complementary PNP Ebers–Moll model; same illustrative parameter magnitudes as the generic NPN, not a named or physically matched device. No breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing."
+    },
+    "opamp_model": {
+      "id": "elab.generic-opamp.v1",
+      "open_loop_gain_v_per_v": 100000,
+      "differential_resistance_ohm": 10000000,
+      "output_resistance_ohm": 50,
+      "active_output_current_limit_a": 0.02,
+      "quiescent_current_a": 0.001,
+      "supply_soft_voltage_v": 0.1,
+      "output_bleed_resistance_ohm": 1000000000,
+      "limitations": "Generic five-pin educational macromodel with differential input resistance, midpoint-centered soft voltage limiting, finite output resistance, bounded active output current, supply-dependent enable and explicit supply currents. A declared 1 Gohm output-to-V- bleed remains with power off or reversed; differential input resistance also remains. No internal bandwidth, slew rate, offset/bias mismatch, common-mode restrictions, protection diodes, noise, thermal behavior, ratings or named physical device. External storage supplies circuit timing; this model cannot qualify physical amplifier speed or stability."
+    },
+    "format": "elab.verification",
+    "version": 1,
+    "operation_id": "verify-1",
+    "created_at": "2026-10-27T07:03:53.632245Z",
+    "input_revision": 7,
+    "electrical_revision": 2,
+    "document_generation": 2,
+    "graph": {
+      "components": [
+        {
+          "sine": {
+            "amplitude_v": 0.5,
+            "offset_v": 0,
+            "frequency_hz": 10,
+            "phase_degrees": 0
+          },
+          "id": "VIN",
+          "kind": "sine-source",
+          "name": "Sine source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": -560,
+            "y": -20
+          },
+          "value": 0.5,
+          "unit": "V",
+          "model": "elab.ideal-sine-source.v1",
+          "rotation": 0
+        },
+        {
+          "id": "VP",
+          "kind": "dc-source",
+          "name": "DC source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": 730,
+            "y": -160
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "ideal-dc.v1",
+          "rotation": 0
+        },
+        {
+          "id": "VN",
+          "kind": "dc-source",
+          "name": "DC source",
+          "terminals": [
+            "positive",
+            "negative"
+          ],
+          "position": {
+            "x": 730,
+            "y": 160
+          },
+          "value": 5,
+          "unit": "V",
+          "model": "ideal-dc.v1",
+          "rotation": 0
+        },
+        {
+          "id": "U1",
+          "kind": "opamp",
+          "name": "Powered op-amp",
+          "terminals": [
+            "noninverting",
+            "inverting",
+            "out",
+            "vplus",
+            "vminus"
+          ],
+          "position": {
+            "x": -350,
+            "y": 0
+          },
+          "value": 0,
+          "model": "elab.generic-opamp.v1",
+          "rotation": 0
+        },
+        {
+          "id": "Q1",
+          "kind": "npn",
+          "name": "NPN transistor",
+          "terminals": [
+            "base",
+            "collector",
+            "emitter"
+          ],
+          "position": {
+            "x": 100,
+            "y": -160
+          },
+          "value": 0,
+          "model": "elab.generic-npn.v1",
+          "rotation": 0
+        },
+        {
+          "id": "Q2",
+          "kind": "pnp",
+          "name": "PNP transistor",
+          "terminals": [
+            "base",
+            "collector",
+            "emitter"
+          ],
+          "position": {
+            "x": 100,
+            "y": 160
+          },
+          "value": 0,
+          "model": "elab.generic-pnp.v1",
+          "rotation": 0
+        },
+        {
+          "id": "D1",
+          "kind": "diode",
+          "name": "Silicon diode",
+          "terminals": [
+            "anode",
+            "cathode"
+          ],
+          "position": {
+            "x": -100,
+            "y": -110
+          },
+          "value": 0,
+          "model": "elab.generic-silicon-diode.v1",
+          "rotation": 0
+        },
+        {
+          "id": "D2",
+          "kind": "diode",
+          "name": "Silicon diode",
+          "terminals": [
+            "anode",
+            "cathode"
+          ],
+          "position": {
+            "x": -100,
+            "y": 110
+          },
+          "value": 0,
+          "model": "elab.generic-silicon-diode.v1",
+          "rotation": 0
+        },
+        {
+          "id": "RP",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": -100,
+            "y": -300
+          },
+          "value": 2200,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 90
+        },
+        {
+          "id": "RN",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": -100,
+            "y": 300
+          },
+          "value": 2200,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 90
+        },
+        {
+          "id": "RE1",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 230,
+            "y": -70
+          },
+          "value": 22,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 90
+        },
+        {
+          "id": "RE2",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 230,
+            "y": 70
+          },
+          "value": 22,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 90
+        },
+        {
+          "id": "RL",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": 500,
+            "y": 100
+          },
+          "value": 100,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 90
+        },
+        {
+          "id": "RF",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": -100,
+            "y": 480
+          },
+          "value": 10000,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 0
+        },
+        {
+          "id": "RG",
+          "kind": "resistor",
+          "name": "Resistor",
+          "terminals": [
+            "1",
+            "2"
+          ],
+          "position": {
+            "x": -440,
+            "y": 570
+          },
+          "value": 10000,
+          "unit": "Ω",
+          "model": "ideal-resistor.v1",
+          "rotation": 90
+        },
+        {
+          "label": "VCC",
+          "id": "PU",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -350,
+            "y": -100
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "VEE",
+          "id": "NU",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -350,
+            "y": 100
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "VCC",
+          "id": "PQ",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": 130,
+            "y": -270
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "VEE",
+          "id": "NQ",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": 130,
+            "y": 270
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "VCC",
+          "id": "PR",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -100,
+            "y": -400
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "VEE",
+          "id": "NR",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -100,
+            "y": 400
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "VCC",
+          "id": "PS",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": 730,
+            "y": -270
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "VEE",
+          "id": "NS",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": 730,
+            "y": 270
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "OUT",
+          "id": "OUT",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": 400,
+            "y": 0
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "label": "OUT",
+          "id": "JR",
+          "kind": "net-label",
+          "name": "Net label",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": 480,
+            "y": 480
+          },
+          "value": 0,
+          "model": "net-label.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GI",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": -560,
+            "y": 100
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GP",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": 730,
+            "y": 0
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GL",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": 500,
+            "y": 250
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        },
+        {
+          "id": "GF",
+          "kind": "ground",
+          "name": "Ground",
+          "terminals": [
+            "reference"
+          ],
+          "position": {
+            "x": -440,
+            "y": 690
+          },
+          "value": 0,
+          "model": "ground.v1",
+          "rotation": 0
+        },
+        {
+          "id": "JD",
+          "kind": "junction",
+          "name": "Junction",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -100,
+            "y": 0
+          },
+          "value": 0,
+          "model": "junction.v1",
+          "rotation": 0
+        },
+        {
+          "id": "JB1",
+          "kind": "junction",
+          "name": "Junction",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -100,
+            "y": -200
+          },
+          "value": 0,
+          "model": "junction.v1",
+          "rotation": 0
+        },
+        {
+          "id": "JB2",
+          "kind": "junction",
+          "name": "Junction",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -100,
+            "y": 200
+          },
+          "value": 0,
+          "model": "junction.v1",
+          "rotation": 0
+        },
+        {
+          "id": "JF",
+          "kind": "junction",
+          "name": "Junction",
+          "terminals": [
+            "node"
+          ],
+          "position": {
+            "x": -440,
+            "y": 480
+          },
+          "value": 0,
+          "model": "junction.v1",
+          "rotation": 0
+        }
+      ],
+      "wires": [
+        {
+          "id": "W1",
+          "from": "VIN.positive",
+          "to": "U1.noninverting",
+          "connected": true
+        },
+        {
+          "id": "W2",
+          "from": "VIN.negative",
+          "to": "GI.reference",
+          "connected": true
+        },
+        {
+          "id": "W3",
+          "from": "U1.vplus",
+          "to": "PU.node",
+          "connected": true
+        },
+        {
+          "id": "W4",
+          "from": "U1.vminus",
+          "to": "NU.node",
+          "connected": true
+        },
+        {
+          "id": "W5",
+          "from": "U1.out",
+          "to": "JD.node",
+          "connected": true
+        },
+        {
+          "id": "W6",
+          "from": "RP.1",
+          "to": "PR.node",
+          "connected": true
+        },
+        {
+          "id": "W7",
+          "from": "RP.2",
+          "to": "JB1.node",
+          "connected": true
+        },
+        {
+          "id": "W8",
+          "from": "JB1.node",
+          "to": "D1.anode",
+          "connected": true
+        },
+        {
+          "id": "W9",
+          "from": "JB1.node",
+          "to": "Q1.base",
+          "connected": true
+        },
+        {
+          "id": "W10",
+          "from": "D1.cathode",
+          "to": "JD.node",
+          "connected": true
+        },
+        {
+          "id": "W11",
+          "from": "JD.node",
+          "to": "D2.anode",
+          "connected": true
+        },
+        {
+          "id": "W12",
+          "from": "D2.cathode",
+          "to": "JB2.node",
+          "connected": true
+        },
+        {
+          "id": "W13",
+          "from": "JB2.node",
+          "to": "Q2.base",
+          "connected": true
+        },
+        {
+          "id": "W14",
+          "from": "JB2.node",
+          "to": "RN.1",
+          "connected": true
+        },
+        {
+          "id": "W15",
+          "from": "RN.2",
+          "to": "NR.node",
+          "connected": true
+        },
+        {
+          "id": "W16",
+          "from": "Q1.collector",
+          "to": "PQ.node",
+          "connected": true
+        },
+        {
+          "id": "W17",
+          "from": "Q2.collector",
+          "to": "NQ.node",
+          "connected": true
+        },
+        {
+          "id": "W18",
+          "from": "Q1.emitter",
+          "to": "RE1.1",
+          "connected": true
+        },
+        {
+          "id": "W19",
+          "from": "Q2.emitter",
+          "to": "RE2.2",
+          "connected": true
+        },
+        {
+          "id": "W20",
+          "from": "RE1.2",
+          "to": "OUT.node",
+          "connected": true
+        },
+        {
+          "id": "W21",
+          "from": "RE2.1",
+          "to": "OUT.node",
+          "connected": true
+        },
+        {
+          "id": "W22",
+          "from": "OUT.node",
+          "to": "RL.1",
+          "connected": true
+        },
+        {
+          "id": "W23",
+          "from": "RL.2",
+          "to": "GL.reference",
+          "connected": true
+        },
+        {
+          "id": "W24",
+          "from": "JR.node",
+          "to": "RF.2",
+          "connected": true
+        },
+        {
+          "id": "W25",
+          "from": "RF.1",
+          "to": "JF.node",
+          "connected": true
+        },
+        {
+          "id": "W26",
+          "from": "JF.node",
+          "to": "U1.inverting",
+          "connected": true
+        },
+        {
+          "id": "W27",
+          "from": "JF.node",
+          "to": "RG.1",
+          "connected": true
+        },
+        {
+          "id": "W28",
+          "from": "RG.2",
+          "to": "GF.reference",
+          "connected": true
+        },
+        {
+          "id": "W29",
+          "from": "VP.positive",
+          "to": "PS.node",
+          "connected": true
+        },
+        {
+          "id": "W30",
+          "from": "VP.negative",
+          "to": "GP.reference",
+          "connected": true
+        },
+        {
+          "id": "W31",
+          "from": "VN.positive",
+          "to": "GP.reference",
+          "connected": true
+        },
+        {
+          "id": "W32",
+          "from": "VN.negative",
+          "to": "NS.node",
+          "connected": true
+        }
+      ]
+    },
+    "settings": {
+      "step_s": 0.0005,
+      "high_s": 0.05,
+      "low_s": 0.05,
+      "initial_voltage_v": 0,
+      "seconds_per_wall_second": 0.02
+    },
+    "input_mode": "auto",
+    "analysis": "Waveform network transient",
+    "engine": "elab.network-waveforms-mna-sdirk2.v1",
+    "led_model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    },
+    "npn_model": {
+      "id": "elab.generic-npn.v1",
+      "saturation_current_a": 1e-14,
+      "forward_beta": 100,
+      "reverse_beta": 1,
+      "temperature_c": 27,
+      "limitations": "Educational Ebers–Moll model; no named physical device, breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing. LED reverse current is neglected."
+    },
+    "probes": [
+      {
+        "id": "v:VIN.positive",
+        "label": "VIN.positive / ground",
+        "unit": "V",
+        "positive": "VIN.positive",
+        "reference": "ground"
+      },
+      {
+        "id": "v:RL",
+        "label": "RL voltage",
+        "unit": "V",
+        "positive": "RL.1",
+        "reference": "RL.2"
+      },
+      {
+        "id": "i:Q1.collector",
+        "label": "Q1.collector current",
+        "unit": "A",
+        "positive": "Q1.collector",
+        "reference": "into device"
+      },
+      {
+        "id": "i:Q2.collector",
+        "label": "Q2.collector current",
+        "unit": "A",
+        "positive": "Q2.collector",
+        "reference": "into device"
+      },
+      {
+        "id": "v:Q1.base-emitter",
+        "label": "Q1 base-emitter voltage",
+        "unit": "V",
+        "positive": "Q1.base",
+        "reference": "Q1.emitter"
+      },
+      {
+        "id": "v:Q2.base-emitter",
+        "label": "Q2 base-emitter voltage",
+        "unit": "V",
+        "positive": "Q2.base",
+        "reference": "Q2.emitter"
+      }
+    ],
+    "duration_s": 0.2,
+    "sample_count": 401,
+    "statistics": [
+      {
+        "probe_id": "v:VIN.positive",
+        "count": 401,
+        "min": -0.5,
+        "max": 0.5,
+        "sample_mean": 2.595596223406694e-17,
+        "sample_rms": 0.35311227577322435
+      },
+      {
+        "probe_id": "v:RL",
+        "count": 401,
+        "min": -0.9999716570933939,
+        "max": 0.9999716570824965,
+        "sample_mean": -5.224206013228652e-12,
+        "sample_rms": 0.7062045151466445
+      },
+      {
+        "probe_id": "i:Q1.collector",
+        "count": 401,
+        "min": 4.3942190865331976e-9,
+        "max": 0.009950217416962562,
+        "sample_mean": 0.003178669250705329,
+        "sample_rms": 0.004970698578854305
+      },
+      {
+        "probe_id": "i:Q2.collector",
+        "count": 401,
+        "min": -0.009950217417071054,
+        "max": -4.394219087014434e-9,
+        "sample_mean": -0.0031786692507573115,
+        "sample_rms": 0.004970698578921333
+      },
+      {
+        "probe_id": "v:Q1.base-emitter",
+        "count": 401,
+        "min": 0.33606849054917765,
+        "max": 0.7145452267087333,
+        "sample_mean": 0.5669192670748877,
+        "sample_rms": 0.5852632854943406
+      },
+      {
+        "probe_id": "v:Q2.base-emitter",
+        "count": 401,
+        "min": -0.7145452267090153,
+        "max": -0.33606849055201027,
+        "sample_mean": -0.5669192670766984,
+        "sample_rms": 0.5852632854958463
+      }
+    ],
+    "mixed": {
+      "opamps": [
+        {
+          "id": "U1",
+          "model": {
+            "id": "elab.generic-opamp.v1",
+            "open_loop_gain_v_per_v": 100000,
+            "differential_resistance_ohm": 10000000,
+            "output_resistance_ohm": 50,
+            "active_output_current_limit_a": 0.02,
+            "quiescent_current_a": 0.001,
+            "supply_soft_voltage_v": 0.1,
+            "output_bleed_resistance_ohm": 1000000000,
+            "limitations": "Generic five-pin educational macromodel with differential input resistance, midpoint-centered soft voltage limiting, finite output resistance, bounded active output current, supply-dependent enable and explicit supply currents. A declared 1 Gohm output-to-V- bleed remains with power off or reversed; differential input resistance also remains. No internal bandwidth, slew rate, offset/bias mismatch, common-mode restrictions, protection diodes, noise, thermal behavior, ratings or named physical device. External storage supplies circuit timing; this model cannot qualify physical amplifier speed or stability."
+          },
+          "input_difference_v": 2.5001735978085452e-12,
+          "output_voltage_v": -7.287765606469674e-12,
+          "supply_voltage_v": 10,
+          "noninverting_current_a": 2.5001735978085453e-19,
+          "inverting_current_a": -2.5001735978085453e-19,
+          "output_delivered_current_a": -7.048358816519086e-15,
+          "positive_supply_current_a": 0.0009999050099919516,
+          "negative_supply_current_a": -0.000999905009999,
+          "power_w": 0.009999050099954759,
+          "state": "powered"
+        }
+      ],
+      "diodes": [
+        {
+          "id": "D1",
+          "current_a": 0.0019781677318860408,
+          "voltage_v": 0.6394466690755551,
+          "power_w": 0.0012649327670272747
+        },
+        {
+          "id": "D2",
+          "current_a": 0.0019781677318789883,
+          "voltage_v": 0.6394466690753914,
+          "power_w": 0.0012649327670224409
+        }
+      ],
+      "engine": "elab.network-waveforms-mna-sdirk2.v1",
+      "run_id": 1,
+      "electrical_revision": 2,
+      "time_s": 0.2,
+      "nodes_v": {
+        "net:D1.anode": 0.6394466690682674,
+        "net:D1.cathode": -7.287765606469674e-12,
+        "net:D2.cathode": -0.6394466690826791,
+        "net:GF.reference": 0,
+        "net:Q1.collector": 5,
+        "net:Q1.emitter": 0.008670164007706998,
+        "net:Q2.collector": -5,
+        "net:Q2.emitter": -0.008670164018818824,
+        "net:RE1.2": -5.002847369214909e-12,
+        "net:RF.1": -2.5001735978085452e-12,
+        "net:U1.noninverting": 0
+      },
+      "transistors": [
+        {
+          "transistor_id": "Q1",
+          "model": {
+            "id": "elab.generic-npn.v1",
+            "saturation_current_a": 1e-14,
+            "forward_beta": 100,
+            "reverse_beta": 1,
+            "temperature_c": 27,
+            "limitations": "Educational Ebers–Moll model; no named physical device, breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing. LED reverse current is neglected."
+          },
+          "base_current_a": 0.000003901963992020618,
+          "collector_current_a": 0.00039019640022206186,
+          "emitter_current_a": 0.00039409836421408246,
+          "vbe_v": 0.6307765050605604,
+          "vce_v": 4.991329835992293,
+          "power_w": 0.0019500602015349259,
+          "state": "active"
+        },
+        {
+          "transistor_id": "Q2",
+          "model": {
+            "id": "elab.generic-pnp.v1",
+            "saturation_current_a": 1e-14,
+            "forward_beta": 100,
+            "reverse_beta": 1,
+            "temperature_c": 27,
+            "limitations": "Educational complementary PNP Ebers–Moll model; same illustrative parameter magnitudes as the generic NPN, not a named or physically matched device. No breakdown, Early effect, heating, junction capacitance, charge storage or switching delay. External capacitors provide circuit timing."
+          },
+          "base_current_a": -0.000003901963992518451,
+          "collector_current_a": -0.0003901964002718451,
+          "emitter_current_a": -0.0003940983642643636,
+          "vbe_v": -0.6307765050638603,
+          "vce_v": -4.9913298359811815,
+          "power_w": 0.001950060201779402,
+          "state": "active"
+        }
+      ],
+      "capacitors": [],
+      "leds": [],
+      "resistors": [
+        {
+          "id": "RP",
+          "current_a": 0.0019820696958780604,
+          "voltage_v": 4.360553330931733,
+          "power_w": 0.008642920614499923
+        },
+        {
+          "id": "RN",
+          "current_a": 0.0019820696958715092,
+          "voltage_v": 4.360553330917321,
+          "power_w": 0.00864292061444279
+        },
+        {
+          "id": "RE1",
+          "current_a": 0.00039409836421408387,
+          "voltage_v": 0.008670164012709845,
+          "power_w": 0.0000034168974548767673
+        },
+        {
+          "id": "RE2",
+          "current_a": 0.0003940983642643626,
+          "voltage_v": 0.008670164013815977,
+          "power_w": 0.000003416897455748617
+        },
+        {
+          "id": "RL",
+          "current_a": -5.002847369214909e-14,
+          "voltage_v": -5.002847369214909e-12,
+          "power_w": 2.5028481799660537e-25
+        },
+        {
+          "id": "RF",
+          "current_a": 2.502673771406364e-16,
+          "voltage_v": 2.502673771406364e-12,
+          "power_w": 6.263376006085353e-28
+        },
+        {
+          "id": "RG",
+          "current_a": -2.5001735978085454e-16,
+          "voltage_v": -2.5001735978085452e-12,
+          "power_w": 6.250868019178926e-28
+        }
+      ],
+      "sources": [
+        {
+          "id": "VIN",
+          "current_a": 2.5001735978085453e-19,
+          "voltage_v": 0,
+          "power_w": 0
+        },
+        {
+          "id": "VP",
+          "current_a": 0.003372171106092075,
+          "voltage_v": 5,
+          "power_w": 0.016860855530460375
+        },
+        {
+          "id": "VN",
+          "current_a": 0.0033721711061423538,
+          "voltage_v": 5,
+          "power_w": 0.016860855530711767
+        }
+      ],
+      "kcl_residual_a": 4.336808689942018e-18,
+      "power_residual_w": 0,
+      "numerical_damping_w": 0,
+      "stale": false
+    }
+  },
+  "rows": [
+    {
+      "time_s": 0,
+      "values": [
+        0,
+        -5.0028473684047035e-12,
+        0.00039019640022208403,
+        -0.0003901964002718658,
+        0.6307765050605618,
+        -0.6307765050638617
+      ]
+    },
+    {
+      "time_s": 0.0005,
+      "values": [
+        0.015705379539064146,
+        0.031409800567150765,
+        0.0005694243066579642,
+        -0.00025688124163230746,
+        0.6405528174414749,
+        -0.6199640266830219
+      ]
+    },
+    {
+      "time_s": 0.001,
+      "values": [
+        0.03139525976465669,
+        0.0627886107184195,
+        0.000790154245924093,
+        -0.00016537648585238985,
+        0.6490262269361662,
+        -0.6085733907380162
+      ]
+    },
+    {
+      "time_s": 0.0015,
+      "values": [
+        0.047054156659257156,
+        0.09410546780163821,
+        0.0010423393597060865,
+        -0.00010594336828493968,
+        0.6561906736737484,
+        -0.597055224126031
+      ]
+    },
+    {
+      "time_s": 0.002,
+      "values": [
+        0.06266661678215213,
+        0.1253294670092644,
+        0.0013154251904917748,
+        -0.00006833494955217829,
+        0.6622092448325687,
+        -0.5857138848777038
+      ]
+    },
+    {
+      "time_s": 0.0025,
+      "values": [
+        0.07821723252011543,
+        0.15642979306166963,
+        0.0016011923014271894,
+        -0.000044638420087546145,
+        0.6672939940711119,
+        -0.5746999162013287
+      ]
+    },
+    {
+      "time_s": 0.003,
+      "values": [
+        0.0936906572928623,
+        0.18737575188448088,
+        0.0018940690227248944,
+        -0.00002958752554374382,
+        0.6716387557707896,
+        -0.5640631701385829
+      ]
+    },
+    {
+      "time_s": 0.0035,
+      "values": [
+        0.10907162069827128,
+        0.21813680163210095,
+        0.002190467844962499,
+        -0.000019898677808264432,
+        0.6753991981497998,
+        -0.5538025657026924
+      ]
+    },
+    {
+      "time_s": 0.004,
+      "values": [
+        0.1243449435824274,
+        0.24868258312843258,
+        0.002488081943852826,
+        -0.000013567130573912713,
+        0.6786943110945022,
+        -0.5438962140275926
+      ]
+    },
+    {
+      "time_s": 0.0045000000000000005,
+      "values": [
+        0.13949555301961464,
+        0.27898294990654476,
+        0.002785386215886438,
+        -0.000009367753621306327,
+        0.6816137998743703,
+        -0.53431644888698
+      ]
+    },
+    {
+      "time_s": 0.005,
+      "values": [
+        0.1545084971874737,
+        0.3090079979501585,
+        0.0030813261408503883,
+        -0.000006543586961451238,
+        0.6842254726981851,
+        -0.5250364278717705
+      ]
+    },
+    {
+      "time_s": 0.0055,
+      "values": [
+        0.16936896012264566,
+        0.33872809516892494,
+        0.0033751321502174525,
+        -0.0000046199162293533465,
+        0.6865811055447684,
+        -0.5160326167994327
+      ]
+    },
+    {
+      "time_s": 0.006,
+      "values": [
+        0.18406227634233896,
+        0.36811391060241117,
+        0.0036662099287548666,
+        -0.000003294283850887643,
+        0.688720753914686,
+        -0.5072854151363789
+      ]
+    },
+    {
+      "time_s": 0.006500000000000001,
+      "values": [
+        0.1985739453173903,
+        0.3971364433318321,
+        0.003954075210324873,
+        -0.0000023709972226189864,
+        0.6906758405744564,
+        -0.498779005789464
+      ]
+    },
+    {
+      "time_s": 0.007,
+      "values": [
+        0.21288964578253636,
+        0.42576705107259794,
+        0.004238314544158246,
+        -0.0000017216105022444738,
+        0.6924713560768306,
+        -0.49050092475504586
+      ]
+    },
+    {
+      "time_s": 0.0075,
+      "values": [
+        0.2269952498697734,
+        0.45397747841892305,
+        0.004518561350039811,
+        -0.0000012606987572768465,
+        0.6941274350470998,
+        -0.4824415675989602
+      ]
+    },
+    {
+      "time_s": 0.008,
+      "values": [
+        0.24087683705085766,
+        0.4817398847115331,
+        0.004794481100824314,
+        -9.307631882589928e-7,
+        0.6956604964787075,
+        -0.4745937214088668
+      ]
+    },
+    {
+      "time_s": 0.0085,
+      "values": [
+        0.25452070787518566,
+        0.5090268714998863,
+        0.0050657620413921195,
+        -6.926768238148216e-7,
+        0.6970840785350768,
+        -0.4669521530981684
+      ]
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "values": [
+        0.26791339748949833,
+        0.5358115095709032,
+        0.00533210932051248,
+        -5.195474355348295e-7,
+        0.6984094574954033,
+        -0.4595132598615996
+      ]
+    },
+    {
+      "time_s": 0.0095,
+      "values": [
+        0.2810416889260653,
+        0.5620673655168137,
+        0.00559324125930263,
+        -3.9272163418071907e-7,
+        0.6996461125173877,
+        -0.4522747774728388
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "values": [
+        0.29389262614623657,
+        0.5877685278153605,
+        0.005848886976498061,
+        -2.991506295372341e-7,
+        0.7008020789508377,
+        -0.4452355387374787
+      ]
+    },
+    {
+      "time_s": 0.0105,
+      "values": [
+        0.30645352682648824,
+        0.6128896323962046,
+        0.006098784886499597,
+        -2.2963387881645626e-7,
+        0.7018842201048492,
+        -0.43839527395267175
+      ]
+    },
+    {
+      "time_s": 0.011,
+      "values": [
+        0.3187119948743448,
+        0.637405887667995,
+        0.006342681765209238,
+        -1.7763589113462016e-7,
+        0.7028984386260542,
+        -0.43175444592165546
+      ]
+    },
+    {
+      "time_s": 0.0115,
+      "values": [
+        0.3306559326618259,
+        0.6612930989811688,
+        0.006580332188785881,
+        -1.3848156610064244e-7,
+        0.7038498426318854,
+        -0.4253141131350202
+      ]
+    },
+    {
+      "time_s": 0.012,
+      "values": [
+        0.3422735529643443,
+        0.6845276925021639,
+        0.006811498219187988,
+        -1.0880417635582585e-7,
+        0.7047428775646868,
+        -0.4190758158190036
+      ]
+    },
+    {
+      "time_s": 0.0125,
+      "values": [
+        0.35355339059327373,
+        0.707086738475349,
+        0.007035949253879728,
+        -8.616360594556347e-8,
+        0.7055814317975769,
+        -0.41304148053074896
+      ]
+    },
+    {
+      "time_s": 0.013000000000000001,
+      "values": [
+        0.3644843137107058,
+        0.7289479738496156,
+        0.00725346198497192,
+        -6.878034557656477e-8,
+        0.7063689219382483,
+        -0.4072133398121024
+      ]
+    },
+    {
+      "time_s": 0.0135,
+      "values": [
+        0.37505553481522974,
+        0.7500898242472224,
+        0.007463820431168698,
+        -5.534883826254742e-8,
+        0.7071083622796773,
+        -0.4015938640983723
+      ]
+    },
+    {
+      "time_s": 0.014,
+      "values": [
+        0.3852566213878946,
+        0.770491425253156,
+        0.007666816017762066,
+        -4.490563424463367e-8,
+        0.7078024217598518,
+        -0.3961857036332496
+      ]
+    },
+    {
+      "time_s": 0.0145,
+      "values": [
+        0.39507750618784515,
+        0.7901326430039521,
+        0.007862247687783468,
+        -3.673567382118792e-8,
+        0.708453470995415,
+        -0.39099163858654434
+      ]
+    },
+    {
+      "time_s": 0.015,
+      "values": [
+        0.4045084971874737,
+        0.8089940940556292,
+        0.00804992203268399,
+        -3.030527125263304e-8,
+        0.7090636213635402,
+        -0.38601453592763835
+      ]
+    },
+    {
+      "time_s": 0.0155,
+      "values": [
+        0.4135402871372809,
+        0.8270571645110993,
+        0.008229653434461864,
+        -2.5213915735326867e-8,
+        0.7096347576646309,
+        -0.38125731189203843
+      ]
+    },
+    {
+      "time_s": 0.016,
+      "values": [
+        0.42216396275100754,
+        0.8443040283881692,
+        0.00840126421357537,
+        -2.115941304314405e-8,
+        0.7101685655650802,
+        -0.3767228991058068
+      ]
+    },
+    {
+      "time_s": 0.0165,
+      "values": [
+        0.4303710135019718,
+        0.8607176652099895,
+        0.00856458477863037,
+        -1.791253959795526e-8,
+        0.7106665547655,
+        -0.37241421761468174
+      ]
+    },
+    {
+      "time_s": 0.017,
+      "values": [
+        0.4381533400219318,
+        0.8762818768005889,
+        0.008719453774978273,
+        -1.529851675151726e-8,
+        0.7111300786449961,
+        -0.36833414921087015
+      ]
+    },
+    {
+      "time_s": 0.0175,
+      "values": [
+        0.4455032620941839,
+        0.8909813032689168,
+        0.008865718230156033,
+        -1.3183401129466817e-8,
+        0.7115603509812991,
+        -0.3644855145681961
+      ]
+    },
+    {
+      "time_s": 0.018000000000000002,
+      "values": [
+        0.45241352623300973,
+        0.9048014381656199,
+        0.009003233694655171,
+        -1.1464036905525455e-8,
+        0.7119584602289912,
+        -0.3608710527914074
+      ]
+    },
+    {
+      "time_s": 0.0185,
+      "values": [
+        0.45887731284199057,
+        0.9177286427976,
+        0.009131864376905566,
+        -1.0060601966616726e-8,
+        0.712325381745748,
+        -0.3574934030625466
+      ]
+    },
+    {
+      "time_s": 0.019,
+      "values": [
+        0.4648882429441257,
+        0.9297501596862315,
+        0.009251483305089462,
+        -8.911052418335353e-9,
+        0.7126619883769729,
+        -0.35435508804204785
+      ]
+    },
+    {
+      "time_s": 0.0195,
+      "values": [
+        0.4704403844771127,
+        0.9408541251559738,
+        0.00936197230440378,
+        -7.966963478929883e-9,
+        0.712969059067514,
+        -0.35145849937626605
+      ]
+    },
+    {
+      "time_s": 0.02,
+      "values": [
+        0.47552825814757677,
+        0.9510295810409382,
+        0.00946322234376604,
+        -7.19040202043442e-9,
+        0.7132472872670521,
+        -0.3488058836863449
+      ]
+    },
+    {
+      "time_s": 0.0205,
+      "values": [
+        0.48014684283847153,
+        0.960266485497906,
+        0.009555133471536215,
+        -6.551566137266507e-9,
+        0.7134972871124212,
+        -0.34639933097500986
+      ]
+    },
+    {
+      "time_s": 0.021,
+      "values": [
+        0.4842915805643156,
+        0.9685557229151042,
+        0.009637614958966412,
+        -6.026996999493249e-9,
+        0.7137195992729375,
+        -0.34424076370834067
+      ]
+    },
+    {
+      "time_s": 0.021500000000000002,
+      "values": [
+        0.4879583809693737,
+        0.9758891129069873,
+        0.009710585388332017,
+        -5.5982206759758534e-9,
+        0.7139146958353901,
+        -0.3423319271954921
+      ]
+    },
+    {
+      "time_s": 0.022,
+      "values": [
+        0.49114362536434436,
+        0.982259418386156,
+        0.00977397273220613,
+        -5.250714827939061e-9,
+        0.7140829844584973,
+        -0.3406743810824242
+      ]
+    },
+    {
+      "time_s": 0.0225,
+      "values": [
+        0.49384417029756883,
+        0.9876603527044578,
+        0.009827714423722812,
+        -4.973122687763819e-9,
+        0.7142248118771821,
+        -0.33926949191523015
+      ]
+    },
+    {
+      "time_s": 0.023,
+      "values": [
+        0.4960573506572389,
+        0.9920865858562333,
+        0.009871757417698754,
+        -4.756656969829459e-9,
+        0.7143404668224353,
+        -0.33811842674027137
+      ]
+    },
+    {
+      "time_s": 0.0235,
+      "values": [
+        0.49778098230154,
+        0.995533749737593,
+        0.009906058242511988,
+        -4.594651382141151e-9,
+        0.7144301824101373,
+        -0.337222147717414
+      ]
+    },
+    {
+      "time_s": 0.024,
+      "values": [
+        0.4990133642141358,
+        0.9979984424565485,
+        0.009930583042652898,
+        -4.482228678028033e-9,
+        0.7144941380415015,
+        -0.3365814077296516
+      ]
+    },
+    {
+      "time_s": 0.0245,
+      "values": [
+        0.4997532801828658,
+        0.9994782316897456,
+        0.009945307611884663,
+        -4.416062768083282e-9,
+        0.7145324608484347,
+        -0.3361967469776934
+      ]
+    },
+    {
+      "time_s": 0.025,
+      "values": [
+        0.5,
+        0.9999716570824965,
+        0.009950217416962562,
+        -4.394219087014434e-9,
+        0.7145452267087333,
+        -0.33606849055201027
+      ]
+    },
+    {
+      "time_s": 0.025500000000000002,
+      "values": [
+        0.4997532801828658,
+        0.9994782316897456,
+        0.00994530761187869,
+        -4.416062768085675e-9,
+        0.7145324608484191,
+        -0.3361967469777074
+      ]
+    },
+    {
+      "time_s": 0.026000000000000002,
+      "values": [
+        0.4990133642141358,
+        0.9979984424565486,
+        0.009930583042612396,
+        -4.482228678044499e-9,
+        0.714494138041396,
+        -0.33658140772974665
+      ]
+    },
+    {
+      "time_s": 0.0265,
+      "values": [
+        0.49778098230154,
+        0.995533749737593,
+        0.00990605824237864,
+        -4.5946513821971e-9,
+        0.7144301824097892,
+        -0.33722214771772896
+      ]
+    },
+    {
+      "time_s": 0.027,
+      "values": [
+        0.4960573506572389,
+        0.9920865858562332,
+        0.009871757417382304,
+        -4.7566569699679454e-9,
+        0.7143404668216062,
+        -0.33811842674102444
+      ]
+    },
+    {
+      "time_s": 0.0275,
+      "values": [
+        0.49384417029756883,
+        0.987660352704458,
+        0.009827714423097902,
+        -4.9731226880523376e-9,
+        0.7142248118755374,
+        -0.3392694919167307
+      ]
+    },
+    {
+      "time_s": 0.028,
+      "values": [
+        0.49114362536434436,
+        0.982259418386156,
+        0.009773972731107701,
+        -5.250714828480426e-9,
+        0.7140829844555905,
+        -0.34067438108509096
+      ]
+    },
+    {
+      "time_s": 0.0285,
+      "values": [
+        0.4879583809693737,
+        0.9758891129069873,
+        0.009710585386549113,
+        -5.5982206769244915e-9,
+        0.7139146958306413,
+        -0.34233192719987504
+      ]
+    },
+    {
+      "time_s": 0.029,
+      "values": [
+        0.48429158056431554,
+        0.9685557229151043,
+        0.009637614956234362,
+        -6.026997001080436e-9,
+        0.7137195992656054,
+        -0.3442407637151521
+      ]
+    },
+    {
+      "time_s": 0.029500000000000002,
+      "values": [
+        0.48014684283847153,
+        0.9602664854979062,
+        0.009555133467526164,
+        -6.551566139838227e-9,
+        0.7134972871015663,
+        -0.34639933098516273
+      ]
+    },
+    {
+      "time_s": 0.03,
+      "values": [
+        0.4755282581475768,
+        0.9510295810409386,
+        0.00946322233807291,
+        -7.190402024508491e-9,
+        0.7132472872514917,
+        -0.34880588370099996
+      ]
+    },
+    {
+      "time_s": 0.0305,
+      "values": [
+        0.4704403844771127,
+        0.9408541251559741,
+        0.009361972296529743,
+        -7.966963485284243e-9,
+        0.7129690590457598,
+        -0.35145849939689566
+      ]
+    },
+    {
+      "time_s": 0.031,
+      "values": [
+        0.4648882429441257,
+        0.9297501596862321,
+        0.009251483294424134,
+        -8.911052428142534e-9,
+        0.7126619883471552,
+        -0.35435508807051386
+      ]
+    },
+    {
+      "time_s": 0.0315,
+      "values": [
+        0.45887731284199057,
+        0.9177286427975986,
+        0.009131864409359302,
+        -1.0060601933064815e-8,
+        0.7123253818376694,
+        -0.3574934029762875
+      ]
+    },
+    {
+      "time_s": 0.032,
+      "values": [
+        0.45241352623300973,
+        0.9048014381656199,
+        0.009003233694655171,
+        -1.1464036905525496e-8,
+        0.7119584602289912,
+        -0.3608710527914075
+      ]
+    },
+    {
+      "time_s": 0.0325,
+      "values": [
+        0.44550326209418395,
+        0.8909813032689169,
+        0.008865718230156033,
+        -1.318340112946677e-8,
+        0.7115603509812991,
+        -0.364485514568196
+      ]
+    },
+    {
+      "time_s": 0.033,
+      "values": [
+        0.43815334002193174,
+        0.8762818768005888,
+        0.008719453774978273,
+        -1.529851675151734e-8,
+        0.7111300786449961,
+        -0.36833414921087027
+      ]
+    },
+    {
+      "time_s": 0.0335,
+      "values": [
+        0.4303710135019718,
+        0.8607176652099895,
+        0.00856458477863037,
+        -1.7912539597955228e-8,
+        0.7106665547655,
+        -0.3724142176146817
+      ]
+    },
+    {
+      "time_s": 0.034,
+      "values": [
+        0.4221639627510075,
+        0.8443040283881691,
+        0.00840126421357537,
+        -2.1159413043144014e-8,
+        0.7101685655650802,
+        -0.37672289910580675
+      ]
+    },
+    {
+      "time_s": 0.0345,
+      "values": [
+        0.4135402871372809,
+        0.8270571645110992,
+        0.008229653434461864,
+        -2.5213915735326953e-8,
+        0.7096347576646309,
+        -0.3812573118920385
+      ]
+    },
+    {
+      "time_s": 0.035,
+      "values": [
+        0.4045084971874737,
+        0.8089940940556292,
+        0.00804992203268399,
+        -3.0305271252633145e-8,
+        0.7090636213635402,
+        -0.38601453592763846
+      ]
+    },
+    {
+      "time_s": 0.035500000000000004,
+      "values": [
+        0.3950775061878451,
+        0.790132643003952,
+        0.007862247687783496,
+        -3.6735673821188176e-8,
+        0.7084534709954151,
+        -0.3909916385865445
+      ]
+    },
+    {
+      "time_s": 0.036000000000000004,
+      "values": [
+        0.3852566213878946,
+        0.770491425253156,
+        0.007666816017762011,
+        -4.4905634244633426e-8,
+        0.7078024217598516,
+        -0.3961857036332495
+      ]
+    },
+    {
+      "time_s": 0.0365,
+      "values": [
+        0.3750555348152298,
+        0.7500898242472225,
+        0.007463820431168671,
+        -5.534883826254771e-8,
+        0.7071083622796772,
+        -0.4015938640983724
+      ]
+    },
+    {
+      "time_s": 0.037,
+      "values": [
+        0.3644843137107058,
+        0.7289479738496156,
+        0.007253461984971842,
+        -6.878034557656477e-8,
+        0.7063689219382481,
+        -0.4072133398121024
+      ]
+    },
+    {
+      "time_s": 0.0375,
+      "values": [
+        0.3535533905932738,
+        0.7070867384753492,
+        0.007035949253879677,
+        -8.616360594556392e-8,
+        0.7055814317975768,
+        -0.41304148053074907
+      ]
+    },
+    {
+      "time_s": 0.038,
+      "values": [
+        0.3422735529643444,
+        0.6845276925021642,
+        0.006811498219187964,
+        -1.0880417635582625e-7,
+        0.7047428775646867,
+        -0.4190758158190037
+      ]
+    },
+    {
+      "time_s": 0.0385,
+      "values": [
+        0.3306559326618259,
+        0.661293098981169,
+        0.0065803321887858346,
+        -1.3848156610064442e-7,
+        0.7038498426318852,
+        -0.42531411313502054
+      ]
+    },
+    {
+      "time_s": 0.039,
+      "values": [
+        0.31871199487434493,
+        0.6374058876679952,
+        0.006342681765209125,
+        -1.7763589113462333e-7,
+        0.7028984386260537,
+        -0.4317544459216559
+      ]
+    },
+    {
+      "time_s": 0.0395,
+      "values": [
+        0.3064535268264882,
+        0.6128896323962045,
+        0.006098784886499445,
+        -2.2963387881646439e-7,
+        0.7018842201048485,
+        -0.43839527395267264
+      ]
+    },
+    {
+      "time_s": 0.04,
+      "values": [
+        0.2938926261462366,
+        0.5877685278153606,
+        0.005848886976497748,
+        -2.991506295372511e-7,
+        0.7008020789508362,
+        -0.4452355387374801
+      ]
+    },
+    {
+      "time_s": 0.0405,
+      "values": [
+        0.28104168892606524,
+        0.5620673655168136,
+        0.005593241259302034,
+        -3.927216341807595e-7,
+        0.699646112517385,
+        -0.4522747774728414
+      ]
+    },
+    {
+      "time_s": 0.041,
+      "values": [
+        0.26791339748949833,
+        0.5358115095709032,
+        0.005332109320511476,
+        -5.19547435534931e-7,
+        0.6984094574953984,
+        -0.45951325986160463
+      ]
+    },
+    {
+      "time_s": 0.0415,
+      "values": [
+        0.25452070787518555,
+        0.5090268714998861,
+        0.005065762041390338,
+        -6.926768238150653e-7,
+        0.6970840785350677,
+        -0.4669521530981775
+      ]
+    },
+    {
+      "time_s": 0.042,
+      "values": [
+        0.2408768370508576,
+        0.481739884711533,
+        0.004794481100821163,
+        -9.307631882596012e-7,
+        0.6956604964786905,
+        -0.47459372140888373
+      ]
+    },
+    {
+      "time_s": 0.0425,
+      "values": [
+        0.22699524986977324,
+        0.4539774784189227,
+        0.004518561350034209,
+        -0.0000012606987572784186,
+        0.6941274350470678,
+        -0.4824415675989924
+      ]
+    },
+    {
+      "time_s": 0.043000000000000003,
+      "values": [
+        0.21288964578253625,
+        0.4257670510725977,
+        0.0042383145441479315,
+        -0.0000017216105022486511,
+        0.6924713560767677,
+        -0.4905009247551087
+      ]
+    },
+    {
+      "time_s": 0.043500000000000004,
+      "values": [
+        0.19857394531739012,
+        0.39713644333183173,
+        0.003954075210305333,
+        -0.000002370997222630628,
+        0.6906758405743286,
+        -0.498779005789591
+      ]
+    },
+    {
+      "time_s": 0.044,
+      "values": [
+        0.18406227634233926,
+        0.3681139106024118,
+        0.003666209928716846,
+        -0.000003294283850921479,
+        0.6887207539144178,
+        -0.5072854151366446
+      ]
+    },
+    {
+      "time_s": 0.0445,
+      "values": [
+        0.16936896012264585,
+        0.3387280951689253,
+        0.0033751321501408194,
+        -0.000004619916229456865,
+        0.6865811055441811,
+        -0.5160326168000122
+      ]
+    },
+    {
+      "time_s": 0.045,
+      "values": [
+        0.15450849718747398,
+        0.3090079979501591,
+        0.0030813261406901888,
+        -0.000006543586961784491,
+        0.6842254726968404,
+        -0.5250364278730878
+      ]
+    },
+    {
+      "time_s": 0.0455,
+      "values": [
+        0.13949555301961475,
+        0.2789829499065451,
+        0.0027853862155389217,
+        -0.00000936775362244031,
+        0.6816137998711433,
+        -0.534316448890111
+      ]
+    },
+    {
+      "time_s": 0.046,
+      "values": [
+        0.12434494358242762,
+        0.2486825831284332,
+        0.0024880819430725507,
+        -0.000013567130577983167,
+        0.6786943110863908,
+        -0.5438962140353526
+      ]
+    },
+    {
+      "time_s": 0.0465,
+      "values": [
+        0.10907162069827137,
+        0.21813680163210156,
+        0.0021904678431662176,
+        -0.000019898677823550165,
+        0.6753991981285893,
+        -0.5538025657225613
+      ]
+    },
+    {
+      "time_s": 0.047,
+      "values": [
+        0.0936906572928625,
+        0.1873757518844824,
+        0.0018940690185876648,
+        -0.000029587525602396658,
+        0.6716387557142927,
+        -0.5640631701898562
+      ]
+    },
+    {
+      "time_s": 0.0475,
+      "values": [
+        0.07821723252011549,
+        0.15642979306166865,
+        0.0016011923047899808,
+        -0.000044638420006292565,
+        0.6672939941254329,
+        -0.5746999161542478
+      ]
+    },
+    {
+      "time_s": 0.048,
+      "values": [
+        0.06266661678215227,
+        0.12532946700926467,
+        0.0013154251904917748,
+        -0.00006833494955217829,
+        0.6622092448325687,
+        -0.5857138848777038
+      ]
+    },
+    {
+      "time_s": 0.0485,
+      "values": [
+        0.047054156659257176,
+        0.09410546780163827,
+        0.0010423393597060902,
+        -0.0001059433682849393,
+        0.6561906736737485,
+        -0.5970552241260308
+      ]
+    },
+    {
+      "time_s": 0.049,
+      "values": [
+        0.03139525976465679,
+        0.06278861071841971,
+        0.000790154245924093,
+        -0.00016537648585238985,
+        0.6490262269361662,
+        -0.6085733907380162
+      ]
+    },
+    {
+      "time_s": 0.0495,
+      "values": [
+        0.01570537953906412,
+        0.03140980056715072,
+        0.0005694243066579622,
+        -0.00025688124163230746,
+        0.6405528174414747,
+        -0.6199640266830219
+      ]
+    },
+    {
+      "time_s": 0.05,
+      "values": [
+        6.123233995736757e-17,
+        -5.0027249094577076e-12,
+        0.00039019640022206457,
+        -0.0003901964002718437,
+        0.6307765050605605,
+        -0.6307765050638602
+      ]
+    },
+    {
+      "time_s": 0.0505,
+      "values": [
+        -0.015705379539063997,
+        -0.03140980057715715,
+        0.0002568812415969094,
+        -0.0005694243067221359,
+        0.6199640266794577,
+        -0.6405528174443896
+      ]
+    },
+    {
+      "time_s": 0.051000000000000004,
+      "values": [
+        -0.031395259764656666,
+        -0.06278861072842909,
+        0.00016537648582887494,
+        -0.0007901542460001819,
+        0.6085733907343385,
+        -0.6490262269386569
+      ]
+    },
+    {
+      "time_s": 0.051500000000000004,
+      "values": [
+        -0.04705415665925705,
+        -0.09410546781165245,
+        0.00010594336826990192,
+        -0.0010423393597906994,
+        0.5970552241223596,
+        -0.656190673675848
+      ]
+    },
+    {
+      "time_s": 0.052000000000000005,
+      "values": [
+        -0.06266661678215216,
+        -0.1253294670192855,
+        0.0000683349495426705,
+        -0.0013154251905819793,
+        0.5857138848741051,
+        -0.6622092448343424
+      ]
+    },
+    {
+      "time_s": 0.0525,
+      "values": [
+        -0.07821723252011538,
+        -0.15642979307169882,
+        0.00004463842008150587,
+        -0.001601192301520943,
+        0.5746999161978287,
+        -0.6672939940726264
+      ]
+    },
+    {
+      "time_s": 0.053,
+      "values": [
+        -0.09369065729286238,
+        -0.18737575189452021,
+        0.000029587525539856214,
+        -0.0018940690228209053,
+        0.5640631701351844,
+        -0.6716387557721006
+      ]
+    },
+    {
+      "time_s": 0.0535,
+      "values": [
+        -0.10907162069827125,
+        -0.21813680164215146,
+        0.000019898677805722547,
+        -0.002190467845059954,
+        0.5538025656993883,
+        -0.6753991981509505
+      ]
+    },
+    {
+      "time_s": 0.054,
+      "values": [
+        -0.12434494358242751,
+        -0.2486825831384962,
+        0.000013567130572223348,
+        -0.0024880819439512796,
+        0.5438962140243718,
+        -0.6786943110955257
+      ]
+    },
+    {
+      "time_s": 0.0545,
+      "values": [
+        -0.13949555301961467,
+        -0.27898294991662254,
+        0.000009367753620165889,
+        -0.002785386215985573,
+        0.5343164488838312,
+        -0.6816137998752909
+      ]
+    },
+    {
+      "time_s": 0.055,
+      "values": [
+        -0.15450849718747386,
+        -0.30900799796025225,
+        0.000006543586960670216,
+        -0.0030813261409500395,
+        0.5250364278686833,
+        -0.6842254726990217
+      ]
+    },
+    {
+      "time_s": 0.0555,
+      "values": [
+        -0.16936896012264577,
+        -0.33872809517903546,
+        0.000004619916228811283,
+        -0.0033751321503175287,
+        0.5160326167963979,
+        -0.6865811055455353
+      ]
+    },
+    {
+      "time_s": 0.056,
+      "values": [
+        -0.18406227634233918,
+        -0.3681139106125401,
+        0.0000032942838505067015,
+        -0.0036662099288553023,
+        0.507285415133388,
+        -0.6887207539153946
+      ]
+    },
+    {
+      "time_s": 0.0565,
+      "values": [
+        -0.19857394531739042,
+        -0.3971364433419802,
+        0.000002370997222348256,
+        -0.003954075210425595,
+        0.4987790057865107,
+        -0.6906758405751152
+      ]
+    },
+    {
+      "time_s": 0.057,
+      "values": [
+        -0.21288964578253636,
+        -0.4257670510827663,
+        0.0000017216105020500028,
+        -0.004238314544259207,
+        0.4905009247521242,
+        -0.6924713560774468
+      ]
+    },
+    {
+      "time_s": 0.0575,
+      "values": [
+        -0.22699524986977354,
+        -0.45397747842911323,
+        0.00000126069875713573,
+        -0.0045185613501410905,
+        0.48244156759606505,
+        -0.6941274350476796
+      ]
+    },
+    {
+      "time_s": 0.058,
+      "values": [
+        -0.2408768370508577,
+        -0.48173988472174556,
+        9.307631881556111e-7,
+        -0.004794481100925833,
+        0.47459372140599393,
+        -0.6956604964792552
+      ]
+    },
+    {
+      "time_s": 0.0585,
+      "values": [
+        -0.2545207078751858,
+        -0.5090268715101225,
+        6.926768237383842e-7,
+        -0.005065762041493894,
+        0.4669521530953142,
+        -0.6970840785355965
+      ]
+    },
+    {
+      "time_s": 0.059000000000000004,
+      "values": [
+        -0.2679133974894984,
+        -0.5358115095811634,
+        5.195474354778089e-7,
+        -0.005332109320614529,
+        0.4595132598587609,
+        -0.6984094574958983
+      ]
+    },
+    {
+      "time_s": 0.059500000000000004,
+      "values": [
+        -0.2810416889260655,
+        -0.5620673655270992,
+        3.927216341378102e-7,
+        -0.005593241259404928,
+        0.45227477747001277,
+        -0.6996461125178608
+      ]
+    },
+    {
+      "time_s": 0.06,
+      "values": [
+        -0.2938926261462365,
+        -0.5877685278256711,
+        2.991506295046711e-7,
+        -0.00584888697660069,
+        0.4452355387346632,
+        -0.7008020789512915
+      ]
+    },
+    {
+      "time_s": 0.0605,
+      "values": [
+        -0.30645352682648813,
+        -0.6128896324065414,
+        2.296338787915353e-7,
+        -0.006098784886602451,
+        0.43839527394986477,
+        -0.7018842201052854
+      ]
+    },
+    {
+      "time_s": 0.061,
+      "values": [
+        -0.3187119948743448,
+        -0.6374058876783586,
+        1.7763589111538708e-7,
+        -0.00634268176531233,
+        0.43175444591885503,
+        -0.7028984386264746
+      ]
+    },
+    {
+      "time_s": 0.0615,
+      "values": [
+        -0.33065593266182586,
+        -0.6612930989915595,
+        1.3848156608567627e-7,
+        -0.006580332188889259,
+        0.4253141131322249,
+        -0.7038498426322918
+      ]
+    },
+    {
+      "time_s": 0.062,
+      "values": [
+        -0.34227355296434436,
+        -0.684527692512582,
+        1.0880417634408208e-7,
+        -0.006811498219291657,
+        0.4190758158162119,
+        -0.7047428775650805
+      ]
+    },
+    {
+      "time_s": 0.0625,
+      "values": [
+        -0.35355339059327373,
+        -0.7070867384857946,
+        8.616360593627167e-8,
+        -0.007035949253983614,
+        0.4130414805279597,
+        -0.7055814317979588
+      ]
+    },
+    {
+      "time_s": 0.063,
+      "values": [
+        -0.36448431371070567,
+        -0.7289479738600886,
+        6.878034556915159e-8,
+        -0.007253461985076131,
+        0.4072133398093146,
+        -0.7063689219386199
+      ]
+    },
+    {
+      "time_s": 0.0635,
+      "values": [
+        -0.3750555348152297,
+        -0.750089824257723,
+        5.534883825658327e-8,
+        -0.0074638204312732015,
+        0.4015938640955852,
+        -0.7071083622800395
+      ]
+    },
+    {
+      "time_s": 0.064,
+      "values": [
+        -0.3852566213878946,
+        -0.7704914252636842,
+        4.4905634239794115e-8,
+        -0.007666816017866823,
+        0.3961857036304621,
+        -0.7078024217602052
+      ]
+    },
+    {
+      "time_s": 0.0645,
+      "values": [
+        -0.39507750618784515,
+        -0.7901326430145076,
+        3.673567381722821e-8,
+        -0.007862247687888494,
+        0.39099163858375635,
+        -0.7084534709957605
+      ]
+    },
+    {
+      "time_s": 0.065,
+      "values": [
+        -0.40450849718747367,
+        -0.8089940940662115,
+        3.030527124936457e-8,
+        -0.008049922032789291,
+        0.3860145359248488,
+        -0.7090636213638786
+      ]
+    },
+    {
+      "time_s": 0.0655,
+      "values": [
+        -0.4135402871372808,
+        -0.8270571645217079,
+        2.521391573260576e-8,
+        -0.008229653434567412,
+        0.38125731188924705,
+        -0.7096347576649626
+      ]
+    },
+    {
+      "time_s": 0.066,
+      "values": [
+        -0.42216396275100765,
+        -0.844304028398804,
+        2.1159413040858597e-8,
+        -0.008401264213681179,
+        0.3767228991030131,
+        -0.710168565565406
+      ]
+    },
+    {
+      "time_s": 0.0665,
+      "values": [
+        -0.4303710135019719,
+        -0.8607176652206494,
+        1.7912539596018785e-8,
+        -0.008564584778736409,
+        0.37241421761188553,
+        -0.7106665547658202
+      ]
+    },
+    {
+      "time_s": 0.067,
+      "values": [
+        -0.4381533400219318,
+        -0.8762818768112732,
+        1.529851674986175e-8,
+        -0.008719453775084556,
+        0.36833414920807117,
+        -0.7111300786453114
+      ]
+    },
+    {
+      "time_s": 0.0675,
+      "values": [
+        -0.4455032620941839,
+        -0.8909813032796247,
+        1.3183401128038645e-8,
+        -0.008865718230262588,
+        0.36448551456539413,
+        -0.71156035098161
+      ]
+    },
+    {
+      "time_s": 0.068,
+      "values": [
+        -0.4524135262330099,
+        -0.9048014381763506,
+        1.146403690428216e-8,
+        -0.009003233694761907,
+        0.3608710527886023,
+        -0.7119584602292979
+      ]
+    },
+    {
+      "time_s": 0.0685,
+      "values": [
+        -0.4588773128419906,
+        -0.917728642808352,
+        1.0060601965524474e-8,
+        -0.009131864377012498,
+        0.35749340305973853,
+        -0.7123253817460509
+      ]
+    },
+    {
+      "time_s": 0.069,
+      "values": [
+        -0.46488824294412573,
+        -0.9297501596970039,
+        8.911052417366875e-9,
+        -0.009251483305196677,
+        0.35435508803923677,
+        -0.7126619883772727
+      ]
+    },
+    {
+      "time_s": 0.0695,
+      "values": [
+        -0.4704403844771127,
+        -0.9408541251667649,
+        7.966963478063122e-9,
+        -0.009361972304511178,
+        0.3514584993734521,
+        -0.7129690590678106
+      ]
+    },
+    {
+      "time_s": 0.07,
+      "values": [
+        -0.47552825814757677,
+        -0.9510295810517472,
+        7.190402019651339e-9,
+        -0.009463222343873591,
+        0.34880588368352805,
+        -0.7132472872673461
+      ]
+    },
+    {
+      "time_s": 0.07050000000000001,
+      "values": [
+        -0.4801468428384716,
+        -0.9602664855087314,
+        6.551566136552335e-9,
+        -0.009555133471643927,
+        0.34639933097219033,
+        -0.7134972871127128
+      ]
+    },
+    {
+      "time_s": 0.07100000000000001,
+      "values": [
+        -0.4842915805643156,
+        -0.9685557229259443,
+        6.026996998835628e-9,
+        -0.009637614959074302,
+        0.3442407637055185,
+        -0.713719599273227
+      ]
+    },
+    {
+      "time_s": 0.07150000000000001,
+      "values": [
+        -0.4879583809693737,
+        -0.9758891129178404,
+        5.59822067536453e-9,
+        -0.009710585388439965,
+        0.3423319271926677,
+        -0.7139146958356777
+      ]
+    },
+    {
+      "time_s": 0.07200000000000001,
+      "values": [
+        -0.49114362536434436,
+        -0.9822594183970208,
+        5.250714827365265e-9,
+        -0.00977397273231426,
+        0.3406743810795977,
+        -0.7140829844587835
+      ]
+    },
+    {
+      "time_s": 0.0725,
+      "values": [
+        -0.49384417029756883,
+        -0.9876603527153326,
+        4.9731226872200135e-9,
+        -0.009827714423831048,
+        0.33926949191240185,
+        -0.714224811877467
+      ]
+    },
+    {
+      "time_s": 0.073,
+      "values": [
+        -0.4960573506572389,
+        -0.9920865858671161,
+        4.7566569693090365e-9,
+        -0.009871757417807055,
+        0.3381184267374415,
+        -0.7143404668227191
+      ]
+    },
+    {
+      "time_s": 0.0735,
+      "values": [
+        -0.49778098230153994,
+        -0.9955337497484821,
+        4.594651381638243e-9,
+        -0.009906058242620348,
+        0.3372221477145829,
+        -0.7144301824104202
+      ]
+    },
+    {
+      "time_s": 0.074,
+      "values": [
+        -0.4990133642141358,
+        -0.9979984424674422,
+        4.48222867753727e-9,
+        -0.009930583042761315,
+        0.33658140772681966,
+        -0.714494138041784
+      ]
+    },
+    {
+      "time_s": 0.0745,
+      "values": [
+        -0.4997532801828658,
+        -0.999478231700642,
+        4.416062767599732e-9,
+        -0.009945307611993205,
+        0.33619674697486124,
+        -0.7145324608487169
+      ]
+    },
+    {
+      "time_s": 0.075,
+      "values": [
+        -0.5,
+        -0.9999716570933939,
+        4.3942190865331976e-9,
+        -0.009950217417071054,
+        0.33606849054917765,
+        -0.7145452267090153
+      ]
+    },
+    {
+      "time_s": 0.0755,
+      "values": [
+        -0.4997532801828658,
+        -0.9994782317006421,
+        4.416062767602101e-9,
+        -0.009945307611987128,
+        0.3361967469748751,
+        -0.7145324608487011
+      ]
+    },
+    {
+      "time_s": 0.076,
+      "values": [
+        -0.4990133642141358,
+        -0.9979984424674422,
+        4.48222867755376e-9,
+        -0.009930583042720847,
+        0.3365814077269148,
+        -0.7144941380416785
+      ]
+    },
+    {
+      "time_s": 0.0765,
+      "values": [
+        -0.49778098230154,
+        -0.9955337497484822,
+        4.594651381694232e-9,
+        -0.009906058242486896,
+        0.3372221477148981,
+        -0.7144301824100718
+      ]
+    },
+    {
+      "time_s": 0.077,
+      "values": [
+        -0.49605735065723894,
+        -0.9920865858671162,
+        4.756656969447507e-9,
+        -0.00987175741749064,
+        0.3381184267381945,
+        -0.71434046682189
+      ]
+    },
+    {
+      "time_s": 0.0775,
+      "values": [
+        -0.4938441702975689,
+        -0.9876603527153327,
+        4.973122687508515e-9,
+        -0.009827714423206069,
+        0.3392694919139023,
+        -0.7142248118758221
+      ]
+    },
+    {
+      "time_s": 0.078,
+      "values": [
+        -0.4911436253643444,
+        -0.9822594183970209,
+        5.2507148279065644e-9,
+        -0.009773972731215832,
+        0.3406743810822641,
+        -0.7140829844558767
+      ]
+    },
+    {
+      "time_s": 0.0785,
+      "values": [
+        -0.48795838096937366,
+        -0.9758891129178404,
+        5.5982206763131785e-9,
+        -0.009710585386657164,
+        0.34233192719705063,
+        -0.713914695830929
+      ]
+    },
+    {
+      "time_s": 0.079,
+      "values": [
+        -0.48429158056431554,
+        -0.9685557229259442,
+        6.026997000422848e-9,
+        -0.009637614956342147,
+        0.34424076371233003,
+        -0.7137195992658947
+      ]
+    },
+    {
+      "time_s": 0.0795,
+      "values": [
+        -0.48014684283847153,
+        -0.9602664855087314,
+        6.55156613912402e-9,
+        -0.009555133467633876,
+        0.3463993309823431,
+        -0.7134972871018579
+      ]
+    },
+    {
+      "time_s": 0.08,
+      "values": [
+        -0.4755282581475768,
+        -0.9510295810517475,
+        7.1904020237254095e-9,
+        -0.00946322233818046,
+        0.3488058836981831,
+        -0.7132472872517857
+      ]
+    },
+    {
+      "time_s": 0.0805,
+      "values": [
+        -0.4704403844771126,
+        -0.9408541251667651,
+        7.96696348441748e-9,
+        -0.009361972296637043,
+        0.3514584993940817,
+        -0.7129690590460562
+      ]
+    },
+    {
+      "time_s": 0.081,
+      "values": [
+        -0.4648882429441256,
+        -0.9297501596970041,
+        8.911052427174087e-9,
+        -0.00925148329453135,
+        0.3543550880677029,
+        -0.712661988347455
+      ]
+    },
+    {
+      "time_s": 0.0815,
+      "values": [
+        -0.4588773128419905,
+        -0.9177286428083503,
+        1.0060601931972687e-8,
+        -0.009131864409466233,
+        0.35749340297347976,
+        -0.7123253818379722
+      ]
+    },
+    {
+      "time_s": 0.082,
+      "values": [
+        -0.45241352623300973,
+        -0.9048014381763503,
+        1.14640369042822e-8,
+        -0.009003233694761907,
+        0.36087105278860243,
+        -0.7119584602292979
+      ]
+    },
+    {
+      "time_s": 0.0825,
+      "values": [
+        -0.44550326209418395,
+        -0.8909813032796248,
+        1.3183401128038645e-8,
+        -0.008865718230262493,
+        0.36448551456539413,
+        -0.7115603509816097
+      ]
+    },
+    {
+      "time_s": 0.083,
+      "values": [
+        -0.4381533400219317,
+        -0.876281876811273,
+        1.5298516749861802e-8,
+        -0.008719453775084556,
+        0.3683341492080713,
+        -0.7111300786453114
+      ]
+    },
+    {
+      "time_s": 0.0835,
+      "values": [
+        -0.43037101350197177,
+        -0.8607176652206492,
+        1.7912539596018818e-8,
+        -0.008564584778736409,
+        0.3724142176118856,
+        -0.7106665547658202
+      ]
+    },
+    {
+      "time_s": 0.084,
+      "values": [
+        -0.42216396275100754,
+        -0.8443040283988038,
+        2.1159413040858706e-8,
+        -0.008401264213681179,
+        0.3767228991030132,
+        -0.710168565565406
+      ]
+    },
+    {
+      "time_s": 0.0845,
+      "values": [
+        -0.41354028713728097,
+        -0.8270571645217082,
+        2.5213915732605578e-8,
+        -0.008229653434567412,
+        0.3812573118892469,
+        -0.7096347576649626
+      ]
+    },
+    {
+      "time_s": 0.085,
+      "values": [
+        -0.40450849718747356,
+        -0.8089940940662113,
+        3.030527124936457e-8,
+        -0.008049922032789291,
+        0.3860145359248488,
+        -0.7090636213638786
+      ]
+    },
+    {
+      "time_s": 0.0855,
+      "values": [
+        -0.395077506187845,
+        -0.7901326430145073,
+        3.673567381722821e-8,
+        -0.007862247687888494,
+        0.39099163858375635,
+        -0.7084534709957605
+      ]
+    },
+    {
+      "time_s": 0.08600000000000001,
+      "values": [
+        -0.3852566213878945,
+        -0.770491425263684,
+        4.490563423979404e-8,
+        -0.00766681601786677,
+        0.39618570363046207,
+        -0.707802421760205
+      ]
+    },
+    {
+      "time_s": 0.08650000000000001,
+      "values": [
+        -0.3750555348152297,
+        -0.7500898242577231,
+        5.534883825658327e-8,
+        -0.0074638204312732015,
+        0.4015938640955852,
+        -0.7071083622800395
+      ]
+    },
+    {
+      "time_s": 0.08700000000000001,
+      "values": [
+        -0.36448431371070544,
+        -0.7289479738600881,
+        6.878034556915183e-8,
+        -0.007253461985076131,
+        0.40721333980931473,
+        -0.7063689219386199
+      ]
+    },
+    {
+      "time_s": 0.08750000000000001,
+      "values": [
+        -0.3535533905932735,
+        -0.7070867384857942,
+        8.616360593627258e-8,
+        -0.0070359492539836385,
+        0.41304148052795997,
+        -0.705581431797959
+      ]
+    },
+    {
+      "time_s": 0.088,
+      "values": [
+        -0.3422735529643448,
+        -0.684527692512583,
+        1.0880417634408169e-7,
+        -0.006811498219291608,
+        0.4190758158162118,
+        -0.7047428775650803
+      ]
+    },
+    {
+      "time_s": 0.0885,
+      "values": [
+        -0.33065593266182614,
+        -0.6612930989915601,
+        1.3848156608567677e-7,
+        -0.006580332188889166,
+        0.425314113132225,
+        -0.7038498426322914
+      ]
+    },
+    {
+      "time_s": 0.089,
+      "values": [
+        -0.31871199487434515,
+        -0.6374058876783593,
+        1.77635891115389e-7,
+        -0.0063426817653122625,
+        0.4317544459188553,
+        -0.7028984386264743
+      ]
+    },
+    {
+      "time_s": 0.0895,
+      "values": [
+        -0.30645352682648824,
+        -0.6128896324065415,
+        2.2963387879154346e-7,
+        -0.006098784886602256,
+        0.4383952739498657,
+        -0.7018842201052845
+      ]
+    },
+    {
+      "time_s": 0.09,
+      "values": [
+        -0.293892626146237,
+        -0.5877685278256721,
+        2.991506295046881e-7,
+        -0.005848886976600295,
+        0.4452355387346647,
+        -0.7008020789512898
+      ]
+    },
+    {
+      "time_s": 0.0905,
+      "values": [
+        -0.28104168892606546,
+        -0.5620673655270991,
+        3.927216341378535e-7,
+        -0.005593241259404332,
+        0.4522747774700156,
+        -0.699646112517858
+      ]
+    },
+    {
+      "time_s": 0.091,
+      "values": [
+        -0.26791339748949855,
+        -0.5358115095811637,
+        5.195474354779087e-7,
+        -0.005332109320613487,
+        0.4595132598587659,
+        -0.6984094574958932
+      ]
+    },
+    {
+      "time_s": 0.0915,
+      "values": [
+        -0.2545207078751856,
+        -0.509026871510122,
+        6.926768237386302e-7,
+        -0.005065762041492076,
+        0.4669521530953234,
+        -0.6970840785355872
+      ]
+    },
+    {
+      "time_s": 0.092,
+      "values": [
+        -0.24087683705085805,
+        -0.4817398847217463,
+        9.307631881562161e-7,
+        -0.004794481100922716,
+        0.47459372140601075,
+        -0.6956604964792383
+      ]
+    },
+    {
+      "time_s": 0.0925,
+      "values": [
+        -0.22699524986977349,
+        -0.4539774784291131,
+        0.0000012606987571372974,
+        -0.004518561350135472,
+        0.4824415675960972,
+        -0.6941274350476474
+      ]
+    },
+    {
+      "time_s": 0.093,
+      "values": [
+        -0.2128896457825365,
+        -0.4257670510827666,
+        0.0000017216105020541683,
+        -0.004238314544248907,
+        0.4905009247521868,
+        -0.692471356077384
+      ]
+    },
+    {
+      "time_s": 0.0935,
+      "values": [
+        -0.19857394531739014,
+        -0.3971364433419797,
+        0.0000023709972223599057,
+        -0.003954075210406068,
+        0.49877900578663775,
+        -0.6906758405749875
+      ]
+    },
+    {
+      "time_s": 0.094,
+      "values": [
+        -0.18406227634233932,
+        -0.3681139106125404,
+        0.000003294283850540572,
+        -0.0036662099288172693,
+        0.5072854151336539,
+        -0.6887207539151262
+      ]
+    },
+    {
+      "time_s": 0.0945,
+      "values": [
+        -0.1693689601226457,
+        -0.33872809517903535,
+        0.000004619916228914768,
+        -0.0033751321502408947,
+        0.5160326167969773,
+        -0.686581105544948
+      ]
+    },
+    {
+      "time_s": 0.095,
+      "values": [
+        -0.1545084971874738,
+        -0.30900799796025213,
+        0.000006543586961003538,
+        -0.0030813261407898512,
+        0.5250364278700009,
+        -0.684225472697677
+      ]
+    },
+    {
+      "time_s": 0.0955,
+      "values": [
+        -0.1394955530196144,
+        -0.2789829499166221,
+        0.000009367753621300037,
+        -0.0027853862156380373,
+        0.5343164488869626,
+        -0.6816137998720637
+      ]
+    },
+    {
+      "time_s": 0.096,
+      "values": [
+        -0.12434494358242767,
+        -0.24868258313849673,
+        0.000013567130576293558,
+        -0.0024880819431709954,
+        0.5438962140321315,
+        -0.6786943110874142
+      ]
+    },
+    {
+      "time_s": 0.0965,
+      "values": [
+        -0.10907162069827123,
+        -0.21813680164215182,
+        0.00001989867782100828,
+        -0.002190467843263673,
+        0.5538025657192572,
+        -0.67539919812974
+      ]
+    },
+    {
+      "time_s": 0.097,
+      "values": [
+        -0.09369065729286234,
+        -0.18737575189452127,
+        0.00002958752559850916,
+        -0.0018940690186836685,
+        0.5640631701864578,
+        -0.6716387557156036
+      ]
+    },
+    {
+      "time_s": 0.0975,
+      "values": [
+        -0.07821723252011512,
+        -0.15642979307169722,
+        0.000044638420000252596,
+        -0.00160119230488374,
+        0.574699916150748,
+        -0.6672939941269473
+      ]
+    },
+    {
+      "time_s": 0.098,
+      "values": [
+        -0.06266661678215234,
+        -0.12532946701928585,
+        0.0000683349495426705,
+        -0.0013154251905819793,
+        0.5857138848741051,
+        -0.6622092448343424
+      ]
+    },
+    {
+      "time_s": 0.0985,
+      "values": [
+        -0.04705415665925702,
+        -0.09410546781165238,
+        0.00010594336826990192,
+        -0.0010423393597906957,
+        0.5970552241223596,
+        -0.6561906736758479
+      ]
+    },
+    {
+      "time_s": 0.099,
+      "values": [
+        -0.03139525976465663,
+        -0.06278861072842902,
+        0.00016537648582887494,
+        -0.0007901542460001763,
+        0.6085733907343385,
+        -0.6490262269386567
+      ]
+    },
+    {
+      "time_s": 0.0995,
+      "values": [
+        -0.015705379539063737,
+        -0.03140980057715663,
+        0.0002568812415969103,
+        -0.0005694243067221298,
+        0.6199640266794578,
+        -0.6405528174443894
+      ]
+    },
+    {
+      "time_s": 0.1,
+      "values": [
+        0,
+        -5.002847369145645e-12,
+        0.00039019640022206186,
+        -0.0003901964002718451,
+        0.6307765050605604,
+        -0.6307765050638603
+      ]
+    },
+    {
+      "time_s": 0.1005,
+      "values": [
+        0.015705379539064507,
+        0.03140980056715149,
+        0.0005694243066579703,
+        -0.0002568812416323038,
+        0.6405528174414751,
+        -0.6199640266830215
+      ]
+    },
+    {
+      "time_s": 0.101,
+      "values": [
+        0.031395259764656715,
+        0.06278861071841955,
+        0.0007901542459240902,
+        -0.00016537648585238928,
+        0.6490262269361661,
+        -0.6085733907380161
+      ]
+    },
+    {
+      "time_s": 0.1015,
+      "values": [
+        0.04705415665925755,
+        0.09410546780163902,
+        0.0010423393597061013,
+        -0.00010594336828493893,
+        0.6561906736737487,
+        -0.5970552241260307
+      ]
+    },
+    {
+      "time_s": 0.10200000000000001,
+      "values": [
+        0.06266661678215218,
+        0.1253294670092645,
+        0.0013154251904917748,
+        -0.0000683349495521778,
+        0.6622092448325687,
+        -0.5857138848777037
+      ]
+    },
+    {
+      "time_s": 0.10250000000000001,
+      "values": [
+        0.07821723252011584,
+        0.15642979306167043,
+        0.0016011923014272009,
+        -0.00004463842008754536,
+        0.667293994071112,
+        -0.5746999162013282
+      ]
+    },
+    {
+      "time_s": 0.10300000000000001,
+      "values": [
+        0.09369065729286238,
+        0.18737575188448105,
+        0.0018940690227249011,
+        -0.00002958752554374382,
+        0.6716387557707897,
+        -0.5640631701385829
+      ]
+    },
+    {
+      "time_s": 0.10350000000000001,
+      "values": [
+        0.10907162069827171,
+        0.21813680163210183,
+        0.002190467844962491,
+        -0.00001989867780826436,
+        0.6753991981497997,
+        -0.5538025657026923
+      ]
+    },
+    {
+      "time_s": 0.10400000000000001,
+      "values": [
+        0.12434494358242751,
+        0.24868258312843278,
+        0.0024880819438528345,
+        -0.000013567130573912713,
+        0.6786943110945023,
+        -0.5438962140275926
+      ]
+    },
+    {
+      "time_s": 0.1045,
+      "values": [
+        0.13949555301961442,
+        0.2789829499065444,
+        0.002785386215886409,
+        -0.000009367753621306427,
+        0.6816137998743701,
+        -0.5343164488869803
+      ]
+    },
+    {
+      "time_s": 0.105,
+      "values": [
+        0.15450849718747384,
+        0.3090079979501588,
+        0.003081326140850399,
+        -0.000006543586961451214,
+        0.6842254726981852,
+        -0.5250364278717704
+      ]
+    },
+    {
+      "time_s": 0.1055,
+      "values": [
+        0.1693689601226455,
+        0.3387280951689246,
+        0.0033751321502174525,
+        -0.0000046199162293533795,
+        0.6865811055447684,
+        -0.5160326167994329
+      ]
+    },
+    {
+      "time_s": 0.106,
+      "values": [
+        0.18406227634233913,
+        0.3681139106024115,
+        0.0036662099287548926,
+        -0.0000032942838508876317,
+        0.6887207539146861,
+        -0.5072854151363788
+      ]
+    },
+    {
+      "time_s": 0.1065,
+      "values": [
+        0.19857394531739014,
+        0.3971364433318318,
+        0.003954075210324859,
+        -0.0000023709972226189953,
+        0.6906758405744563,
+        -0.4987790057894641
+      ]
+    },
+    {
+      "time_s": 0.107,
+      "values": [
+        0.2128896457825365,
+        0.4257670510725982,
+        0.004238314544158261,
+        -0.0000017216105022444613,
+        0.6924713560768307,
+        -0.49050092475504575
+      ]
+    },
+    {
+      "time_s": 0.1075,
+      "values": [
+        0.22699524986977326,
+        0.4539774784189228,
+        0.004518561350039795,
+        -0.000001260698757276851,
+        0.6941274350470997,
+        -0.4824415675989603
+      ]
+    },
+    {
+      "time_s": 0.108,
+      "values": [
+        0.24087683705085786,
+        0.4817398847115335,
+        0.004794481100824314,
+        -9.307631882589895e-7,
+        0.6956604964787075,
+        -0.4745937214088667
+      ]
+    },
+    {
+      "time_s": 0.1085,
+      "values": [
+        0.25452070787518555,
+        0.5090268714998861,
+        0.005065762041392066,
+        -6.926768238148216e-7,
+        0.6970840785350766,
+        -0.46695215309816845
+      ]
+    },
+    {
+      "time_s": 0.109,
+      "values": [
+        0.2679133974894985,
+        0.5358115095709035,
+        0.005332109320512499,
+        -5.195474355348277e-7,
+        0.6984094574954034,
+        -0.4595132598615995
+      ]
+    },
+    {
+      "time_s": 0.1095,
+      "values": [
+        0.28104168892606524,
+        0.5620673655168136,
+        0.005593241259302651,
+        -3.9272163418071764e-7,
+        0.6996461125173878,
+        -0.4522747774728387
+      ]
+    },
+    {
+      "time_s": 0.11,
+      "values": [
+        0.2938926261462368,
+        0.5877685278153609,
+        0.005848886976498123,
+        -2.991506295372341e-7,
+        0.7008020789508379,
+        -0.4452355387374786
+      ]
+    },
+    {
+      "time_s": 0.1105,
+      "values": [
+        0.3064535268264882,
+        0.6128896323962044,
+        0.006098784886499597,
+        -2.2963387881645626e-7,
+        0.7018842201048492,
+        -0.43839527395267175
+      ]
+    },
+    {
+      "time_s": 0.111,
+      "values": [
+        0.3187119948743451,
+        0.6374058876679956,
+        0.006342681765209283,
+        -1.7763589113461952e-7,
+        0.7028984386260544,
+        -0.43175444592165535
+      ]
+    },
+    {
+      "time_s": 0.1115,
+      "values": [
+        0.3306559326618259,
+        0.661293098981169,
+        0.006580332188785881,
+        -1.3848156610064244e-7,
+        0.7038498426318854,
+        -0.4253141131350202
+      ]
+    },
+    {
+      "time_s": 0.112,
+      "values": [
+        0.34227355296434453,
+        0.6845276925021644,
+        0.006811498219188012,
+        -1.0880417635582547e-7,
+        0.7047428775646869,
+        -0.4190758158190035
+      ]
+    },
+    {
+      "time_s": 0.1125,
+      "values": [
+        0.35355339059327373,
+        0.707086738475349,
+        0.007035949253879753,
+        -8.616360594556362e-8,
+        0.705581431797577,
+        -0.413041480530749
+      ]
+    },
+    {
+      "time_s": 0.113,
+      "values": [
+        0.36448431371070594,
+        0.728947973849616,
+        0.007253461984971945,
+        -6.878034557656415e-8,
+        0.7063689219382484,
+        -0.40721333981210217
+      ]
+    },
+    {
+      "time_s": 0.1135,
+      "values": [
+        0.37505553481522974,
+        0.7500898242472224,
+        0.007463820431168698,
+        -5.534883826254742e-8,
+        0.7071083622796773,
+        -0.4015938640983723
+      ]
+    },
+    {
+      "time_s": 0.114,
+      "values": [
+        0.38525662138789485,
+        0.7704914252531564,
+        0.007666816017762066,
+        -4.4905634244633036e-8,
+        0.7078024217598518,
+        -0.3961857036332493
+      ]
+    },
+    {
+      "time_s": 0.1145,
+      "values": [
+        0.39507750618784515,
+        0.7901326430039521,
+        0.007862247687783468,
+        -3.673567382118824e-8,
+        0.708453470995415,
+        -0.39099163858654457
+      ]
+    },
+    {
+      "time_s": 0.115,
+      "values": [
+        0.40450849718747395,
+        0.8089940940556297,
+        0.008049922032684018,
+        -3.030527125263288e-8,
+        0.7090636213635403,
+        -0.38601453592763824
+      ]
+    },
+    {
+      "time_s": 0.1155,
+      "values": [
+        0.41354028713728097,
+        0.8270571645110993,
+        0.008229653434461864,
+        -2.5213915735326817e-8,
+        0.7096347576646309,
+        -0.3812573118920384
+      ]
+    },
+    {
+      "time_s": 0.116,
+      "values": [
+        0.4221639627510078,
+        0.8443040283881698,
+        0.00840126421357546,
+        -2.1159413043143978e-8,
+        0.7101685655650805,
+        -0.3767228991058067
+      ]
+    },
+    {
+      "time_s": 0.1165,
+      "values": [
+        0.4303710135019718,
+        0.8607176652099895,
+        0.00856458477863037,
+        -1.791253959795526e-8,
+        0.7106665547655,
+        -0.37241421761468174
+      ]
+    },
+    {
+      "time_s": 0.117,
+      "values": [
+        0.43815334002193196,
+        0.8762818768005892,
+        0.008719453774978273,
+        -1.529851675151726e-8,
+        0.7111300786449961,
+        -0.36833414921087015
+      ]
+    },
+    {
+      "time_s": 0.11750000000000001,
+      "values": [
+        0.44550326209418395,
+        0.8909813032689169,
+        0.008865718230156033,
+        -1.318340112946677e-8,
+        0.7115603509812991,
+        -0.364485514568196
+      ]
+    },
+    {
+      "time_s": 0.11800000000000001,
+      "values": [
+        0.45241352623300995,
+        0.9048014381656203,
+        0.009003233694655171,
+        -1.1464036905525455e-8,
+        0.7119584602289912,
+        -0.3608710527914074
+      ]
+    },
+    {
+      "time_s": 0.11850000000000001,
+      "values": [
+        0.4588773128419906,
+        0.9177286427976,
+        0.009131864376905566,
+        -1.0060601966616763e-8,
+        0.712325381745748,
+        -0.35749340306254673
+      ]
+    },
+    {
+      "time_s": 0.11900000000000001,
+      "values": [
+        0.4648882429441259,
+        0.929750159686232,
+        0.009251483305089528,
+        -8.911052418335274e-9,
+        0.7126619883769731,
+        -0.35435508804204763
+      ]
+    },
+    {
+      "time_s": 0.11950000000000001,
+      "values": [
+        0.4704403844771128,
+        0.9408541251559739,
+        0.00936197230440378,
+        -7.966963478929883e-9,
+        0.712969059067514,
+        -0.35145849937626605
+      ]
+    },
+    {
+      "time_s": 0.12,
+      "values": [
+        0.47552825814757677,
+        0.9510295810409383,
+        0.00946322234376604,
+        -7.1904020204343945e-9,
+        0.7132472872670521,
+        -0.3488058836863448
+      ]
+    },
+    {
+      "time_s": 0.1205,
+      "values": [
+        0.4801468428384716,
+        0.9602664854979062,
+        0.009555133471536147,
+        -6.551566137266507e-9,
+        0.713497287112421,
+        -0.34639933097500986
+      ]
+    },
+    {
+      "time_s": 0.121,
+      "values": [
+        0.48429158056431554,
+        0.9685557229151041,
+        0.009637614958966412,
+        -6.026996999493249e-9,
+        0.7137195992729375,
+        -0.34424076370834067
+      ]
+    },
+    {
+      "time_s": 0.1215,
+      "values": [
+        0.4879583809693736,
+        0.9758891129069871,
+        0.009710585388332017,
+        -5.5982206759758534e-9,
+        0.7139146958353901,
+        -0.3423319271954921
+      ]
+    },
+    {
+      "time_s": 0.122,
+      "values": [
+        0.49114362536434436,
+        0.9822594183861559,
+        0.009773972732206199,
+        -5.250714827939061e-9,
+        0.7140829844584975,
+        -0.3406743810824242
+      ]
+    },
+    {
+      "time_s": 0.1225,
+      "values": [
+        0.4938441702975689,
+        0.9876603527044581,
+        0.009827714423722916,
+        -4.973122687763792e-9,
+        0.7142248118771823,
+        -0.33926949191523004
+      ]
+    },
+    {
+      "time_s": 0.123,
+      "values": [
+        0.4960573506572389,
+        0.9920865858562333,
+        0.009871757417698754,
+        -4.756656969829475e-9,
+        0.7143404668224353,
+        -0.3381184267402715
+      ]
+    },
+    {
+      "time_s": 0.1235,
+      "values": [
+        0.49778098230153994,
+        0.9955337497375929,
+        0.009906058242511988,
+        -4.5946513821411355e-9,
+        0.7144301824101373,
+        -0.3372221477174139
+      ]
+    },
+    {
+      "time_s": 0.124,
+      "values": [
+        0.4990133642141358,
+        0.9979984424565485,
+        0.009930583042652898,
+        -4.48222867802805e-9,
+        0.7144941380415015,
+        -0.3365814077296517
+      ]
+    },
+    {
+      "time_s": 0.1245,
+      "values": [
+        0.4997532801828658,
+        0.9994782316897456,
+        0.009945307611884663,
+        -4.416062768083282e-9,
+        0.7145324608484347,
+        -0.3361967469776934
+      ]
+    },
+    {
+      "time_s": 0.125,
+      "values": [
+        0.5,
+        0.9999716570824965,
+        0.009950217416962562,
+        -4.394219087014434e-9,
+        0.7145452267087333,
+        -0.33606849055201027
+      ]
+    },
+    {
+      "time_s": 0.1255,
+      "values": [
+        0.4997532801828658,
+        0.9994782316897456,
+        0.00994530761187869,
+        -4.416062768085675e-9,
+        0.7145324608484191,
+        -0.3361967469777074
+      ]
+    },
+    {
+      "time_s": 0.126,
+      "values": [
+        0.4990133642141358,
+        0.9979984424565486,
+        0.009930583042612396,
+        -4.482228678044499e-9,
+        0.714494138041396,
+        -0.33658140772974665
+      ]
+    },
+    {
+      "time_s": 0.1265,
+      "values": [
+        0.49778098230153994,
+        0.9955337497375929,
+        0.009906058242378571,
+        -4.594651382197125e-9,
+        0.714430182409789,
+        -0.33722214771772907
+      ]
+    },
+    {
+      "time_s": 0.127,
+      "values": [
+        0.4960573506572389,
+        0.9920865858562332,
+        0.009871757417382233,
+        -4.7566569699679454e-9,
+        0.714340466821606,
+        -0.33811842674102444
+      ]
+    },
+    {
+      "time_s": 0.1275,
+      "values": [
+        0.4938441702975689,
+        0.9876603527044581,
+        0.009827714423097902,
+        -4.9731226880523376e-9,
+        0.7142248118755374,
+        -0.3392694919167307
+      ]
+    },
+    {
+      "time_s": 0.128,
+      "values": [
+        0.49114362536434436,
+        0.982259418386156,
+        0.009773972731107701,
+        -5.25071482848038e-9,
+        0.7140829844555905,
+        -0.34067438108509074
+      ]
+    },
+    {
+      "time_s": 0.1285,
+      "values": [
+        0.4879583809693736,
+        0.9758891129069871,
+        0.009710585386549044,
+        -5.5982206769244915e-9,
+        0.713914695830641,
+        -0.34233192719987504
+      ]
+    },
+    {
+      "time_s": 0.129,
+      "values": [
+        0.48429158056431554,
+        0.9685557229151042,
+        0.009637614956234362,
+        -6.026997001080468e-9,
+        0.7137195992656054,
+        -0.3442407637151522
+      ]
+    },
+    {
+      "time_s": 0.1295,
+      "values": [
+        0.4801468428384716,
+        0.9602664854979063,
+        0.009555133467526164,
+        -6.5515661398381924e-9,
+        0.7134972871015663,
+        -0.3463993309851626
+      ]
+    },
+    {
+      "time_s": 0.13,
+      "values": [
+        0.47552825814757677,
+        0.9510295810409385,
+        0.00946322233807291,
+        -7.190402024508491e-9,
+        0.7132472872514917,
+        -0.34880588370099996
+      ]
+    },
+    {
+      "time_s": 0.1305,
+      "values": [
+        0.47044038447711256,
+        0.9408541251559738,
+        0.009361972296529644,
+        -7.966963485284271e-9,
+        0.7129690590457596,
+        -0.3514584993968958
+      ]
+    },
+    {
+      "time_s": 0.131,
+      "values": [
+        0.4648882429441257,
+        0.9297501596862321,
+        0.009251483294424134,
+        -8.911052428142534e-9,
+        0.7126619883471552,
+        -0.35435508807051386
+      ]
+    },
+    {
+      "time_s": 0.1315,
+      "values": [
+        0.4588773128419906,
+        0.9177286427975987,
+        0.009131864409359302,
+        -1.0060601933064815e-8,
+        0.7123253818376694,
+        -0.3574934029762875
+      ]
+    },
+    {
+      "time_s": 0.132,
+      "values": [
+        0.45241352623300973,
+        0.9048014381656199,
+        0.009003233694655171,
+        -1.1464036905525496e-8,
+        0.7119584602289912,
+        -0.3608710527914075
+      ]
+    },
+    {
+      "time_s": 0.1325,
+      "values": [
+        0.4455032620941836,
+        0.8909813032689162,
+        0.008865718230156033,
+        -1.3183401129466817e-8,
+        0.7115603509812991,
+        -0.3644855145681961
+      ]
+    },
+    {
+      "time_s": 0.133,
+      "values": [
+        0.43815334002193174,
+        0.8762818768005888,
+        0.008719453774978273,
+        -1.5298516751517398e-8,
+        0.7111300786449961,
+        -0.3683341492108704
+      ]
+    },
+    {
+      "time_s": 0.1335,
+      "values": [
+        0.43037101350197193,
+        0.8607176652099897,
+        0.00856458477863031,
+        -1.7912539597955228e-8,
+        0.7106665547654998,
+        -0.3724142176146817
+      ]
+    },
+    {
+      "time_s": 0.134,
+      "values": [
+        0.4221639627510075,
+        0.8443040283881691,
+        0.00840126421357537,
+        -2.1159413043144014e-8,
+        0.7101685655650802,
+        -0.37672289910580675
+      ]
+    },
+    {
+      "time_s": 0.1345,
+      "values": [
+        0.41354028713728064,
+        0.8270571645110988,
+        0.008229653434461864,
+        -2.5213915735327042e-8,
+        0.7096347576646309,
+        -0.3812573118920386
+      ]
+    },
+    {
+      "time_s": 0.135,
+      "values": [
+        0.4045084971874736,
+        0.808994094055629,
+        0.00804992203268399,
+        -3.0305271252633145e-8,
+        0.7090636213635402,
+        -0.38601453592763846
+      ]
+    },
+    {
+      "time_s": 0.1355,
+      "values": [
+        0.39507750618784526,
+        0.7901326430039524,
+        0.007862247687783468,
+        -3.6735673821188116e-8,
+        0.708453470995415,
+        -0.39099163858654445
+      ]
+    },
+    {
+      "time_s": 0.136,
+      "values": [
+        0.3852566213878945,
+        0.7704914252531557,
+        0.007666816017762066,
+        -4.4905634244633353e-8,
+        0.7078024217598518,
+        -0.39618570363324945
+      ]
+    },
+    {
+      "time_s": 0.1365,
+      "values": [
+        0.3750555348152294,
+        0.7500898242472217,
+        0.007463820431168698,
+        -5.5348838262547903e-8,
+        0.7071083622796773,
+        -0.4015938640983725
+      ]
+    },
+    {
+      "time_s": 0.137,
+      "values": [
+        0.36448431371070555,
+        0.7289479738496152,
+        0.007253461984971894,
+        -6.878034557656525e-8,
+        0.7063689219382482,
+        -0.40721333981210256
+      ]
+    },
+    {
+      "time_s": 0.1375,
+      "values": [
+        0.3535533905932738,
+        0.7070867384753492,
+        0.007035949253879677,
+        -8.616360594556362e-8,
+        0.7055814317975768,
+        -0.413041480530749
+      ]
+    },
+    {
+      "time_s": 0.138,
+      "values": [
+        0.3422735529643441,
+        0.6845276925021635,
+        0.006811498219187964,
+        -1.088041763558274e-7,
+        0.7047428775646867,
+        -0.41907581581900394
+      ]
+    },
+    {
+      "time_s": 0.1385,
+      "values": [
+        0.3306559326618254,
+        0.661293098981168,
+        0.006580332188785789,
+        -1.384815661006464e-7,
+        0.7038498426318851,
+        -0.4253141131350209
+      ]
+    },
+    {
+      "time_s": 0.139,
+      "values": [
+        0.3187119948743446,
+        0.6374058876679946,
+        0.006342681765209102,
+        -1.7763589113462518e-7,
+        0.7028984386260536,
+        -0.43175444592165624
+      ]
+    },
+    {
+      "time_s": 0.1395,
+      "values": [
+        0.3064535268264882,
+        0.6128896323962045,
+        0.006098784886499445,
+        -2.296338788164652e-7,
+        0.7018842201048485,
+        -0.43839527395267275
+      ]
+    },
+    {
+      "time_s": 0.14,
+      "values": [
+        0.29389262614623624,
+        0.5877685278153599,
+        0.005848886976497748,
+        -2.9915062953725434e-7,
+        0.7008020789508362,
+        -0.44523553873748034
+      ]
+    },
+    {
+      "time_s": 0.1405,
+      "values": [
+        0.2810416889260647,
+        0.5620673655168125,
+        0.005593241259302034,
+        -3.9272163418076507e-7,
+        0.699646112517385,
+        -0.45227477747284184
+      ]
+    },
+    {
+      "time_s": 0.14100000000000001,
+      "values": [
+        0.26791339748949794,
+        0.5358115095709024,
+        0.0053321093205114575,
+        -5.195474355349366e-7,
+        0.6984094574953983,
+        -0.4595132598616049
+      ]
+    },
+    {
+      "time_s": 0.14150000000000001,
+      "values": [
+        0.25452070787518555,
+        0.5090268714998861,
+        0.005065762041390338,
+        -6.926768238150628e-7,
+        0.6970840785350677,
+        -0.4669521530981774
+      ]
+    },
+    {
+      "time_s": 0.14200000000000002,
+      "values": [
+        0.24087683705085722,
+        0.48173988471153223,
+        0.00479448110082118,
+        -9.307631882596045e-7,
+        0.6956604964786907,
+        -0.47459372140888384
+      ]
+    },
+    {
+      "time_s": 0.14250000000000002,
+      "values": [
+        0.22699524986977265,
+        0.45397747841892155,
+        0.0045185613500341925,
+        -0.0000012606987572784366,
+        0.6941274350470676,
+        -0.4824415675989928
+      ]
+    },
+    {
+      "time_s": 0.14300000000000002,
+      "values": [
+        0.21288964578253586,
+        0.42576705107259694,
+        0.0042383145441479315,
+        -0.0000017216105022486693,
+        0.6924713560767677,
+        -0.490500924755109
+      ]
+    },
+    {
+      "time_s": 0.14350000000000002,
+      "values": [
+        0.19857394531739012,
+        0.39713644333183173,
+        0.003954075210305333,
+        -0.000002370997222630628,
+        0.6906758405743286,
+        -0.498779005789591
+      ]
+    },
+    {
+      "time_s": 0.14400000000000002,
+      "values": [
+        0.18406227634233843,
+        0.3681139106024101,
+        0.00366620992871682,
+        -0.0000032942838509215486,
+        0.6887207539144176,
+        -0.5072854151366452
+      ]
+    },
+    {
+      "time_s": 0.1445,
+      "values": [
+        0.16936896012264627,
+        0.33872809516892616,
+        0.0033751321501408194,
+        -0.000004619916229456815,
+        0.6865811055441811,
+        -0.516032616800012
+      ]
+    },
+    {
+      "time_s": 0.145,
+      "values": [
+        0.15450849718747398,
+        0.3090079979501591,
+        0.0030813261406901888,
+        -0.00000654358696178456,
+        0.6842254726968404,
+        -0.525036427873088
+      ]
+    },
+    {
+      "time_s": 0.1455,
+      "values": [
+        0.1394955530196152,
+        0.278982949906546,
+        0.0027853862155389217,
+        -0.000009367753622440276,
+        0.6816137998711433,
+        -0.5343164488901109
+      ]
+    },
+    {
+      "time_s": 0.146,
+      "values": [
+        0.12434494358242762,
+        0.2486825831284332,
+        0.0024880819430725507,
+        -0.000013567130577983167,
+        0.6786943110863908,
+        -0.5438962140353526
+      ]
+    },
+    {
+      "time_s": 0.1465,
+      "values": [
+        0.10907162069827181,
+        0.21813680163210245,
+        0.0021904678431662254,
+        -0.000019898677823549955,
+        0.6753991981285894,
+        -0.5538025657225609
+      ]
+    },
+    {
+      "time_s": 0.147,
+      "values": [
+        0.0936906572928625,
+        0.1873757518844824,
+        0.0018940690185876648,
+        -0.000029587525602396658,
+        0.6716387557142927,
+        -0.5640631701898562
+      ]
+    },
+    {
+      "time_s": 0.1475,
+      "values": [
+        0.07821723252011592,
+        0.15642979306166951,
+        0.001601192304789992,
+        -0.000044638420006292083,
+        0.667293994125433,
+        -0.5746999161542474
+      ]
+    },
+    {
+      "time_s": 0.148,
+      "values": [
+        0.06266661678215227,
+        0.12532946700926467,
+        0.0013154251904917748,
+        -0.0000683349495521778,
+        0.6622092448325687,
+        -0.5857138848777037
+      ]
+    },
+    {
+      "time_s": 0.1485,
+      "values": [
+        0.04705415665925762,
+        0.09410546780163914,
+        0.0010423393597060939,
+        -0.00010594336828493855,
+        0.6561906736737486,
+        -0.5970552241260306
+      ]
+    },
+    {
+      "time_s": 0.149,
+      "values": [
+        0.03139525976465679,
+        0.06278861071841971,
+        0.000790154245924093,
+        -0.00016537648585238985,
+        0.6490262269361662,
+        -0.6085733907380162
+      ]
+    },
+    {
+      "time_s": 0.1495,
+      "values": [
+        0.015705379539064562,
+        0.0314098005671516,
+        0.0005694243066579703,
+        -0.0002568812416323056,
+        0.6405528174414751,
+        -0.6199640266830216
+      ]
+    },
+    {
+      "time_s": 0.15,
+      "values": [
+        6.123233995736757e-17,
+        -5.002724909308608e-12,
+        0.00039019640022206457,
+        -0.0003901964002718451,
+        0.6307765050605605,
+        -0.6307765050638603
+      ]
+    },
+    {
+      "time_s": 0.1505,
+      "values": [
+        -0.015705379539063775,
+        -0.031409800577156706,
+        0.0002568812415969103,
+        -0.0005694243067221298,
+        0.6199640266794578,
+        -0.6405528174443894
+      ]
+    },
+    {
+      "time_s": 0.151,
+      "values": [
+        -0.031395259764656666,
+        -0.06278861072842909,
+        0.00016537648582887494,
+        -0.0007901542460001819,
+        0.6085733907343385,
+        -0.6490262269386569
+      ]
+    },
+    {
+      "time_s": 0.1515,
+      "values": [
+        -0.04705415665925683,
+        -0.09410546781165201,
+        0.0001059433682699023,
+        -0.0010423393597906957,
+        0.5970552241223597,
+        -0.6561906736758479
+      ]
+    },
+    {
+      "time_s": 0.152,
+      "values": [
+        -0.06266661678215216,
+        -0.1253294670192855,
+        0.00006833494954267027,
+        -0.0013154251905819793,
+        0.585713884874105,
+        -0.6622092448343424
+      ]
+    },
+    {
+      "time_s": 0.1525,
+      "values": [
+        -0.07821723252011516,
+        -0.15642979307169835,
+        0.00004463842008150618,
+        -0.001601192301520943,
+        0.5746999161978289,
+        -0.6672939940726264
+      ]
+    },
+    {
+      "time_s": 0.153,
+      "values": [
+        -0.09369065729286238,
+        -0.18737575189452021,
+        0.000029587525539856214,
+        -0.0018940690228209187,
+        0.5640631701351844,
+        -0.6716387557721009
+      ]
+    },
+    {
+      "time_s": 0.1535,
+      "values": [
+        -0.10907162069827105,
+        -0.21813680164215102,
+        0.00001989867780572262,
+        -0.0021904678450599463,
+        0.5538025656993885,
+        -0.6753991981509504
+      ]
+    },
+    {
+      "time_s": 0.154,
+      "values": [
+        -0.12434494358242751,
+        -0.2486825831384962,
+        0.000013567130572223251,
+        -0.0024880819439512796,
+        0.5438962140243717,
+        -0.6786943110955257
+      ]
+    },
+    {
+      "time_s": 0.1545,
+      "values": [
+        -0.13949555301961444,
+        -0.27898294991662215,
+        0.000009367753620165989,
+        -0.0027853862159855536,
+        0.5343164488838315,
+        -0.6816137998752907
+      ]
+    },
+    {
+      "time_s": 0.155,
+      "values": [
+        -0.15450849718747386,
+        -0.30900799796025225,
+        0.000006543586960670168,
+        -0.0030813261409500395,
+        0.5250364278686832,
+        -0.6842254726990217
+      ]
+    },
+    {
+      "time_s": 0.1555,
+      "values": [
+        -0.16936896012264555,
+        -0.338728095179035,
+        0.0000046199162288113,
+        -0.0033751321503175166,
+        0.516032616796398,
+        -0.6865811055455352
+      ]
+    },
+    {
+      "time_s": 0.156,
+      "values": [
+        -0.18406227634233918,
+        -0.3681139106125401,
+        0.0000032942838505067366,
+        -0.003666209928855276,
+        0.5072854151333882,
+        -0.6887207539153943
+      ]
+    },
+    {
+      "time_s": 0.1565,
+      "values": [
+        -0.19857394531739,
+        -0.3971364433419794,
+        0.000002370997222348273,
+        -0.003954075210425566,
+        0.4987790057865108,
+        -0.6906758405751151
+      ]
+    },
+    {
+      "time_s": 0.157,
+      "values": [
+        -0.21288964578253636,
+        -0.4257670510827663,
+        0.0000017216105020500028,
+        -0.004238314544259207,
+        0.49050092475212426,
+        -0.6924713560774468
+      ]
+    },
+    {
+      "time_s": 0.1575,
+      "values": [
+        -0.22699524986977315,
+        -0.45397747842911246,
+        0.0000012606987571357433,
+        -0.0045185613501410584,
+        0.48244156759606527,
+        -0.6941274350476794
+      ]
+    },
+    {
+      "time_s": 0.158,
+      "values": [
+        -0.2408768370508577,
+        -0.48173988472174556,
+        9.307631881556111e-7,
+        -0.004794481100925833,
+        0.47459372140599393,
+        -0.6956604964792552
+      ]
+    },
+    {
+      "time_s": 0.1585,
+      "values": [
+        -0.25452070787518544,
+        -0.5090268715101217,
+        6.926768237383892e-7,
+        -0.005065762041493894,
+        0.46695215309531435,
+        -0.6970840785355965
+      ]
+    },
+    {
+      "time_s": 0.159,
+      "values": [
+        -0.2679133974894984,
+        -0.5358115095811634,
+        5.195474354778089e-7,
+        -0.005332109320614529,
+        0.45951325985876085,
+        -0.6984094574958983
+      ]
+    },
+    {
+      "time_s": 0.1595,
+      "values": [
+        -0.2810416889260651,
+        -0.5620673655270985,
+        3.927216341378116e-7,
+        -0.005593241259404928,
+        0.4522747774700129,
+        -0.6996461125178608
+      ]
+    },
+    {
+      "time_s": 0.16,
+      "values": [
+        -0.2938926261462367,
+        -0.5877685278256715,
+        2.991506295046711e-7,
+        -0.00584888697660069,
+        0.4452355387346632,
+        -0.7008020789512915
+      ]
+    },
+    {
+      "time_s": 0.1605,
+      "values": [
+        -0.30645352682648813,
+        -0.6128896324065414,
+        2.2963387879153449e-7,
+        -0.006098784886602451,
+        0.4383952739498647,
+        -0.7018842201052854
+      ]
+    },
+    {
+      "time_s": 0.161,
+      "values": [
+        -0.318711994874345,
+        -0.6374058876783589,
+        1.776358911153858e-7,
+        -0.006342681765312375,
+        0.4317544459188548,
+        -0.7028984386264747
+      ]
+    },
+    {
+      "time_s": 0.1615,
+      "values": [
+        -0.33065593266182586,
+        -0.6612930989915595,
+        1.3848156608567677e-7,
+        -0.006580332188889259,
+        0.42531411313222495,
+        -0.7038498426322918
+      ]
+    },
+    {
+      "time_s": 0.162,
+      "values": [
+        -0.34227355296434453,
+        -0.6845276925125825,
+        1.0880417634408208e-7,
+        -0.006811498219291657,
+        0.41907581581621184,
+        -0.7047428775650805
+      ]
+    },
+    {
+      "time_s": 0.1625,
+      "values": [
+        -0.35355339059327373,
+        -0.7070867384857946,
+        8.616360593627167e-8,
+        -0.007035949253983614,
+        0.4130414805279597,
+        -0.7055814317979588
+      ]
+    },
+    {
+      "time_s": 0.163,
+      "values": [
+        -0.36448431371070594,
+        -0.7289479738600891,
+        6.87803455691511e-8,
+        -0.007253461985076131,
+        0.40721333980931446,
+        -0.7063689219386199
+      ]
+    },
+    {
+      "time_s": 0.1635,
+      "values": [
+        -0.3750555348152297,
+        -0.750089824257723,
+        5.534883825658318e-8,
+        -0.0074638204312732015,
+        0.4015938640955851,
+        -0.7071083622800395
+      ]
+    },
+    {
+      "time_s": 0.164,
+      "values": [
+        -0.3852566213878946,
+        -0.7704914252636842,
+        4.4905634239794115e-8,
+        -0.0076668160178667965,
+        0.3961857036304621,
+        -0.7078024217602051
+      ]
+    },
+    {
+      "time_s": 0.1645,
+      "values": [
+        -0.39507750618784515,
+        -0.7901326430145076,
+        3.6735673817228006e-8,
+        -0.007862247687888494,
+        0.39099163858375624,
+        -0.7084534709957605
+      ]
+    },
+    {
+      "time_s": 0.165,
+      "values": [
+        -0.4045084971874739,
+        -0.8089940940662119,
+        3.0305271249364464e-8,
+        -0.008049922032789264,
+        0.3860145359248487,
+        -0.7090636213638785
+      ]
+    },
+    {
+      "time_s": 0.1655,
+      "values": [
+        -0.4135402871372808,
+        -0.8270571645217079,
+        2.521391573260576e-8,
+        -0.008229653434567412,
+        0.38125731188924705,
+        -0.7096347576649626
+      ]
+    },
+    {
+      "time_s": 0.166,
+      "values": [
+        -0.42216396275100765,
+        -0.844304028398804,
+        2.1159413040858597e-8,
+        -0.008401264213681179,
+        0.3767228991030131,
+        -0.710168565565406
+      ]
+    },
+    {
+      "time_s": 0.1665,
+      "values": [
+        -0.4303710135019719,
+        -0.8607176652206494,
+        1.7912539596018785e-8,
+        -0.008564584778736409,
+        0.37241421761188553,
+        -0.7106665547658202
+      ]
+    },
+    {
+      "time_s": 0.167,
+      "values": [
+        -0.438153340021932,
+        -0.8762818768112737,
+        1.529851674986175e-8,
+        -0.008719453775084618,
+        0.36833414920807117,
+        -0.7111300786453116
+      ]
+    },
+    {
+      "time_s": 0.1675,
+      "values": [
+        -0.4455032620941839,
+        -0.8909813032796247,
+        1.3183401128038715e-8,
+        -0.008865718230262588,
+        0.36448551456539424,
+        -0.71156035098161
+      ]
+    },
+    {
+      "time_s": 0.168,
+      "values": [
+        -0.4524135262330099,
+        -0.9048014381763506,
+        1.146403690428216e-8,
+        -0.009003233694761907,
+        0.3608710527886023,
+        -0.7119584602292979
+      ]
+    },
+    {
+      "time_s": 0.1685,
+      "values": [
+        -0.4588773128419906,
+        -0.917728642808352,
+        1.0060601965524474e-8,
+        -0.009131864377012498,
+        0.35749340305973853,
+        -0.7123253817460509
+      ]
+    },
+    {
+      "time_s": 0.169,
+      "values": [
+        -0.4648882429441259,
+        -0.9297501596970043,
+        8.911052417366796e-9,
+        -0.009251483305196677,
+        0.35435508803923654,
+        -0.7126619883772727
+      ]
+    },
+    {
+      "time_s": 0.1695,
+      "values": [
+        -0.4704403844771127,
+        -0.9408541251667649,
+        7.966963478063122e-9,
+        -0.009361972304511178,
+        0.3514584993734521,
+        -0.7129690590678106
+      ]
+    },
+    {
+      "time_s": 0.17,
+      "values": [
+        -0.47552825814757693,
+        -0.9510295810517474,
+        7.190402019651313e-9,
+        -0.009463222343873657,
+        0.34880588368352794,
+        -0.7132472872673463
+      ]
+    },
+    {
+      "time_s": 0.1705,
+      "values": [
+        -0.4801468428384716,
+        -0.9602664855087314,
+        6.5515661365523e-9,
+        -0.009555133471643927,
+        0.3463993309721902,
+        -0.7134972871127128
+      ]
+    },
+    {
+      "time_s": 0.171,
+      "values": [
+        -0.4842915805643157,
+        -0.9685557229259445,
+        6.0269969988356075e-9,
+        -0.009637614959074302,
+        0.34424076370551837,
+        -0.713719599273227
+      ]
+    },
+    {
+      "time_s": 0.1715,
+      "values": [
+        -0.4879583809693737,
+        -0.9758891129178404,
+        5.59822067536453e-9,
+        -0.009710585388440034,
+        0.3423319271926677,
+        -0.7139146958356779
+      ]
+    },
+    {
+      "time_s": 0.17200000000000001,
+      "values": [
+        -0.49114362536434447,
+        -0.982259418397021,
+        5.250714827365265e-9,
+        -0.00977397273231419,
+        0.3406743810795977,
+        -0.7140829844587833
+      ]
+    },
+    {
+      "time_s": 0.17250000000000001,
+      "values": [
+        -0.4938441702975689,
+        -0.9876603527153327,
+        4.973122687219995e-9,
+        -0.009827714423831048,
+        0.33926949191240174,
+        -0.714224811877467
+      ]
+    },
+    {
+      "time_s": 0.17300000000000001,
+      "values": [
+        -0.496057350657239,
+        -0.9920865858671163,
+        4.75665696930902e-9,
+        -0.00987175741780716,
+        0.3381184267374414,
+        -0.7143404668227193
+      ]
+    },
+    {
+      "time_s": 0.17350000000000002,
+      "values": [
+        -0.49778098230154,
+        -0.9955337497484822,
+        4.594651381638243e-9,
+        -0.009906058242620419,
+        0.3372221477145829,
+        -0.7144301824104204
+      ]
+    },
+    {
+      "time_s": 0.17400000000000002,
+      "values": [
+        -0.49901336421413583,
+        -0.9979984424674423,
+        4.48222867753727e-9,
+        -0.009930583042761315,
+        0.33658140772681966,
+        -0.714494138041784
+      ]
+    },
+    {
+      "time_s": 0.17450000000000002,
+      "values": [
+        -0.4997532801828658,
+        -0.9994782317006421,
+        4.416062767599732e-9,
+        -0.009945307611993099,
+        0.33619674697486124,
+        -0.7145324608487167
+      ]
+    },
+    {
+      "time_s": 0.17500000000000002,
+      "values": [
+        -0.5,
+        -0.9999716570933939,
+        4.3942190865331976e-9,
+        -0.009950217417071054,
+        0.33606849054917765,
+        -0.7145452267090153
+      ]
+    },
+    {
+      "time_s": 0.17550000000000002,
+      "values": [
+        -0.4997532801828658,
+        -0.9994782317006421,
+        4.416062767602101e-9,
+        -0.009945307611987128,
+        0.3361967469748751,
+        -0.7145324608487011
+      ]
+    },
+    {
+      "time_s": 0.176,
+      "values": [
+        -0.49901336421413583,
+        -0.9979984424674423,
+        4.48222867755376e-9,
+        -0.009930583042720847,
+        0.3365814077269148,
+        -0.7144941380416785
+      ]
+    },
+    {
+      "time_s": 0.1765,
+      "values": [
+        -0.49778098230154,
+        -0.9955337497484822,
+        4.594651381694232e-9,
+        -0.009906058242486896,
+        0.3372221477148981,
+        -0.7144301824100718
+      ]
+    },
+    {
+      "time_s": 0.177,
+      "values": [
+        -0.49605735065723894,
+        -0.9920865858671162,
+        4.756656969447507e-9,
+        -0.00987175741749064,
+        0.3381184267381945,
+        -0.71434046682189
+      ]
+    },
+    {
+      "time_s": 0.1775,
+      "values": [
+        -0.49384417029756894,
+        -0.9876603527153328,
+        4.973122687508489e-9,
+        -0.009827714423206138,
+        0.3392694919139022,
+        -0.7142248118758223
+      ]
+    },
+    {
+      "time_s": 0.178,
+      "values": [
+        -0.49114362536434447,
+        -0.982259418397021,
+        5.2507148279065835e-9,
+        -0.009773972731215832,
+        0.3406743810822642,
+        -0.7140829844558767
+      ]
+    },
+    {
+      "time_s": 0.1785,
+      "values": [
+        -0.4879583809693738,
+        -0.9758891129178406,
+        5.598220676313159e-9,
+        -0.00971058538665706,
+        0.3423319271970505,
+        -0.7139146958309288
+      ]
+    },
+    {
+      "time_s": 0.179,
+      "values": [
+        -0.48429158056431554,
+        -0.9685557229259442,
+        6.026997000422848e-9,
+        -0.009637614956342147,
+        0.34424076371233003,
+        -0.7137195992658947
+      ]
+    },
+    {
+      "time_s": 0.1795,
+      "values": [
+        -0.48014684283847164,
+        -0.9602664855087316,
+        6.5515661391240436e-9,
+        -0.009555133467633876,
+        0.3463993309823432,
+        -0.7134972871018579
+      ]
+    },
+    {
+      "time_s": 0.18,
+      "values": [
+        -0.475528258147577,
+        -0.9510295810517478,
+        7.190402023725384e-9,
+        -0.00946322233818046,
+        0.348805883698183,
+        -0.7132472872517857
+      ]
+    },
+    {
+      "time_s": 0.1805,
+      "values": [
+        -0.4704403844771128,
+        -0.9408541251667655,
+        7.966963484417452e-9,
+        -0.009361972296637109,
+        0.3514584993940816,
+        -0.7129690590460565
+      ]
+    },
+    {
+      "time_s": 0.181,
+      "values": [
+        -0.4648882429441256,
+        -0.9297501596970041,
+        8.911052427174119e-9,
+        -0.00925148329453135,
+        0.354355088067703,
+        -0.712661988347455
+      ]
+    },
+    {
+      "time_s": 0.1815,
+      "values": [
+        -0.4588773128419907,
+        -0.9177286428083506,
+        1.0060601931972599e-8,
+        -0.009131864409466233,
+        0.35749340297347953,
+        -0.7123253818379722
+      ]
+    },
+    {
+      "time_s": 0.182,
+      "values": [
+        -0.45241352623300995,
+        -0.9048014381763507,
+        1.146403690428216e-8,
+        -0.009003233694761907,
+        0.3608710527886023,
+        -0.7119584602292979
+      ]
+    },
+    {
+      "time_s": 0.1825,
+      "values": [
+        -0.44550326209418395,
+        -0.8909813032796248,
+        1.3183401128038645e-8,
+        -0.008865718230262493,
+        0.36448551456539413,
+        -0.7115603509816097
+      ]
+    },
+    {
+      "time_s": 0.183,
+      "values": [
+        -0.4381533400219317,
+        -0.876281876811273,
+        1.5298516749861802e-8,
+        -0.008719453775084556,
+        0.3683341492080713,
+        -0.7111300786453114
+      ]
+    },
+    {
+      "time_s": 0.1835,
+      "values": [
+        -0.430371013501972,
+        -0.8607176652206496,
+        1.7912539596018755e-8,
+        -0.008564584778736409,
+        0.3724142176118855,
+        -0.7106665547658202
+      ]
+    },
+    {
+      "time_s": 0.184,
+      "values": [
+        -0.42216396275100776,
+        -0.8443040283988043,
+        2.1159413040858557e-8,
+        -0.008401264213681267,
+        0.37672289910301304,
+        -0.7101685655654062
+      ]
+    },
+    {
+      "time_s": 0.1845,
+      "values": [
+        -0.41354028713728097,
+        -0.8270571645217082,
+        2.5213915732605714e-8,
+        -0.008229653434567412,
+        0.381257311889247,
+        -0.7096347576649626
+      ]
+    },
+    {
+      "time_s": 0.185,
+      "values": [
+        -0.40450849718747356,
+        -0.8089940940662113,
+        3.0305271249364524e-8,
+        -0.008049922032789291,
+        0.38601453592484875,
+        -0.7090636213638786
+      ]
+    },
+    {
+      "time_s": 0.1855,
+      "values": [
+        -0.3950775061878453,
+        -0.7901326430145079,
+        3.673567381722788e-8,
+        -0.007862247687888523,
+        0.39099163858375613,
+        -0.7084534709957606
+      ]
+    },
+    {
+      "time_s": 0.186,
+      "values": [
+        -0.3852566213878948,
+        -0.7704914252636845,
+        4.490563423979396e-8,
+        -0.007666816017866823,
+        0.396185703630462,
+        -0.7078024217602052
+      ]
+    },
+    {
+      "time_s": 0.1865,
+      "values": [
+        -0.3750555348152297,
+        -0.7500898242577231,
+        5.534883825658347e-8,
+        -0.0074638204312732015,
+        0.4015938640955853,
+        -0.7071083622800395
+      ]
+    },
+    {
+      "time_s": 0.187,
+      "values": [
+        -0.36448431371070544,
+        -0.7289479738600881,
+        6.878034556915196e-8,
+        -0.00725346198507608,
+        0.4072133398093148,
+        -0.7063689219386198
+      ]
+    },
+    {
+      "time_s": 0.1875,
+      "values": [
+        -0.35355339059327384,
+        -0.7070867384857948,
+        8.616360593627243e-8,
+        -0.007035949253983614,
+        0.4130414805279599,
+        -0.7055814317979588
+      ]
+    },
+    {
+      "time_s": 0.188,
+      "values": [
+        -0.3422735529643448,
+        -0.684527692512583,
+        1.0880417634408169e-7,
+        -0.006811498219291608,
+        0.4190758158162118,
+        -0.7047428775650803
+      ]
+    },
+    {
+      "time_s": 0.1885,
+      "values": [
+        -0.33065593266182614,
+        -0.6612930989915601,
+        1.3848156608567677e-7,
+        -0.006580332188889166,
+        0.425314113132225,
+        -0.7038498426322914
+      ]
+    },
+    {
+      "time_s": 0.189,
+      "values": [
+        -0.3187119948743448,
+        -0.6374058876783586,
+        1.7763589111539087e-7,
+        -0.006342681765312217,
+        0.4317544459188556,
+        -0.7028984386264742
+      ]
+    },
+    {
+      "time_s": 0.1895,
+      "values": [
+        -0.30645352682648824,
+        -0.6128896324065415,
+        2.2963387879154428e-7,
+        -0.006098784886602256,
+        0.43839527394986577,
+        -0.7018842201052845
+      ]
+    },
+    {
+      "time_s": 0.19,
+      "values": [
+        -0.293892626146237,
+        -0.5877685278256721,
+        2.991506295046881e-7,
+        -0.005848886976600295,
+        0.44523553873466465,
+        -0.7008020789512898
+      ]
+    },
+    {
+      "time_s": 0.1905,
+      "values": [
+        -0.28104168892606546,
+        -0.5620673655270991,
+        3.9272163413785205e-7,
+        -0.005593241259404332,
+        0.45227477747001554,
+        -0.699646112517858
+      ]
+    },
+    {
+      "time_s": 0.191,
+      "values": [
+        -0.26791339748949816,
+        -0.535811509581163,
+        5.195474354779142e-7,
+        -0.005332109320613505,
+        0.4595132598587661,
+        -0.6984094574958933
+      ]
+    },
+    {
+      "time_s": 0.1915,
+      "values": [
+        -0.2545207078751856,
+        -0.509026871510122,
+        6.926768237386302e-7,
+        -0.005065762041492076,
+        0.4669521530953234,
+        -0.6970840785355872
+      ]
+    },
+    {
+      "time_s": 0.192,
+      "values": [
+        -0.24087683705085805,
+        -0.4817398847217463,
+        9.307631881562161e-7,
+        -0.004794481100922716,
+        0.47459372140601075,
+        -0.6956604964792383
+      ]
+    },
+    {
+      "time_s": 0.1925,
+      "values": [
+        -0.22699524986977349,
+        -0.4539774784291131,
+        0.000001260698757137302,
+        -0.004518561350135472,
+        0.48244156759609724,
+        -0.6941274350476474
+      ]
+    },
+    {
+      "time_s": 0.193,
+      "values": [
+        -0.2128896457825361,
+        -0.4257670510827658,
+        0.0000017216105020541865,
+        -0.004238314544248907,
+        0.4905009247521871,
+        -0.692471356077384
+      ]
+    },
+    {
+      "time_s": 0.1935,
+      "values": [
+        -0.19857394531739014,
+        -0.3971364433419797,
+        0.0000023709972223599057,
+        -0.003954075210406068,
+        0.4987790057866377,
+        -0.6906758405749875
+      ]
+    },
+    {
+      "time_s": 0.194,
+      "values": [
+        -0.18406227634233932,
+        -0.3681139106125404,
+        0.000003294283850540572,
+        -0.0036662099288172693,
+        0.5072854151336539,
+        -0.6887207539151262
+      ]
+    },
+    {
+      "time_s": 0.1945,
+      "values": [
+        -0.1693689601226457,
+        -0.33872809517903535,
+        0.000004619916228914768,
+        -0.0033751321502408947,
+        0.5160326167969773,
+        -0.686581105544948
+      ]
+    },
+    {
+      "time_s": 0.195,
+      "values": [
+        -0.1545084971874734,
+        -0.3090079979602513,
+        0.0000065435869610036075,
+        -0.003081326140789807,
+        0.5250364278700012,
+        -0.6842254726976766
+      ]
+    },
+    {
+      "time_s": 0.1955,
+      "values": [
+        -0.1394955530196144,
+        -0.2789829499166221,
+        0.000009367753621300071,
+        -0.0027853862156380373,
+        0.5343164488869627,
+        -0.6816137998720637
+      ]
+    },
+    {
+      "time_s": 0.196,
+      "values": [
+        -0.12434494358242767,
+        -0.24868258313849673,
+        0.000013567130576293558,
+        -0.0024880819431709954,
+        0.5438962140321315,
+        -0.6786943110874142
+      ]
+    },
+    {
+      "time_s": 0.1965,
+      "values": [
+        -0.10907162069827123,
+        -0.21813680164215182,
+        0.00001989867782100828,
+        -0.002190467843263673,
+        0.5538025657192572,
+        -0.67539919812974
+      ]
+    },
+    {
+      "time_s": 0.197,
+      "values": [
+        -0.09369065729286191,
+        -0.1873757518945204,
+        0.000029587525598509577,
+        -0.0018940690186836618,
+        0.5640631701864582,
+        -0.6716387557156035
+      ]
+    },
+    {
+      "time_s": 0.1975,
+      "values": [
+        -0.07821723252011512,
+        -0.15642979307169722,
+        0.000044638420000252915,
+        -0.0016011923048837228,
+        0.5746999161507481,
+        -0.6672939941269471
+      ]
+    },
+    {
+      "time_s": 0.198,
+      "values": [
+        -0.06266661678215234,
+        -0.12532946701928585,
+        0.00006833494954267027,
+        -0.0013154251905819793,
+        0.585713884874105,
+        -0.6622092448343424
+      ]
+    },
+    {
+      "time_s": 0.1985,
+      "values": [
+        -0.04705415665925702,
+        -0.09410546781165238,
+        0.00010594336826990192,
+        -0.0010423393597906957,
+        0.5970552241223596,
+        -0.6561906736758479
+      ]
+    },
+    {
+      "time_s": 0.199,
+      "values": [
+        -0.031395259764656194,
+        -0.06278861072842815,
+        0.00016537648582887727,
+        -0.0007901542460001734,
+        0.6085733907343388,
+        -0.6490262269386566
+      ]
+    },
+    {
+      "time_s": 0.1995,
+      "values": [
+        -0.015705379539063737,
+        -0.03140980057715663,
+        0.0002568812415969103,
+        -0.0005694243067221298,
+        0.6199640266794578,
+        -0.6405528174443894
+      ]
+    },
+    {
+      "time_s": 0.2,
+      "values": [
+        0,
+        -5.002847369214909e-12,
+        0.00039019640022206186,
+        -0.0003901964002718451,
+        0.6307765050605604,
+        -0.6307765050638603
+      ]
+    }
+  ]
+}

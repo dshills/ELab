@@ -1,0 +1,660 @@
+{
+  "name": "Build a diode-biased class AB amplifier",
+  "edits": [
+    {
+      "command": "component.place",
+      "params": {
+        "id": "VIN",
+        "kind": "sine-source",
+        "position": {
+          "x": -560,
+          "y": -20
+        },
+        "value": "0.5 V"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "VP",
+        "kind": "dc-source",
+        "position": {
+          "x": 730,
+          "y": -160
+        },
+        "value": "5 V"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "VN",
+        "kind": "dc-source",
+        "position": {
+          "x": 730,
+          "y": 160
+        },
+        "value": "5 V"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "U1",
+        "kind": "opamp",
+        "position": {
+          "x": -350,
+          "y": 0
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "Q1",
+        "kind": "npn",
+        "position": {
+          "x": 100,
+          "y": -160
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "Q2",
+        "kind": "pnp",
+        "position": {
+          "x": 100,
+          "y": 160
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "D1",
+        "kind": "diode",
+        "position": {
+          "x": -100,
+          "y": -110
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "D2",
+        "kind": "diode",
+        "position": {
+          "x": -100,
+          "y": 110
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "RP",
+        "kind": "resistor",
+        "position": {
+          "x": -100,
+          "y": -300
+        },
+        "value": "2.2k"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "RP"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "RN",
+        "kind": "resistor",
+        "position": {
+          "x": -100,
+          "y": 300
+        },
+        "value": "2.2k"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "RN"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "RE1",
+        "kind": "resistor",
+        "position": {
+          "x": 230,
+          "y": -70
+        },
+        "value": "22"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "RE1"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "RE2",
+        "kind": "resistor",
+        "position": {
+          "x": 230,
+          "y": 70
+        },
+        "value": "22"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "RE2"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "RL",
+        "kind": "resistor",
+        "position": {
+          "x": 500,
+          "y": 100
+        },
+        "value": "100"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "RL"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "RF",
+        "kind": "resistor",
+        "position": {
+          "x": -100,
+          "y": 480
+        },
+        "value": "10k"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "RG",
+        "kind": "resistor",
+        "position": {
+          "x": -440,
+          "y": 570
+        },
+        "value": "10k"
+      }
+    },
+    {
+      "command": "component.rotate",
+      "params": {
+        "id": "RG"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "PU",
+        "kind": "net-label",
+        "position": {
+          "x": -350,
+          "y": -100
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "NU",
+        "kind": "net-label",
+        "position": {
+          "x": -350,
+          "y": 100
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "PQ",
+        "kind": "net-label",
+        "position": {
+          "x": 125,
+          "y": -270
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "NQ",
+        "kind": "net-label",
+        "position": {
+          "x": 125,
+          "y": 270
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "PR",
+        "kind": "net-label",
+        "position": {
+          "x": -100,
+          "y": -400
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "NR",
+        "kind": "net-label",
+        "position": {
+          "x": -100,
+          "y": 400
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "PS",
+        "kind": "net-label",
+        "position": {
+          "x": 730,
+          "y": -270
+        },
+        "value": "VCC"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "NS",
+        "kind": "net-label",
+        "position": {
+          "x": 730,
+          "y": 270
+        },
+        "value": "VEE"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "OUT",
+        "kind": "net-label",
+        "position": {
+          "x": 400,
+          "y": 0
+        },
+        "value": "OUT"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "JR",
+        "kind": "net-label",
+        "position": {
+          "x": 480,
+          "y": 480
+        },
+        "value": "OUT"
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "GI",
+        "kind": "ground",
+        "position": {
+          "x": -560,
+          "y": 100
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "GP",
+        "kind": "ground",
+        "position": {
+          "x": 730,
+          "y": 0
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "GL",
+        "kind": "ground",
+        "position": {
+          "x": 500,
+          "y": 250
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "GF",
+        "kind": "ground",
+        "position": {
+          "x": -440,
+          "y": 690
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "JD",
+        "kind": "junction",
+        "position": {
+          "x": -100,
+          "y": 0
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "JB1",
+        "kind": "junction",
+        "position": {
+          "x": -100,
+          "y": -200
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "JB2",
+        "kind": "junction",
+        "position": {
+          "x": -100,
+          "y": 200
+        }
+      }
+    },
+    {
+      "command": "component.place",
+      "params": {
+        "id": "JF",
+        "kind": "junction",
+        "position": {
+          "x": -440,
+          "y": 480
+        }
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "VIN.positive",
+        "to": "U1.noninverting"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "VIN.negative",
+        "to": "GI.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "U1.vplus",
+        "to": "PU.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "U1.vminus",
+        "to": "NU.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "U1.out",
+        "to": "JD.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RP.1",
+        "to": "PR.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RP.2",
+        "to": "JB1.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JB1.node",
+        "to": "D1.anode"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JB1.node",
+        "to": "Q1.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "D1.cathode",
+        "to": "JD.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JD.node",
+        "to": "D2.anode"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "D2.cathode",
+        "to": "JB2.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JB2.node",
+        "to": "Q2.base"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JB2.node",
+        "to": "RN.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RN.2",
+        "to": "NR.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "Q1.collector",
+        "to": "PQ.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "Q2.collector",
+        "to": "NQ.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "Q1.emitter",
+        "to": "RE1.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "Q2.emitter",
+        "to": "RE2.2"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RE1.2",
+        "to": "OUT.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RE2.1",
+        "to": "OUT.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "OUT.node",
+        "to": "RL.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RL.2",
+        "to": "GL.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JR.node",
+        "to": "RF.2"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RF.1",
+        "to": "JF.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JF.node",
+        "to": "U1.inverting"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "JF.node",
+        "to": "RG.1"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "RG.2",
+        "to": "GF.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "VP.positive",
+        "to": "PS.node"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "VP.negative",
+        "to": "GP.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "VN.positive",
+        "to": "GP.reference"
+      }
+    },
+    {
+      "command": "wire.connect",
+      "params": {
+        "from": "VN.negative",
+        "to": "NS.node"
+      }
+    },
+    {
+      "command": "source.sine.set",
+      "params": {
+        "id": "VIN",
+        "waveform": {
+          "amplitude_v": 0.5,
+          "offset_v": 0,
+          "frequency_hz": 10,
+          "phase_degrees": 0
+        }
+      }
+    }
+  ]
+}
