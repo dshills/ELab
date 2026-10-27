@@ -45,6 +45,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	JFETs              []JFETResult          `json:"jfets,omitempty"`
 	Loads              []BranchResult        `json:"electronic_loads,omitempty"`
 	Speakers           []SpeakerResult       `json:"speakers,omitempty"`
 	Shifts             []ShiftResult         `json:"shift_registers,omitempty"`
@@ -90,6 +91,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.JFETs = append([]JFETResult(nil), r.JFETs...)
 	o.Loads = append([]BranchResult(nil), r.Loads...)
 	o.Speakers = append([]SpeakerResult(nil), r.Speakers...)
 	o.Shifts = append([]ShiftResult(nil), r.Shifts...)
@@ -140,6 +142,7 @@ type mixedNetwork struct {
 	nonlinear                    bool
 	hasOptocoupler, hasRegulator bool
 	hasMOSFET                    bool
+	hasJFET                      bool
 	hasGeneralBipolar            bool
 	c                            Compiled
 	nodes                        []string
@@ -192,6 +195,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 	for _, p := range c.MixedGraph.Components {
 		n.hasOptocoupler = n.hasOptocoupler || p.Kind == "optocoupler"
 		n.hasRegulator = n.hasRegulator || IsRegulatorKind(p.Kind)
+		n.hasJFET = n.hasJFET || IsJFETKind(p.Kind)
 		n.hasMOSFET = n.hasMOSFET || IsMOSFETKind(p.Kind)
 		n.hasGeneralBipolar = n.hasGeneralBipolar || hasTransistorProfile(p) || p.Kind == "pnp" || p.Kind == "npn" && c.TerminalNet[p.ID+".emitter"] != c.Ground
 		switch p.Kind {
@@ -424,6 +428,8 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
 			i, g := n.ledCurrent(voltage(x, u) - voltage(x, v))
 			flow(u, v, i, g)
+		case "njfet", "pjfet":
+			n.stampJFET(p, x, add, f)
 		case "nmos", "pmos":
 			g, d, s := n.pin(p, "gate"), n.pin(p, "drain"), n.pin(p, "source")
 			id, gm, gd := mosfetLinear(p.Kind, voltage(x, g)-voltage(x, s), voltage(x, d)-voltage(x, s))
@@ -687,7 +693,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasGeneralBipolar || n.hasOptocoupler || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
+		if good && (n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasJFET || n.hasGeneralBipolar || n.hasOptocoupler || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -899,6 +905,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			powers += power
 			r.Potentiometers = append(r.Potentiometers, PotentiometerResult{ID: p.ID, Resistance: p.Value, WiperPosition: *p.WiperPosition, UpperResistance: upper, LowerResistance: lower, Terminal1Voltage: v1, Terminal2Voltage: v2, WiperVoltage: vw, Terminal1Current: i1, Terminal2Current: i2, WiperCurrent: -i1 - i2, Power: power})
 
+		case "njfet", "pjfet":
+			q := n.jfetResult(p, x)
+			r.JFETs = append(r.JFETs, q)
+			powers += q.Power
 		case "nmos", "pmos":
 			device := n.mosfetResult(p, x)
 			powers += device.Power

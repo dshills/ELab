@@ -37,7 +37,7 @@ voltage source; a current-only circuit has no voltage-excitation Bode target.
 Scope probes show terminal voltage, source delivered current or absorbed load
 current. Readouts, verification recordings, projects, undo/redo, schematic
 metadata and print descriptions retain the model and full settings. Opening is
-silent. Source count remains at the existing combined four-source budget;
+silent. Source count remains at the existing combined three-source budget;
 normal part/node/storage/current/range/work/accuracy guards remain. No dynamics,
 thermal protection, rated SOA, control-loop bandwidth or manufacturer fidelity
 is claimed. These are model experiments, not physical hardware qualification.

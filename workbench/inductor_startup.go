@@ -116,6 +116,9 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 		case "npn", "pnp":
 			join(p, "base", "emitter")
 			join(p, "collector", "emitter")
+		case "njfet", "pjfet":
+			join(p, "gate", "source")
+			join(p, "drain", "source")
 		case "nmos", "pmos":
 			join(p, "drain", "source")
 		}

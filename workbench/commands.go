@@ -132,6 +132,9 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(HistoryParams{}), "urn:elab:edit-history-input:1"},
 	{reflect.TypeOf(DeviceParameters{}), "urn:elab:device-parameters:1"},
 	{reflect.TypeOf(AudioRenderParams{}), "urn:elab:audio-render:1"},
+	{reflect.TypeOf(SaveParams{}), "urn:elab:project-save-input:1"},
+	{reflect.TypeOf(LoadParams{}), "urn:elab:project-load-input:1"},
+	{reflect.TypeOf(StepParams{}), "urn:elab:manual-step-input:1"},
 	{reflect.TypeOf(PlaceParams{}), "urn:elab:place-component:1"},
 	{reflect.TypeOf(MoveParams{}), "urn:elab:move-object:1"},
 	{reflect.TypeOf(DuplicateParams{}), "urn:elab:duplicate-component:1"},
@@ -141,6 +144,9 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(SearchParams{}), "urn:elab:search-input:1"},
 	{reflect.TypeOf(SpeakerConfig{}), "urn:elab:speaker-config:1"},
 	{reflect.TypeOf(PassiveParams{}), "urn:elab:passive-configure:1"},
+	{reflect.TypeOf(JFETConfig{}), "urn:elab:jfet-config:1"},
+	{reflect.TypeOf(JFETParams{}), "urn:elab:jfet-configure:1"},
+	{reflect.TypeOf(JFETResult{}), "urn:elab:jfet-result:1"},
 	{reflect.TypeOf(CurrentConfig{}), "urn:elab:current-source-config:1"},
 	{reflect.TypeOf(LoadConfig{}), "urn:elab:load-config:1"},
 	{reflect.TypeOf(CurrentTiming{}), "urn:elab:current-timing:1"},
@@ -272,6 +278,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Input-only shared definitions retain command unit text without
 		// widening numeric output/settings schemas.
+		if common.Type == reflect.TypeOf(JFETConfig{}) {
+			addJFETSchema(schema)
+		}
 		if common.Type == reflect.TypeOf(CurrentConfig{}) {
 			addCurrentSchema(schema, "source")
 		}
@@ -298,6 +307,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 				}
 				property["$ref"] = waveformQuantitySchemaID("Hz")
 			}
+		}
+		if common.Type == reflect.TypeOf(StepParams{}) {
+			schema = timeInputSchema("simulation.step", schema)
 		}
 		if common.Type == reflect.TypeOf(VerifyParams{}) {
 			schema = timeInputSchema("simulation.verify", schema)
@@ -423,6 +435,7 @@ func Catalog() []Capability {
 		queryCapability("audio.read", "Read owned preview metadata and WAV bytes.", reflect.TypeOf(IDParams{}), reflect.TypeOf(AudioData{})),
 		typedCapability("pwm.configure", "Set powered PWM controller frequency and duty.", reflect.TypeOf(PWMParams{})),
 		typedCapability("passive.configure", "Configure saved capacitor ESR/leakage or inductor winding resistance, or restore ideal behavior; shared undoable electrical edit.", reflect.TypeOf(PassiveParams{})),
+		typedCapability("jfet.configure", "Configure a saved educational depletion-mode N/P-channel JFET with explicit gate junctions.", reflect.TypeOf(JFETParams{})),
 		typedCapability("current-source.configure", "Configure DC or finite pulsed current delivery with explicit compliance.", reflect.TypeOf(CurrentParams{})),
 		typedCapability("load.configure", "Configure a one-quadrant CC/CP electronic load with finite pulse ramps and bounded low-voltage continuation.", reflect.TypeOf(ElectronicLoadParams{})),
 		typedCapability("speaker.configure", "Configure a saved passive loudspeaker electrical load; explicit audio preview uses existing shared commands.", reflect.TypeOf(SpeakerParams{})),

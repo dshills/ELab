@@ -93,6 +93,9 @@ func (s *Service) componentExplanationLocked(c Compiled, id string, inspection *
 		}
 	}
 	switch part.Kind {
+	case "njfet", "pjfet":
+		out.Model, out.Limitations = JFETModelID, jfetDescription
+		out.Facts = append(out.Facts, "A reverse-biased gate depletes a normally conducting channel; forward gate junctions draw current. Source-current probes are positive out of source, gate/drain positive into device.")
 	case "current-source", "electronic-load":
 		out.Model, out.Limitations = CurrentDeviceModelID, currentDeviceDescription
 		out.Facts = append(out.Facts, currentDeviceName(part))

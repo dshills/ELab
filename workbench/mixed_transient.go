@@ -104,6 +104,11 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		p.Energy += d.Energy
 	}
 	currents := map[string]float64{}
+	for _, q := range r.JFETs {
+		currents[q.ID+".gate"] = q.GateCurrent
+		currents[q.ID+".drain"] = q.DrainCurrent
+		currents[q.ID+".source"] = q.SourceCurrent
+	}
 	for _, u := range r.Shifts {
 		for k, pin := range shiftPins {
 			currents[u.ID+"."+pin] = u.PinCurrents[k]

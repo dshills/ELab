@@ -7,7 +7,7 @@
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/audio_controls.go": "145150962fa7aea606b0dbec0f3fc674bf2786120ca7054679fa1e9ba89d60a3",
     "desktop/canvas.go": "420e572313c6a1dbc29ffe94736e668d7fc52326e4a4872fa941d52e5d560ef0",
-    "desktop/component_inspector.go": "908e630336442126188d7c78485b99759ffcedd66b85b1c5fd154e3e9e43e0a8",
+    "desktop/component_inspector.go": "ef4c49ee521e37f923aa1da39eb20eea445764ec566ac75c533718aeb33c6a59",
     "desktop/component_palette.go": "554968a6746c02a80cc8c8f3fb853e422f0e45e97afa0d68cb95e2eb00da4a9a",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
@@ -20,7 +20,7 @@
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
     "desktop/document_workspace.go": "41bedab4921ec48632727ae69aa2e460910b5ff869da1d2f72fdad5d4a5c1313",
-    "desktop/drawing.go": "df63108c645dd1387a8e6780e354562e1d5ea2862caf3920100adfc966f39b5d",
+    "desktop/drawing.go": "33a6e673f62a79505aa27fbb1d140ee2ed672c6e17d24fa303627a663c9ae3e3",
     "desktop/drawing_preview.go": "c5faa6a382db37aa8748cafa9dcc9e655cc40a3d71218684facc88cb2ccf3a6c",
     "desktop/edit_proposal.go": "85b9470a7665f55758da21fe42f802c033101887faea9ec7889a2ceb055ab1df",
     "desktop/example_browser.go": "6784c01fa1ab6eddb605f08cf3a5d9a84835d42625525ffc28f1cc38bb360aae",
@@ -38,6 +38,7 @@
     "desktop/inductor_controls.go": "326e6590bf52d5e7aa256d508f1a73c8dcb164b48692d2012e5706104d50c5c0",
     "desktop/input_work.go": "63b1644f065e82f1deaedc018bcfa5b855af2b885ac96dc3d68b2d4971f701bc",
     "desktop/inspector_style.go": "5da4a21b81e964b7472f3532ce38ca6c873daa916afdfd87d618cbd5294a7db1",
+    "desktop/jfet_controls.go": "bc2d09bede116b403673ea9dda29aa43f33570c6c3e072320d02be6c6336ab86",
     "desktop/keyboard_workflow.go": "b191362c5d182dac02e265925c30bdfcaf5db3bf6a9ef0a189d0e264917c7349",
     "desktop/layout.go": "1b780e66e228784016e71d4d2d3300620551eb9bb83d47fdc696296a9b2b456d",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
@@ -172,6 +173,7 @@
     "export.scope.csv",
     "export.start",
     "inductor.initial.set",
+    "jfet.configure",
     "load.configure",
     "measurement.inspect",
     "measurement.pin.add",
@@ -863,7 +865,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 169,
+      "line": 172,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -871,7 +873,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 169,
+      "line": 172,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
@@ -879,7 +881,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 203,
+      "line": 206,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -887,7 +889,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 203,
+      "line": 206,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
@@ -895,7 +897,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 212,
+      "line": 215,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -903,7 +905,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 212,
+      "line": 215,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -911,7 +913,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 225,
+      "line": 228,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeComponentStartup(state, part, fmt.Sprintf(\"%.9g V\", e.Number))\n}",
@@ -919,7 +921,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 227,
+      "line": 230,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.componentStartupDefault(state, part)",
@@ -927,7 +929,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 228,
+      "line": 231,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -935,7 +937,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 228,
+      "line": 231,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -943,7 +945,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 288,
+      "line": 291,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -954,7 +956,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 289,
+      "line": 292,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -965,7 +967,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 292,
+      "line": 295,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -976,7 +978,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 293,
+      "line": 296,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -2151,6 +2153,25 @@
         "simulation.work.cancel"
       ],
       "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/jfet_controls.go",
+      "line": 19,
+      "function": "*screen.jfetControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"jfet.configure\", workbench.JFETParams{ID: p.ID, Parameters: next}, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "jfet.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/jfet_controls.go",
+      "line": 22,
+      "function": "*screen.jfetControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Number == float32(value) {\n\t\treturn\n\t}\n\tv, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)\n\tif err != nil {\n\t\treturn\n\t}\n\tnext := c\n\tset(\u0026next, v)\n\tapply(next)\n}",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/keyboard_workflow.go",
@@ -5362,6 +5383,7 @@
     "export.scope.csv",
     "export.start",
     "inductor.initial.set",
+    "jfet.configure",
     "load.configure",
     "measurement.pin.add",
     "measurement.pin.move",

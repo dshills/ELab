@@ -241,10 +241,10 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 		}
 	}
 	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
-	if hasCurrentDevices(g) || hasSpeakers(g) || hasTransistorProfiles(g) || hasPassiveLosses(g) {
+	if hasJFETs(g) || hasCurrentDevices(g) || hasSpeakers(g) || hasTransistorProfiles(g) || hasPassiveLosses(g) {
 		devices := []Component{}
 		for _, p := range g.Components {
-			if IsCurrentDevice(p.Kind) || p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
+			if IsJFETKind(p.Kind) || IsCurrentDevice(p.Kind) || p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
 				devices = append(devices, p)
 			}
 		}
@@ -458,8 +458,14 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 			} else {
 				b.WriteString(`<path d="M15 31 L25 35 L21 25"/>`)
 			}
-		case "current-source", "electronic-load":
-			for _, path := range CurrentSymbolPaths(p.Kind) {
+		case "njfet", "pjfet", "current-source", "electronic-load":
+			var paths [][]Point
+			if IsJFETKind(p.Kind) {
+				paths = JFETSymbolPaths(p.Kind)
+			} else {
+				paths = CurrentSymbolPaths(p.Kind)
+			}
+			for _, path := range paths {
 				b.WriteString(`<polyline points="`)
 				for _, at := range path {
 					fmt.Fprintf(&b, "%g,%g ", at.X, at.Y)
@@ -713,7 +719,7 @@ func schematicPartLabel(p Component) (float64, float64, string) {
 	case "led":
 		at := LEDLabelPosition(p)
 		x, y = at.X, at.Y
-	case "nmos", "pmos", "npn", "pnp":
+	case "njfet", "pjfet", "nmos", "pmos", "npn", "pnp":
 		if p.Rotation == 180 {
 			x = p.Position.X - schematicLabelWidth(text) - 31
 		}

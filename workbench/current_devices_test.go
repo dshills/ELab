@@ -253,7 +253,7 @@ func TestCurrentDevicesNoStoragePulsingAndCapacitorDrive(t *testing.T) {
 
 func TestCurrentDevicesPreserveCombinedSourceBudgetAndInitialReadout(t *testing.T) {
 	g := currentResistorGraph(t, 1000)
-	for k := 2; k <= 5; k++ {
+	for k := 2; k <= MaxNetworkSources+1; k++ {
 		p, _ := MakeComponent("I"+string(rune('0'+k)), "current-source", Point{X: float64(k) * 100}, "")
 		g.Components = append(g.Components, p)
 		g.Wires = append(g.Wires, Wire{ID: "WP" + p.ID, From: p.ID + ".positive", To: "I1.positive", Connected: true}, Wire{ID: "WN" + p.ID, From: p.ID + ".negative", To: "I1.negative", Connected: true})

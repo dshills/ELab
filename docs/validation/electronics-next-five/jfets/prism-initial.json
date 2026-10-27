@@ -1,0 +1,326 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "4e97002ee4c37e8994c2cab31df336ac",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "fa12ddfad2776eed25472b08e263c1020a601b6d",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 8,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "21c27407343e0806",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unsynchronized access to s.graph in test",
+      "message": "The test locks `s.mu` to read `s.operations`, which shows that server state is shared with background goroutines. It reads `s.graph` without that lock in two places: `s.graph.Component(\"J1\")` and `schematicSVG(s.graph, 1, 1)`. A simulation or worker goroutine may touch the graph while it is read, so the test can trip `go test -race` or turn flaky.",
+      "suggestion": "Take the graph from a locked copy or from `s.Snapshot()`. For example, wrap each access in `s.mu.Lock()`/`s.mu.Unlock()`, or copy the graph once under the lock into a local variable and use that.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/jfet_test.go",
+          "lines": {
+            "start": 145,
+            "end": 145
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "test",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tp, _ := s.graph.Component(\"J1\")",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "439d600be124c82a",
+      "severity": "low",
+      "category": "performance",
+      "title": "CurrentSymbolPaths computed and discarded for JFET kinds",
+      "message": "For JFET kinds, CurrentSymbolPaths is called with a kind it does not handle and its result is thrown away. That is wasted work on every draw. It could also panic or log if that function validates the kind.",
+      "suggestion": "Choose the path function before calling it, using an if/else on IsJFETKind. The 'after' code assumes the element type is [][]workbench.Point; check this against the actual return type of CurrentSymbolPaths and JFETSymbolPaths.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/drawing.go",
+          "lines": {
+            "start": 305,
+            "end": 308
+          }
+        }
+      ],
+      "tags": [
+        "drawing"
+      ],
+      "evidence": "\t\tpaths := workbench.CurrentSymbolPaths(part.Kind)\n\t\tif workbench.IsJFETKind(part.Kind) {\n\t\t\tpaths = workbench.JFETSymbolPaths(part.Kind)\n\t\t}",
+      "fix": {
+        "before": "\t\tpaths := workbench.CurrentSymbolPaths(part.Kind)\n\t\tif workbench.IsJFETKind(part.Kind) {\n\t\t\tpaths = workbench.JFETSymbolPaths(part.Kind)\n\t\t}",
+        "after": "\t\tvar paths [][]workbench.Point\n\t\tif workbench.IsJFETKind(part.Kind) {\n\t\t\tpaths = workbench.JFETSymbolPaths(part.Kind)\n\t\t} else {\n\t\t\tpaths = workbench.CurrentSymbolPaths(part.Kind)\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "456619bd4691b1d3",
+      "severity": "low",
+      "category": "docs",
+      "title": "Source budget number changed while text claims it is unchanged",
+      "message": "The source budget changes from four to three in two docs, while the text still says it 'remains at the existing' budget. The JFET work adds no sources, and the README says the limits 'remain unchanged'. Either the docs now misstate the real budget or the engine budget was quietly reduced. Both would mislead users.",
+      "suggestion": "Check the actual combined source limit in workbench and make both docs match it. If the limit really changed, describe it as a change rather than saying it 'remains'.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "docs/current-devices.md",
+          "lines": {
+            "start": 40,
+            "end": 40
+          }
+        }
+      ],
+      "tags": [
+        "docs",
+        "consistency"
+      ],
+      "evidence": "silent. Source count remains at the existing combined three-source budget;",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b20efa82902d682b",
+      "severity": "low",
+      "category": "docs",
+      "title": "Doc claims four required fields but lists three",
+      "message": "The doc says four configuration fields are required, but the inspector and the description list only three parameters: IDSS, cutoff and lambda. Agent authors may be unsure which fourth field to send.",
+      "suggestion": "Name all required JSON fields explicitly, for example id, idss_a, cutoff_v and lambda_per_v, or correct the count.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "docs/jfets.md",
+          "lines": {
+            "start": 6,
+            "end": 7
+          }
+        }
+      ],
+      "tags": [
+        "docs"
+      ],
+      "evidence": "command used by the inspector and every agent adapter. All four configuration\nfields are required. The signed `cutoff_v` is negative for N, positive for P.",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "23c530f8b0d131a1",
+      "severity": "low",
+      "category": "security",
+      "title": "Absolute developer path committed in validation artifact",
+      "message": "A committed validation artifact contains an absolute local filesystem path that includes the developer's username. This leaks environment details and makes the artifact non-reproducible.",
+      "suggestion": "Record a repo-relative SDK path or an SDK identifier instead of an absolute home-directory path.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "docs/validation/electronics-next-five/jfets/jfet-lint.txt",
+          "lines": {
+            "start": 1,
+            "end": 1
+          }
+        }
+      ],
+      "tags": [
+        "privacy",
+        "artifacts"
+      ],
+      "evidence": "{\"passed\": true, \"sdk\": \"/Users/dshills/Development/projects/ELab/build/.vellum-sdk-4cf0176-elab1\", \"source\": \"19c9ebc37ed9f06daa824e024b331caf9700f4b0\"}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "11271f0acdf9808e",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "JFETs flagged as MOS devices",
+      "message": "JFETs now set `hasMOS = true`. The compile condition already checks `hasJFETs(g)`, so this flag change is redundant. It also mislabels JFETs as MOS devices. Any later logic that reads `hasMOS` (for example insulated-gate assumptions or MOS-specific diagnostics) would wrongly treat JFETs, whose gates conduct, as MOSFETs.",
+      "suggestion": "Keep `hasMOS` limited to nmos/pmos and rely on `hasJFETs(g)` to route JFET circuits to the network compiler.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/graph.go",
+          "lines": {
+            "start": 555,
+            "end": 555
+          }
+        }
+      ],
+      "tags": [
+        "jfet",
+        "semantics"
+      ],
+      "evidence": "\t\tcase \"njfet\", \"pjfet\", \"nmos\", \"pmos\":\n\t\t\thasMOS = true",
+      "fix": {
+        "before": "\t\tcase \"njfet\", \"pjfet\", \"nmos\", \"pmos\":\n\t\t\thasMOS = true",
+        "after": "\t\tcase \"nmos\", \"pmos\":\n\t\t\thasMOS = true"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c77245ec88dbbc88",
+      "severity": "low",
+      "category": "bug",
+      "title": "Possible nil dereference of JFET config",
+      "message": "`jfetChannel` and `jfetResult` dereference `p.Device.JFET` with no nil check. Example graphs add JFETs with an empty value (`b.part(\"J1\", kind, \"\", ...)`). If a component reaches the solver without a populated JFET config, for example from a hand-edited or older graph, the simulator panics instead of returning a diagnostic.",
+      "suggestion": "Make sure compile/validation rejects or defaults JFET components that have a missing `Device.JFET`. Alternatively, fall back to `DefaultJFETConfig(p.Kind)` when it is nil.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/jfet.go",
+          "lines": {
+            "start": 72,
+            "end": 72
+          }
+        }
+      ],
+      "tags": [
+        "nil",
+        "robustness"
+      ],
+      "evidence": "\tc := *p.Device.JFET",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d96287fbd71ca1f2",
+      "severity": "low",
+      "category": "correctness",
+      "title": "JFET source pin current sign may be inconsistent",
+      "message": "Tests elsewhere assert `GateCurrent + DrainCurrent - SourceCurrent == 0`, so `SourceCurrent` appears to be the current leaving the source pin. Gate and drain currents are current entering the pin. Per-pin terminal currents in this map look like current into each pin (for example, `jfetEvaluation` satisfies `i[0]+i[1]+i[2]==0`). If so, the source current in the trace has the wrong sign and does not balance the other two pins.",
+      "suggestion": "Check the sign convention used by the other entries in `currents`, such as the MOSFET pins. If the map uses current into each pin, store `-q.SourceCurrent` for the source pin.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/mixed_transient.go",
+          "lines": {
+            "start": 106,
+            "end": 110
+          }
+        }
+      ],
+      "tags": [
+        "sign-convention"
+      ],
+      "evidence": "\t\tcurrents[q.ID+\".source\"] = q.SourceCurrent",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5193a33cf88f9546",
+      "severity": "low",
+      "category": "correctness",
+      "title": "JFETs routed through MOSFET compilation path",
+      "message": "JFET parts are now added to the `mos` slice. This part of the review does not show how that slice is processed. If the downstream code reads MOSFET-specific parameters (threshold voltage, transistor profile) or assumes an insulated gate with zero gate current, JFETs will be modeled incorrectly. A JFET has a depletion-mode pinch-off and a gate–channel junction that can conduct.",
+      "suggestion": "Check that everything consuming `mos` dispatches on `IsJFETKind` and uses the JFET parameters (IDSS, Vp, gate-junction diode). Otherwise, collect JFETs in their own slice so they cannot fall into MOSFET-only logic.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 47,
+            "end": 48
+          }
+        }
+      ],
+      "tags": [
+        "jfet",
+        "modeling",
+        "location-corrected"
+      ],
+      "evidence": "\t\tcase \"njfet\", \"pjfet\", \"nmos\", \"pmos\":\n\t\t\tmos = append(mos, p)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 100999,
+    "totalMs": 27968
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 46,
+    "bytes": 132142,
+    "chunks": 7,
+    "llmCalls": 7,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 80939,
+        "output": 9520,
+        "costUSD": 0.514156
+      }
+    ],
+    "widenedFiles": 14,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "7aed6cdb1d937cbf",
+        "severity": "low",
+        "category": "maintainability",
+        "title": "JFET ID prefix collides with junction prefix",
+        "message": "New JFET parts get the reference prefix \"J\", which is already used by \"junction\". `nextID` probably keeps the IDs unique, but J1 could then be a wire junction and J2 a transistor. That makes designators ambiguous in BOMs, netlist exports, and agent commands that infer the part kind from its ID.",
+        "suggestion": "Confirm that `nextID` and any consumers that interpret IDs handle the shared prefix. Otherwise use a distinct prefix such as \"JF\" for JFETs, or rename the junction prefix.",
+        "confidence": 0.3,
+        "locations": [
+          {
+            "path": "workbench/editing.go",
+            "lines": {
+              "start": 831,
+              "end": 831
+            }
+          }
+        ],
+        "tags": [
+          "naming",
+          "ids"
+        ],
+        "evidence": "prefix := map[string]string{\"njfet\": \"J\", \"pjfet\": \"J\",",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in workbench/editing.go"
+    }
+  ],
+  "suppressed": []
+}

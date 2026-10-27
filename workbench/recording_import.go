@@ -345,6 +345,9 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 		if err := validateRecordedCurrentDevices(c, m.Graph, r); err != nil {
 			return err
 		}
+		if err := validateRecordedJFETs(c, m.Graph, r); err != nil {
+			return err
+		}
 		if err := validateRecordedMOSFETs(c, m.Graph, r); err != nil {
 			return err
 		}

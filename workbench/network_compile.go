@@ -9,7 +9,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	optos := []Component{}
 	transformers := []Component{}
 	inductors := []Component{}
-	mos := []Component{}
+	fets := []Component{}
 	opamps := []Component{}
 	timers := []Component{}
 	logic := []Component{}
@@ -44,8 +44,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			caps = append(caps, p)
 		case "inductor":
 			inductors = append(inductors, p)
-		case "nmos", "pmos":
-			mos = append(mos, p)
+		case "njfet", "pjfet", "nmos", "pmos":
+			fets = append(fets, p)
 		case "linear-regulator", "ldo-regulator":
 			regulators = append(regulators, p)
 		case "relay":
@@ -95,7 +95,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			generalBipolar = generalBipolar || hasTransistorProfile(q) || out.TerminalNet[q.ID+".emitter"] != out.TerminalNet[grounds[0].ID+".reference"]
 		}
 	}
-	if len(logic) > 0 || len(opamps) > 0 || len(mos) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 || generalBipolar {
+	if len(logic) > 0 || len(opamps) > 0 || len(fets) > 0 || len(pots) > 0 || len(diodes) > 0 || len(switches) > 0 || len(caps) == 0 || len(qs) == 0 || generalBipolar {
 		out.Analysis = NetworkDCAnalysis
 		if len(caps) > 0 {
 			out.Analysis = NetworkTransientAnalysis
@@ -166,7 +166,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 
-	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
+	if len(inductors) > MaxNetworkInductors || len(fets) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers)+len(bridges) == 0 && !hasPassiveDissipation(g) && !hasCurrentDevices(g) {
@@ -217,7 +217,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			}
 			for _, b := range p.Terminals[i+1:] {
 				u, v := net(p, a), net(p, b)
-				if u == v && p.Kind != "shift-register" && p.Kind != "pwm-controller" && p.Kind != "hbridge" && p.Kind != "transformer" && p.Kind != "optocoupler" && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !(IsMOSFETKind(p.Kind) && (a == "gate" || b == "gate")) {
+				if u == v && p.Kind != "shift-register" && p.Kind != "pwm-controller" && p.Kind != "hbridge" && p.Kind != "transformer" && p.Kind != "optocoupler" && !IsRegulatorKind(p.Kind) && p.Kind != "relay" && p.Kind != "comparator" && !IsDisplayKind(p.Kind) && !IsSequentialKind(p.Kind) && !IsLogicKind(p.Kind) && p.Kind != "opamp" && p.Kind != "timer555" && p.Kind != "potentiometer" && !(IsBipolarKind(p.Kind) && a == "base" && b == "collector") && !((IsJFETKind(p.Kind) || IsMOSFETKind(p.Kind)) && (a == "gate" || b == "gate")) {
 					return fail("error", "shorted-component", "Remove the short across component "+p.ID+".", p.ID)
 				}
 				if networkReferencePair(p, a, b, len(opamps) > 0) {
@@ -337,8 +337,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	out.Output = out.Supply
 	if len(qs) > 0 {
 		out.Output = net(qs[0], "collector")
-	} else if len(mos) > 0 {
-		out.Output = net(mos[0], "drain")
+	} else if len(fets) > 0 {
+		out.Output = net(fets[0], "drain")
 	} else if len(sequential) > 0 {
 		pin := "q"
 		if sequential[0].Kind == "shift-register" {

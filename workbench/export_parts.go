@@ -10,6 +10,10 @@ import (
 // describe saved intent rather than a momentary live result.
 func schematicPartDescription(p Component) string {
 	text := p.ID + " · " + p.Name
+	if IsJFETKind(p.Kind) && p.Device != nil && p.Device.JFET != nil {
+		c := p.Device.JFET
+		text += fmt.Sprintf(" · IDSS %.6g A · cutoff %.6g V · lambda %.6g /V · %s", c.IDSS, c.Cutoff, c.Lambda, c.Version)
+	}
 	if IsCurrentDevice(p.Kind) {
 		text += " · " + currentDeviceName(p) + " · " + CurrentDeviceModelID
 	}

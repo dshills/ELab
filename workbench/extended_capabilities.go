@@ -9,6 +9,8 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	c := commandContractDetail{Version: 1, Scope: "hobbyist-device-configuration", Preconditions: []string{"Ordinary revision, document-generation, retry and closed-service guards apply"}, Effects: []string{}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing, extra, wrong-type, null-required, out-of-range or wrong-target fields preserve accepted state"}}}
 	switch id {
+	case "jfet.configure":
+		c.Effects = []string{jfetDescription, "Complete saved undoable electrical edit, all fields required. Cutoff sign must match N/P kind. Existing combined two-FET budget includes MOSFETs and JFETs."}
 	case "current-source.configure", "load.configure":
 		c.Effects = []string{currentDeviceDescription, "Complete saved undoable startup edit; all fields and pulse timing required even in DC. Source 0–1 A/compliance 1–24 V; load cc 0–1 A or cp 0–24 W, minimum 0.1–12 V, current limit 0.001–1 A. Low level must not exceed high. Pulse phase/edge rules match finite source timing. No solver-limit changes."}
 	case "passive.configure":
@@ -60,6 +62,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	schema["x-command-contract"] = c
 	schema["x-model-id"] = ExtendedModelID
+	if id == "jfet.configure" {
+		schema["x-model-id"] = JFETModelID
+	}
 	if id == "current-source.configure" || id == "load.configure" {
 		schema["x-model-id"] = CurrentDeviceModelID
 	}
@@ -160,4 +165,19 @@ func addCurrentSchema(schema map[string]any, kind string) {
 		schema["x-mode-bound"] = "CC levels ≤ 1 A; CP levels ≤ 24 W"
 	}
 	schema["x-level-relation"] = "low ≤ high; DC uses high level, pulse timing is independent of primary input mode"
+}
+
+func addJFETSchema(schema map[string]any) {
+	if p := inputProperty(schema, "version"); p != nil {
+		p["enum"] = []string{JFETModelID}
+	}
+	for _, f := range []struct {
+		name, unit string
+		min, max   float64
+	}{{"idss_a", "A", 1e-5, .1}, {"cutoff_v", "V", -12, 12}, {"lambda_per_v", "1/V", 0, .1}} {
+		if p := inputProperty(schema, f.name); p != nil {
+			p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
+		}
+	}
+	schema["x-cutoff-sign"] = "N: -12 to -0.1 V; P: +0.1 to +12 V; zero and |cutoff|<0.1 V refused"
 }

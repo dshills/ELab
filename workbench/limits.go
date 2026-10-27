@@ -24,6 +24,8 @@ const (
 )
 
 type CircuitLimits struct {
+	JFETs               int `json:"jfets"`
+	CombinedFETs        int `json:"field_effect_transistors_total"`
 	Timers555           int `json:"timers555,omitempty"`
 	PNP                 int `json:"pnp_transistors,omitempty"`
 	CombinedBipolar     int `json:"bipolar_transistors_total,omitempty"`
@@ -53,7 +55,7 @@ type CircuitLimits struct {
 }
 
 func Limits() CircuitLimits {
-	return CircuitLimits{Timers555: MaxNetworkTimers555, PNP: MaxNetworkTransistors, CombinedBipolar: MaxNetworkTransistors, IntegrationAttempts: MaxIntegrationAttempts, IntegrationWallMS: int(MaxIntegrationWallTime / time.Millisecond), PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Inductors: MaxNetworkInductors, Transistors: MaxNetworkTransistors, MOSFETs: MaxNetworkMOSFETs, PMOS: MaxNetworkMOSFETs, CombinedMOSFETs: MaxNetworkMOSFETs, OpAmps: MaxNetworkOpAmps, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
+	return CircuitLimits{JFETs: MaxNetworkMOSFETs, CombinedFETs: MaxNetworkMOSFETs, Timers555: MaxNetworkTimers555, PNP: MaxNetworkTransistors, CombinedBipolar: MaxNetworkTransistors, IntegrationAttempts: MaxIntegrationAttempts, IntegrationWallMS: int(MaxIntegrationWallTime / time.Millisecond), PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Inductors: MaxNetworkInductors, Transistors: MaxNetworkTransistors, MOSFETs: MaxNetworkMOSFETs, PMOS: MaxNetworkMOSFETs, CombinedMOSFETs: MaxNetworkMOSFETs, OpAmps: MaxNetworkOpAmps, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
 }
 func SimulatedComponentCount(g Graph) int {
 	count := 0
@@ -65,5 +67,5 @@ func SimulatedComponentCount(g Graph) int {
 	return count
 }
 func networkLimitMessage() string {
-	return fmt.Sprintf("Network simulation supports at most %d simulated parts and %d electrical nodes including ground: %d sources, %d capacitors, %d inductors, %d total NPN/PNP transistors, %d total N/P-channel MOSFETs, %d op-amps, %d 555 timers, %d resistors, %d switches, %d total silicon/Schottky/Zener diodes, %d potentiometers and %d LEDs. Excess drawings remain editable and savable.", MaxSimulatedComponents, MaxElectricalNodes, MaxNetworkSources, MaxNetworkCapacitors, MaxNetworkInductors, MaxNetworkTransistors, MaxNetworkMOSFETs, MaxNetworkOpAmps, MaxNetworkTimers555, MaxNetworkResistors, MaxNetworkSwitches, MaxNetworkDiodes, MaxNetworkPotentiometers, MaxNetworkLEDs)
+	return fmt.Sprintf("Network simulation supports at most %d simulated parts and %d electrical nodes including ground: %d sources, %d capacitors, %d inductors, %d total NPN/PNP transistors, %d total N/P-channel MOSFETs/JFETs, %d op-amps, %d 555 timers, %d resistors, %d switches, %d total silicon/Schottky/Zener diodes, %d potentiometers and %d LEDs. Excess drawings remain editable and savable.", MaxSimulatedComponents, MaxElectricalNodes, MaxNetworkSources, MaxNetworkCapacitors, MaxNetworkInductors, MaxNetworkTransistors, MaxNetworkMOSFETs, MaxNetworkOpAmps, MaxNetworkTimers555, MaxNetworkResistors, MaxNetworkSwitches, MaxNetworkDiodes, MaxNetworkPotentiometers, MaxNetworkLEDs)
 }

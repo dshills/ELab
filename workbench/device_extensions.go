@@ -14,6 +14,7 @@ type ExtendedModel struct {
 	Shift    string `json:"shift_register"`
 	Sound    string `json:"sound"`
 	Speaker  string `json:"loudspeaker,omitempty"`
+	JFET     string `json:"jfet,omitempty"`
 	Current  string `json:"current_devices,omitempty"`
 	Passive  string `json:"passive_losses,omitempty"`
 }
@@ -38,6 +39,7 @@ type SoundConfig struct {
 	Frequency   float64 `json:"frequency_hz"`
 }
 type DeviceParameters struct {
+	JFET     *JFETConfig        `json:"jfet,omitempty"`
 	Current  *CurrentConfig     `json:"current_source,omitempty"`
 	Load     *LoadConfig        `json:"electronic_load,omitempty"`
 	Passive  *PassiveConfig     `json:"passive,omitempty"`
@@ -53,6 +55,10 @@ func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
 		return nil
 	}
 	o := *p
+	if p.JFET != nil {
+		v := *p.JFET
+		o.JFET = &v
+	}
 	if p.Current != nil {
 		v := *p.Current
 		o.Current = &v
@@ -92,12 +98,15 @@ func hasDynamics(p Component) bool {
 }
 func isSoundKind(k string) bool { return k == "piezo" || k == "active-buzzer" }
 func isExtendedKind(k string) bool {
-	return IsCurrentDevice(k) || k == "speaker" || k == "pwm-controller" || k == "shift-register" || isSoundKind(k)
+	return IsJFETKind(k) || IsCurrentDevice(k) || k == "speaker" || k == "pwm-controller" || k == "shift-register" || isSoundKind(k)
 }
 func extendedModelForGraph(g Graph) *ExtendedModel {
 	for _, p := range g.Components {
 		if isExtendedKind(p.Kind) || hasDynamics(p) || hasPassiveLoss(p) {
 			m := ExtendedDeviceModel()
+			if hasJFETs(g) {
+				m.JFET = jfetDescription
+			}
 			if hasCurrentDevices(g) {
 				m.Current = currentDeviceDescription
 			}
@@ -114,6 +123,9 @@ func extendedModelForGraph(g Graph) *ExtendedModel {
 }
 func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	expected := ExtendedDeviceModel()
+	if hasJFETs(g) {
+		expected.JFET = jfetDescription
+	}
 	if hasCurrentDevices(g) {
 		expected.Current = currentDeviceDescription
 	}
@@ -132,6 +144,10 @@ func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	return nil
 }
 func defaultDeviceParameters(p *Component) {
+	if IsJFETKind(p.Kind) {
+		v := DefaultJFETConfig(p.Kind)
+		p.Device = &DeviceParameters{JFET: &v}
+	}
 	if p.Kind == "current-source" {
 		v := DefaultCurrentConfig()
 		p.Device = &DeviceParameters{Current: &v}
@@ -154,12 +170,15 @@ func defaultDeviceParameters(p *Component) {
 func validateDeviceParameters(p Component) error {
 	d := p.Device
 	if d == nil {
-		if IsCurrentDevice(p.Kind) || p.Kind == "speaker" || p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
+		if IsJFETKind(p.Kind) || IsCurrentDevice(p.Kind) || p.Kind == "speaker" || p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
 			return fmt.Errorf("device requires explicit parameters")
 		}
 		return nil
 	}
 	count := 0
+	if d.JFET != nil {
+		count++
+	}
 	if d.Current != nil {
 		count++
 	}
@@ -186,6 +205,9 @@ func validateDeviceParameters(p Component) error {
 	}
 	if count != 1 {
 		return fmt.Errorf("device parameters must match one component model")
+	}
+	if IsJFETKind(p.Kind) && d.JFET != nil {
+		return validateJFET(p.Kind, *d.JFET)
 	}
 	if p.Kind == "current-source" && d.Current != nil {
 		return validateCurrent(*d.Current)
@@ -234,6 +256,8 @@ func validateDeviceFields(raw json.RawMessage, p Component) error {
 		return err
 	}
 	switch {
+	case p.Device.JFET != nil:
+		return paramsNested(f["device_parameters"], "jfet", &JFETConfig{}, jfetFields()...)
 	case p.Device.Current != nil:
 		if err := paramsNested(f["device_parameters"], "current_source", &CurrentConfig{}, currentFields()...); err != nil {
 			return err

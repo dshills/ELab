@@ -78,6 +78,9 @@ func buildExampleCatalog() []ExampleInfo {
 		{ID: "bipolar-push-pull", Title: "Complementary transistor buffer", Question: "How can an NPN/PNP pair source and sink load current?", Expected: "Q1 supplies the positive half-cycle, Q2 the negative half-cycle. The unbiased stage has a visible crossover dead band near zero input.", Try: "Plot VIN, the shared emitters and both collector currents. Pause and compare positive, negative and near-zero input samples.", Limitation: "Unbiased educational class-B stage with illustrative complementary parameters; no thermal behavior, internal charge, real matched pair or physical power ratings."},
 		{ID: "capacitor-loss", Title: "Capacitor ESR and leakage", Question: "Why do capacitor terminal voltage and stored voltage differ?", Expected: "ESR creates an immediate terminal-voltage step; leakage lowers the final charge and dissipates power.", Try: "Select C1, compare stored voltage and total current, then disable electrical losses and Restart. Change ESR or leakage resistance and compare captures.", Limitation: passiveLossDescription},
 		{ID: "winding-loss", Title: "Coil winding loss and damping", Question: "How does winding resistance change ringing and energy loss?", Expected: "The coil's series resistance increases damping and dissipates I²R while magnetic energy remains L I²/2.", Try: "Select L1, compare winding heat and storage voltage, then disable losses or change winding resistance. Record C1 voltage and L1 current.", Limitation: passiveLossDescription},
+		{ID: "jfet-preamp", Title: "JFET audio preamplifier", Question: "How does reverse gate bias control an amplifier?", Expected: "A self-biased N-channel depletion JFET amplifies and inverts a small 100 Hz signal. COUT removes the drain DC bias.", Try: "Inspect J1 gate/source/drain readings. Change IDSS, cutoff or RD; compare DC bias and VIN to RL Bode response.", Limitation: jfetDescription},
+		{ID: "jfet-current", Title: "Self-biased JFET current sink", Question: "Can a normally-on transistor set current with one resistor?", Expected: "Source resistance reverse-biases the gate, reducing drain current below IDSS.", Try: "Change RSET or J1 IDSS/cutoff and sweep V1 to see compliance.", Limitation: jfetDescription},
+		{ID: "pjfet-current", Title: "P-channel JFET current source", Question: "How does JFET polarity reverse the same circuit?", Expected: "A P-channel device sources current from the positive rail with signed negative drain current.", Try: "Compare signed terminal currents with the N-channel sink.", Limitation: jfetDescription},
 		{ID: "current-led", Title: "Pulsed current-driven LED", Question: "How does a current source control LED brightness?", Expected: "I1 alternates 2 and 15 mA; the LED sets its forward voltage below source compliance.", Try: "Select I1 and change current, pulse timing or compliance. Compare terminal voltage and delivered current.", Limitation: currentDeviceDescription},
 		{ID: "load-step", Title: "Constant-current supply load step", Question: "How does a supply sag under a changing load?", Expected: "A 5 V source and 10 Ω feed charge C1. LOAD1 alternates 10 and 80 mA, exposing droop and recovery.", Try: "Compare capacitor voltage and load/source currents. Change feed resistance or enable ESR on C1.", Limitation: currentDeviceDescription},
 		{ID: "constant-power-load", Title: "Constant-power electronic load", Question: "Why does a power load draw more current as voltage falls?", Expected: "LOAD1 alternates 50 and 250 mW; increasing feed resistance exposes negative incremental resistance and current limiting.", Try: "Compare with CC mode. Lower the current limit or increase minimum operating voltage to see foldback.", Limitation: currentDeviceDescription},
@@ -445,6 +448,13 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.selected = "Q6"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0005, .02
 		d.probes = []string{"v:VIN.positive", "v:RL", "i:Q6.collector", "i:Q7.collector", "i:Q8.collector", "v:C1"}
+	case "jfet-preamp":
+		d.graph, d.selected = JFETPreampExampleGraph(), "J1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0001, .02
+		d.probes = []string{"v:VIN.positive", "v:RL", "v:J1.gate-source", "i:J1.drain"}
+	case "jfet-current", "pjfet-current":
+		d.graph, d.selected = JFETCurrentExampleGraph(id == "pjfet-current"), "J1"
+		d.probes = []string{"v:J1", "v:J1.gate-source", "i:J1.drain", "i:J1.gate"}
 	case "current-led":
 		d.graph, d.selected = CurrentLEDExampleGraph(), "I1"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00025, .1

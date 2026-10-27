@@ -134,7 +134,7 @@ func probeInventory(g Graph) []Probe {
 				ref := p.ID + "." + pin
 				out = append(out, Probe{"i:" + ref, ref + " current into device", "A", ref, "into device"})
 			}
-		case "nmos", "pmos":
+		case "njfet", "pjfet", "nmos", "pmos":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " drain-source voltage", "V", p.ID + ".drain", p.ID + ".source"}, Probe{"v:" + p.ID + ".gate-source", p.ID + " gate-source voltage", "V", p.ID + ".gate", p.ID + ".source"})
 			for _, pin := range p.Terminals {
 				ref := p.ID + "." + pin

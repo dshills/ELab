@@ -32,6 +32,14 @@ func (n *mixedNetwork) inductorNewtonScale(x, delta []float64, stages int) float
 					sign := bipolarPolarity(p.Kind)
 					forward(sign*v, sign*d)
 				}
+			case "njfet", "pjfet":
+				if p.Kind == "njfet" {
+					forward(junction(p, "gate", "source"))
+					forward(junction(p, "gate", "drain"))
+				} else {
+					forward(junction(p, "source", "gate"))
+					forward(junction(p, "drain", "gate"))
+				}
 			case "nmos", "pmos":
 				_, gateChange := junction(p, "gate", "source")
 				if math.Abs(gateChange) > maxMixedNewtonDelta {

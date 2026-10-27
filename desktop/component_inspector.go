@@ -95,6 +95,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	if workbench.IsJFETKind(part.Kind) {
+		inspector = append(inspector, s.jfetControls(state, part)...)
+	}
 	if workbench.IsCurrentDevice(part.Kind) {
 		inspector = append(inspector, s.currentControls(state, part)...)
 	}

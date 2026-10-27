@@ -301,8 +301,14 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		b.stroke(c, width, transformed...)
 	}
 	switch part.Kind {
-	case "current-source", "electronic-load":
-		for _, path := range workbench.CurrentSymbolPaths(part.Kind) {
+	case "njfet", "pjfet", "current-source", "electronic-load":
+		var paths [][]workbench.Point
+		if workbench.IsJFETKind(part.Kind) {
+			paths = workbench.JFETSymbolPaths(part.Kind)
+		} else {
+			paths = workbench.CurrentSymbolPaths(part.Kind)
+		}
+		for _, path := range paths {
 			points := make([]canvas.Point, len(path))
 			for k, p := range path {
 				points[k] = canvas.Point{X: p.X, Y: p.Y}

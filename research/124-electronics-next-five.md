@@ -70,6 +70,18 @@ bleed, bounded low-voltage continuation and finite pulse ramps are documented.
 Independent resistor/compliance roots, CC/CP supply roots, RC ODE, derivatives,
 passivity, current-driven capacitor, storage-free pulse classification, combined
 source budget, capture/reopen/forgery, initial voltage trace and ordinary/offscreen
-shared inspector/agent checks pass. Source count remains four; no solver-limit
+shared inspector/agent checks pass. Source count remains three; no solver-limit
 changes. Catalog is 56 kinds /206 commands /73 examples. Model/print/export
 metadata and sampling advice retain full settings. Prism completed all eight Anthropic Opus 5.5 chunks; findings are fixed or explicitly dispositioned against tests and declared model scope in the current-devices evidence README. Fresh controls cover the review changes.
+
+Item 3 committed as `fa12ddfa`. A documentation/test closeout corrects the source
+budget description to the actual unchanged three-source limit and tests exactly
+MaxNetworkSources+1. Item 4 adds configurable generic N/P-channel JFETs within the
+existing combined two-FET capacity, explicit gate PN junctions/bleeds, analytic
+Jacobian, DC/transient/AC, signed terminal readings and model-bearing captures.
+Three examples teach a preamp and complementary self-biased current sink/source.
+Independent square law, complete Jacobian/polarity/reciprocity, self-bias quadratic,
+transconductance/pole AC and nonlinear transient ODE checks pass, as do
+capture/reopen/forgery, history, capacity and ordinary/offscreen shared controls.
+Discovery keeps its 64 KiB bound by sharing existing save/load/step schemas.
+Catalog: 58 kinds /207 commands /76 examples. Prism completed all seven Anthropic Opus 5.5 chunks; one medium and eight low findings are fixed or dispositioned in the JFET evidence README. Fresh race controls cover review changes.

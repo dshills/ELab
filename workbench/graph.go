@@ -158,6 +158,8 @@ type Part struct {
 
 func libraryParts() []Part {
 	return []Part{
+		{Kind: "njfet", Name: "N-channel JFET", Terminals: append([]string{}, jfetPins...), Model: JFETModelID},
+		{Kind: "pjfet", Name: "P-channel JFET", Terminals: append([]string{}, jfetPins...), Model: JFETModelID},
 		{Kind: "current-source", Name: "DC / pulsed current source", Terminals: []string{"positive", "negative"}, Model: CurrentDeviceModelID},
 		{Kind: "electronic-load", Name: "CC / CP electronic load", Terminals: []string{"positive", "negative"}, Model: CurrentDeviceModelID},
 		{Kind: "shift-register", Name: "8-bit shift / latch register", Terminals: append([]string{}, shiftPins...), Model: ExtendedModelID},
@@ -433,7 +435,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "nmos", "pmos":
+	case "njfet", "pjfet", "nmos", "pmos":
 		switch name {
 		case "gate":
 			p = Point{-40, 0}
@@ -651,7 +653,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		}
 	}
 	// Optional storage losses require the general network equations, not the ideal RC shortcut.
-	if hasCurrentDevices(g) || hasPassiveLosses(g) || hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasJFETs(g) || hasCurrentDevices(g) || hasPassiveLosses(g) || hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

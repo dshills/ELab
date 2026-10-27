@@ -3,7 +3,7 @@
 56 kinds /206 commands /73 examples. Three examples exercise pulsed LED current,
 CC supply sag, and CP negative incremental resistance. Shared saved/batchable
 configuration, history, full parameter/model metadata, sampling advice, probes,
-recordings/projects and both desktop drivers are covered. Four-source, part,
+recordings/projects and both desktop drivers are covered. Three-source, part,
 node, storage, residual/error, attempt and wall limits remain unchanged.
 
 Independent Norton/resistor and compliance checks, CC/CP supply roots, RC ODE,

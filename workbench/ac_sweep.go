@@ -26,7 +26,7 @@ type ACBand struct {
 func acSupported(g Graph) error {
 	for _, p := range g.Components {
 		switch p.Kind {
-		case "current-source", "electronic-load", "speaker", "npn", "pnp", "nmos", "pmos", "diode", "schottky", "zener", "led", "transformer", "ground", "net-label", "junction", "resistor", "potentiometer", "capacitor", "inductor", "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "opamp", "thermistor", "ldr", "switch":
+		case "njfet", "pjfet", "current-source", "electronic-load", "speaker", "npn", "pnp", "nmos", "pmos", "diode", "schottky", "zener", "led", "transformer", "ground", "net-label", "junction", "resistor", "potentiometer", "capacitor", "inductor", "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "opamp", "thermistor", "ldr", "switch":
 		default:
 			return fmt.Errorf("AC small-signal analysis does not yet support %s; use transient simulation", p.Kind)
 		}
