@@ -58,4 +58,8 @@ Item 2 is committed as `cd7ff887`.
 
 Item 3: versioned educational NPN/PNP profiles, Early effect and explicit junction capacitance are implemented with shared undoable controls, saved/captured parameters, a working follower example and independent DC/Jacobian/AC references. Biased startup avoids imposing redundant junction voltage constraints; existing four-storage and total-part bounds remain unchanged. Three Anthropic Prism reviews and findings dispositions are retained. Actual inspector mounting, stale callbacks, core race and offscreen-build handler/theme tests pass. Early fixture/compiler and unrecognized-tag trials are excluded from successful evidence. Manufacturer SPICE-card fidelity is deliberately not claimed. Committing this reviewed batch.
 
-Items 4–5: implementation in progress, not yet qualified or committed.
+Item 3 is committed as `0377a10b`.
+
+Item 4: independent seeded tolerance analysis is implemented for R/C and explicit profile beta, in AC-gain or DC mode. Every trial exposes actual parameter draws and outcome, with failed counts and inspectable errors. Captured model-bearing source/hash, exact-result exports, cancellation, shared controls and an RC example are covered. Independent RC transfer/statistics, reproducibility, zero values, failure retention, stale callback, exact-seed and ordinary/offscreen-build tests pass. Three complete Anthropic Prism reviews are retained; final report has no medium/high findings, with all remaining observations repaired or concretely dispositioned. Catalog schema pooling preserves the 64 KiB bound. Initial fixture IDs, pointer-identity assertion, RC-vs-mixed helper assumption and expected-refusal runner mistakes are excluded from passing evidence. Committing item 4.
+
+Item 5: loudspeaker implementation pending; private draft is outside compiled packages.

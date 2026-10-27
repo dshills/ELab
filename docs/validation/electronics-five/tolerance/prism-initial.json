@@ -1,0 +1,267 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "27f91eb8d8925cb4baff6acc1d4aba6e",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "0377a10b652d2b3e42878538fb51ae1581675380",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 3,
+      "medium": 4,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "63b02e4818686d57",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "x",
+      "message": "The Run button sends the settings `p` captured when the view was rendered. The docs say a nonempty run object fully replaces the current settings. If an agent or another UI path changes the settings before the user clicks Run, those changes are silently replaced by stale values. The settings controls avoid this by using `invokeAtCommandRevision`, but `s.action` has no revision guard.",
+      "suggestion": "Send empty params so the run uses the current settings. Alternatively, invoke the run with `invokeAtCommandRevision(\"tolerance.run\", p, state.CommandRevision, state.Document.Generation)` so a run against stale settings is refused.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "desktop/tolerance.go",
+          "lines": {
+            "start": 66,
+            "end": 66
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "stale-state",
+        "location-corrected"
+      ],
+      "evidence": "run := s.action(\"tolerance-run\", \"Run tolerance analysis\", \"tolerance.run\", p)",
+      "fix": {
+        "before": "run := s.action(\"tolerance-run\", \"Run tolerance analysis\", \"tolerance.run\", p)",
+        "after": "run := s.action(\"tolerance-run\", \"Run tolerance analysis\", \"tolerance.run\", struct{}{})"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d6c2840221ed2564",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unchecked indexing into AC sweep result",
+      "message": "The AC sweep result is indexed without checking that `Points` or `Values` has any elements. If the sweep returns no points, or the probe produced no value, the worker goroutine panics. That panic takes down the whole service rather than producing a failed trial.",
+      "suggestion": "Check that `response.Points` and `response.Points[0].Values` are non-empty before indexing. When either is empty, set `err` so the trial is recorded as failed.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/tolerance.go",
+          "lines": {
+            "start": 253,
+            "end": 253
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "bounds",
+        "location-corrected"
+      ],
+      "evidence": "value = response.Points[0].Values[0]",
+      "fix": {
+        "before": "value = response.Points[0].Values[0]",
+        "after": "if len(response.Points) == 0 || len(response.Points[0].Values) == 0 {\n\t\t\t\t\t\terr = fmt.Errorf(\"probe unavailable\")\n\t\t\t\t\t} else {\n\t\t\t\t\t\tvalue = response.Points[0].Values[0]\n\t\t\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "e3577d0a7571be35",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unchecked nil map write on schema property",
+      "message": "`inputProperty` can return nil; the loop below already checks `p != nil` for that. The `format` and `mode` lookups write to the result without a check. If the schema lacks the property, the write to a nil map panics while building capabilities.",
+      "suggestion": "Check for nil before assigning `enum`, as the numeric bounds loop already does.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/tolerance_capabilities.go",
+          "lines": {
+            "start": 11,
+            "end": 15
+          }
+        }
+      ],
+      "tags": [
+        "nil-map",
+        "panic"
+      ],
+      "evidence": "inputProperty(schema, \"format\")[\"enum\"] = []string{\"json\", \"csv\"}",
+      "fix": {
+        "before": "inputProperty(schema, \"format\")[\"enum\"] = []string{\"json\", \"csv\"}",
+        "after": "if p := inputProperty(schema, \"format\"); p != nil {\n\t\t\tp[\"enum\"] = []string{\"json\", \"csv\"}\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1923938603b8b39e",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unchecked nil map write for mode enum",
+      "message": "Writes to the result of `inputProperty` without a nil check. This panics for any schema that lacks `mode`. That includes `tolerance.run`, which takes empty params.",
+      "suggestion": "Guard with a nil check.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/tolerance_capabilities.go",
+          "lines": {
+            "start": 15,
+            "end": 15
+          }
+        }
+      ],
+      "tags": [
+        "nil-map",
+        "panic"
+      ],
+      "evidence": "inputProperty(schema, \"mode\")[\"enum\"] = []string{\"dc\", \"ac-gain\"}",
+      "fix": {
+        "before": "inputProperty(schema, \"mode\")[\"enum\"] = []string{\"dc\", \"ac-gain\"}",
+        "after": "if p := inputProperty(schema, \"mode\"); p != nil {\n\t\t\tp[\"enum\"] = []string{\"dc\", \"ac-gain\"}\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "9372e378732e9938",
+      "severity": "low",
+      "category": "docs",
+      "title": "Export contract effects omit tolerance kinds",
+      "message": "The export.start contract adds `tolerance-json` and `tolerance-csv` kinds and updates the ID description and errors. The Effects text still lists only scope, spectrum and verification/sweep capture semantics. Clients that read the machine contract cannot tell what a tolerance export captures.",
+      "suggestion": "Add a sentence to the Effects text describing what tolerance kinds capture, for example the exact completed result with all trials and its settings or seed.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/export_capabilities.go",
+          "lines": {
+            "start": 57,
+            "end": 57
+          }
+        }
+      ],
+      "tags": [
+        "contract",
+        "tolerance",
+        "location-corrected"
+      ],
+      "evidence": "c.Effects = append(c.Effects, \"Scope kind captures fresh selected live rows/window/units even while recorded view is shown. Spectrum kinds capture the exact derived result and its original recording hash. Verification/sweep kinds capture retained complete immutable data and original metadata, independent of selection or later membership/view changes\")",
+      "fix": {
+        "before": "c.Effects = append(c.Effects, \"Scope kind captures fresh selected live rows/window/units even while recorded view is shown. Spectrum kinds capture the exact derived result and its original recording hash. Verification/sweep kinds capture retained complete immutable data and original metadata, independent of selection or later membership/view changes\")",
+        "after": "c.Effects = append(c.Effects, \"Scope kind captures fresh selected live rows/window/units even while recorded view is shown. Spectrum kinds capture the exact derived result and its original recording hash. Tolerance kinds capture the exact completed tolerance result including failed trials. Verification/sweep kinds capture retained complete immutable data and original metadata, independent of selection or later membership/view changes\")"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b5b27f5aaf4d321c",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Partial settings payload resets all other fields to zero",
+      "message": "When any field is supplied, the current settings are replaced with a zero-valued struct before decoding. A partial update, such as changing only `trials`, therefore resets `frequency`, `seed`, the fractions and the IDs. Validation then rejects it, because frequency 0 is outside 0.01–100000 even in dc mode. A seed of 0, or fractions of 0, are also silently lost from the defaults.",
+      "suggestion": "Decode onto the existing settings (`p`) instead of a zeroed struct so omitted fields keep their current values. Alternatively, document and enforce full replacement, and validate frequency only in ac-gain mode.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/tolerance.go",
+          "lines": {
+            "start": 309,
+            "end": 310
+          }
+        }
+      ],
+      "tags": [
+        "api",
+        "settings"
+      ],
+      "evidence": "\t\tif len(fields) \u003e 0 {\n\t\t\tp = ToleranceSettings{}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "280211bd70044b54",
+      "severity": "low",
+      "category": "testing",
+      "title": "Use errors.Is for cancellation check",
+      "message": "The test compares errors with `!=`. If `computeTolerance` (or the solver) wraps the cancellation error, this check fails spuriously, which makes the test brittle.",
+      "suggestion": "Use `errors.Is(err, context.Canceled)` and import `errors`.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/tolerance_test.go",
+          "lines": {
+            "start": 178,
+            "end": 178
+          }
+        }
+      ],
+      "tags": [
+        "errors",
+        "location-corrected"
+      ],
+      "evidence": "if _, err := computeTolerance(ctx, r.Source, p, func(int) {}); err != context.Canceled {",
+      "fix": {
+        "before": "if _, err := computeTolerance(ctx, r.Source, p, func(int) {}); err != context.Canceled {",
+        "after": "if _, err := computeTolerance(ctx, r.Source, p, func(int) {}); !errors.Is(err, context.Canceled) {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 61353,
+    "totalMs": 23856
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 19,
+    "bytes": 76064,
+    "chunks": 4,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 44171,
+        "output": 6039,
+        "costUSD": 0.297464
+      }
+    ],
+    "widenedFiles": 4,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

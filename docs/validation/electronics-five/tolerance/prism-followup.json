@@ -1,0 +1,231 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "eddf6bd763dc8c0229ef98603535db47",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "0377a10b652d2b3e42878538fb51ae1581675380",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 5,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "1ec88251b96c7cd8",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Snapshot alias check can pass when only some fields are aliased",
+      "message": "Three separate fields are mutated and then the whole structure is compared once. If only one of them is deep-copied by Snapshot, the structures still differ and the test passes. Aliasing of the other two fields (for example the Trials slice or the Value pointer) goes undetected. The test only fails when every mutated field is aliased.",
+      "suggestion": "Take a fresh snapshot and check each mutated field on its own. Assert that the Actual parameter, *Value and the component Name each still hold their original values.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/tolerance_test.go",
+          "lines": {
+            "start": 112,
+            "end": 117
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "weak-assertion"
+      ],
+      "evidence": "\tv.Result.Trials[0].Parameters[0].Actual = 999\n\t*v.Result.Trials[0].Value = 999\n\tv.Result.Source.Graph.Components[0].Name = \"alias\"\n\tif reflect.DeepEqual(v, s.Snapshot().Tolerance) {\n\t\tt.Fatal(\"snapshot alias\")\n\t}",
+      "fix": {
+        "before": "\tv.Result.Trials[0].Parameters[0].Actual = 999\n\t*v.Result.Trials[0].Value = 999\n\tv.Result.Source.Graph.Components[0].Name = \"alias\"\n\tif reflect.DeepEqual(v, s.Snapshot().Tolerance) {\n\t\tt.Fatal(\"snapshot alias\")\n\t}",
+        "after": "\tv.Result.Trials[0].Parameters[0].Actual = 999\n\t*v.Result.Trials[0].Value = 999\n\tv.Result.Source.Graph.Components[0].Name = \"alias\"\n\tfresh := s.Snapshot().Tolerance\n\tif fresh.Result.Trials[0].Parameters[0].Actual == 999 || *fresh.Result.Trials[0].Value == 999 || fresh.Result.Source.Graph.Components[0].Name == \"alias\" {\n\t\tt.Fatal(\"snapshot alias\")\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "077a976254a7338e",
+      "severity": "low",
+      "category": "correctness",
+      "title": "float32 round-trip introduces noise into float64 settings",
+      "message": "Settings values pass through float32 in the number fields. Frequency and the tolerance fractions are float64. A user entry like 0.1 Hz or 12.3 % is stored with float32 rounding noise (for example 0.10000000149011612). That noise then shows up in snapshots, exports and agent parity comparisons.",
+      "suggestion": "Round the float32 value to a sensible precision before storing it, e.g. `strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', 7, 32), 64)`. Alternatively, use a text field for frequency, as is already done for the seed.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/tolerance.go",
+          "lines": {
+            "start": 39,
+            "end": 45
+          }
+        }
+      ],
+      "tags": [
+        "precision",
+        "ui"
+      ],
+      "evidence": "update(float64(e.Number))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0900c4f15f1291f0",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Trials truncates fractional input silently",
+      "message": "`int(f)` truncates a fractional entry, so 15.9 becomes 15. The result can also be a value the user did not intend without any feedback.",
+      "suggestion": "Use `int(math.Round(f))` so fractional entries round to the nearest integer, or reject non-integer input. This requires importing `math`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/tolerance.go",
+          "lines": {
+            "start": 50,
+            "end": 50
+          }
+        }
+      ],
+      "tags": [
+        "ui"
+      ],
+      "evidence": "field(\"tolerance-trials\", \"Trials\", float64(p.Trials), 2, 64, 1, func(f float64) { n := p; n.Trials = int(f); apply(n) })",
+      "fix": {
+        "before": "field(\"tolerance-trials\", \"Trials\", float64(p.Trials), 2, 64, 1, func(f float64) { n := p; n.Trials = int(f); apply(n) })",
+        "after": "field(\"tolerance-trials\", \"Trials\", float64(p.Trials), 2, 64, 1, func(f float64) { n := p; n.Trials = int(math.Round(f)); apply(n) })"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5a5b7f9183371979",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Tolerance snapshot field lacks omitempty, unlike sibling optional states",
+      "message": "The new `Tolerance` field is the only optional pointer state here without `omitempty`. `Spectrum`, `Proposal` and `Audio` all use it. Every snapshot will now carry `\"tolerance\": null` when no tolerance job exists. That changes the snapshot wire shape and can break clients or golden tests that compare snapshots or treat key presence as state presence.",
+      "suggestion": "Add `omitempty` to match the other optional analysis states, unless always emitting the key is intentional and documented.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/service.go",
+          "lines": {
+            "start": 19,
+            "end": 19
+          }
+        }
+      ],
+      "tags": [
+        "json",
+        "api-consistency",
+        "location-corrected"
+      ],
+      "evidence": "\tTolerance              *ToleranceState        `json:\"tolerance\"`",
+      "fix": {
+        "before": "\tTolerance              *ToleranceState        `json:\"tolerance\"`",
+        "after": "\tTolerance              *ToleranceState        `json:\"tolerance,omitempty\"`"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "dfdcb6e7c0c84112",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Frequency required even in DC mode",
+      "message": "A nonempty params object replaces the full settings, so a DC run submitted without `frequency_hz` gets Frequency=0 and is rejected. DC mode never uses the frequency, so this rejection has no purpose. `frequency_hz` is also tagged omitempty, which makes it easy to leave out.",
+      "suggestion": "Validate the frequency only when Mode is \"ac-gain\". Alternatively, give an omitted frequency a default value before validating.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/tolerance.go",
+          "lines": {
+            "start": 147,
+            "end": 149
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "location-corrected"
+      ],
+      "evidence": "if !finite(p.Frequency) || p.Frequency \u003c .01 || p.Frequency \u003e 100000 {\n\t\treturn Probe{}, fmt.Errorf(\"frequency must be 0.01–100000 Hz\")\n\t}",
+      "fix": {
+        "before": "if !finite(p.Frequency) || p.Frequency \u003c .01 || p.Frequency \u003e 100000 {\n\t\treturn Probe{}, fmt.Errorf(\"frequency must be 0.01–100000 Hz\")\n\t}",
+        "after": "if p.Mode == \"ac-gain\" \u0026\u0026 (!finite(p.Frequency) || p.Frequency \u003c .01 || p.Frequency \u003e 100000) {\n\t\treturn Probe{}, fmt.Errorf(\"frequency must be 0.01–100000 Hz\")\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "05a02d5fcf48a47d",
+      "severity": "low",
+      "category": "security",
+      "title": "CSV export does not neutralize formula-leading cells",
+      "message": "The CSV export writes free-form strings straight into cells: failure diagnostics, probe IDs that come from user-authored component IDs, and parameters JSON. A cell that starts with =, +, - or @ can be run as a formula when the file is opened in a spreadsheet.",
+      "suggestion": "Before writing each text cell, prefix it with a single quote if it starts with a formula character.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/tolerance.go",
+          "lines": {
+            "start": 400,
+            "end": 400
+          }
+        }
+      ],
+      "tags": [
+        "csv-injection",
+        "location-corrected"
+      ],
+      "evidence": "if e = w.Write([]string{r.SourceSHA256, strconv.Itoa(t.Index), r.Probe.ID, r.Probe.Unit, v, t.Failure, string(params)}); e != nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 86891,
+    "totalMs": 26242
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 20,
+    "bytes": 82154,
+    "chunks": 5,
+    "llmCalls": 5,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 49567,
+        "output": 7693,
+        "costUSD": 0.352128
+      }
+    ],
+    "widenedFiles": 5,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

@@ -1,0 +1,200 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "90b2d14c33a276f86dd2a6fe05e3ae3d",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "0377a10b652d2b3e42878538fb51ae1581675380",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 5,
+      "medium": 0,
+      "high": 0
+    },
+    "highestSeverity": "low"
+  },
+  "findings": [
+    {
+      "id": "641f8975536e6649",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Run enabled with a probe/source not valid for the current mode",
+      "message": "In ac-gain mode the probe options are filtered to `v:` probes, but `ProbeID` keeps any earlier selection, such as a current probe from dc mode. Run stays enabled and the selector's `SelectedID` may not match any of its options. The source selector has the same problem when `SourceID` is not a listed non-battery voltage source. The run then fails on the server, or the view may fail validation.",
+      "suggestion": "Disable Run, or prompt for a new selection, when `p.ProbeID` is not among the `probes` options. In ac-gain mode, also require `p.SourceID` to be among the `sources` options.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "desktop/tolerance.go",
+          "lines": {
+            "start": 81,
+            "end": 81
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "validation",
+        "location-corrected"
+      ],
+      "evidence": "run.Disabled = busy || p.ProbeID == \"\"",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1ddc6d6959837b89",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Progress uses live settings instead of the running job's trial count",
+      "message": "The progress denominator comes from the current settings (`p.Trials`), not from the run in progress. Native controls are disabled while busy, but an agent can still call `tolerance.settings.set` mid-run. After that, the display can show a misleading count such as \"12 / 4 trials\".",
+      "suggestion": "Show the trial count captured for the active run, for example a run-settings or total field on `ToleranceState`, instead of the live settings.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/tolerance.go",
+          "lines": {
+            "start": 84,
+            "end": 84
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "state",
+        "location-corrected"
+      ],
+      "evidence": "nodes = append(nodes, quiet(\"tolerance-progress\", fmt.Sprintf(\"%s · %d / %d trials\", v.Status, v.Completed, p.Trials)), s.action(\"tolerance-cancel\", \"Cancel tolerance run\", \"tolerance.cancel\", workbench.IDParams{ID: v.ID}))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f6d60c469f5b3ae8",
+      "severity": "low",
+      "category": "security",
+      "title": "CSV formula escaping misses leading tab/CR triggers",
+      "message": "`toleranceCSVText` escapes cells whose first non-whitespace character is `=`, `+`, `-` or `@`. A leading tab or carriage return can also make spreadsheets interpret a cell, and OWASP lists both as formula-injection triggers. A cell such as `\\t...` is only prefixed if `=+-@` follows the whitespace, so the protection is incomplete. Failure messages can contain user-authored component or probe IDs.",
+      "suggestion": "Also prefix any cell whose first character is a tab or carriage return.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/tolerance.go",
+          "lines": {
+            "start": 410,
+            "end": 414
+          }
+        }
+      ],
+      "tags": [
+        "csv-injection"
+      ],
+      "evidence": "\ttrim := strings.TrimLeft(s, \" \\t\\r\\n\")\n\tif len(trim) \u003e 0 \u0026\u0026 strings.ContainsRune(\"=+-@\", rune(trim[0])) {",
+      "fix": {
+        "before": "\ttrim := strings.TrimLeft(s, \" \\t\\r\\n\")\n\tif len(trim) \u003e 0 \u0026\u0026 strings.ContainsRune(\"=+-@\", rune(trim[0])) {",
+        "after": "\tif len(s) \u003e 0 \u0026\u0026 strings.ContainsRune(\"\\t\\r\", rune(s[0])) {\n\t\treturn \"'\" + s\n\t}\n\ttrim := strings.TrimLeft(s, \" \\t\\r\\n\")\n\tif len(trim) \u003e 0 \u0026\u0026 strings.ContainsRune(\"=+-@\", rune(trim[0])) {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "811f00f836069b9d",
+      "severity": "low",
+      "category": "testing",
+      "title": "Progress counter may race and the exact-count assertion is brittle",
+      "message": "The test asserts that the progress callback runs exactly once. If `computeTolerance` evaluates trials concurrently or reports progress from worker goroutines, `calls++` is a data race. The exact-count assertion would also be flaky, because other goroutines may report progress before they see the cancellation.",
+      "suggestion": "Use an `atomic.Int32` for the counter. Assert `calls \u003e= 1` unless `computeTolerance` documents that progress is always reported serially on the calling goroutine.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/tolerance_test.go",
+          "lines": {
+            "start": 211,
+            "end": 211
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "flaky",
+        "location-corrected"
+      ],
+      "evidence": "_, err := computeTolerance(ctx, v.Result.Source, p, func(int) { calls++; cancel() })",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "82a9d1459c2aee15",
+      "severity": "low",
+      "category": "testing",
+      "title": "Unchecked column index in CSV assertion can panic",
+      "message": "`rows[1][5]` is read without checking how many columns the row has. `csv.Reader` with default settings rejects rows whose field count differs from the header, but a header with fewer than 6 columns would still pass. In that case the test panics with an index-out-of-range instead of failing with a clear message.",
+      "suggestion": "Check `len(rows[1]) \u003e 5` before indexing, or locate the failure column by its header name.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/tolerance_test.go",
+          "lines": {
+            "start": 228,
+            "end": 228
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness",
+        "location-corrected"
+      ],
+      "evidence": "if err != nil || len(rows) != 2 || rows[1][5] != \"'=1+1\" || r.Trials[0].Failure != \"=1+1\" {",
+      "fix": {
+        "before": "if err != nil || len(rows) != 2 || rows[1][5] != \"'=1+1\" || r.Trials[0].Failure != \"=1+1\" {",
+        "after": "if err != nil || len(rows) != 2 || len(rows[1]) \u003c= 5 || rows[1][5] != \"'=1+1\" || r.Trials[0].Failure != \"=1+1\" {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 72450,
+    "totalMs": 30955
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 21,
+    "bytes": 86125,
+    "chunks": 5,
+    "llmCalls": 5,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 51736,
+        "output": 6696,
+        "costUSD": 0.340864
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

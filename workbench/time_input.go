@@ -73,6 +73,9 @@ var timeCommandFields = map[string][]string{
 }
 
 func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, error) {
+	if len(raw) == 0 && (command == "tolerance.settings.set" || command == "tolerance.run") {
+		raw = json.RawMessage(`{}`)
+	}
 	if command == "edit.batch.preview" || command == "edit.proposal.set" {
 		command = "edit.batch"
 	}

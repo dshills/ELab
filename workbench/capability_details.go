@@ -67,6 +67,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addToleranceCapabilityDetails(id, schema) {
+		return
+	}
 	if addSpectrumCapabilityDetails(id, schema) {
 		return
 	}

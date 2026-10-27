@@ -95,6 +95,11 @@ func (s *Service) requireCleanLocked(discard bool) error {
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	if s.tolerance != nil {
+		s.tolerance.cancel()
+	}
+	s.tolerance = nil
+	s.toleranceSettings = nil
 	s.spectrum = nil
 	s.proposal = nil
 	s.exampleBrowser.Visible = false

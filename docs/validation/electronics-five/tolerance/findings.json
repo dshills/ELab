@@ -1,0 +1,128 @@
+[
+  {
+    "review": "prism-initial.json",
+    "id": "63b02e4818686d57",
+    "severity": "medium",
+    "title": "x",
+    "disposition": "Existing screen.action captures command/document guards (desktop/view.go). Run now also uses empty params. A retained pre-agent Run action is explicitly refused without replacing newer settings."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "d6c2840221ed2564",
+    "severity": "medium",
+    "title": "Unchecked indexing into AC sweep result",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "e3577d0a7571be35",
+    "severity": "medium",
+    "title": "Unchecked nil map write on schema property",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "1923938603b8b39e",
+    "severity": "medium",
+    "title": "Unchecked nil map write for mode enum",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "9372e378732e9938",
+    "severity": "low",
+    "title": "Export contract effects omit tolerance kinds",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "b5b27f5aaf4d321c",
+    "severity": "low",
+    "title": "Partial settings payload resets all other fields to zero",
+    "disposition": "Intentional complete replacement, explicit in machine contract/guide. Public omitted-params and explicit zero seed/fraction tests verify defaults and zero values are preserved, with no partial mutation on refusal."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "280211bd70044b54",
+    "severity": "low",
+    "title": "Use errors.Is for cancellation check",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "1ec88251b96c7cd8",
+    "severity": "medium",
+    "title": "Snapshot alias check can pass when only some fields are aliased",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "077a976254a7338e",
+    "severity": "low",
+    "title": "float32 round-trip introduces noise into float64 settings",
+    "disposition": "Number fields use Vellum float32; final bridge converts its shortest decimal representation to float64 before SI conversion, avoiding a gratuitous binary-widening artifact. Agent numeric input and exact integer seed text retain full supported precision."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "0900c4f15f1291f0",
+    "severity": "low",
+    "title": "Trials truncates fractional input silently",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "5a5b7f9183371979",
+    "severity": "low",
+    "title": "Tolerance snapshot field lacks omitempty, unlike sibling optional states",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "dfdcb6e7c0c84112",
+    "severity": "low",
+    "title": "Frequency required even in DC mode",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "05a02d5fcf48a47d",
+    "severity": "low",
+    "title": "CSV export does not neutralize formula-leading cells",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "641f8975536e6649",
+    "severity": "low",
+    "title": "Run enabled with a probe/source not valid for the current mode",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "1ddc6d6959837b89",
+    "severity": "low",
+    "title": "Progress uses live settings instead of the running job's trial count",
+    "disposition": "Not reachable: tolerance.settings.set and tolerance.run refuse busy while toleranceWorkers>0, before assigning settings. Worker view retains its captured settings. Native controls are additionally disabled."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "f6d60c469f5b3ae8",
+    "severity": "low",
+    "title": "CSV formula escaping misses leading tab/CR triggers",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "811f00f836069b9d",
+    "severity": "low",
+    "title": "Progress counter may race and the exact-count assertion is brittle",
+    "disposition": "computeTolerance is explicitly serial in captured component/trial order. Callback cancellation test guarantees no further trial after that cooperative boundary. No parallel execution or worker callbacks exist."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "82a9d1459c2aee15",
+    "severity": "low",
+    "title": "Unchecked column index in CSV assertion can panic",
+    "disposition": "Repaired in final source and covered by focused regressions."
+  }
+]

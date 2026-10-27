@@ -16,6 +16,7 @@ import (
 )
 
 type Snapshot struct {
+	Tolerance              *ToleranceState        `json:"tolerance,omitempty"`
 	Spectrum               *SpectrumState         `json:"spectrum,omitempty"`
 	Proposal               *EditProposal          `json:"edit_proposal,omitempty"`
 	Explanation            *ComponentExplanation  `json:"component_explanation,omitempty"`
@@ -123,6 +124,10 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	tolerance                        *toleranceJob
+	toleranceSettings                *ToleranceSettings
+	toleranceSerial                  uint64
+	toleranceWorkers                 int
 	spectrum                         *SpectrumState
 	proposal                         *editProposalState
 	proposalSerial                   uint64
@@ -357,6 +362,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		Tolerance:              s.toleranceViewLocked(),
 		Spectrum:               s.spectrumViewLocked(),
 		Proposal:               s.proposalViewLocked(),
 		WorkspaceLayout:        s.workspaceLayout,
@@ -680,6 +686,9 @@ func (s *Service) closeLocked() {
 	s.cancelInputWorkLocked("canceled")
 	s.cancelStepLocked("canceled")
 	s.cancelAudioLocked()
+	if s.tolerance != nil {
+		s.tolerance.cancel()
+	}
 	s.closed = true
 	if s.appearanceStore != nil {
 		select {
@@ -1218,6 +1227,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Tolerance = cloneTolerance(state.Tolerance)
 	state.Spectrum = cloneSpectrum(state.Spectrum)
 	state.Proposal = cloneEditProposal(state.Proposal)
 	state.Explanation = cloneComponentExplanation(state.Explanation)

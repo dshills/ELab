@@ -166,6 +166,17 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.configureOptocouplerLocked(p)
+	case "tolerance.settings.set", "tolerance.run", "tolerance.cancel":
+		return s.toleranceCommandLocked(command, raw)
+	case "tolerance.export":
+		var p VerificationExportParams
+		if err := params(raw, &p, "id", "path", "format"); err != nil {
+			return err
+		}
+		if p.Format != "json" && p.Format != "csv" {
+			return fmt.Errorf("tolerance format must be json or csv")
+		}
+		return s.startExportLocked(ExportStartParams{Kind: "tolerance-" + p.Format, ID: p.ID, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
 	case "spectrum.settings.set", "spectrum.analyze":
 		return s.spectrumCommandLocked(command, raw)
 	case "spectrum.export":

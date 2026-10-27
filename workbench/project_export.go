@@ -25,6 +25,7 @@ type ExportStartParams struct {
 	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
 }
 type exportCapture struct {
+	tolerance     *ToleranceResult
 	spectrum      *SpectrumResult
 	protectedPath string
 	previewData   []byte
@@ -172,6 +173,16 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			capture.scope = cloneScope(scope)
 			capture.artifact.RunID = t.RunID
 			capture.artifact.ElectricalRevision = t.ElectricalRevision
+		case "tolerance-json", "tolerance-csv":
+			command = "tolerance.export"
+			if s.tolerance == nil || s.tolerance.view.Result == nil || s.tolerance.view.Result.ID != p.ID {
+				return &actionError{"not-ready", "Choose the exact completed current tolerance result"}
+			}
+			capture.tolerance = cloneToleranceResult(s.tolerance.view.Result)
+			capture.artifact.OperationID = p.ID
+			capture.artifact.ElectricalRevision = capture.tolerance.ElectricalRevision
+			capture.artifact.RunID = 0
+			capture.artifact.Format = p.Kind
 		case "spectrum-json", "spectrum-csv":
 			command = "spectrum.export"
 			if s.spectrum == nil || s.spectrum.Result == nil || s.spectrum.Result.ID != p.ID {
@@ -219,7 +230,7 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			capture.artifact.RunID = 0
 			capture.artifact.ElectricalRevision = operation.record.metadata.ElectricalRevision
 		default:
-			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json, sweep-csv, spectrum-json, spectrum-csv or audio-wav")
+			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json, sweep-csv, spectrum-json, spectrum-csv, tolerance-json, tolerance-csv or audio-wav")
 		}
 	}
 	// Keep protection tied to this admission even for an older preview capture.
@@ -252,6 +263,10 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 		} else {
 			data, err = renderSchematicPage(ctx, capture)
 		}
+	case "tolerance-json":
+		data, err = encodeToleranceExport(capture.tolerance, "json")
+	case "tolerance-csv":
+		data, err = encodeToleranceExport(capture.tolerance, "csv")
 	case "spectrum-json":
 		data, err = encodeSpectrumExport(capture.spectrum, "json")
 	case "spectrum-csv":

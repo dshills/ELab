@@ -95,6 +95,10 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(struct{}{}), "urn:elab:empty-input:1"},
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
+	{reflect.TypeOf(RecoveryInspection{}), "urn:elab:recovery-inspection:1"},
+	{reflect.TypeOf(RecoveryReadChunk{}), "urn:elab:recovery-read-chunk:1"},
+	{reflect.TypeOf(SweepInspection{}), "urn:elab:sweep-inspection:1"},
+	{reflect.TypeOf(ToleranceSettings{}), "urn:elab:tolerance-settings:1"},
 	{reflect.TypeOf(SpectrumInput{}), "urn:elab:spectrum-input:1"},
 	{reflect.TypeOf(Part{}), "urn:elab:part-description:1"},
 	{reflect.TypeOf(OperationView{}), "urn:elab:operation-view:1"},
@@ -364,6 +368,10 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("tolerance.settings.set", "Configure deterministic independent tolerance trials without changing the live circuit", reflect.TypeOf(ToleranceSettings{})),
+		typedCapability("tolerance.run", "Run bounded seeded R/C/profile-beta Monte Carlo; empty params use current settings", reflect.TypeOf(ToleranceSettings{})),
+		typedCapability("tolerance.cancel", "Cancel the exact current tolerance run; worker retains its slot until retirement", reflect.TypeOf(IDParams{})),
+		typedCapability("tolerance.export", "Export the exact completed tolerance result and captured provenance as JSON or CSV", reflect.TypeOf(VerificationExportParams{})),
 		typedCapability("spectrum.settings.set", "Configure recorded FFT interval, probe, window and declared fundamental; session-only, no live circuit or history change", reflect.TypeOf(SpectrumInput{})),
 		typedCapability("spectrum.analyze", "Compute bounded FFT and coherent harmonic THD from an immutable retained recording; empty params use current spectrum settings", reflect.TypeOf(SpectrumInput{})),
 		typedCapability("spectrum.export", "Export the exact completed spectrum as JSON or CSV through the shared asynchronous file workflow", reflect.TypeOf(VerificationExportParams{})),

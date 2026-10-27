@@ -197,5 +197,6 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 		}
 	}
 	nodes = append(nodes, s.spectrumInspector(state)...)
+	nodes = append(nodes, s.toleranceInspector(state)...)
 	return nodes
 }
