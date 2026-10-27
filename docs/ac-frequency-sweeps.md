@@ -32,9 +32,13 @@ The selected ideal voltage source has normalized 1 V AC excitation; all other
 ideal voltage sources are AC grounded. AC amplitude is independent of configured
 waveform amplitude. The solver uses the analytic real device Jacobian plus jωC
 and −jωL branch terms, with a complex linear solve at each frequency. Supported
-parts initially include R/L/C, potentiometers, resistive sensors, static switches,
-ideal sources, grounds/labels/junctions, and the generic powered op-amp. Other
-parts explicitly refuse; hysteretic/digital state requires transient simulation.
+parts include R/L/C, potentiometers, resistive sensors, static switches,
+ideal sources, grounds/labels/junctions, transformers, the generic powered
+op-amp, NPN/PNP BJTs, N/P-channel MOSFETs, LEDs and silicon/Schottky/Zener
+diodes. Other parts explicitly refuse; hysteretic/digital state requires
+transient simulation. Semiconductor tangent conductances use the solved DC
+bias, not the live transient vector or the capacitor's initial charge. At the
+exact piecewise Zener knee the blocking-side derivative is used.
 The op-amp model has no intrinsic bandwidth/slew rate: external feedback RC sets
 filter response, and large-signal clipping needs transient simulation.
 
@@ -58,3 +62,24 @@ saved reopen, native/agent parity, and existing DC sweep behavior.
 The [Analog Devices Bode reference](https://www.analog.com/en/resources/technical-articles/2021/03/29/17/10/how-to-generate-a-bode-plot-with-ltspice.html)
 provides the frequency/gain/phase context. ELab's implementation and supported
 model domain are described above; it does not invoke LTspice.
+
+## Discrete amplifier frequency response
+
+Load `example.load {"id":"discrete-class-ab"}` or choose the all-discrete
+class-AB example in the browser. Its default sweep selects VIN, 1 Hz–100 kHz,
+201 logarithmic points and load voltage `v:RL`. Run AC sweep to view gain and
+phase without changing the running amplifier. The same `sweep.settings.set`,
+`sweep.start`, cursors, exports and project commands serve users and agents.
+
+The low-frequency gain is about 10.9 V/V. C1's external compensation shapes the
+frequency response; v1 generic transistors and diodes still have no internal
+junction capacitance, charge storage or physical bandwidth. Small-signal results
+cannot establish clipping, crossover THD or physical stability. Sweep metadata
+records these assumptions. Existing RC/op-amp capture formats remain readable.
+
+Independent tests compare BJT follower and MOSFET common-source complex transfer
+functions with emitter/drain capacitors; diode tangent resistances include
+forward silicon/Schottky/LED behavior and reverse Zener breakdown. The amplifier's
+low-frequency response is checked against central DC perturbations. Captured
+results reopen exactly, negative-input DC bias works with authored storage
+opened, and native controls match agent commands while preserving live state.

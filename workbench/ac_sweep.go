@@ -26,7 +26,7 @@ type ACBand struct {
 func acSupported(g Graph) error {
 	for _, p := range g.Components {
 		switch p.Kind {
-		case "transformer", "ground", "net-label", "junction", "resistor", "potentiometer", "capacitor", "inductor", "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "opamp", "thermistor", "ldr", "switch":
+		case "npn", "pnp", "nmos", "pmos", "diode", "schottky", "zener", "led", "transformer", "ground", "net-label", "junction", "resistor", "potentiometer", "capacitor", "inductor", "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "opamp", "thermistor", "ldr", "switch":
 		default:
 			return fmt.Errorf("AC small-signal analysis does not yet support %s; use transient simulation", p.Kind)
 		}
@@ -48,6 +48,7 @@ func acFormat(parameter string) (string, string) {
 }
 func acAssumptions() []string {
 	return []string{
+		"Semiconductor differential conductances come from the solved DC operating point; generic v1 devices have no intrinsic charge/bandwidth and a Zener knee uses the blocking-side derivative",
 		"Normalized 1 V small-signal excitation of the selected source around a solved DC bias; all other ideal voltage sources are AC grounded",
 		"Capacitor admittance jωC; inductor impedance jωL; op-amp analytic Jacobian, including its compensation capacitor when optional dynamics are enabled; small-signal AC does not predict large-signal slew distortion",
 		"Configured sine offset/pulse low/DC source levels establish bias; waveform amplitude, startup and live trajectory are ignored",

@@ -8,6 +8,12 @@ import "context"
 func (n *mixedNetwork) canStepBipolarSources() bool {
 	for _, p := range n.c.MixedGraph.Components {
 		switch p.Kind {
+		case "capacitor":
+			// AC/DC bias opens storage before solving. The authored graph may
+			// still contain capacitors; never use this path for live startup.
+			if !n.dc || len(n.caps) != 0 {
+				return false
+			}
 		case "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "resistor", "diode", "schottky", "zener", "led", "npn", "pnp", "ground", "junction", "net-label":
 		default:
 			return false

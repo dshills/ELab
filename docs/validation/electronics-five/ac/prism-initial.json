@@ -1,0 +1,179 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "8ed0d8fdfe2132f93919f64603a79efa",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "6074e40170e41bac437ef0b0cd83a21f192e5ca0",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 3,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "e782ae6b396e3956",
+      "severity": "medium",
+      "category": "testing",
+      "title": "t.Fatal invoked inside app.Do closure",
+      "message": "t.Fatal calls runtime.Goexit and must only be called from the test goroutine. If app.Do runs the closure on the UI goroutine, a failure here leaves the test running or hangs it instead of reporting cleanly. A nil u.sweepDrawing.View would also panic on the UI thread.",
+      "suggestion": "Inside the closure, only capture the result and the error. Make the assertion after Do returns, on the test goroutine.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/ac_sweep_test.go",
+          "lines": {
+            "start": 115,
+            "end": 120
+          }
+        }
+      ],
+      "tags": [
+        "testing",
+        "goroutines"
+      ],
+      "evidence": "\tu.app.Do(func() {\n\t\tu.view()\n\t\tif mesh, err := u.sweepMesh(*u.sweepDrawing.View); err != nil || mesh == nil {\n\t\t\tt.Fatal(\"Bode canvas\", err)\n\t\t}\n\t})",
+      "fix": {
+        "before": "\tu.app.Do(func() {\n\t\tu.view()\n\t\tif mesh, err := u.sweepMesh(*u.sweepDrawing.View); err != nil || mesh == nil {\n\t\t\tt.Fatal(\"Bode canvas\", err)\n\t\t}\n\t})",
+        "after": "\tvar meshErr error\n\tvar meshOK bool\n\tu.app.Do(func() {\n\t\tu.view()\n\t\tmesh, err := u.sweepMesh(*u.sweepDrawing.View)\n\t\tmeshErr, meshOK = err, err == nil \u0026\u0026 mesh != nil\n\t})\n\tif !meshOK {\n\t\tt.Fatal(\"Bode canvas\", meshErr)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "e0248a06d2d3ec14",
+      "severity": "low",
+      "category": "testing",
+      "title": "Agent sweep wait loop has no explicit timeout failure",
+      "message": "The polling loop can time out silently. A timeout then surfaces as a generic \"differs or changed live state\" failure, which hides the real cause. The loop also busy-polls every 1ms. Snapshot is taken again later, so the result compared may not be the one observed by the loop.",
+      "suggestion": "Check for a timeout explicitly and fail with a clear message. Capture the agent result once and reuse it in the comparison, or use the existing awaitSweep-style helper.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "desktop/ac_sweep_test.go",
+          "lines": {
+            "start": 108,
+            "end": 112
+          }
+        }
+      ],
+      "tags": [
+        "flaky",
+        "diagnostics",
+        "fix-dropped"
+      ],
+      "evidence": "\tfor a.Snapshot().DCSweep.Result == nil \u0026\u0026 time.Now().Before(deadline) {\n\t\ttime.Sleep(time.Millisecond)\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "9a14da8e7863209d",
+      "severity": "low",
+      "category": "security",
+      "title": "Personal filesystem path committed in docs",
+      "message": "The committed research note exposes a developer's absolute home path and username, plus sandbox/network details. None of this is useful to other contributors.",
+      "suggestion": "Remove machine-specific paths and environment notes, or replace them with a generic instruction.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "research/123-analysis-and-device-expansion.md",
+          "lines": {
+            "start": 28,
+            "end": 28
+          }
+        }
+      ],
+      "tags": [
+        "privacy",
+        "docs"
+      ],
+      "evidence": "Prism is installed at /Users/dshills/Development/Go/bin/prism. Initial provider",
+      "fix": {
+        "before": "Prism is installed at /Users/dshills/Development/Go/bin/prism. Initial provider",
+        "after": "Prism is installed locally (see developer environment). Initial provider"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "e1b02f08991c85a2",
+      "severity": "low",
+      "category": "testing",
+      "title": "Unsynchronized read of internal sweep map in test",
+      "message": "The test reads the service's internal sweeps map without holding the service lock, while worker goroutines may still mutate it. This can trip the race detector. Separately, op may be nil and would panic instead of failing cleanly.",
+      "suggestion": "Acquire the service mutex when reading s.sweeps.operations, using whatever lock guards it, and nil-check op before use.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/ac_semiconductor_test.go",
+          "lines": {
+            "start": 168,
+            "end": 169
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "testing",
+        "location-corrected"
+      ],
+      "evidence": "\top := s.sweeps.operations[after.DCSweep.Selected]\n\tdata, err := json.Marshal(op.record)",
+      "fix": {
+        "before": "\top := s.sweeps.operations[after.DCSweep.Selected]\n\tdata, err := json.Marshal(op.record)",
+        "after": "\ts.mu.Lock()\n\top := s.sweeps.operations[after.DCSweep.Selected]\n\ts.mu.Unlock()\n\tif op == nil {\n\t\tt.Fatal(\"selected sweep operation missing\")\n\t}\n\tdata, err := json.Marshal(op.record)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 27270,
+    "totalMs": 27338
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 8,
+    "bytes": 21568,
+    "chunks": 1,
+    "llmCalls": 1,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 12328,
+        "output": 2990,
+        "costUSD": 0.109112
+      }
+    ],
+    "widenedFiles": 1,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

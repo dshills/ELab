@@ -1,0 +1,24 @@
+{
+  "review": "prism-followup.json",
+  "all_medium_high_resolved": true,
+  "remaining_low": [
+    {
+      "id": "7ffcb656d0de13f8",
+      "severity": "low",
+      "title": "Gain comparison tolerance may be tighter than the finite-difference/solver error",
+      "disposition": "Retained: independent analytic follower/MOS/diode references and repeated focused race runs pass unchanged; no demonstrated numerical instability justifies weakening the amplifier central-difference tolerance."
+    },
+    {
+      "id": "762dc7f83da5fe8a",
+      "severity": "low",
+      "title": "Negative-bias fallback sweep result is not asserted",
+      "disposition": "Covered: sweepForTest fails on computation errors and checks conservation for every point. Dedicated full-circuit DC tests qualify the negative operating point and both output half-cycles. A more specific response assertion can be added with profile-dependent AC regressions."
+    },
+    {
+      "id": "5cbd8a7d9b04488c",
+      "severity": "low",
+      "title": "No test guards the live-startup exclusion for capacitor graphs",
+      "disposition": "Already covered by TestBipolarSourceSteppingIsPrivateAndBounded, which explicitly refuses the authored reactive amplifier in the normal live network; that test is included in the passing focused race command."
+    }
+  ]
+}

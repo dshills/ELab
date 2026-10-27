@@ -182,10 +182,13 @@ func (s *Service) sweepSettingsLocked() SweepSettings {
 	if s.sweeps != nil && s.sweeps.settings != nil {
 		return cloneSweepSettings(*s.sweeps.settings)
 	}
-	if s.exampleID == "ac-rc" || s.exampleID == "ac-rlc" || s.exampleID == "ac-opamp" {
+	if s.exampleID == "ac-rc" || s.exampleID == "ac-rlc" || s.exampleID == "ac-opamp" || s.exampleID == "discrete-class-ab" {
 		source, probe := "V1", "v:C1"
 		if s.exampleID == "ac-opamp" {
 			source, probe = "VIN", "v:U1"
+		}
+		if s.exampleID == "discrete-class-ab" {
+			source, probe = "VIN", "v:RL"
 		}
 		return SweepSettings{ComponentID: source, Parameter: "frequency", Spacing: "logarithmic", Start: "1 Hz", Stop: "100 kHz", Points: 201, ProbeIDs: []string{probe}}
 	}

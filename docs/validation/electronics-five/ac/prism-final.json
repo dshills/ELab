@@ -1,0 +1,147 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "213ed23a68931dfcdc8ea070c0f44cc9",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "6074e40170e41bac437ef0b0cd83a21f192e5ca0",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 3,
+      "medium": 0,
+      "high": 0
+    },
+    "highestSeverity": "low"
+  },
+  "findings": [
+    {
+      "id": "cc6b574b14875ee6",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Duplicated condition in fixture builder",
+      "message": "Two consecutive `if IsBipolarKind(kind)` blocks make the fixture wiring harder to follow. The research note mentions a past wiring mistake in this same fixture.",
+      "suggestion": "Merge the two blocks into a single bipolar branch.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/ac_semiconductor_test.go",
+          "lines": {
+            "start": 35,
+            "end": 38
+          }
+        }
+      ],
+      "tags": [
+        "readability"
+      ],
+      "evidence": "\tif IsBipolarKind(kind) {\n\t\tb.ground(\"GL\", \"RL.2\", 0, 300)\n\t}\n\tif IsBipolarKind(kind) {",
+      "fix": {
+        "before": "\tif IsBipolarKind(kind) {\n\t\tb.ground(\"GL\", \"RL.2\", 0, 300)\n\t}\n\tif IsBipolarKind(kind) {",
+        "after": "\tif IsBipolarKind(kind) {\n\t\tb.ground(\"GL\", \"RL.2\", 0, 300)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "649c2fb0bdc84308",
+      "severity": "low",
+      "category": "testing",
+      "title": "Hard-coded component index in diode test",
+      "message": "The test replaces `g.Components[2]` on the assumption that index 2 of `ExampleGraph()` is D1. If the example's component order changes, the test silently replaces the wrong part.",
+      "suggestion": "Find the component by `ID == \"D1\"` and replace it at that index, failing the test if it is not found.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/ac_semiconductor_test.go",
+          "lines": {
+            "start": 104,
+            "end": 104
+          }
+        }
+      ],
+      "tags": [
+        "fragile",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\tg.Components[2] = p",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1f867ba8b7d2886c",
+      "severity": "low",
+      "category": "testing",
+      "title": "Points indexed before length/nil check",
+      "message": "`r.Points[0]` is indexed before the length is checked, and `r` is never checked for nil. An empty or missing result panics instead of producing a clear test failure.",
+      "suggestion": "Check that `r` is not nil and that `len(r.Points)` is correct before indexing.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/ac_semiconductor_test.go",
+          "lines": {
+            "start": 162,
+            "end": 162
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness",
+        "location-corrected"
+      ],
+      "evidence": "if math.Abs(r.Points[0].AC[0].Real-want) \u003e 1e-5 || len(r.Points) != 201 {",
+      "fix": {
+        "before": "if math.Abs(r.Points[0].AC[0].Real-want) \u003e 1e-5 || len(r.Points) != 201 {",
+        "after": "if r == nil || len(r.Points) != 201 {\n\t\tt.Fatal(\"amplifier sweep result missing or wrong length\", r)\n\t}\n\tif math.Abs(r.Points[0].AC[0].Real-want) \u003e 1e-5 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 17199,
+    "totalMs": 17235
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 8,
+    "bytes": 22896,
+    "chunks": 1,
+    "llmCalls": 1,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 12875,
+        "output": 1875,
+        "costUSD": 0.089
+      }
+    ],
+    "widenedFiles": 1,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

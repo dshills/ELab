@@ -85,6 +85,15 @@ are not specified physical power transistors. The default is a low-frequency,
 100 Ω educational fixture: it does not qualify a speaker power amplifier,
 physical bandwidth/stability or zero-energy power-on behavior.
 
+## Frequency response
+
+The existing AC sweep panel now supports this circuit. Its default is VIN,
+1 Hz–100 kHz, 201 logarithmic points and `v:RL`. Run the sweep to compare gain,
+phase and external compensation while the live scope continues independently.
+Agents use the same `sweep.start` and `sweep.settings.set` commands. Capacitors
+open for the solved DC bias; their startup voltages and the current live frame
+are ignored. See [AC analysis and semiconductor model limits](ac-frequency-sweeps.md).
+
 ## Shared commands and files
 
 Read `capabilities.list` and `project.inspect` before automating. Command/params

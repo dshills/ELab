@@ -79,3 +79,55 @@ func TestNativeBodeAxisLabelsStayInsideNarrowCanvas(t *testing.T) {
 		})
 	}
 }
+
+func TestNativeDiscreteAmplifierBodeMatchesAgentWithoutChangingLive(t *testing.T) {
+	u, cleanup := testScreen(t)
+	defer cleanup()
+	a := workbench.New()
+	defer a.Close()
+	uiAction(t, u, "examples-menu", nil)
+	uiAction(t, u, "example-search", &ui.ChangeEvent{Text: "class AB"})
+	grid := browserGridNode(t, u)
+	u.app.Do(func() {
+		grid.SelectionChange(ui.ListSelectionEvent{TargetID: "discrete-class-ab", IDs: []string{"discrete-class-ab"}})
+	})
+	uiAction(t, u, ui.SheetConfirmID(exampleBrowserID), nil)
+	agentAction(t, a, "example.load", workbench.ExampleLoadParams{ID: "discrete-class-ab"})
+	for _, cmd := range []string{"simulation.pause", "simulation.restart"} {
+		uiAction(t, u, cmd, nil)
+		agentAction(t, a, cmd, struct{}{})
+	}
+	before := awaitInductorCircuit(t, u.service)
+	awaitInductorCircuit(t, a)
+	if before.DCSweep.Settings.Parameter != "frequency" || before.DCSweep.Settings.ComponentID != "VIN" {
+		t.Fatal("amplifier needs useful default Bode settings")
+	}
+	uiAction(t, u, "sweep-start", nil)
+	agentAction(t, a, "sweep.start", workbench.SweepStartParams{})
+	native := awaitNativeSweep(t, u)
+	deadline := time.Now().Add(5 * time.Second)
+	agentState := a.Snapshot()
+	for agentState.DCSweep.Result == nil && time.Now().Before(deadline) {
+		time.Sleep(5 * time.Millisecond)
+		agentState = a.Snapshot()
+	}
+	if agentState.DCSweep.Result == nil {
+		t.Fatal("agent amplifier AC did not complete before deadline", agentState.DCSweep.Operations)
+	}
+	if native.DCSweep.Result == nil || !reflect.DeepEqual(native.DCSweep.Result, agentState.DCSweep.Result) || !reflect.DeepEqual(before.Mixed, native.Mixed) {
+		t.Fatal("native/agent transistor AC differs or changed live state")
+	}
+	var meshErr error
+	var meshOK bool
+	u.app.Do(func() {
+		u.view()
+		if u.sweepDrawing == nil || u.sweepDrawing.View == nil {
+			return
+		}
+		mesh, err := u.sweepMesh(*u.sweepDrawing.View)
+		meshErr, meshOK = err, mesh != nil && err == nil
+	})
+	if !meshOK {
+		t.Fatal("Bode canvas unavailable", meshErr)
+	}
+}
