@@ -43,7 +43,28 @@ func TestMountedComponentBrowserSearchAndKeyboardPlacement(t *testing.T) {
 	// clears the query without changing the selected placement kind.
 	agentAction(t, s.service, "parts.category.set", workbench.PartCategoryParams{Category: "passives"})
 	m.frame()
-	if state = s.service.Snapshot(); state.PartSearch != "" || len(state.MatchingParts) != 9 || state.Drawing.Kind != "pmos" {
+	if state = s.service.Snapshot(); state.PartSearch != "" || len(state.MatchingParts) != 10 || state.Drawing.Kind != "pmos" {
 		t.Fatal("agent category did not update UI")
+	}
+	speakerIndex := -1
+	for i, part := range state.MatchingParts {
+		if part.Kind == "speaker" {
+			speakerIndex = i
+		}
+	}
+	if speakerIndex < 0 {
+		t.Fatal("loudspeaker missing from Passives")
+	}
+	// The category replacement removes the formerly focused MOSFET row.
+	// Independently focus the updated list before testing new user input.
+	s.requestKeyboardFocus("part-list")
+	m.frame()
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeHome})
+	for range speakerIndex {
+		m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeDownArrow})
+	}
+	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeReturnEnter})
+	if state = s.service.Snapshot(); state.Drawing.Tool != "place" || state.Drawing.Kind != "speaker" {
+		t.Fatal("mounted Passives list did not choose the loudspeaker", state.Drawing)
 	}
 }

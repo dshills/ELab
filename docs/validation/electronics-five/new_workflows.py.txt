@@ -1,0 +1,163 @@
+"""Owned public-agent regression of all five analysis/device additions.
+
+Semantic transport evidence, not physical mouse/keyboard or hardware acceptance.
+"""
+import argparse
+import base64
+import hashlib
+import json
+import math
+from pathlib import Path
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'scripts'))
+from acceptance_client import AcceptanceClient
+
+
+def poll(read, ready, seconds=30):
+    deadline = time.monotonic() + seconds
+    while True:
+        value = read()
+        if ready(value):
+            return value
+        if time.monotonic() >= deadline:
+            raise TimeoutError('owned analysis deadline')
+        time.sleep(.02)
+
+
+def load(c, name):
+    c.ask('example.load', dict(id=name, discard_changes=True), mutate=True)
+    c.ask('simulation.pause', mutate=True)
+    c.ask('simulation.restart', mutate=True)
+    state = c.ask('simulation.wait')
+    assert state['paused'] and not state['diagnostics'], state['diagnostics']
+    return state
+
+
+def record(c, output, name, duration, step, probes):
+    state = c.ask('simulation.verify', dict(duration_s=duration,
+        sample_step_s=step, probe_ids=probes), mutate=True)
+    identifier = state['last_operation']
+    op = poll(lambda: c.ask('operation.inspect', dict(id=identifier)),
+              lambda x: x['operation']['status'] in ('completed', 'failed', 'canceled'))
+    assert op['operation']['status'] == 'completed', op
+    c.ask('verification.export', dict(id=identifier, path=str(output / (name+'.json')),
+        format='json'), mutate=True)
+    return identifier
+
+
+def exercise(c, output):
+    assert not c.ask('project.inspect')['components'], 'fresh owned blank session required'
+    assert len(c.ask('parts.list')) == 54
+    catalog = c.ask('capabilities.list')['capabilities']
+    assert len(catalog) == 203
+    c.ask('simulation.pause', mutate=True)
+    before = load(c, 'discrete-class-ab')
+    state = c.ask('sweep.start', dict(settings=dict(component_id='VIN',
+        parameter='frequency', spacing='log', start='1 Hz', stop='100 kHz',
+        points=101, probe_ids=['v:RL'])), mutate=True)
+    sweep = poll(lambda: c.ask('project.inspect')['dc_sweep'],
+        lambda x: bool(x['operations']) and x['operations'][-1]['status'] in ('completed', 'failed', 'canceled'))
+    assert sweep['operations'][-1]['status'] == 'completed', sweep['operations']
+    assert len(sweep['result']['points']) == 101
+    gain = sweep['result']['points'][0]['ac_response'][0]['real_v_per_v']
+    assert 10 < gain < 12, gain
+    assert c.ask('project.inspect')['mixed'] == before['mixed']
+    sweep_id = sweep['selected_operation']
+    c.ask('sweep.export', dict(id=sweep_id, path=str(output/'semiconductor-ac.json'), format='json'), mutate=True)
+
+    load(c, 'amplifier-distortion')
+    capture = record(c, output, 'distortion-recording', .2, .0005, ['v:VIN.positive', 'v:U1'])
+    cfg = dict(id=capture, probe_id='v:U1', start_s=0, end_s=.2,
+               fundamental_hz=10, window='hann', harmonics=5)
+    c.ask('spectrum.settings.set', cfg, mutate=True)
+    state = c.ask('spectrum.analyze', mutate=True)
+    spectrum = state['spectrum']['result']
+    assert spectrum['thd_percent'] > 1 and len(spectrum['harmonics']) == 5, spectrum
+    for fmt in ('json', 'csv'):
+        c.ask('spectrum.export', dict(id=spectrum['id'], path=str(output/('spectrum.'+fmt)), format=fmt), mutate=True)
+    path = output/'recorded-distortion.elab'
+    c.ask('project.save', dict(path=str(path)), mutate=True)
+    c.ask('project.load', dict(path=str(path), discard_changes=True), mutate=True)
+    reopened = c.ask('simulation.wait')
+    cfg['id'] = reopened['operations'][0]['id']
+    again = c.ask('spectrum.analyze', cfg, mutate=True)['spectrum']['result']
+    assert again['bins'] == spectrum['bins'] and again['thd_percent'] == spectrum['thd_percent']
+
+    profile_before = load(c, 'transistor-profile')
+    q = next(x for x in profile_before['components'] if x['id'] == 'Q1')
+    params = dict(q['device_parameters']['bipolar'])
+    params['forward_beta'] = 250
+    state = c.ask('transistor.profile.set', dict(id='Q1', enabled=True, parameters=params), mutate=True)
+    assert next(x for x in state['components'] if x['id']=='Q1')['device_parameters']['bipolar']['forward_beta'] == 250
+    c.ask('edit.undo', mutate=True)
+    assert c.ask('simulation.wait')['components'] == profile_before['components']
+    c.ask('edit.redo', mutate=True)
+    profile_path = output/'configured-profile.elab'
+    c.ask('project.save', dict(path=str(profile_path)), mutate=True)
+    saved = c.ask('project.inspect')['components']
+    c.ask('project.load', dict(path=str(profile_path), discard_changes=True), mutate=True)
+    assert c.ask('simulation.wait')['components'] == saved
+
+    tolerance_before = load(c, 'rc-tolerance')
+    cfg = dict(mode='ac-gain', source_id='V1', probe_id='v:C1', frequency_hz=1000,
+        trials=16, seed=7, resistance_fraction=.05, capacitance_fraction=.1, beta_fraction=.2)
+    c.ask('tolerance.settings.set', cfg, mutate=True)
+    c.ask('tolerance.run', mutate=True)
+    tolerance = poll(lambda: c.ask('project.inspect')['tolerance'],
+        lambda x: x.get('status') in ('completed','failed','canceled'))
+    assert tolerance['status'] == 'completed' and tolerance['result']['statistics']['successful'] == 16, tolerance
+    first = tolerance['result']
+    for fmt in ('json','csv'):
+        c.ask('tolerance.export', dict(id=first['id'], path=str(output/('tolerance.'+fmt)), format=fmt), mutate=True)
+    c.ask('tolerance.run', mutate=True)
+    second = poll(lambda: c.ask('project.inspect')['tolerance'],
+        lambda x: x.get('status') in ('completed','failed','canceled'))
+    assert second['result']['trials'] == first['trials'] and second['result']['statistics'] == first['statistics']
+    assert c.ask('project.inspect')['transient'] == tolerance_before['transient']
+
+    speaker_before = load(c, 'speaker-amplifier')
+    sp = next(x for x in speaker_before['components'] if x['id']=='SP1')
+    parameters = dict(sp['device_parameters']['speaker'])
+    parameters['resonance_hz'] = 150
+    c.ask('speaker.configure', dict(id='SP1',parameters=parameters), mutate=True)
+    c.ask('edit.undo', mutate=True)
+    assert c.ask('simulation.wait')['components'] == speaker_before['components']
+    record(c, output, 'speaker-recording', .002, .0001, ['v:SP1','i:SP1'])
+    c.ask('audio.render', dict(id='SP1', duration_s=.02, gain=.1), mutate=True)
+    audio = poll(lambda: c.ask('project.inspect')['audio'],
+        lambda x: x['status'] in ('completed','failed','canceled'))
+    assert audio['status']=='completed' and not audio['playing'] and audio['signal'], audio
+    wav = c.ask('audio.read', dict(id=audio['id']))
+    data = base64.b64decode(wav['wav_base64'])
+    assert data[:4]==b'RIFF' and len(data)==524
+    (output/'speaker-preview.wav').write_bytes(data)
+    assert c.ask('project.inspect')['mixed'] == speaker_before['mixed']
+    c.ask('project.clear', dict(discard_changes=True), mutate=True)
+    return dict(passed=True, scope=__doc__.strip(), component_kinds=54, commands=203,
+        semiconductor_low_frequency_gain=gain, clipping_thd_percent=spectrum['thd_percent'],
+        recorded_spectrum_reopened_exact=True, configurable_profile_undo_redo_reopen=True,
+        seeded_tolerance_trials=16, tolerance_repeated_exact=True,
+        speaker_capture_rows=21, speaker_preview_bytes=len(data), autoplay=False,
+        native_input_acceptance=False, hardware_audio_qualification=False)
+
+
+def main():
+    p=argparse.ArgumentParser();p.add_argument('--agent',type=Path,required=True)
+    p.add_argument('--connect',type=Path);p.add_argument('--output',type=Path,required=True)
+    a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+    c=AcceptanceClient(a.agent,a.connect)
+    try:
+        report=exercise(c,out)
+    finally:
+        c.close()
+    report.update(agent_exit_code=c.process.returncode,
+        agent_sha256=hashlib.sha256(a.agent.read_bytes()).hexdigest())
+    (out/'checks.json').write_text(json.dumps(report,indent=2)+'\n')
+    print(json.dumps(report,indent=2))
+
+
+if __name__=='__main__':
+    main()

@@ -77,3 +77,16 @@ checks both new device edits. Full workbench race tests and full isolated
 conformance tests pass. The ordered portable run's RL work-guard failure remains
 recorded; isolated workflow controls also pass, without a claimed cause or
 solver-limit change. Desktop/routed/offscreen and package checks are continuing.
+
+Final source coverage is aggregated explicitly: 914 portable, 354 ordinary and
+491 offscreen top-level race tests (2043/859/1530 including subtests), with all
+three vets, lint/imports, 77 Python tests, PRD and native-inventory checks passing.
+The initial ordered failures remain retained: RL work-guard, an opaque flasher
+UI-step error, and an explicit offscreen flasher switching-edge work-guard.
+Full isolated conformance/workbench and three isolated full workflow/cursor
+controls pass. No causal solver repair or relaxed limit is claimed. The only
+additional offscreen repair is a stale Passives fixture (9 to 10), with actual
+mounted keyboard speaker selection. Its initial focus assumption is documented;
+final independent focus and three repetitions pass. All 1409 final inputs are
+pinned, with production inputs unchanged during the continuation. Building a
+new clean-source /276 candidate next; old packages remain preserved.

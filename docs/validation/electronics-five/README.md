@@ -24,11 +24,16 @@ owner then authorized Anthropic. No code-review diff was sent to OpenAI.
 
 ## Combined qualification
 
-Final combined qualification is in progress after the five implementation
-commits. Focused independent electrical references, persistence/capture,
-shared-command and all-theme routed/offscreen checks are recorded per item.
-The complete workbench race suite and isolated full conformance package pass;
-ordinary and rendered desktop suites and exact package checks follow.
+Final exact-source coverage includes **914 portable,
+354 ordinary desktop and 491 offscreen**
+top-level race tests (2043,
+859 and 1530 with subtests).
+Lint/imports, all three vets, 77 Python tests, PRD audit and native command
+inventory verification pass. The final **1409** frozen executable/test/module
+inputs are pinned in [qualified inputs](qualified-inputs.json.gz).
+[Coverage report](application-report.json.gz) and [aggregation controller](aggregate_checks.py.txt).
+This is aggregated exact-source coverage, **not** a claim that each initial
+ordered invocation passed. The failed invocations and controls are retained.
 
 The initial complete portable run found missing spectrum contract version/scope
 and a stale native UI inventory. Both are repaired. The second complete run
@@ -40,6 +45,19 @@ and a full isolated conformance-package run pass. No cause or electrical repair
 is established; initial failed runs remain evidence, not passing gates. Final
 portable coverage combines exact unchanged packages from the complete run with
 fresh complete workbench and conformance-package runs.
+
+The ordinary full run also failed an older flasher UI-step test at 115 ms; its
+helper printed only an error pointer. Three exact-source isolated full workflow
+controls pass. In the full offscreen run, one flasher cursor case explicitly hit
+the 100 ms work guard at its switching edge. Three isolated full cursor workflows
+pass. No numerical correctness failure or causal production repair is claimed.
+The other offscreen failure was a stale Passives count (9 instead of 10 after
+adding the speaker). The corrected fixture checks presence and actually selects
+the speaker through the mounted keyboard list; three repetitions pass. An initial
+extended fixture incorrectly assumed focus survived removal of the MOSFET row;
+final independent focus is explicit, and that failed assumption is preserved.
+Only the atomic-edit and browser test fixtures changed during this continuation;
+all production and other test inputs retained for coverage are exact.
 
 ## Material limitations
 
