@@ -34,7 +34,11 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	} else {
-		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model))
+		model := part.Model
+		if part.Device != nil && part.Device.Passive != nil {
+			model = workbench.PassiveLossModelID
+		}
+		inspector = append(inspector, quiet("part-model-id", "Model: "+model))
 	}
 	if r := state.Mixed; r != nil {
 		for _, q := range r.Transistors {
@@ -90,6 +94,9 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 				inspector = append(inspector, quiet("timer555-selected-reading", fmt.Sprintf("%s · output %s\nOut %.5g V · delivered %.5g mA\nTrigger level %.5g V · threshold %.5g V\nSupply %.5g V · power %.5g mW", status, timer.State, timer.OutputVoltage, -timer.PinCurrents[2]*1000, timer.TriggerLevel, timer.ThresholdLevel, timer.SupplyVoltage, timer.Power*1000)))
 			}
 		}
+	}
+	if workbench.IsPassiveStorageKind(part.Kind) {
+		inspector = append(inspector, s.passiveControls(state, part)...)
 	}
 	if part.Kind == "speaker" || workbench.IsBipolarKind(part.Kind) || part.Kind == "pwm-controller" || part.Kind == "opamp" || part.Kind == "shift-register" || part.Kind == "piezo" || part.Kind == "active-buzzer" {
 		inspector = append(inspector, s.extendedControls(state, part)...)

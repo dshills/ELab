@@ -19,10 +19,11 @@ const (
 )
 
 type InductorResult struct {
-	ID      string  `json:"id"`
-	Voltage float64 `json:"voltage_v"`
-	Current float64 `json:"current_a"`
-	Energy  float64 `json:"energy_j"`
+	Loss    *PassiveReading `json:"losses,omitempty"`
+	ID      string          `json:"id"`
+	Voltage float64         `json:"voltage_v"`
+	Current float64         `json:"current_a"`
+	Energy  float64         `json:"energy_j"`
 }
 
 // Small current residuals do not bound voltage error near a controlled

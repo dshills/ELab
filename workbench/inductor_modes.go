@@ -59,6 +59,7 @@ func (n *mixedNetwork) storageJacobian(state *inductorStage, trace *Transient, a
 		if v := n.pin(p, "2"); v >= 0 {
 			base[row][v] = -1
 		}
+		base[row][row] -= capacitorESR(p)
 	}
 	for k, p := range n.inductors {
 		row, j := n.inductorIndex(k), len(n.caps)+k

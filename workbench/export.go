@@ -241,10 +241,10 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 		}
 	}
 	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
-	if hasSpeakers(g) || hasTransistorProfiles(g) {
+	if hasSpeakers(g) || hasTransistorProfiles(g) || hasPassiveLosses(g) {
 		devices := []Component{}
 		for _, p := range g.Components {
-			if p.Kind == "speaker" || hasTransistorProfile(p) {
+			if p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
 				devices = append(devices, p)
 			}
 		}

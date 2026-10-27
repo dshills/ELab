@@ -96,7 +96,17 @@ func (s *Service) componentExplanationLocked(c Compiled, id string, inspection *
 	case "resistor":
 		out.Facts = append(out.Facts, "In this ideal model, voltage across the resistor equals current times resistance (V = I × R).")
 	case "capacitor":
-		out.Facts = append(out.Facts, "Positive current into pin 1 increases V(1) − V(2); capacitance sets how quickly that voltage changes (I = C × dV/dt).")
+		if hasPassiveLoss(part) {
+			out.Model, out.Limitations = PassiveLossModelID, passiveLossDescription
+			out.Facts = append(out.Facts, "Charging current changes internal stored voltage (Icharge = C × dVstored/dt). ESR adds Icharge × ESR to terminal voltage; external leakage adds to terminal current.")
+		} else {
+			out.Facts = append(out.Facts, "Positive current into pin 1 increases V(1) − V(2); capacitance sets how quickly that voltage changes (I = C × dV/dt).")
+		}
+	case "inductor":
+		if hasPassiveLoss(part) {
+			out.Model, out.Limitations = PassiveLossModelID, passiveLossDescription
+			out.Facts = append(out.Facts, "Terminal voltage includes winding resistance: V = L × dI/dt + Rw × I. Winding heat is I² × Rw; magnetic energy remains L × I² / 2.")
+		}
 	case "led":
 		out.Facts = append(out.Facts, "Forward current flows from anode to cathode. The brightness cue is illustrative, not a physical light-output prediction.")
 		for _, reading := range out.Readings {

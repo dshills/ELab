@@ -167,7 +167,7 @@ func computeACSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*S
 		}
 		for _, p := range caps {
 			u, v := n.pin(p, "1"), n.pin(p, "2")
-			y := complex(0, w*p.Value)
+			y := passiveACAdmittance(p, w)
 			add(u, u, y)
 			add(v, v, y)
 			add(u, v, -y)

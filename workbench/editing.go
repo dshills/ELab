@@ -190,6 +190,15 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.startExportLocked(ExportStartParams{Kind: "spectrum-" + p.Format, ID: p.ID, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
 	case "audio.render", "audio.play", "audio.stop":
 		return s.audioCommandLocked(command, raw)
+	case "passive.configure":
+		var p PassiveParams
+		if err := params(raw, &p, "id", "enabled", "parameters"); err != nil {
+			return err
+		}
+		if err := paramsNested(raw, "parameters", &PassiveConfig{}, passiveRequiredFields()...); err != nil {
+			return err
+		}
+		return s.configurePassiveLocked(p)
 	case "speaker.configure":
 		var p SpeakerParams
 		if err := params(raw, &p, "id", "parameters"); err != nil {

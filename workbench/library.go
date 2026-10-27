@@ -132,9 +132,9 @@ func partLimitations(kind string) string {
 	case "resistor":
 		return "Ideal constant resistance; no tolerance, heating, parasitics, ratings or physical part identity. Current is positive from pin 1 to pin 2."
 	case "capacitor":
-		return "Ideal capacitor with configurable initial voltage; no ESR, leakage, polarity, heating, ratings or physical part identity. Voltage and current use pin 1 relative to pin 2."
+		return "Ideal capacitor by default, with optional saved ESR/leakage and stored-voltage startup. No dielectric absorption, temperature dependence, polarity, ratings or manufacturer identity. Voltage and current use pin 1 relative to pin 2."
 	case "inductor":
-		return "Ideal constant inductance with configurable signed initial current; voltage pin 1 minus pin 2, current into pin 1/out of pin 2, energy L I² / 2. No winding resistance, saturation, mutual coupling, parasitic capacitance, heating, ratings or physical part identity. Add external resistance and a return path for switching current."
+		return "Ideal constant inductance with configurable signed initial current; voltage pin 1 minus pin 2, current into pin 1/out of pin 2, energy L I² / 2. Optional saved winding resistance; no saturation, parasitic capacitance, thermal evolution, ratings or physical part identity. Use the transformer component for mutual coupling and provide a return path for switching current."
 	case "ground":
 		return "Common zero-volt reference; this symbol establishes the simulation reference, not protective earth or a physical grounding design."
 	case "pulse-source":

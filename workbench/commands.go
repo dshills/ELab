@@ -127,6 +127,9 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(SequentialMemory{}), "urn:elab:sequential-memory:1"},
 	{reflect.TypeOf(SequentialResult{}), "urn:elab:sequential-result:1"},
 	{reflect.TypeOf(ExtendedModel{}), "urn:elab:extended-model:1"},
+	{reflect.TypeOf(DisplayFrame{}), "urn:elab:display-frame:1"},
+	{reflect.TypeOf(PreviewImageChunk{}), "urn:elab:preview-image-chunk:1"},
+	{reflect.TypeOf(HistoryParams{}), "urn:elab:edit-history-input:1"},
 	{reflect.TypeOf(DeviceParameters{}), "urn:elab:device-parameters:1"},
 	{reflect.TypeOf(AudioRenderParams{}), "urn:elab:audio-render:1"},
 	{reflect.TypeOf(PlaceParams{}), "urn:elab:place-component:1"},
@@ -137,6 +140,9 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(ExampleResetParams{}), "urn:elab:reset-example:1"},
 	{reflect.TypeOf(SearchParams{}), "urn:elab:search-input:1"},
 	{reflect.TypeOf(SpeakerConfig{}), "urn:elab:speaker-config:1"},
+	{reflect.TypeOf(PassiveParams{}), "urn:elab:passive-configure:1"},
+	{reflect.TypeOf(PassiveConfig{}), "urn:elab:passive-loss-parameters:1"},
+	{reflect.TypeOf(PassiveReading{}), "urn:elab:passive-loss-readings:1"},
 	{reflect.TypeOf(SpeakerParams{}), "urn:elab:speaker-configure:1"},
 	{reflect.TypeOf(TransistorProfile{}), "urn:elab:transistor-profile:1"},
 	{reflect.TypeOf(TransistorProfileParams{}), "urn:elab:transistor-profile-set:1"},
@@ -261,6 +267,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Input-only shared definitions retain command unit text without
 		// widening numeric output/settings schemas.
+		if common.Type == reflect.TypeOf(PassiveConfig{}) {
+			addPassiveSchema(schema)
+		}
 		if common.Type == reflect.TypeOf(SpeakerConfig{}) {
 			addSpeakerSchema(schema)
 		}
@@ -399,6 +408,7 @@ func Catalog() []Capability {
 		typedCapability("audio.stop", "Stop exact preview playback and cancel its rendering.", reflect.TypeOf(IDParams{})),
 		queryCapability("audio.read", "Read owned preview metadata and WAV bytes.", reflect.TypeOf(IDParams{}), reflect.TypeOf(AudioData{})),
 		typedCapability("pwm.configure", "Set powered PWM controller frequency and duty.", reflect.TypeOf(PWMParams{})),
+		typedCapability("passive.configure", "Configure saved capacitor ESR/leakage or inductor winding resistance, or restore ideal behavior; shared undoable electrical edit.", reflect.TypeOf(PassiveParams{})),
 		typedCapability("speaker.configure", "Configure a saved passive loudspeaker electrical load; explicit audio preview uses existing shared commands.", reflect.TypeOf(SpeakerParams{})),
 		typedCapability("transistor.profile.set", "Enable/configure a saved versioned educational BJT profile or restore generic v1; same undoable user/agent electrical edit.", reflect.TypeOf(TransistorProfileParams{})),
 		typedCapability("opamp.dynamics.set", "Enable or disable op-amp dominant-pole and slew limiting.", reflect.TypeOf(DynamicsParams{})),

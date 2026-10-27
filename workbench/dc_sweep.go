@@ -325,7 +325,7 @@ func solveDCOperatingPoint(ctx context.Context, g Graph, levels []SweepSource) (
 			continue
 		}
 		v := result.Nodes[compiled.TerminalNet[p.ID+".1"]] - result.Nodes[compiled.TerminalNet[p.ID+".2"]]
-		result.Capacitors = append(result.Capacitors, CapacitorResult{ID: p.ID, Voltage: v, Current: 0, Energy: .5 * p.Value * v * v})
+		result.Capacitors = append(result.Capacitors, capacitorResult(p, v, 0))
 	}
 	if !finite(result.KCLResidual) || !finite(result.PowerResidual) {
 		return nil, TraceSample{}, fmt.Errorf("nonfinite DC conservation residual")

@@ -7,7 +7,7 @@
     "desktop/appearance.go": "08dfed3100cd3db2cf2e10dbc70a70e3059271300887220161b869cef6d70a74",
     "desktop/audio_controls.go": "145150962fa7aea606b0dbec0f3fc674bf2786120ca7054679fa1e9ba89d60a3",
     "desktop/canvas.go": "420e572313c6a1dbc29ffe94736e668d7fc52326e4a4872fa941d52e5d560ef0",
-    "desktop/component_inspector.go": "347ff27e288b1d21dcbedb0952428c430e95786bb5faf20cd5978757fff931c8",
+    "desktop/component_inspector.go": "1aabd764ffcba34efec4cc169b3f7c67a3ba66e3b2facd55c1d7ad46a1c13f53",
     "desktop/component_palette.go": "554968a6746c02a80cc8c8f3fb853e422f0e45e97afa0d68cb95e2eb00da4a9a",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
@@ -51,6 +51,7 @@
     "desktop/operation_notice.go": "f4f8858aea77b3874d52061cedfd2206622eaa746608fbff08b02cc999f814b9",
     "desktop/optocoupler_controls.go": "ec1697919d413219c574625bf000c2f95ef6d2b84ea12be48cded0665664ddbd",
     "desktop/output_page_actions.go": "92b5592e3bb9ead8363e4c6f6c6b4ae9ac892926e253eb415a97a98bbdf8a923",
+    "desktop/passive_controls.go": "97cd17cb0ba4188561539269e4e5823f3a63ec1ba37e05fabfc34b27d4d6bcb7",
     "desktop/pinned_readings.go": "40fc42f6d46c79f97a303b6a8fa660c6a47702c5bf36cf835a1d21e62009a251",
     "desktop/placement_actions.go": "312deb732a7f065a31cf45d094daf201d637dc92398eaf3660e2fc558786f63e",
     "desktop/pointer_darwin.go": "6687056dfbf5fb66327cb7a527030271fffdcf591b5f2ff9c9ab9bd67f7662df",
@@ -186,6 +187,7 @@
     "parts.category.set",
     "parts.list",
     "parts.search.set",
+    "passive.configure",
     "potentiometer.wiper.set",
     "print.destination.set",
     "print.job.cancel",
@@ -858,7 +860,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 159,
+      "line": 166,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -866,7 +868,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 159,
+      "line": 166,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
@@ -874,7 +876,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 193,
+      "line": 200,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -882,7 +884,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 193,
+      "line": 200,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
@@ -890,7 +892,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 202,
+      "line": 209,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -898,7 +900,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 202,
+      "line": 209,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -906,7 +908,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 215,
+      "line": 222,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeComponentStartup(state, part, fmt.Sprintf(\"%.9g V\", e.Number))\n}",
@@ -914,7 +916,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 217,
+      "line": 224,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.componentStartupDefault(state, part)",
@@ -922,7 +924,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 218,
+      "line": 225,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -930,7 +932,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 218,
+      "line": 225,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -938,7 +940,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 278,
+      "line": 285,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -949,7 +951,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 279,
+      "line": 286,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -960,7 +962,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 282,
+      "line": 289,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -971,7 +973,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 283,
+      "line": 290,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -2869,6 +2871,41 @@
         "export.page.set"
       ],
       "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/passive_controls.go",
+      "line": 26,
+      "function": "*screen.passiveControls",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"passive.configure\", workbench.PassiveParams{ID: p.ID, Enabled: on, Parameters: c}, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "passive.configure"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/passive_controls.go",
+      "line": 28,
+      "function": "*screen.passiveControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Checked != enabled {\n\t\tapply(cfg, e.Checked)\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/passive_controls.go",
+      "line": 37,
+      "function": "*screen.passiveControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Number == float32(value) {\n\t\treturn\n\t}\n\tnext := cfg\n\tparsed, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)\n\tif err != nil {\n\t\treturn\n\t}\n\tchange(\u0026next, decimalControlSI(parsed, exponent))\n\tapply(next, true)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/passive_controls.go",
+      "line": 52,
+      "function": "*screen.passiveControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tif e.Checked == (cfg.Leakage \u003e 0) {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.Leakage = 0\n\tif e.Checked {\n\t\tnext.Leakage = 1e6\n\t}\n\tapply(next, true)\n}",
+      "status": "requires-binding-review"
     },
     {
       "file": "desktop/pinned_readings.go",
@@ -5289,6 +5326,7 @@
     "optocoupler.configure",
     "parts.category.set",
     "parts.search.set",
+    "passive.configure",
     "potentiometer.wiper.set",
     "print.destination.set",
     "print.job.cancel",

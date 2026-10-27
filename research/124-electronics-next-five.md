@@ -51,4 +51,15 @@ mode-check overhead is a documented bounded tradeoff. Current positive waveform
 proof includes full two-polarity refinement and production-clock captured/UI
 steps, distinct from deterministic numerical tests. Final focused race controls,
 ordinary/offscreen parity and lint pass. All 27 prior package/SDK identities stay
-exact. Committing the reviewed repair before beginning item 2.
+exact. Committed as `361b77ba` before beginning item 2.
+
+Item 2 adds optional versioned capacitor ESR/leakage and standalone inductor
+winding resistance without extra storage slots or solver-limit changes. Both
+examples, independent RC/RL/RLC and complex-impedance references, energy balance,
+Jacobian, capture/reopen/forgery checks and routed ordinary/offscreen UI-agent
+parity pass. A numeric minimum endpoint conversion regression was reproduced and
+fixed by preserving decimal float32 control input before SI conversion. Command
+discovery exceeded its existing 64 KiB bound; sharing existing schema definitions
+restored it without deleting fields or raising the limit. The native source
+ledger adds only passive.configure and its inspector route; native acceptance
+3/6/9/11 remains open. Prism completed 7/7 Anthropic Opus 5.5 chunks; four medium/nine low observations are fixed or dispositioned in the passives evidence README. Fresh focused core/desktop checks cover the fixes.

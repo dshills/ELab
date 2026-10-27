@@ -75,6 +75,16 @@ func recordedDeviceNodes(c Compiled, result *MixedResult) (*mixedNetwork, []floa
 		}
 		x[k] = v
 	}
+	for _, cap := range result.Capacitors {
+		for k, p := range n.caps {
+			if p.ID == cap.ID && hasPassiveLoss(p) {
+				x[n.capacitorIndex(k)] = cap.Current - capacitorLeakage(p)*cap.Voltage
+				if !finite(cap.Current) || !finite(cap.Voltage) || !finite(x[n.capacitorIndex(k)]) {
+					return nil, nil, fmt.Errorf("invalid recorded capacitor state")
+				}
+			}
+		}
+	}
 	if err := n.restorePowerNodes(result, x); err != nil {
 		return nil, nil, err
 	}

@@ -1,0 +1,416 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "a88cfadfb90961c9aa5fe4cb5e2767c9",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "361b77ba36f5c3aac9802b49e7aa0a905adf864c",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 9,
+      "medium": 4,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "c71f7477e841c6f5",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "DC result hardcodes zero capacitor current despite loss model",
+      "message": "The DC operating point always reports zero capacitor current. If the new passive-loss model includes a parallel leakage or dielectric-loss path, a lossy capacitor carries a nonzero steady-state current at DC, so the reported current and dissipation would be wrong. `network.caps = nil` also removes the capacitor stamps. If leakage is modeled inside the capacitor element, it is dropped from the DC solve entirely.",
+      "suggestion": "Confirm the passive loss model has no parallel leakage term. If it does, keep the leakage conductance in the DC network when removing the capacitor stamps. Then pass the actual leakage current (v/Rleak) to capacitorResult.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep.go",
+          "lines": {
+            "start": 328,
+            "end": 328
+          }
+        }
+      ],
+      "tags": [
+        "dc",
+        "passive-losses",
+        "location-corrected"
+      ],
+      "evidence": "result.Capacitors = append(result.Capacitors, capacitorResult(p, v, 0))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1beed2b9767ce1eb",
+      "severity": "medium",
+      "category": "maintainability",
+      "title": "Passive loss components flagged as switches",
+      "message": "Passive-loss components set `hasSwitch = true`, which reuses the switch flag to force a different compile or solver path. Any other logic that reads `hasSwitch` will now treat lossy capacitors and inductors as switches. Examples include switch-specific diagnostics, metadata, sampling advice and model-identity reporting. That can misreport circuit contents or change behavior in unrelated places. The reason for the coupling is also undocumented.",
+      "suggestion": "Add a dedicated flag (e.g. `hasPassiveLosses`) and OR it in only where the general/nonlinear solver path is actually needed. Alternatively, document why passive losses must be treated as a switch and confirm that no switch-specific outputs depend on `hasSwitch`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/graph.go",
+          "lines": {
+            "start": 528,
+            "end": 530
+          }
+        }
+      ],
+      "tags": [
+        "solver",
+        "flag-misuse"
+      ],
+      "evidence": "\t\tif hasPassiveLoss(c) {\n\t\t\thasSwitch = true\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "65dc57a68f4087c1",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "ESR not applied in the other capacitor constraint branch",
+      "message": "ESR is stamped only in the `else` branch. The sibling branch above writes `add(u, row, 1); add(v, row, -1)`, which looks like a terminal-voltage constraint against `old[k]`. If so, a capacitor with ESR still gets an ideal terminal-voltage constraint there. `result()` then reports the stored voltage as `v - ESR*i`, which would no longer match `old[k]`. That would give inconsistent startup state and energy accounting.",
+      "suggestion": "Check whether the first branch constrains terminal voltage to `old[k]`. If it does, subtract the ESR drop there as well, e.g. `f[row] -= resistance*x[row]; add(row, row, -resistance)`. Alternatively, have that branch reject or handle lossy capacitors explicitly.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/mixed.go",
+          "lines": {
+            "start": 477,
+            "end": 486
+          }
+        }
+      ],
+      "tags": [
+        "esr",
+        "startup"
+      ],
+      "evidence": "\t\t\t\tbranch(u, v, n.capacitorIndex(k), old[k])\n\t\t\t\tif resistance := capacitorESR(p); resistance \u003e 0 {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "269e2dc0edfe34d9",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "x",
+      "message": "The ESR charging current is written into the reconstructed state vector straight from untrusted recorded data. Neither `cap.Current` nor `cap.Voltage` is checked to be finite. The later sanity loop only scans `range n.nodes`, so a capacitor state slot past the node range can hold NaN or Inf. That value would then reach `restorePowerNodes` and the device validation.",
+      "suggestion": "Reject non-finite `cap.Current` and `cap.Voltage`, and the computed value, before storing it. Alternatively, extend the final finiteness check to cover the capacitor state indices.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/recording_devices.go",
+          "lines": {
+            "start": 79,
+            "end": 89
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "recording"
+      ],
+      "evidence": "x[n.capacitorIndex(k)] = cap.Current - capacitorLeakage(p)*cap.Voltage",
+      "fix": {
+        "before": "x[n.capacitorIndex(k)] = cap.Current - capacitorLeakage(p)*cap.Voltage",
+        "after": "x[n.capacitorIndex(k)] = cap.Current - capacitorLeakage(p)*cap.Voltage\n\t\t\t\tif !finite(cap.Current) || !finite(cap.Voltage) || !finite(x[n.capacitorIndex(k)]) {\n\t\t\t\t\treturn nil, nil, fmt.Errorf(\"invalid recorded capacitor state\")\n\t\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "89433f00bdbac00c",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Non-capacitor passive kinds assumed to be inductors",
+      "message": "Any kind other than exactly \"capacitor\" accepted by `IsPassiveStorageKind` is treated as an inductor. That case gets winding defaults and inductor readings. If additional capacitor kinds exist or are added later, they will be configured with invalid parameters.",
+      "suggestion": "Use a dedicated predicate (e.g. `workbench.IsCapacitorKind`) or switch explicitly on the supported kinds. Return nil for unknown kinds.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "desktop/passive_controls.go",
+          "lines": {
+            "start": 13,
+            "end": 17
+          }
+        }
+      ],
+      "tags": [
+        "kinds"
+      ],
+      "evidence": "\tif p.Kind == \"capacitor\" {\n\t\tcfg.ESR, cfg.Leakage = 1, 1e6\n\t} else {\n\t\tcfg.Winding = 1\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6bb9224847303002",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Shadowed `value` variable in field change handler",
+      "message": "Inside the Change closure, `value` is redeclared, shadowing the captured outer `value` parameter that the earlier equality check uses. This works today but is fragile and easy to break when the code is reordered.",
+      "suggestion": "Rename the parsed variable, e.g. `parsed`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/passive_controls.go",
+          "lines": {
+            "start": 39,
+            "end": 39
+          }
+        }
+      ],
+      "tags": [
+        "shadowing",
+        "location-corrected"
+      ],
+      "evidence": "value, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)",
+      "fix": {
+        "before": "value, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)\n\t\t\tif err != nil {\n\t\t\t\treturn\n\t\t\t}\n\t\t\tchange(\u0026next, decimalControlSI(value, exponent))",
+        "after": "parsed, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)\n\t\t\tif err != nil {\n\t\t\t\treturn\n\t\t\t}\n\t\t\tchange(\u0026next, decimalControlSI(parsed, exponent))"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f89054cc4e81106f",
+      "severity": "low",
+      "category": "testing",
+      "title": "Ignored findNode result may cause nil panic",
+      "message": "The second return value from `findNode` is discarded. If the field is not found, `held.Change` will panic or be nil, and the test fails confusingly instead of reporting the missing node.",
+      "suggestion": "Check the second return value and fail with a clear message if the node is absent.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "desktop/passive_controls_test.go",
+          "lines": {
+            "start": 67,
+            "end": 67
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness"
+      ],
+      "evidence": "held, _ := findNode(user.view(), field)",
+      "fix": {
+        "before": "held, _ := findNode(user.view(), field)",
+        "after": "held, ok := findNode(user.view(), field)\n\t\t\tif !ok || held.Change == nil {\n\t\t\t\tt.Fatal(\"missing passive field\", field)\n\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "005154fae9859003",
+      "severity": "low",
+      "category": "testing",
+      "title": "Test dereferences Passive without nil check",
+      "message": "This line dereferences `p.Device.Passive` without a nil check. If a regression clears the passive config, the test panics instead of failing with a useful message.",
+      "suggestion": "Guard for a nil Device/Passive before reading Leakage.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/passive_controls_test.go",
+          "lines": {
+            "start": 103,
+            "end": 103
+          }
+        }
+      ],
+      "tags": [
+        "nil",
+        "location-corrected"
+      ],
+      "evidence": "if p.ID == \"C1\" \u0026\u0026 p.Device.Passive.Leakage != 1000 {",
+      "fix": {
+        "before": "if p.ID == \"C1\" \u0026\u0026 p.Device.Passive.Leakage != 1000 {",
+        "after": "if p.ID == \"C1\" \u0026\u0026 (p.Device == nil || p.Device.Passive == nil || p.Device.Passive.Leakage != 1000) {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "091bed344dd17baa",
+      "severity": "low",
+      "category": "docs",
+      "title": "Validation artifact shows an empty review",
+      "message": "The committed prism review artifact reports 0 files, 0 chunks and 0 LLM calls, yet `complete: true` with no findings. It is not evidence that a review occurred, and it embeds local absolute paths.",
+      "suggestion": "Regenerate the artifact against the actual change set, or remove it. Strip machine-specific paths.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "docs/validation/electronics-next-five/passives/prism-initial.json",
+          "lines": {
+            "start": 34,
+            "end": 34
+          }
+        }
+      ],
+      "tags": [
+        "validation-artifact",
+        "location-corrected"
+      ],
+      "evidence": "\"files\": 0,",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "a5bf5c0d72b5e650",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Mixed \u0026\u0026/|| without parentheses in constraint skip",
+      "message": "This condition mixes `||` and `\u0026\u0026` without parentheses. Go's precedence makes it correct, but the intent is easy to misread. The skip is also undocumented: a capacitor with ESR contributes no ideal voltage constraint because of its series resistance, and the comment above does not say so.",
+      "suggestion": "Add parentheses around the capacitor clause and update the comment to explain why ESR capacitors add no constraint.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/device_extensions.go",
+          "lines": {
+            "start": 390,
+            "end": 390
+          }
+        }
+      ],
+      "tags": [
+        "readability"
+      ],
+      "evidence": "if isJunctionCap(p) || p.Kind == \"capacitor\" \u0026\u0026 capacitorESR(p) \u003e 0 {",
+      "fix": {
+        "before": "if isJunctionCap(p) || p.Kind == \"capacitor\" \u0026\u0026 capacitorESR(p) \u003e 0 {",
+        "after": "if isJunctionCap(p) || (p.Kind == \"capacitor\" \u0026\u0026 capacitorESR(p) \u003e 0) {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d6be389450796754",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Residual tolerance ignores ESR drop magnitude",
+      "message": "The capacitor residual now includes the ESR drop `-ESR*i` through `capacitorStoredVoltage`. The magnitude used to scale the tolerance does not include that term. When the ESR drop dominates, the tolerance is too tight relative to the cancellation error. This can cause spurious non-convergence or `inductorRoundoffError` rejections.",
+      "suggestion": "Add `capacitorESR(part)*math.Abs(local[n.capacitorIndex(k)])` to `magnitude`.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/inductor_integration.go",
+          "lines": {
+            "start": 90,
+            "end": 90
+          }
+        }
+      ],
+      "tags": [
+        "tolerance",
+        "esr",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tmagnitude := math.Abs(voltage(local, one)) + math.Abs(voltage(local, two)) + math.Abs(old[k])",
+      "fix": {
+        "before": "\t\t\tmagnitude := math.Abs(voltage(local, one)) + math.Abs(voltage(local, two)) + math.Abs(old[k])",
+        "after": "\t\t\tmagnitude := math.Abs(voltage(local, one)) + math.Abs(voltage(local, two)) + math.Abs(old[k]) + capacitorESR(part)*math.Abs(local[n.capacitorIndex(k)])"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "666bfb9ad37fc547",
+      "severity": "low",
+      "category": "style",
+      "title": "Loop variable shadows builtin cap",
+      "message": "Naming the loop variable `cap` shadows Go's builtin `cap` function in this scope. That hurts readability and can surprise later edits.",
+      "suggestion": "Rename the loop variable, e.g. `c`.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/mixed_transient.go",
+          "lines": {
+            "start": 72,
+            "end": 74
+          }
+        }
+      ],
+      "tags": [
+        "shadowing"
+      ],
+      "evidence": "\tfor _, cap := range r.Capacitors {\n\t\thasProfile = hasProfile || cap.Loss != nil\n\t}",
+      "fix": {
+        "before": "\tfor _, cap := range r.Capacitors {\n\t\thasProfile = hasProfile || cap.Loss != nil\n\t}",
+        "after": "\tfor _, c := range r.Capacitors {\n\t\thasProfile = hasProfile || c.Loss != nil\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0596860863a3881a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Missing-parts message not updated for passive dissipation",
+      "message": "The completeness check now also accepts networks whose dissipation comes from passive losses (ESR, leakage or winding resistance). The user-facing guidance was not updated to reflect this. Users get no hint that a lossy capacitor or inductor also satisfies the requirement.",
+      "suggestion": "Update the message to mention that saved capacitor ESR/leakage or inductor winding resistance also completes the network.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 169,
+            "end": 169
+          }
+        }
+      ],
+      "tags": [
+        "ux",
+        "location-corrected"
+      ],
+      "evidence": "\t\treturn fail(\"incomplete\", \"missing-parts\", \"Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.\", \"\")",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 122623,
+    "totalMs": 34517
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 41,
+    "bytes": 132945,
+    "chunks": 7,
+    "llmCalls": 7,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 79899,
+        "output": 11930,
+        "costUSD": 0.558196
+      }
+    ],
+    "widenedFiles": 12,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

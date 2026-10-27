@@ -16,10 +16,11 @@ const (
 const MixedEngineID = "elab.mixed-mna-sdirk2.v1"
 
 type CapacitorResult struct {
-	ID      string  `json:"id"`
-	Voltage float64 `json:"voltage_v"`
-	Current float64 `json:"current_a"`
-	Energy  float64 `json:"energy_j"`
+	ID      string          `json:"id"`
+	Voltage float64         `json:"voltage_v"`
+	Current float64         `json:"current_a"`
+	Energy  float64         `json:"energy_j"`
+	Loss    *PassiveReading `json:"losses,omitempty"`
 }
 type BranchResult struct {
 	ID      string  `json:"id"`
@@ -107,6 +108,9 @@ func cloneMixed(r *MixedResult) *MixedResult {
 	o.Timers555 = append([]Timer555Result(nil), r.Timers555...)
 	o.OpAmps = append([]OpAmpResult(nil), r.OpAmps...)
 	o.Inductors = append([]InductorResult(nil), r.Inductors...)
+	for i := range o.Inductors {
+		o.Inductors[i].Loss = clonePassiveReading(o.Inductors[i].Loss)
+	}
 	o.Nodes = map[string]float64{}
 	for k, v := range r.Nodes {
 		o.Nodes[k] = v
@@ -115,6 +119,9 @@ func cloneMixed(r *MixedResult) *MixedResult {
 	o.Transistors = append([]MixedTransistor{}, r.Transistors...)
 
 	o.Capacitors = append([]CapacitorResult{}, r.Capacitors...)
+	for i := range o.Capacitors {
+		o.Capacitors[i].Loss = clonePassiveReading(o.Capacitors[i].Loss)
+	}
 	o.LEDs = append([]BranchResult{}, r.LEDs...)
 	o.Resistors = append([]BranchResult{}, r.Resistors...)
 	o.Sources = append([]BranchResult{}, r.Sources...)
@@ -367,6 +374,11 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			u, v := n.pin(p, "1"), n.pin(p, "2")
 			r := sensorResistance(p)
 			flow(u, v, (voltage(x, u)-voltage(x, v))/r, 1/r)
+		case "capacitor":
+			if g := capacitorLeakage(p); g > 0 {
+				u, v := n.pin(p, "1"), n.pin(p, "2")
+				flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
+			}
 		case "resistor", "switch":
 			u, v := n.pin(p, "1"), n.pin(p, "2")
 			resistance := p.Value
@@ -464,9 +476,14 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 				add(v, row, -1)
 			} else {
 				branch(u, v, n.capacitorIndex(k), old[k])
+				if resistance := capacitorESR(p); resistance > 0 {
+					row := n.capacitorIndex(k)
+					f[row] -= resistance * x[row]
+					add(row, row, -resistance)
+				}
 			}
 		} else {
-			g := p.Value / dt
+			g := passiveCapCompanion(p, dt)
 			flow(u, v, g*(voltage(x, u)-voltage(x, v)-old[k]), g)
 		}
 	}
@@ -688,6 +705,14 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				}
 			}
 			result := n.result(x, old, dt, t, at)
+			for k, p := range n.caps {
+				if hasPassiveLoss(p) {
+					internal := voltage(x, n.pin(p, "2")) + result.capV[k]
+					if !finite(internal) || math.Abs(internal) > maxMixedNodeVoltage {
+						return nil, fmt.Errorf("capacitor %s internal storage node exceeds the ±30 V model range", p.ID)
+					}
+				}
+			}
 			if len(n.inductors) > 0 {
 				if !finite(result.result.PowerResidual) || !finite(result.result.KCLResidual) {
 					return nil, fmt.Errorf("RLC result exceeds the finite energy/power range")
@@ -882,20 +907,32 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		}
 		sourcePower += br.Power
 	}
+	for _, p := range n.c.MixedGraph.Components {
+		if p.Kind == "capacitor" {
+			v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
+			powers += capacitorLeakage(p) * v * v
+		}
+	}
 	for k, p := range n.caps {
 		v := voltage(x, n.pin(p, "1")) - voltage(x, n.pin(p, "2"))
-		capV[k] = v
 		i := 0.
 		if dt == 0 || n.usesCollocation() {
 			i = x[n.capacitorIndex(k)]
 		} else {
-			i = p.Value * (v - old[k]) / dt
+			if capacitorESR(p) > 0 {
+				i = passiveCapCompanion(p, dt) * (v - old[k])
+			} else {
+				i = p.Value * (v - old[k]) / dt
+			}
 		}
 		// SDIRK history is a stage construction, not the previous accepted
 		// voltage. Balance instantaneous terminal power for every method.
-		energyRate += v * i
+		stored := capacitorStoredVoltage(p, v, i)
+		capV[k] = stored
+		energyRate += stored * i
+		powers += capacitorESR(p) * i * i
 		if !privatePart(p.ID) {
-			r.Capacitors = append(r.Capacitors, CapacitorResult{p.ID, v, i, .5 * p.Value * v * v})
+			r.Capacitors = append(r.Capacitors, capacitorResult(p, v, i))
 		}
 	}
 	for k, p := range n.inductors {
@@ -911,9 +948,14 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			energyRate += (v - inductorWindingResistance(p)*i) * i
 			continue
 		}
-		energyRate += v * i
+		if resistance := inductorWindingResistance(p); resistance > 0 {
+			energyRate += (v - resistance*i) * i
+			powers += resistance * i * i
+		} else {
+			energyRate += v * i
+		}
 		if !privatePart(p.ID) {
-			r.Inductors = append(r.Inductors, InductorResult{ID: p.ID, Voltage: v, Current: i, Energy: .5 * p.Value * i * i})
+			r.Inductors = append(r.Inductors, InductorResult{ID: p.ID, Voltage: v, Current: i, Energy: .5 * p.Value * i * i, Loss: passiveReading(p, v, i)})
 		}
 	}
 	_, f := n.mnaEquations(x, old, dt, t, at, !n.usesCollocation())

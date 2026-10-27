@@ -28,14 +28,14 @@ func TestAtomicEditHistoryContractsPreserveDiscoveryAndExposeSupportedCommands(t
 		}
 		if id == "edit.batch" {
 			commands := schema["x-supported-edit-commands"].([]any)
-			if len(commands) != 29 || inputProperty(schema, "edits")["maxItems"] != float64(100) || inputProperty(schema, "name")["x-max-utf8-bytes"] != float64(80) {
+			if len(commands) != 30 || inputProperty(schema, "edits")["maxItems"] != float64(100) || inputProperty(schema, "name")["x-max-utf8-bytes"] != float64(80) {
 				t.Fatal("missing batch domains")
 			}
 			found := map[string]bool{}
 			for _, command := range commands {
 				found[command.(string)] = true
 			}
-			if !found["speaker.configure"] || !found["transistor.profile.set"] {
+			if !found["passive.configure"] || !found["speaker.configure"] || !found["transistor.profile.set"] {
 				t.Fatal("new device edits missing from atomic contract")
 			}
 			for _, command := range commands {

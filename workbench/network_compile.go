@@ -165,8 +165,8 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	if len(inductors) > MaxNetworkInductors || len(mos) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
-	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers)+len(bridges) == 0 {
-		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop or counter to complete the network.", "")
+	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers)+len(bridges) == 0 && !hasPassiveDissipation(g) {
+		return fail("incomplete", "missing-parts", "Add ground, a source and a resistor, switch, diode, potentiometer, op-amp, 555 timer, logic gate, flip-flop counter, or saved capacitor/inductor loss to complete the network.", "")
 	}
 	net := func(p Component, t string) string { return out.TerminalNet[p.ID+"."+t] }
 	out.Ground = net(grounds[0], "reference")
@@ -231,6 +231,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			continue
 		}
 		for _, c := range caps {
+			if capacitorESR(c) > 0 {
+				continue
+			}
 			a, b := net(c, "1"), net(c, "2")
 			positive, negative := net(v, "positive"), net(v, "negative")
 			if a == positive && b == negative || b == positive && a == negative {
@@ -270,6 +273,9 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		}
 	}
 	for _, p := range caps {
+		if capacitorESR(p) > 0 {
+			continue
+		}
 		if !join(net(p, "1"), net(p, "2")) {
 			return fail("unsupported", "ideal-constraint-loop", "A capacitor/source constraint loop has indeterminate startup currents; remove the redundant capacitor or add resistance.", p.ID)
 		}

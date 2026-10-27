@@ -310,6 +310,9 @@ func (n *mixedNetwork) nextControlEvent(at float64) float64 {
 func controlTimeReached(at, event float64) bool { return at >= event || sameSampleTime(at, event) }
 
 func inductorWindingResistance(p Component) float64 {
+	if p.Kind == "inductor" && hasPassiveLoss(p) {
+		return p.Device.Passive.Winding
+	}
 	if privatePart(p.ID) && p.Power != nil && p.Power.Transformer != nil {
 		if strings.HasSuffix(p.ID, "_secondary") {
 			return p.Power.Transformer.SecondaryResistance

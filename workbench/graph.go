@@ -648,7 +648,8 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 			}
 		}
 	}
-	if hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
+	// Optional storage losses require the general network equations, not the ideal RC shortcut.
+	if hasPassiveLosses(g) || hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

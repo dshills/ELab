@@ -9,6 +9,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	c := commandContractDetail{Version: 1, Scope: "hobbyist-device-configuration", Preconditions: []string{"Ordinary revision, document-generation, retry and closed-service guards apply"}, Effects: []string{}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing, extra, wrong-type, null-required, out-of-range or wrong-target fields preserve accepted state"}}}
 	switch id {
+	case "passive.configure":
+		schema["x-passive-version"] = PassiveLossModelID
+		c.Effects = []string{"Saved undoable capacitor/inductor configuration; all fields required, including when disabling. Unused kind-specific fields must be zero. Enabled=false removes parameters and restores the exact original ideal model. Version elab.passive-loss.v1.", "Capacitor ESR is series with ideal storage; leakage is parallel across external terminals. Initial voltage and energy refer to internal storage, external probes report total terminal voltage/current. Inductor winding loss is series resistance. Results include storage voltage/current and each nonnegative heat loss; captures validate them. No extra storage slots or solver-limit changes."}
 	case "speaker.configure":
 		c.Effects = []string{"Complete saved undoable passive loudspeaker configuration, version elab.loudspeaker-impedance.v1. Series coil R/L and parallel motional R/L/C, with C derived from resonance_hz and motional_inductance_h. Zero-energy startup; no calibrated acoustic output or manufacturer rating", "Two private inductors, one capacitor, two resistors and two nodes count against existing budgets. AC and transient use the same passive equivalent. Voltage/current, terminal power, coil and motional heat, stored energy and internal state are captured and validated", "Simulation is silent. Existing explicit audio.render/play/stop/read and WAV export support a normalized terminal-voltage illustration, not SPL/cone/radiation prediction"}
 		schema["x-speaker-version"] = SpeakerModelID
@@ -55,6 +58,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	}
 	schema["x-command-contract"] = c
 	schema["x-model-id"] = ExtendedModelID
+	if id == "passive.configure" {
+		schema["x-model-id"] = PassiveLossModelID
+	}
 	if id == "speaker.configure" {
 		schema["x-model-id"] = SpeakerModelID
 	}
@@ -99,4 +105,21 @@ func addSpeakerSchema(schema map[string]any) {
 			p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
 		}
 	}
+}
+
+func addPassiveSchema(schema map[string]any) {
+	if p := inputProperty(schema, "version"); p != nil {
+		p["enum"] = []string{PassiveLossModelID}
+	}
+	for _, v := range []struct {
+		name     string
+		min, max float64
+	}{{"esr_ohm", .001, 1e5}, {"leakage_resistance_ohm", 1000, 1e12}, {"winding_resistance_ohm", .001, 1e5}} {
+		if p := inputProperty(schema, v.name); p != nil {
+			delete(p, "type")
+			p["anyOf"] = []any{map[string]any{"type": "number", "enum": []int{0}}, map[string]any{"type": "number", "minimum": v.min, "maximum": v.max}}
+			p["x-unit"] = "ohm"
+		}
+	}
+	schema["x-unused-fields"] = "capacitor requires winding_resistance_ohm=0; inductor requires esr_ohm=0 and leakage_resistance_ohm=0"
 }

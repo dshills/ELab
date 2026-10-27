@@ -85,15 +85,16 @@ func (n *mixedNetwork) radauEquations(x, old []float64, h float64, trace *Transi
 		for k, part := range n.caps {
 			row := offset + n.capacitorIndex(k)
 			one, two := n.pin(part, "1"), n.pin(part, "2")
-			value := voltage(local, one) - voltage(local, two)
+			value := capacitorStoredVoltage(part, voltage(local, one)-voltage(local, two), local[n.capacitorIndex(k)])
 			residual[row] = value - old[k]
-			magnitude := math.Abs(voltage(local, one)) + math.Abs(voltage(local, two)) + math.Abs(old[k])
+			magnitude := math.Abs(voltage(local, one)) + math.Abs(voltage(local, two)) + math.Abs(old[k]) + capacitorESR(part)*math.Abs(local[n.capacitorIndex(k)])
 			if one >= 0 {
 				matrix[row][offset+one] = 1
 			}
 			if two >= 0 {
 				matrix[row][offset+two] = -1
 			}
+			matrix[row][offset+n.capacitorIndex(k)] -= capacitorESR(part)
 			for other := range radauNodes {
 				column := other*size + n.capacitorIndex(k)
 				coefficient := h * radauWeights[stage][other] / part.Value
@@ -157,7 +158,7 @@ func (n *mixedNetwork) radauStep(state *inductorStage, trace *Transient, h, end 
 			}
 			caps := make([]float64, len(n.caps))
 			for k, part := range n.caps {
-				caps[k] = voltage(endState, n.pin(part, "1")) - voltage(endState, n.pin(part, "2"))
+				caps[k] = capacitorStoredVoltage(part, voltage(endState, n.pin(part, "1"))-voltage(endState, n.pin(part, "2")), endState[n.capacitorIndex(k)])
 			}
 			return &inductorStage{x: endState, capV: caps}, nil
 		}
@@ -198,6 +199,15 @@ func (n *mixedNetwork) radauNodeRange(x []float64, size int) error {
 			value := x[stage*size+node]
 			if !finite(value) || math.Abs(value) > maxMixedNodeVoltage {
 				return fmt.Errorf("RLC collocation node exceeds the ±30 V educational model range")
+			}
+		}
+		for k, p := range n.caps {
+			if hasPassiveLoss(p) {
+				local := x[stage*size : (stage+1)*size]
+				internal := voltage(local, n.pin(p, "1")) - capacitorESR(p)*local[n.capacitorIndex(k)]
+				if !finite(internal) || math.Abs(internal) > maxMixedNodeVoltage {
+					return fmt.Errorf("capacitor %s internal storage node exceeds the ±30 V model range", p.ID)
+				}
 			}
 		}
 	}

@@ -68,6 +68,9 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		hasRelay = hasRelay || device.Kind == "relay"
 	}
 	hasProfile := false
+	for _, c := range r.Capacitors {
+		hasProfile = hasProfile || c.Loss != nil
+	}
 	for _, q := range r.Transistors {
 		hasProfile = hasProfile || q.Model.ID == TransistorProfileModelID+".npn" || q.Model.ID == TransistorProfileModelID+".pnp"
 	}

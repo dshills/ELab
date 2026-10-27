@@ -16,6 +16,20 @@ func schematicPartDescription(p Component) string {
 	if p.Unit != "" {
 		text += " · " + displayPartValue(p)
 	}
+	if hasPassiveLoss(p) {
+		c := p.Device.Passive
+		if p.Kind == "capacitor" {
+			text += fmt.Sprintf(" · ESR %.6g Ω", c.ESR)
+			if c.Leakage == 0 {
+				text += " · leakage off"
+			} else {
+				text += fmt.Sprintf(" · leakage %.6g Ω", c.Leakage)
+			}
+		} else {
+			text += fmt.Sprintf(" · winding %.6g Ω", c.Winding)
+		}
+		text += " · " + c.Version
+	}
 	if p.Kind == "speaker" && p.Device != nil && p.Device.Speaker != nil {
 		c := p.Device.Speaker
 		text += fmt.Sprintf(" · coil R %.6g Ω · L %.6g H · fs %.6g Hz · motional R %.6g Ω · L %.6g H · %s", c.Resistance, c.Inductance, c.Resonance, c.MotionalResistance, c.MotionalInductance, c.Version)

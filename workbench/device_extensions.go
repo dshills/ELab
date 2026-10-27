@@ -14,6 +14,7 @@ type ExtendedModel struct {
 	Shift    string `json:"shift_register"`
 	Sound    string `json:"sound"`
 	Speaker  string `json:"loudspeaker,omitempty"`
+	Passive  string `json:"passive_losses,omitempty"`
 }
 
 func ExtendedDeviceModel() ExtendedModel {
@@ -36,6 +37,7 @@ type SoundConfig struct {
 	Frequency   float64 `json:"frequency_hz"`
 }
 type DeviceParameters struct {
+	Passive  *PassiveConfig     `json:"passive,omitempty"`
 	Speaker  *SpeakerConfig     `json:"speaker,omitempty"`
 	Bipolar  *TransistorProfile `json:"bipolar,omitempty"`
 	PWM      *PWMConfig         `json:"pwm,omitempty"`
@@ -48,6 +50,10 @@ func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
 		return nil
 	}
 	o := *p
+	if p.Passive != nil {
+		v := *p.Passive
+		o.Passive = &v
+	}
 	if p.Speaker != nil {
 		v := *p.Speaker
 		o.Speaker = &v
@@ -79,8 +85,11 @@ func isExtendedKind(k string) bool {
 }
 func extendedModelForGraph(g Graph) *ExtendedModel {
 	for _, p := range g.Components {
-		if isExtendedKind(p.Kind) || hasDynamics(p) {
+		if isExtendedKind(p.Kind) || hasDynamics(p) || hasPassiveLoss(p) {
 			m := ExtendedDeviceModel()
+			if hasPassiveLosses(g) {
+				m.Passive = passiveLossDescription
+			}
 			if hasSpeakers(g) {
 				m.Speaker = speakerDescription
 			}
@@ -91,6 +100,9 @@ func extendedModelForGraph(g Graph) *ExtendedModel {
 }
 func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	expected := ExtendedDeviceModel()
+	if hasPassiveLosses(g) {
+		expected.Passive = passiveLossDescription
+	}
 	if hasSpeakers(g) {
 		expected.Speaker = speakerDescription
 	}
@@ -123,6 +135,9 @@ func validateDeviceParameters(p Component) error {
 		return nil
 	}
 	count := 0
+	if d.Passive != nil {
+		count++
+	}
 	if d.Speaker != nil {
 		count++
 	}
@@ -140,6 +155,9 @@ func validateDeviceParameters(p Component) error {
 	}
 	if count != 1 {
 		return fmt.Errorf("device parameters must match one component model")
+	}
+	if IsPassiveStorageKind(p.Kind) && d.Passive != nil {
+		return validatePassiveConfig(p.Kind, *d.Passive)
 	}
 	if p.Kind == "speaker" && d.Speaker != nil {
 		return validateSpeaker(*d.Speaker)
@@ -179,6 +197,8 @@ func validateDeviceFields(raw json.RawMessage, p Component) error {
 		return err
 	}
 	switch {
+	case p.Device.Passive != nil:
+		return paramsNested(f["device_parameters"], "passive", &PassiveConfig{}, passiveRequiredFields()...)
 	case p.Device.Speaker != nil:
 		return paramsNested(f["device_parameters"], "speaker", &SpeakerConfig{}, speakerRequiredFields()...)
 	case p.Device.Bipolar != nil:
@@ -366,8 +386,8 @@ func validateExtendedConstraints(c Compiled) error {
 	}
 	for _, p := range lowered.MixedGraph.Components {
 		// Profile junctions start at solved bias with zero current, not an
-		// imposed startup voltage. They add no ideal voltage constraint.
-		if isJunctionCap(p) {
+		// imposed startup voltage. ESR also removes the ideal voltage constraint.
+		if isJunctionCap(p) || (p.Kind == "capacitor" && capacitorESR(p) > 0) {
 			continue
 		}
 		if p.Kind != "dc-source" && p.Kind != "pulse-source" && !IsWaveformSource(p.Kind) && p.Kind != "capacitor" {

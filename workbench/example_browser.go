@@ -49,7 +49,7 @@ func PreviewExample(id string) (ExamplePreview, error) {
 
 func exampleCategory(id string) string {
 	switch id {
-	case "led", "split-supply", "rc", "rc-high-pass", "led-fade", "rl", "rlc", "flyback":
+	case "capacitor-loss", "winding-loss", "led", "split-supply", "rc", "rc-high-pass", "led-fade", "rl", "rlc", "flyback":
 		return "basics"
 	case "npn", "pnp", "emitter-follower", "bipolar-push-pull", "switch-npn", "blink", "flasher", "nmos", "pmos", "cmos":
 		return "transistors"

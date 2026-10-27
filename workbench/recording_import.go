@@ -329,11 +329,17 @@ func validateRecordedResults(m VerificationMetadata, c Compiled) error {
 			if !ok || p.Kind != "inductor" || !recordingNear(v.Energy, .5*p.Value*v.Current*v.Current) || !recordingNear(v.Voltage, r.Nodes[c.TerminalNet[v.ID+".1"]]-r.Nodes[c.TerminalNet[v.ID+".2"]]) {
 				return fmt.Errorf("invalid recorded inductor identity, voltage or energy")
 			}
+			if err := validatePassiveReading(v.Loss, passiveReading(p, v.Voltage, v.Current)); err != nil {
+				return err
+			}
 		}
 		for _, v := range r.Capacitors {
 			p, ok := m.Graph.Component(v.ID)
-			if !ok || p.Kind != "capacitor" || !recordingNear(v.Energy, .5*p.Value*v.Voltage*v.Voltage) || !recordingNear(v.Voltage, r.Nodes[c.TerminalNet[v.ID+".1"]]-r.Nodes[c.TerminalNet[v.ID+".2"]]) {
+			if !ok || p.Kind != "capacitor" || !recordingNear(v.Energy, passiveCapEnergy(p, v.Voltage, v.Current)) || !recordingNear(v.Voltage, r.Nodes[c.TerminalNet[v.ID+".1"]]-r.Nodes[c.TerminalNet[v.ID+".2"]]) {
 				return fmt.Errorf("invalid recorded capacitor identity, voltage or energy")
+			}
+			if err := validatePassiveReading(v.Loss, passiveReading(p, v.Voltage, v.Current-capacitorLeakage(p)*v.Voltage)); err != nil {
+				return err
 			}
 		}
 		if err := validateRecordedMOSFETs(c, m.Graph, r); err != nil {
