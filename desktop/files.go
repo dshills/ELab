@@ -141,12 +141,16 @@ func (s *screen) beginFile(id string, choose bool, p any, after func()) {
 				}
 				options.Extensions = []string{"png"}
 				options.Filename = "Schematic.png"
-			case "verification.export", "sweep.export":
+			case "verification.export", "sweep.export", "spectrum.export":
 				var format string
 				_ = json.Unmarshal(fields["format"], &format)
 				options.Title = "Export recorded verification"
 				options.Extensions = []string{format}
 				options.Filename = "Verification." + format
+				if id == "spectrum.export" {
+					options.Title = "Export recorded spectrum"
+					options.Filename = "Spectrum." + format
+				}
 				if id == "sweep.export" {
 					options.Title = "Export frequency or DC sweep"
 					options.Filename = "DCSweep." + format

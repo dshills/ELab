@@ -166,6 +166,17 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.configureOptocouplerLocked(p)
+	case "spectrum.settings.set", "spectrum.analyze":
+		return s.spectrumCommandLocked(command, raw)
+	case "spectrum.export":
+		var p VerificationExportParams
+		if err := params(raw, &p, "id", "path", "format"); err != nil {
+			return err
+		}
+		if p.Format != "json" && p.Format != "csv" {
+			return fmt.Errorf("spectrum format must be json or csv")
+		}
+		return s.startExportLocked(ExportStartParams{Kind: "spectrum-" + p.Format, ID: p.ID, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
 	case "audio.render", "audio.play", "audio.stop":
 		return s.audioCommandLocked(command, raw)
 	case "pwm.configure":

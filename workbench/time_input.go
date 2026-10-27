@@ -53,6 +53,8 @@ func ParseTimeSeconds(text string) (float64, error) {
 // Only public command inputs accept unit strings. Persisted documents, recorded
 // rows and output schemas retain strict numeric SI fields.
 var timeCommandFields = map[string][]string{
+	"spectrum.settings.set":    {"start_s", "end_s"},
+	"spectrum.analyze":         {"start_s", "end_s"},
 	"simulation.transient.set": {"step_s", "high_s", "low_s"},
 	"simulation.step":          {"duration_s"}, "simulation.step.start": {"duration_s"},
 	"verification.settings.set": {"duration_s", "sample_step_s"},
@@ -77,6 +79,9 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 	fields := timeCommandFields[command]
 	if len(fields) == 0 && len(waveformQuantityFields[command]) == 0 && command != "edit.batch" {
 		return raw, nil
+	}
+	if len(raw) == 0 && (command == "spectrum.settings.set" || command == "spectrum.analyze") {
+		raw = json.RawMessage(`{}`)
 	}
 	var object map[string]json.RawMessage
 	if err := DecodeStrict(raw, &object); err != nil {
@@ -128,6 +133,24 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 	if command == "source.pulse.timing.set" || command == "simulation.pulse.timing.set" {
 		if err := normalizePulseTimingQuantities(object); err != nil {
 			return nil, err
+		}
+	}
+	if command == "spectrum.settings.set" || command == "spectrum.analyze" {
+		quantityRaw := object["fundamental_hz"]
+		if len(quantityRaw) > 0 && quantityRaw[0] == '"' {
+			var text string
+			if err := json.Unmarshal(quantityRaw, &text); err != nil {
+				return nil, err
+			}
+			value, err := parseWaveformQuantity(text, "Hz")
+			if err != nil {
+				return nil, fmt.Errorf("fundamental_hz: %w", err)
+			}
+			encoded, err := json.Marshal(value)
+			if err != nil {
+				return nil, err
+			}
+			object["fundamental_hz"] = encoded
 		}
 	}
 	if command == "edit.batch" {

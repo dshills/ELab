@@ -197,81 +197,82 @@ func runNative() (runErr error) {
 }
 
 type screen struct {
-	exampleSearch                       ui.SearchBox
-	exampleGrid                         ui.CollectionView
-	exampleSheet                        ui.Sheet
-	exampleThumbnails                   exampleThumbnails
-	partSearch                          ui.SearchBox
-	statusNotice                        ui.InlineNotice
-	systemAppearance                    atomic.Pointer[cogent.SystemAppearance]
-	reduceMotion                        atomic.Bool
-	scopeAppearance, sweepAppearance    canvasAppearanceRevision
-	viewportPending                     *viewportReport
-	viewportSerial                      uint64
-	keyboardFocus                       ui.FocusRequest
-	recoveryInspection, recoverySamples recoveryReadCache
-	nativePointerPane                   string
-	sweepDrawing                        *sweepCanvas
-	previewPixels                       previewPixels
-	requestHelp                         *workbench.DiagnosticHelp
-	requestHelpRevision                 uint64
-	displayStarted                      time.Time
-	app                                 *app.Application
-	window                              app.WindowRef
-	service                             *workbench.Service
-	commands                            *command.Registry
-	drawing                             *commandCanvas
-	scope                               *scopeCanvas
-	fileBusy                            bool
-	fileMessage, pendingCommand         string
-	pendingParams                       json.RawMessage
-	pendingFileSerial                   uint64
-	fileDecisionContext                 *actionContext
-	chooseFile                          func(context.Context, app.FileOptions) (string, error)
-	serial                              uint64
-	errorMessage                        string
-	renderRevision, lastDrawRevision    uint64
-	lastDrawAnalysis                    string
-	lastPalette                         appPalette
-	lastReduceMotion                    bool
-	nativePalette                       atomic.Pointer[appPalette]
-	menuSerial                          uint64
-	menuCommandRevision                 *uint64
-	actionContext                       *actionContext
-	fieldContext                        *actionContext
-	pointerContext                      *actionContext
-	pointerAccepted                     *actionContext
-	fieldAccepted                       *actionContext
-	settleField                         func(string, func(error)) error
-	settleNumber                        func(string, func(error)) error
-	pendingValueApply                   *valueApply
-	componentStartupAccepted            *componentStartupContinuation
-	componentStartupRejected            *componentStartupRejection
-	pendingComponentStartup             *componentStartupWork
-	componentStartupEpoch               uint64
-	verificationAccepted                *verificationContinuation
-	verificationRejected                map[string]verificationFieldRejection
-	pendingVerificationAction           *verificationActionWork
-	sweepSettingsAccepted               *sweepSettingsContinuation
-	sweepFieldRejected                  map[string]sweepFieldRejection
-	pendingSweepStart                   *sweepStartWork
-	valueDraftAccepted                  *valueDraftContinuation
-	outputPageAccepted                  *outputPageContinuation
-	recordedStatisticsRejected          map[string]recordedStatisticsRejection
-	recordedComparisonRejected          *recordedComparisonRejection
-	recordedTimingAccepted              *recordedTimingContinuation
-	recordedTimingRejected              map[string]*recordedTimingFieldRejection
-	pendingRecordedTimingPage           *recordedTimingPageWork
-	recordedPlaybackAccepted            *recordedPlaybackContinuation
-	recordedPlaybackRejected            map[string]recordedPlaybackRejection
-	pendingRecordedPlayback             *recordedPlaybackWork
-	placementFieldAccepted              *placementFieldContinuation
-	pendingPlacement                    *placementActionWork
-	cursorFieldAccepted                 *cursorFieldContinuation
-	cursorTimeRejected                  map[string]cursorTimeRejection
-	intervalTimeRejected                map[string]intervalTimeRejection
-	intervalFieldAccepted               *intervalFieldContinuation
-	pendingCursorAction                 *cursorActionWork
+	spectrumDrawing                                      *cogent.MeshCanvas
+	exampleSearch                                        ui.SearchBox
+	exampleGrid                                          ui.CollectionView
+	exampleSheet                                         ui.Sheet
+	exampleThumbnails                                    exampleThumbnails
+	partSearch                                           ui.SearchBox
+	statusNotice                                         ui.InlineNotice
+	systemAppearance                                     atomic.Pointer[cogent.SystemAppearance]
+	reduceMotion                                         atomic.Bool
+	scopeAppearance, sweepAppearance, spectrumAppearance canvasAppearanceRevision
+	viewportPending                                      *viewportReport
+	viewportSerial                                       uint64
+	keyboardFocus                                        ui.FocusRequest
+	recoveryInspection, recoverySamples                  recoveryReadCache
+	nativePointerPane                                    string
+	sweepDrawing                                         *sweepCanvas
+	previewPixels                                        previewPixels
+	requestHelp                                          *workbench.DiagnosticHelp
+	requestHelpRevision                                  uint64
+	displayStarted                                       time.Time
+	app                                                  *app.Application
+	window                                               app.WindowRef
+	service                                              *workbench.Service
+	commands                                             *command.Registry
+	drawing                                              *commandCanvas
+	scope                                                *scopeCanvas
+	fileBusy                                             bool
+	fileMessage, pendingCommand                          string
+	pendingParams                                        json.RawMessage
+	pendingFileSerial                                    uint64
+	fileDecisionContext                                  *actionContext
+	chooseFile                                           func(context.Context, app.FileOptions) (string, error)
+	serial                                               uint64
+	errorMessage                                         string
+	renderRevision, lastDrawRevision                     uint64
+	lastDrawAnalysis                                     string
+	lastPalette                                          appPalette
+	lastReduceMotion                                     bool
+	nativePalette                                        atomic.Pointer[appPalette]
+	menuSerial                                           uint64
+	menuCommandRevision                                  *uint64
+	actionContext                                        *actionContext
+	fieldContext                                         *actionContext
+	pointerContext                                       *actionContext
+	pointerAccepted                                      *actionContext
+	fieldAccepted                                        *actionContext
+	settleField                                          func(string, func(error)) error
+	settleNumber                                         func(string, func(error)) error
+	pendingValueApply                                    *valueApply
+	componentStartupAccepted                             *componentStartupContinuation
+	componentStartupRejected                             *componentStartupRejection
+	pendingComponentStartup                              *componentStartupWork
+	componentStartupEpoch                                uint64
+	verificationAccepted                                 *verificationContinuation
+	verificationRejected                                 map[string]verificationFieldRejection
+	pendingVerificationAction                            *verificationActionWork
+	sweepSettingsAccepted                                *sweepSettingsContinuation
+	sweepFieldRejected                                   map[string]sweepFieldRejection
+	pendingSweepStart                                    *sweepStartWork
+	valueDraftAccepted                                   *valueDraftContinuation
+	outputPageAccepted                                   *outputPageContinuation
+	recordedStatisticsRejected                           map[string]recordedStatisticsRejection
+	recordedComparisonRejected                           *recordedComparisonRejection
+	recordedTimingAccepted                               *recordedTimingContinuation
+	recordedTimingRejected                               map[string]*recordedTimingFieldRejection
+	pendingRecordedTimingPage                            *recordedTimingPageWork
+	recordedPlaybackAccepted                             *recordedPlaybackContinuation
+	recordedPlaybackRejected                             map[string]recordedPlaybackRejection
+	pendingRecordedPlayback                              *recordedPlaybackWork
+	placementFieldAccepted                               *placementFieldContinuation
+	pendingPlacement                                     *placementActionWork
+	cursorFieldAccepted                                  *cursorFieldContinuation
+	cursorTimeRejected                                   map[string]cursorTimeRejection
+	intervalTimeRejected                                 map[string]intervalTimeRejection
+	intervalFieldAccepted                                *intervalFieldContinuation
+	pendingCursorAction                                  *cursorActionWork
 }
 
 func (s *screen) invoke(id string, p any) workbench.Response {

@@ -1,0 +1,394 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "67b7e99be786ce48ac71069289c775e8",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "ed98095f45c5f837f24a104a964a23a432175541",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 9,
+      "medium": 3,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "019f5de8493fb3dd",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Spectrum ID mismatch returns wrong error code vs contract",
+      "message": "The export.start contract added in this diff says a wrong spectrum ID returns `not-found` (\"spectrum ID is not the exact current result\"). The implementation returns `not-ready` instead. Clients that branch on the documented error code will mishandle this failure.",
+      "suggestion": "Make the code and the contract agree. Return `not-found` for an ID mismatch, and keep `not-ready` only for the case where no completed spectrum exists. Alternatively, update the contract to match the code.",
+      "confidence": 0.75,
+      "locations": [
+        {
+          "path": "workbench/project_export.go",
+          "lines": {
+            "start": 178,
+            "end": 178
+          }
+        }
+      ],
+      "tags": [
+        "api-contract",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\treturn \u0026actionError{\"not-ready\", \"Choose the exact result ID of the current completed spectrum\"}",
+      "fix": {
+        "before": "\t\t\t\treturn \u0026actionError{\"not-ready\", \"Choose the exact result ID of the current completed spectrum\"}",
+        "after": "\t\t\t\treturn \u0026actionError{\"not-found\", \"Choose the exact result ID of the current completed spectrum\"}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "060d6081b5ab248e",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Absent params cause unmarshal error",
+      "message": "The contract says empty analyze params should reuse the current settings. If the caller omits params, the `RawMessage` is zero-length, and `json.Unmarshal` fails with \"unexpected end of JSON input\" instead of falling back to the current settings.",
+      "suggestion": "Treat empty or whitespace-only raw as no fields before calling `Unmarshal`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 311,
+            "end": 314
+          }
+        }
+      ],
+      "tags": [
+        "params",
+        "location-corrected"
+      ],
+      "evidence": "\tvar fields map[string]json.RawMessage\n\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\treturn err\n\t}",
+      "fix": {
+        "before": "\tvar fields map[string]json.RawMessage\n\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\treturn err\n\t}",
+        "after": "\tvar fields map[string]json.RawMessage\n\tif len(bytes.TrimSpace(raw)) \u003e 0 {\n\t\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\t\treturn err\n\t\t}\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4393a6bf64cb0e76",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unit-text fundamental is not decoded via SpectrumInput",
+      "message": "The capability schema says `fundamental_hz` accepts decimal text with units (\"Hz/kHz/mHz\"). The comment says `SpectrumInput` exists to accept that unit text. However, the command decodes params straight into `SpectrumParams`, whose `Fundamental` field is a plain `float64`. If the custom unmarshalling lives on `SpectrumInput`, string inputs like \"1 kHz\" are rejected even though the schema advertises them.",
+      "suggestion": "Decode into `SpectrumInput`, which carries the unit-aware unmarshalling, then convert: `var in SpectrumInput; if err := params(raw, \u0026in); err != nil {...}; p = SpectrumParams(in)`.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 316,
+            "end": 317
+          }
+        }
+      ],
+      "tags": [
+        "schema-mismatch",
+        "input",
+        "location-corrected"
+      ],
+      "evidence": "\t\tp = SpectrumParams{}\n\t\tif err := params(raw, \u0026p); err != nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ac44404674596f0d",
+      "severity": "low",
+      "category": "bug",
+      "title": "Spectrum canvas revision ignores appearance changes",
+      "message": "The spectrum mesh uses theme palette colors (`palette.Grid`, `palette.Accent`, `palette.Muted`), but its redraw revision only tracks `state.CommandRevision`. The scope and sweep canvases track appearance through `canvasAppearanceRevision`. When the theme is \"system\" and the OS appearance changes, or reduce-motion changes, the command revision stays the same. The cached spectrum mesh can then keep stale colors.",
+      "suggestion": "Add a `spectrumAppearance canvasAppearanceRevision` to `screen`. Combine it with `CommandRevision` when setting `spectrumDrawing.Revision`, the same way the scope and sweep canvases do.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/spectrum.go",
+          "lines": {
+            "start": 95,
+            "end": 95
+          }
+        }
+      ],
+      "tags": [
+        "rendering",
+        "theme",
+        "location-corrected"
+      ],
+      "evidence": "\t\ts.spectrumDrawing.Revision = state.CommandRevision",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "2c65319bd744efc1",
+      "severity": "low",
+      "category": "bug",
+      "title": "Unchecked type assertion on schema properties",
+      "message": "`SchemaRegistry` writes into the result of `timeInputSchema` with an unchecked type assertion on `schema[\"properties\"]`. If `timeInputSchema` returns a schema whose properties are missing or of another type, the assertion panics and takes down the registry or catalog. If the `fundamental_hz` key does not exist, the write silently adds an undeclared property. This depends on the shape `timeInputSchema` returns, which is not shown in this part.",
+      "suggestion": "Use the comma-ok form, and fail loudly in tests if the property is missing. For example: `props, ok := schema[\"properties\"].(map[string]any); if !ok { panic(\"spectrum schema missing properties\") }`. Alternatively, check that `fundamental_hz` exists before overriding it.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/commands.go",
+          "lines": {
+            "start": 258,
+            "end": 258
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "schema"
+      ],
+      "evidence": "\t\t\tschema[\"properties\"].(map[string]any)[\"fundamental_hz\"] = map[string]any{\"$ref\": waveformQuantitySchemaID(\"Hz\")}",
+      "fix": {
+        "before": "\t\t\tschema[\"properties\"].(map[string]any)[\"fundamental_hz\"] = map[string]any{\"$ref\": waveformQuantitySchemaID(\"Hz\")}",
+        "after": "\t\t\tif props, ok := schema[\"properties\"].(map[string]any); ok {\n\t\t\t\tprops[\"fundamental_hz\"] = map[string]any{\"$ref\": waveformQuantitySchemaID(\"Hz\")}\n\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0ef8bdcc2bbd276a",
+      "severity": "low",
+      "category": "docs",
+      "title": "export.start id description omits spectrum kinds",
+      "message": "spectrum-json/csv were added to the kind enum, but the `id` field description was not updated. It does not say that spectrum kinds require the exact current spectrum result ID. The `x-work-inventory`/effects text likewise only mentions verification/sweep capture semantics.",
+      "suggestion": "Update the id description to mention that spectrum kinds require the exact current spectrum result ID.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/export_capabilities.go",
+          "lines": {
+            "start": 55,
+            "end": 55
+          }
+        }
+      ],
+      "tags": [
+        "schema",
+        "location-corrected"
+      ],
+      "evidence": "\t\tinputProperty(schema, \"id\")[\"description\"] = \"Omitted/null/empty means no recording ID. Audio-WAV requires the exact current completed preview ID; verification/sweep kinds look up this value and return not-found when absent/unknown; schematic/scope kinds reject a nonempty ID.\"",
+      "fix": {
+        "before": "\t\tinputProperty(schema, \"id\")[\"description\"] = \"Omitted/null/empty means no recording ID. Audio-WAV requires the exact current completed preview ID; verification/sweep kinds look up this value and return not-found when absent/unknown; schematic/scope kinds reject a nonempty ID.\"",
+        "after": "\t\tinputProperty(schema, \"id\")[\"description\"] = \"Omitted/null/empty means no recording ID. Audio-WAV requires the exact current completed preview ID; spectrum kinds require the exact current spectrum result ID; verification/sweep kinds look up this value and return not-found when absent/unknown; schematic/scope kinds reject a nonempty ID.\""
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "80e7626566d2b4ad",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Spectrum artifact lacks electrical revision provenance",
+      "message": "The contract says retained work exposes captured generation/run/electrical or record identity. Other kinds populate ElectricalRevision from the captured data, but the spectrum branch does not. This leaves the artifact provenance incomplete.",
+      "suggestion": "Populate capture.artifact.ElectricalRevision (and RunID, if known) from the spectrum result's source metadata.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/project_export.go",
+          "lines": {
+            "start": 182,
+            "end": 183
+          }
+        }
+      ],
+      "tags": [
+        "provenance",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tcapture.artifact.RunID = 0\n\t\t\tcapture.artifact.Format = p.Kind",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "70b54243dd9d0fcf",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Minimum-row check uses un-deduplicated rows",
+      "message": "The minimum-sample check counts raw rows before duplicate timestamps are collapsed. The contract promises at least 32 distinct sample intervals, but a recording with many duplicate timestamps passes this check. Because `n` is at least 32 and `dt` must be at least `maxGap`, such a recording then fails later with a confusing grid error.",
+      "suggestion": "After deduplication, also require `len(rows) \u003e= 33`, i.e. 32 distinct intervals, and return the same clear message when it fails.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 129,
+            "end": 129
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "location-corrected"
+      ],
+      "evidence": "\tif record == nil || len(record.rows) \u003c 33 {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "823d228169d45f7a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "JSON export returns data alongside error",
+      "message": "When marshalling fails, the function still returns a non-nil one-byte payload alongside the error. A caller that ignores the error or checks `len(data)` could write a bogus file.",
+      "suggestion": "Return `nil, err` when marshalling fails.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 353,
+            "end": 354
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "location-corrected"
+      ],
+      "evidence": "\t\tdata, err := json.MarshalIndent(r, \"\", \"  \")\n\t\treturn append(data, '\\n'), err",
+      "fix": {
+        "before": "\t\tdata, err := json.MarshalIndent(r, \"\", \"  \")\n\t\treturn append(data, '\\n'), err",
+        "after": "\t\tdata, err := json.MarshalIndent(r, \"\", \"  \")\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\treturn append(data, '\\n'), nil"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "86f0a00e46a89e66",
+      "severity": "low",
+      "category": "testing",
+      "title": "Exact float equality on derived grid values",
+      "message": "Nyquist, Resolution and SampleStep are compared with exact float equality. These values come from floating-point arithmetic over the interval, so the test may fail spuriously if the implementation changes how it computes them (e.g. (end-start)/n vs n/(end-start)).",
+      "suggestion": "Compare with a small tolerance, e.g. `math.Abs(r.Resolution-2.5) \u003e 1e-12`.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/spectrum_test.go",
+          "lines": {
+            "start": 31,
+            "end": 31
+          }
+        }
+      ],
+      "tags": [
+        "flaky",
+        "location-corrected"
+      ],
+      "evidence": "if r.Nyquist != 1280 || r.Resolution != 2.5 || r.SampleStep != .4/1024 || len(r.SourceSHA256) != 64 || len(r.Bins) != 513 {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8bcf3754efc8c8e9",
+      "severity": "low",
+      "category": "testing",
+      "title": "Harmonics aliasing mutation is never asserted",
+      "message": "The test writes to `r.Harmonics[0].Peak` but never checks whether the snapshot's Harmonics slice is aliased. As a result, the Harmonics part of the deep copy is untested.",
+      "suggestion": "Add `s.Snapshot().Spectrum.Result.Harmonics[0].Peak == 99` to the aliasing check.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/spectrum_test.go",
+          "lines": {
+            "start": 92,
+            "end": 95
+          }
+        }
+      ],
+      "tags": [
+        "aliasing"
+      ],
+      "evidence": "\tif s.Snapshot().Spectrum.Result.Bins[2].Peak == 99 || *s.Snapshot().Spectrum.Result.THD == 99 {",
+      "fix": {
+        "before": "\tif s.Snapshot().Spectrum.Result.Bins[2].Peak == 99 || *s.Snapshot().Spectrum.Result.THD == 99 {",
+        "after": "\tif s.Snapshot().Spectrum.Result.Bins[2].Peak == 99 || s.Snapshot().Spectrum.Result.Harmonics[0].Peak == 99 || *s.Snapshot().Spectrum.Result.THD == 99 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0ac0b22e6aca6583",
+      "severity": "low",
+      "category": "testing",
+      "title": "Stale export refusal uses operation ID instead of result ID",
+      "message": "`cfg.ID` holds the source verification operation ID, not the spectrum result ID. The stale-export check therefore exports an ID that never named a spectrum result. It would be refused for the wrong reason (unknown ID), and it never checks that the retired result itself can no longer be exported.",
+      "suggestion": "Use `oldID` (the retired spectrum result ID) for the stale-export refusal right after the settings change.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/spectrum_test.go",
+          "lines": {
+            "start": 133,
+            "end": 133
+          }
+        }
+      ],
+      "tags": [
+        "test-accuracy",
+        "location-corrected"
+      ],
+      "evidence": "refuse(t, s, \"spectrum.export\", VerificationExportParams{ID: cfg.ID, Path: filepath.Join(t.TempDir(), \"stale.json\"), Format: \"json\"}, \"not-ready\")",
+      "fix": {
+        "before": "refuse(t, s, \"spectrum.export\", VerificationExportParams{ID: cfg.ID, Path: filepath.Join(t.TempDir(), \"stale.json\"), Format: \"json\"}, \"not-ready\")",
+        "after": "refuse(t, s, \"spectrum.export\", VerificationExportParams{ID: oldID, Path: filepath.Join(t.TempDir(), \"stale.json\"), Format: \"json\"}, \"not-ready\")"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 79869,
+    "totalMs": 29263
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 22,
+    "bytes": 89086,
+    "chunks": 5,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 1,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 42965,
+        "output": 8526,
+        "costUSD": 0.34238
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

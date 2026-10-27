@@ -1,0 +1,399 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "9e70c90f471eaf8f4093fcaa8d17e52e",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "ed98095f45c5f837f24a104a964a23a432175541",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 9,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "f89560573103669d",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Default End uses nominal duration rather than last recorded time",
+      "message": "The default end is set to the nominal `metadata.Duration`. `analyzeSpectrum` rejects any `End` greater than the last recorded row time. A stepped capture's final timestamp can fall slightly below the nominal duration because of floating-point step accumulation or an early stop. In that case, the first `spectrum.analyze` with empty params fails with \"spectrum interval must lie inside recorded time\".",
+      "suggestion": "Default `End` to 0, which already means \"capture end\". Alternatively, use the time of the last recorded row: `r.rows[len(r.rows)-1].Time`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 296,
+            "end": 297
+          }
+        }
+      ],
+      "tags": [
+        "defaults",
+        "float",
+        "location-corrected"
+      ],
+      "evidence": "\t\tif fresh {\n\t\t\tp.End = r.metadata.Duration",
+      "fix": {
+        "before": "\t\tif fresh {\n\t\t\tp.End = r.metadata.Duration",
+        "after": "\t\tif fresh {\n\t\t\tp.End = 0"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "07c4170b5ce5ca12",
+      "severity": "medium",
+      "category": "bug",
+      "title": "spectrum.analyze with empty/null params may now be rejected",
+      "message": "Adding `spectrum.analyze` (and `spectrum.settings.set`) to `timeCommandFields` means their params are now always run through `DecodeStrict` into a map. Before this change they passed through untouched. If a client sends empty, `null` or omitted params (common for an 'analyze with current settings' call), the request now fails with a decode error or \"params must be a JSON object\" before the domain handler sees it.",
+      "suggestion": "At the top of `normalizeTimeInput`, return `raw` unchanged when the trimmed input is empty or `null`. Alternatively, confirm that the spectrum handlers always require an object and add a test that calls `spectrum.analyze` with no params.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/time_input.go",
+          "lines": {
+            "start": 57,
+            "end": 57
+          }
+        }
+      ],
+      "tags": [
+        "regression",
+        "input-validation",
+        "location-corrected"
+      ],
+      "evidence": "\t\"spectrum.analyze\":         {\"start_s\", \"end_s\"},",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "541395cbe06b271e",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Operation selector lists all completed operations, not just recordings",
+      "message": "Every completed operation is offered as a spectrum recording, which may include sweeps or other non-transient operations. Choosing one of these would fail analysis or confuse the user, and `run.Disabled` also relies on this list.",
+      "suggestion": "Filter the list by operation kind as well, keeping only transient/verify recordings.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "desktop/spectrum.go",
+          "lines": {
+            "start": 27,
+            "end": 30
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "validation"
+      ],
+      "evidence": "\t\tif op.Status == \"completed\" {\n\t\t\tops = append(ops, ui.Option{ID: op.ID, Label: op.ID + \" · recorded\"})",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d8e0a80a986d6ddb",
+      "severity": "low",
+      "category": "bug",
+      "title": "Possible divide-by-zero when Nyquist is zero",
+      "message": "If a result has `Nyquist == 0`, for example a degenerate grid, `p.Frequency/r.Nyquist` produces NaN or Inf. Those values go into the stroke vertices and can corrupt the mesh or make rendering fail.",
+      "suggestion": "Return an empty mesh early when `r.Nyquist \u003c= 0` or `len(r.Bins) == 0`, or filter out non-finite coordinates before calling `b.stroke`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/spectrum.go",
+          "lines": {
+            "start": 151,
+            "end": 153
+          }
+        }
+      ],
+      "tags": [
+        "robustness",
+        "rendering"
+      ],
+      "evidence": "points[i] = canvas.Point{X: left + p.Frequency/r.Nyquist*(right-left), Y: bottom - (math.Max(low, math.Min(high, p.DB))-low)/(high-low)*(bottom-top)}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "2c65319bd744efc1",
+      "severity": "low",
+      "category": "bug",
+      "title": "Unchecked type assertion on schema properties",
+      "message": "`SchemaRegistry` writes into the result of `timeInputSchema` with an unchecked type assertion on `schema[\"properties\"]`. If `timeInputSchema` returns a schema whose properties are missing or of another type, the assertion panics and takes down the registry or catalog. If the `fundamental_hz` key does not exist, the write silently adds an undeclared property. This depends on the shape `timeInputSchema` returns, which is not shown in this part.",
+      "suggestion": "Use the comma-ok form, and fail loudly in tests if the property is missing. For example: `props, ok := schema[\"properties\"].(map[string]any); if !ok { panic(\"spectrum schema missing properties\") }`. Alternatively, check that `fundamental_hz` exists before overriding it.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/commands.go",
+          "lines": {
+            "start": 258,
+            "end": 258
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "schema"
+      ],
+      "evidence": "\t\t\tschema[\"properties\"].(map[string]any)[\"fundamental_hz\"] = map[string]any{\"$ref\": waveformQuantitySchemaID(\"Hz\")}",
+      "fix": {
+        "before": "\t\t\tschema[\"properties\"].(map[string]any)[\"fundamental_hz\"] = map[string]any{\"$ref\": waveformQuantitySchemaID(\"Hz\")}",
+        "after": "\t\t\tif props, ok := schema[\"properties\"].(map[string]any); ok {\n\t\t\t\tprops[\"fundamental_hz\"] = map[string]any{\"$ref\": waveformQuantitySchemaID(\"Hz\")}\n\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0ef8bdcc2bbd276a",
+      "severity": "low",
+      "category": "docs",
+      "title": "export.start contract text not updated for spectrum kinds",
+      "message": "The new spectrum-json/spectrum-csv kinds are in the enum, but the contract text was not updated. The id description, the x-kind-options note and the effects/errors lists still name only the verification, sweep, scope, schematic and audio kinds. Agents reading the capability contract cannot learn that spectrum export requires the exact current spectrum result ID, or that it fails with not-ready rather than not-found.",
+      "suggestion": "Mention spectrum kinds in the id description and in x-kind-options. Also add a spectrum entry to the errors list, e.g. not-ready when the ID is not the current completed spectrum result.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/export_capabilities.go",
+          "lines": {
+            "start": 55,
+            "end": 55
+          }
+        }
+      ],
+      "tags": [
+        "contract",
+        "spectrum",
+        "location-corrected"
+      ],
+      "evidence": "inputProperty(schema, \"id\")[\"description\"] = \"Omitted/null/empty means no recording ID. Audio-WAV requires the exact current completed preview ID; verification/sweep kinds look up this value and return not-found when absent/unknown; schematic/scope kinds reject a nonempty ID.\"",
+      "fix": {
+        "before": "inputProperty(schema, \"id\")[\"description\"] = \"Omitted/null/empty means no recording ID. Audio-WAV requires the exact current completed preview ID; verification/sweep kinds look up this value and return not-found when absent/unknown; schematic/scope kinds reject a nonempty ID.\"",
+        "after": "inputProperty(schema, \"id\")[\"description\"] = \"Omitted/null/empty means no recording ID. Audio-WAV requires the exact current completed preview ID; spectrum kinds require the exact current completed spectrum result ID and return not-ready otherwise; verification/sweep kinds look up this value and return not-found when absent/unknown; schematic/scope kinds reject a nonempty ID.\""
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8c1eb4f5fd120704",
+      "severity": "low",
+      "category": "performance",
+      "title": "Full recording is re-marshaled for hashing on every analyze",
+      "message": "Each analysis re-serializes the entire recording to JSON just to hash it. This runs while the service lock is held, and the cost scales with rows × probes, which can be large for long captures.",
+      "suggestion": "Compute the recording hash once when the recording completes or loads, cache it on `verificationRecord`, and reuse it here.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 223,
+            "end": 223
+          }
+        }
+      ],
+      "tags": [
+        "hashing",
+        "location-corrected"
+      ],
+      "evidence": "\traw, err := json.Marshal(VerificationDocument{Metadata: record.metadata, Rows: record.rows})",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "a5caedd4909d2eb5",
+      "severity": "low",
+      "category": "bug",
+      "title": "Empty raw params cause an unmarshal error",
+      "message": "If a caller sends no params at all (empty or nil `RawMessage`), `json.Unmarshal` returns \"unexpected end of JSON input\". Analyze should instead fall back to the current settings, as documented for empty params.",
+      "suggestion": "Treat empty or whitespace-only `raw` as no fields before calling `Unmarshal`.",
+      "confidence": 0.25,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 311,
+            "end": 313
+          }
+        }
+      ],
+      "tags": [
+        "params",
+        "location-corrected"
+      ],
+      "evidence": "\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\treturn err\n\t}",
+      "fix": {
+        "before": "\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\treturn err\n\t}",
+        "after": "\tif len(bytes.TrimSpace(raw)) \u003e 0 {\n\t\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\t\treturn err\n\t\t}\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "505d20c8167d0b04",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Stored settings are not the normalized settings actually analyzed",
+      "message": "`analyzeSpectrum` normalizes the settings it uses: End 0 becomes the capture end, Samples 0 becomes the chosen n, and it fills the default window and harmonics. Those values go into `result.Settings`, but the state stores the un-normalized `p`. As a result, `snapshot.spectrum.settings` disagrees with `result.settings`, despite the documented contract of \"actual normalized settings\". It also makes later `settings.set` equality comparisons inconsistent.",
+      "suggestion": "Store `result.Settings` as the state settings.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 347,
+            "end": 347
+          }
+        }
+      ],
+      "tags": [
+        "state",
+        "location-corrected"
+      ],
+      "evidence": "\ts.spectrum = \u0026SpectrumState{Settings: p, Result: result}",
+      "fix": {
+        "before": "\ts.spectrum = \u0026SpectrumState{Settings: p, Result: result}",
+        "after": "\ts.spectrum = \u0026SpectrumState{Settings: result.Settings, Result: result}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "7bb9d4628caca945",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Local `raw` shadows function parameter",
+      "message": "The new block declares a local `raw` that shadows the function's `raw json.RawMessage` parameter. It is harmless today but invites mistakes if this code is later edited to fall back to the original input.",
+      "suggestion": "Rename the local variable to something like `fundamental`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/time_input.go",
+          "lines": {
+            "start": 136,
+            "end": 136
+          }
+        }
+      ],
+      "tags": [
+        "shadowing",
+        "location-corrected"
+      ],
+      "evidence": "\t\traw := object[\"fundamental_hz\"]",
+      "fix": {
+        "before": "\t\traw := object[\"fundamental_hz\"]\n\t\tif len(raw) \u003e 0 \u0026\u0026 raw[0] == '\"' {\n\t\t\tvar text string\n\t\t\tif err := json.Unmarshal(raw, \u0026text); err != nil {",
+        "after": "\t\tfundamental := object[\"fundamental_hz\"]\n\t\tif len(fundamental) \u003e 0 \u0026\u0026 fundamental[0] == '\"' {\n\t\t\tvar text string\n\t\t\tif err := json.Unmarshal(fundamental, \u0026text); err != nil {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "70327fd0081d6a51",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Marshal error ignored for parsed fundamental_hz",
+      "message": "If `parseWaveformQuantity` returns NaN or ±Inf (e.g. for \"1e400Hz\"), `json.Marshal` fails. The error is discarded and the field is set to a nil `RawMessage`, which is serialized as `null`. The value is then silently replaced instead of being rejected with a clear error.",
+      "suggestion": "Check the error returned by `json.Marshal`, or reject non-finite values explicitly before assigning the field.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/time_input.go",
+          "lines": {
+            "start": 146,
+            "end": 146
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tobject[\"fundamental_hz\"], _ = json.Marshal(value)",
+      "fix": {
+        "before": "\t\t\tobject[\"fundamental_hz\"], _ = json.Marshal(value)",
+        "after": "\t\t\tencoded, err := json.Marshal(value)\n\t\t\tif err != nil {\n\t\t\t\treturn nil, fmt.Errorf(\"fundamental_hz: %w\", err)\n\t\t\t}\n\t\t\tobject[\"fundamental_hz\"] = encoded"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 95371,
+    "totalMs": 38059
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 22,
+    "bytes": 86245,
+    "chunks": 5,
+    "llmCalls": 5,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 51816,
+        "output": 9899,
+        "costUSD": 0.405244
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "fdd462175f884574",
+        "severity": "low",
+        "category": "correctness",
+        "title": "Harmonics selector has no option for default value 0",
+        "message": "The docs say `harmonics` 0 means 5, but the selector only offers options 2–10. If settings keep the raw 0, `SelectedID` is \"0\", which matches no option. The selector then shows no selection and may fail `ui.Validate`.",
+        "suggestion": "Normalize before rendering: `h := cfg.Harmonics; if h == 0 { h = 5 }`, and use `strconv.Itoa(h)` as `SelectedID`. Alternatively, add a \"0\"/default option.",
+        "confidence": 0.35,
+        "locations": [
+          {
+            "path": "desktop/spectrum.go",
+            "lines": {
+              "start": 77,
+              "end": 77
+            }
+          }
+        ],
+        "tags": [
+          "ui"
+        ],
+        "evidence": "nodes = append(nodes, ui.Node{ID: \"spectrum-harmonics\", Kind: ui.Selector, SelectedID: strconv.Itoa(cfg.Harmonics), Options: harmonics,",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in desktop/spectrum.go"
+    }
+  ],
+  "suppressed": []
+}

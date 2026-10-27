@@ -16,6 +16,7 @@ import (
 )
 
 type Snapshot struct {
+	Spectrum               *SpectrumState         `json:"spectrum,omitempty"`
 	Proposal               *EditProposal          `json:"edit_proposal,omitempty"`
 	Explanation            *ComponentExplanation  `json:"component_explanation,omitempty"`
 	ExampleBrowser         ExampleBrowser         `json:"example_browser"`
@@ -122,6 +123,7 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	spectrum                         *SpectrumState
 	proposal                         *editProposalState
 	proposalSerial                   uint64
 	exampleBrowser                   ExampleBrowser
@@ -355,6 +357,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		Spectrum:               s.spectrumViewLocked(),
 		Proposal:               s.proposalViewLocked(),
 		WorkspaceLayout:        s.workspaceLayout,
 		InspectorSection:       s.inspectorSection,
@@ -1215,6 +1218,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 }
 
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Spectrum = cloneSpectrum(state.Spectrum)
 	state.Proposal = cloneEditProposal(state.Proposal)
 	state.Explanation = cloneComponentExplanation(state.Explanation)
 	if state.Audio != nil {

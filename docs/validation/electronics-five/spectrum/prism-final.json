@@ -1,0 +1,259 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "d8396761147f415fe762e25941fc0754",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "ed98095f45c5f837f24a104a964a23a432175541",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 5,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "060d6081b5ab248e",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Empty raw params cause unmarshal error",
+      "message": "The contract says empty analyze params use the current spectrum settings. If the dispatcher passes a nil or empty `json.RawMessage` when no params are supplied, `json.Unmarshal` fails with \"unexpected end of JSON input\". The command then errors instead of falling back to the stored settings.",
+      "suggestion": "Skip unmarshalling when `raw` is empty, e.g. `if len(bytes.TrimSpace(raw)) \u003e 0 { ... }`, so that missing params behave like `{}` or `null`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 316,
+            "end": 319
+          }
+        }
+      ],
+      "tags": [
+        "json",
+        "params",
+        "location-corrected"
+      ],
+      "evidence": "\tvar fields map[string]json.RawMessage\n\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\treturn err\n\t}",
+      "fix": {
+        "before": "\tvar fields map[string]json.RawMessage\n\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\treturn err\n\t}",
+        "after": "\tvar fields map[string]json.RawMessage\n\tif len(bytes.TrimSpace(raw)) \u003e 0 {\n\t\tif err := json.Unmarshal(raw, \u0026fields); err != nil {\n\t\t\treturn err\n\t\t}\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0aabf8149fc2e949",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Analyze enabled without a selected recording or probe",
+      "message": "The Analyze button is disabled only when there are no completed operations. Changing the recording clears `ProbeID`, but the button stays enabled. Users can then trigger an analysis that will fail because no recording or probe is selected.",
+      "suggestion": "Also disable the button when `cfg.ID` or `cfg.ProbeID` is empty.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/spectrum.go",
+          "lines": {
+            "start": 82,
+            "end": 82
+          }
+        }
+      ],
+      "tags": [
+        "ui"
+      ],
+      "evidence": "run.Disabled = len(ops) == 0",
+      "fix": {
+        "before": "run.Disabled = len(ops) == 0",
+        "after": "run.Disabled = len(ops) == 0 || cfg.ID == \"\" || cfg.ProbeID == \"\""
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0df885dba14598f7",
+      "severity": "low",
+      "category": "testing",
+      "title": "Test can panic on nil Spectrum and reuses cross-service operation ID",
+      "message": "The test dereferences `Spectrum` without a nil check, so a regression panics instead of producing a clear failure. The test also reuses settings taken from the UI service, including its operation ID, on the separate agent service. The two services only stay in parity if their operation IDs happen to match.",
+      "suggestion": "Check that `Snapshot().Spectrum` is not nil before using it. Build the agent's settings from `a.Snapshot().Spectrum.Settings` instead of the UI service's.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/spectrum_test.go",
+          "lines": {
+            "start": 33,
+            "end": 33
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness",
+        "location-corrected"
+      ],
+      "evidence": "cfg := u.service.Snapshot().Spectrum.Settings",
+      "fix": {
+        "before": "cfg := u.service.Snapshot().Spectrum.Settings",
+        "after": "spec := u.service.Snapshot().Spectrum\n\tif spec == nil {\n\t\tt.Fatal(\"spectrum state missing\")\n\t}\n\tcfg := spec.Settings"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8c1eb4f5fd120704",
+      "severity": "low",
+      "category": "performance",
+      "title": "Full recording re-serialized and hashed on each analysis under lock",
+      "message": "Every analyze call re-marshals the entire recording (metadata plus all rows) to JSON just to hash it. This happens while the service lock is held, so large recordings can stall the service.",
+      "suggestion": "Compute and cache the recording SHA-256 once when the record is completed, and reuse it here.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 228,
+            "end": 228
+          }
+        }
+      ],
+      "tags": [
+        "locking",
+        "hashing",
+        "location-corrected"
+      ],
+      "evidence": "\traw, err := json.Marshal(VerificationDocument{Metadata: record.metadata, Rows: record.rows})",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5459df2097307216",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Unknown export format silently falls back to CSV",
+      "message": "Any format other than \"json\" (including typos or an empty string) silently produces CSV. The capability schema only allows json or csv, but this function does not enforce that, so a misrouted request writes the wrong file content without reporting an error.",
+      "suggestion": "Reject unknown formats explicitly, e.g. `if format != \"json\" \u0026\u0026 format != \"csv\" { return nil, fmt.Errorf(...) }`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 357,
+            "end": 376
+          }
+        }
+      ],
+      "tags": [
+        "validation"
+      ],
+      "evidence": "\tif format == \"json\" {",
+      "fix": {
+        "before": "\tif format == \"json\" {",
+        "after": "\tif format != \"json\" \u0026\u0026 format != \"csv\" {\n\t\treturn nil, fmt.Errorf(\"export format must be json or csv\")\n\t}\n\tif format == \"json\" {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ac0015c4befe4241",
+      "severity": "low",
+      "category": "security",
+      "title": "CSV export writes unsanitized probe text",
+      "message": "The probe ID and probe unit (used in the header) are user-controlled strings written into the CSV unchanged. Values beginning with =, +, - or @ can be interpreted as formulas when the export is opened in a spreadsheet application.",
+      "suggestion": "Sanitize text cells by prefixing a single quote when they start with a formula trigger character.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/spectrum.go",
+          "lines": {
+            "start": 366,
+            "end": 372
+          }
+        }
+      ],
+      "tags": [
+        "csv-injection"
+      ],
+      "evidence": "\t\tif err := w.Write([]string{r.SourceSHA256, r.Probe.ID, number(p.Frequency), number(p.Peak), number(p.DB)}); err != nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 70600,
+    "totalMs": 24310
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 22,
+    "bytes": 96316,
+    "chunks": 5,
+    "llmCalls": 5,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 55293,
+        "output": 6807,
+        "costUSD": 0.357312
+      }
+    ],
+    "widenedFiles": 5,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "2b77445eec47d5fd",
+        "severity": "low",
+        "category": "bug",
+        "title": "Selector SelectedID may not match any option",
+        "message": "The selectors set `SelectedID` straight from the settings. Harmonic options only cover 2–10, and sample options are 0 plus powers of two. If the settings hold another value (for example a zero-value default `Harmonics` of 0, or an empty `Window`), the selected ID matches no option. That can fail `ui.Validate` or show a blank selection.",
+        "suggestion": "Normalize the selected IDs before building the selectors, or add a fallback option. For example, fall back to the default harmonic count when `cfg.Harmonics` is outside 2–10, and to \"hann\" or \"rectangular\" when `cfg.Window` is empty.",
+        "confidence": 0.35,
+        "locations": [
+          {
+            "path": "desktop/spectrum.go",
+            "lines": {
+              "start": 79,
+              "end": 79
+            }
+          }
+        ],
+        "tags": [
+          "ui",
+          "validation"
+        ],
+        "evidence": "nodes = append(nodes, ui.Node{ID: \"spectrum-harmonics\", Kind: ui.Selector, SelectedID: strconv.Itoa(cfg.Harmonics), Options: harmonics,",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in desktop/spectrum.go"
+    }
+  ],
+  "suppressed": []
+}

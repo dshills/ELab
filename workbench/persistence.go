@@ -95,6 +95,7 @@ func (s *Service) requireCleanLocked(discard bool) error {
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	s.spectrum = nil
 	s.proposal = nil
 	s.exampleBrowser.Visible = false
 	s.stopViewportFollowingLocked()

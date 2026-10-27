@@ -95,6 +95,10 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(struct{}{}), "urn:elab:empty-input:1"},
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
+	{reflect.TypeOf(SpectrumInput{}), "urn:elab:spectrum-input:1"},
+	{reflect.TypeOf(Part{}), "urn:elab:part-description:1"},
+	{reflect.TypeOf(OperationView{}), "urn:elab:operation-view:1"},
+	{reflect.TypeOf(OperationSummary{}), "urn:elab:operation-summary:1"},
 	{reflect.TypeOf(ZenerModel{}), "urn:elab:zener-model:1"},
 	{reflect.TypeOf(MOSFETModel{}), "urn:elab:mosfet-model:1"},
 	{reflect.TypeOf(ControlModel{}), "urn:elab:control-model:1"},
@@ -249,6 +253,15 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Input-only shared definitions retain command unit text without
 		// widening numeric output/settings schemas.
+		if common.Type == reflect.TypeOf(SpectrumInput{}) {
+			schema = timeInputSchema("spectrum.analyze", schema)
+			if property := inputProperty(schema, "fundamental_hz"); property != nil {
+				for key := range property {
+					delete(property, key)
+				}
+				property["$ref"] = waveformQuantitySchemaID("Hz")
+			}
+		}
 		if common.Type == reflect.TypeOf(VerifyParams{}) {
 			schema = timeInputSchema("simulation.verify", schema)
 		}
@@ -346,6 +359,9 @@ func queryCapability(id, description string, input, output reflect.Type) Capabil
 }
 func Catalog() []Capability {
 	return []Capability{
+		typedCapability("spectrum.settings.set", "Configure recorded FFT interval, probe, window and declared fundamental; session-only, no live circuit or history change", reflect.TypeOf(SpectrumInput{})),
+		typedCapability("spectrum.analyze", "Compute bounded FFT and coherent harmonic THD from an immutable retained recording; empty params use current spectrum settings", reflect.TypeOf(SpectrumInput{})),
+		typedCapability("spectrum.export", "Export the exact completed spectrum as JSON or CSV through the shared asynchronous file workflow", reflect.TypeOf(VerificationExportParams{})),
 		queryCapability("edit.batch.preview", "Preview exact atomic batch admission and component/wire/settings differences without editing or solving; commit with returned revision/document guards", reflect.TypeOf(BatchParams{}), reflect.TypeOf(BatchPreview{})),
 		typedCapability("edit.proposal.set", "Stage or refresh an atomic edit proposal for shared review; no circuit change, solve or Undo entry", reflect.TypeOf(BatchParams{})),
 		typedCapability("edit.proposal.apply", "Apply the exact current non-stale proposal as one guarded undoable edit", reflect.TypeOf(IDParams{})),

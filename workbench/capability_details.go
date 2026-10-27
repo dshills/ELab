@@ -67,6 +67,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addSpectrumCapabilityDetails(id, schema) {
+		return
+	}
 	if addWorkbenchImprovementDetails(id, schema) {
 		return
 	}

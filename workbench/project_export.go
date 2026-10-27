@@ -25,6 +25,7 @@ type ExportStartParams struct {
 	ExpectedGeneration *uint64        `json:"expected_document_generation,omitempty"`
 }
 type exportCapture struct {
+	spectrum      *SpectrumResult
 	protectedPath string
 	previewData   []byte
 	annotations   []SourceAnnotation
@@ -171,6 +172,16 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			capture.scope = cloneScope(scope)
 			capture.artifact.RunID = t.RunID
 			capture.artifact.ElectricalRevision = t.ElectricalRevision
+		case "spectrum-json", "spectrum-csv":
+			command = "spectrum.export"
+			if s.spectrum == nil || s.spectrum.Result == nil || s.spectrum.Result.ID != p.ID {
+				return &actionError{"not-ready", "Choose the exact result ID of the current completed spectrum"}
+			}
+			capture.spectrum = cloneSpectrumResult(s.spectrum.Result)
+			capture.artifact.ElectricalRevision = capture.spectrum.ElectricalRevision
+			capture.artifact.OperationID = p.ID
+			capture.artifact.RunID = 0
+			capture.artifact.Format = p.Kind
 		case "sweep-json", "sweep-csv":
 			command = "sweep.export"
 			if s.sweeps == nil || s.sweeps.operations[p.ID] == nil {
@@ -208,7 +219,7 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			capture.artifact.RunID = 0
 			capture.artifact.ElectricalRevision = operation.record.metadata.ElectricalRevision
 		default:
-			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json, sweep-csv or audio-wav")
+			return fmt.Errorf("export kind must be schematic-svg, schematic-pdf, schematic-png, scope-csv, verification-json, verification-csv, sweep-json, sweep-csv, spectrum-json, spectrum-csv or audio-wav")
 		}
 	}
 	// Keep protection tied to this admission even for an older preview capture.
@@ -241,6 +252,10 @@ func prepareProjectExport(ctx context.Context, capture exportCapture, progress f
 		} else {
 			data, err = renderSchematicPage(ctx, capture)
 		}
+	case "spectrum-json":
+		data, err = encodeSpectrumExport(capture.spectrum, "json")
+	case "spectrum-csv":
+		data, err = encodeSpectrumExport(capture.spectrum, "csv")
 	case "sweep-json":
 		data, err = encodeSweepExport(capture.sweep, "json")
 	case "sweep-csv":

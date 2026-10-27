@@ -196,5 +196,6 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 			nodes = append(nodes, quiet("verify-reading-"+reading.Probe.ID, fmt.Sprintf("%s\nFinal %.5g %s · range %.5g…%.5g", strings.TrimSuffix(reading.Probe.Label, " / ground"), reading.Value*scale, unit, reading.Minimum*scale, reading.Maximum*scale)))
 		}
 	}
+	nodes = append(nodes, s.spectrumInspector(state)...)
 	return nodes
 }

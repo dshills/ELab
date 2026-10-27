@@ -1,0 +1,205 @@
+[
+  {
+    "review": "prism-initial.json",
+    "id": "f89560573103669d",
+    "severity": "medium",
+    "title": "Default End uses nominal duration rather than last recorded time",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "07c4170b5ce5ca12",
+    "severity": "medium",
+    "title": "spectrum.analyze with empty/null params may now be rejected",
+    "disposition": "Public Dispatch regression reproduces omitted params. Final normalizer maps only omitted spectrum input to {}; explicit null remains refused. TestSpectrumProtocolDefaultsUseActualRowsAndRefuseNull passes."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "541395cbe06b271e",
+    "severity": "low",
+    "title": "Operation selector lists all completed operations, not just recordings",
+    "disposition": "Service.operations contains only Verify/import/project recordings; sweep/project work have separate stores. Completed members carry immutable records. Analyze additionally requires an available probe."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "d8e0a80a986d6ddb",
+    "severity": "low",
+    "title": "Possible divide-by-zero when Nyquist is zero",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "2c65319bd744efc1",
+    "severity": "low",
+    "title": "Unchecked type assertion on schema properties",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "0ef8bdcc2bbd276a",
+    "severity": "low",
+    "title": "export.start contract text not updated for spectrum kinds",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "8c1eb4f5fd120704",
+    "severity": "low",
+    "title": "Full recording is re-marshaled for hashing on every analyze",
+    "disposition": "Bounded explicit analysis of retained recording, not live rendering; source hash covers exact metadata/rows. No demonstrated correctness failure. Potential latency optimization remains, with existing 4096 FFT and recording limits unchanged."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "a5caedd4909d2eb5",
+    "severity": "low",
+    "title": "Empty raw params cause an unmarshal error",
+    "disposition": "Public Dispatch regression reproduces omitted params. Final normalizer maps only omitted spectrum input to {}; explicit null remains refused. TestSpectrumProtocolDefaultsUseActualRowsAndRefuseNull passes."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "505d20c8167d0b04",
+    "severity": "low",
+    "title": "Stored settings are not the normalized settings actually analyzed",
+    "disposition": "Intentional: draft settings retain auto/end=0 choices; actual normalized grid/interval are in result.settings. Detailed command contract explicitly distinguishes these."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "7bb9d4628caca945",
+    "severity": "low",
+    "title": "Local `raw` shadows function parameter",
+    "disposition": "Public Dispatch regression reproduces omitted params. Final normalizer maps only omitted spectrum input to {}; explicit null remains refused. TestSpectrumProtocolDefaultsUseActualRowsAndRefuseNull passes."
+  },
+  {
+    "review": "prism-initial.json",
+    "id": "70327fd0081d6a51",
+    "severity": "low",
+    "title": "Marshal error ignored for parsed fundamental_hz",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "019f5de8493fb3dd",
+    "severity": "medium",
+    "title": "Spectrum ID mismatch returns wrong error code vs contract",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "060d6081b5ab248e",
+    "severity": "medium",
+    "title": "Absent params cause unmarshal error",
+    "disposition": "Public Dispatch regression reproduces omitted params. Final normalizer maps only omitted spectrum input to {}; explicit null remains refused. TestSpectrumProtocolDefaultsUseActualRowsAndRefuseNull passes."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "4393a6bf64cb0e76",
+    "severity": "medium",
+    "title": "Unit-text fundamental is not decoded via SpectrumInput",
+    "disposition": "Not reproduced: normalizeTimeInput converts fundamental unit text before typed decode. TestSpectrumUnitsAndDetailedDiscovery exercises .01 kHz through public Dispatch, plus malformed-unit refusal."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "ac44404674596f0d",
+    "severity": "low",
+    "title": "Spectrum canvas revision ignores appearance changes",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "2c65319bd744efc1",
+    "severity": "low",
+    "title": "Unchecked type assertion on schema properties",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "0ef8bdcc2bbd276a",
+    "severity": "low",
+    "title": "export.start id description omits spectrum kinds",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "80e7626566d2b4ad",
+    "severity": "low",
+    "title": "Spectrum artifact lacks electrical revision provenance",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "70b54243dd9d0fcf",
+    "severity": "low",
+    "title": "Minimum-row check uses un-deduplicated rows",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "823d228169d45f7a",
+    "severity": "low",
+    "title": "JSON export returns data alongside error",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "86f0a00e46a89e66",
+    "severity": "low",
+    "title": "Exact float equality on derived grid values",
+    "disposition": "Reference values are exact powers-of-two grids; exact equality is stable for these chosen values. Electrical amplitudes use numerical tolerances."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "8bcf3754efc8c8e9",
+    "severity": "low",
+    "title": "Harmonics aliasing mutation is never asserted",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-followup.json",
+    "id": "0ac0b22e6aca6583",
+    "severity": "low",
+    "title": "Stale export refusal uses operation ID instead of result ID",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "060d6081b5ab248e",
+    "severity": "medium",
+    "title": "Empty raw params cause unmarshal error",
+    "disposition": "Public Dispatch regression reproduces omitted params. Final normalizer maps only omitted spectrum input to {}; explicit null remains refused. TestSpectrumProtocolDefaultsUseActualRowsAndRefuseNull passes."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "0aabf8149fc2e949",
+    "severity": "low",
+    "title": "Analyze enabled without a selected recording or probe",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "0df885dba14598f7",
+    "severity": "low",
+    "title": "Test can panic on nil Spectrum and reuses cross-service operation ID",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "8c1eb4f5fd120704",
+    "severity": "low",
+    "title": "Full recording re-serialized and hashed on each analysis under lock",
+    "disposition": "Bounded explicit analysis of retained recording, not live rendering; source hash covers exact metadata/rows. No demonstrated correctness failure. Potential latency optimization remains, with existing 4096 FFT and recording limits unchanged."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "5459df2097307216",
+    "severity": "low",
+    "title": "Unknown export format silently falls back to CSV",
+    "disposition": "Addressed in final source; focused regression tests cover the corrected path."
+  },
+  {
+    "review": "prism-final.json",
+    "id": "ac0015c4befe4241",
+    "severity": "low",
+    "title": "CSV export writes unsanitized probe text",
+    "disposition": "Probe identity and unit are generated by probeInventory and imported metadata must equal that inventory exactly (recording_import.go). IDs use voltage/current prefixes and units fixed V/A/etc; they cannot begin with formula markers."
+  }
+]

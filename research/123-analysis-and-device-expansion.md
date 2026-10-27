@@ -44,4 +44,14 @@ no medium/high findings. Remaining low testing observations have explicit
 existing-test/electrical-reference dispositions. Focused core and desktop race
 tests pass. Item 1 is complete; committing this reviewed batch.
 
-Items 2–5: planned, not yet qualified or committed.
+Item 1 is committed as `ed98095f`.
+
+Item 2: FFT/THD, captured-data inspector controls, exact-result JSON/CSV exports
+and a clipping example are implemented. Independent Fourier-series/window tests,
+recording export/reopen, stale result identity, unit input, user/agent parity
+and ordinary/rendered focused tests pass. New discovery initially exceeded its
+64 KiB catalog bound; shared input/part/operation schema references correct this
+without dropping fields or relaxing the limit. Focused discovery/time/core race
+tests now pass. Three complete Anthropic Prism reviews are recorded with explicit dispositions. Final source fixes actual-row defaults, omitted-parameter normalization, appearance invalidation, exact export identity/provenance, defensive grid/export checks and test assertions. Public unit-text and object-only protocol tests resolve the remaining medium observations. Focused core and desktop race tests pass. Item 2 is complete; committing the reviewed batch.
+
+Items 3–5: planned, not yet qualified or committed.
