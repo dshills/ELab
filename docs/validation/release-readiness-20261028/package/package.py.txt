@@ -1,0 +1,32 @@
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/release-readiness-20261028';out=r/'build/ELab-0.200.1-279-Reliability';bins=b/'binaries-279'
+assert not out.exists() and not bins.exists()
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=r,text=True).strip(),'Commit source before building'
+source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip();sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+env=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+bins.mkdir()
+with (b/'clean-build.txt').open('w') as stream:
+ for args in [['go','build','-o',str(bins/'elab-agent'),'./cmd/elab-agent'],['go','build','-o',str(bins/'elab-conformance'),'./cmd/elab-conformance'],['go','-C','desktop','build','-o',str(bins/'elab'),'.']]:subprocess.run(args,cwd=r,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=240)
+out.mkdir();app=out/'ELab.app';shutil.copyfile(bins/'elab-agent',out/'elab-agent');(out/'elab-agent').chmod(0o755)
+old=r/'build/ELab-0.200.0-278-Electronics';shutil.copytree(old/'Examples',out/'Examples');shutil.copytree(old/'Licenses',out/'Licenses');assert (out/'Licenses/Gonum').is_dir()
+notices=b/'app-notices-279';notices.mkdir();files={};components=[]
+for folder,identity in [('Vellum','Vellum SDK inherited dependency notices'),('Gonum','gonum.org/v1/gonum v0.17.0 BSD-3-Clause')]:
+ names=[]
+ for file in sorted((out/'Licenses'/folder).rglob('*')):
+  if file.is_file():
+   name='NOTICES/'+folder+'/'+file.relative_to(out/'Licenses'/folder).as_posix();target=notices/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(file.read_bytes());names.append(name);files[name]=dict(bytes=file.stat().st_size,sha256=sha(file))
+ components.append(dict(id=identity,notice_files=names))
+file=out/'Licenses/Vellum-packager-LICENSE';name='NOTICES/Vellum-packager-LICENSE';(notices/name).write_bytes(file.read_bytes());files[name]=dict(bytes=file.stat().st_size,sha256=sha(file));components.append(dict(id='Pinned Vellum packager',notice_files=[name]))
+inventory=dict(schema=1,target='darwin',artifact_sha256=sha(bins/'elab'),distribution_audit='pending',applicability='review-required',scope='Private unsigned ELab candidate. Original inherited Vellum/packager notices plus newly pinned Gonum BSD notice. Source notices are preserved; this inventory binds bytes, not a rights clearance.',files=files,components=components)
+(notices/'INVENTORY.json').write_text(json.dumps(inventory,indent=2)+'\n')
+with (b/'packager-output.txt').open('w') as stream:subprocess.run(['python3','-B','scripts/package_app.py','--binary',str(bins/'elab'),'--output',str(app),'--version','0.200.1','--build-version','279','--notice-bundle',str(notices)],cwd=r,env=env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=180)
+for label,path in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent')]:
+ info=subprocess.check_output(['go','version','-m',str(path)],text=True);assert 'vcs.revision='+source in info and 'vcs.modified=false' in info;(b/(label+'-build-info.txt')).write_text(info)
+result=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True,capture_output=True,text=True);(b/'signature.txt').write_text(result.stdout+result.stderr)
+for name in ['agent-api','workbench-workflows','application-icon','discrete-class-ab','ac-frequency-sweeps','spectrum-analysis','transistor-profiles','tolerance-analysis','loudspeaker','class-ab-speaker','passive-losses','current-devices','jfets','feedback-and-step-response','circuit-blocks','temperature','noise-analysis','photodiodes','thyristors']:
+ shutil.copyfile(r/'docs'/(name+'.md'),out/(name+'.md'))
+(out/'README.md').write_text('ELab 0.200.1 /279 reliability candidate\n\nNoise capture roundoff/import fix, bounded 8 MiB agent replies, revision-aware idle polling and separated snapshot ownership. Reusable single-level circuit blocks; resistor/silicon-diode/BJT temperature and optional self-heating; stationary white-noise sweeps and component/RMS budgets; photodiodes and a transimpedance amplifier; generic low-voltage SCR/TRIAC latching and commutation. Matching app/agent, 87 examples, 61 physical kinds, 220 shared commands. Included guides explain declared models and limitations.\n\nExisting accuracy, integration work and primitive/resource limits remain unchanged. Block members retain ordinary component identities and counts. Noise includes declared independent white sources, not 1/f or THD+N. Thermal and optical models are illustrative, without manufacturer fitting. SCR/TRIAC examples are low-voltage educational circuits, not mains/hardware qualification.\n\nAd-hoc signed; no Developer ID/notarization. Native acceptance 3/6/9/11, participant and separate-account gates remain open. Prior packages and owner sessions are preserved. No public upload or release promotion.\n')
+manifest=json.loads((app/'Contents/Resources/APP_MANIFEST.json').read_text());pin=json.loads((r/'third_party/vellum/sdk.lock.json').read_text())
+p=dict(version='0.200.1',build=279,source_commit=source,clean_source=True,app=str(app),agent=str(out/'elab-agent'),conformance=str(bins/'elab-conformance'),app_executable_sha256=sha(app/'Contents/MacOS/ELab'),agent_sha256=sha(out/'elab-agent'),strict_adhoc_signature=True,upstream_commit=pin['upstream_commit'],sdk_source=pin['source_commit'],sdk_archive_sha256=pin['sha256'],component_kinds=61,public_commands=220,examples=87,icon=manifest['app_icon'],notice_inventory=inventory,release_promoted=False)
+(b/'package.json').write_text(json.dumps(p,indent=2)+'\n');print(json.dumps(dict(version=p['version'],source=source,app=str(app))),flush=True)

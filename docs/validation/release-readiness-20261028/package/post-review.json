@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "observed_public_adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "runtime_stages": [
+    {
+      "name": "native-smoke",
+      "command": [
+        "/private/tmp/elab-reliability279-875147cf/native",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 43.2543462499998
+    },
+    {
+      "name": "public-suites",
+      "command": [
+        "/Users/dshills/Development/projects/ELab/build/release-readiness-20261028/binaries-279/elab-conformance",
+        "--agent-binary",
+        "/private/tmp/elab-reliability279-875147cf/agent",
+        "--native-binary",
+        "/private/tmp/elab-reliability279-875147cf/native",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/private/tmp/elab-reliability279-875147cf/public"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 48.48198004200094
+    }
+  ],
+  "captured_probe_counts_checked": true,
+  "agent_exit_codes_checked": true,
+  "conformance_build_info_exact": true,
+  "archive_has_no_unexpected_payload_or_symlinks": true,
+  "normal_assertion_execution": true
+}

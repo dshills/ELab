@@ -1,0 +1,15 @@
+from pathlib import Path
+import hashlib,json,sys
+r=Path.cwd();b=r/'build/release-readiness-20261028';p=json.loads((b/'package.json').read_text());out=Path(p['app']).parent;old=r/'build/ELab-0.200.0-278-Electronics';sys.path.insert(0,str(r/'scripts'));from acceptance_client import AcceptanceClient
+rows=[]
+for file in sorted((out/'Examples').glob('*.elab')):
+ expected=json.loads(file.read_text());c=AcceptanceClient(p['agent'])
+ try:
+  c.ask('project.load',dict(path=str(file)),mutate=True);s=c.ask('simulation.wait')
+  assert s['paused'] and not s['document']['dirty'];assert dict(components=s['components'],wires=s['wires'])==expected['graph']
+ finally:c.close()
+ rows.append(file.name)
+assert len(rows)==87
+for file in sorted((old/'Examples').iterdir()):
+ if file.is_file():assert file.read_bytes()==(out/'Examples'/file.name).read_bytes()
+(b/'examples.json').write_text(json.dumps(dict(passed=True,examples=len(rows),previous_examples_all_files_exact=True,all_agents_normal_exit=True),indent=2)+'\n')

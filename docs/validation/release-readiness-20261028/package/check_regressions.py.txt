@@ -1,0 +1,33 @@
+"""Exercise the corrected capacity capture using an exact agent/service."""
+import argparse,gzip,json,sys
+from pathlib import Path
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+sys.path.insert(0,str(ROOT/'scripts'))
+from acceptance_client import AcceptanceClient
+
+def run(agent,endpoint,out):
+ out.mkdir(parents=True,exist_ok=False)
+ fixture=out/'capacity.elab';fixture.write_bytes(gzip.decompress((ROOT/'workbench/testdata/noise-capacity.elab.gz').read_bytes()))
+ c=AcceptanceClient(agent,endpoint)
+ try:
+  c.ask('project.load',dict(path=str(fixture),discard_changes=True),mutate=True)
+  before=c.ask('simulation.wait');assert not before['diagnostics'] and before['simulated_component_count']==64
+  assert len(before['dc_sweep']['result']['points'])==201
+  assert len(json.dumps(before,separators=(',',':')).encode())>1024*1024
+  saved=out/'saved.elab';c.ask('project.save',dict(path=str(saved)),mutate=True)
+  c.ask('project.load',dict(path=str(saved),discard_changes=True),mutate=True)
+  reopened=c.ask('simulation.wait');assert reopened['paused'] and not reopened['document']['dirty']
+  assert before['components']==reopened['components'] and before['dc_sweep']['result']==reopened['dc_sweep']['result']
+  c.ask('sweep.export',dict(id=reopened['dc_sweep']['selected_operation'],path=str(out/'noise.csv'),format='csv'),mutate=True)
+  c.ask('component.set',dict(id='R1',value='2k'),mutate=True)
+  changed=c.ask('simulation.wait');assert next(p for p in changed['components'] if p['id']=='R1')['value']==2000
+  assert not changed['dc_sweep']['operations'][-1]['source_unchanged']
+  c.ask('project.save',dict(path=str(out/'edited.elab')),mutate=True)
+  c.ask('project.load',dict(path=str(out/'edited.elab'),discard_changes=True),mutate=True)
+  assert not c.ask('project.inspect')['document']['dirty']
+  c.ask('project.clear',dict(discard_changes=True),mutate=True)
+ finally:c.close()
+ report=dict(passed=True,simulated_parts=64,points=201,probes=3,original_capture_reopened=True,large_response=True,csv_export=True,subsequent_edit_save_reopen=True,agent_exit_code=c.process.returncode,physical_input_acceptance=False)
+ (out/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
+if __name__=='__main__':
+ p=argparse.ArgumentParser();p.add_argument('--agent',type=Path,required=True);p.add_argument('--endpoint',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args();run(a.agent,a.endpoint,a.output)

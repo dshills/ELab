@@ -14,7 +14,7 @@ work is described below; the preserved release and its evidence remain separate.
 
 Subsequent source repairs address capacity noise-capture reopening, large agent
 responses and idle snapshot polling. See the [project architecture and code review](research/126-project-code-and-architecture-review.md).
-These repairs are not yet in the preserved /278 package below.
+These repairs are packaged in [ELab 0.200.1 /279](build/ELab-0.200.1-279-Reliability/ELab.app); [package checks](docs/validation/release-readiness-20261028/package/README.md).
 
 **Current electronics candidate: [ELab 0.200.0 /278](build/ELab-0.200.0-278-Electronics/ELab.app)**
 adds five capabilities, with the same validated commands available to users and

@@ -1,0 +1,515 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "8c0b9b7329e235ba5724e5049834bfd5",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "875147cf968073e81d5253e98e1d48dd07d5b896",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 7,
+      "medium": 5,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "7db34056e5eb150a",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "all_agents_normal_exit claimed without verification",
+      "message": "The receipt records `all_agents_normal_exit=True`, but the script never checks any agent's exit code. The loop only calls `c.close()`. This hard-codes a claim that the evidence does not support.",
+      "suggestion": "After each `c.close()`, assert the agent exited normally, e.g. `assert c.process.returncode==0`. Alternatively, drop the field from the receipt.",
+      "confidence": 0.7,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/check_examples.py.txt",
+          "lines": {
+            "start": 10,
+            "end": 15
+          }
+        }
+      ],
+      "tags": [
+        "evidence",
+        "unverified-claim"
+      ],
+      "evidence": "(b/'examples.json').write_text(json.dumps(dict(passed=True,examples=len(rows),previous_examples_all_files_exact=True,all_agents_normal_exit=True),indent=2)+'\\n')",
+      "fix": {
+        "before": "finally:c.close()",
+        "after": "finally:\n  c.close();assert c.process.returncode==0,(file.name,c.process.returncode)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "2f4f8d8a3cc2e7e8",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Regression report passes regardless of agent exit code and unchecked probe count",
+      "message": "The report is written with `passed=True` no matter what the agent's return code is, and that code could be nonzero or None. It also hard-codes `probes=3` even though the probe count is never asserted. The README relies on this receipt for the 'three-probe' claim.",
+      "suggestion": "Assert `c.process.returncode==0` before writing `passed=True`. Also assert the probe count from the simulation response, e.g. `len(before['probes'])==3`.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/check_regressions.py.txt",
+          "lines": {
+            "start": 30,
+            "end": 30
+          }
+        }
+      ],
+      "tags": [
+        "evidence",
+        "location-corrected"
+      ],
+      "evidence": " report=dict(passed=True,simulated_parts=64,points=201,probes=3,original_capture_reopened=True,large_response=True,csv_export=True,subsequent_edit_save_reopen=True,agent_exit_code=c.process.returncode,physical_input_acceptance=False)",
+      "fix": {
+        "before": " report=dict(passed=True,simulated_parts=64,points=201,probes=3,original_capture_reopened=True,large_response=True,csv_export=True,subsequent_edit_save_reopen=True,agent_exit_code=c.process.returncode,physical_input_acceptance=False)",
+        "after": " assert c.process.returncode==0,c.process.returncode\n report=dict(passed=True,simulated_parts=64,points=201,probes=3,original_capture_reopened=True,large_response=True,csv_export=True,subsequent_edit_save_reopen=True,agent_exit_code=c.process.returncode,physical_input_acceptance=False)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "7ee7a246a3bdd3b5",
+      "severity": "medium",
+      "category": "maintainability",
+      "title": "Hardcoded developer-specific repository path",
+      "message": "The repository root is an absolute path to one developer's machine. On any other checkout the script cannot import `acceptance_client`, so the packaged validation cannot be reproduced.",
+      "suggestion": "Derive the root from `__file__`, an environment variable, or a CLI argument.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/new_workflows.py.txt",
+          "lines": {
+            "start": 4,
+            "end": 4
+          }
+        }
+      ],
+      "tags": [
+        "portability",
+        "reproducibility"
+      ],
+      "evidence": "ROOT=Path('/Users/dshills/Development/projects/ELab')",
+      "fix": {
+        "before": "ROOT=Path('/Users/dshills/Development/projects/ELab')",
+        "after": "ROOT=Path(__file__).resolve().parents[4]"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "44213990bae2846b",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Acceptance checks rely on assert statements",
+      "message": "Every acceptance check uses a bare `assert`. Running the script with `python -O` strips all of them, so the script would still write `checks.json` with `passed=True` and no verification would have run.",
+      "suggestion": "Use a `check(cond, msg)` helper that raises `AssertionError`/`RuntimeError` explicitly. Alternatively, refuse to run when `sys.flags.optimize` is set.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/new_workflows.py.txt",
+          "lines": {
+            "start": 18,
+            "end": 18
+          }
+        }
+      ],
+      "tags": [
+        "validation"
+      ],
+      "evidence": " value=c.ask('simulation.wait');assert value['paused'] and not value['diagnostics'],(name,value['diagnostics']);return value",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "aa51e045b5daa947",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Runtime result fields hardcoded rather than derived from report",
+      "message": "The result file hardcodes `native_smoke` and `public_adapters` instead of reading them from `report`. The only check is the aggregate `report['passed']`. If the controller skipped an adapter or the native smoke step, this evidence file would still claim all of them passed.",
+      "suggestion": "Take these values from the report and assert them, for example `assert set(report['adapters'])=={...}` and `report['native_smoke']=='passed'`. Then write the observed values, not literals.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/runtime.py.txt",
+          "lines": {
+            "start": 12,
+            "end": 12
+          }
+        }
+      ],
+      "tags": [
+        "evidence",
+        "validation"
+      ],
+      "evidence": "(b/'runtime-result.json').write_text(json.dumps(dict(passed=True,directory=str(out),normal_external_exits=len(exits),native_smoke='passed',public_adapters=['in-process','headless-stdio','headless-socket','native-socket']),indent=2)+'\\n')",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "36ed00b08cf0c8ee",
+      "severity": "low",
+      "category": "security",
+      "title": "Absolute local user paths committed",
+      "message": "Committed receipts and scripts embed absolute developer home paths, which expose the local username. Scripts that hard-code `ROOT` this way are also not reproducible on other machines.",
+      "suggestion": "Record paths relative to the repo root. Derive `ROOT` from `Path.cwd()` or `__file__` instead of hard-coding it.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/archive.json",
+          "lines": {
+            "start": 3,
+            "end": 3
+          }
+        }
+      ],
+      "tags": [
+        "privacy",
+        "portability"
+      ],
+      "evidence": "  \"path\": \"/Users/dshills/Development/projects/ELab/build/releases/ELab-0.200.1-macos-arm64.zip\",",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "903529adc298e112",
+      "severity": "low",
+      "category": "correctness",
+      "title": "ZIP verification ignores extra entries and symlinks",
+      "message": "Verification only checks that each source file appears in the ZIP. It does not check that the ZIP has no extra or unexpected entries. Because `is_file()` follows symlinks, symlinks inside app bundles (e.g. framework `Versions/Current`) are compared as regular files. Their link structure is never verified, and `ditto` preserves those entries as symlinks.",
+      "suggestion": "Compare the set of ZIP entries (excluding directories and `__MACOSX`) against the expected set. Handle symlinks explicitly by comparing `os.readlink` with the ZIP entry contents.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/archive.py.txt",
+          "lines": {
+            "start": 9,
+            "end": 13
+          }
+        }
+      ],
+      "tags": [
+        "archive",
+        "verification"
+      ],
+      "evidence": "files=[f for f in folder.rglob('*') if f.is_file()]",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f229a84350031306",
+      "severity": "low",
+      "category": "bug",
+      "title": "Native process may be orphaned on timeout",
+      "message": "If `app.close` succeeds (so `closed=True`) but `app.wait(timeout=15)` times out, or if startup times out before the endpoint exists, cleanup is skipped and the native process is never terminated. It stays orphaned, and `final-process-state.json` records `exit_code: null`.",
+      "suggestion": "As a last resort in `finally`, call `app.terminate()` and then `app.kill()` if the process is still running after the graceful attempts. Record that this was done in the state file.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/native.py.txt",
+          "lines": {
+            "start": 26,
+            "end": 26
+          }
+        }
+      ],
+      "tags": [
+        "process-cleanup",
+        "location-corrected"
+      ],
+      "evidence": " if app.poll() is None and endpoint.exists() and not closed:",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "92af12d6c8deb198",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Report hardcodes counts that were never measured",
+      "message": "The report hardcodes `examples=87`, but the script never counts or checks examples. The `component_kinds` and `commands` values are also literals rather than measured counts. The release evidence therefore states counts the run did not observe.",
+      "suggestion": "Report the measured values instead, e.g. `len(c.ask('parts.list'))`. Either query and assert the examples count, or drop the `examples` field.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/new_workflows.py.txt",
+          "lines": {
+            "start": 82,
+            "end": 82
+          }
+        }
+      ],
+      "tags": [
+        "evidence-integrity",
+        "location-corrected"
+      ],
+      "evidence": " return dict(passed=True,component_kinds=61,commands=220,examples=87,shared_new_commands=commands,block_reused_between_documents=True,thermal_reference_c=thermal['temperature_c'],noise_rms_v=result['noise']['output_rms_v'][0],light_charge_preserved=True,scr_latch_release_reset=True,triac_capture_completed=True,physical_input_acceptance=False)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "9be32c6adab01a5b",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Evidence file named package.json may be misdetected as an npm manifest",
+      "message": "This file is named package.json and has a top-level \"version\" field, but it is not an npm manifest. Editors, dependency scanners, and workspace tooling such as npm/yarn workspaces, Dependabot, and SCA tools may treat it as a Node package. That can produce spurious warnings or errors.",
+      "suggestion": "Rename the file to something unambiguous, e.g. package-evidence.json or package-result.json, and update the references in the README and scripts.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/package.json",
+          "lines": {
+            "start": 2,
+            "end": 2
+          }
+        }
+      ],
+      "tags": [
+        "naming",
+        "tooling"
+      ],
+      "evidence": "  \"version\": \"0.200.1\",",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "bea1f6d7616f37ca",
+      "severity": "low",
+      "category": "security",
+      "title": "Absolute developer-local paths committed in evidence",
+      "message": "The committed evidence records absolute paths from one developer's machine. These paths expose a local username and directory layout. Nobody else can resolve or reproduce them from a clean checkout, which makes the recorded evidence less portable.",
+      "suggestion": "Record paths relative to the repository or build root, e.g. \"build/ELab-0.200.1-279-Reliability/ELab.app\". Alternatively, redact the home-directory prefix in the generator script before writing the evidence.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/package.json",
+          "lines": {
+            "start": 6,
+            "end": 8
+          }
+        }
+      ],
+      "tags": [
+        "privacy",
+        "reproducibility"
+      ],
+      "evidence": "  \"app\": \"/Users/dshills/Development/projects/ELab/build/ELab-0.200.1-279-Reliability/ELab.app\",\n  \"agent\": \"/Users/dshills/Development/projects/ELab/build/ELab-0.200.1-279-Reliability/elab-agent\",\n  \"conformance\": \"/Users/dshills/Development/projects/ELab/build/release-readiness-20261028/binaries-279/elab-conformance\",",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "570476898784a73d",
+      "severity": "low",
+      "category": "testing",
+      "title": "Conformance binary build info not verified",
+      "message": "The script verifies the VCS revision and clean state only for the app and the agent. The conformance binary is also recorded in package.json and used for qualification, but its build info is never checked.",
+      "suggestion": "Add `('conformance',bins/'elab-conformance')` to the build-info verification loop.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "docs/validation/release-readiness-20261028/package/package.py.txt",
+          "lines": {
+            "start": 24,
+            "end": 24
+          }
+        }
+      ],
+      "tags": [
+        "provenance",
+        "location-corrected"
+      ],
+      "evidence": "for label,path in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent')]:",
+      "fix": {
+        "before": "for label,path in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent')]:",
+        "after": "for label,path in [('native',app/'Contents/MacOS/ELab'),('agent',out/'elab-agent'),('conformance',bins/'elab-conformance')]:"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 77034,
+    "totalMs": 25407
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 19,
+    "bytes": 72815,
+    "chunks": 4,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 47556,
+        "output": 8228,
+        "costUSD": 0.354784
+      }
+    ],
+    "excluded": [
+      {
+        "path": "docs/validation/release-readiness-20261028/package/archive-controller.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/clean-build.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/headless-regressions.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/initial-package-controller.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/initial-runtime-controller.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/native-controller.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/package-controller.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/packager-output.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/public-report.json.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/runtime-controller.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/runtime-report.json.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      },
+      {
+        "path": "docs/validation/release-readiness-20261028/package/signature.txt.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      }
+    ],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "6d0b36117176f105",
+        "severity": "medium",
+        "category": "bug",
+        "title": "SCR reset assertion checks a different key than the latch assertions",
+        "message": "The latch and hold checks read `memory['latched']`, but the reset check reads `memory['high']`. If `high` is not the same signal as `latched`, the check fails with a KeyError. Otherwise it checks a different property, and the reported `scr_latch_release_reset=True` would not show that the latch was actually cleared.",
+        "suggestion": "Assert on the same `latched` field after the reset, for example `assert not ...['memory']['latched']`.",
+        "confidence": 0.5,
+        "locations": [
+          {
+            "path": "docs/validation/release-readiness-20261028/package/new_workflows.py.txt",
+            "lines": {
+              "start": 79,
+              "end": 79
+            }
+          }
+        ],
+        "tags": [
+          "acceptance",
+          "scr"
+        ],
+        "evidence": "off=c.ask('simulation.wait');assert not next(x for x in off['mixed']['controls'] if x['id']=='SCR1')['memory']['high']",
+        "fix": {
+          "before": "off=c.ask('simulation.wait');assert not next(x for x in off['mixed']['controls'] if x['id']=='SCR1')['memory']['high']",
+          "after": "off=c.ask('simulation.wait');assert not next(x for x in off['mixed']['controls'] if x['id']=='SCR1')['memory']['latched']"
+        },
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in docs/validation/release-readiness-20261028/package/new_workflows.py.txt"
+    },
+    {
+      "finding": {
+        "id": "55959aa0d87820a7",
+        "severity": "low",
+        "category": "maintainability",
+        "title": "Hardcoded user-specific absolute paths",
+        "message": "The script hardcodes a user-specific absolute repository root, and runtime.py.txt does the same. These committed validation scripts cannot be rerun on another machine or in CI. This conflicts with the stated goal of repeatable qualification tooling.",
+        "suggestion": "Derive the root from `git rev-parse --show-toplevel` or `Path(__file__).resolve().parents[n]`.",
+        "confidence": 0.3,
+        "locations": [
+          {
+            "path": "docs/validation/release-readiness-20261028/package/package.py.txt",
+            "lines": {
+              "start": 3,
+              "end": 3
+            }
+          }
+        ],
+        "tags": [
+          "reproducibility"
+        ],
+        "evidence": "r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/release-readiness-20261028'",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in docs/validation/release-readiness-20261028/package/package.py.txt"
+    },
+    {
+      "finding": {
+        "id": "efa8ba914a610a4a",
+        "severity": "low",
+        "category": "correctness",
+        "title": "Notice inventory hashes pre-signing binary, not shipped executable",
+        "message": "The notice inventory binds `artifact_sha256` to the unpackaged `bins/elab` binary. The packager then copies and ad-hoc signs it into `ELab.app/Contents/MacOS/ELab`, and signing changes the bytes. As a result, the inventory hash will not match the shipped executable (`app_executable_sha256` in package.json). That makes it harder to tie the notices to the distributed artifact.",
+        "suggestion": "Name the field explicitly as the pre-sign source binary hash, or record the post-packaging executable hash alongside it in package.json.",
+        "confidence": 0.35,
+        "locations": [
+          {
+            "path": "docs/validation/release-readiness-20261028/package/package.py.txt",
+            "lines": {
+              "start": 21,
+              "end": 21
+            }
+          }
+        ],
+        "tags": [
+          "provenance"
+        ],
+        "evidence": "inventory=dict(schema=1,target='darwin',artifact_sha256=sha(bins/'elab'),",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in docs/validation/release-readiness-20261028/package/package.py.txt"
+    }
+  ],
+  "suppressed": []
+}

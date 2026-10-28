@@ -1,0 +1,13 @@
+from pathlib import Path
+import gzip,json,subprocess,zipfile,sys
+if sys.flags.optimize:raise RuntimeError('qualification requires assertions enabled')
+r=Path.cwd();b=r/'build/release-readiness-20261028';p=json.loads((b/'package.json').read_text());runtime=Path(json.loads((b/'runtime-result.json').read_text())['directory']);folder=Path(p['app']).parent
+v=json.loads((runtime/'runtime-report.json').read_text());public=json.loads((runtime/'public/report.json').read_text());modes=[x['name'] for x in public['adapters']];assert set(modes)=={'in-process','headless-stdio','headless-socket','native-socket'} and public['passed'];assert v['passed'];assert len(v['stages'])>=2
+for folder_checks in [b/'headless-regressions',runtime/'features/regressions']:
+ capture=json.loads((folder_checks/'capacity.elab').read_text())['dc_sweeps']['entries'][0]['result'];assert len(capture['probes'])==3 and len(capture['points'])==201;assert all(len(row['values'])==3 for row in capture['points']);assert json.loads((folder_checks/'report.json').read_text())['agent_exit_code']==0
+info=subprocess.check_output(['go','version','-m',p['conformance']],text=True);assert 'vcs.revision='+p['source_commit'] in info and 'vcs.modified=false' in info;(b/'conformance-build-info.txt.gz').write_bytes(gzip.compress(info.encode(),mtime=0))
+files=[x for x in folder.rglob('*') if x.is_file()];assert not any(x.is_symlink() for x in folder.rglob('*'))
+with zipfile.ZipFile(json.loads((b/'archive.json').read_text())['path']) as z:
+ actual=[n for n in z.namelist() if not n.endswith('/') and not n.startswith('__MACOSX/')];expected={folder.name+'/'+x.relative_to(folder).as_posix() for x in files};assert len(actual)==len(set(actual)) and set(actual)==expected
+report=dict(passed=True,observed_public_adapters=modes,runtime_stages=v['stages'],captured_probe_counts_checked=True,agent_exit_codes_checked=True,conformance_build_info_exact=True,archive_has_no_unexpected_payload_or_symlinks=True,normal_assertion_execution=True)
+(b/'post-review.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

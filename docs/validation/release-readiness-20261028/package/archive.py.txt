@@ -1,0 +1,19 @@
+from pathlib import Path
+import hashlib,json,stat,subprocess,zipfile
+r=Path.cwd();b=r/'build/release-readiness-20261028';p=json.loads((b/'package.json').read_text());folder=Path(p['app']).parent;archive=r/'build/releases/ELab-0.200.1-macos-arm64.zip';assert not archive.exists()
+for name in ['examples.json','runtime-result.json','native-features.json']:assert json.loads((b/name).read_text())['passed']
+runtime=Path(json.loads((b/'runtime-result.json').read_text())['directory']);assert json.loads((runtime/'features/regressions/report.json').read_text())['passed'];assert json.loads((runtime/'features/final-process-state.json').read_text())['exit_code']==0
+sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
+protected=json.loads((b/'initial-preservation.json').read_text());assert all(sha(r/f)==h for f,h in protected.items())
+subprocess.run(['ditto','-c','-k','--sequesterRsrc','--keepParent',str(folder),str(archive)],check=True,timeout=120)
+files=[f for f in folder.rglob('*') if f.is_file()]
+with zipfile.ZipFile(archive) as z:
+ assert z.testzip() is None
+ for f in files:
+  entry=folder.name+'/'+f.relative_to(folder).as_posix();assert z.read(entry)==f.read_bytes();assert stat.S_IMODE(z.getinfo(entry).external_attr>>16)==stat.S_IMODE(f.stat().st_mode)
+extract=b/'extracted';assert not extract.exists();extract.mkdir()
+subprocess.run(['ditto','-x','-k',str(archive),str(extract)],check=True,timeout=120)
+for f in files:
+ copy=extract/folder.name/f.relative_to(folder);assert copy.read_bytes()==f.read_bytes();assert stat.S_IMODE(copy.stat().st_mode)==stat.S_IMODE(f.stat().st_mode)
+for app in [Path(p['app']),extract/folder.name/'ELab.app']:subprocess.run(['codesign','--verify','--deep','--strict',str(app)],check=True)
+report=dict(passed=True,path=str(archive),bytes=archive.stat().st_size,sha256=sha(archive),files=len(files),os_extraction_exact=True,strict_adhoc_seal=True,protected_identities_exact=len(protected));(b/'archive.json').write_text(json.dumps(report,indent=2)+'\n');Path(str(archive)+'.sha256').write_text(report['sha256']+'  '+archive.name+'\n');print(json.dumps(report))
