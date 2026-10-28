@@ -120,3 +120,12 @@ frozen-state model. Pin-name robustness, app-thread testing, notes and rendering
 allocation/readability fixes are included. Corrected complete root suite passes,
 workbench 67.662 s; final offscreen sweep/noise/thyristor controls 2.488 s and lint
 pass. All five implementations are ready for final source/package qualification.
+
+Final full root and ordinary desktop race suites pass (486.355/246.929 s).
+The complete rendered suite found Document output displaced below the visible
+viewport in all four themes: Circuit blocks lacked a sort priority and defaulted
+to the top. The explicit priority repair preserves commands and existing output
+order. Existing focused rendered layout/navigation/block parity tests pass 9.296 s;
+a complete Anthropic Opus 5.5 Prism review reports zero findings. Original failed
+and passing controls are preserved in document-order evidence; full affected
+rendered suite reruns before packaging. All other static/Python/audit gates pass.

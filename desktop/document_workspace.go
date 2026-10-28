@@ -107,7 +107,7 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 	pages["document"] = append(pages["document"], inspectorGroup("document-actions", "Share and print", document)...)
 	pages["document"] = append(pages["document"], inspectorGroup("document-help", "Help and examples", append(help, experiment...))...)
 	pages["simulation"] = append(pages["simulation"], inspectorGroup("experiment", "Experiment", experiment)...)
-	priority := map[string]int{"source-sampling": 0, "transient": 1, "probes": 2, "verification": 3, "sweep": 4, "circuit": 5, "document-actions": 0, "output": 1, "appearance": 2, "display": 3, "recovery": 4, "project-work": 5, "document-help": 6}
+	priority := map[string]int{"source-sampling": 0, "transient": 1, "probes": 2, "verification": 3, "sweep": 4, "circuit": 5, "document-actions": 0, "output": 1, "appearance": 2, "display": 3, "recovery": 4, "project-work": 5, "blocks": 6, "document-help": 7}
 	priority["proposal"] = -2
 	priority["experiment"] = 3
 	if state.InspectorSection != "component" {
