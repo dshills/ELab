@@ -58,6 +58,8 @@ func ExampleCatalog() []ExampleInfo { return slices.Clone(immutableExampleCatalo
 
 func buildExampleCatalog() []ExampleInfo {
 	catalog := []ExampleInfo{
+		{ID: "self-heating", Title: "Resistor self-heating", Question: "How does electrical heat raise component temperature?", Expected: "R1 dissipates 250 mW. Its temperature approaches 52 °C from 27 °C with a 100 ms thermal time constant.", Try: "Select R1 to watch temperature and separate thermal energy. Set a positive resistance coefficient, then compare current and temperature. Try an ambient DC sweep.", Limitation: thermalDescription},
+		{ID: "class-ab-temperature", Title: "Class-AB temperature and bias drift", Question: "How does unmatched transistor temperature move amplifier bias?", Expected: "Q6 and Q7 start at the same 27 °C. Changing one ambient temperature changes junction current, bias and output offset through the existing feedback circuit.", Try: "Select Q6 and change Ambient, or sweep its temperature while observing Q6/Q7 currents and RL voltage. Self-heating is initially disabled; each junction is held by an imposed bath.", Limitation: thermalDescription},
 		{ID: "rc-block", Title: "Reusable RC circuit block", Question: "Can a named block keep a simple circuit easy to reuse?", Expected: "The same 1k/1µF RC charges with a 1ms time constant behind named in/out/ground pins. Every physical member remains inspectable.", Try: "Select FILTER, edit resistance/capacitance, or Show internals. Copy block, create a new drawing, then Document → Circuit blocks → Paste copied block.", Limitation: "Single-level ordinary-component grouping; every primitive counts against existing limits. Ground is common; nested blocks and net-label members are refused. Clipboard is session-only; project files retain complete instances."},
 		{ID: "buck", Title: "PWM buck converter", Question: "PWM buck converter", Expected: "Duty changes the switched LC output; close SLOAD for a load step. This is an open-loop converter, not a regulated feedback supply.", Try: "Select PWM and change Duty, then compare C1 voltage and inductor current. Close SLOAD for a load step.", Limitation: ExtendedDeviceModel().PWM},
 		{ID: "opamp-slew", Title: "Op-amp slew-limited follower", Question: "Op-amp slew-limited follower", Expected: "The output takes finite time to follow each input edge. Disable dynamics to compare the original model.", Try: "Select U1 and change slew rate. Compare input and output edges, then disable dynamics to compare the original model.", Limitation: ExtendedDeviceModel().Dynamics},
@@ -451,6 +453,14 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.selected = "Q6"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0005, .02
 		d.probes = []string{"v:VIN.positive", "v:RL", "i:Q6.collector", "i:Q7.collector", "i:Q8.collector", "v:C1"}
+	case "self-heating":
+		d.graph, d.selected = SelfHeatingExampleGraph(), "R1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .001, .1
+		d.probes = []string{"i:R1", "v:R1"}
+	case "class-ab-temperature":
+		d.graph, d.selected = ThermalClassABExampleGraph(), "Q6"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0005, .02
+		d.probes = []string{"v:RL", "i:Q6.collector", "i:Q7.collector"}
 	case "rc-block":
 		d.graph, d.selected = RCBlockExampleGraph(), "FILTER"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00002, .01

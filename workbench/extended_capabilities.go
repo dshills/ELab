@@ -26,6 +26,8 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 		if id == "recording.step-response.set" {
 			c.Preconditions = append(c.Preconditions, "Exact currently selected retained recording ID; stale controls/replaced document refuse")
 		}
+	case "thermal.configure":
+		c.Effects = []string{thermalDescription, "All fields required even when disabling; enabled=false restores the exact original law. Supported resistor, silicon diode, NPN and PNP only. Ambient -40..125 °C; accepted self-heated state -40..150 °C. Settings are saved, undoable electrical startup edits. Thermal readings are a separate heat domain, not electrical capacitor energy."}
 	case "jfet.configure":
 		c.Effects = []string{jfetDescription, "Complete saved undoable electrical edit, all fields required. Cutoff sign must match N/P kind. Existing combined two-FET budget includes MOSFETs and JFETs."}
 	case "current-source.configure", "load.configure":
@@ -82,6 +84,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	if id == "recording.step-response" || id == "recording.step-response.set" {
 		delete(schema, "x-model-id")
 		schema["x-method-id"] = StepResponseMethod
+	}
+	if id == "thermal.configure" {
+		schema["x-model-id"] = ThermalModelID
 	}
 	if id == "jfet.configure" {
 		schema["x-model-id"] = JFETModelID
@@ -201,4 +206,16 @@ func addJFETSchema(schema map[string]any) {
 		}
 	}
 	schema["x-cutoff-sign"] = "N: -12 to -0.1 V; P: +0.1 to +12 V; zero and |cutoff|<0.1 V refused"
+}
+
+func addThermalSchema(schema map[string]any) {
+	inputProperty(schema, "version")["enum"] = []string{ThermalModelID}
+	for _, f := range []struct {
+		name, unit string
+		min, max   float64
+	}{{"ambient_c", "°C", -40, 125}, {"thermal_resistance_k_per_w", "K/W", .1, 2000}, {"thermal_capacitance_j_per_k", "J/K", .001, 10}, {"resistance_coefficient_per_k", "1/K", -.005, .005}} {
+		p := inputProperty(schema, f.name)
+		p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
+	}
+	schema["x-kind-relation"] = "resistance_coefficient_per_k must be zero unless the target is a resistor"
 }

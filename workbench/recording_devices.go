@@ -29,7 +29,7 @@ func validateRecordedBipolars(c Compiled, graph Graph, result *MixedResult) erro
 	for _, actual := range result.Transistors {
 		part, _ := graph.Component(actual.TransistorID)
 		expected := n.bipolarResult(part, x)
-		if hasTransistorProfile(part) && !recordingNear(actual.ConductiveHeat, expected.ConductiveHeat) {
+		if (hasTransistorProfile(part) || hasThermal(part)) && !recordingNear(actual.ConductiveHeat, expected.ConductiveHeat) {
 			return fmt.Errorf("recorded profile heat disagrees with state")
 		}
 		validModel := actual.Model == expected.Model
@@ -160,6 +160,9 @@ func validateRecordedDiodes(c Compiled, graph Graph, result *MixedResult) error 
 		p, _ := graph.Component(actual.ID)
 		v := voltage(x, n.pin(p, "anode")) - voltage(x, n.pin(p, "cathode"))
 		i, _ := deviceDiodeCurrent(p, v)
+		if hasThermal(p) {
+			i = n.evaluateThermal(p, x).currents[0]
+		}
 		if !recordingNear(actual.Voltage, v) || !recordingNear(actual.Current, i) || !recordingNear(actual.Power, v*i) {
 			return fmt.Errorf("recorded diode readings disagree with its terminal voltages")
 		}

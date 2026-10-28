@@ -20,6 +20,7 @@ func ExampleGraph() Graph { c := DefaultCircuit(); return Graph{Components(c), W
 func (g Graph) Clone() Graph {
 	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
 	for i := range out.Components {
+		out.Components[i].Thermal = cloneThermal(out.Components[i].Thermal)
 		out.Components[i].Block = cloneBlock(out.Components[i].Block)
 		out.Components[i].Device = cloneDeviceParameters(out.Components[i].Device)
 		out.Components[i].Power = clonePower(out.Components[i].Power)
@@ -546,6 +547,11 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		}
 		return c, status, d
 	}
+	for _, p := range g.Components {
+		if err := validateThermal(p); err != nil {
+			return Compiled{}, "error", &Diagnostic{"invalid-thermal", err.Error(), p.ID}
+		}
+	}
 	out := Compiled{TerminalNet: map[string]string{}, Nets: []Net{}}
 	parent := map[string]string{}
 	var root func(string) string
@@ -697,7 +703,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 		}
 	}
 	// Optional storage losses require the general network equations, not the ideal RC shortcut.
-	if hasJFETs(g) || hasCurrentDevices(g) || hasPassiveLosses(g) || hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
+	if hasThermals(g) || hasJFETs(g) || hasCurrentDevices(g) || hasPassiveLosses(g) || hasOpAmp || hasInductor || hasMOS || hasWaveforms || hasSwitch || hasDiode || hasPot || networkTopology || floatingDC || bipolarNetwork || len(transistors) > 0 && len(capacitors) > 0 {
 		return compileNetwork(out, g, groups, root)
 	}
 	if len(transistors) > 0 {

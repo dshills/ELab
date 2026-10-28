@@ -1,0 +1,183 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "66f5e3ab5f6af46094e2095e9f7e7bc0",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "3f048675b86da6ece24ff4f8790a1a2fb8ae6d66",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 2,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "d0e1584af63b6e64",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Session closed twice: Cleanup plus explicit Close",
+      "message": "The new `t.Cleanup(s.Close)` registers a close, but the loop body still calls `s.Close()` explicitly. On the success path each session is closed twice. If `Close` is not idempotent (for example, it closes a channel or stops a goroutine), the cleanup will panic or hang after the test passes.",
+      "suggestion": "Close each session only once. Either remove the explicit `s.Close()` at the end of the loop body and rely on the cleanup, or make sure `Close` is idempotent (for example, guard it with `sync.Once`).",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/thermal_test.go",
+          "lines": {
+            "start": 260,
+            "end": 260
+          }
+        }
+      ],
+      "tags": [
+        "double-close",
+        "test-cleanup",
+        "location-corrected"
+      ],
+      "evidence": "\t\tt.Cleanup(s.Close)",
+      "fix": {
+        "before": "\t\ts := New()\n\t\tt.Cleanup(s.Close)\n\t\tcall(t, s, \"example.load\", ExampleLoadParams{ID: id}, \"load\")\n\t\tcall(t, s, \"simulation.pause\", struct{}{}, \"pause\")\n\t\tsnap := settled(t, s)\n\t\tif snap.Mixed == nil || len(snap.Mixed.Thermal) == 0 {\n\t\t\tt.Fatal(\"thermal example\", id, snap.Diagnostics)\n\t\t}\n\t\tcall(t, s, \"simulation.step\", StepParams{Duration: .0001}, \"step\")\n\t\ts.Close()\n\t}",
+        "after": "\t\ts := New()\n\t\tt.Cleanup(s.Close)\n\t\tcall(t, s, \"example.load\", ExampleLoadParams{ID: id}, \"load\")\n\t\tcall(t, s, \"simulation.pause\", struct{}{}, \"pause\")\n\t\tsnap := settled(t, s)\n\t\tif snap.Mixed == nil || len(snap.Mixed.Thermal) == 0 {\n\t\t\tt.Fatal(\"thermal example\", id, snap.Diagnostics)\n\t\t}\n\t\tcall(t, s, \"simulation.step\", StepParams{Duration: .0001}, \"step\")\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8c906ddad7711f6b",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Editing thermal parameters silently enables thermal modeling",
+      "message": "The thermal parameter and self-heating handlers in `desktop/thermal_controls.go` are recorded here as calling `apply(next, true)`. They always send `Enabled: true`, so editing a coefficient or toggling self-heating on a part with thermal modeling disabled turns the model on as a side effect. The user did not ask for that.",
+      "suggestion": "In `desktop/thermal_controls.go`, pass the current `enabled` state to `apply` instead of the hard-coded `true`, i.e. `apply(next, enabled)`. Alternatively, disable these inputs while thermal modeling is off. The inventory entries here are generated, so regenerate them after changing the source.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "research/13-native-command-inventory.json",
+          "lines": {
+            "start": 4687,
+            "end": 4687
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "thermal",
+        "location-corrected"
+      ],
+      "evidence": "\"expression\": \"Change: func(e ui.ChangeEvent) {\\n\\tif e.Number == float32(value) {\\n\\t\\treturn\\n\\t}\\n\\tv, err := strconv.ParseFloat(strconv.FormatFloat(float64(e.Number), 'g', -1, 32), 64)\\n\\tif err != nil {\\n\\t\\treturn\\n\\t}\\n\\tnext := cfg\\n\\tset(\\u0026next, v)\\n\\tapply(next, true)\\n}\",",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "36d4cfe9c6fcd52a",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Redundant x-model-id assignment overwritten later",
+      "message": "In the `thermal.configure` case, the `x-model-id` assignment inside the switch is dead code. Later, `schema[\"x-model-id\"] = ExtendedModelID` runs unconditionally and replaces it. The value is then set again by the new `if id == \"thermal.configure\"` block. Having two assignments makes it unclear which one controls the result.",
+      "suggestion": "Remove the assignment inside the switch case. Keep only the post-switch override, which matches how the jfet and current-device cases are handled.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/extended_capabilities.go",
+          "lines": {
+            "start": 31,
+            "end": 32
+          }
+        }
+      ],
+      "tags": [
+        "dead-code",
+        "location-corrected"
+      ],
+      "evidence": "\t\tschema[\"x-model-id\"] = ThermalModelID\n\tcase \"jfet.configure\":",
+      "fix": {
+        "before": "\t\tschema[\"x-model-id\"] = ThermalModelID\n\tcase \"jfet.configure\":",
+        "after": "\tcase \"jfet.configure\":"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 33896,
+    "totalMs": 12504
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 9,
+    "bytes": 50389,
+    "chunks": 3,
+    "llmCalls": 3,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 31685,
+        "output": 3403,
+        "costUSD": 0.1948
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "f0ea171d5e31bdb3",
+        "severity": "low",
+        "category": "docs",
+        "title": "Unicode minus in machine-facing temperature description",
+        "message": "The schema description uses U+2212 MINUS SIGN in \"−40\". Agents or clients that copy this example will send text the float parser rejects, because the parser expects an ASCII '-'. The text also does not say whether a °C suffix is accepted.",
+        "suggestion": "Use an ASCII hyphen-minus (-40..125) in the published description, and state explicitly whether a unit suffix is allowed.",
+        "confidence": 0.35,
+        "locations": [
+          {
+            "path": "workbench/dc_sweep_capabilities.go",
+            "lines": {
+              "start": 43,
+              "end": 43
+            }
+          }
+        ],
+        "tags": [
+          "schema",
+          "unicode"
+        ],
+        "evidence": "temperature is plain °C text (−40…125)",
+        "fix": {
+          "before": "temperature is plain °C text (−40…125)",
+          "after": "temperature is plain °C text (-40..125)"
+        },
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in workbench/dc_sweep_capabilities.go"
+    }
+  ],
+  "suppressed": []
+}

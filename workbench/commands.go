@@ -91,6 +91,9 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(ThermalConfig{}), "urn:elab:thermal-config:1"},
+	{reflect.TypeOf(ThermalParams{}), "urn:elab:thermal-input:1"},
+	{reflect.TypeOf(ThermalReading{}), "urn:elab:thermal-reading:1"},
 	{reflect.TypeOf(BlockCreateParams{}), "urn:elab:block-create-input:1"},
 	{reflect.TypeOf(IDParams{}), "urn:elab:id-input:1"},
 	{reflect.TypeOf(BlockTemplate{}), "urn:elab:block-template:1"},
@@ -294,8 +297,11 @@ func SchemaRegistry() map[string]json.RawMessage {
 			schema = timeInputSchema("simulation.pulse.timing.set", schema)
 			addIdealPulseTimingDetails("simulation.pulse.timing.set", schema)
 		}
-		// Input-only shared definitions retain command unit text without
-		// widening numeric output/settings schemas.
+		// Shared model definitions declare numeric bounds; input-only quantity
+		// definitions below retain unit text without widening numeric outputs.
+		if common.Type == reflect.TypeOf(ThermalConfig{}) {
+			addThermalSchema(schema)
+		}
 		if common.Type == reflect.TypeOf(JFETConfig{}) {
 			addJFETSchema(schema)
 		}
@@ -595,6 +601,7 @@ func Catalog() []Capability {
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),
 		typedCapability("project.work.cancel", "Cancel exact current project work before publication; cancelable is false during atomic Save publication/cleanup; refusal code operation-committing", reflect.TypeOf(IDParams{})),
 		typedCapability("project.load", "Wait for the same background open job as project.load.start; restores saved pause/view with fresh physics; unsaved changes require discard_changes", reflect.TypeOf(LoadParams{})),
+		typedCapability("thermal.configure", "Configure optional resistor/diode/BJT ambient temperature and one-node self-heating; saved and undoable", reflect.TypeOf(ThermalParams{})),
 		typedCapability("block.create", "Group existing ordinary components behind named pins and published numeric values; single-level, no net-label members", reflect.TypeOf(BlockCreateParams{})),
 		typedCapability("block.copy", "Copy an independent block template into the session clipboard, surviving document replacement", reflect.TypeOf(IDParams{})),
 		typedCapability("block.paste", "Paste the copied block with independent renamed primitives at an unoccupied position", reflect.TypeOf(BlockPasteParams{})),

@@ -8,6 +8,7 @@ import (
 const ExtendedModelID = "elab.hobbyist-devices.v1"
 
 type ExtendedModel struct {
+	Thermal  string `json:"thermal,omitempty"`
 	ID       string `json:"id"`
 	PWM      string `json:"pwm"`
 	Dynamics string `json:"opamp_dynamics"`
@@ -102,8 +103,11 @@ func isExtendedKind(k string) bool {
 }
 func extendedModelForGraph(g Graph) *ExtendedModel {
 	for _, p := range g.Components {
-		if isExtendedKind(p.Kind) || hasDynamics(p) || hasPassiveLoss(p) {
+		if hasThermal(p) || isExtendedKind(p.Kind) || hasDynamics(p) || hasPassiveLoss(p) {
 			m := ExtendedDeviceModel()
+			if hasThermals(g) {
+				m.Thermal = thermalDescription
+			}
 			if hasJFETs(g) {
 				m.JFET = jfetDescription
 			}
@@ -123,6 +127,9 @@ func extendedModelForGraph(g Graph) *ExtendedModel {
 }
 func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	expected := ExtendedDeviceModel()
+	if hasThermals(g) {
+		expected.Thermal = thermalDescription
+	}
 	if hasJFETs(g) {
 		expected.JFET = jfetDescription
 	}

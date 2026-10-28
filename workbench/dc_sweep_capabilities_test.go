@@ -65,6 +65,10 @@ func TestPublishedSweepDomainsAndLimitsMatchAdmission(t *testing.T) {
 			graph = FeedbackLoopExampleGraph()
 			target = "U1"
 		}
+		if parameter == "temperature" {
+			graph = thermalResistorGraph(0, false)
+			target = "R1"
+		}
 		if parameter == "resistance" {
 			target = "R1"
 		}

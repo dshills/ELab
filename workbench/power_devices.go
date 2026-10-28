@@ -180,6 +180,7 @@ func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 	c.Nets = append([]Net(nil), c.Nets...)
 	parts := []Component{}
 	for _, p := range original.Components {
+		parts = append(parts, lowerThermal(&c, p)...)
 		if p.Kind == "shift-register" {
 			parts = append(parts, lowerShift(&c, p)...)
 			continue
@@ -320,6 +321,9 @@ func validateRecordedPower(c Compiled, g Graph, r *MixedResult) error {
 	return nil
 }
 func (n *mixedNetwork) restorePowerNodes(r *MixedResult, x []float64) error {
+	if err := n.restoreThermals(r, x); err != nil {
+		return err
+	}
 	if err := n.restoreSpeakers(r, x); err != nil {
 		return err
 	}
@@ -381,6 +385,12 @@ type powerResourceUsage struct{ parts, caps, inductors, resistors, sources, node
 
 func powerResources(g Graph) (u powerResourceUsage) {
 	for _, p := range g.Components {
+		if hasThermal(p) && p.Thermal.SelfHeating {
+			u.parts += 2
+			u.caps++
+			u.resistors++
+			u.nodes++
+		}
 		if p.Kind == "speaker" {
 			u.parts += 5
 			u.inductors += 2

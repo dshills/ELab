@@ -12,6 +12,10 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
+Source development now includes [reusable circuit blocks](docs/circuit-blocks.md)
+and [temperature effects and self-heating](docs/temperature.md), with shared
+user/agent commands. These changes are not yet in the preserved /277 package.
+
 **Current electronics candidate: [ELab 0.199.0 /277](build/ELab-0.199.0-277-Electronics/ELab.app)**
 adds five capabilities, with the same validated commands available to users and
 AI agents:

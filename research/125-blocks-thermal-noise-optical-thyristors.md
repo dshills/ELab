@@ -70,3 +70,16 @@ complete Anthropic Opus 5.5 Prism review covers the three-file repair (1 chunk);
 two ownership/net-identity assumptions are disproven by implementation and new
 explicit assertions, and the empty-result testing low is fixed. The transparent
 analysis repair commits separately before thermal implementation continues.
+
+Item 2 implements generic resistor/silicon-diode/NPN/PNP temperature laws and
+optional self-heating with explicit one-node Rth/Cth within existing resource and
+work limits. Two examples and shared thermal.configure inspector/agent edits,
+ambient sweeps, separate heat-domain readings, history/save/capture/refusal and
+forgery validation are covered. Independent analytic RC/quadratic/diode/BJT and
+full cross-domain Jacobian references pass. Initial/follow-up complete Anthropic
+Opus 5.5 reviews and findings/dispositions live in the thermal evidence directory.
+Broad ordinary-sandbox tests hit local Unix socket restrictions and stale
+inventory/count/discovery expectations; corrected access and focused controls
+are recorded explicitly, without relabeling earlier failures as clean passes.
+The prior atomic test expected 33 entries before four block edits; correct current
+allowlist count is 38 including temperature, with specific shared commands checked.

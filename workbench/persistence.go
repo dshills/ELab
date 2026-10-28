@@ -193,6 +193,11 @@ func decodeDocument(data []byte) (Document, error) {
 		if err := json.Unmarshal(component, &p); err != nil {
 			return d, err
 		}
+		if p.Thermal != nil {
+			if err := paramsNested(component, "thermal", &ThermalConfig{}, thermalFields()...); err != nil {
+				return d, err
+			}
+		}
 		if err := validateDeviceFields(component, p); err != nil {
 			return d, err
 		}
@@ -532,6 +537,10 @@ func decodeDocument(data []byte) (Document, error) {
 		if err := validatePower(c); err != nil {
 			return d, err
 		}
+		if err := validateThermal(c); err != nil {
+			return d, err
+		}
+		expected.Thermal = cloneThermal(c.Thermal)
 		expected.Power = clonePower(c.Power)
 		expected.Device = cloneDeviceParameters(c.Device)
 		if IsSensorKind(c.Kind) {

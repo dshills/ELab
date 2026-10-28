@@ -1,0 +1,201 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "71c77feca1ba9d5a3b9876027e109044",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "3f048675b86da6ece24ff4f8790a1a2fb8ae6d66",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 4,
+      "medium": 0,
+      "high": 0
+    },
+    "highestSeverity": "low"
+  },
+  "findings": [
+    {
+      "id": "7b3619a29b8b5b98",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Thermal schema hook inserted under unrelated comment",
+      "message": "The new ThermalConfig branch sits between the existing comment and the JFET/Current branches it describes. Readers may now assume the thermal schema is an input-only unit-text definition. If addThermalSchema instead changes numeric output/settings shape, the comment becomes misleading.",
+      "suggestion": "Move the thermal branch above the comment, or give it its own comment if it shares the same input-only semantics.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/commands.go",
+          "lines": {
+            "start": 300,
+            "end": 306
+          }
+        }
+      ],
+      "tags": [
+        "comments",
+        "schema"
+      ],
+      "evidence": "\t\t// Input-only shared definitions retain command unit text without\n\t\t// widening numeric output/settings schemas.\n\t\tif common.Type == reflect.TypeOf(ThermalConfig{}) {\n\t\t\taddThermalSchema(schema)\n\t\t}",
+      "fix": {
+        "before": "\t\t// Input-only shared definitions retain command unit text without\n\t\t// widening numeric output/settings schemas.\n\t\tif common.Type == reflect.TypeOf(ThermalConfig{}) {\n\t\t\taddThermalSchema(schema)\n\t\t}",
+        "after": "\t\tif common.Type == reflect.TypeOf(ThermalConfig{}) {\n\t\t\taddThermalSchema(schema)\n\t\t}\n\t\t// Input-only shared definitions retain command unit text without\n\t\t// widening numeric output/settings schemas."
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6f132915b892b975",
+      "severity": "low",
+      "category": "bug",
+      "title": "Storage slot bounds check ignores negative indices",
+      "message": "The new bounds guard only rejects indices that are too large. A negative index from `capacitorIndex` would still panic on `x[...]` instead of returning the intended validation error. The value is also computed twice.",
+      "suggestion": "Store the index in a local and check both bounds: `idx := n.capacitorIndex(k); if idx \u003c 0 || idx \u003e= len(x) { ... }`, then write `x[idx]`.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/thermal.go",
+          "lines": {
+            "start": 306,
+            "end": 309
+          }
+        }
+      ],
+      "tags": [
+        "bounds",
+        "robustness"
+      ],
+      "evidence": "if n.capacitorIndex(k) \u003e= len(x) {",
+      "fix": {
+        "before": "if n.capacitorIndex(k) \u003e= len(x) {",
+        "after": "if idx := n.capacitorIndex(k); idx \u003c 0 || idx \u003e= len(x) {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ef9d90f37da0b113",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Recorded branch consistency only checked for resistor/diode",
+      "message": "Thermal support covers resistor, diode, NPN and PNP. The new recorded-branch consistency check only runs for resistors and diodes. Tampered or inconsistent BJT electrical readings in a capture are therefore still accepted on restore.",
+      "suggestion": "Extend the consistency check to the transistor branch records, or document why BJT branches are validated elsewhere.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/thermal.go",
+          "lines": {
+            "start": 319,
+            "end": 319
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "location-corrected"
+      ],
+      "evidence": "if p.Kind == \"resistor\" || p.Kind == \"diode\" {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "920b946cd282dbd5",
+      "severity": "low",
+      "category": "testing",
+      "title": "Unsupported-kind test does not verify the reason or the atomicity",
+      "message": "The test is named \"RefuseAtomically\" but only checks that `validateThermal` returns some error. It never checks that the error is about the unsupported kind. `DefaultThermalConfig` may return a zero or invalid config for unsupported kinds, in which case validation fails for an unrelated reason and the test passes even if kind gating is broken. It also never exercises the `thermal.configure` command to confirm the graph and undo history are left unchanged after a refusal, so the atomicity in the name is untested.",
+      "suggestion": "Build the config from a supported kind, e.g. `DefaultThermalConfig(\"resistor\")`, so only the kind is invalid. Assert on the specific error or diagnostic code. Also call `thermal.configure` on a server, then assert that the snapshot components and undo depth are unchanged.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/thermal_test.go",
+          "lines": {
+            "start": 361,
+            "end": 365
+          }
+        }
+      ],
+      "tags": [
+        "test-coverage"
+      ],
+      "evidence": "\t\tcfg := DefaultThermalConfig(kind)\n\t\tp.Thermal = \u0026cfg\n\t\tif validateThermal(p) == nil {\n\t\t\tt.Fatal(\"unsupported thermal kind accepted\", kind)\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 32587,
+    "totalMs": 14101
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 10,
+    "bytes": 55303,
+    "chunks": 3,
+    "llmCalls": 3,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 34007,
+        "output": 3108,
+        "costUSD": 0.198188
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "f0ea171d5e31bdb3",
+        "severity": "low",
+        "category": "docs",
+        "title": "Schema description uses Unicode minus in numeric bound",
+        "message": "The description uses the Unicode minus sign U+2212 in \"−40\". Clients that copy the advertised bound verbatim may send text the float parser rejects.",
+        "suggestion": "Use the ASCII hyphen-minus: \"(-40..125)\".",
+        "confidence": 0.3,
+        "locations": [
+          {
+            "path": "workbench/dc_sweep_capabilities.go",
+            "lines": {
+              "start": 43,
+              "end": 43
+            }
+          }
+        ],
+        "tags": [
+          "schema",
+          "unicode"
+        ],
+        "evidence": "temperature is plain °C text (−40…125)",
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in workbench/dc_sweep_capabilities.go"
+    }
+  ],
+  "suppressed": []
+}

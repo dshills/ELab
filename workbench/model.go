@@ -29,6 +29,7 @@ type View struct {
 	Zoom   float64 `json:"zoom"`
 }
 type Component struct {
+	Thermal        *ThermalConfig    `json:"thermal,omitempty"`
 	Block          *CircuitBlock     `json:"block,omitempty"`
 	Device         *DeviceParameters `json:"device_parameters,omitempty"`
 	Power          *PowerParameters  `json:"power,omitempty"`

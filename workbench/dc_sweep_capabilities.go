@@ -40,7 +40,7 @@ func sweepSettingsInputSchema() map[string]any {
 	for _, name := range []string{"start", "stop"} {
 		p := inputProperty(schema, name)
 		p["minLength"], p["maxLength"], p["x-max-utf8-bytes"] = 1, 128, 128
-		p["description"] = "Finite floating point text; optional V for voltage, Ω/ohm with k/K/M resistance prefixes; wiper is a unitless fraction; frequency uses Hz/kHz/mHz or bare Hz. Bounds apply after parsing."
+		p["description"] = "Finite floating point text; optional V for voltage, Ω/ohm with k/K/M resistance prefixes; temperature is plain °C text (−40…125); wiper is a unitless fraction; frequency uses Hz/kHz/mHz or bare Hz. Bounds apply after parsing."
 	}
 	probes := inputProperty(schema, "probe_ids")
 	probes["minItems"], probes["maxItems"], probes["uniqueItems"] = 1, MaxScopeProbes, true

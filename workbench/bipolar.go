@@ -86,6 +86,10 @@ func (n *mixedNetwork) bipolarResult(p Component, x []float64) MixedTransistor {
 	vbe := voltage(x, n.pin(p, "base")) - voltage(x, n.pin(p, "emitter"))
 	vce := voltage(x, n.pin(p, "collector")) - voltage(x, n.pin(p, "emitter"))
 	ib, ic, _, _, _, _ := componentBipolarLinear(p, vbe, vce)
+	if hasThermal(p) {
+		e := n.evaluateThermal(p, x)
+		ib, ic = e.currents[0], e.currents[1]
+	}
 	state := "active"
 	sign := bipolarPolarity(p.Kind)
 	if math.Abs(ib) < 1e-8 && math.Abs(ic) < 1e-8 {
@@ -98,7 +102,7 @@ func (n *mixedNetwork) bipolarResult(p Component, x []float64) MixedTransistor {
 	be, bc, energy := n.junctionReading(p, x)
 	heat := vbe*ib + vce*ic
 	// Optional profile-only reading; omit it for historical generic-v1 results.
-	if !hasTransistorProfile(p) {
+	if !hasTransistorProfile(p) && !hasThermal(p) {
 		heat = 0
 	}
 	ib += be + bc

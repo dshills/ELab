@@ -49,7 +49,7 @@ func PreviewExample(id string) (ExamplePreview, error) {
 
 func exampleCategory(id string) string {
 	switch id {
-	case "rc-block", "capacitor-loss", "winding-loss", "led", "split-supply", "rc", "rc-high-pass", "led-fade", "rl", "rlc", "flyback":
+	case "self-heating", "rc-block", "capacitor-loss", "winding-loss", "led", "split-supply", "rc", "rc-high-pass", "led-fade", "rl", "rlc", "flyback":
 		return "basics"
 	case "npn", "pnp", "emitter-follower", "bipolar-push-pull", "switch-npn", "blink", "flasher", "nmos", "pmos", "cmos":
 		return "transistors"
@@ -65,7 +65,7 @@ func exampleCategory(id string) string {
 		return "motors"
 	case "555-tone", "light-alarm":
 		return "sound"
-	case "feedback-loop", "step-response", "jfet-preamp", "jfet-current", "pjfet-current", "current-led", "load-step", "constant-power-load", "class-ab-speaker", "speaker-amplifier", "rc-tolerance", "transistor-profile", "amplifier-distortion", "discrete-class-ab", "opamp-slew", "opamp-bandwidth", "opamp-follower", "opamp-inverting", "ac-rc", "ac-rlc", "ac-opamp":
+	case "class-ab-temperature", "feedback-loop", "step-response", "jfet-preamp", "jfet-current", "pjfet-current", "current-led", "load-step", "constant-power-load", "class-ab-speaker", "speaker-amplifier", "rc-tolerance", "transistor-profile", "amplifier-distortion", "discrete-class-ab", "opamp-slew", "opamp-bandwidth", "opamp-follower", "opamp-inverting", "ac-rc", "ac-rlc", "ac-opamp":
 		return "analysis"
 	}
 	return ""

@@ -73,6 +73,8 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 			next.Start, next.Stop, next.Spacing = "1 Hz", "100 kHz", "logarithmic"
 		case "resistance":
 			next.Start, next.Stop = "100 Ω", "10k Ω"
+		case "temperature":
+			next.Start, next.Stop = "-20", "80"
 		case "wiper":
 			next.Start, next.Stop = "0", "1"
 		default:

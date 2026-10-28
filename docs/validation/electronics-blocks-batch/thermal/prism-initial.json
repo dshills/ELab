@@ -1,0 +1,285 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "b2a9ca21e3c3e4987b2d1a6a065870e3",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "3f048675b86da6ece24ff4f8790a1a2fb8ae6d66",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 6,
+      "medium": 1,
+      "high": 1
+    },
+    "highestSeverity": "high"
+  },
+  "findings": [
+    {
+      "id": "6a164cc19c067193",
+      "severity": "high",
+      "category": "bug",
+      "title": "Sweep may mutate shared Thermal config through pointer",
+      "message": "`Thermal` is a pointer: the UI reads `*p.Thermal` and checks `p.Thermal != nil`. The sweep graph is probably a shallow copy of the planned or document graph. If so, this assignment writes through the shared pointer and changes the original component's saved ambient temperature. The background sweep then mutates document state without undo history, and can race with readers on other goroutines. Unlike `WiperPosition`, which is reassigned to a fresh pointer, this line mutates shared memory in place. The line also dereferences without a nil check.",
+      "suggestion": "Copy the config before modifying it. Assign a fresh pointer, as the wiper branch does, and skip components whose `Thermal` is nil.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep.go",
+          "lines": {
+            "start": 385,
+            "end": 386
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "data-race",
+        "sweep"
+      ],
+      "evidence": "graph.Components[i].Thermal.Ambient = value",
+      "fix": {
+        "before": "if plan.target.Parameter == \"temperature\" {\n\t\t\t\t\tgraph.Components[i].Thermal.Ambient = value",
+        "after": "if plan.target.Parameter == \"temperature\" {\n\t\t\t\t\tif graph.Components[i].Thermal == nil {\n\t\t\t\t\t\tcontinue\n\t\t\t\t\t}\n\t\t\t\t\tthermal := *graph.Components[i].Thermal\n\t\t\t\t\tthermal.Ambient = value\n\t\t\t\t\tgraph.Components[i].Thermal = \u0026thermal"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8227c4a3b9c4265b",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Non-bipolar, non-diode thermal parts all reported as resistors",
+      "message": "In `result()`, every thermal-enabled component that is not bipolar is reported as a diode or a resistor. Results are built from `pins[0]`/`pins[1]` and `currents[0]`. If thermal configs are accepted on other kinds, those parts would be misreported in `r.Resistors`. Examples are an LED, a MOSFET, a JFET or a multi-terminal part. Because of the `continue`, their kind-specific result entries (LED brightness, MOSFET results, and so on) are also lost. The same `continue` in `mnaEquations` skips their normal stamps, so correctness depends entirely on `stampThermal` covering every kind.",
+      "suggestion": "Make the dispatch explicit by kind: resistor, diode, bipolar. Return an error or diagnostic for any other kind. Alternatively, ensure `validateThermal` rejects thermal configs on kinds that `stampThermal`, `evaluateThermal` and this result path do not support.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/mixed.go",
+          "lines": {
+            "start": 831,
+            "end": 845
+          }
+        }
+      ],
+      "tags": [
+        "thermal",
+        "results"
+      ],
+      "evidence": "\t\t\t\tif p.Kind == \"diode\" {\n\t\t\t\t\tr.Diodes = append(r.Diodes, b)\n\t\t\t\t} else {\n\t\t\t\t\tr.Resistors = append(r.Resistors, b)\n\t\t\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "10b7776578957e8d",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Thermal nodes excluded from residual check",
+      "message": "Thermal nodes are excluded from the KCL residual. If the thermal equations are poorly converged, the residual check will not detect it. Only `Balance` is reported, and it is not used as an acceptance criterion here.",
+      "suggestion": "Track a separate thermal residual, scaled by `thermalScale`. Validate it against a tolerance, or fold it into the existing residual using appropriate units.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/mixed.go",
+          "lines": {
+            "start": 1044,
+            "end": 1046
+          }
+        }
+      ],
+      "tags": [
+        "thermal",
+        "diagnostics"
+      ],
+      "evidence": "\t\tif isThermalNode(n.nodes[i]) {\n\t\t\tcontinue\n\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "730f13d84319b727",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Disabling thermal model still requires valid parameters",
+      "message": "`configureThermalLocked` validates the supplied parameters before it checks `enabled`. A request to disable thermal modelling with omitted or zero parameters is rejected, because an empty version or a Cth of 0 fails validation. That makes disabling unexpectedly fail.",
+      "suggestion": "Only validate the parameters when `v.Enabled` is true. When it is false, clear `p.Thermal` without validating.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/thermal.go",
+          "lines": {
+            "start": 98,
+            "end": 104
+          }
+        }
+      ],
+      "tags": [
+        "thermal",
+        "api"
+      ],
+      "evidence": "\tp.Thermal = \u0026v.Parameters\n\tif err := validateThermal(p); err != nil {\n\t\treturn err\n\t}\n\tif !v.Enabled {\n\t\tp.Thermal = nil\n\t}",
+      "fix": {
+        "before": "\tp.Thermal = \u0026v.Parameters\n\tif err := validateThermal(p); err != nil {\n\t\treturn err\n\t}\n\tif !v.Enabled {\n\t\tp.Thermal = nil\n\t}",
+        "after": "\tp.Thermal = nil\n\tif v.Enabled {\n\t\tp.Thermal = \u0026v.Parameters\n\t\tif err := validateThermal(p); err != nil {\n\t\t\treturn err\n\t\t}\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b62ab576a3f20732",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Missing thermal storage capacitor is silently ignored on restore",
+      "message": "The loop looks for the private thermal storage capacitor. If that capacitor is absent, the loop silently restores nothing. The thermal node voltage is restored while the capacitor current state keeps its previous or zero value, so a resumed transient can start from an inconsistent state without any error.",
+      "suggestion": "Track whether the matching capacitor was found. If it was not, return `fmt.Errorf(\"thermal storage missing\")`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/thermal.go",
+          "lines": {
+            "start": 303,
+            "end": 307
+          }
+        }
+      ],
+      "tags": [
+        "thermal",
+        "restore",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tfor k, c := range n.caps {\n\t\t\t\tif c.ID == thermalCap(p.ID) {\n\t\t\t\t\tx[n.capacitorIndex(k)] = a.StorageRate / thermalScale\n\t\t\t\t}\n\t\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "51f773790a6aad8d",
+      "severity": "low",
+      "category": "testing",
+      "title": "Ignored MakeComponent errors",
+      "message": "Several tests throw away the error from `MakeComponent` and use the returned component anyway. This happens here and in the diode, stamp-Jacobian and capacitor-loop tests. If construction fails, for example because the kind is unknown or the value fails to parse, the test keeps going with a zero-value component. It then fails later with a confusing message, or passes for the wrong reason.",
+      "suggestion": "Check the error and stop the test on failure, e.g. `p, err := MakeComponent(...); if err != nil { t.Fatal(err) }`.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/thermal_test.go",
+          "lines": {
+            "start": 89,
+            "end": 89
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "tests",
+        "location-corrected"
+      ],
+      "evidence": "\t\tp, _ := MakeComponent(\"Q1\", kind, Point{}, \"\")",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "eb4bf28beb64b93a",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Callback parameter shadows state vector",
+      "message": "In the `stamp` helper, the inner callback names its float parameter `v`. That hides the outer `v []float64` state vector in the same expression. The current code happens to be correct, but the shadowing makes the Jacobian check easy to misread and easy to break in a later edit.",
+      "suggestion": "Rename the callback's float parameter, for example to `d`, so it no longer shadows the outer vector.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/thermal_test.go",
+          "lines": {
+            "start": 229,
+            "end": 229
+          }
+        }
+      ],
+      "tags": [
+        "shadowing",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tn.stampThermal(p, v, func(a, b int, v float64) {",
+      "fix": {
+        "before": "\t\t\tn.stampThermal(p, v, func(a, b int, v float64) {\n\t\t\t\tif a \u003e= 0 \u0026\u0026 b \u003e= 0 {\n\t\t\t\t\tj[a][b] += v",
+        "after": "\t\t\tn.stampThermal(p, v, func(a, b int, d float64) {\n\t\t\t\tif a \u003e= 0 \u0026\u0026 b \u003e= 0 {\n\t\t\t\t\tj[a][b] += d"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "107eff483c0f2a08",
+      "severity": "low",
+      "category": "testing",
+      "title": "Workbench not closed when the test fails mid-loop",
+      "message": "In TestThermalExamplesAndDisabledEquivalence, the workbench created in the loop is closed only by an explicit `s.Close()` at the end of the iteration. Any `t.Fatal` before that line, including the ones inside `call` and `settled`, skips the close. The workbench's background simulation goroutines and resources then leak into the rest of the test run.",
+      "suggestion": "Close the workbench through a deferred call or `t.Cleanup` right after `New()`, and remove the trailing `s.Close()` from the loop body.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/thermal_test.go",
+          "lines": {
+            "start": 259,
+            "end": 260
+          }
+        }
+      ],
+      "tags": [
+        "resource-leak",
+        "tests",
+        "location-corrected"
+      ],
+      "evidence": "\t\ts := New()\n\t\tcall(t, s, \"example.load\", ExampleLoadParams{ID: id}, \"load\")",
+      "fix": {
+        "before": "\t\ts := New()\n\t\tcall(t, s, \"example.load\", ExampleLoadParams{ID: id}, \"load\")",
+        "after": "\t\ts := New()\n\t\tdefer s.Close()\n\t\tcall(t, s, \"example.load\", ExampleLoadParams{ID: id}, \"load\")"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 90737,
+    "totalMs": 35722
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 24,
+    "bytes": 76068,
+    "chunks": 4,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 47720,
+        "output": 9440,
+        "costUSD": 0.37968
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

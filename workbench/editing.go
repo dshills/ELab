@@ -123,6 +123,8 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "thermal.configure":
+		return s.configureThermalLocked(raw)
 	case "block.create", "block.copy", "block.paste", "block.parameter.set", "block.view.set", "block.release":
 		return s.blockCommandLocked(command, raw)
 	case "edit.proposal.set", "edit.proposal.apply", "edit.proposal.dismiss":

@@ -45,6 +45,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Thermal            []ThermalReading      `json:"thermal,omitempty"`
 	JFETs              []JFETResult          `json:"jfets,omitempty"`
 	Loads              []BranchResult        `json:"electronic_loads,omitempty"`
 	Speakers           []SpeakerResult       `json:"speakers,omitempty"`
@@ -121,6 +122,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 	}
 	o.MOSFETs = append([]MOSFETResult(nil), r.MOSFETs...)
 	o.Transistors = append([]MixedTransistor{}, r.Transistors...)
+	o.Thermal = append([]ThermalReading(nil), r.Thermal...)
 
 	o.Capacitors = append([]CapacitorResult{}, r.Capacitors...)
 	for i := range o.Capacitors {
@@ -143,6 +145,7 @@ type mixedNetwork struct {
 	hasOptocoupler, hasRegulator bool
 	hasMOSFET                    bool
 	hasJFET                      bool
+	hasThermal                   bool
 	hasGeneralBipolar            bool
 	c                            Compiled
 	nodes                        []string
@@ -193,6 +196,11 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
+		if hasThermal(p) {
+			n.hasThermal = true
+			n.nonlinear = true
+			n.hasGeneralBipolar = n.hasGeneralBipolar || IsBipolarKind(p.Kind)
+		}
 		n.hasOptocoupler = n.hasOptocoupler || p.Kind == "optocoupler"
 		n.hasRegulator = n.hasRegulator || IsRegulatorKind(p.Kind)
 		n.hasJFET = n.hasJFET || IsJFETKind(p.Kind)
@@ -365,6 +373,10 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 		add(k, q, -1)
 	}
 	for _, p := range n.c.MixedGraph.Components {
+		if hasThermal(p) {
+			n.stampThermal(p, x, add, f)
+			continue
+		}
 		switch p.Kind {
 		case "current-source", "electronic-load":
 			u, v := n.pin(p, "positive"), n.pin(p, "negative")
@@ -706,7 +718,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasJFET || n.hasGeneralBipolar || n.hasOptocoupler || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
+		if good && (n.hasThermal || n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasJFET || n.hasGeneralBipolar || n.hasOptocoupler || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -733,6 +745,9 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				if !finite(v) || math.Abs(v) > maxMixedNodeVoltage {
 					return nil, fmt.Errorf("mixed node voltage exceeds the ±30 V educational model range")
 				}
+			}
+			if err := n.validateThermalState(x); err != nil {
+				return nil, err
 			}
 			result := n.result(x, old, dt, t, at)
 			for k, p := range n.caps {
@@ -809,7 +824,24 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	powers := 0.
 	sourcePower := 0.
 	energyRate := 0.
+	thermalRates := map[string]float64{}
 	for _, p := range n.c.MixedGraph.Components {
+		if hasThermal(p) {
+			e := n.evaluateThermal(p, x)
+			powers += e.heat
+			if IsBipolarKind(p.Kind) {
+				r.Transistors = append(r.Transistors, n.bipolarResult(p, x))
+			} else {
+				v := voltage(x, e.pins[0]) - voltage(x, e.pins[1])
+				b := BranchResult{ID: p.ID, Current: e.currents[0], Voltage: v, Power: e.heat}
+				if p.Kind == "diode" {
+					r.Diodes = append(r.Diodes, b)
+				} else {
+					r.Resistors = append(r.Resistors, b)
+				}
+			}
+			continue
+		}
 		switch p.Kind {
 		case "current-source", "electronic-load":
 			br := n.currentDeviceResult(p, x, at)
@@ -972,6 +1004,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 		// voltage. Balance instantaneous terminal power for every method.
 		stored := capacitorStoredVoltage(p, v, i)
 		capV[k] = stored
+		if isThermalCap(p) {
+			thermalRates[p.ID] = thermalScale * i
+			continue
+		}
 		energyRate += stored * i
 		powers += capacitorESR(p) * i * i
 		if !privatePart(p.ID) {
@@ -1003,7 +1039,18 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 	}
 	_, f := n.mnaEquations(x, old, dt, t, at, !n.usesCollocation())
 	for i := range n.nodes {
+		if isThermalNode(n.nodes[i]) {
+			continue
+		}
 		r.KCLResidual = math.Max(r.KCLResidual, math.Abs(f[i]))
+	}
+	for _, p := range n.c.MixedGraph.Components {
+		if hasThermal(p) {
+			v := n.thermalReading(p, x)
+			v.StorageRate = thermalRates[thermalCap(p.ID)]
+			v.Balance = v.ConductiveHeat - v.Transfer - v.StorageRate
+			r.Thermal = append(r.Thermal, v)
+		}
 	}
 	n.publishPower(r, x)
 	r.PowerResidual = sourcePower - powers - energyRate - r.NumericalDamping

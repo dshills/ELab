@@ -75,7 +75,7 @@ type sweepDomain struct {
 }
 
 func sweepDomains() []sweepDomain {
-	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}, {"loop-frequency", "Hz", .01, 1e9}}
+	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"temperature", "°C", -40, 125}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}, {"loop-frequency", "Hz", .01, 1e9}}
 }
 
 func sweepTargets(g Graph) []SweepTarget {
@@ -85,6 +85,10 @@ func sweepTargets(g Graph) []SweepTarget {
 		for _, d := range domains {
 			label := ""
 			switch d.Parameter {
+			case "temperature":
+				if hasThermal(p) {
+					label = "Ambient temperature"
+				}
 			case "loop-frequency":
 				if hasDynamics(p) {
 					label = "Loop return ratio / differential control injection"
@@ -161,7 +165,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		}
 	}
 	if !found {
-		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper, AC frequency or configured dynamic-op-amp loop target")
+		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper, enabled thermal ambient, AC frequency or configured dynamic-op-amp loop target")
 	}
 	if settings.Points < 2 || settings.Points > MaxDCSweepPoints {
 		return plan, fmt.Errorf("sweep requires 2–201 points")
@@ -178,7 +182,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		if IsFrequencySweep(plan.target.Parameter) {
 			value, err = parseWaveformQuantity(text, "Hz")
 		}
-		if plan.target.Parameter == "wiper" {
+		if plan.target.Parameter == "wiper" || plan.target.Parameter == "temperature" {
 			value, err = strconv.ParseFloat(strings.TrimSpace(text), 64)
 		}
 		if err != nil {
@@ -378,7 +382,9 @@ func computeDCSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*S
 				if graph.Components[i].ID != plan.target.ComponentID {
 					continue
 				}
-				if plan.target.Parameter == "wiper" {
+				if plan.target.Parameter == "temperature" {
+					graph.Components[i].Thermal.Ambient = value
+				} else if plan.target.Parameter == "wiper" {
 					graph.Components[i].WiperPosition = &value
 				} else {
 					graph.Components[i].Value = value

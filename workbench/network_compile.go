@@ -161,6 +161,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return fail("unsupported", "mixed-limit", "Network simulation supports at most two generic powered op-amps within the existing total part, node and source limits.", "")
 	}
 
+	for _, p := range g.Components {
+		if hasThermal(p) && p.Thermal.SelfHeating && out.Analysis == NetworkDCAnalysis {
+			out.Analysis = NetworkTransientAnalysis
+		}
+	}
 	usage := powerResources(g)
 	if SimulatedComponentCount(g)+usage.parts > MaxSimulatedComponents || len(caps)+usage.caps > MaxNetworkCapacitors || len(rs)+usage.resistors > MaxNetworkResistors || len(inductors)+usage.inductors > MaxNetworkInductors || len(sources)+usage.sources > MaxNetworkSources || len(out.Nets)+usage.nodes > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
