@@ -12,6 +12,12 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
+Source development adds **Scope / Spectrum** tabs and live FFT using selected
+scope probes, with Hold and independent recorded analysis. Users and agents share
+`scope.view.set` and `spectrum.live.set`. See the [spectrum guide](docs/spectrum-analysis.md)
+and [internal review/tests](docs/validation/scope-spectrum-20261028/README.md).
+The /281 candidate below predates these changes; a matching build follows.
+
 **Current candidate: [ELab 0.200.3 /281](build/ELab-0.200.3-281-Readiness/ELab.app)**,
 with **87 examples**, **61 component kinds** and **222 shared commands**.
 It includes capacity noise-capture/agent-response repairs, bounded

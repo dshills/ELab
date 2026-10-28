@@ -21,6 +21,7 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
+	scopeView string
 	// Service.mu owns both stores and all publication/revision transitions.
 	analysisJobs
 	compilation                 compilationCache
@@ -377,6 +378,9 @@ func (s *Service) closeLocked() {
 	s.cancelAudioLocked()
 	if s.tolerance != nil {
 		s.tolerance.cancel()
+	}
+	if s.liveSpectrumCancel != nil {
+		s.liveSpectrumCancel()
 	}
 	s.closed = true
 	if s.appearanceStore != nil {

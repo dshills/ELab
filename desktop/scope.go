@@ -200,7 +200,7 @@ func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		return nil, b.err
 	}
 	mesh, err := canvas.NewMesh(b.vertices, b.indices)
-	if err == nil && state.ScopeVisible && !sourcePaneHidden(state) && plot.WindowValid && !stale {
+	if err == nil && state.ScopeVisible && state.ScopeView != "spectrum" && !sourcePaneHidden(state) && plot.WindowValid && !stale {
 		frame := &scopePlotFrame{revision: state.CommandRevision, generation: state.Document.Generation, left: left, right: right, start: first, end: last, cursor: plot.ActiveCursor}
 		if recorded {
 			frame.recordingID = state.Recording.ID

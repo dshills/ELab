@@ -1,6 +1,7 @@
 package workbench
 
 type Snapshot struct {
+	ScopeView               string                 `json:"scope_view"`
 	BlockClipboardAvailable bool                   `json:"block_clipboard_available"`
 	Tolerance               *ToleranceState        `json:"tolerance,omitempty"`
 	Spectrum                *SpectrumState         `json:"spectrum,omitempty"`
@@ -181,6 +182,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		AppearanceWork:          s.appearanceWorkLocked(),
 		MatchingParts:           browserParts(s.partCategory, s.partSearch),
 		Scope:                   s.scopeLocked(compiled),
+		ScopeView:               s.scopeViewLocked(),
 		ScopeVisible:            s.scopeVisible,
 		Mixed:                   cloneMixed(s.mixed),
 		NPN:                     cloneNPN(s.npn),

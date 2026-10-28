@@ -20,7 +20,7 @@ func toolbarDivider(id string) ui.Node {
 // and the drawing-mode group retain their own presentation. Existing control
 // identities, callback captures, enablement and editing state are untouched.
 func polishToolbars(node *ui.Node, p appPalette, inToolbar bool) {
-	if node.ID == "inspector-navigation" || node.ID == "drawing-mode-tabs" {
+	if node.ID == "inspector-navigation" || node.ID == "drawing-mode-tabs" || node.ID == "instrument-tabs" {
 		return
 	}
 	if node.Kind == ui.Toolbar {

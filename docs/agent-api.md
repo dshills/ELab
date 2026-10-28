@@ -28,6 +28,12 @@ Source development also provides [bounded analysis pages](analysis-pages.md) for
 large sweeps, recordings, spectra and tolerance trials, with compact admission
 guards. Discover availability from the running build.
 
+Source development also adds Scope/Spectrum tabs and bounded live FFT through
+`scope.view.set` and `spectrum.live.set`; observe `snapshot.spectrum.live` through
+`project.inspect` or events. Live probes are the selected scope probes, and live
+analysis does not advance physics. [Live/recorded contract](spectrum-analysis.md).
+The preserved /281 package predates these two commands; use runtime discovery.
+
 ## Request and response
 
 ```json

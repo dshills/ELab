@@ -67,7 +67,7 @@ func applyWorkspaceTabStyle(node *ui.Node, p appPalette, selected bool) {
 			node.Style.MaxSize = ui.Some(ui.Size{Width: 44, Height: 20})
 		}
 		workspaceTabWeight(node, selected)
-	case "inspector-section-component", "inspector-section-simulation", "inspector-section-document":
+	case "inspector-section-component", "inspector-section-simulation", "inspector-section-document", "scope-view-scope", "scope-view-spectrum":
 		node.Style.Foreground, node.Style.Background = ui.Some(p.Muted), ui.Some(p.Paper)
 		node.Style.Border = ui.Some(ui.Border{})
 		node.Style.CornerRadius = ui.Some(float32(3))

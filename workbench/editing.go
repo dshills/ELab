@@ -196,6 +196,18 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("tolerance format must be json or csv")
 		}
 		return s.startExportLocked(ExportStartParams{Kind: "tolerance-" + p.Format, ID: p.ID, Path: p.Path, Overwrite: p.Overwrite, ExpectedGeneration: p.ExpectedGeneration})
+	case "scope.view.set":
+		var p ScopeViewParams
+		if err := params(raw, &p, "view"); err != nil {
+			return err
+		}
+		return s.setScopeViewLocked(p)
+	case "spectrum.live.set":
+		var p LiveSpectrumParams
+		if err := params(raw, &p, "enabled"); err != nil {
+			return err
+		}
+		return s.setLiveSpectrumLocked(p)
 	case "spectrum.settings.set", "spectrum.analyze":
 		return s.spectrumCommandLocked(command, raw)
 	case "spectrum.export":

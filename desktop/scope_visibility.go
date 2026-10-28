@@ -8,7 +8,7 @@ import (
 )
 
 func scopeAvailable(state workbench.Snapshot) bool {
-	return state.Recording != nil && state.Recording.Viewing || workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil
+	return state.ScopeView == "spectrum" || state.Recording != nil && state.Recording.Viewing || workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil
 }
 func (s *screen) scopeVisibilityButton(state workbench.Snapshot) ui.Node {
 	text := "Show scope"

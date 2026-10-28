@@ -1,4 +1,64 @@
-# Recorded spectrum and harmonic distortion
+# Scope, live spectrum and recorded harmonic distortion
+
+The signal dock has **Scope / Spectrum** tabs. Scope retains its live and recorded
+waveform controls. Spectrum puts the existing FFT plot in the dock, with **Live**
+and **Recorded** source choices. Both tabs and all settings use the same shared
+commands for the desktop and AI agents.
+
+## Live spectrum
+
+Opening Spectrum for the first time enables live FFT with a Hann window and an
+automatic sample count. Choose one of the same selected voltage/current scope
+probes, or **First scope probe**. Add/remove channels through the existing Scope
+probes controls. A removed channel stays visibly unavailable until reassigned or
+restored; it never silently selects a different signal.
+
+Live analysis copies accepted points inside the scope window and reuses the
+recorded FFT engine. It does not run another electrical solve or advance time.
+One lazy service worker checks for changed samples every 250 ms (at most four
+updates/second), computes outside the service mutex, then publishes only if the
+source document, circuit/run, actuation, probe selection/window and settings still
+match. Unchanged paused data is not repeatedly analyzed. Restart, electrical edits and
+replacement documents cannot borrow an old frame.
+
+**Hold** freezes the derived spectrum while simulation continues. Pause stops
+simulation normally. Source changes invalidate even a held result. **Recorded**
+stops live publication and exposes recording/probe choices and **Analyze**;
+advanced interval and export controls remain in Simulate → Spectrum & distortion.
+The original recorded settings/result remain independent of live analysis.
+
+Live retains the existing 512-point scope history. An end-exclusive FFT needs
+N intervals, so live uses automatic or 32/64/128/256 samples; at least 33 distinct
+accepted points are needed. The analyser never invents a sample grid finer than
+the recorded spacing. Resolution, Nyquist frequency and frame start/end are
+reported for the actual analyzed grid. The original recorded analyser still
+supports up to 4096 samples. Mean removal, window scaling and THD requirements
+are unchanged.
+
+Tabs, selectors, numeric fields, plot area and two readout rows keep fixed
+allocation as results arrive. Only plot content/readout text changes. Short docks
+retain their existing scroll viewport. Scope cursor input is ignored while the
+Spectrum tab is showing.
+
+### Live commands
+
+- `scope.view.set {"view":"scope"}` or `{"view":"spectrum"}` selects the dock.
+  The first Spectrum selection enables live defaults if no live draft exists.
+- `spectrum.live.set {"enabled":true,"hold":false,"probe_id":"v:C1","window":"hann","samples":0,"fundamental_hz":0,"harmonics":5}`
+  replaces live settings; `enabled` is required. Empty probe means first selected
+  available scope trace. Window defaults to Hann, samples to automatic and
+  harmonics to five. Frequency accepts numeric Hz or unit text such as `10 Hz`.
+- `project.inspect`/events expose `scope_view` and `spectrum.live`: settings,
+  status/reason, run, analyzed start/end and a detached FFT result. Publication
+  changes the state revision, not the command revision; ordinary mutation guards
+  and retry identities still apply. Snapshot reads do not compute FFTs.
+
+Live data/settings are session-only and clear on document replacement. A live
+frame is not a Verify recording, and recorded export/page commands retain their
+existing captured-result target. To keep/export an analysis, make a Verify capture
+and use Recorded. No component, solver, sample-history or integration limit changes.
+
+## Recorded spectrum
 
 After a completed Verify capture, the Inspector's **Spectrum & distortion**
 section analyzes any captured voltage or current probe. Choose the recording,

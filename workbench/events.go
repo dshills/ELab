@@ -52,9 +52,9 @@ func commandEventTopics(command string, documentChanged bool) []string {
 		topics = append(topics, "view")
 	case strings.HasPrefix(command, "button."), strings.HasPrefix(command, "simulation."):
 		topics = append(topics, "simulation", "jobs")
-	case command == "scope.visibility.set", command == "workspace.layout.set", command == "workspace.inspector.set":
+	case command == "scope.view.set", command == "scope.visibility.set", command == "workspace.layout.set", command == "workspace.inspector.set":
 		topics = append(topics, "view", "preferences")
-	case strings.HasPrefix(command, "scope."), strings.HasPrefix(command, "measurement."):
+	case strings.HasPrefix(command, "spectrum."), strings.HasPrefix(command, "scope."), strings.HasPrefix(command, "measurement."):
 		topics = append(topics, "measurements")
 	case strings.HasPrefix(command, "diagnostics."):
 		topics = append(topics, "diagnostics")

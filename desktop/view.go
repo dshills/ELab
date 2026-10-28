@@ -588,11 +588,11 @@ func (s *screen) view() ui.Node {
 	}
 	if scopeAvailable(state) && !sourcePaneHidden(state) {
 		if state.ScopeVisible {
-			root.Children[1] = s.workspaceDock(root.Children[1], s.scopePanel(state), state)
+			root.Children[1] = s.workspaceDock(root.Children[1], s.instrumentPanel(state), state)
 		} else {
 			index := len(root.Children) - 3
 			children := append([]ui.Node{}, root.Children[:index]...)
-			children = append(children, s.scopePanel(state))
+			children = append(children, s.instrumentPanel(state))
 			children = append(children, root.Children[index:]...)
 			root.Children = children
 		}

@@ -9,7 +9,6 @@ import (
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/canvas"
-	"github.com/dshills/vellum/drivers/cogent"
 	"github.com/dshills/vellum/ui"
 )
 
@@ -88,12 +87,11 @@ func (s *screen) spectrumInspector(state workbench.Snapshot) []ui.Node {
 		} else {
 			nodes = append(nodes, quiet("spectrum-thd-unavailable", r.THDReason))
 		}
-		if s.spectrumDrawing == nil {
-			v := canvas.Viewport{Width: 300, Height: 190, Zoom: 1}
-			s.spectrumDrawing = &cogent.MeshCanvas{Owner: s.app, Window: "main", View: &v, Prepare: s.spectrumMesh}
+		if state.ScopeView != "spectrum" {
+			s.ensureSpectrumDrawing()
+			s.spectrumDrawing.Revision = s.spectrumAppearance.next(state.CommandRevision, s.colorsForTheme(state.Theme))
+			nodes = append(nodes, ui.Node{ID: "spectrum-plot", Kind: ui.Extension, Custom: s.spectrumDrawing, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 190})}, Accessibility: ui.Accessibility{Name: "Recorded FFT magnitude in decibels versus frequency in hertz"}})
 		}
-		s.spectrumDrawing.Revision = s.spectrumAppearance.next(state.CommandRevision, s.colorsForTheme(state.Theme))
-		nodes = append(nodes, ui.Node{ID: "spectrum-plot", Kind: ui.Extension, Custom: s.spectrumDrawing, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 190})}, Accessibility: ui.Accessibility{Name: "Recorded FFT magnitude in decibels versus frequency in hertz"}})
 		for _, h := range r.Harmonics {
 			nodes = append(nodes, quiet(fmt.Sprintf("spectrum-harmonic-%d", h.Order), fmt.Sprintf("H%d · %.5g Hz · %.6g %s peak", h.Order, h.Frequency, h.Peak, r.Probe.Unit)))
 		}
@@ -110,10 +108,16 @@ func (s *screen) spectrumInspector(state workbench.Snapshot) []ui.Node {
 func (s *screen) spectrumMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	state := s.service.Snapshot()
 	b := &meshBuilder{}
-	if state.Spectrum == nil || state.Spectrum.Result == nil {
+	if state.Spectrum == nil {
 		return canvas.NewMesh(nil, nil)
 	}
 	r := state.Spectrum.Result
+	if state.ScopeView == "spectrum" && state.Spectrum.Live != nil && state.Spectrum.Live.Settings.Enabled {
+		r = state.Spectrum.Live.Result
+	}
+	if r == nil {
+		return canvas.NewMesh(nil, nil)
+	}
 	if r.Nyquist <= 0 || math.IsNaN(r.Nyquist) || math.IsInf(r.Nyquist, 0) {
 		return canvas.NewMesh(nil, nil)
 	}

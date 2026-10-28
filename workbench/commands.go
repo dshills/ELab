@@ -91,6 +91,9 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(ScopeVisibilityParams{}), "urn:elab:scope-visible:1"},
+	{reflect.TypeOf(ScopeViewParams{}), "urn:elab:scope-view:1"},
+	{reflect.TypeOf(LiveSpectrumInput{}), "urn:elab:live-spectrum-input:1"},
 	{reflect.TypeOf(AnalysisSummary{}), "urn:elab:analysis-summary:1"},
 	{reflect.TypeOf(AnalysisCatalog{}), "urn:elab:analysis-catalog:1"},
 	{reflect.TypeOf(AnalysisPageParams{}), "urn:elab:analysis-page-input:1"},
@@ -338,6 +341,12 @@ func SchemaRegistry() map[string]json.RawMessage {
 		if common.Type == reflect.TypeOf(TransistorProfile{}) {
 			addTransistorProfileSchema(schema)
 		}
+		if common.Type == reflect.TypeOf(LiveSpectrumInput{}) {
+			addLiveSpectrumCapabilityDetails("spectrum.live.set", schema)
+		}
+		if common.Type == reflect.TypeOf(ScopeViewParams{}) {
+			addLiveSpectrumCapabilityDetails("scope.view.set", schema)
+		}
 		if common.Type == reflect.TypeOf(SpectrumInput{}) {
 			schema = timeInputSchema("spectrum.analyze", schema)
 			if property := inputProperty(schema, "fundamental_hz"); property != nil {
@@ -454,6 +463,8 @@ func Catalog() []Capability {
 		typedCapability("tolerance.run", "Run bounded seeded R/C/profile-beta Monte Carlo; empty params use current settings", reflect.TypeOf(ToleranceSettings{})),
 		typedCapability("tolerance.cancel", "Cancel the exact current tolerance run; worker retains its slot until retirement", reflect.TypeOf(IDParams{})),
 		typedCapability("tolerance.export", "Export the exact completed tolerance result and captured provenance as JSON or CSV", reflect.TypeOf(VerificationExportParams{})),
+		typedCapability("scope.view.set", "Select Scope or Spectrum.", reflect.TypeOf(ScopeViewParams{})),
+		typedCapability("spectrum.live.set", "Configure live spectrum.", reflect.TypeOf(LiveSpectrumInput{})),
 		typedCapability("spectrum.settings.set", "Configure recorded FFT interval, probe, window and declared fundamental; session-only, no live circuit or history change", reflect.TypeOf(SpectrumInput{})),
 		typedCapability("spectrum.analyze", "Compute bounded FFT and coherent harmonic THD from an immutable retained recording; empty params use current spectrum settings", reflect.TypeOf(SpectrumInput{})),
 		typedCapability("spectrum.export", "Export the exact completed spectrum as JSON or CSV through the shared asynchronous file workflow", reflect.TypeOf(VerificationExportParams{})),

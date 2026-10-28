@@ -81,7 +81,7 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 		command = "edit.batch"
 	}
 	fields := timeCommandFields[command]
-	if len(fields) == 0 && len(waveformQuantityFields[command]) == 0 && command != "edit.batch" {
+	if len(fields) == 0 && len(waveformQuantityFields[command]) == 0 && command != "edit.batch" && command != "spectrum.live.set" {
 		return raw, nil
 	}
 	if len(raw) == 0 && (command == "spectrum.settings.set" || command == "spectrum.analyze") {
@@ -139,7 +139,7 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 			return nil, err
 		}
 	}
-	if command == "spectrum.settings.set" || command == "spectrum.analyze" {
+	if command == "spectrum.settings.set" || command == "spectrum.analyze" || command == "spectrum.live.set" {
 		quantityRaw := object["fundamental_hz"]
 		if len(quantityRaw) > 0 && quantityRaw[0] == '"' {
 			var text string

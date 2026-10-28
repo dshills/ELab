@@ -7,6 +7,11 @@ import "context"
 // hold Service.mu for all access, including the Locked helpers below. Workers
 // publish only through Service, preserving document/source/revision guards.
 type analysisJobs struct {
+	liveSpectrum          *LiveSpectrumState
+	liveSpectrumSerial    uint64
+	liveSpectrumResultKey liveSpectrumKey
+	liveSpectrumCancel    context.CancelFunc
+
 	tolerance                        *toleranceJob
 	toleranceSettings                *ToleranceSettings
 	toleranceSerial                  uint64

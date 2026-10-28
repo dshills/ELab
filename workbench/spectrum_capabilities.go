@@ -1,6 +1,9 @@
 package workbench
 
 func addSpectrumCapabilityDetails(id string, schema map[string]any) bool {
+	if addLiveSpectrumCapabilityDetails(id, schema) {
+		return true
+	}
 	if id != "spectrum.analyze" && id != "spectrum.settings.set" && id != "spectrum.export" {
 		return false
 	}

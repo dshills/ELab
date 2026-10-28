@@ -101,6 +101,9 @@ func (s *Service) detachDocumentLocked() {
 	s.tolerance = nil
 	s.toleranceSettings = nil
 	s.spectrum = nil
+	s.liveSpectrum = nil
+	s.scopeView = "scope"
+	s.liveSpectrumSerial++
 	s.proposal = nil
 	s.exampleBrowser.Visible = false
 	s.stopViewportFollowingLocked()

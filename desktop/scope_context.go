@@ -45,7 +45,7 @@ func (c *scopeCanvas) applyCursorFrame(frame *scopePlotFrame, px float64, revisi
 		return revision, false
 	}
 	state := c.screen.service.Snapshot()
-	if !state.ScopeVisible || sourcePaneHidden(state) || state.ExampleBrowser.Visible {
+	if !state.ScopeVisible || state.ScopeView == "spectrum" || sourcePaneHidden(state) || state.ExampleBrowser.Visible {
 		return revision, false
 	}
 	if frame.recordingID == "" && (state.Transient == nil || state.Transient.Stale || state.Transient.RunID != frame.runID) {

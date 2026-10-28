@@ -56,9 +56,10 @@ type SpectrumResult struct {
 	Assumptions        []string           `json:"assumptions"`
 }
 type SpectrumState struct {
-	Available []Probe         `json:"available"`
-	Settings  SpectrumParams  `json:"settings"`
-	Result    *SpectrumResult `json:"result,omitempty"`
+	Live      *LiveSpectrumState `json:"live,omitempty"`
+	Available []Probe            `json:"available"`
+	Settings  SpectrumParams     `json:"settings"`
+	Result    *SpectrumResult    `json:"result,omitempty"`
 }
 
 func cloneSpectrumResult(p *SpectrumResult) *SpectrumResult {
@@ -80,6 +81,7 @@ func cloneSpectrum(p *SpectrumState) *SpectrumState {
 		return nil
 	}
 	v := *p
+	v.Live = cloneLiveSpectrumState(p.Live)
 	v.Result = cloneSpectrumResult(p.Result)
 	v.Available = append([]Probe{}, p.Available...)
 	return &v
@@ -309,6 +311,7 @@ func (s *Service) spectrumViewLocked() *SpectrumState {
 			}
 		}
 	}
+	v.Live = s.liveSpectrumViewLocked()
 	return v
 }
 func (s *Service) spectrumCommandLocked(command string, raw json.RawMessage) error {
