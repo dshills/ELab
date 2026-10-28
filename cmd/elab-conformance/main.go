@@ -17,19 +17,20 @@ import (
 )
 
 type adapterResult struct {
-	ProjectContracts    *conformance.ProjectContractResult `json:"project_contracts,omitempty"`
-	Name                string                             `json:"name"`
-	Equivalent          bool                               `json:"equivalent_to_in_process"`
-	Workflows           []conformance.Result               `json:"workflows"`
-	Electrical          *conformance.ElectricalResult      `json:"electrical,omitempty"`
-	Inductors           *conformance.InductorResult        `json:"inductors,omitempty"`
-	OpAmps              *conformance.OpAmpSuiteResult      `json:"opamps,omitempty"`
-	OpAmpStorage        *conformance.OpAmpStorageResult    `json:"opamp_storage,omitempty"`
-	Capacity            *conformance.CapacityResult        `json:"capacity,omitempty"`
-	Performance         *conformance.PerformanceResult     `json:"performance,omitempty"`
-	InductorPerformance *conformance.PerformanceResult     `json:"inductor_performance,omitempty"`
-	OpAmpPerformance    *conformance.PerformanceResult     `json:"opamp_performance,omitempty"`
-	CapacityPerformance *conformance.PerformanceResult     `json:"capacity_performance,omitempty"`
+	AnalysisBoundaries  []conformance.AnalysisBoundaryResult `json:"analysis_boundaries,omitempty"`
+	ProjectContracts    *conformance.ProjectContractResult   `json:"project_contracts,omitempty"`
+	Name                string                               `json:"name"`
+	Equivalent          bool                                 `json:"equivalent_to_in_process"`
+	Workflows           []conformance.Result                 `json:"workflows"`
+	Electrical          *conformance.ElectricalResult        `json:"electrical,omitempty"`
+	Inductors           *conformance.InductorResult          `json:"inductors,omitempty"`
+	OpAmps              *conformance.OpAmpSuiteResult        `json:"opamps,omitempty"`
+	OpAmpStorage        *conformance.OpAmpStorageResult      `json:"opamp_storage,omitempty"`
+	Capacity            *conformance.CapacityResult          `json:"capacity,omitempty"`
+	Performance         *conformance.PerformanceResult       `json:"performance,omitempty"`
+	InductorPerformance *conformance.PerformanceResult       `json:"inductor_performance,omitempty"`
+	OpAmpPerformance    *conformance.PerformanceResult       `json:"opamp_performance,omitempty"`
+	CapacityPerformance *conformance.PerformanceResult       `json:"capacity_performance,omitempty"`
 }
 type report struct {
 	Passed      bool            `json:"passed"`
@@ -54,6 +55,7 @@ func run() error {
 	opamps := flag.Bool("opamp-suite", false, "also verify powered amplifier references, mixed RC/NPN and two-buffer RC/MOSFET circuits, captures and save/reopen")
 	opampStorage := flag.Bool("opamp-storage-suite", false, "also verify buffered RLC and RC/PMOS references, refinement, fresh reopen and corrupted recording/project refusal")
 	projectContracts := flag.Bool("project-contract-suite", false, "also discover eight project contracts and exercise owned save/open/conflict/clear/job workflows")
+	analysisBoundaries := flag.Bool("analysis-boundaries", false, "also run 3/18/64-part, maximum-width DC/AC/noise save/reopen/edit workflows")
 	capacity := flag.Bool("capacity-suite", false, "also construct 100-node and 64-part networks, verify four-stage RC/MOSFET references and over-limit edit/save/reopen behavior")
 	performance := flag.Bool("performance-suite", false, "also measure fresh/warm backend edit/result and Verify latency in owned sessions")
 	inductorPerformance := flag.Bool("inductor-performance-suite", false, "also measure RL/RLC/flyback/mixed NPN-coil fresh/warm timing, 200 ms Verify at 1 ms outputs")
@@ -98,6 +100,7 @@ func run() error {
 	var inductorReference *conformance.InductorResult
 	var opAmpReference *conformance.OpAmpSuiteResult
 	var opAmpStorageReference *conformance.OpAmpStorageResult
+	var boundaryReference []conformance.AnalysisBoundaryResult
 	var capacityReference *conformance.CapacityResult
 	var projectReference *conformance.ProjectContractResult
 	for _, mode := range modes {
@@ -192,6 +195,22 @@ func run() error {
 			if qualificationErr != nil {
 				result.Adapters = append(result.Adapters, adapter)
 				return writeFailure(dir, result, fmt.Errorf("%s op-amp storage suite: %w", mode.name, qualificationErr))
+			}
+		}
+		if *analysisBoundaries {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+			qualified, qualificationErr := conformance.RunAnalysisBoundaries(ctx, mode.factory, filepath.Join(dir, mode.name, "analysis-boundaries"))
+			cancel()
+			adapter.AnalysisBoundaries = qualified
+			if qualificationErr == nil {
+				if boundaryReference == nil {
+					boundaryReference = qualified
+				}
+				qualificationErr = conformance.CompareAnalysisBoundaries(boundaryReference, qualified)
+			}
+			if qualificationErr != nil {
+				result.Adapters = append(result.Adapters, adapter)
+				return writeFailure(dir, result, fmt.Errorf("%s analysis boundaries: %w", mode.name, qualificationErr))
 			}
 		}
 		if *capacity {
