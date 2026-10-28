@@ -113,6 +113,7 @@ func (s *Service) navigateLocked(p NavigateParams) error {
 }
 
 func (s *Service) fitViewLocked(p FitParams) (View, error) {
+	drawing := s.graph.VisibleGraph()
 	minX, minY, maxX, maxY := math.Inf(1), math.Inf(1), math.Inf(-1), math.Inf(-1)
 	include := func(a, b Point) {
 		minX = min(minX, a.X)
@@ -130,7 +131,7 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 		text string
 	}
 	captions := []caption{}
-	for _, c := range s.graph.Components {
+	for _, c := range drawing.Components {
 		left, right, top, bottom := BodyBounds(c)
 		include(Point{left - 4, top - 4}, Point{right + 4, bottom + 4})
 		if !annotated[c.ID] {
@@ -145,11 +146,11 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 			}
 		}
 	}
-	for _, w := range s.graph.Wires {
+	for _, w := range drawing.Wires {
 		// Fit the deterministic route used by both drawing and output, rather
 		// than its much larger path-finder search envelope. WirePath owns its
 		// result and caches by the complete graph/route input.
-		for _, at := range WirePath(s.graph, w) {
+		for _, at := range WirePath(drawing, w) {
 			include(Point{at.X - 4, at.Y - 4}, Point{at.X + 4, at.Y + 4})
 		}
 	}
@@ -158,6 +159,9 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 		include(a, b)
 	}
 	for _, a := range annotations {
+		if _, ok := drawing.Component(a.ID); !ok {
+			continue
+		}
 		lo, hi := SourceAnnotationBounds(a)
 		include(lo, hi)
 	}
@@ -173,7 +177,10 @@ func (s *Service) fitViewLocked(p FitParams) (View, error) {
 			include(lo, hi)
 		}
 		for _, a := range annotations {
-			part, _ := s.graph.Component(a.ID)
+			part, visible := drawing.Component(a.ID)
+			if !visible {
+				continue
+			}
 			layout := LayoutCanvasAnnotation(a, part.Rotation, zoom)
 			for i, line := range a.Lines {
 				lo, hi := CanvasTextBounds(layout.Position(line, i), line, layout.Scale)

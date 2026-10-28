@@ -176,7 +176,7 @@ func TestViewportIsSessionOnlyAndSavedViewSurvivesOpen(t *testing.T) {
 func assertViewportContainsSchematic(t *testing.T, state Snapshot) {
 	t.Helper()
 	v := state.Viewport
-	g := Graph{Components: state.Components, Wires: state.Wires}
+	g := (Graph{Components: state.Components, Wires: state.Wires}).VisibleGraph()
 	check := func(p Point) {
 		x := (p.X-state.View.Center.X)*state.View.Zoom + v.Width/2
 		y := (p.Y-state.View.Center.Y)*state.View.Zoom + v.Height/2
@@ -207,6 +207,9 @@ func assertViewportContainsSchematic(t *testing.T, state Snapshot) {
 		}
 	}
 	for _, a := range state.SourceAnnotations {
+		if _, visible := g.Component(a.ID); !visible {
+			continue
+		}
 		lo, hi := SourceAnnotationBounds(a)
 		check(lo)
 		check(hi)

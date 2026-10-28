@@ -40,6 +40,7 @@ func detailedCapabilities(id string) ([]Capability, error) {
 			return nil, err
 		}
 		cap.Input = data
+		cap.Description = cap.fullDescription
 		return []Capability{cap}, nil
 	}
 	return nil, &actionError{"not-found", "unknown command; choose an ID from capabilities.list"}
@@ -67,6 +68,9 @@ type inputRelation struct {
 }
 
 func addCapabilityDetails(id string, schema map[string]any) {
+	if addBlockCapabilityDetails(id, schema) {
+		return
+	}
 	if addToleranceCapabilityDetails(id, schema) {
 		return
 	}

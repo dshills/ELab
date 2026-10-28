@@ -58,6 +58,7 @@ func ExampleCatalog() []ExampleInfo { return slices.Clone(immutableExampleCatalo
 
 func buildExampleCatalog() []ExampleInfo {
 	catalog := []ExampleInfo{
+		{ID: "rc-block", Title: "Reusable RC circuit block", Question: "Can a named block keep a simple circuit easy to reuse?", Expected: "The same 1k/1µF RC charges with a 1ms time constant behind named in/out/ground pins. Every physical member remains inspectable.", Try: "Select FILTER, edit resistance/capacitance, or Show internals. Copy block, create a new drawing, then Document → Circuit blocks → Paste copied block.", Limitation: "Single-level ordinary-component grouping; every primitive counts against existing limits. Ground is common; nested blocks and net-label members are refused. Clipboard is session-only; project files retain complete instances."},
 		{ID: "buck", Title: "PWM buck converter", Question: "PWM buck converter", Expected: "Duty changes the switched LC output; close SLOAD for a load step. This is an open-loop converter, not a regulated feedback supply.", Try: "Select PWM and change Duty, then compare C1 voltage and inductor current. Close SLOAD for a load step.", Limitation: ExtendedDeviceModel().PWM},
 		{ID: "opamp-slew", Title: "Op-amp slew-limited follower", Question: "Op-amp slew-limited follower", Expected: "The output takes finite time to follow each input edge. Disable dynamics to compare the original model.", Try: "Select U1 and change slew rate. Compare input and output edges, then disable dynamics to compare the original model.", Limitation: ExtendedDeviceModel().Dynamics},
 		{ID: "opamp-bandwidth", Title: "Op-amp bandwidth limit", Question: "Op-amp bandwidth limit", Expected: "A 1 kHz, 10 mV input is attenuated near the configured 1 kHz gain-bandwidth. Change input frequency or use an AC sweep.", Try: "Change VIN frequency or U1 gain-bandwidth and compare the traces. Run an AC sweep to see the frequency response.", Limitation: ExtendedDeviceModel().Dynamics},
@@ -450,6 +451,10 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.selected = "Q6"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0005, .02
 		d.probes = []string{"v:VIN.positive", "v:RL", "i:Q6.collector", "i:Q7.collector", "i:Q8.collector", "v:C1"}
+	case "rc-block":
+		d.graph, d.selected = RCBlockExampleGraph(), "FILTER"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00002, .01
+		d.probes = []string{"v:C1", "i:C1", "v:V1.positive"}
 	case "feedback-loop":
 		d.graph, d.selected = FeedbackLoopExampleGraph(), "U1"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0001, .02

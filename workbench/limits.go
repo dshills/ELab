@@ -60,7 +60,7 @@ func Limits() CircuitLimits {
 func SimulatedComponentCount(g Graph) int {
 	count := 0
 	for _, p := range g.Components {
-		if p.Kind != "ground" && !IsConnectivityPrimitive(p.Kind) {
+		if p.Kind != "ground" && p.Kind != "circuit-block" && !IsConnectivityPrimitive(p.Kind) {
 			count++
 		}
 	}

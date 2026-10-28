@@ -1,0 +1,314 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "aaf3af3cbcfc4e6f507dac92836b064b",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "ec8f8be5b32247bcb9f1bd8e24075972f709cad2",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 8,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "75132c38a5453a91",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Block hit box and outline use same size with different semantics",
+      "message": "`hitComponent` treats `width`/`height` as half-extents: it tests `math.Abs(local.X) \u003c= width`. `drawing.go` passes the same `BlockBodySize(part)+30/+8` values to the selection outline, and that code used full sizes before this change (230 wide, `2*h+20` tall).\n\nBoth sites now use identical numbers but read them differently. Either the block hit area is twice the drawn body, or the outline is half the body. The old code made the same distinction: hit width 90 against outline 230.\n\nIf the hit box is too large, a block can grab clicks meant for nearby parts or terminals. That works against the goal of not acquiring positions outside visible geometry.",
+      "suggestion": "Make the meaning of `BlockBodySize` explicit (full size or half-extents). Then halve its result in `hitComponent`, or double it for the outline, so both match the drawn symbol. Add a test that clicks just outside the drawn block body and expects no hit.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/canvas.go",
+          "lines": {
+            "start": 117,
+            "end": 119
+          }
+        }
+      ],
+      "tags": [
+        "hit-testing",
+        "geometry"
+      ],
+      "evidence": "\t\t\twidth, height = workbench.BlockBodySize(part)\n\t\t\twidth += 30\n\t\t\theight += 8",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5992fdb757c4c0ec",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unbounded recursion resolving expanded block ports",
+      "message": "`TerminalPoint` now follows an expanded block's port to `p.Terminal` with no depth limit or visited set. A port that points back at its own block, or a cycle between nested expanded blocks, recurses forever and overflows the stack. This can happen if `validateBlocks` does not exclude it, or if the call runs on a graph that was never validated, such as a preview or disposable graph. `TerminalPoint` is used in routing and junction validation, so the panic would hit hot paths.",
+      "suggestion": "Resolve the port iteratively with a visited set, or cap the depth. On a cycle, return `false` or fall back to `TerminalPosition` of the block pin.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/graph.go",
+          "lines": {
+            "start": 501,
+            "end": 501
+          }
+        }
+      ],
+      "tags": [
+        "recursion",
+        "blocks",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\treturn g.TerminalPoint(p.Terminal)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "2605d920dcede9d5",
+      "severity": "low",
+      "category": "docs",
+      "title": "Missing spaces in research notes",
+      "message": "The new paragraph is missing spaces between words and numbers: \"completed10/10\", \"Opus5.5\", \"passes54.981s\", \"pass1.861/1.843s\", \"is58\", \"/216\", \"/79\", \"/277\". This makes the record hard to read and search.",
+      "suggestion": "Add the missing spaces, e.g. \"completed 10/10 Anthropic Opus 5.5 chunks\", \"passes 54.981s\", \"is 58 physical kinds / 216 commands / 79 examples\".",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "research/125-blocks-thermal-noise-optical-thyristors.md",
+          "lines": {
+            "start": 46,
+            "end": 56
+          }
+        }
+      ],
+      "tags": [
+        "typo"
+      ],
+      "evidence": "Initial block Prism review completed10/10 Anthropic Opus5.5 chunks (nine medium,",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6b49ebd2d85117af",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Inconsistent sentinel wrapping of position errors",
+      "message": "Paste wraps position failures with the `errBlockPosition` sentinel. Create, move, view.set and release return the raw error instead. Any caller that classifies errors with `errors.Is(err, errBlockPosition)` will treat these identical collisions differently.",
+      "suggestion": "Wrap `validatePositions` errors consistently with `errBlockPosition` everywhere, or have `validatePositions` return an error that already wraps the sentinel.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/blocks.go",
+          "lines": {
+            "start": 305,
+            "end": 309
+          }
+        }
+      ],
+      "tags": [
+        "errors"
+      ],
+      "evidence": "\tif err := g.validatePositions(); err != nil {\n\t\treturn err\n\t}\n\ts.graph = g\n\ts.usedIDs[p.ID] = true",
+      "fix": {
+        "before": "\tif err := g.validatePositions(); err != nil {\n\t\treturn err\n\t}\n\ts.graph = g\n\ts.usedIDs[p.ID] = true",
+        "after": "\tif err := g.validatePositions(); err != nil {\n\t\treturn fmt.Errorf(\"%w: %v\", errBlockPosition, err)\n\t}\n\ts.graph = g\n\ts.usedIDs[p.ID] = true"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "31b381b2394dd3c0",
+      "severity": "low",
+      "category": "performance",
+      "title": "validatePositions is super-linear",
+      "message": "`positionScope` calls `g.Component` and `g.blockOwner` for every component, and both likely scan the full component list and block members. That makes validation quadratic or worse. It now runs on every block move, paste, create, view toggle and release.",
+      "suggestion": "Before the loop, precompute an `id-\u003ecomponent` map and a `member-\u003eowner` map once. Then derive scopes in O(n).",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/blocks.go",
+          "lines": {
+            "start": 597,
+            "end": 606
+          }
+        }
+      ],
+      "tags": [
+        "complexity"
+      ],
+      "evidence": "\tfor _, c := range g.Components {\n\t\tk := key{g.positionScope(c.ID), c.Position}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8c976f1604cbfd7c",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Collision error text is misleading for create/move/paste",
+      "message": "`validatePositions` now runs for create, paste and move as well as view/release. Every caller gets the same message about \"showing or releasing its internals\". For a plain block creation or move collision, that tells the user the wrong thing.",
+      "suggestion": "Return a neutral error from `validatePositions`, for example including the conflicting component IDs. Let each caller wrap it with context suited to that operation.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/blocks.go",
+          "lines": {
+            "start": 603,
+            "end": 603
+          }
+        }
+      ],
+      "tags": [
+        "ux",
+        "errors"
+      ],
+      "evidence": "return fmt.Errorf(\"visible grid position is occupied; move the block to a free area before showing or releasing its internals\")",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "0e609135b302f5e2",
+      "severity": "low",
+      "category": "testing",
+      "title": "Collision test lacks post-reload assertions",
+      "message": "The test saves and reloads after expansion but never asserts on the reloaded state. It does not check that EXTERNAL and the members kept their positions or that FILTER is still expanded. It also never checks that the refused commands left the graph unchanged.",
+      "suggestion": "Capture snapshots before and after the refusals and compare them. After reload, assert that the components equal those from before the save, including `Block.Expanded`.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/blocks_test.go",
+          "lines": {
+            "start": 340,
+            "end": 357
+          }
+        }
+      ],
+      "tags": [
+        "assertions"
+      ],
+      "evidence": "\tcall(t, s, \"project.load\", LoadParams{Path: path, DiscardChanges: true}, \"reopen\")\n\tsettled(t, s)\n}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5a3548318461e414",
+      "severity": "low",
+      "category": "bug",
+      "title": "`break` guard may exit the enclosing loop rather than the case",
+      "message": "The new `break` guard only works if this code sits directly inside a `switch` case. If it is in a `for` loop body, or in an `if` inside the components loop, `break` ends the whole component loop. Every component after a block-less circuit-block would then be dropped from the exported SVG.",
+      "suggestion": "Confirm the enclosing statement. To make the intent explicit, guard the port loop with `if p.Block != nil { for ... }` instead of using `break`.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/export.go",
+          "lines": {
+            "start": 377,
+            "end": 379
+          }
+        }
+      ],
+      "tags": [
+        "control-flow"
+      ],
+      "evidence": "\t\t\tif p.Block == nil {\n\t\t\t\tbreak\n\t\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d05698a75c4a3a1c",
+      "severity": "low",
+      "category": "performance",
+      "title": "`VisibleGraph` recomputed on every `WirePath` call",
+      "message": "`WirePath` now rebuilds `VisibleGraph()` and scans every wire on each call, before the cache lookup. Callers such as `fitViewLocked` already pass a visible graph and call `WirePath` once per wire, so a full graph is rebuilt per wire (O(W·(N+W))). This is repeated on every render, fit and export.",
+      "suggestion": "Skip the rebuild when the graph is already visible, for example with a flag or an idempotence check. Alternatively, have callers pass the visible graph and do the conversion once per batch.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/routing.go",
+          "lines": {
+            "start": 97,
+            "end": 104
+          }
+        }
+      ],
+      "tags": [
+        "routing",
+        "cache"
+      ],
+      "evidence": "\tif g.hasBlocks() {\n\t\tg = g.VisibleGraph()",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5627538928aaf278",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Block body bounds now include route padding",
+      "message": "For block components, `BodyBounds` used to return the exact body half-size. It now goes through `routeBody`, which adds 4 units of routing padding on every side. Every rendering, hit-testing and fit computation that uses `BodyBounds` for blocks changes size. Fit code also adds its own 4-unit margin on top, so block bounds are now padded twice.",
+      "suggestion": "Check whether the padding is intended for block presentation bounds. If not, compute the block case from `BlockBodySize` directly, without the +4 margin.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/routing.go",
+          "lines": {
+            "start": 261,
+            "end": 265
+          }
+        }
+      ],
+      "tags": [
+        "geometry"
+      ],
+      "evidence": "\tr := routeBody(p)\n\treturn r.left, r.right, r.top, r.bottom",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 66267,
+    "totalMs": 24381
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 21,
+    "bytes": 84062,
+    "chunks": 4,
+    "llmCalls": 4,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 50690,
+        "output": 6503,
+        "costUSD": 0.33282
+      }
+    ],
+    "widenedFiles": 13,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

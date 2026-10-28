@@ -124,7 +124,7 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 		case "led", "diode", "zener", "schottky":
 			set("anode", p.ID, 1)
 			set("cathode", p.ID, -1)
-		case "ground", "junction", "net-label":
+		case "ground", "junction", "net-label", "circuit-block":
 		default:
 			for _, pin := range p.Terminals {
 				known[p.ID+"."+pin] = false
@@ -136,6 +136,13 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 	for _, w := range g.Wires {
 		if w.Connected {
 			edges = append(edges, edge{w.From, w.To, w.ID})
+		}
+	}
+	for _, part := range g.Components {
+		if part.Block != nil {
+			for _, pin := range part.Block.Ports {
+				edges = append(edges, edge{part.ID + "." + pin.Name, pin.Terminal, ""})
+			}
 		}
 	}
 	labels := map[string]string{}

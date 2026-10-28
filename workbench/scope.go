@@ -76,6 +76,13 @@ type CursorSelectParams struct {
 
 func probeInventory(g Graph) []Probe {
 	out := []Probe{}
+	aliases := g.blockAliases()
+	canonical := func(ref string) string {
+		if internal, ok := aliases[ref]; ok {
+			return internal
+		}
+		return ref
+	}
 	for _, p := range g.Components {
 		for _, pin := range p.Terminals {
 			ref := p.ID + "." + pin
@@ -83,10 +90,10 @@ func probeInventory(g Graph) []Probe {
 			if p.Kind == "net-label" {
 				name = p.Label + " / ground"
 			}
-			out = append(out, Probe{"v:" + ref, name, "V", ref, "ground"})
+			out = append(out, Probe{"v:" + ref, name, "V", canonical(ref), "ground"})
 		}
 		if len(p.Terminals) == 2 {
-			out = append(out, Probe{"v:" + p.ID, p.ID + " voltage", "V", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]})
+			out = append(out, Probe{"v:" + p.ID, p.ID + " voltage", "V", canonical(p.ID + "." + p.Terminals[0]), canonical(p.ID + "." + p.Terminals[1])})
 		}
 		switch p.Kind {
 		case "thermistor", "ldr", "pushbutton", "bouncing-pushbutton", "resistor", "capacitor", "inductor", "led", "switch", "diode", "zener", "schottky":

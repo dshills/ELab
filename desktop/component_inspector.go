@@ -12,6 +12,9 @@ import (
 // content so they remain reachable in a short inspector. All controls retain
 // their ordinary shared commands and the assembled view's revision binding.
 func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Graph, part workbench.Component) []ui.Node {
+	if part.Block != nil {
+		return s.blockInspector(state, part)
+	}
 	inspector := []ui.Node{}
 	terminals := "Terminals: " + strings.Join(part.Terminals, ", ")
 	if part.Kind == "timer555" {

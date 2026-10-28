@@ -103,6 +103,7 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 		}
 		pages[section] = append(pages[section], group)
 	}
+	pages["document"] = append(pages["document"], inspectorGroup("blocks", "Circuit blocks", s.blockLibraryControls(state))...)
 	pages["document"] = append(pages["document"], inspectorGroup("document-actions", "Share and print", document)...)
 	pages["document"] = append(pages["document"], inspectorGroup("document-help", "Help and examples", append(help, experiment...))...)
 	pages["simulation"] = append(pages["simulation"], inspectorGroup("experiment", "Experiment", experiment)...)

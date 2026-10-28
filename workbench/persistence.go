@@ -203,6 +203,16 @@ func decodeDocument(data []byte) (Document, error) {
 		// from these terminals. Check their library shape before indexing any
 		// untrusted saved array; full component metadata is still checked below.
 		terminals, known := terminalDefinitions[p.Kind]
+		if p.Kind == "circuit-block" && p.Block != nil {
+			terminals = make([]string, len(p.Block.Ports))
+			for k, pin := range p.Block.Ports {
+				terminals[k] = pin.Name
+			}
+			known = true
+			if err := paramsNested(component, "block", &CircuitBlock{}, "version", "members", "ports", "parameters", "expanded"); err != nil {
+				return d, err
+			}
+		}
 		if !known || !reflect.DeepEqual(p.Terminals, terminals) {
 			return d, fmt.Errorf("component %d has invalid kind or terminal metadata", index+1)
 		}
@@ -466,7 +476,7 @@ func decodeDocument(data []byte) (Document, error) {
 		return d, fmt.Errorf("invalid saved viewport")
 	}
 	ids := map[string]bool{}
-	positions := map[Point]bool{}
+
 	for _, c := range d.Graph.Components {
 		value := ""
 		if c.Kind == "net-label" {
@@ -479,6 +489,10 @@ func decodeDocument(data []byte) (Document, error) {
 			value = ""
 		}
 		expected, err := MakeComponent(c.ID, c.Kind, c.Position, value)
+		if c.Kind == "circuit-block" && c.Block != nil {
+			expected = blockComponent(c.ID, c.Name, c.Position, c.Block)
+			_, err = snapPoint(c.Position)
+		}
 		if err != nil {
 			return d, err
 		}
@@ -572,11 +586,10 @@ func decodeDocument(data []byte) (Document, error) {
 		if !reflect.DeepEqual(expected, c) {
 			return d, fmt.Errorf("invalid component metadata, model, value, or grid position on %s", c.ID)
 		}
-		if ids[c.ID] || positions[c.Position] {
+		if ids[c.ID] {
 			return d, fmt.Errorf("duplicate object ID or occupied position on %s", c.ID)
 		}
 		ids[c.ID] = true
-		positions[c.Position] = true
 	}
 	pairs := map[string]bool{}
 	for _, w := range d.Graph.Wires {
@@ -599,6 +612,12 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 		ids[w.ID] = true
 		pairs[pair] = true
+	}
+	if err := d.Graph.validatePositions(); err != nil {
+		return d, err
+	}
+	if err := d.Graph.validateBlocks(); err != nil {
+		return d, err
 	}
 	return d, nil
 }

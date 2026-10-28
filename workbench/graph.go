@@ -20,6 +20,7 @@ func ExampleGraph() Graph { c := DefaultCircuit(); return Graph{Components(c), W
 func (g Graph) Clone() Graph {
 	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
 	for i := range out.Components {
+		out.Components[i].Block = cloneBlock(out.Components[i].Block)
 		out.Components[i].Device = cloneDeviceParameters(out.Components[i].Device)
 		out.Components[i].Power = clonePower(out.Components[i].Power)
 		out.Components[i].Terminals = append([]string{}, out.Components[i].Terminals...)
@@ -111,6 +112,20 @@ func (g Graph) Summary() Circuit {
 	return c
 }
 func ElectricalEqual(a, b Graph) bool {
+	if a.hasBlocks() {
+		var err error
+		a, err = a.PhysicalGraph()
+		if err != nil {
+			return false
+		}
+	}
+	if b.hasBlocks() {
+		var err error
+		b, err = b.PhysicalGraph()
+		if err != nil {
+			return false
+		}
+	}
 	a = a.Clone()
 	b = b.Clone()
 	for i := range a.Components {
@@ -344,6 +359,11 @@ func RotateLocal(p Point, degrees int) Point {
 	return p
 }
 func TerminalPosition(c Component, name string) (Point, bool) {
+	if c.Block != nil {
+		p, ok := blockPinLocal(c, name)
+		p = RotateLocal(p, c.Rotation)
+		return Point{X: p.X + c.Position.X, Y: p.Y + c.Position.Y}, ok
+	}
 	p := Point{}
 	found := true
 	switch c.Kind {
@@ -475,6 +495,17 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 	return Point{p.X + c.Position.X, p.Y + c.Position.Y}, found
 }
 func (g Graph) TerminalPoint(ref string) (Point, bool) {
+	if c, pin, ok := g.Terminal(ref); ok && c.Block != nil && c.Block.Expanded {
+		for _, p := range c.Block.Ports {
+			if p.Name == pin {
+				member, terminal, exists := g.Terminal(p.Terminal)
+				if !exists || member.Block != nil || member.Kind == "circuit-block" {
+					return Point{}, false
+				}
+				return TerminalPosition(member, terminal)
+			}
+		}
+	}
 	c, name, ok := g.Terminal(ref)
 	if !ok {
 		return Point{}, false
@@ -502,6 +533,19 @@ type Compiled struct {
 // Compile derives nets from explicit terminal connections and matching named labels. Coordinates,
 // line crossings, drawing order, IDs, and symbol rotation never create a net.
 func (g Graph) Compile() (Compiled, string, *Diagnostic) {
+	if g.hasBlocks() {
+		physical, err := g.PhysicalGraph()
+		if err != nil {
+			return Compiled{}, "error", &Diagnostic{"invalid-block", err.Error(), ""}
+		}
+		c, status, d := physical.Compile()
+		if d == nil {
+			for alias, ref := range g.blockAliases() {
+				c.TerminalNet[alias] = c.TerminalNet[ref]
+			}
+		}
+		return c, status, d
+	}
 	out := Compiled{TerminalNet: map[string]string{}, Nets: []Net{}}
 	parent := map[string]string{}
 	var root func(string) string

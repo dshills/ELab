@@ -1,0 +1,685 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "4d68dd554cc04cbf7a2f74c81cec0369",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "ec8f8be5b32247bcb9f1bd8e24075972f709cad2",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 14,
+      "medium": 9,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "bda7079526ab9075",
+      "severity": "medium",
+      "category": "bug",
+      "title": "terminalHit not restricted to visible graph",
+      "message": "`hitComponent`, `hitWire` and drawing now filter through `VisibleGraph()`, so members of a collapsed block are hidden. `terminalHit`, defined just above, is unchanged in this diff. If it still scans `state.Components` directly, clicks can land on terminals of hidden members. Users could then start wires on parts they cannot see.",
+      "suggestion": "In `terminalHit`, filter `state.Components` and `state.Wires` through `VisibleGraph()`, as `hitComponent` and `hitWire` now do.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/canvas.go",
+          "lines": {
+            "start": 171,
+            "end": 171
+          }
+        }
+      ],
+      "tags": [
+        "blocks",
+        "hit-testing"
+      ],
+      "evidence": "func wirePath(graph workbench.Graph, w workbench.Wire) []canvas.Point {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "e790d0eb02d989b0",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Parameter set mutates live component slice in place",
+      "message": "The parameter update writes directly into `s.graph.Components`. Other commands clone the graph and then replace `s.graph`. Any prior snapshot that shares the Components backing array, such as an undo entry, would have its member value overwritten. That breaks the documented promise that value edits participate in ordinary document history.",
+      "suggestion": "Clone the graph, assign the updated component into the clone, then set `s.graph = g`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/blocks.go",
+          "lines": {
+            "start": 436,
+            "end": 440
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "history"
+      ],
+      "evidence": "\t\t\t\t\t\tnext, err := SetValue(c, p.Value)\n\t\t\t\t\t\tif err != nil {\n\t\t\t\t\t\t\treturn err\n\t\t\t\t\t\t}\n\t\t\t\t\t\ts.graph.Components[k] = next",
+      "fix": {
+        "before": "\t\t\t\t\t\tnext, err := SetValue(c, p.Value)\n\t\t\t\t\t\tif err != nil {\n\t\t\t\t\t\t\treturn err\n\t\t\t\t\t\t}\n\t\t\t\t\t\ts.graph.Components[k] = next",
+        "after": "\t\t\t\t\t\tnext, err := SetValue(c, p.Value)\n\t\t\t\t\t\tif err != nil {\n\t\t\t\t\t\t\treturn err\n\t\t\t\t\t\t}\n\t\t\t\t\t\tg := s.graph.Clone()\n\t\t\t\t\t\tg.Components[k] = next\n\t\t\t\t\t\ts.graph = g"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6092ae40002039ab",
+      "severity": "medium",
+      "category": "bug",
+      "title": "View toggle mutates shared Block pointer in place",
+      "message": "`block.view.set` writes through the shared `*CircuitBlock` pointer on the live graph. Every other mutation here follows a copy-on-write pattern: clone the graph, edit the clone, then assign it to `s.graph`. If history snapshots, the clipboard or other graph copies share the backing slice or the `Block` pointer, this edit silently changes them too. That can corrupt undo/redo state and earlier snapshots.",
+      "suggestion": "Clone the graph and the block before modifying the `Expanded` flag, then assign the clone to `s.graph`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/blocks.go",
+          "lines": {
+            "start": 456,
+            "end": 461
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "history",
+        "location-corrected"
+      ],
+      "evidence": "\t\tfor k, c := range s.graph.Components {\n\t\t\tif c.ID == p.ID \u0026\u0026 c.Block != nil {\n\t\t\t\ts.graph.Components[k].Block.Expanded = p.Expanded\n\t\t\t\treturn nil\n\t\t\t}\n\t\t}",
+      "fix": {
+        "before": "\t\tfor k, c := range s.graph.Components {\n\t\t\tif c.ID == p.ID \u0026\u0026 c.Block != nil {\n\t\t\t\ts.graph.Components[k].Block.Expanded = p.Expanded\n\t\t\t\treturn nil\n\t\t\t}\n\t\t}",
+        "after": "\t\tfor k, c := range s.graph.Components {\n\t\t\tif c.ID == p.ID \u0026\u0026 c.Block != nil {\n\t\t\t\tg := s.graph.Clone()\n\t\t\t\tb := cloneBlock(g.Components[k].Block)\n\t\t\t\tb.Expanded = p.Expanded\n\t\t\t\tg.Components[k].Block = b\n\t\t\t\ts.graph = g\n\t\t\t\treturn nil\n\t\t\t}\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ab437ab6a77ff6e3",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Aliasing check inspects the wrong graph",
+      "message": "`physical` comes from `g.PhysicalGraph()`, but the test checks `original`. `original` is a separate graph built by `StepResponseExampleGraph()`. This check can never fail, so a `PhysicalGraph` that aliases `g`'s component slice would go undetected.",
+      "suggestion": "Compare against the source graph `g`, for example `if g.Components[0].Name == \"changed\"`.",
+      "confidence": 0.75,
+      "locations": [
+        {
+          "path": "workbench/blocks_test.go",
+          "lines": {
+            "start": 56,
+            "end": 57
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "test-gap",
+        "location-corrected"
+      ],
+      "evidence": "\tphysical.Components[0].Name = \"changed\"\n\tif original.Components[0].Name == \"changed\" {",
+      "fix": {
+        "before": "\tphysical.Components[0].Name = \"changed\"\n\tif original.Components[0].Name == \"changed\" {",
+        "after": "\tphysical.Components[0].Name = \"changed\"\n\tif g.Components[0].Name == \"changed\" {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "874b2aa01bf28528",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Internal state accessed without the service mutex",
+      "message": "The test calls `documentLocked()` without holding `s.mu`. Line 107 likewise reads `s.blockClipboard` directly without the lock. The service runs background goroutines for simulation and operations, so these unlocked reads can race and make tests flaky under `-race`. Elsewhere the test does take `s.mu` before reading internals. The marshal error is also discarded.",
+      "suggestion": "Wrap the internal accesses in `s.mu.Lock()`/`s.mu.Unlock()` and check the marshal error.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/blocks_test.go",
+          "lines": {
+            "start": 180,
+            "end": 180
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "locking",
+        "location-corrected"
+      ],
+      "evidence": "\traw, _ := json.Marshal(s.documentLocked())",
+      "fix": {
+        "before": "\traw, _ := json.Marshal(s.documentLocked())",
+        "after": "\ts.mu.Lock()\n\traw, err := json.Marshal(s.documentLocked())\n\ts.mu.Unlock()\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "af2b059752af1643",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible nil dereference of p.Block in circuit-block render",
+      "message": "The bounds loop guards `p.Block != nil`, which implies Block can be nil. The rendering branch dereferences `p.Block.Ports` with no check. A `circuit-block` component with a nil Block, for example from a malformed or legacy document, panics during export.",
+      "suggestion": "Guard the port loop with `if p.Block != nil { ... }` or skip the component, matching the check in the bounds loop.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/export.go",
+          "lines": {
+            "start": 363,
+            "end": 363
+          }
+        }
+      ],
+      "tags": [
+        "nil",
+        "panic",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tfor _, pin := range p.Block.Ports {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ed070927a3fd5897",
+      "severity": "medium",
+      "category": "bug",
+      "title": "fitAt still includes annotations of hidden block members",
+      "message": "The new code skips annotation bounds for components that are not in the visible drawing. The per-zoom `fitAt` loop still iterates every annotation and looks it up in `s.graph` instead of `drawing`. As a result, annotation text for block members hidden from view still enlarges the fitted bounds. Hidden members can then make the view zoom out too far or fail with 'view-limit'.",
+      "suggestion": "Apply the same visibility filter in `fitAt`: look up each annotation's part in `drawing` and skip it when it is absent.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/navigation.go",
+          "lines": {
+            "start": 179,
+            "end": 181
+          }
+        }
+      ],
+      "tags": [
+        "navigation",
+        "blocks",
+        "location-corrected"
+      ],
+      "evidence": "\t\tfor _, a := range annotations {\n\t\t\tpart, _ := s.graph.Component(a.ID)\n\t\t\tlayout := LayoutCanvasAnnotation(a, part.Rotation, zoom)",
+      "fix": {
+        "before": "\t\tfor _, a := range annotations {\n\t\t\tpart, _ := s.graph.Component(a.ID)\n\t\t\tlayout := LayoutCanvasAnnotation(a, part.Rotation, zoom)",
+        "after": "\t\tfor _, a := range annotations {\n\t\t\tpart, ok := drawing.Component(a.ID)\n\t\t\tif !ok {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tlayout := LayoutCanvasAnnotation(a, part.Rotation, zoom)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5433d30c57a16f33",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "block.inspect may return data aliasing the live graph",
+      "message": "`block.inspect` builds its result from the live `s.graph` while the mutex is held, then returns it. The response is marshaled after `dispatch` returns and the lock is released. Other read paths, such as `snapshotLocked`, work on `s.graph.Clone()`. If `BlockTemplate` returns slices or maps that alias the graph's components, wires or params, a concurrent mutation can race with JSON encoding of the response.",
+      "suggestion": "Build the template from a cloned graph, or make sure `BlockTemplate` deep-copies everything it returns.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/service.go",
+          "lines": {
+            "start": 1009,
+            "end": 1013
+          }
+        }
+      ],
+      "tags": [
+        "concurrency",
+        "aliasing",
+        "location-corrected"
+      ],
+      "evidence": "t, err := s.graph.BlockTemplate(p.ID)\n\t\t\tif err != nil {\n\t\t\t\treturn fail(\"not-found\", err.Error())\n\t\t\t}\n\t\t\tout.Result = t",
+      "fix": {
+        "before": "t, err := s.graph.BlockTemplate(p.ID)",
+        "after": "t, err := s.graph.Clone().BlockTemplate(p.ID)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "908fb1d8cc82df75",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Block duplicate swallows all paste errors",
+      "message": "The search loop drops every error from pasteBlockLocked, not just occupied-position or out-of-bounds errors. A fault that has nothing to do with position (an invalid template, a port naming conflict, an internal validation failure) is retried 30 times. The user then sees the misleading message \"choose an unoccupied duplicate block position\", and the real cause is hidden.",
+      "suggestion": "Keep the last error and return it, or wrap it, when no position succeeds. Better still, check position availability before pasting and only retry on position-related errors (for example, a sentinel error checked with errors.Is).",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/workflow.go",
+          "lines": {
+            "start": 77,
+            "end": 79
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "location-corrected"
+      ],
+      "evidence": "if err := s.pasteBlockLocked(BlockPasteParams{ID: s.nextID(\"BLOCK\"), Position: position}); err == nil {\n\t\t\t\t\treturn nil\n\t\t\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "42598241c720a800",
+      "severity": "low",
+      "category": "correctness",
+      "title": "blockPairs silently accepts malformed entries",
+      "message": "Entries without `=`, or whitespace-only entries, are silently turned into pairs with an empty target or empty name. These malformed entries are sent to `block.create` instead of being flagged to the user.",
+      "suggestion": "Skip empty entries. Surface entries without `=` as errors, or keep them so the shared command can reject them with a clear diagnostic.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "desktop/blocks.go",
+          "lines": {
+            "start": 14,
+            "end": 17
+          }
+        }
+      ],
+      "tags": [
+        "validation"
+      ],
+      "evidence": "name, target, _ := strings.Cut(strings.TrimSpace(word), \"=\")",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "a765819cd21ecc44",
+      "severity": "low",
+      "category": "bug",
+      "title": "Node IDs derived from user names may collide",
+      "message": "Node IDs are built directly from user-supplied pin and parameter names. Duplicate or empty names, such as from a trailing `=` or a repeated name in the form, produce duplicate or degenerate node IDs. These may fail `ui.Validate` or bind the wrong change handler.",
+      "suggestion": "Add the loop index to the ID (for example `\"block-pin-\"+strconv.Itoa(i)+\"-\"+pin.Name`). Alternatively, make sure the workbench rejects empty or duplicate names when the block is created.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/blocks.go",
+          "lines": {
+            "start": 72,
+            "end": 72
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "ids",
+        "location-corrected"
+      ],
+      "evidence": "out = append(out, quiet(\"block-pin-\"+pin.Name, pin.Name+\" → \"+pin.Terminal))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "32b69796effe1adc",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Block hit box inconsistent with drawn outline",
+      "message": "The hit test uses a half-width of 90 for blocks, a 180-unit-wide box. The drawn outline is 230 wide, and its height formula differs from the hit height. Parts of the visible block outline may not respond to clicks, or the hit area may not match the rendered body.",
+      "suggestion": "Derive block hit extents and outline extents from one shared workbench helper, for example `workbench.BlockSize(part)`, so the hit area matches the drawing.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/canvas.go",
+          "lines": {
+            "start": 115,
+            "end": 118
+          }
+        }
+      ],
+      "tags": [
+        "blocks",
+        "ui"
+      ],
+      "evidence": "\t\t\twidth = 90\n\t\t\theight = max(45., float64((len(part.Block.Ports)+1)/2)*15+15)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "8e00e306ca44ef99",
+      "severity": "low",
+      "category": "docs",
+      "title": "Hide-internals UI instruction is vague and may not match command",
+      "message": "The guide says hiding internals happens by reselecting the block from the Document list, while the command list exposes an explicit `block.view.set {id,expanded}`. It is unclear whether reselecting toggles expansion or whether there is a UI control matching the agent command. This weakens the stated user/agent parity.",
+      "suggestion": "Describe the exact UI control for collapsing a block (e.g., a \"Hide internals\" button) and state that it corresponds to `block.view.set {expanded:false}`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "docs/circuit-blocks.md",
+          "lines": {
+            "start": 23,
+            "end": 24
+          }
+        }
+      ],
+      "tags": [
+        "parity"
+      ],
+      "evidence": "Select the block again from the Document list to hide internals. Named external",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "10bc585772f09702",
+      "severity": "low",
+      "category": "docs",
+      "title": "Hyphenated word broken across lines renders incorrectly",
+      "message": "The hyphenated term \"zero-injection\" is split across a line break. Markdown joins the lines with a space, so it renders as \"zero- injection\".",
+      "suggestion": "Keep \"zero-injection\" on a single line.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "docs/circuit-blocks.md",
+          "lines": {
+            "start": 35,
+            "end": 36
+          }
+        }
+      ],
+      "tags": [
+        "markdown"
+      ],
+      "evidence": "reading is fabricated. Wire currents remain conservative; boundary pins are zero-\ninjection virtual edges, just as connectivity aliases are not current sources.",
+      "fix": {
+        "before": "reading is fabricated. Wire currents remain conservative; boundary pins are zero-\ninjection virtual edges, just as connectivity aliases are not current sources.",
+        "after": "reading is fabricated. Wire currents remain conservative; boundary pins are\nzero-injection virtual edges, just as connectivity aliases are not current sources."
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d0c2a5b3fdc3c317",
+      "severity": "low",
+      "category": "security",
+      "title": "Absolute local path committed in validation artifact",
+      "message": "The committed lint artifact embeds an absolute developer-machine path, including the local username. It leaks environment details, and the artifact cannot be reproduced on other machines.",
+      "suggestion": "Record the SDK path relative to the repository root, e.g. `build/.vellum-sdk-4cf0176-elab1`, or record only the SDK identifier.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "docs/validation/electronics-blocks-batch/blocks/blocks-lint.txt",
+          "lines": {
+            "start": 1,
+            "end": 1
+          }
+        }
+      ],
+      "tags": [
+        "privacy",
+        "validation-artifact"
+      ],
+      "evidence": "{\"passed\": true, \"sdk\": \"/Users/dshills/Development/projects/ELab/build/.vellum-sdk-4cf0176-elab1\", \"source\": \"19c9ebc37ed9f06daa824e024b331caf9700f4b0\"}",
+      "fix": {
+        "before": "{\"passed\": true, \"sdk\": \"/Users/dshills/Development/projects/ELab/build/.vellum-sdk-4cf0176-elab1\", \"source\": \"19c9ebc37ed9f06daa824e024b331caf9700f4b0\"}",
+        "after": "{\"passed\": true, \"sdk\": \"build/.vellum-sdk-4cf0176-elab1\", \"source\": \"19c9ebc37ed9f06daa824e024b331caf9700f4b0\"}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "e7b8ae30d1d1375d",
+      "severity": "low",
+      "category": "testing",
+      "title": "Junction refusal check may silently never run",
+      "message": "The junction-insert refusal only runs when a wire with exactly `From`=R1.2 and `To`=C1.1 exists. If the example's wire orientation or IDs change, this check silently stops running.",
+      "suggestion": "Record whether a matching wire was found (accepting either orientation) and call `t.Fatal` if none was.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/blocks_test.go",
+          "lines": {
+            "start": 132,
+            "end": 135
+          }
+        }
+      ],
+      "tags": [
+        "test-gap"
+      ],
+      "evidence": "\tfor _, w := range before.Wires {\n\t\tif w.From == \"R1.2\" \u0026\u0026 w.To == \"C1.1\" {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "843094746236eb1e",
+      "severity": "low",
+      "category": "testing",
+      "title": "Unused decode with ignored error",
+      "message": "`saved` is decoded but never used, and the `Unmarshal` error is ignored. This is dead code that suggests an assertion was meant to be here.",
+      "suggestion": "Remove these lines, or add an assertion on `saved` and check the error.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/blocks_test.go",
+          "lines": {
+            "start": 182,
+            "end": 183
+          }
+        }
+      ],
+      "tags": [
+        "dead-code"
+      ],
+      "evidence": "\tvar saved map[string]any\n\tjson.Unmarshal(raw, \u0026saved)",
+      "fix": {
+        "before": "\tvar saved map[string]any\n\tjson.Unmarshal(raw, \u0026saved)\n",
+        "after": ""
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b82b935e06de1e2e",
+      "severity": "low",
+      "category": "performance",
+      "title": "VisibleGraph projection computed on every hit test",
+      "message": "`TerminalAt` backs `NearestTerminal`, which is likely called on pointer movement. It now builds a full visible-graph projection on every call, even when the input is invalid and the function returns early.",
+      "suggestion": "Move the projection after the finite/radius checks. Consider skipping hidden members inline instead of building a new graph.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/drawing_preview.go",
+          "lines": {
+            "start": 36,
+            "end": 36
+          }
+        }
+      ],
+      "tags": [
+        "hot-path"
+      ],
+      "evidence": "\tgraph = graph.VisibleGraph()",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "795c79919a4aa708",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Duplicate blockPinLocal call and ignored lookup result",
+      "message": "`blockPinLocal` is called twice per pin only to recover the X that was just overwritten. Both calls also discard the found/ok result, so an unresolved pin is still drawn as a caption at the zero position.",
+      "suggestion": "Save the original X before overwriting it, and skip pins that blockPinLocal does not resolve.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/export.go",
+          "lines": {
+            "start": 364,
+            "end": 367
+          }
+        }
+      ],
+      "tags": [
+        "redundant",
+        "ignored-result",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\tq, _ := blockPinLocal(p, pin.Name)\n\t\t\t\tanchor := \"start\"\n\t\t\t\tq.X = -79\n\t\t\t\tif pinAt, _ := blockPinLocal(p, pin.Name); pinAt.X \u003e 0 {",
+      "fix": {
+        "before": "\t\t\t\tq, _ := blockPinLocal(p, pin.Name)\n\t\t\t\tanchor := \"start\"\n\t\t\t\tq.X = -79\n\t\t\t\tif pinAt, _ := blockPinLocal(p, pin.Name); pinAt.X \u003e 0 {",
+        "after": "\t\t\t\tq, ok := blockPinLocal(p, pin.Name)\n\t\t\t\tif !ok {\n\t\t\t\t\tcontinue\n\t\t\t\t}\n\t\t\t\tanchor := \"start\"\n\t\t\t\tside := q.X\n\t\t\t\tq.X = -79\n\t\t\t\tif side \u003e 0 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "75c3d281c37f6a36",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Hardcoded pin caption X ignores block body size",
+      "message": "Bounds are computed with `BodyBounds(p)`, which implies blocks can vary in size. Pin captions are always placed at a fixed X of ±79. For blocks wider or narrower than that, captions land outside the body or overlap the symbol.",
+      "suggestion": "Derive the caption X from the block's body bounds or pin position, e.g. place it at an offset inward from the pin's local X.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/export.go",
+          "lines": {
+            "start": 366,
+            "end": 366
+          }
+        }
+      ],
+      "tags": [
+        "layout",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\tq.X = -79",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b28b1852b1419a36",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Duplicated, inconsistent block body bounds",
+      "message": "Block size is computed twice: once in `routeBody` (keyed on Kind==\"circuit-block\", with a 4px margin) and once in `BodyBounds` (keyed on Block!=nil, without the margin). This differs from every other kind, where `BodyBounds` equals the `routeBody` rect. Rendering, routing and validation bounds can disagree, and the two copies can drift apart.",
+      "suggestion": "Move block dimension calculation into one helper. Make `BodyBounds` delegate to `routeBody` the same way it does for other kinds, or document why the margin differs.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/routing.go",
+          "lines": {
+            "start": 249,
+            "end": 257
+          }
+        }
+      ],
+      "tags": [
+        "consistency"
+      ],
+      "evidence": "\t\th := max(45., float64((len(p.Block.Ports)+1)/2)*15+15)\n\t\tx, y := 85., h",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "435ae3ce8fa30e8d",
+      "severity": "low",
+      "category": "style",
+      "title": "Inconsistent composite literal formatting",
+      "message": "The new field sits on the same line as the opening brace of the composite literal. The other fields are one per line and aligned. This breaks the formatting convention and makes the new field easy to miss.",
+      "suggestion": "Put `BlockClipboardAvailable` on its own line and run gofmt.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/service.go",
+          "lines": {
+            "start": 366,
+            "end": 366
+          }
+        }
+      ],
+      "tags": [
+        "gofmt",
+        "location-corrected"
+      ],
+      "evidence": "out := Snapshot{BlockClipboardAvailable: s.blockClipboard != nil,",
+      "fix": {
+        "before": "out := Snapshot{BlockClipboardAvailable: s.blockClipboard != nil,",
+        "after": "out := Snapshot{\n\t\tBlockClipboardAvailable: s.blockClipboard != nil,"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d9fc7580b18d89f3",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Failed paste attempts consume block IDs",
+      "message": "Each failed attempt calls s.nextID(\"BLOCK\") again. If nextID advances a counter, failed candidates use up IDs and the duplicated block gets a gap in its numbering (for example, BLOCK7 after BLOCK1). If pasteBlockLocked does not fully roll back on failure, failed attempts may also leave partial state behind.",
+      "suggestion": "Allocate the ID once before the loop and reuse it for every attempt. Make sure pasteBlockLocked is atomic, meaning it validates fully before changing the graph.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/workflow.go",
+          "lines": {
+            "start": 77,
+            "end": 77
+          }
+        }
+      ],
+      "tags": [
+        "ids",
+        "location-corrected"
+      ],
+      "evidence": "if err := s.pasteBlockLocked(BlockPasteParams{ID: s.nextID(\"BLOCK\"), Position: position}); err == nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 156285,
+    "totalMs": 33981
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 41,
+    "bytes": 207365,
+    "chunks": 10,
+    "llmCalls": 10,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 118359,
+        "output": 15820,
+        "costUSD": 0.789836
+      }
+    ],
+    "widenedFiles": 11,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

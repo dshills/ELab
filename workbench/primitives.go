@@ -71,7 +71,7 @@ func WireJunctionPosition(g Graph, w Wire) (Point, error) {
 	return Point{}, fmt.Errorf("choose a free grid point along the interior of the wire")
 }
 func validJunctionPosition(g Graph, wires []Wire, p Point) error {
-	for _, part := range g.Components {
+	for _, part := range g.VisibleGraph().Components {
 		if part.Position == p {
 			return fmt.Errorf("junction position is occupied")
 		}
@@ -114,6 +114,11 @@ func (s *Service) insertJunctionLocked(p JunctionInsertParams) error {
 		for i, wire := range s.graph.Wires {
 			if wire.ID == id {
 				found = true
+				from, _, _ := s.graph.Terminal(wire.From)
+				to, _, _ := s.graph.Terminal(wire.To)
+				if s.graph.blockOwner(from.ID) != "" || s.graph.blockOwner(to.ID) != "" {
+					return fmt.Errorf("release the block before inserting new members into an internal wire")
+				}
 				wires = append(wires, wire)
 				indices = append(indices, i)
 				break

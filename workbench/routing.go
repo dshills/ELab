@@ -62,6 +62,8 @@ type routeRect struct{ left, right, top, bottom float64 }
 func routeBody(p Component) routeRect {
 	w, h := 42., 42.
 	switch p.Kind {
+	case "circuit-block":
+		w, h = BlockBodySize(p)
 	case "shift-register":
 		w, h = 95, 185
 	case "speaker", "pwm-controller", "piezo", "active-buzzer", "hbridge":
@@ -95,6 +97,20 @@ func routeBody(p Component) routeRect {
 	return routeRect{p.Position.X - w - 4, p.Position.X + w + 4, p.Position.Y - h - 4, p.Position.Y + h + 4}
 }
 func WirePath(g Graph, w Wire) []Point {
+	if g.hasBlocks() {
+		g = g.VisibleGraph()
+		visible := false
+		for _, candidate := range g.Wires {
+			if candidate.ID == w.ID {
+				w = candidate
+				visible = true
+				break
+			}
+		}
+		if !visible {
+			return nil
+		}
+	}
 	data, _ := json.Marshal(struct {
 		Graph Graph
 		Wire  Wire

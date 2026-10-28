@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -35,12 +36,13 @@ type Response struct {
 	Error     *Failure        `json:"error,omitempty"`
 }
 type Capability struct {
-	ID           string          `json:"id"`
-	Description  string          `json:"description"`
-	Mutation     bool            `json:"mutation"`
-	Input        json.RawMessage `json:"input_schema"`
-	Output       string          `json:"output"`
-	OutputSchema json.RawMessage `json:"output_schema"`
+	fullDescription string
+	ID              string          `json:"id"`
+	Description     string          `json:"description"`
+	Mutation        bool            `json:"mutation"`
+	Input           json.RawMessage `json:"input_schema"`
+	Output          string          `json:"output"`
+	OutputSchema    json.RawMessage `json:"output_schema"`
 }
 
 func capability(id, description string, mutates bool, schema string) Capability {
@@ -62,7 +64,15 @@ func capability(id, description string, mutates bool, schema string) Capability 
 	if mutates {
 		outputLabel = "Snapshot"
 	}
-	return Capability{id, description, mutates, encoded, outputLabel, append(json.RawMessage(nil), output...)}
+	summary := description
+	if runes := []rune(description); len(runes) > 96 {
+		summary = string(runes[:96])
+		if at := strings.LastIndex(summary, " "); at > 0 {
+			summary = summary[:at]
+		}
+		summary += "…"
+	}
+	return Capability{ID: id, Description: summary, Mutation: mutates, Input: encoded, Output: outputLabel, OutputSchema: append(json.RawMessage(nil), output...), fullDescription: description}
 }
 
 func typedCapability(id, description string, t reflect.Type) Capability {
@@ -81,6 +91,9 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(BlockCreateParams{}), "urn:elab:block-create-input:1"},
+	{reflect.TypeOf(IDParams{}), "urn:elab:id-input:1"},
+	{reflect.TypeOf(BlockTemplate{}), "urn:elab:block-template:1"},
 	{reflect.TypeOf(Point{}), "urn:elab:point:1"},
 	{reflect.TypeOf(DrawingPreview{}), "urn:elab:drawing-preview:1"},
 	{reflect.TypeOf(ComponentExplanation{}), "urn:elab:component-explanation:1"},
@@ -582,6 +595,13 @@ func Catalog() []Capability {
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),
 		typedCapability("project.work.cancel", "Cancel exact current project work before publication; cancelable is false during atomic Save publication/cleanup; refusal code operation-committing", reflect.TypeOf(IDParams{})),
 		typedCapability("project.load", "Wait for the same background open job as project.load.start; restores saved pause/view with fresh physics; unsaved changes require discard_changes", reflect.TypeOf(LoadParams{})),
+		typedCapability("block.create", "Group existing ordinary components behind named pins and published numeric values; single-level, no net-label members", reflect.TypeOf(BlockCreateParams{})),
+		typedCapability("block.copy", "Copy an independent block template into the session clipboard, surviving document replacement", reflect.TypeOf(IDParams{})),
+		typedCapability("block.paste", "Paste the copied block with independent renamed primitives at an unoccupied position", reflect.TypeOf(BlockPasteParams{})),
+		typedCapability("block.parameter.set", "Edit a published member value with its ordinary validation and history", reflect.TypeOf(BlockValueParams{})),
+		typedCapability("block.view.set", "Show or hide a block's ordinary internal drawing without restarting physics; saved visual edit", reflect.TypeOf(BlockViewParams{})),
+		typedCapability("block.release", "Remove the block boundary and retain all ordinary members and exact connections", reflect.TypeOf(IDParams{})),
+		queryCapability("block.inspect", "Read a self-contained independent template and its ordinary internal circuitry", reflect.TypeOf(IDParams{}), reflect.TypeOf(BlockTemplate{})),
 		typedCapability("component.place", "Place a library part on the 10-unit grid; unused optional ID; bounds in snapshot.limits", reflect.TypeOf(PlaceParams{})),
 		typedCapability("component.move", "Move a part to a grid position within ±10000; preserve all wires and electrical results", reflect.TypeOf(MoveParams{})),
 		typedCapability("component.rotate", "Rotate a part 90 degrees clockwise without changing its pin identities or connectivity", reflect.TypeOf(IDParams{})),

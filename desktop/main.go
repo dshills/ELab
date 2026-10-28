@@ -197,6 +197,8 @@ func runNative() (runErr error) {
 }
 
 type screen struct {
+	blockForm                                            [7]string
+	blockFormReady                                       bool
 	spectrumDrawing                                      *cogent.MeshCanvas
 	exampleSearch                                        ui.SearchBox
 	exampleGrid                                          ui.CollectionView

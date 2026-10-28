@@ -107,10 +107,16 @@ func (c *commandCanvas) Sync(w core.Widget) error {
 	return c.MeshCanvas.Sync(w)
 }
 func hitComponent(state workbench.Snapshot, p workbench.Point) string {
+	state.Components = (workbench.Graph{Components: state.Components, Wires: state.Wires}).VisibleGraph().Components
 	for i := len(state.Components) - 1; i >= 0; i-- {
 		part := state.Components[i]
 		local := workbench.RotateLocal(workbench.Point{X: p.X - part.Position.X, Y: p.Y - part.Position.Y}, (360-part.Rotation)%360)
 		width, height := 42., 42.
+		if part.Block != nil {
+			width, height = workbench.BlockBodySize(part)
+			width += 30
+			height += 8
+		}
 		if part.Kind == "speaker" || part.Kind == "pwm-controller" || part.Kind == "piezo" || part.Kind == "active-buzzer" {
 			width, height = 65, 75
 		}
@@ -168,7 +174,8 @@ func wirePath(graph workbench.Graph, w workbench.Wire) []canvas.Point {
 }
 
 func hitWire(state workbench.Snapshot, p workbench.Point, tolerance float64) string {
-	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
+	graph := (workbench.Graph{Components: state.Components, Wires: state.Wires}).VisibleGraph()
+	state.Components, state.Wires = graph.Components, graph.Wires
 	for i := len(state.Wires) - 1; i >= 0; i-- {
 		points := wirePath(graph, state.Wires[i])
 		for j := 1; j < len(points); j++ {

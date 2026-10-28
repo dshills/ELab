@@ -109,7 +109,12 @@ func (s *Service) connectLocked(p ConnectParams) error {
 	if !ValidID(p.ID) || s.usedIDs[p.ID] || s.graph.HasObject(p.ID) {
 		return fmt.Errorf("wire ID is invalid or already used in this session")
 	}
-	s.graph.Wires = append(s.graph.Wires, Wire{ID: p.ID, From: p.From, To: p.To, Connected: true})
+	candidate := s.graph.Clone()
+	candidate.Wires = append(candidate.Wires, Wire{ID: p.ID, From: p.From, To: p.To, Connected: true})
+	if err := candidate.validateBlocks(); err != nil {
+		return err
+	}
+	s.graph = candidate
 	s.usedIDs[p.ID] = true
 	s.drawing.WireStart = ""
 	s.drawing.From = ""
@@ -118,6 +123,8 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "block.create", "block.copy", "block.paste", "block.parameter.set", "block.view.set", "block.release":
+		return s.blockCommandLocked(command, raw)
 	case "edit.proposal.set", "edit.proposal.apply", "edit.proposal.dismiss":
 		return s.proposalCommandLocked(command, raw)
 	case "scope.probe.plot":
@@ -842,7 +849,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		for _, other := range s.graph.Components {
-			if other.Position == c.Position {
+			if other.Position == c.Position && s.graph.positionScope(other.ID) == "" {
 				return fmt.Errorf("this grid position is occupied; choose another")
 			}
 		}
@@ -885,7 +892,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		for _, other := range s.graph.Components {
-			if other.ID != p.ID && other.Position == position {
+			if other.ID != p.ID && other.Position == position && s.graph.positionScope(other.ID) == s.graph.positionScope(p.ID) {
 				return fmt.Errorf("this grid position is occupied")
 			}
 		}
@@ -893,6 +900,9 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			if c.ID == p.ID {
 				if p.PreviousPosition != nil && c.Position != *p.PreviousPosition {
 					return &actionError{"conflict", "component moved during this gesture; inspect its current position"}
+				}
+				if c.Block != nil {
+					return s.moveBlockLocked(c, position)
 				}
 				s.graph.Components[i].Position = position
 				return nil
@@ -918,6 +928,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		if !s.graph.HasObject(p.ID) {
 			return fmt.Errorf("unknown object ID")
+		}
+		if owner := s.graph.blockOwner(p.ID); owner != "" {
+			return fmt.Errorf("part belongs to %s; release the block before deleting a member", owner)
+		}
+		if part, ok := s.graph.Component(p.ID); ok && part.Block != nil {
+			return s.deleteBlockLocked(part)
 		}
 		graph := s.graph.Clone()
 		graph.Components = graph.Components[:0]

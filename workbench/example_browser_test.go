@@ -59,7 +59,7 @@ func TestExampleBrowserCategoriesSearchSelectionAndPhysics(t *testing.T) {
 			}
 		}
 	}
-	if len(seen) != len(ExampleCatalog()) || len(seen) != 78 {
+	if len(seen) != len(ExampleCatalog()) || len(seen) != 79 {
 		t.Fatal("catalog coverage", len(seen))
 	}
 	call(t, s, "examples.category.set", PartCategoryParams{Category: "timers"}, "timers-again")

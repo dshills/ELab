@@ -94,7 +94,8 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 			b.quad(x-dot/2, y-dot/2, dot, dot, grid)
 		}
 	}
-	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
+	graph := (workbench.Graph{Components: state.Components, Wires: state.Wires}).VisibleGraph()
+	state.Components, state.Wires = graph.Components, graph.Wires
 	focusObjects, focusTerminals := map[string]bool{}, map[string]bool{}
 	if state.TraceFocus != nil && !state.TraceFocus.Unavailable {
 		for _, id := range state.TraceFocus.Objects {
@@ -170,6 +171,11 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 		}
 		drawComponentSymbol(b, state, part, ink, muted, accent, wireColor, connectionCount[part.ID+".node"] > 0)
 		outlineW, outlineH := 64., 46.
+		if part.Block != nil {
+			outlineW, outlineH = workbench.BlockBodySize(part)
+			outlineW += 30
+			outlineH += 8
+		}
 		if workbench.IsLogicKind(part.Kind) {
 			outlineW, outlineH = 72, 72
 		}
@@ -240,7 +246,10 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 		b.textAtScale(at.X, at.Y, title, ink, workbench.CanvasFontScale(view.Zoom))
 	}
 	for _, a := range state.SourceAnnotations {
-		part, _ := graph.Component(a.ID)
+		part, visible := graph.Component(a.ID)
+		if !visible {
+			continue
+		}
 		layout := workbench.LayoutCanvasAnnotation(a, part.Rotation, view.Zoom)
 		for i, line := range a.Lines {
 			at := layout.Position(line, i)
@@ -301,6 +310,17 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		b.stroke(c, width, transformed...)
 	}
 	switch part.Kind {
+	case "circuit-block":
+		for _, path := range workbench.BlockSymbolPaths(part) {
+			points := make([]canvas.Point, len(path))
+			for k, q := range path {
+				points[k] = canvas.Point{X: q.X, Y: q.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
+		for _, label := range workbench.BlockSymbolLabels(part) {
+			b.text(label.At.X, label.At.Y, label.Text, ink)
+		}
 	case "njfet", "pjfet", "current-source", "electronic-load":
 		var paths [][]workbench.Point
 		if workbench.IsJFETKind(part.Kind) {

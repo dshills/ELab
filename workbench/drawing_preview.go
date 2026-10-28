@@ -36,6 +36,7 @@ func TerminalAt(graph Graph, position Point, radius float64) (string, bool) {
 	if !finite(position.X) || !finite(position.Y) || !finite(radius) || radius < 0 {
 		return "", false
 	}
+	graph = graph.VisibleGraph()
 	best, distance, ambiguous := "", radius, false
 	for _, part := range graph.Components {
 		for _, pin := range part.Terminals {

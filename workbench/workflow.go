@@ -2,6 +2,7 @@ package workbench
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"slices"
 	"strings"
@@ -25,6 +26,7 @@ type BatchParams struct {
 
 // One allowlist serves staged validation and on-demand agent discovery.
 var atomicBatchCommands = [...]string{
+	"block.create", "block.parameter.set", "block.view.set", "block.release",
 	"component.place", "component.move", "component.rotate", "component.set", "component.duplicate",
 	"capacitor.initial.set", "inductor.initial.set", "object.delete", "wire.connect", "wire.junction.insert",
 	"transformer.configure", "optocoupler.configure", "pwm.configure", "passive.configure", "jfet.configure", "current-source.configure", "load.configure", "speaker.configure", "transistor.profile.set", "opamp.dynamics.set", "sound.configure", "motor.configure", "motor.load.set", "battery.configure", "sensor.temperature.set", "sensor.light.set", "switch.set", "potentiometer.wiper.set", "source.sine.set", "source.pulse.set",
@@ -58,6 +60,33 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 	part, ok := s.graph.Component(p.ID)
 	if !ok {
 		return fmt.Errorf("choose an existing component to duplicate")
+	}
+	if part.Block != nil {
+		old := s.blockClipboard
+		t, err := s.graph.BlockTemplate(p.ID)
+		if err != nil {
+			return err
+		}
+		s.blockClipboard = t
+		defer func() { s.blockClipboard = old }()
+		if p.Position != nil {
+			return s.pasteBlockLocked(BlockPasteParams{ID: s.nextID("BLOCK"), Position: *p.Position})
+		}
+		id := s.nextID("BLOCK")
+		var lastErr error
+		for offset := 400.; offset <= 2000; offset += 400 {
+			for _, d := range []Point{{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {-1, 1}} {
+				position := Point{X: part.Position.X + offset*d.X, Y: part.Position.Y + offset*d.Y}
+				if err := s.pasteBlockLocked(BlockPasteParams{ID: id, Position: position}); err == nil {
+					return nil
+				} else if !errors.Is(err, errBlockPosition) {
+					return err
+				} else {
+					lastErr = err
+				}
+			}
+		}
+		return fmt.Errorf("no free duplicate block position within ordinary limits: %w", lastErr)
 	}
 	position := p.Position
 

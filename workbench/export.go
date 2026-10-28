@@ -141,12 +141,34 @@ func schematicSVGWithAnnotations(g Graph, run, revision uint64, display CircuitD
 // Chooser previews share all routes, symbols, labels and source annotations.
 // Printed/exported documents retain their existing report header and parts list.
 func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, annotations []SourceAnnotation, settings TransientSettings, report bool, readings ...PinnedReading) []byte {
+	rawGraph := g
+	g = g.VisibleGraph()
+	allAnnotations := annotations
+	declaredAnnotation := map[string]bool{}
+	for _, a := range allAnnotations {
+		declaredAnnotation[a.ID] = true
+	}
+	if rawGraph.hasBlocks() {
+		annotations = []SourceAnnotation{}
+		for _, a := range allAnnotations {
+			if _, ok := g.Component(a.ID); ok {
+				annotations = append(annotations, a)
+			}
+		}
+	}
 	annotated := map[string]bool{}
 	for _, a := range annotations {
 		annotated[a.ID] = true
 	}
 	minX, minY, maxX, maxY := -120., -100., 120., 100.
 	for _, p := range g.Components {
+		if p.Block != nil {
+			l, r, t, b := BodyBounds(p)
+			minX = math.Min(minX, l-25)
+			maxX = math.Max(maxX, r+25)
+			minY = math.Min(minY, t-25)
+			maxY = math.Max(maxY, b+25)
+		}
 		minX = math.Min(minX, p.Position.X-90)
 		maxX = math.Max(maxX, p.Position.X+140)
 		if p.Kind == "hbridge" || p.Kind == "pwm-controller" {
@@ -222,7 +244,7 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 		maxX, maxY = maxX+margin, maxY+margin
 	}
 	diagramBottom := maxY
-	partLines, partsHeight := schematicPartsList(g.Components, maxX-minX)
+	partLines, partsHeight := schematicPartsList(rawGraph.Components, maxX-minX)
 	if report {
 		maxY += partsHeight
 		minY -= 50
@@ -235,43 +257,43 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 	}
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="%g" viewBox="%g %g %g %g"%s><title>ELab schematic</title>`, 1200*height/width, minX, minY, width, height, aspect)
 	sources := []Component{}
-	for _, p := range g.Components {
-		if annotated[p.ID] {
+	for _, p := range rawGraph.Components {
+		if declaredAnnotation[p.ID] {
 			sources = append(sources, p)
 		}
 	}
-	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": annotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
-	if hasJFETs(g) || hasCurrentDevices(g) || hasSpeakers(g) || hasTransistorProfiles(g) || hasPassiveLosses(g) {
+	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": allAnnotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
+	if hasJFETs(rawGraph) || hasCurrentDevices(rawGraph) || hasSpeakers(rawGraph) || hasTransistorProfiles(rawGraph) || hasPassiveLosses(rawGraph) {
 		devices := []Component{}
-		for _, p := range g.Components {
+		for _, p := range rawGraph.Components {
 			if IsJFETKind(p.Kind) || IsCurrentDevice(p.Kind) || p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
 				devices = append(devices, p)
 			}
 		}
 		metadataFields["device_components"] = devices
 	}
-	if model := timer555ModelForGraph(g); model != nil {
+	if model := timer555ModelForGraph(rawGraph); model != nil {
 		metadataFields["timer555_model"] = model
 	}
-	if model := extendedModelForGraph(g); model != nil {
+	if model := extendedModelForGraph(rawGraph); model != nil {
 		metadataFields["device_model"] = model
 	}
-	if model := hbridgeModelForGraph(g); model != nil {
+	if model := hbridgeModelForGraph(rawGraph); model != nil {
 		metadataFields["hbridge_model"] = model
 	}
-	if model := logicModelForGraph(g); model != nil {
+	if model := logicModelForGraph(rawGraph); model != nil {
 		metadataFields["logic_model"] = model
 	}
-	if model := controlModelForGraph(g); model != nil {
+	if model := controlModelForGraph(rawGraph); model != nil {
 		metadataFields["control_model"] = model
 	}
-	if model := powerModelForGraph(g); model != nil {
+	if model := powerModelForGraph(rawGraph); model != nil {
 		metadataFields["power_model"] = model
 	}
-	if model := sensorModelForGraph(g); model != nil {
+	if model := sensorModelForGraph(rawGraph); model != nil {
 		metadataFields["sensor_model"] = model
 		conditions := []map[string]any{}
-		for _, p := range g.Components {
+		for _, p := range rawGraph.Components {
 			if IsSensorKind(p.Kind) {
 				condition := map[string]any{"id": p.ID, "kind": p.Kind, "reference_resistance_ohm": p.Value, "resistance_ohm": sensorResistance(p)}
 				if p.Kind == "thermistor" {
@@ -284,17 +306,21 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 		}
 		metadataFields["sensor_environments"] = conditions
 	}
-	if model := regulatorModelForGraph(g); model != nil {
+	if model := regulatorModelForGraph(rawGraph); model != nil {
 		metadataFields["regulator_model"] = model
 	}
-	if model := displayModelForGraph(g); model != nil {
+	if model := displayModelForGraph(rawGraph); model != nil {
 		metadataFields["display_model"] = model
 	}
-	if model := sequentialModelForGraph(g); model != nil {
+	if model := sequentialModelForGraph(rawGraph); model != nil {
 		metadataFields["sequential_model"] = model
 	}
-	if model := opAmpModelForGraph(g); model != nil {
+	if model := opAmpModelForGraph(rawGraph); model != nil {
 		metadataFields["opamp_model"] = model
+	}
+
+	if rawGraph.hasBlocks() {
+		metadataFields["block_graph"] = rawGraph
 	}
 	metadata, _ := json.Marshal(metadataFields)
 	fmt.Fprintf(&b, "<metadata>%s</metadata>", html.EscapeString(string(metadata)))
@@ -338,6 +364,33 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 	for _, p := range g.Components {
 		fmt.Fprintf(&b, `<g id="%s" transform="translate(%g %g) rotate(%d)"><title>%s · %s</title>`, html.EscapeString(p.ID), p.Position.X, p.Position.Y, p.Rotation, html.EscapeString(p.ID), html.EscapeString(p.Name))
 		switch p.Kind {
+		case "circuit-block":
+			for _, path := range BlockSymbolPaths(p) {
+				b.WriteString(`<polyline points="`)
+				for _, q := range path {
+					fmt.Fprintf(&b, "%g,%g ", q.X, q.Y)
+				}
+				b.WriteString(`"/>`)
+			}
+
+			if p.Block == nil {
+				break
+			}
+			for _, pin := range p.Block.Ports {
+				q, ok := blockPinLocal(p, pin.Name)
+				if !ok {
+					continue
+				}
+				side := q.X
+				anchor := "start"
+				q.X = -79
+				if side > 0 {
+					q.X = 79
+					anchor = "end"
+				}
+				fmt.Fprintf(&b, `<text x="%g" y="%g" font-size="10" fill="#365260" stroke="none" text-anchor="%s">%s<title>%s</title></text>`, q.X, q.Y+4, anchor, html.EscapeString(blockPinCaption(pin.Name)), html.EscapeString(pin.Name))
+			}
+
 		case "linear-regulator", "ldo-regulator":
 			for _, path := range RegulatorSymbolPaths(p.Kind) {
 				b.WriteString(`<polyline points="`)
