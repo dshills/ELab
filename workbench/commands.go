@@ -91,6 +91,9 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(PhotodiodeConfig{}), "urn:elab:photodiode-config:1"},
+	{reflect.TypeOf(PhotodiodeParams{}), "urn:elab:photodiode-input:1"},
+	{reflect.TypeOf(OpticalLightParams{}), "urn:elab:optical-light-input:1"},
 	{reflect.TypeOf(ThermalConfig{}), "urn:elab:thermal-config:1"},
 	{reflect.TypeOf(ThermalParams{}), "urn:elab:thermal-input:1"},
 	{reflect.TypeOf(ThermalReading{}), "urn:elab:thermal-reading:1"},
@@ -299,6 +302,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Shared model definitions declare numeric bounds; input-only quantity
 		// definitions below retain unit text without widening numeric outputs.
+		if common.Type == reflect.TypeOf(PhotodiodeConfig{}) {
+			addPhotodiodeSchema(schema)
+		}
 		if common.Type == reflect.TypeOf(ThermalConfig{}) {
 			addThermalSchema(schema)
 		}
@@ -601,6 +607,8 @@ func Catalog() []Capability {
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),
 		typedCapability("project.work.cancel", "Cancel exact current project work before publication; cancelable is false during atomic Save publication/cleanup; refusal code operation-committing", reflect.TypeOf(IDParams{})),
 		typedCapability("project.load", "Wait for the same background open job as project.load.start; restores saved pause/view with fresh physics; unsaved changes require discard_changes", reflect.TypeOf(LoadParams{})),
+		typedCapability("photodiode.configure", "Configure a saved photodiode responsivity, dark current and capacitance; restarts the experiment", reflect.TypeOf(PhotodiodeParams{})),
+		typedCapability("photodiode.light.set", "Set incident optical µW through the shared live input worker, preserving stored charge", reflect.TypeOf(OpticalLightParams{})),
 		typedCapability("thermal.configure", "Configure optional resistor/diode/BJT ambient temperature and one-node self-heating; saved and undoable", reflect.TypeOf(ThermalParams{})),
 		typedCapability("block.create", "Group existing ordinary components behind named pins and published numeric values; single-level, no net-label members", reflect.TypeOf(BlockCreateParams{})),
 		typedCapability("block.copy", "Copy an independent block template into the session clipboard, surviving document replacement", reflect.TypeOf(IDParams{})),

@@ -91,3 +91,13 @@ Independent electrical and immutable-capture checks pass; core noise/AC/DC/sweep
 race control passes 11.699 s. Explicit noise assumptions and refused unsupported
 families avoid silently assigning zero noise. New prepared RC/amplifier examples
 use existing models; no physical component, public command or solver-limit change.
+
+Item 3 committed 16e3b6a3 after complete initial/follow-up Anthropic Opus 5.5 Prism
+reviews. Item 4 now includes a declared photodiode PN/shunt/photocurrent/Cj model,
+shared model/light commands, atomic live light input, optical DC sweeps, full
+AC/noise storage stamps, energy/capture restoration and native/SVG symbols.
+Independent current/derivative, conversion/TIA/optical sweep, light-step RC and
+noise references pass with history/save/capture/forgery and user-agent controls.
+A broader run exposed one remaining old category-count fixture; current source
+has 59 physical kinds, 219 commands and 85 examples. Existing capacities and
+integration/numerical limits stay unchanged. Prism review follows before commit.

@@ -24,7 +24,7 @@ func (n *mixedNetwork) inductorNewtonScale(x, delta []float64, stages int) float
 			switch p.Kind {
 			case "optocoupler":
 				forward(junction(p, "anode", "cathode"))
-			case "led", "diode", "zener", "schottky":
+			case "photodiode", "led", "diode", "zener", "schottky":
 				forward(junction(p, "anode", "cathode"))
 			case "npn", "pnp":
 				for _, other := range []string{"emitter", "collector"} {

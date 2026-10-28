@@ -121,7 +121,7 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 		case "thermistor", "ldr", "pushbutton", "bouncing-pushbutton", "resistor", "capacitor", "inductor", "switch":
 			set("1", p.ID, 1)
 			set("2", p.ID, -1)
-		case "led", "diode", "zener", "schottky":
+		case "photodiode", "led", "diode", "zener", "schottky":
 			set("anode", p.ID, 1)
 			set("cathode", p.ID, -1)
 		case "ground", "junction", "net-label", "circuit-block":

@@ -12,9 +12,10 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
-Source development now includes [reusable circuit blocks](docs/circuit-blocks.md)
-[temperature effects and self-heating](docs/temperature.md), and
-[small-signal noise analysis](docs/noise-analysis.md), with shared
+Source development now includes [reusable circuit blocks](docs/circuit-blocks.md),
+[temperature effects and self-heating](docs/temperature.md),
+[small-signal noise analysis](docs/noise-analysis.md), and
+[photodiode sensing](docs/photodiodes.md), with shared
 user/agent commands. These changes are not yet in the preserved /277 package.
 
 **Current electronics candidate: [ELab 0.199.0 /277](build/ELab-0.199.0-277-Electronics/ELab.app)**

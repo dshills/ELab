@@ -71,7 +71,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			rs = append(rs, p)
 		case "led":
 			leds = append(leds, p)
-		case "diode", "zener", "schottky":
+		case "photodiode", "diode", "zener", "schottky":
 			diodes = append(diodes, p)
 		case "potentiometer":
 			pots = append(pots, p)
@@ -105,6 +105,11 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 					out.Analysis = NetworkTransientAnalysis
 				}
 			}
+		}
+	}
+	for _, p := range g.Components {
+		if p.Kind == "photodiode" && p.Device.Photo.Capacitance > 0 && out.Analysis == NetworkDCAnalysis {
+			out.Analysis = NetworkTransientAnalysis
 		}
 	}
 	for _, p := range qs {

@@ -123,6 +123,9 @@ func (s *Service) setSensorLocked(id, kind string, value float64) error {
 	return nil
 }
 func sensorInputID(w *InputWork) string {
+	if w.OpticalLight != nil {
+		return w.OpticalLight.ID
+	}
 	if w.Temperature != nil {
 		return w.Temperature.ID
 	}
@@ -137,7 +140,10 @@ func setSensorWork(w *InputWork, event string) {
 		return
 	}
 	value, _ := strconv.ParseFloat(v[3], 64)
-	if v[1] == "thermistor" {
+	if v[1] == "photodiode" {
+		w.Command = "photodiode.light.set"
+		w.OpticalLight = &OpticalLightParams{v[2], value}
+	} else if v[1] == "thermistor" {
 		w.Command = "sensor.temperature.set"
 		w.Temperature = &TemperatureParams{v[2], value}
 	} else {
@@ -149,7 +155,9 @@ func applySensorWork(g *Graph, w *InputWork) {
 	id := sensorInputID(w)
 	for k := range g.Components {
 		if g.Components[k].ID == id {
-			if w.Temperature != nil {
+			if w.OpticalLight != nil {
+				g.Components[k].Device.Photo.Light = w.OpticalLight.Light
+			} else if w.Temperature != nil {
 				setSensorEnvironment(&g.Components[k], w.Temperature.Temperature)
 			} else {
 				setSensorEnvironment(&g.Components[k], w.Light.Illuminance)

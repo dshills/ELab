@@ -181,6 +181,10 @@ func lowerPowerDevices(c Compiled) (Compiled, Graph) {
 	parts := []Component{}
 	for _, p := range original.Components {
 		parts = append(parts, lowerThermal(&c, p)...)
+		if p.Kind == "photodiode" {
+			parts = append(parts, lowerPhotodiode(&c, p)...)
+			continue
+		}
 		if p.Kind == "shift-register" {
 			parts = append(parts, lowerShift(&c, p)...)
 			continue
@@ -321,6 +325,9 @@ func validateRecordedPower(c Compiled, g Graph, r *MixedResult) error {
 	return nil
 }
 func (n *mixedNetwork) restorePowerNodes(r *MixedResult, x []float64) error {
+	if err := n.restorePhotodiodes(r, x); err != nil {
+		return err
+	}
 	if err := n.restoreThermals(r, x); err != nil {
 		return err
 	}
@@ -374,7 +381,7 @@ func (n *mixedNetwork) usesCollocation() bool {
 		return true
 	}
 	for _, p := range n.authored.Components {
-		if p.Kind == "piezo" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == "battery" || p.Kind == "dc-motor" {
+		if p.Kind == "photodiode" && p.Device != nil && p.Device.Photo != nil && p.Device.Photo.Capacitance > 0 || p.Kind == "piezo" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == "battery" || p.Kind == "dc-motor" {
 			return !n.dc
 		}
 	}
@@ -385,6 +392,10 @@ type powerResourceUsage struct{ parts, caps, inductors, resistors, sources, node
 
 func powerResources(g Graph) (u powerResourceUsage) {
 	for _, p := range g.Components {
+		if p.Kind == "photodiode" && p.Device.Photo.Capacitance > 0 {
+			u.parts++
+			u.caps++
+		}
 		if hasThermal(p) && p.Thermal.SelfHeating {
 			u.parts += 2
 			u.caps++

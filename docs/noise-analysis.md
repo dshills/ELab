@@ -36,6 +36,8 @@ Declared independent, one-sided white mechanisms:
 - Resistors: Norton PSD 4kT/R; 300.15 K unless their temperature option is enabled.
 - Silicon/Schottky/LED: effective terminal shot PSD 2q|I|. Internal series-resistor
   partition and diode correlations are omitted; this is an explicit approximation.
+- Photodiodes: 2q·(photocurrent+|junction current|), plus Johnson noise of
+  the fixed shunt. No avalanche multiplication or optical source statistics.
 - NPN/PNP: separate base-emitter and collector-emitter shot sources, 2q|IB| and
   2q|IC| using conductive currents. Saturation/reverse behavior is approximate.
 - JFET/MOS: channel PSD (8/3)kT|gm| at 300.15 K; gate/bleed noise omitted.

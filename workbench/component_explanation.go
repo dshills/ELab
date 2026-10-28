@@ -93,6 +93,9 @@ func (s *Service) componentExplanationLocked(c Compiled, id string, inspection *
 		}
 	}
 	switch part.Kind {
+	case "photodiode":
+		out.Model, out.Limitations = PhotodiodeModelID, photodiodeDescription
+		out.Facts = append(out.Facts, "Photocurrent is responsivity times incident optical watts, directed from cathode to anode. A transimpedance amplifier converts this current into voltage; junction capacitance stores charge and starts uncharged.")
 	case "njfet", "pjfet":
 		out.Model, out.Limitations = JFETModelID, jfetDescription
 		out.Facts = append(out.Facts, "A reverse-biased gate depletes a normally conducting channel; forward gate junctions draw current. Source-current probes are positive out of source, gate/drain positive into device.")

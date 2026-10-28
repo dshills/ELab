@@ -45,6 +45,7 @@ type MixedTransistor struct {
 }
 
 type MixedResult struct {
+	Photodiodes        []PhotodiodeResult    `json:"photodiodes,omitempty"`
 	Thermal            []ThermalReading      `json:"thermal,omitempty"`
 	JFETs              []JFETResult          `json:"jfets,omitempty"`
 	Loads              []BranchResult        `json:"electronic_loads,omitempty"`
@@ -92,6 +93,7 @@ func cloneMixed(r *MixedResult) *MixedResult {
 		return nil
 	}
 	o := *r
+	o.Photodiodes = append([]PhotodiodeResult(nil), r.Photodiodes...)
 	o.JFETs = append([]JFETResult(nil), r.JFETs...)
 	o.Loads = append([]BranchResult(nil), r.Loads...)
 	o.Speakers = append([]SpeakerResult(nil), r.Speakers...)
@@ -146,6 +148,7 @@ type mixedNetwork struct {
 	hasMOSFET                    bool
 	hasJFET                      bool
 	hasThermal                   bool
+	hasPhoto                     bool
 	hasGeneralBipolar            bool
 	c                            Compiled
 	nodes                        []string
@@ -196,6 +199,7 @@ func newMixedNetwork(c Compiled) *mixedNetwork {
 		}
 	}
 	for _, p := range c.MixedGraph.Components {
+		n.hasPhoto = n.hasPhoto || p.Kind == "photodiode"
 		if hasThermal(p) {
 			n.hasThermal = true
 			n.nonlinear = true
@@ -432,6 +436,10 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			flow(one, w, (voltage(x, one)-voltage(x, w))/upper, 1/upper)
 			flow(two, w, (voltage(x, two)-voltage(x, w))/lower, 1/lower)
 
+		case "photodiode":
+			a, b := n.pin(p, "anode"), n.pin(p, "cathode")
+			i, g, _, _ := photodiodeLaw(p, voltage(x, a)-voltage(x, b))
+			flow(a, b, i, g)
 		case "diode", "zener", "schottky":
 			u, v := n.pin(p, "anode"), n.pin(p, "cathode")
 			i, g := deviceDiodeCurrent(p, voltage(x, u)-voltage(x, v))
@@ -718,7 +726,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 			}
 		}
 		var delta []float64
-		if good && (n.hasThermal || n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasJFET || n.hasGeneralBipolar || n.hasOptocoupler || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
+		if good && (n.hasPhoto || n.hasThermal || n.hasRegulator || len(n.inductors) > 0 || len(n.opamps) > 0 || n.hasMOSFET || n.hasJFET || n.hasGeneralBipolar || n.hasOptocoupler || len(n.timers) > 0 || len(n.logic) > 0 || len(n.sequential) > 0 || len(n.displays) > 0 || len(n.controls) > 0) {
 			rhs := make([]float64, size)
 			for i := range f {
 				rhs[i] = -f[i]
@@ -890,6 +898,10 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			powers += device.Power
 		// Speaker R/L/C primitives below already count dissipation/storage;
 		// this authored-parent result is a public summary, not another load.
+		case "photodiode":
+			device := n.photoResult(p, x)
+			r.Photodiodes = append(r.Photodiodes, device)
+			powers += device.Voltage * (device.Current - device.StorageCurrent)
 		case "speaker":
 			r.Speakers = append(r.Speakers, n.speakerResult(p, x))
 		case "piezo", "active-buzzer":

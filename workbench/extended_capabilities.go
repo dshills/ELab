@@ -26,6 +26,10 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 		if id == "recording.step-response.set" {
 			c.Preconditions = append(c.Preconditions, "Exact currently selected retained recording ID; stale controls/replaced document refuse")
 		}
+	case "photodiode.configure", "photodiode.light.set":
+		bounds("incident_light_uw", "µW", 0, 1000)
+		c.Effects = []string{photodiodeDescription, "Configuration is a complete saved undoable startup edit. Light command stages atomic input_work at accepted time for a fresh transient, preserves voltage/charge/run/time and publishes one saved environment/history edit; newer inputs supersede pending work and failures preserve the committed state. Inspect requested_optical_light and simulation.wait. Incomplete/stale drawings use ordinary startup edit semantics. Parameter light in the existing sweep workflow solves independent DC optical operating points."}
+		c.Completion = &commandCompletionDetail{Mode: "configuration edit or asynchronous atomic input_work for fresh light change", Observe: []string{"project.inspect", "simulation.wait", "snapshot.input_work"}, Cancel: "simulation.work.cancel", CooperativeDeadlineSeconds: int(InputWorkDeadline.Seconds())}
 	case "thermal.configure":
 		c.Effects = []string{thermalDescription, "All fields required even when disabling; enabled=false restores the exact original law. Supported resistor, silicon diode, NPN and PNP only. Ambient -40..125 °C; accepted self-heated state -40..150 °C. Settings are saved, undoable electrical startup edits. Thermal readings are a separate heat domain, not electrical capacitor energy."}
 	case "jfet.configure":
@@ -84,6 +88,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	if id == "recording.step-response" || id == "recording.step-response.set" {
 		delete(schema, "x-model-id")
 		schema["x-method-id"] = StepResponseMethod
+	}
+	if id == "photodiode.configure" || id == "photodiode.light.set" {
+		schema["x-model-id"] = PhotodiodeModelID
 	}
 	if id == "thermal.configure" {
 		schema["x-model-id"] = ThermalModelID
@@ -218,4 +225,15 @@ func addThermalSchema(schema map[string]any) {
 		p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
 	}
 	schema["x-kind-relation"] = "resistance_coefficient_per_k must be zero unless the target is a resistor"
+}
+
+func addPhotodiodeSchema(schema map[string]any) {
+	inputProperty(schema, "version")["enum"] = []string{PhotodiodeModelID}
+	for _, f := range []struct {
+		name, unit string
+		min, max   float64
+	}{{"responsivity_a_per_w", "A/W", .01, 1}, {"incident_light_uw", "µW", 0, 1000}, {"dark_saturation_current_a", "A", 1e-15, 1e-6}, {"junction_capacitance_f", "F", 0, 1e-6}} {
+		p := inputProperty(schema, f.name)
+		p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
+	}
 }

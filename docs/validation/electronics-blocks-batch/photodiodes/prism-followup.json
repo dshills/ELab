@@ -1,0 +1,152 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "f2ccaa649d15af84d3950c14e6f6dd37",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "16e3b6a3ece8e767c4c0f956a1d516b03691f380",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 2,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "2b73de20e6d87f43",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible nil pointer dereference on photodiode config",
+      "message": "The new condition dereferences p.Device.Photo without nil checks. Other code paths, such as photodiodeControls, guard against p.Device == nil || p.Device.Photo == nil. Any photodiode component lacking a populated Photo config, for example from a partially decoded or legacy document, would panic inside the solver.",
+      "suggestion": "Guard the dereference: `p.Kind == \"photodiode\" \u0026\u0026 p.Device != nil \u0026\u0026 p.Device.Photo != nil \u0026\u0026 p.Device.Photo.Capacitance \u003e 0`. Wrap the photodiode term in parentheses for clarity.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/power_devices.go",
+          "lines": {
+            "start": 384,
+            "end": 384
+          }
+        }
+      ],
+      "tags": [
+        "nil-deref",
+        "solver"
+      ],
+      "evidence": "if p.Kind == \"photodiode\" \u0026\u0026 p.Device.Photo.Capacitance \u003e 0 || p.Kind == \"piezo\" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == \"battery\" || p.Kind == \"dc-motor\" {",
+      "fix": {
+        "before": "if p.Kind == \"photodiode\" \u0026\u0026 p.Device.Photo.Capacitance \u003e 0 || p.Kind == \"piezo\" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == \"battery\" || p.Kind == \"dc-motor\" {",
+        "after": "if p.Kind == \"photodiode\" \u0026\u0026 p.Device != nil \u0026\u0026 p.Device.Photo != nil \u0026\u0026 p.Device.Photo.Capacitance \u003e 0 || p.Kind == \"piezo\" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == \"battery\" || p.Kind == \"dc-motor\" {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "10f756ba0da288e5",
+      "severity": "low",
+      "category": "style",
+      "title": "Variable shadows builtin copy",
+      "message": "The local variable `copy` shadows Go's builtin copy function, which hurts readability and can confuse later edits.",
+      "suggestion": "Rename the variable to `clone`.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/photodiode_test.go",
+          "lines": {
+            "start": 201,
+            "end": 201
+          }
+        }
+      ],
+      "tags": [
+        "shadowing",
+        "location-corrected"
+      ],
+      "evidence": "\tcopy := g.Clone()",
+      "fix": {
+        "before": "\tcopy := g.Clone()\n\tcopy.Components[2].Device.Photo.Light = 99",
+        "after": "\tclone := g.Clone()\n\tclone.Components[2].Device.Photo.Light = 99"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b8a6e3f72f2f2bba",
+      "severity": "low",
+      "category": "testing",
+      "title": "Unsynchronized access to service internals and unchecked lookup",
+      "message": "The test reads the service's internal `s.graph` directly while the service may be running worker goroutines, which can race under -race. The test also ignores the existence flag, so a missing component causes a nil-pointer panic instead of a clear failure. The same flag is ignored for `old, _ :=` above.",
+      "suggestion": "Resolve the component from a published snapshot after `settled(t, s)` rather than reading the internal `s.graph`. If no such snapshot accessor exists, read `s.graph` only under the service's synchronization. Check the `exists` result and nil-check `Device`/`Photo` before dereferencing.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/photodiode_test.go",
+          "lines": {
+            "start": 230,
+            "end": 231
+          }
+        }
+      ],
+      "tags": [
+        "race",
+        "test-robustness"
+      ],
+      "evidence": "\tp, _ := s.graph.Component(\"PD1\")\n\tif p.Device.Photo.Light != 10 {",
+      "fix": {
+        "before": "\tp, _ := s.graph.Component(\"PD1\")\n\tif p.Device.Photo.Light != 10 {",
+        "after": "\tp, ok := s.Snapshot().Graph().Component(\"PD1\")\n\tif !ok || p.Device == nil || p.Device.Photo == nil || p.Device.Photo.Light != 10 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 14905,
+    "totalMs": 14925
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 7,
+    "bytes": 16253,
+    "chunks": 1,
+    "llmCalls": 1,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 9970,
+        "output": 1747,
+        "costUSD": 0.07482
+      }
+    ],
+    "widenedFiles": 2,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

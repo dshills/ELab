@@ -497,6 +497,14 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		}
 	case "resistor":
 		stroke(ink, 2.5, canvas.Point{X: -55}, canvas.Point{X: -43}, canvas.Point{X: -35, Y: -15}, canvas.Point{X: -21, Y: 15}, canvas.Point{X: -7, Y: -15}, canvas.Point{X: 7, Y: 15}, canvas.Point{X: 21, Y: -15}, canvas.Point{X: 35, Y: 15}, canvas.Point{X: 43}, canvas.Point{X: 55})
+	case "photodiode":
+		for _, path := range workbench.PhotodiodeSymbolPaths() {
+			points := make([]canvas.Point, len(path))
+			for k, p := range path {
+				points[k] = canvas.Point{X: p.X, Y: p.Y}
+			}
+			stroke(ink, 2.5, points...)
+		}
 	case "diode", "zener", "schottky":
 		stroke(ink, 3, canvas.Point{X: -20, Y: -24}, canvas.Point{X: 20, Y: -24}, canvas.Point{Y: 17}, canvas.Point{X: -20, Y: -24})
 		switch part.Kind {

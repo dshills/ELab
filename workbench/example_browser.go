@@ -57,7 +57,7 @@ func exampleCategory(id string) string {
 		return "timers"
 	case "shift-register", "display-counter", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-inverter", "logic-switches", "logic-half-adder", "button-counter", "button-debounce", "comparator-counter":
 		return "logic"
-	case "night-light", "thermostat", "comparator-threshold":
+	case "photodiode-load", "photodiode-tia", "night-light", "thermostat", "comparator-threshold":
 		return "sensors"
 	case "buck", "rectifier", "zener", "schottky", "coupled-windings", "transformer-supply", "opto-switch", "battery-led", "battery-regulator", "regulator-supply", "regulator-dropout", "relay-switch", "relay-flasher":
 		return "power"

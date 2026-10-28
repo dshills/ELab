@@ -7,23 +7,24 @@ import (
 )
 
 type InputWork struct {
-	MotorLoad          *MotorLoadParams   `json:"requested_motor_load,omitempty"`
-	Temperature        *TemperatureParams `json:"requested_temperature,omitempty"`
-	Light              *LightParams       `json:"requested_light,omitempty"`
-	Button             *ButtonParams      `json:"requested_button,omitempty"`
-	Click              bool               `json:"button_click,omitempty"`
-	ID                 string             `json:"id"`
-	Command            string             `json:"command"`
-	Status             string             `json:"status"`
-	Actor              string             `json:"actor"`
-	RunID              uint64             `json:"run_id"`
-	ElectricalRevision uint64             `json:"electrical_revision"`
-	ActuationRevision  uint64             `json:"actuation_revision"`
-	CommandRevision    uint64             `json:"command_revision"`
-	Time               float64            `json:"time_s"`
-	Mode               string             `json:"requested_mode,omitempty"`
-	Wiper              *WiperParams       `json:"requested_wiper,omitempty"`
-	Error              *Failure           `json:"error,omitempty"`
+	OpticalLight       *OpticalLightParams `json:"requested_optical_light,omitempty"`
+	MotorLoad          *MotorLoadParams    `json:"requested_motor_load,omitempty"`
+	Temperature        *TemperatureParams  `json:"requested_temperature,omitempty"`
+	Light              *LightParams        `json:"requested_light,omitempty"`
+	Button             *ButtonParams       `json:"requested_button,omitempty"`
+	Click              bool                `json:"button_click,omitempty"`
+	ID                 string              `json:"id"`
+	Command            string              `json:"command"`
+	Status             string              `json:"status"`
+	Actor              string              `json:"actor"`
+	RunID              uint64              `json:"run_id"`
+	ElectricalRevision uint64              `json:"electrical_revision"`
+	ActuationRevision  uint64              `json:"actuation_revision"`
+	CommandRevision    uint64              `json:"command_revision"`
+	Time               float64             `json:"time_s"`
+	Mode               string              `json:"requested_mode,omitempty"`
+	Wiper              *WiperParams        `json:"requested_wiper,omitempty"`
+	Error              *Failure            `json:"error,omitempty"`
 }
 
 func cloneInputWork(in *InputWork) *InputWork {
@@ -31,6 +32,10 @@ func cloneInputWork(in *InputWork) *InputWork {
 		return nil
 	}
 	out := *in
+	if in.OpticalLight != nil {
+		v := *in.OpticalLight
+		out.OpticalLight = &v
+	}
 	if in.MotorLoad != nil {
 		v := *in.MotorLoad
 		out.MotorLoad = &v

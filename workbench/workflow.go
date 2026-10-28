@@ -26,7 +26,7 @@ type BatchParams struct {
 
 // One allowlist serves staged validation and on-demand agent discovery.
 var atomicBatchCommands = [...]string{
-	"thermal.configure",
+	"photodiode.configure", "photodiode.light.set", "thermal.configure",
 	"block.create", "block.parameter.set", "block.view.set", "block.release",
 	"component.place", "component.move", "component.rotate", "component.set", "component.duplicate",
 	"capacitor.initial.set", "inductor.initial.set", "object.delete", "wire.connect", "wire.junction.insert",

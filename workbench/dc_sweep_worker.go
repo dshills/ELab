@@ -182,6 +182,13 @@ func (s *Service) sweepSettingsLocked() SweepSettings {
 	if s.sweeps != nil && s.sweeps.settings != nil {
 		return cloneSweepSettings(*s.sweeps.settings)
 	}
+	if s.exampleID == "photodiode-load" || s.exampleID == "photodiode-tia" {
+		probe := "v:RL"
+		if s.exampleID == "photodiode-tia" {
+			probe = "v:U1"
+		}
+		return SweepSettings{ComponentID: "PD1", Parameter: "light", Start: "0", Stop: "40", Points: 41, ProbeIDs: []string{probe}}
+	}
 	if s.exampleID == "noise-rc" || s.exampleID == "noise-amplifier" {
 		source, probe := "V1", "v:C1"
 		if s.exampleID == "noise-amplifier" {

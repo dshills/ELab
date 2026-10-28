@@ -74,7 +74,7 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 	for _, q := range r.Transistors {
 		hasProfile = hasProfile || q.Model.ID == TransistorProfileModelID+".npn" || q.Model.ID == TransistorProfileModelID+".pnp"
 	}
-	if hasProfile || len(r.Speakers) > 0 || len(r.Transformers) > 0 || len(r.Inductors) > 0 || hasRelay || len(r.Motors) > 0 || len(r.Batteries) > 0 {
+	if len(r.Photodiodes) > 0 || hasProfile || len(r.Speakers) > 0 || len(r.Transformers) > 0 || len(r.Inductors) > 0 || hasRelay || len(r.Motors) > 0 || len(r.Batteries) > 0 {
 		p.Energy = 0
 		for _, part := range r.Inductors {
 			p.Energy += part.Energy
@@ -130,6 +130,10 @@ func mixedSample(compiled Compiled, r *MixedResult, input float64) TraceSample {
 		currents[u.ID+".secondary1"] = u.SecondaryCurrent
 		currents[u.ID+".secondary2"] = -u.SecondaryCurrent
 		p.Energy += u.Energy
+	}
+	for _, q := range r.Photodiodes {
+		currents[q.ID] = q.Current
+		p.Energy += q.Energy
 	}
 	for _, u := range r.Optocouplers {
 		currents[u.ID+".anode"] = u.InputCurrent

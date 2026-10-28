@@ -1,0 +1,390 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "48bd36524e56bd1380c50b3b7c94609c",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "16e3b6a3ece8e767c4c0f956a1d516b03691f380",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 7,
+      "medium": 5,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "bfda9f0ee3335727",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Light sweep may mutate shared photodiode config",
+      "message": "The light sweep writes through `graph.Components[i].Device.Photo`. The other branches either assign a value field (`Thermal.Ambient`) or replace a pointer (`WiperPosition = \u0026value`). If `Photo` is a pointer, two things can go wrong. A shallow copy of the graph would mutate the live document's photodiode config while the background sweep runs, causing data races and corrupting the saved light level. If the pointer is nil, the write panics.",
+      "suggestion": "Clone the photodiode config before mutating it, and guard against nil. For example: `photo := *graph.Components[i].Device.Photo; photo.Light = value; graph.Components[i].Device.Photo = \u0026photo`. If `Photo` is a value type, confirm `Device` is copied by value.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep.go",
+          "lines": {
+            "start": 406,
+            "end": 407
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "concurrency"
+      ],
+      "evidence": "\t\t\t\tif plan.target.Parameter == \"light\" {\n\t\t\t\t\tgraph.Components[i].Device.Photo.Light = value",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "953297fca95a579c",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Photodiode presence does not mark network nonlinear",
+      "message": "The photodiode junction is exponential (it is stamped with a Newton conductance `g`). Other nonlinear device flags such as hasThermal also set `n.nonlinear = true`; hasPhoto does not. If `nonlinear` gates iteration or step control elsewhere, a circuit whose only nonlinear part is a photodiode could be solved as if it were linear. This is uncertain if diode kinds already set `nonlinear` somewhere this diff does not show.",
+      "suggestion": "Set `n.nonlinear = true` when a photodiode is present, as is done for the other nonlinear devices.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/mixed.go",
+          "lines": {
+            "start": 202,
+            "end": 202
+          }
+        }
+      ],
+      "tags": [
+        "solver",
+        "nonlinear"
+      ],
+      "evidence": "\t\tn.hasPhoto = n.hasPhoto || p.Kind == \"photodiode\"",
+      "fix": {
+        "before": "\t\tn.hasPhoto = n.hasPhoto || p.Kind == \"photodiode\"",
+        "after": "\t\tif p.Kind == \"photodiode\" {\n\t\t\tn.hasPhoto = true\n\t\t\tn.nonlinear = true\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "9d808d055a95ea84",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Shot noise PSD may be negative if photocurrent is signed",
+      "message": "The junction current is passed through `math.Abs`, but the photocurrent is used with its sign. If photodiodeLaw returns photocurrent as a negative value (reverse flow, cathode to anode), the shot PSD shrinks or goes negative. `math.Sqrt` of a negative PSD gives NaN densities.",
+      "suggestion": "Use `math.Abs(photo)` in the shot-noise PSD, or guarantee and document that `photo` is never negative.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/noise.go",
+          "lines": {
+            "start": 111,
+            "end": 111
+          }
+        }
+      ],
+      "tags": [
+        "noise",
+        "nan",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tpair(p, \"optical-and-dark-shot\", \"anode\", \"cathode\", 2*noiseCharge*(math.Abs(junction)+photo))",
+      "fix": {
+        "before": "\t\t\tpair(p, \"optical-and-dark-shot\", \"anode\", \"cathode\", 2*noiseCharge*(math.Abs(junction)+photo))",
+        "after": "\t\t\tpair(p, \"optical-and-dark-shot\", \"anode\", \"cathode\", 2*noiseCharge*(math.Abs(junction)+math.Abs(photo)))"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "69d4f04affde23b8",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible aliasing: mutating cloned graph's shared Photo pointer",
+      "message": "The light is written through the pointer chain `Device.Photo` on the cloned graph. If `Graph.Clone` copies components without deep-copying the `Device`/`Photo` pointers, this write changes `s.graph` and any running simulation's authored graph. That would happen before the input work is accepted, and it would break the atomic/undo semantics. The same pattern appears in `applySensorWork`. The existing sensor path goes through `setSensorEnvironment` instead.",
+      "suggestion": "Make sure the change is copy-on-write. Copy the PhotodiodeConfig, set the new light on the copy, and assign a fresh `*DeviceParameters` holding the new `Photo` pointer to `g.Components[k].Device`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/photodiode.go",
+          "lines": {
+            "start": 131,
+            "end": 136
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "pointer",
+        "location-corrected"
+      ],
+      "evidence": "\tg := s.graph.Clone()\n\tfor k, p := range g.Components {\n\t\tif p.ID == v.ID {\n\t\t\tg.Components[k].Device.Photo.Light = v.Light\n\t\t}\n\t}",
+      "fix": {
+        "before": "\tg := s.graph.Clone()\n\tfor k, p := range g.Components {\n\t\tif p.ID == v.ID {\n\t\t\tg.Components[k].Device.Photo.Light = v.Light\n\t\t}\n\t}",
+        "after": "\tg := s.graph.Clone()\n\tfor k, p := range g.Components {\n\t\tif p.ID == v.ID {\n\t\t\tcfg := *p.Device.Photo\n\t\t\tcfg.Light = v.Light\n\t\t\tdev := *p.Device\n\t\t\tdev.Photo = \u0026cfg\n\t\t\tg.Components[k].Device = \u0026dev\n\t\t}\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "54cbdc3a9637beed",
+      "severity": "medium",
+      "category": "bug",
+      "title": "In-place mutation of shared Photo config in applySensorWork",
+      "message": "`applySensorWork` sets the light by writing through the shared `Photo` pointer. If the graph passed in shares Device pointers with other snapshots, such as history, the current graph or a running network, they all see the change.",
+      "suggestion": "Replace the Device and Photo with fresh copies before setting the light.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/sensors.go",
+          "lines": {
+            "start": 159,
+            "end": 159
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\tg.Components[k].Device.Photo.Light = w.OpticalLight.Light",
+      "fix": {
+        "before": "\t\t\t\tg.Components[k].Device.Photo.Light = w.OpticalLight.Light",
+        "after": "\t\t\t\tcfg := *g.Components[k].Device.Photo\n\t\t\t\tcfg.Light = w.OpticalLight.Light\n\t\t\t\tdev := *g.Components[k].Device\n\t\t\t\tdev.Photo = \u0026cfg\n\t\t\t\tg.Components[k].Device = \u0026dev"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4fc7ceb4a0c8e62e",
+      "severity": "low",
+      "category": "docs",
+      "title": "README list now has two \"and\"s",
+      "message": "The edit leaves the list joined as \"…temperature effects…, and noise analysis, and photodiode sensing\", so it contains two \"and\"s. The comma after the circuit-blocks link is also still missing.",
+      "suggestion": "Rewrite as: \"reusable circuit blocks, temperature effects and self-heating, small-signal noise analysis, and photodiode sensing\". This requires adding a comma after the circuit-blocks link and removing the \"and\" before the noise-analysis link.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "README.md",
+          "lines": {
+            "start": 17,
+            "end": 18
+          }
+        }
+      ],
+      "tags": [
+        "grammar",
+        "location-corrected"
+      ],
+      "evidence": "+[small-signal noise analysis](docs/noise-analysis.md), and\n+[photodiode sensing](docs/photodiodes.md), with shared",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "99756ae2f1c871af",
+      "severity": "low",
+      "category": "testing",
+      "title": "Possible nil dereference of Snapshot().Mixed",
+      "message": "`Snapshot().Mixed` is dereferenced without a nil check. If no mixed solution is available yet, the test panics instead of reporting a clear failure.",
+      "suggestion": "Check that `Mixed` is non-nil on both snapshots and call `t.Fatal` if it is nil, before comparing `Photodiodes`.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/photodiode_controls_test.go",
+          "lines": {
+            "start": 25,
+            "end": 25
+          }
+        }
+      ],
+      "tags": [
+        "nil"
+      ],
+      "evidence": "if !reflect.DeepEqual(s.service.Snapshot().Components, a.Snapshot().Components) || !reflect.DeepEqual(s.service.Snapshot().Mixed.Photodiodes, a.Snapshot().Mixed.Photodiodes) {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4e653be6cb85c9db",
+      "severity": "low",
+      "category": "testing",
+      "title": "Hardcoded component index in parity test",
+      "message": "The test reads the photodiode config from `Components[2]`, which assumes the example's component order. If the `photodiode-load` example is reordered or gains a part, the test will panic on a nil `Device`/`Photo` or compare the wrong component, rather than fail with a clear message.",
+      "suggestion": "Look up the component by ID (\"PD1\") and call `t.Fatal` if it is missing or has no `Photo` config.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "desktop/photodiode_controls_test.go",
+          "lines": {
+            "start": 29,
+            "end": 29
+          }
+        }
+      ],
+      "tags": [
+        "brittle-test"
+      ],
+      "evidence": "cfg := *a.Snapshot().Components[2].Device.Photo",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "a15cc0e61ec423b6",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Duplicate identical inventory entry for photodiode Change binding",
+      "message": "The inventory has two entries for desktop/photodiode_controls.go line 27 that are byte-for-byte identical (same kind and same expression, `Change: light`). If two separate widgets share that line, the entries cannot be told apart. Reviewers then cannot see which binding each entry refers to. If only one widget exists, the generator emitted a duplicate. This inflates the requires-binding-review count and can hide a real missing entry.",
+      "suggestion": "Check photodiode_controls.go. If two nodes bind `light` on one line, split them onto separate lines or add a column/node discriminator to the inventory so the entries are distinct. If there is only one binding, remove the duplicate and fix the generator's dedup logic.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "research/13-native-command-inventory.json",
+          "lines": {
+            "start": 3134,
+            "end": 3141
+          }
+        }
+      ],
+      "tags": [
+        "generated",
+        "duplicate",
+        "inventory"
+      ],
+      "evidence": "      \"line\": 27,\n      \"function\": \"*screen.photodiodeControls\",\n      \"kind\": \"node-Change\",\n      \"expression\": \"Change: light\",",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "09eac88ed3071095",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Photodiode grouped with plain diodes in network compile",
+      "message": "The photodiode is grouped into the plain-diode list in compileNetwork. If that path stamps or classifies the device with the ordinary diode law, the photocurrent and optical drive are silently dropped in whatever analysis uses this list.",
+      "suggestion": "Confirm that consumers of `diodes` dispatch photodiodes to photodiodeLaw. Otherwise, keep photodiodes in their own list.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/network_compile.go",
+          "lines": {
+            "start": 74,
+            "end": 74
+          }
+        }
+      ],
+      "tags": [
+        "compile",
+        "location-corrected"
+      ],
+      "evidence": "\t\tcase \"photodiode\", \"diode\", \"zener\", \"schottky\":",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "2b74e3fcb49170d0",
+      "severity": "low",
+      "category": "correctness",
+      "title": "configure overwrites entire DeviceParameters in place",
+      "message": "Configuring the photodiode replaces the whole `DeviceParameters` struct, which drops any other device fields. The graph is also changed in place, without cloning. Nothing in this function invalidates the transient or keeps the running state consistent, unlike the light-set path.",
+      "suggestion": "Copy the existing `DeviceParameters` and set only `Photo` on the copy. Change the graph through the same clone-and-replace or history path that other configure commands use.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/photodiode.go",
+          "lines": {
+            "start": 109,
+            "end": 109
+          }
+        }
+      ],
+      "tags": [
+        "state",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\ts.graph.Components[k].Device = \u0026DeviceParameters{Photo: \u0026v.Parameters}",
+      "fix": {
+        "before": "\t\t\ts.graph.Components[k].Device = \u0026DeviceParameters{Photo: \u0026v.Parameters}",
+        "after": "\t\t\tcfg := v.Parameters\n\t\t\tdev := DeviceParameters{}\n\t\t\tif p.Device != nil {\n\t\t\t\tdev = *p.Device\n\t\t\t}\n\t\t\tdev.Photo = \u0026cfg\n\t\t\ts.graph.Components[k].Device = \u0026dev"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5a37dc43db526c4b",
+      "severity": "low",
+      "category": "performance",
+      "title": "Collocation forced for photodiodes without capacitance",
+      "message": "Any photodiode switches the solver to collocation. When the capacitance is 0 the photodiode adds no storage and is purely resistive, so the extra solver cost buys nothing.",
+      "suggestion": "Only require collocation when `p.Device.Photo.Capacitance \u003e 0`. Capacitors produced by lowering are already handled.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/power_devices.go",
+          "lines": {
+            "start": 384,
+            "end": 384
+          }
+        }
+      ],
+      "tags": [
+        "solver",
+        "location-corrected"
+      ],
+      "evidence": "\t\tif p.Kind == \"photodiode\" || p.Kind == \"piezo\" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == \"battery\" || p.Kind == \"dc-motor\" {",
+      "fix": {
+        "before": "\t\tif p.Kind == \"photodiode\" || p.Kind == \"piezo\" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == \"battery\" || p.Kind == \"dc-motor\" {",
+        "after": "\t\tif (p.Kind == \"photodiode\" \u0026\u0026 p.Device != nil \u0026\u0026 p.Device.Photo != nil \u0026\u0026 p.Device.Photo.Capacitance \u003e 0) || p.Kind == \"piezo\" || hasDynamics(p) || hasJunctionStorage(p) || p.Kind == \"battery\" || p.Kind == \"dc-motor\" {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 113211,
+    "totalMs": 31876
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 46,
+    "bytes": 152180,
+    "chunks": 8,
+    "llmCalls": 8,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 91807,
+        "output": 10511,
+        "costUSD": 0.577448
+      }
+    ],
+    "widenedFiles": 18,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

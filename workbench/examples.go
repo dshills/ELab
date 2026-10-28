@@ -58,6 +58,8 @@ func ExampleCatalog() []ExampleInfo { return slices.Clone(immutableExampleCatalo
 
 func buildExampleCatalog() []ExampleInfo {
 	catalog := []ExampleInfo{
+		{ID: "photodiode-load", Title: "Photodiode light-to-voltage sensor", Question: "How does optical power become current?", Expected: "PD1 is reverse-biased through RL. Increasing incident optical µW increases photocurrent and resistor voltage. The 10 nF junction charges from zero through the external circuit.", Try: "Select PD1 and adjust Incident light. Probe PD1/RL current and voltage, then compare capacitance settings or use the optical-power DC sweep target.", Limitation: photodiodeDescription},
+		{ID: "photodiode-tia", Title: "Photodiode transimpedance amplifier", Question: "How can an op-amp measure a small light current?", Expected: "A 100k feedback resistor converts 10 µA photocurrent into about 1 V output. CF bounds the closed-loop response; the detector operates near zero junction voltage.", Try: "Select PD1 and change incident light from 0 to 40 µW. Observe stored charge continuity and output response. Sweep PD1 optical power to compare the transimpedance against responsivity × RF.", Limitation: photodiodeDescription},
 		{ID: "noise-rc", Title: "RC filter thermal noise", Question: "How do resistance and bandwidth set noise?", Expected: "R1 contributes Johnson noise filtered by C1. Output noise falls above the RC cutoff; integrated RMS depends on the selected bandwidth.", Try: "Open Simulate → sweeps and run the prepared Noise target. Compare output density, input-referred density and integrated RMS; change R1 or C1 and repeat.", Limitation: "Declared independent white sources at DC bias; no flicker/excess noise or hardware noise floor. RMS uses sampled linear-PSD quadrature; refine points and band."},
 		{ID: "noise-amplifier", Title: "Amplifier noise budget", Question: "Which components dominate amplifier noise?", Expected: "Input/feedback resistors and the illustrative op-amp white voltage/current sources contribute independently. Their powers add; RMS amplitudes do not add directly.", Try: "Run the prepared Noise sweep, inspect component RMS contributions, then increase feedback resistance and compare. Export JSON/CSV or save the captured curve with the project.", Limitation: "Fixed educational op-amp input noise: 10 nV/√Hz and 1 pA/√Hz per input. No named-device model, 1/f noise, correlations or distortion-plus-noise claim."},
 		{ID: "self-heating", Title: "Resistor self-heating", Question: "How does electrical heat raise component temperature?", Expected: "R1 dissipates 250 mW. Its temperature approaches 52 °C from 27 °C with a 100 ms thermal time constant.", Try: "Select R1 to watch temperature and separate thermal energy. Set a positive resistance coefficient, then compare current and temperature. Try an ambient DC sweep.", Limitation: thermalDescription},
@@ -455,6 +457,14 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.selected = "Q6"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0005, .02
 		d.probes = []string{"v:VIN.positive", "v:RL", "i:Q6.collector", "i:Q7.collector", "i:Q8.collector", "v:C1"}
+	case "photodiode-load":
+		d.graph, d.selected = PhotodiodeLoadExampleGraph(), "PD1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00001, .01
+		d.probes = []string{"v:PD1", "i:PD1", "v:RL"}
+	case "photodiode-tia":
+		d.graph, d.selected = PhotodiodeTIAExampleGraph(), "PD1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .000001, .001
+		d.probes = []string{"v:U1", "i:PD1", "v:PD1"}
 	case "noise-rc":
 		d.graph, d.selected = ACRCExampleGraph(), "R1"
 		d.probes = []string{"v:C1"}

@@ -77,7 +77,7 @@ type sweepDomain struct {
 }
 
 func sweepDomains() []sweepDomain {
-	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"temperature", "°C", -40, 125}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}, {"noise", "Hz", .01, 1e9}, {"loop-frequency", "Hz", .01, 1e9}}
+	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"temperature", "°C", -40, 125}, {"light", "µW", 0, 1000}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}, {"noise", "Hz", .01, 1e9}, {"loop-frequency", "Hz", .01, 1e9}}
 }
 
 func sweepTargets(g Graph) []SweepTarget {
@@ -87,6 +87,10 @@ func sweepTargets(g Graph) []SweepTarget {
 		for _, d := range domains {
 			label := ""
 			switch d.Parameter {
+			case "light":
+				if p.Kind == "photodiode" {
+					label = "Incident optical power"
+				}
 			case "temperature":
 				if hasThermal(p) {
 					label = "Ambient temperature"
@@ -193,7 +197,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		if IsSpectralSweep(plan.target.Parameter) {
 			value, err = parseWaveformQuantity(text, "Hz")
 		}
-		if plan.target.Parameter == "wiper" || plan.target.Parameter == "temperature" {
+		if plan.target.Parameter == "wiper" || plan.target.Parameter == "temperature" || plan.target.Parameter == "light" {
 			value, err = strconv.ParseFloat(strings.TrimSpace(text), 64)
 		}
 		if err != nil {
@@ -399,7 +403,9 @@ func computeDCSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*S
 				if graph.Components[i].ID != plan.target.ComponentID {
 					continue
 				}
-				if plan.target.Parameter == "temperature" {
+				if plan.target.Parameter == "light" {
+					graph.Components[i].Device.Photo.Light = value
+				} else if plan.target.Parameter == "temperature" {
 					graph.Components[i].Thermal.Ambient = value
 				} else if plan.target.Parameter == "wiper" {
 					graph.Components[i].WiperPosition = &value

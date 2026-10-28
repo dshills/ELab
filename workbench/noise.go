@@ -48,6 +48,7 @@ func IsSpectralSweep(parameter string) bool {
 func noiseAssumptions() []string {
 	return []string{
 		NoiseEngineID + ": stationary, uncorrelated one-sided white sources about a solved DC operating point; no live random waveform, flicker, avalanche, excess noise, correlations or THD+N",
+		"Photodiode optical/dark shot PSD 2*q*(photocurrent+abs(junction current)) and fixed 1 Gohm shunt Johnson noise; no avalanche multiplication",
 		"Resistor Johnson current PSD 4*k*T/R (T=300.15 K unless its temperature model is enabled); diode terminal shot PSD 2*q*abs(I); BJT independent base/emitter and collector/emitter shot PSD 2*q*abs(IB/IC), approximate in saturation/reverse operation",
 		"JFET/MOS channel PSD (8/3)*k*300.15*abs(gm); gate noise and parasitic bleeds omitted. Op-amp illustrative white input voltage 10 nV/sqrt(Hz) and independent input currents 1 pA/sqrt(Hz) referred to V-; no device-fit claim",
 		"Only declared noise mechanisms count; ideal capacitors/inductors/sources/connectivity are noiseless. Lossy storage, speakers, transformers, switches/sensors, current devices and Zener avalanche are refused rather than silently omitted",
@@ -65,7 +66,7 @@ func noiseSupported(g Graph) error {
 			return fmt.Errorf("noise analysis does not yet model lossy storage; disable losses or use explicit resistors")
 		}
 		switch p.Kind {
-		case "ground", "net-label", "junction", "dc-source", "pulse-source", "sine-source", "finite-pulse-source", "resistor", "capacitor", "inductor", "diode", "schottky", "led", "npn", "pnp", "njfet", "pjfet", "nmos", "pmos", "opamp":
+		case "photodiode", "ground", "net-label", "junction", "dc-source", "pulse-source", "sine-source", "finite-pulse-source", "resistor", "capacitor", "inductor", "diode", "schottky", "led", "npn", "pnp", "njfet", "pjfet", "nmos", "pmos", "opamp":
 		default:
 			return fmt.Errorf("noise analysis does not yet declare noise for %s", p.Kind)
 		}
@@ -105,6 +106,10 @@ func (n *mixedNetwork) noiseDrives(x []float64) []noiseDrive {
 			temp = n.thermalTemperature(p, x) + 273.15
 		}
 		switch p.Kind {
+		case "photodiode":
+			_, _, junction, photo := photodiodeLaw(p, voltage(x, n.pin(p, "anode"))-voltage(x, n.pin(p, "cathode")))
+			pair(p, "optical-and-dark-shot", "anode", "cathode", 2*noiseCharge*(math.Abs(junction)+photo))
+			pair(p, "shunt-johnson", "anode", "cathode", 4*noiseBoltzmann*temp*1e-9)
 		case "resistor":
 			r := p.Value
 			if hasThermal(p) {

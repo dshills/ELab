@@ -174,6 +174,7 @@ type Part struct {
 
 func libraryParts() []Part {
 	return []Part{
+		{Kind: "photodiode", Name: "Photodiode", Terminals: []string{"anode", "cathode"}, Model: PhotodiodeModelID},
 		{Kind: "njfet", Name: "N-channel JFET", Terminals: append([]string{}, jfetPins...), Model: JFETModelID},
 		{Kind: "pjfet", Name: "P-channel JFET", Terminals: append([]string{}, jfetPins...), Model: JFETModelID},
 		{Kind: "current-source", Name: "DC / pulsed current source", Terminals: []string{"positive", "negative"}, Model: CurrentDeviceModelID},
@@ -428,7 +429,7 @@ func TerminalPosition(c Component, name string) (Point, bool) {
 		default:
 			found = false
 		}
-	case "led", "diode", "zener", "schottky":
+	case "photodiode", "led", "diode", "zener", "schottky":
 		switch name {
 		case "anode":
 			p = Point{0, -32}
@@ -592,7 +593,7 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 				hasSwitch = true
 			}
 			sources = append(sources, c)
-		case "speaker", "shift-register", "piezo", "active-buzzer", "pwm-controller", "hbridge", "transformer", "optocoupler", "dc-motor", "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
+		case "photodiode", "speaker", "shift-register", "piezo", "active-buzzer", "pwm-controller", "hbridge", "transformer", "optocoupler", "dc-motor", "linear-regulator", "ldo-regulator", "relay", "comparator", "pushbutton", "bouncing-pushbutton", "bcd-decoder", "seven-segment", "d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter", "logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor", "timer555", "switch":
 			hasSwitch = true
 		case "diode", "zener", "schottky":
 			hasDiode = true
