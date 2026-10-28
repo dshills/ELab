@@ -565,6 +565,29 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			out.Result = result
 			return out
 		}
+		if r.Command == "analysis.list" {
+			if err := params(r.Params, &struct{}{}); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = s.analysisCatalogLocked()
+			return out
+		}
+		if r.Command == "analysis.page" {
+			var p AnalysisPageParams
+			if err := params(r.Params, &p, "kind", "id", "document_generation"); err != nil {
+				return fail("invalid-params", err.Error())
+			}
+			result, err := s.analysisPageLocked(p)
+			if err != nil {
+				var action *actionError
+				if errors.As(err, &action) {
+					return fail(action.code, action.message)
+				}
+				return fail("invalid-params", err.Error())
+			}
+			out.Result = result
+			return out
+		}
 		if r.Command == "sweep.inspect" {
 			var p IDParams
 			if err := params(r.Params, &p, "id"); err != nil {

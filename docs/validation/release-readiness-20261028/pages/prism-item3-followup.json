@@ -1,0 +1,143 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "002ebc4f09fa8e4864c61f844932d31d",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "04ef91082c05b4d11f22878fccfb630a54b9e371",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 3,
+      "medium": 0,
+      "high": 0
+    },
+    "highestSeverity": "low"
+  },
+  "findings": [
+    {
+      "id": "d75b035bfd5b90c4",
+      "severity": "low",
+      "category": "correctness",
+      "title": "slices.Clone changes empty-array JSON encoding",
+      "message": "append([]float64{}, x...) always returned a non-nil slice. slices.Clone returns nil when the source is nil. Values, sample Values and trial Parameters therefore now marshal as JSON null instead of [] when the source is nil. This silently changes the wire format and is not a pure refactor.",
+      "suggestion": "Keep the previous non-nil semantics, for example `append([]float64{}, point.Values...)`. Alternatively, confirm that clients accept null and that the sources are never nil.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/analysis_pages.go",
+          "lines": {
+            "start": 157,
+            "end": 157
+          }
+        }
+      ],
+      "tags": [
+        "json",
+        "refactor",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tv.Values = slices.Clone(point.Values)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "53502c38f9e004e7",
+      "severity": "low",
+      "category": "testing",
+      "title": "Readiness asserted immediately after Close may be flaky",
+      "message": "Per the shutdown docs, ExitReady means background finalization and joining has completed. If Close returns before that finalization finishes, asserting ReadyToExit immediately after Close can intermittently fail. The service is also closed twice, once explicitly and once via defer, which relies on Close being idempotent.",
+      "suggestion": "Poll or wait (e.g. via s.Wait or a deadline loop) until ReadyToExit becomes true. Then compare it with the snapshot.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/analysis_pages_test.go",
+          "lines": {
+            "start": 234,
+            "end": 236
+          }
+        }
+      ],
+      "tags": [
+        "flaky"
+      ],
+      "evidence": "\ts.Close()\n\tif !s.ReadyToExit() || !s.Snapshot().ReadyToExit() {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "695294a972290836",
+      "severity": "low",
+      "category": "docs",
+      "title": "Doc comment detached from Snapshot.ReadyToExit",
+      "message": "The new Service.ReadyToExit was inserted between Snapshot.ReadyToExit and its doc comment. The \"Closed freezes...\" comment now merges into the new method's doc, and Snapshot.ReadyToExit is left undocumented.",
+      "suggestion": "Place the new method and its comment before the existing comment block, or after Snapshot.ReadyToExit.",
+      "confidence": 0.75,
+      "locations": [
+        {
+          "path": "workbench/shutdown.go",
+          "lines": {
+            "start": 46,
+            "end": 57
+          }
+        }
+      ],
+      "tags": [
+        "godoc"
+      ],
+      "evidence": "// Closed freezes semantic mutations immediately. ExitReady additionally means\n// background finalization/joining completed, or its failure was acknowledged.\n// ReadyToExit reads lifecycle readiness without constructing a full snapshot.\nfunc (s *Service) ReadyToExit() bool {",
+      "fix": {
+        "before": "// Closed freezes semantic mutations immediately. ExitReady additionally means\n// background finalization/joining completed, or its failure was acknowledged.\n// ReadyToExit reads lifecycle readiness without constructing a full snapshot.\nfunc (s *Service) ReadyToExit() bool {\n\ts.mu.Lock()\n\tdefer s.mu.Unlock()\n\treturn s.closed \u0026\u0026 s.shutdown != nil \u0026\u0026 s.shutdown.work.ExitReady\n}\n\nfunc (state Snapshot) ReadyToExit() bool {",
+        "after": "// ReadyToExit reads lifecycle readiness without constructing a full snapshot.\nfunc (s *Service) ReadyToExit() bool {\n\ts.mu.Lock()\n\tdefer s.mu.Unlock()\n\treturn s.closed \u0026\u0026 s.shutdown != nil \u0026\u0026 s.shutdown.work.ExitReady\n}\n\n// Closed freezes semantic mutations immediately. ExitReady additionally means\n// background finalization/joining completed, or its failure was acknowledged.\nfunc (state Snapshot) ReadyToExit() bool {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 19398,
+    "totalMs": 19420
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 7,
+    "bytes": 15205,
+    "chunks": 1,
+    "llmCalls": 1,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 9728,
+        "output": 2153,
+        "costUSD": 0.081972
+      }
+    ],
+    "widenedFiles": 5,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

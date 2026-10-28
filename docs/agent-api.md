@@ -24,6 +24,10 @@ project, history, probe and export commands remain shared with the UI.
 
 All semantic commands use `workbench.Service.Dispatch`. Vellum widget callbacks, keyboard commands, canvas gestures, built-in Go clients, headless stdio, and the external socket client share this entry point. An agent does not need screenshots or simulated clicks to operate the implemented circuit slice.
 
+Source development also provides [bounded analysis pages](analysis-pages.md) for
+large sweeps, recordings, spectra and tolerance trials, with compact admission
+guards. Discover availability from the running build.
+
 ## Request and response
 
 ```json

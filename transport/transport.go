@@ -51,7 +51,7 @@ func Stdio(ctx context.Context, s *workbench.Service, in io.Reader, out io.Write
 		if err := encoder.Encode(response(ctx, s, scanner.Bytes(), "agent.stdio")); err != nil {
 			return err
 		}
-		if s.Snapshot().ReadyToExit() {
+		if s.ReadyToExit() {
 			return nil
 		}
 	}

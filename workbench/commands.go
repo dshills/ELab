@@ -91,6 +91,10 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(AnalysisSummary{}), "urn:elab:analysis-summary:1"},
+	{reflect.TypeOf(AnalysisCatalog{}), "urn:elab:analysis-catalog:1"},
+	{reflect.TypeOf(AnalysisPageParams{}), "urn:elab:analysis-page-input:1"},
+	{reflect.TypeOf(AnalysisPage{}), "urn:elab:analysis-page:1"},
 	{reflect.TypeOf(ThyristorConfig{}), "urn:elab:thyristor-config:1"},
 	{reflect.TypeOf(ThyristorParams{}), "urn:elab:thyristor-input:1"},
 	{reflect.TypeOf(PhotodiodeConfig{}), "urn:elab:photodiode-config:1"},
@@ -543,6 +547,8 @@ func Catalog() []Capability {
 		typedCapability("sweep.settings.set", "Configure DC, AC or noise sweep, 2–201 points; DC 1–6 probes, AC/noise 1–3 voltage outputs; no live mutation", reflect.TypeOf(SweepSettings{})),
 		typedCapability("sweep.start", "Capture DC, AC gain/phase or white-noise results; optional settings override; inspect dc_sweep/jobs; one worker, 30 s cooperative deadline", reflect.TypeOf(SweepStartParams{})),
 		typedCapability("sweep.cancel", "Cancel exact active sweep ID; no partial points are published", reflect.TypeOf(IDParams{})),
+		queryCapability("analysis.list", "List compact analysis summaries and current admission guards", reflect.TypeOf(struct{}{}), reflect.TypeOf(AnalysisCatalog{})),
+		queryCapability("analysis.page", "Read 1–50 analysis rows by kind/id and document generation; no live mutation", reflect.TypeOf(AnalysisPageParams{}), reflect.TypeOf(AnalysisPage{})),
 		queryCapability("sweep.inspect", "Read retained sweep capture and complete result; copied data; no live mutation", reflect.TypeOf(IDParams{}), reflect.TypeOf(SweepInspection{})),
 		typedCapability("sweep.select", "Select a retained sweep ID without stopping current work", reflect.TypeOf(IDParams{})),
 		typedCapability("sweep.visibility.set", "Show/hide sweep plot; preserves live acquisition; showing closes print preview", reflect.TypeOf(SweepVisibilityParams{})),

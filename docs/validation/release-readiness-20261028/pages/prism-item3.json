@@ -1,0 +1,249 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "2003a4e7475a056003c7e7b79ea2e51f",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "04ef91082c05b4d11f22878fccfb630a54b9e371",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 5,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "1a5e38e660e8cbb9",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Full snapshot DeepEqual may be flaky with clock publication",
+      "message": "The new docs say clock publication can continue while analyses are read. If the snapshot includes clock or published state that changes on its own, deep-comparing the full snapshot taken earlier with `Wait` could make this test flaky. A failure would then not show that the queries mutated anything.",
+      "suggestion": "Compare only the fields that queries must not alter: revision, command_revision, document generation, history, selection, cursors and dirty flags. Alternatively, ensure the simulation clock is stopped before taking `before`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "transport/analysis_pages_test.go",
+          "lines": {
+            "start": 81,
+            "end": 81
+          }
+        }
+      ],
+      "tags": [
+        "flaky",
+        "test",
+        "location-corrected"
+      ],
+      "evidence": "\tif !reflect.DeepEqual(before, s.Snapshot()) {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "134d8bd660e611b4",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Tolerance with empty ID may appear in catalog",
+      "message": "`analysisCatalogLocked` adds a tolerance entry whenever `s.tolerance` is non-nil. If no tolerance run has been started, `view.ID` is likely empty. `analysisViewLocked` then matches `\"\" == \"\"` and succeeds, so the catalog lists a tolerance analysis with an empty ID. Clients cannot page that entry, because the page handler rejects empty IDs.",
+      "suggestion": "Only list the tolerance entry when it has a non-empty ID: `if s.tolerance != nil \u0026\u0026 s.tolerance.view.ID != \"\"`.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/analysis_pages.go",
+          "lines": {
+            "start": 116,
+            "end": 118
+          }
+        }
+      ],
+      "tags": [
+        "catalog",
+        "edge-case"
+      ],
+      "evidence": "\tif s.tolerance != nil {\n\t\tadd(\"tolerance\", s.tolerance.view.ID)\n\t}",
+      "fix": {
+        "before": "\tif s.tolerance != nil {\n\t\tadd(\"tolerance\", s.tolerance.view.ID)\n\t}",
+        "after": "\tif s.tolerance != nil \u0026\u0026 s.tolerance.view.ID != \"\" {\n\t\tadd(\"tolerance\", s.tolerance.view.ID)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c566bb42bcc7ab42",
+      "severity": "low",
+      "category": "docs",
+      "title": "Opaque reference in docs",
+      "message": "The phrase \"The /279 package\" is an unexplained internal reference. It is unclear what it means to readers of the public documentation.",
+      "suggestion": "Replace it with a clear version or release reference, or remove it.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "docs/analysis-pages.md",
+          "lines": {
+            "start": 4,
+            "end": 4
+          }
+        }
+      ],
+      "tags": [
+        "clarity"
+      ],
+      "evidence": "Service.Dispatch used by the UI and agents. The /279 package predates them.",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f5eb385548b21c72",
+      "severity": "low",
+      "category": "testing",
+      "title": "Ignored json.Marshal errors",
+      "message": "The errors from `json.Marshal` are discarded. If marshaling fails, the test sends an empty or invalid request, and the resulting failure points somewhere misleading.",
+      "suggestion": "Check the errors and call `t.Fatal` on failure.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "transport/analysis_pages_test.go",
+          "lines": {
+            "start": 62,
+            "end": 63
+          }
+        }
+      ],
+      "tags": [
+        "errors"
+      ],
+      "evidence": "\t\tparams, _ := json.Marshal(q.params)\n\t\trequest, _ := json.Marshal(workbench.Request{Version: 1, ID: q.command, Command: q.command, Params: params})",
+      "fix": {
+        "before": "\t\tparams, _ := json.Marshal(q.params)\n\t\trequest, _ := json.Marshal(workbench.Request{Version: 1, ID: q.command, Command: q.command, Params: params})",
+        "after": "\t\tparams, err := json.Marshal(q.params)\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\trequest, err := json.Marshal(workbench.Request{Version: 1, ID: q.command, Command: q.command, Params: params})\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "fc13a1e6b2aff026",
+      "severity": "low",
+      "category": "style",
+      "title": "Inconsistent context usage",
+      "message": "The stdio path uses `context.Background()`, while the rest of the test uses `t.Context()`. That context is not cancelled when the test ends, and the two paths being compared get different contexts.",
+      "suggestion": "Use `t.Context()` for consistency. Then drop the `context` import, since it would no longer be used.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "transport/analysis_pages_test.go",
+          "lines": {
+            "start": 67,
+            "end": 67
+          }
+        }
+      ],
+      "tags": [
+        "context"
+      ],
+      "evidence": "\t\tif err = Stdio(context.Background(), s, bytes.NewReader(request), \u0026a); err != nil {",
+      "fix": {
+        "before": "\t\tif err = Stdio(context.Background(), s, bytes.NewReader(request), \u0026a); err != nil {",
+        "after": "\t\tif err = Stdio(t.Context(), s, bytes.NewReader(request), \u0026a); err != nil {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "6a9128ed55a67a99",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Unhandled record type yields silently empty page",
+      "message": "The type switch over `record` has no default branch. If `analysisViewLocked` ever returns a new record type, the function returns a page with no rows. That page still carries a NextOffset and a Done flag computed from `summary.Rows`, so the data is silently dropped.",
+      "suggestion": "Add `default: return AnalysisPage{DocumentGeneration: s.documentGeneration}, fmt.Errorf(\"unsupported analysis record %T\", record)` to fail loudly.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/analysis_pages.go",
+          "lines": {
+            "start": 149,
+            "end": 176
+          }
+        }
+      ],
+      "tags": [
+        "robustness"
+      ],
+      "evidence": "\tswitch r := record.(type) {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b3b4f520eb805bf1",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Inconsistent nil/empty normalization in cloned slices",
+      "message": "The copies normalize nil and empty slices in opposite directions. `Values` always becomes a non-nil slice, even when the source is nil. `AC` always becomes nil, even when the source is a non-nil empty slice. Paged rows can therefore fail `reflect.DeepEqual` against the source, and JSON may encode `[]` where the source gives `null`, or the reverse. This depends on how producers fill these fields.",
+      "suggestion": "Preserve nil-ness, e.g. use `slices.Clone(point.Values)` and `slices.Clone(point.AC)`. The same applies to the RMS, Parameters and row Values copies.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/analysis_pages.go",
+          "lines": {
+            "start": 156,
+            "end": 157
+          }
+        }
+      ],
+      "tags": [
+        "cloning",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tv.Values = append([]float64{}, point.Values...)\n\t\t\tv.AC = append([]ACResponse(nil), point.AC...)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 36485,
+    "totalMs": 21176
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 10,
+    "bytes": 28503,
+    "chunks": 2,
+    "llmCalls": 2,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 18081,
+        "output": 3780,
+        "costUSD": 0.147924
+      }
+    ],
+    "widenedFiles": 1,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

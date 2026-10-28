@@ -43,6 +43,13 @@ func cloneShutdown(in *ShutdownWork) *ShutdownWork {
 	return &out
 }
 
+// ReadyToExit reads lifecycle readiness without constructing a full snapshot.
+func (s *Service) ReadyToExit() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.closed && s.shutdown != nil && s.shutdown.work.ExitReady
+}
+
 // Closed freezes semantic mutations immediately. ExitReady additionally means
 // background finalization/joining completed, or its failure was acknowledged.
 func (state Snapshot) ReadyToExit() bool {
