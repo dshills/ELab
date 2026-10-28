@@ -120,6 +120,9 @@ func (s *screen) changeSweepField(state workbench.Snapshot, id, text string) {
 
 func (s *screen) sweepStartAction(state workbench.Snapshot) ui.Node {
 	label := "Run DC sweep"
+	if state.DCSweep.Settings.Parameter == "noise" {
+		label = "Run noise analysis"
+	}
 	if state.DCSweep.Settings.Parameter == "loop-frequency" {
 		label = "Run loop analysis"
 	} else if state.DCSweep.Settings.Parameter == "frequency" {

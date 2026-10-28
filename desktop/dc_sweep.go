@@ -44,7 +44,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	}
 	s.pruneSweepFieldRejections(state)
 	cfg := sweep.Settings
-	nodes := []ui.Node{section("sweep-settings-title", "Frequency & DC sweeps"), quiet("sweep-settings-help", "AC response or DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
+	nodes := []ui.Node{section("sweep-settings-title", "Frequency, noise & DC sweeps"), quiet("sweep-settings-help", "AC response, white noise or DC points."), quiet("sweep-live-help", "Live circuit unchanged.")}
 	nodes = append(nodes, buttonStyle(ui.Node{ID: "sweep-import", Kind: ui.Button, Text: "Open sweep JSON…", Accessibility: ui.Accessibility{Name: "Open captured frequency or DC sweep JSON"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("sweep.import", true, workbench.RecordingImportParams{}, nil) }}, false))
 	options := []ui.Option{}
 	selected := cfg.ComponentID + ":" + cfg.Parameter
@@ -69,7 +69,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		next.ProbeIDs = nil
 		next.Spacing = ""
 		switch next.Parameter {
-		case "frequency", "loop-frequency":
+		case "frequency", "loop-frequency", "noise":
 			next.Start, next.Stop, next.Spacing = "1 Hz", "100 kHz", "logarithmic"
 		case "resistance":
 			next.Start, next.Stop = "100 Ω", "10k Ω"
@@ -142,7 +142,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 				}
 			}
 			limit := workbench.MaxScopeProbes
-			if workbench.IsFrequencySweep(cfg.Parameter) {
+			if workbench.IsSpectralSweep(cfg.Parameter) {
 				limit = 3
 			}
 			if len(next.ProbeIDs) >= limit {
@@ -183,7 +183,9 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	start := s.sweepStartAction(state)
 	_, _, diagnostic := (workbench.Graph{Components: state.Components, Wires: state.Wires}).Compile()
 	start.Disabled = start.Disabled || active || !valid || diagnostic != nil
-	if cfg.Parameter == "loop-frequency" {
+	if cfg.Parameter == "noise" {
+		nodes = append(nodes, start, quiet("sweep-assumptions", "White noise · linearized DC bias"), quiet("sweep-source-help", "Declared independent sources; no flicker or avalanche"), quiet("sweep-time-help", "RMS integrates sampled linear PSD across this band"))
+	} else if cfg.Parameter == "loop-frequency" {
 		nodes = append(nodes, start, quiet("sweep-assumptions", "Loop return ratio · closed-bias control injection"), quiet("sweep-source-help", "One dynamic op-amp differential control; loading retained"), quiet("sweep-time-help", "Other loops stay closed; no stability certification"))
 	} else if cfg.Parameter == "frequency" {
 		nodes = append(nodes, start, quiet("sweep-assumptions", "AC · small signal at DC bias"), quiet("sweep-source-help", "Selected source: normalized 1 V"), quiet("sweep-time-help", "Other sources: AC ground"), quiet("sweep-ac-bandwidth", "Bandwidth follows configured op-amp dynamics"))
@@ -214,6 +216,9 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 			}
 		}
 	}
+	if sweep.Result != nil && sweep.Result.Noise != nil {
+		nodes = append(nodes, noiseReadouts(sweep.Result)...)
+	}
 	if sweep.Result != nil && sweep.Result.Loop != nil {
 		nodes = append(nodes, loopMarginReadouts(sweep.Result.Loop)...)
 	}
@@ -223,7 +228,7 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 	sweep := state.DCSweep
 	s.ensureSweepCanvas()
 	s.sweepDrawing.Revision = s.sweepAppearance.next(state.Revision, s.colorsForTheme(state.Theme))
-	toolbar := ui.Node{ID: "sweep-toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{heading("sweep-title", "Frequency & DC sweeps"), s.action("sweep-back", "Back to circuit", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: false})}}
+	toolbar := ui.Node{ID: "sweep-toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{heading("sweep-title", "Frequency, noise & DC sweeps"), s.action("sweep-back", "Back to circuit", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: false})}}
 	nodes := []ui.Node{toolbar}
 	op := selectedSweep(sweep)
 	if op == nil {

@@ -1,0 +1,118 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "d809f8f55923639d8220adb9f99fe23b",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "f6b88a6dc49d18023b2e74d61350f1c4e0845108",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 1,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "fc2142842ace29ac",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Validity guard precedes nil-noise check",
+      "message": "The shape guard runs before the `r.Noise == nil` check. A non-noise sweep result has no noise summary, and the guard probably treats that as invalid. In that case the function shows a spurious \"Noise result is incomplete\" notice for ordinary DC/AC sweeps. The `nil` return path below the guard then never runs. A nil `r` also reaches the validator first.",
+      "suggestion": "Check for a nil result or nil noise summary before calling `NoiseSummaryValid`. Return nil in that case, so only malformed noise summaries produce the warning.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "desktop/noise.go",
+          "lines": {
+            "start": 13,
+            "end": 19
+          }
+        }
+      ],
+      "tags": [
+        "nil-handling",
+        "ui"
+      ],
+      "evidence": "\tif !workbench.NoiseSummaryValid(r) {\n\t\treturn []ui.Node{quiet(\"noise-unavailable\", \"Noise result is incomplete\")}\n\t}\n\tn := r.Noise\n\tif n == nil {\n\t\treturn nil\n\t}",
+      "fix": {
+        "before": "\tif !workbench.NoiseSummaryValid(r) {\n\t\treturn []ui.Node{quiet(\"noise-unavailable\", \"Noise result is incomplete\")}\n\t}\n\tn := r.Noise\n\tif n == nil {\n\t\treturn nil\n\t}",
+        "after": "\tif r == nil || r.Noise == nil {\n\t\treturn nil\n\t}\n\tif !workbench.NoiseSummaryValid(r) {\n\t\treturn []ui.Node{quiet(\"noise-unavailable\", \"Noise result is incomplete\")}\n\t}\n\tn := r.Noise"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "da3da60e1ac09e9b",
+      "severity": "low",
+      "category": "testing",
+      "title": "Contribution column test assumes contributor index 0",
+      "message": "The test finds the CSV column by contributor ID `R1:johnson`, but reads the expected value from `PSD[0]`. That only works if `R1:johnson` happens to be the first contributor. If the contributor order changes or another source is added, the test can fail even though the CSV is correct, or pass when columns are mislabeled.",
+      "suggestion": "Look up the contributor index by ID in `r.Noise.Contributors` (e.g. loop until `c.ID == \"R1:johnson\"`). Then compare against `r.Points[0].Noise.PSD[idx][j]`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/noise_test.go",
+          "lines": {
+            "start": 216,
+            "end": 228
+          }
+        }
+      ],
+      "tags": [
+        "test-robustness"
+      ],
+      "evidence": "if err != nil || value != r.Points[0].Noise.PSD[0][j] {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 22481,
+    "totalMs": 11556
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 11,
+    "bytes": 42574,
+    "chunks": 2,
+    "llmCalls": 2,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 26118,
+        "output": 2024,
+        "costUSD": 0.144952
+      }
+    ],
+    "widenedFiles": 6,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

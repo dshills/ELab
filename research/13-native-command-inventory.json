@@ -15,8 +15,8 @@
     "desktop/current_controls.go": "75e51b78555dbdc0787eb321697c1f5f0af87e085e8149fee2b6586d8b1a77e7",
     "desktop/cursor_actions.go": "fefec629a794097a6ce7c11d1badc9a9e1a35a17704683de58a673d547130486",
     "desktop/cursor_rejection.go": "d635c20a969208dbaf163fe1b66b3b5de6b624154739529b326aeea4e3b839da",
-    "desktop/dc_sweep.go": "117f7a514c42c9dbe1ce710dcbd324f6eb186cc35db7b4ea634954bacd539a36",
-    "desktop/dc_sweep_actions.go": "7ce13dd030b8758e71f0ba27d7528d9ff4015081b34756e568be5664fe99e54a",
+    "desktop/dc_sweep.go": "230a3c387cd7171b17a29f49cc405d761c5bf29923fb0a517b25ca3a73208b96",
+    "desktop/dc_sweep_actions.go": "15407fa3ebbf9c9c757131ccf9739815671060730e1b20aabf218196564f0c41",
     "desktop/dc_sweep_canvas.go": "457023ebaf9d3d5a07602597975e78f5cea11cb3f77c7cbfe770d0fe363a9331",
     "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
@@ -51,6 +51,7 @@
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
     "desktop/motor_controls.go": "b9d2416b6fa95da22b0ccb1d55ef6cfa62c0681de2d4cd55e6d85c04bbc1d09a",
     "desktop/native_chrome.go": "c9990bed7c0b15abe210c6a80fffa5bbc8815e1bcc45a102b837aadbef935b38",
+    "desktop/noise.go": "aec3dba6f005300468237a81ddfc2dda6c96aa4172a7c005d65bc9331c9ffa15",
     "desktop/npn.go": "f355ebca5a937207f73da01d8358831d4f1f8da1e7e95e538ca4eda742f8cbaf",
     "desktop/operation_notice.go": "f4f8858aea77b3874d52061cedfd2206622eaa746608fbff08b02cc999f814b9",
     "desktop/optocoupler_controls.go": "ec1697919d413219c574625bf000c2f95ef6d2b84ea12be48cded0665664ddbd",
@@ -1381,7 +1382,7 @@
       "line": 62,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tnext.Spacing = \"\"\n\tswitch next.Parameter {\n\tcase \"frequency\", \"loop-frequency\":\n\t\tnext.Start, next.Stop, next.Spacing = \"1 Hz\", \"100 kHz\", \"logarithmic\"\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"temperature\":\n\t\tnext.Start, next.Stop = \"-20\", \"80\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tpieces := strings.SplitN(e.SelectedID, \":\", 2)\n\tif len(pieces) != 2 {\n\t\treturn\n\t}\n\tnext := cfg\n\tnext.ComponentID, next.Parameter = pieces[0], pieces[1]\n\tnext.ProbeIDs = nil\n\tnext.Spacing = \"\"\n\tswitch next.Parameter {\n\tcase \"frequency\", \"loop-frequency\", \"noise\":\n\t\tnext.Start, next.Stop, next.Spacing = \"1 Hz\", \"100 kHz\", \"logarithmic\"\n\tcase \"resistance\":\n\t\tnext.Start, next.Stop = \"100 Ω\", \"10k Ω\"\n\tcase \"temperature\":\n\t\tnext.Start, next.Stop = \"-20\", \"80\"\n\tcase \"wiper\":\n\t\tnext.Start, next.Stop = \"0\", \"1\"\n\tdefault:\n\t\tnext.Start, next.Stop = \"0 V\", \"5 V\"\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
@@ -1435,7 +1436,7 @@
       "line": 134,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.ProbeIDs = nil\n\tif e.SelectedID != \"__auto\" {\n\t\tnext.ProbeIDs = append([]string{}, cfg.ProbeIDs...)\n\t\tfor _, id := range next.ProbeIDs {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tlimit := workbench.MaxScopeProbes\n\t\tif workbench.IsFrequencySweep(cfg.Parameter) {\n\t\t\tlimit = 3\n\t\t}\n\t\tif len(next.ProbeIDs) \u003e= limit {\n\t\t\ts.errorMessage = \"Remove a sweep reading before adding another\"\n\t\t\ts.app.Invalidate(\"main\")\n\t\t\treturn\n\t\t}\n\t\tnext.ProbeIDs = append(next.ProbeIDs, e.SelectedID)\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tnext := cfg\n\tnext.ProbeIDs = nil\n\tif e.SelectedID != \"__auto\" {\n\t\tnext.ProbeIDs = append([]string{}, cfg.ProbeIDs...)\n\t\tfor _, id := range next.ProbeIDs {\n\t\t\tif id == e.SelectedID {\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tlimit := workbench.MaxScopeProbes\n\t\tif workbench.IsSpectralSweep(cfg.Parameter) {\n\t\t\tlimit = 3\n\t\t}\n\t\tif len(next.ProbeIDs) \u003e= limit {\n\t\t\ts.errorMessage = \"Remove a sweep reading before adding another\"\n\t\t\ts.app.Invalidate(\"main\")\n\t\t\treturn\n\t\t}\n\t\tnext.ProbeIDs = append(next.ProbeIDs, e.SelectedID)\n\t}\n\ts.invoke(\"sweep.settings.set\", next)\n}",
       "status": "requires-binding-review"
     },
     {
@@ -1473,7 +1474,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 198,
+      "line": 200,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -1481,7 +1482,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 198,
+      "line": 200,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -1492,7 +1493,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 199,
+      "line": 201,
       "function": "*screen.sweepInspector",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-show\", \"View sweep\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -1503,7 +1504,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 205,
+      "line": 207,
       "function": "*screen.sweepInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})\n}",
@@ -1511,7 +1512,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 206,
+      "line": 208,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.keep.set\", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})",
@@ -1522,7 +1523,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 210,
+      "line": 212,
       "function": "*screen.sweepInspector",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\ts.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)\n}",
@@ -1530,7 +1531,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 211,
+      "line": 213,
       "function": "*screen.sweepInspector",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"sweep.export\", true, workbench.VerificationExportParams{ID: op.ID, Format: format}, nil)",
@@ -1541,7 +1542,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 226,
+      "line": 231,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-back\", \"Back to circuit\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: false})",
@@ -1552,7 +1553,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 275,
+      "line": 280,
       "function": "*screen.sweepPanel",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) { s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID}) }",
@@ -1560,7 +1561,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 275,
+      "line": 280,
       "function": "*screen.sweepPanel",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"sweep.trace.select\", workbench.IDParams{ID: e.SelectedID})",
@@ -1571,7 +1572,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 275,
+      "line": 280,
       "function": "*screen.sweepPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.sweepDrawing",
@@ -1579,7 +1580,7 @@
     },
     {
       "file": "desktop/dc_sweep.go",
-      "line": 290,
+      "line": 295,
       "function": "*screen.sweepPanel",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-cursor-clear\", \"Clear point\", \"sweep.cursor.set\", workbench.SweepCursorParams{OperationID: sweep.Selected})",
@@ -1601,7 +1602,7 @@
     },
     {
       "file": "desktop/dc_sweep_actions.go",
-      "line": 128,
+      "line": 131,
       "function": "*screen.sweepStartAction",
       "kind": "node-Activate",
       "expression": "Activate: func() {\n\tif s.pendingSweepStart != nil {\n\t\treturn\n\t}\n\tpending := \u0026sweepStartWork{context: actionContext{state.CommandRevision, state.Document.Generation}, settings: state.DCSweep.Settings}\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.sweepSettingsAccepted; accepted != nil \u0026\u0026 accepted.from.generation == pending.context.generation \u0026\u0026 accepted.from.revision \u003c= pending.context.revision \u0026\u0026 pending.context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tpending.context, pending.settings = accepted.to, accepted.settings\n\t}\n\tif current.CommandRevision != pending.context.revision || current.Document.Generation != pending.context.generation {\n\t\ts.finishSweepStart(pending)\n\t\treturn\n\t}\n\ts.pendingSweepStart = pending\n\ts.settleSweepStart(pending, 0)\n}",
@@ -1609,7 +1610,7 @@
     },
     {
       "file": "desktop/dc_sweep_actions.go",
-      "line": 190,
+      "line": 193,
       "function": "*screen.finishSweepStart",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"sweep.start\", workbench.SweepStartParams{Settings: \u0026pending.settings}, pending.context.revision, pending.context.generation)",

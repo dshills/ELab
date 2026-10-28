@@ -182,6 +182,13 @@ func (s *Service) sweepSettingsLocked() SweepSettings {
 	if s.sweeps != nil && s.sweeps.settings != nil {
 		return cloneSweepSettings(*s.sweeps.settings)
 	}
+	if s.exampleID == "noise-rc" || s.exampleID == "noise-amplifier" {
+		source, probe := "V1", "v:C1"
+		if s.exampleID == "noise-amplifier" {
+			source, probe = "VIN", "v:U1"
+		}
+		return SweepSettings{ComponentID: source, Parameter: "noise", Spacing: "logarithmic", Start: "1 Hz", Stop: "100 kHz", Points: 201, ProbeIDs: []string{probe}}
+	}
 	if s.exampleID == "feedback-loop" {
 		return SweepSettings{ComponentID: "U1", Parameter: "loop-frequency", Spacing: "logarithmic", Start: ".1 Hz", Stop: "100 kHz", Points: 201, ProbeIDs: []string{"loop:U1"}}
 	}
@@ -219,7 +226,7 @@ func sweepGraphHash(g Graph) [32]byte { data, _ := json.Marshal(g); return sha25
 func (s *Service) sweepSummaryLocked(job *sweepJob) SweepSummary {
 	out := job.summary
 	out.Kept = job.keep
-	out.SourceUnchanged = (job.summary.Kind == "dc-sweep" || job.summary.Kind == "ac-sweep" || job.summary.Kind == "loop-gain-sweep") && job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
+	out.SourceUnchanged = (job.summary.Kind == "dc-sweep" || job.summary.Kind == "ac-sweep" || job.summary.Kind == "loop-gain-sweep" || job.summary.Kind == "noise-sweep") && job.metadata.DocumentGeneration == s.documentGeneration && job.sourceHash == sweepGraphHash(s.graph)
 	if out.Error != nil {
 		e := *out.Error
 		out.Error = &e
@@ -296,6 +303,9 @@ func (s *Service) startDCSweepLocked(p SweepStartParams) error {
 	// This capture is a source document, not a recursive collection of other runs.
 	metadata := SweepMetadata{Format: "elab.dc-sweep", Version: 1, Engine: DCSweepEngineID, OperationID: id, CreatedAt: time.Now().UTC().Format(time.RFC3339Nano), DocumentGeneration: s.documentGeneration, ElectricalRevision: s.electrical, ActuationRevision: s.actuationRevision, Source: source, Settings: cloneSweepSettings(plan.settings), Sources: append([]SweepSource{}, plan.sources...), Assumptions: []string{"Independent DC operating points; no time advancement or hysteresis continuation", "Capacitors open; startup voltages ignored", "Sine sources use offset; finite pulses use low level; ideal pulses use zero; swept source uses the requested DC bias", "Configured switch states and accepted wiper positions; live held inputs and pending actuation are not applied", "Existing generic device assumptions and limits remain in force"}}
 	metadata.Format, metadata.Engine = acFormat(cfg.Parameter)
+	if IsNoiseSweep(cfg.Parameter) {
+		metadata.Assumptions = noiseAssumptions()
+	}
 	if IsFrequencySweep(cfg.Parameter) {
 		metadata.Assumptions = acAssumptions()
 		if cfg.Parameter == "loop-frequency" {
@@ -307,6 +317,10 @@ func (s *Service) startDCSweepLocked(p SweepStartParams) error {
 	s.retainSweepJobLocked(job)
 	s.sweepViewerRevision++
 	traceID := plan.probes[0].ID
+	if IsNoiseSweep(cfg.Parameter) {
+		traceID = "noise:" + traceID
+		job.summary.Kind = "noise-sweep"
+	}
 	if IsFrequencySweep(cfg.Parameter) {
 		traceID = "gain:" + traceID
 		job.summary.Kind = "ac-sweep"

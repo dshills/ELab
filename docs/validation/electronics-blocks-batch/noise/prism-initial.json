@@ -1,0 +1,546 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "e8a08462a8486a323d69b8ed1dbd1a37",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "f6b88a6dc49d18023b2e74d61350f1c4e0845108",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 9,
+      "medium": 7,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "eaa5287a106854e3",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Noise readouts rendered twice with duplicate node IDs",
+      "message": "noiseReadouts is appended in both sweepInspector and sweepPanel with the same fixed IDs (\"noise-title\", \"noise-rms-0\", …). When the inspector and sweep panel render together this duplicates node IDs, which can break validation, accessibility and focus. In the panel the readouts are also inserted before the caption, unlike the loop readouts, which only appear in the inspector.",
+      "suggestion": "Render noise readouts in one place only, matching the loop readouts in the inspector, and drop the call from sweepPanel. If both are needed, give each an ID prefix.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "desktop/dc_sweep.go",
+          "lines": {
+            "start": 241,
+            "end": 245
+          }
+        }
+      ],
+      "tags": [
+        "ui",
+        "duplicate-id",
+        "location-corrected"
+      ],
+      "evidence": "\tif sweep.Result != nil \u0026\u0026 sweep.Result.Noise != nil {\n\t\tnodes = append(nodes, noiseReadouts(sweep.Result)...)\n\t}\n\tif sweep.Result != nil \u0026\u0026 sweep.Result.Loop != nil {\n\t\tcaption = op.ID + \" · \" + op.Status + \" · differential loop return ratio\"",
+      "fix": {
+        "before": "\tif sweep.Result != nil \u0026\u0026 sweep.Result.Noise != nil {\n\t\tnodes = append(nodes, noiseReadouts(sweep.Result)...)\n\t}\n\tif sweep.Result != nil \u0026\u0026 sweep.Result.Loop != nil {\n\t\tcaption = op.ID + \" · \" + op.Status + \" · differential loop return ratio\"",
+        "after": "\tif sweep.Result != nil \u0026\u0026 sweep.Result.Loop != nil {\n\t\tcaption = op.ID + \" · \" + op.Status + \" · differential loop return ratio\""
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1987a62f7a0d1876",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Unchecked slice indexing can panic on malformed/imported results",
+      "message": "InputDefined, InputRMS, OutputRMS and each contributor's RMS are indexed by the probe index without length checks. Results can come from imported sweep JSON (\"Open sweep JSON…\"). A malformed or older file with mismatched slice lengths would panic the desktop UI during render.",
+      "suggestion": "Check each slice length against len(r.Probes) before indexing and skip or mark the entry unavailable on mismatch. Also make sure the import path validates these lengths.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "desktop/noise.go",
+          "lines": {
+            "start": 19,
+            "end": 26
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "untrusted-input"
+      ],
+      "evidence": "\t\tif n.InputDefined[j] {\n\t\t\tinput = fmt.Sprintf(\"Input referred %.5g µV RMS\", n.InputRMS[j]*1e6)\n\t\t}\n\t\tnodes = append(nodes, quiet(fmt.Sprintf(\"noise-rms-%d\", j), fmt.Sprintf(\"%s\\nOutput %.5g µV RMS\\n%s\", p.Label, n.OutputRMS[j]*1e6, input)))\n\t\tvalues := []string{}\n\t\tfor _, c := range n.Contributors {\n\t\t\tvalues = append(values, fmt.Sprintf(\"%s · %.4g µV RMS\", c.ID, c.RMS[j]*1e6))",
+      "fix": {
+        "before": "\t\tif n.InputDefined[j] {",
+        "after": "\t\tif j \u003e= len(n.InputDefined) || j \u003e= len(n.InputRMS) || j \u003e= len(n.OutputRMS) {\n\t\t\tbreak\n\t\t}\n\t\tif n.InputDefined[j] {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c66a6f27731231ac",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible index-out-of-range and row/header misalignment in noise export",
+      "message": "`InputDefined[j]` is indexed by `InputDensity`'s range without checking its length. A record whose slices differ in length, for example an imported or hand-edited file, would panic the export worker. Rows are also written only when `p.Noise != nil`, while the header is decided by `Result.Noise`, so a point with nil Noise produces a short row. The csv writer accepts a short row and the file ends up ragged.",
+      "suggestion": "Check `len(InputDefined) == len(InputDensity)` and return an error on mismatch. Also return an error when `Result.Noise != nil` but a point's Noise is nil.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep_export.go",
+          "lines": {
+            "start": 53,
+            "end": 54
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "csv",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tfor j, v := range p.Noise.InputDensity {\n\t\t\t\trow = append(row, number(v), strconv.FormatBool(p.Noise.InputDefined[j]))",
+      "fix": {
+        "before": "\t\t\tfor j, v := range p.Noise.InputDensity {\n\t\t\t\trow = append(row, number(v), strconv.FormatBool(p.Noise.InputDefined[j]))",
+        "after": "\t\t\tif len(p.Noise.InputDefined) != len(p.Noise.InputDensity) {\n\t\t\t\treturn nil, fmt.Errorf(\"noise point has %d densities but %d defined flags\", len(p.Noise.InputDensity), len(p.Noise.InputDefined))\n\t\t\t}\n\t\t\tfor j, v := range p.Noise.InputDensity {\n\t\t\t\trow = append(row, number(v), strconv.FormatBool(p.Noise.InputDefined[j]))"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1e336b1711d40605",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Noise PSD column order may not match header order",
+      "message": "The header writes contributor-major columns (`for c { for p { ... } }`), but each row emits `p.Noise.PSD` in its own storage order. If PSD is stored probe-major (`[probe][contributor]`), the values land under the wrong headers and the CSV is silently mislabeled. Nothing here checks that the shape matches the header.",
+      "suggestion": "Build the row with explicit indices that mirror the header loops: iterate contributors, then probes, and index PSD with the matching dimension order. Also check that the lengths match, and return an error if they do not.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep_export.go",
+          "lines": {
+            "start": 57,
+            "end": 59
+          }
+        }
+      ],
+      "tags": [
+        "csv",
+        "noise",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\t\tfor _, v := range psd {\n\t\t\t\t\trow = append(row, number(v))\n\t\t\t\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4205f839f9e923ac",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Recorded noise PSD and transfer values are not recomputed against the circuit",
+      "message": "The validator recomputes the bias and the noise source densities. It then checks only that the stored per-point numbers are consistent with each other: the PSDs sum to the total, and density/gain gives the input density.\n\nIt never rebuilds the small-signal matrix or solves the adjoint system. Any stored PSD or gain values, including fabricated or stale ones, pass as long as they are self-consistent. That makes the transfer and noise results effectively unverified.",
+      "suggestion": "Recompute each point's adjoint at `p.Input` using `smallSignalMatrix` and `complexSolve`, as `computeNoiseSweep` does. Then compare the PSD and Gain values within a tolerance. A simpler option is to refactor `computeNoiseSweep` into a pure function and compare its output with the record.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "workbench/noise.go",
+          "lines": {
+            "start": 467,
+            "end": 499
+          }
+        }
+      ],
+      "tags": [
+        "verification"
+      ],
+      "evidence": "\tfor _, p := range r.Points {\n\t\tq := p.Noise",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ad06ab49c7d0fc89",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Validator can panic on malformed records: Values/Probes length unchecked",
+      "message": "`validateNoiseRecord` checks that the per-point PSD, Gain, InputDensity and InputDefined slices have `len(plan.probes)` entries. It never checks `len(p.Values)` or `len(r.Probes)`.\n\nIf a loaded record has more Values than probes, `v[j]` and `q.Gain[j]` index past the end and the validator panics. If it has fewer, some probes are never checked. `summarizeNoise(expected)` also loops over `r.Probes` and reads `point.Values[j]` and `point.Noise.InputDefined[j]`, so a record with mismatched shapes can crash the validator instead of being rejected.",
+      "suggestion": "Before the per-value loop, reject the record when the Values or Probes lengths do not match the plan:\n`if len(p.Values) != len(plan.probes) || len(r.Probes) != len(plan.probes) { return fmt.Errorf(...) }`",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/noise.go",
+          "lines": {
+            "start": 482,
+            "end": 485
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "panic",
+        "untrusted-input",
+        "location-corrected"
+      ],
+      "evidence": "\t\tfor j, density := range p.Values {\n\t\t\tsum := 0.\n\t\t\tfor _, v := range q.PSD {\n\t\t\t\tif !finite(v[j]) || v[j] \u003c 0 {",
+      "fix": {
+        "before": "\t\tfor j, density := range p.Values {\n\t\t\tsum := 0.\n\t\t\tfor _, v := range q.PSD {\n\t\t\t\tif !finite(v[j]) || v[j] \u003c 0 {",
+        "after": "\t\tif len(p.Values) != len(plan.probes) || len(r.Probes) != len(plan.probes) {\n\t\t\treturn fmt.Errorf(\"noise point value width differs\")\n\t\t}\n\t\tfor j, density := range p.Values {\n\t\t\tsum := 0.\n\t\t\tfor _, v := range q.PSD {\n\t\t\t\tif !finite(v[j]) || v[j] \u003c 0 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "e573be9fc3b6d9bf",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Shot-noise assertion passes vacuously if contributor missing",
+      "message": "The shot-law check only runs when a contributor with ID \"Q1:collector-shot\" exists. If that contributor is renamed or never emitted, the test still passes, so the shot-noise law goes unverified.",
+      "suggestion": "Track whether the contributor was found and fail the test when it is missing.",
+      "confidence": 0.75,
+      "locations": [
+        {
+          "path": "workbench/noise_test.go",
+          "lines": {
+            "start": 91,
+            "end": 95
+          }
+        }
+      ],
+      "tags": [
+        "vacuous-test"
+      ],
+      "evidence": "if c.ID == \"Q1:collector-shot\" \u0026\u0026 math.Abs(c.Density*c.Density/(2*noiseCharge*math.Abs(q.CollectorCurrent))-1) \u003e 1e-12 {",
+      "fix": {
+        "before": "for _, c := range r.Noise.Contributors {\n\t\tif c.ID == \"Q1:collector-shot\" \u0026\u0026 math.Abs(c.Density*c.Density/(2*noiseCharge*math.Abs(q.CollectorCurrent))-1) \u003e 1e-12 {\n\t\t\tt.Fatal(\"shot reference\", c, q)\n\t\t}\n\t}",
+        "after": "shotFound := false\n\tfor _, c := range r.Noise.Contributors {\n\t\tif c.ID != \"Q1:collector-shot\" {\n\t\t\tcontinue\n\t\t}\n\t\tshotFound = true\n\t\tif math.Abs(c.Density*c.Density/(2*noiseCharge*math.Abs(q.CollectorCurrent))-1) \u003e 1e-12 {\n\t\t\tt.Fatal(\"shot reference\", c, q)\n\t\t}\n\t}\n\tif !shotFound {\n\t\tt.Fatal(\"missing collector shot contributor\")\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c29a9143c0324855",
+      "severity": "low",
+      "category": "testing",
+      "title": "Agent sweep wait loop doesn't detect timeout",
+      "message": "The polling loop does not report a timeout. A slow agent sweep therefore surfaces as a misleading \"noise user/agent parity\" failure, and the 1 ms busy-poll can be flaky on loaded CI.",
+      "suggestion": "After the loop, fail explicitly if the result is still nil, for example with t.Fatal(\"agent noise sweep timed out\").",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "desktop/noise_test.go",
+          "lines": {
+            "start": 29,
+            "end": 31
+          }
+        }
+      ],
+      "tags": [
+        "flaky"
+      ],
+      "evidence": "\tfor a.Snapshot().DCSweep.Result == nil \u0026\u0026 time.Now().Before(deadline) {\n\t\ttime.Sleep(time.Millisecond)\n\t}",
+      "fix": {
+        "before": "\tfor a.Snapshot().DCSweep.Result == nil \u0026\u0026 time.Now().Before(deadline) {\n\t\ttime.Sleep(time.Millisecond)\n\t}",
+        "after": "\tfor a.Snapshot().DCSweep.Result == nil \u0026\u0026 time.Now().Before(deadline) {\n\t\ttime.Sleep(time.Millisecond)\n\t}\n\tif a.Snapshot().DCSweep.Result == nil {\n\t\tt.Fatal(\"agent noise sweep timed out\")\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "7fce1f3ecf1b48f5",
+      "severity": "low",
+      "category": "testing",
+      "title": "t.Fatal called inside app.Do callback",
+      "message": "If app.Do runs the callback on the UI goroutine, t.Fatal is called off the test goroutine. Go's testing package forbids this, and the result can be a hung test or a misreported failure.",
+      "suggestion": "Capture the error in a variable inside the callback and call t.Fatal after s.app.Do returns.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "desktop/noise_test.go",
+          "lines": {
+            "start": 37,
+            "end": 44
+          }
+        }
+      ],
+      "tags": [
+        "test",
+        "goroutine"
+      ],
+      "evidence": "\t\ts.app.Do(func() {\n\t\t\tif err := ui.Validate(s.view()); err != nil {\n\t\t\t\tt.Fatal(theme, err)\n\t\t\t}",
+      "fix": {
+        "before": "\t\ts.app.Do(func() {\n\t\t\tif err := ui.Validate(s.view()); err != nil {\n\t\t\t\tt.Fatal(theme, err)\n\t\t\t}",
+        "after": "\t\tvar verr error\n\t\ts.app.Do(func() {\n\t\t\tif err := ui.Validate(s.view()); err != nil {\n\t\t\t\tverr = err\n\t\t\t\treturn\n\t\t\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "cfb9c2bf976c8b08",
+      "severity": "low",
+      "category": "docs",
+      "title": "sweep.start description not updated for noise sweeps",
+      "message": "`sweep.settings.set` now describes noise sweeps, but `sweep.start`, which the noise docs say is used to run noise analysis, still says it only captures DC points or AC gain/phase. Agents that discover capabilities from this catalog may not realize noise runs go through this command.",
+      "suggestion": "Update the `sweep.start` description to mention noise results. If a catalog test pins the exact strings, update that test as well.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/commands.go",
+          "lines": {
+            "start": 533,
+            "end": 533
+          }
+        }
+      ],
+      "tags": [
+        "capability-catalog",
+        "docs"
+      ],
+      "evidence": "\t\ttypedCapability(\"sweep.start\", \"Capture DC points or AC gain/phase; optional settings override; inspect dc_sweep/jobs; one worker, 30 s cooperative deadline\", reflect.TypeOf(SweepStartParams{})),",
+      "fix": {
+        "before": "\t\ttypedCapability(\"sweep.start\", \"Capture DC points or AC gain/phase; optional settings override; inspect dc_sweep/jobs; one worker, 30 s cooperative deadline\", reflect.TypeOf(SweepStartParams{})),",
+        "after": "\t\ttypedCapability(\"sweep.start\", \"Capture DC points, AC gain/phase or noise density/RMS; optional settings override; inspect dc_sweep/jobs; one worker, 30 s cooperative deadline\", reflect.TypeOf(SweepStartParams{})),"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f17eb6e649f3be41",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Target-not-found error omits the new noise target",
+      "message": "This change adds a new `noise` sweep target, but the error shown when no matching target is found still lists only the old target kinds. A user who picks a noise target on an unsupported component gets guidance that leaves out the noise option.",
+      "suggestion": "Add the noise target to the error message.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep.go",
+          "lines": {
+            "start": 179,
+            "end": 179
+          }
+        }
+      ],
+      "tags": [
+        "error-message",
+        "noise",
+        "location-corrected"
+      ],
+      "evidence": "\t\treturn plan, fmt.Errorf(\"choose an existing DC bias, resistance, wiper, enabled thermal ambient, AC frequency or configured dynamic-op-amp loop target\")",
+      "fix": {
+        "before": "\t\treturn plan, fmt.Errorf(\"choose an existing DC bias, resistance, wiper, enabled thermal ambient, AC frequency or configured dynamic-op-amp loop target\")",
+        "after": "\t\treturn plan, fmt.Errorf(\"choose an existing DC bias, resistance, wiper, enabled thermal ambient, AC frequency, noise or configured dynamic-op-amp loop target\")"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "190973ba774a300d",
+      "severity": "low",
+      "category": "testing",
+      "title": "Out-of-domain check is vacuous for noise (and loop-frequency)",
+      "message": "For the newly added `noise` parameter, `cfg` has already been swapped to a descending range, which noise always refuses. The out-of-domain checks then pass because of the ordering error, not because of the domain bounds. As a result, the published noise min/max bounds are never actually verified.",
+      "suggestion": "For ascending-only parameters, reset `cfg` to ascending endpoints before the outside loop. Probe the lower bound with `Start` and the upper bound with `Stop`.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep_capabilities_test.go",
+          "lines": {
+            "start": 91,
+            "end": 93
+          }
+        }
+      ],
+      "tags": [
+        "test-coverage",
+        "location-corrected"
+      ],
+      "evidence": "\t\tfor _, outside := range []float64{math.Nextafter(min, math.Inf(-1)), math.Nextafter(max, math.Inf(1))} {\n\t\t\tbad := cfg\n\t\t\tbad.Start = fmt.Sprintf(\"%.17g\", outside)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "164e5fbbe5df7dc4",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Noise and frequency branches are not mutually exclusive",
+      "message": "The noise branches and the frequency branches are independent `if` statements. This holds in startDCSweepLocked, validateSweepRecord and validateSweepFields. Correctness depends on IsFrequencySweep returning false for \"noise\", which cannot be checked from this part of the review. If a noise sweep also counts as a frequency sweep, the noise handling is overwritten by the AC handling. The result would be a trace ID like \"gain:noise:...\", Kind set to \"ac-sweep\", AC assumptions, and probes transformed twice by acProbes(noiseProbes(...)), which would then fail validation.",
+      "suggestion": "Make the branches mutually exclusive with `else if`, so the noise path cannot be overridden by the frequency path. Apply this in all three places, or document and test that IsFrequencySweep excludes \"noise\".",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/dc_sweep_worker.go",
+          "lines": {
+            "start": 317,
+            "end": 322
+          }
+        }
+      ],
+      "tags": [
+        "noise",
+        "control-flow"
+      ],
+      "evidence": "\tif IsNoiseSweep(cfg.Parameter) {\n\t\ttraceID = \"noise:\" + traceID\n\t\tjob.summary.Kind = \"noise-sweep\"\n\t}\n\tif IsFrequencySweep(cfg.Parameter) {\n\t\ttraceID = \"gain:\" + traceID",
+      "fix": {
+        "before": "\tif IsNoiseSweep(cfg.Parameter) {\n\t\ttraceID = \"noise:\" + traceID\n\t\tjob.summary.Kind = \"noise-sweep\"\n\t}\n\tif IsFrequencySweep(cfg.Parameter) {\n\t\ttraceID = \"gain:\" + traceID",
+        "after": "\tif IsNoiseSweep(cfg.Parameter) {\n\t\ttraceID = \"noise:\" + traceID\n\t\tjob.summary.Kind = \"noise-sweep\"\n\t} else if IsFrequencySweep(cfg.Parameter) {\n\t\ttraceID = \"gain:\" + traceID"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "9ae4319d0bc48eab",
+      "severity": "low",
+      "category": "bug",
+      "title": "Johnson noise PSD not guarded against non-positive resistance",
+      "message": "Nothing guards against a resistance (nominal or thermal) that is zero or negative. If r is 0, the Density is +Inf. If r is negative, `math.Sqrt` returns NaN. The sweep then fails later with a generic 'nonfinite noise contribution' error, or, when the adjoint transfer is zero, a NaN Density is carried into the summary and JSON encoding fails.",
+      "suggestion": "Check `r \u003e 0 \u0026\u0026 finite(r)` in `noiseDrives`, or in `noiseSupported`, and return a clear error naming the resistor.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/noise.go",
+          "lines": {
+            "start": 113,
+            "end": 113
+          }
+        }
+      ],
+      "tags": [
+        "robustness",
+        "location-corrected"
+      ],
+      "evidence": "\t\t\tpair(p, \"johnson\", \"1\", \"2\", 4*noiseBoltzmann*temp/r)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1fdf02249caa46c0",
+      "severity": "low",
+      "category": "testing",
+      "title": "json.Marshal errors ignored in validation tests",
+      "message": "The json.Marshal errors are discarded. If marshalling fails, for example because a value is NaN or Inf, raw is nil. validateSweepRecord then rejects it, which makes the forged-record checks pass for the wrong reason.",
+      "suggestion": "Check the error and call t.Fatal if marshalling fails, both here and inside the forgery loop.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/noise_test.go",
+          "lines": {
+            "start": 111,
+            "end": 119
+          }
+        }
+      ],
+      "tags": [
+        "error-handling"
+      ],
+      "evidence": "raw, _ := json.Marshal(record)",
+      "fix": {
+        "before": "raw, _ := json.Marshal(record)",
+        "after": "raw, err := json.Marshal(record)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "dff3dc88cd3762e4",
+      "severity": "low",
+      "category": "testing",
+      "title": "Bias resistor aliasing mutation never asserted",
+      "message": "The test mutates the snapshot's Bias.Resistors[0].Current, but afterwards it only checks PSD. If the bias inventory is shallow-copied, the snapshot aliases live state and the test does not catch it.",
+      "suggestion": "Also check that the fresh snapshot's Bias.Resistors[0].Current is not 999.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/noise_test.go",
+          "lines": {
+            "start": 124,
+            "end": 128
+          }
+        }
+      ],
+      "tags": [
+        "aliasing"
+      ],
+      "evidence": "after.DCSweep.Result.Noise.Bias.Resistors[0].Current = 999",
+      "fix": {
+        "before": "if s.Snapshot().DCSweep.Result.Points[0].Noise.PSD[0][0] == 999 {",
+        "after": "if snap := s.Snapshot(); snap.DCSweep.Result.Points[0].Noise.PSD[0][0] == 999 || snap.DCSweep.Result.Noise.Bias.Resistors[0].Current == 999 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 132579,
+    "totalMs": 30701
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 21,
+    "bytes": 112448,
+    "chunks": 7,
+    "llmCalls": 7,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 71673,
+        "output": 14510,
+        "costUSD": 0.576892
+      }
+    ],
+    "widenedFiles": 11,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "c33324fb12bb9f81",
+        "severity": "low",
+        "category": "docs",
+        "title": "Missing comma in README list",
+        "message": "The list item after \"reusable circuit blocks\" is missing its separating comma, so the sentence runs together.",
+        "suggestion": "Add a comma after the circuit-blocks link.",
+        "confidence": 0.7,
+        "locations": [
+          {
+            "path": "README.md",
+            "lines": {
+              "start": 16,
+              "end": 18
+            }
+          }
+        ],
+        "tags": [
+          "readme"
+        ],
+        "evidence": "Source development now includes [reusable circuit blocks](docs/circuit-blocks.md)\n[temperature effects and self-heating](docs/temperature.md), and",
+        "fix": {
+          "before": "Source development now includes [reusable circuit blocks](docs/circuit-blocks.md)\n[temperature effects and self-heating](docs/temperature.md), and",
+          "after": "Source development now includes [reusable circuit blocks](docs/circuit-blocks.md),\n[temperature effects and self-heating](docs/temperature.md), and"
+        },
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in README.md"
+    }
+  ],
+  "suppressed": []
+}

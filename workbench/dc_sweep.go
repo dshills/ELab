@@ -29,6 +29,7 @@ type SweepTarget struct {
 	Maximum     float64 `json:"maximum"`
 }
 type SweepPoint struct {
+	Noise         *NoisePoint  `json:"noise,omitempty"`
 	AC            []ACResponse `json:"ac_response,omitempty"`
 	Input         float64      `json:"input"`
 	Values        []float64    `json:"values"`
@@ -47,6 +48,7 @@ type SweepStatistics struct {
 	Maximum float64 `json:"maximum"`
 }
 type SweepResult struct {
+	Noise      *NoiseSummary     `json:"noise,omitempty"`
 	Loop       *LoopMargins      `json:"loop_margins,omitempty"`
 	AC         []ACBand          `json:"ac_bands,omitempty"`
 	Target     SweepTarget       `json:"target"`
@@ -75,7 +77,7 @@ type sweepDomain struct {
 }
 
 func sweepDomains() []sweepDomain {
-	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"temperature", "°C", -40, 125}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}, {"loop-frequency", "Hz", .01, 1e9}}
+	return []sweepDomain{{"voltage", "V", -12, 12}, {"resistance", "Ω", 10, 100000}, {"temperature", "°C", -40, 125}, {"wiper", "ratio", 0, 1}, {"frequency", "Hz", .01, 1e9}, {"noise", "Hz", .01, 1e9}, {"loop-frequency", "Hz", .01, 1e9}}
 }
 
 func sweepTargets(g Graph) []SweepTarget {
@@ -92,6 +94,10 @@ func sweepTargets(g Graph) []SweepTarget {
 			case "loop-frequency":
 				if hasDynamics(p) {
 					label = "Loop return ratio / differential control injection"
+				}
+			case "noise":
+				if IsVoltageSource(p.Kind) && p.Kind != "battery" {
+					label = "White noise / input reference"
 				}
 			case "frequency":
 				if IsVoltageSource(p.Kind) && p.Kind != "battery" {
@@ -141,6 +147,11 @@ func newSweepPlan(g Graph, settings SweepSettings) (sweepPlan, error) {
 }
 func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (sweepPlan, error) {
 	plan := sweepPlan{graph: g.Clone(), settings: settings}
+	if IsNoiseSweep(settings.Parameter) {
+		if err := noiseSupported(g); err != nil {
+			return plan, err
+		}
+	}
 	if IsFrequencySweep(settings.Parameter) {
 		if err := acSupported(g); err != nil {
 			return plan, err
@@ -165,7 +176,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		}
 	}
 	if !found {
-		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper, enabled thermal ambient, AC frequency or configured dynamic-op-amp loop target")
+		return plan, fmt.Errorf("choose an existing DC bias, resistance, wiper, enabled thermal ambient, AC frequency, noise or configured dynamic-op-amp loop target")
 	}
 	if settings.Points < 2 || settings.Points > MaxDCSweepPoints {
 		return plan, fmt.Errorf("sweep requires 2–201 points")
@@ -179,7 +190,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 			unit = ""
 		}
 		value, err := ParseValue(text, unit)
-		if IsFrequencySweep(plan.target.Parameter) {
+		if IsSpectralSweep(plan.target.Parameter) {
 			value, err = parseWaveformQuantity(text, "Hz")
 		}
 		if plan.target.Parameter == "wiper" || plan.target.Parameter == "temperature" {
@@ -221,6 +232,9 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 	if _, _, diagnostic := g.Compile(); requireComplete && diagnostic != nil {
 		return plan, &actionError{"unavailable", "Complete a supported circuit before sweeping: " + diagnostic.Message}
 	}
+	if IsNoiseSweep(settings.Parameter) && (plan.start <= 0 || plan.stop <= plan.start) {
+		return plan, fmt.Errorf("noise requires an ascending positive frequency band")
+	}
 	if settings.Parameter == "loop-frequency" {
 		if plan.start <= 0 || plan.stop <= plan.start {
 			return plan, fmt.Errorf("loop sweep requires an ascending positive frequency band")
@@ -235,7 +249,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 		return plan, nil
 	}
 	available := probeInventory(g)
-	if settings.Parameter == "frequency" {
+	if settings.Parameter == "frequency" || IsNoiseSweep(settings.Parameter) {
 		v := []Probe{}
 		for _, p := range available {
 			if p.Unit == "V" {
@@ -247,7 +261,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 	ids := settings.ProbeIDs
 	if ids == nil {
 		wantedIDs := []string{"i:" + settings.ComponentID, "v:" + settings.ComponentID}
-		if settings.Parameter == "frequency" {
+		if settings.Parameter == "frequency" || IsNoiseSweep(settings.Parameter) {
 			wantedIDs = nil
 			for _, p := range available {
 				if p.ID != "v:"+settings.ComponentID && p.Positive != settings.ComponentID+".positive" && p.Reference != "ground" {
@@ -273,7 +287,7 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 	}
 
 	limit := MaxScopeProbes
-	if settings.Parameter == "frequency" {
+	if settings.Parameter == "frequency" || IsNoiseSweep(settings.Parameter) {
 		limit = 3
 	}
 	if len(ids) == 0 || len(ids) > limit {
@@ -360,6 +374,9 @@ func solveDCOperatingPoint(ctx context.Context, g Graph, levels []SweepSource) (
 	return result, mixedSample(compiled, result, 0), nil
 }
 func computeDCSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*SweepResult, error) {
+	if IsNoiseSweep(plan.settings.Parameter) {
+		return computeNoiseSweep(ctx, plan, progress)
+	}
 	if IsFrequencySweep(plan.settings.Parameter) {
 		return computeACSweep(ctx, plan, progress)
 	}
@@ -425,6 +442,7 @@ func cloneSweepResult(in *SweepResult) *SweepResult {
 	}
 	out := *in
 	out.Loop = cloneLoopMargins(in.Loop)
+	out.Noise = cloneNoiseSummary(in.Noise)
 	out.Probes = append([]Probe{}, in.Probes...)
 	out.AC = append([]ACBand(nil), in.AC...)
 	for i := range out.AC {
@@ -434,6 +452,7 @@ func cloneSweepResult(in *SweepResult) *SweepResult {
 	out.Points = make([]SweepPoint, len(in.Points))
 	for i, p := range in.Points {
 		out.Points[i] = p
+		out.Points[i].Noise = cloneNoisePoint(p.Noise)
 		out.Points[i].Values = append([]float64{}, p.Values...)
 		out.Points[i].AC = append([]ACResponse(nil), p.AC...)
 	}

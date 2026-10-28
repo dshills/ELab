@@ -8,6 +8,11 @@ import (
 )
 
 func encodeSweepExport(record *SweepRecord, format string) ([]byte, error) {
+	if record.Result.Noise != nil {
+		if err := noiseResultShape(&record.Result); err != nil {
+			return nil, err
+		}
+	}
 	if format == "json" {
 		data, err := json.MarshalIndent(record, "", "  ")
 		if err != nil {
@@ -26,6 +31,16 @@ func encodeSweepExport(record *SweepRecord, format string) ([]byte, error) {
 			header = append(header, id+" real [V/V]", id+" imaginary [V/V]", id+" phase_defined")
 		}
 	}
+	if record.Result.Noise != nil {
+		for _, p := range record.Result.Probes {
+			header = append(header, p.ID+" input [V/sqrt(Hz)]", p.ID+" input_defined")
+		}
+		for _, c := range record.Result.Noise.Contributors {
+			for _, p := range record.Result.Probes {
+				header = append(header, c.ID+" -> "+p.ID+" [V^2/Hz]")
+			}
+		}
+	}
 	if err := w.Write(header); err != nil {
 		return nil, err
 	}
@@ -38,6 +53,16 @@ func encodeSweepExport(record *SweepRecord, format string) ([]byte, error) {
 		}
 		for _, z := range p.AC {
 			row = append(row, number(z.Real), number(z.Imaginary), strconv.FormatBool(z.PhaseDefined))
+		}
+		if p.Noise != nil {
+			for j, v := range p.Noise.InputDensity {
+				row = append(row, number(v), strconv.FormatBool(p.Noise.InputDefined[j]))
+			}
+			for _, psd := range p.Noise.PSD {
+				for _, v := range psd {
+					row = append(row, number(v))
+				}
+			}
 		}
 		if err := w.Write(row); err != nil {
 			return nil, err

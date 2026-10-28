@@ -65,7 +65,7 @@ func exampleCategory(id string) string {
 		return "motors"
 	case "555-tone", "light-alarm":
 		return "sound"
-	case "class-ab-temperature", "feedback-loop", "step-response", "jfet-preamp", "jfet-current", "pjfet-current", "current-led", "load-step", "constant-power-load", "class-ab-speaker", "speaker-amplifier", "rc-tolerance", "transistor-profile", "amplifier-distortion", "discrete-class-ab", "opamp-slew", "opamp-bandwidth", "opamp-follower", "opamp-inverting", "ac-rc", "ac-rlc", "ac-opamp":
+	case "noise-rc", "noise-amplifier", "class-ab-temperature", "feedback-loop", "step-response", "jfet-preamp", "jfet-current", "pjfet-current", "current-led", "load-step", "constant-power-load", "class-ab-speaker", "speaker-amplifier", "rc-tolerance", "transistor-profile", "amplifier-distortion", "discrete-class-ab", "opamp-slew", "opamp-bandwidth", "opamp-follower", "opamp-inverting", "ac-rc", "ac-rlc", "ac-opamp":
 		return "analysis"
 	}
 	return ""

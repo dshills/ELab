@@ -83,3 +83,11 @@ inventory/count/discovery expectations; corrected access and focused controls
 are recorded explicitly, without relabeling earlier failures as clean passes.
 The prior atomic test expected 33 entries before four block edits; correct current
 allowlist count is 38 including temperature, with specific shared commands checked.
+
+Item 2 committed f6b88a6d. Item 3 adds small-signal stationary noise through the
+existing sweep workflow, with explicit Johnson/shot/channel/op-amp white sources,
+component PSD contributions, output/input-referred RMS and captured DC bias.
+Independent electrical and immutable-capture checks pass; core noise/AC/DC/sweep
+race control passes 11.699 s. Explicit noise assumptions and refused unsupported
+families avoid silently assigning zero noise. New prepared RC/amplifier examples
+use existing models; no physical component, public command or solver-limit change.

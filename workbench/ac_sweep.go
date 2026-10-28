@@ -48,6 +48,9 @@ func acProbes(probes []Probe) []Probe {
 	return out
 }
 func acFormat(parameter string) (string, string) {
+	if IsNoiseSweep(parameter) {
+		return "elab.noise-sweep", NoiseEngineID
+	}
 	if parameter == "loop-frequency" {
 		return "elab.loop-gain-sweep", LoopGainEngineID
 	}

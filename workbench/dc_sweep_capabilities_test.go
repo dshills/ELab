@@ -58,7 +58,7 @@ func TestPublishedSweepDomainsAndLimitsMatchAdmission(t *testing.T) {
 		min, max := d["minimum"].(float64), d["maximum"].(float64)
 		graph := ExampleGraph()
 		target := "V1"
-		if parameter == "frequency" {
+		if parameter == "frequency" || parameter == "noise" {
 			graph = ACRCExampleGraph()
 		}
 		if parameter == "loop-frequency" {
@@ -81,16 +81,21 @@ func TestPublishedSweepDomainsAndLimitsMatchAdmission(t *testing.T) {
 			t.Fatal("published endpoints rejected", parameter, err)
 		}
 		cfg.Start, cfg.Stop = cfg.Stop, cfg.Start
-		if _, err := newSweepPlan(graph, cfg); parameter == "loop-frequency" {
+		if _, err := newSweepPlan(graph, cfg); parameter == "loop-frequency" || parameter == "noise" {
 			if err == nil {
 				t.Fatal("descending loop band accepted")
 			}
 		} else if err != nil {
 			t.Fatal("published descending range rejected", parameter, err)
 		}
+		cfg.Start, cfg.Stop = fmt.Sprint(min), fmt.Sprint(max)
 		for _, outside := range []float64{math.Nextafter(min, math.Inf(-1)), math.Nextafter(max, math.Inf(1))} {
 			bad := cfg
-			bad.Start = fmt.Sprintf("%.17g", outside)
+			if outside < min {
+				bad.Start = fmt.Sprintf("%.17g", outside)
+			} else {
+				bad.Stop = fmt.Sprintf("%.17g", outside)
+			}
 			if _, err := newSweepPlan(graph, bad); err == nil {
 				t.Fatal("outside advertised domain accepted", parameter, outside)
 			}

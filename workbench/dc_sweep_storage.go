@@ -56,6 +56,9 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 	}
 	r := &record.Result
 	probes := plan.probes
+	if IsNoiseSweep(m.Settings.Parameter) {
+		probes = noiseProbes(probes)
+	}
 	if IsFrequencySweep(m.Settings.Parameter) {
 		probes = acProbes(probes)
 	}
@@ -78,6 +81,9 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 			stats[j].Minimum = math.Min(stats[j].Minimum, value)
 			stats[j].Maximum = math.Max(stats[j].Maximum, value)
 		}
+	}
+	if err := validateNoiseRecord(plan, r); err != nil {
+		return nil, err
 	}
 	if err := validateACRecord(plan, r); err != nil {
 		return nil, err
@@ -122,6 +128,11 @@ func validateSweepFields(data []byte) error {
 		var out SweepPoint
 		if err := params(point, &out, "input", "values", "kcl_residual_a", "power_residual_w"); err != nil {
 			return fmt.Errorf("sweep point %d: %w", i, err)
+		}
+	}
+	if IsNoiseSweep(metadata.Settings.Parameter) {
+		if err := validateNoiseFields(raw.Result, arrays.Points); err != nil {
+			return err
 		}
 	}
 	if IsFrequencySweep(metadata.Settings.Parameter) {
