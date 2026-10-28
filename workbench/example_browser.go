@@ -59,7 +59,7 @@ func exampleCategory(id string) string {
 		return "logic"
 	case "photodiode-load", "photodiode-tia", "night-light", "thermostat", "comparator-threshold":
 		return "sensors"
-	case "buck", "rectifier", "zener", "schottky", "coupled-windings", "transformer-supply", "opto-switch", "battery-led", "battery-regulator", "regulator-supply", "regulator-dropout", "relay-switch", "relay-flasher":
+	case "scr-latch", "triac-phase", "buck", "rectifier", "zener", "schottky", "coupled-windings", "transformer-supply", "opto-switch", "battery-led", "battery-regulator", "regulator-supply", "regulator-dropout", "relay-switch", "relay-flasher":
 		return "power"
 	case "hbridge-motor", "motor-dc", "motor-pwm":
 		return "motors"

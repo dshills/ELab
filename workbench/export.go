@@ -263,10 +263,10 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 		}
 	}
 	metadataFields := map[string]any{"format": "elab.schematic.svg.v1", "run_id": run, "electrical_revision": revision, "led_model": Model(), "npn_model": TransistorModel(), "pnp_model": PNPDeviceModel(), "switch_model": SwitchDeviceModel(), "nmos_model": NMOSDeviceModel(), "pmos_model": PMOSDeviceModel(), "diode_model": SiliconDiodeModel(), "zener_model": ZenerDeviceModel(), "schottky_model": SchottkyDeviceModel(), "potentiometer_model": LinearPotentiometerModel(), "waveform_model": SourceWaveformModel(), "source_annotations": allAnnotations, "source_components": sources, "source_settings": settings, "display": display, "pinned_readings": readings, "note": "Generic educational models; schematic rendering, not physical build certification"}
-	if hasPhotodiodes(rawGraph) || hasThermals(rawGraph) || hasJFETs(rawGraph) || hasCurrentDevices(rawGraph) || hasSpeakers(rawGraph) || hasTransistorProfiles(rawGraph) || hasPassiveLosses(rawGraph) {
+	if hasThyristors(rawGraph) || hasPhotodiodes(rawGraph) || hasThermals(rawGraph) || hasJFETs(rawGraph) || hasCurrentDevices(rawGraph) || hasSpeakers(rawGraph) || hasTransistorProfiles(rawGraph) || hasPassiveLosses(rawGraph) {
 		devices := []Component{}
 		for _, p := range rawGraph.Components {
-			if p.Kind == "photodiode" || hasThermal(p) || IsJFETKind(p.Kind) || IsCurrentDevice(p.Kind) || p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
+			if IsThyristorKind(p.Kind) || p.Kind == "photodiode" || hasThermal(p) || IsJFETKind(p.Kind) || IsCurrentDevice(p.Kind) || p.Kind == "speaker" || hasTransistorProfile(p) || hasPassiveLoss(p) {
 				devices = append(devices, p)
 			}
 		}
@@ -399,7 +399,7 @@ func schematicSVGDrawing(g Graph, run, revision uint64, display CircuitDisplay, 
 				}
 				b.WriteString(`"/>`)
 			}
-		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
+		case "scr", "triac", "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			for _, path := range ControlSymbolPaths(p.Kind, ControlMemory{}) {
 				b.WriteString(`<polyline points="`)
 				for _, point := range path {

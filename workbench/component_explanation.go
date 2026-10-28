@@ -93,6 +93,9 @@ func (s *Service) componentExplanationLocked(c Compiled, id string, inspection *
 		}
 	}
 	switch part.Kind {
+	case "scr", "triac":
+		out.Model, out.Limitations = ThyristorModelID, thyristorDescription
+		out.Facts = append(out.Facts, "Gate current starts conduction; actual main current must reach Il before the gate is removed to latch. A latched path turns off below Ih or on current reversal. No physical high-voltage qualification is implied.")
 	case "photodiode":
 		out.Model, out.Limitations = PhotodiodeModelID, photodiodeDescription
 		out.Facts = append(out.Facts, "Photocurrent is responsivity times incident optical watts, directed from cathode to anode. A transimpedance amplifier converts this current into voltage; junction capacitance stores charge and starts uncharged.")

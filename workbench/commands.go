@@ -65,8 +65,8 @@ func capability(id, description string, mutates bool, schema string) Capability 
 		outputLabel = "Snapshot"
 	}
 	summary := description
-	if runes := []rune(description); len(runes) > 96 {
-		summary = string(runes[:96])
+	if runes := []rune(description); len(runes) > 88 {
+		summary = string(runes[:88])
 		if at := strings.LastIndex(summary, " "); at > 0 {
 			summary = summary[:at]
 		}
@@ -91,6 +91,8 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(ThyristorConfig{}), "urn:elab:thyristor-config:1"},
+	{reflect.TypeOf(ThyristorParams{}), "urn:elab:thyristor-input:1"},
 	{reflect.TypeOf(PhotodiodeConfig{}), "urn:elab:photodiode-config:1"},
 	{reflect.TypeOf(PhotodiodeParams{}), "urn:elab:photodiode-input:1"},
 	{reflect.TypeOf(OpticalLightParams{}), "urn:elab:optical-light-input:1"},
@@ -302,6 +304,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		}
 		// Shared model definitions declare numeric bounds; input-only quantity
 		// definitions below retain unit text without widening numeric outputs.
+		if common.Type == reflect.TypeOf(ThyristorConfig{}) {
+			addThyristorSchema(schema)
+		}
 		if common.Type == reflect.TypeOf(PhotodiodeConfig{}) {
 			addPhotodiodeSchema(schema)
 		}
@@ -607,6 +612,7 @@ func Catalog() []Capability {
 		typedCapability("project.load.start", "Start background bounded local project reading/validation; inspect project_work; replacement refuses intervening edits", reflect.TypeOf(LoadParams{})),
 		typedCapability("project.work.cancel", "Cancel exact current project work before publication; cancelable is false during atomic Save publication/cleanup; refusal code operation-committing", reflect.TypeOf(IDParams{})),
 		typedCapability("project.load", "Wait for the same background open job as project.load.start; restores saved pause/view with fresh physics; unsaved changes require discard_changes", reflect.TypeOf(LoadParams{})),
+		typedCapability("thyristor.configure", "Configure a saved SCR/TRIAC trigger, latching, holding and conduction model; restarts the experiment", reflect.TypeOf(ThyristorParams{})),
 		typedCapability("photodiode.configure", "Configure a saved photodiode responsivity, dark current and capacitance; restarts the experiment", reflect.TypeOf(PhotodiodeParams{})),
 		typedCapability("photodiode.light.set", "Set incident optical µW through the shared live input worker, preserving stored charge", reflect.TypeOf(OpticalLightParams{})),
 		typedCapability("thermal.configure", "Configure optional resistor/diode/BJT ambient temperature and one-node self-heating; saved and undoable", reflect.TypeOf(ThermalParams{})),

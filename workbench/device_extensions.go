@@ -41,16 +41,17 @@ type SoundConfig struct {
 	Frequency   float64 `json:"frequency_hz"`
 }
 type DeviceParameters struct {
-	Photo    *PhotodiodeConfig  `json:"photodiode,omitempty"`
-	JFET     *JFETConfig        `json:"jfet,omitempty"`
-	Current  *CurrentConfig     `json:"current_source,omitempty"`
-	Load     *LoadConfig        `json:"electronic_load,omitempty"`
-	Passive  *PassiveConfig     `json:"passive,omitempty"`
-	Speaker  *SpeakerConfig     `json:"speaker,omitempty"`
-	Bipolar  *TransistorProfile `json:"bipolar,omitempty"`
-	PWM      *PWMConfig         `json:"pwm,omitempty"`
-	Dynamics *OpAmpDynamics     `json:"opamp_dynamics,omitempty"`
-	Sound    *SoundConfig       `json:"sound,omitempty"`
+	Thyristor *ThyristorConfig   `json:"thyristor,omitempty"`
+	Photo     *PhotodiodeConfig  `json:"photodiode,omitempty"`
+	JFET      *JFETConfig        `json:"jfet,omitempty"`
+	Current   *CurrentConfig     `json:"current_source,omitempty"`
+	Load      *LoadConfig        `json:"electronic_load,omitempty"`
+	Passive   *PassiveConfig     `json:"passive,omitempty"`
+	Speaker   *SpeakerConfig     `json:"speaker,omitempty"`
+	Bipolar   *TransistorProfile `json:"bipolar,omitempty"`
+	PWM       *PWMConfig         `json:"pwm,omitempty"`
+	Dynamics  *OpAmpDynamics     `json:"opamp_dynamics,omitempty"`
+	Sound     *SoundConfig       `json:"sound,omitempty"`
 }
 
 func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
@@ -58,6 +59,10 @@ func cloneDeviceParameters(p *DeviceParameters) *DeviceParameters {
 		return nil
 	}
 	o := *p
+	if p.Thyristor != nil {
+		v := *p.Thyristor
+		o.Thyristor = &v
+	}
 	if p.Photo != nil {
 		v := *p.Photo
 		o.Photo = &v
@@ -163,6 +168,10 @@ func validateExtendedModel(g Graph, m *ExtendedModel) error {
 	return nil
 }
 func defaultDeviceParameters(p *Component) {
+	if IsThyristorKind(p.Kind) {
+		v := DefaultThyristorConfig()
+		p.Device = &DeviceParameters{Thyristor: &v}
+	}
 	if p.Kind == "photodiode" {
 		v := DefaultPhotodiodeConfig()
 		p.Device = &DeviceParameters{Photo: &v}
@@ -193,12 +202,15 @@ func defaultDeviceParameters(p *Component) {
 func validateDeviceParameters(p Component) error {
 	d := p.Device
 	if d == nil {
-		if p.Kind == "photodiode" || IsJFETKind(p.Kind) || IsCurrentDevice(p.Kind) || p.Kind == "speaker" || p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
+		if IsThyristorKind(p.Kind) || p.Kind == "photodiode" || IsJFETKind(p.Kind) || IsCurrentDevice(p.Kind) || p.Kind == "speaker" || p.Kind == "pwm-controller" || isSoundKind(p.Kind) {
 			return fmt.Errorf("device requires explicit parameters")
 		}
 		return nil
 	}
 	count := 0
+	if d.Thyristor != nil {
+		count++
+	}
 	if d.Photo != nil {
 		count++
 	}
@@ -231,6 +243,9 @@ func validateDeviceParameters(p Component) error {
 	}
 	if count != 1 {
 		return fmt.Errorf("device parameters must match one component model")
+	}
+	if IsThyristorKind(p.Kind) && d.Thyristor != nil {
+		return validateThyristor(*d.Thyristor)
 	}
 	if p.Kind == "photodiode" && d.Photo != nil {
 		return validatePhotodiode(*d.Photo)
@@ -285,6 +300,8 @@ func validateDeviceFields(raw json.RawMessage, p Component) error {
 		return err
 	}
 	switch {
+	case p.Device.Thyristor != nil:
+		return paramsNested(f["device_parameters"], "thyristor", &ThyristorConfig{}, thyristorFields()...)
 	case p.Device.Photo != nil:
 		return paramsNested(f["device_parameters"], "photodiode", &PhotodiodeConfig{}, photodiodeFields()...)
 	case p.Device.JFET != nil:

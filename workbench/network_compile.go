@@ -51,7 +51,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		case "relay":
 			controls = append(controls, p)
 			inductors = append(inductors, p)
-		case "comparator", "pushbutton", "bouncing-pushbutton":
+		case "scr", "triac", "comparator", "pushbutton", "bouncing-pushbutton":
 			controls = append(controls, p)
 		case "bcd-decoder", "seven-segment":
 			displays = append(displays, p)

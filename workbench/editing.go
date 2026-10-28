@@ -123,6 +123,8 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "thyristor.configure":
+		return s.configureThyristorLocked(raw)
 	case "photodiode.configure":
 		return s.configurePhotodiodeLocked(raw)
 	case "photodiode.light.set":
@@ -845,7 +847,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return fmt.Errorf("drawing supports at most %d components", MaxComponents)
 		}
 		if p.ID == "" {
-			prefix := map[string]string{"photodiode": "PD", "njfet": "J", "pjfet": "J", "current-source": "I", "electronic-load": "LOAD", "speaker": "SP", "shift-register": "U", "piezo": "BZ", "active-buzzer": "BZ", "pwm-controller": "U", "hbridge": "U", "transformer": "T", "optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
+			prefix := map[string]string{"scr": "SCR", "triac": "TR", "photodiode": "PD", "njfet": "J", "pjfet": "J", "current-source": "I", "electronic-load": "LOAD", "speaker": "SP", "shift-register": "U", "piezo": "BZ", "active-buzzer": "BZ", "pwm-controller": "U", "hbridge": "U", "transformer": "T", "optocoupler": "OC", "dc-motor": "MTR", "battery": "B", "dc-source": "V", "thermistor": "RT", "ldr": "LDR", "resistor": "R", "led": "D", "diode": "D", "zener": "D", "schottky": "D", "potentiometer": "P", "ground": "GND", "capacitor": "C", "inductor": "L", "pulse-source": "V", "sine-source": "V", "finite-pulse-source": "V", "relay": "K", "linear-regulator": "U", "ldo-regulator": "U", "comparator": "U", "opamp": "U", "timer555": "U", "bcd-decoder": "U", "seven-segment": "DS", "d-flipflop": "U", "jk-flipflop": "U", "t-flipflop": "U", "binary-counter": "U", "decade-counter": "U", "logic-not": "U", "logic-and": "U", "logic-or": "U", "logic-nand": "U", "logic-nor": "U", "logic-xor": "U", "logic-xnor": "U", "npn": "Q", "pnp": "Q", "nmos": "M", "pmos": "M", "junction": "J", "net-label": "L", "pushbutton": "S", "bouncing-pushbutton": "S", "switch": "S"}[p.Kind]
 			if prefix == "" {
 				return fmt.Errorf("unknown part kind")
 			}

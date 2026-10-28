@@ -449,7 +449,7 @@ func drawComponentSymbol(b *meshBuilder, state workbench.Snapshot, part workbenc
 		for _, label := range workbench.RegulatorSymbolLabels(part) {
 			b.text(label.At.X, label.At.Y, label.Text, muted)
 		}
-	case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
+	case "scr", "triac", "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 		memory := workbench.ControlMemory{}
 		if state.Mixed != nil && !state.Mixed.Stale {
 			for _, c := range state.Mixed.Controls {

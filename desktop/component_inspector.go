@@ -98,6 +98,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			}
 		}
 	}
+	inspector = append(inspector, s.thyristorControls(state, part)...)
 	inspector = append(inspector, s.photodiodeControls(state, part)...)
 	if workbench.IsJFETKind(part.Kind) {
 		inspector = append(inspector, s.jfetControls(state, part)...)

@@ -13,6 +13,8 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
+var sweepBitmapUnits = strings.NewReplacer("µ", "u", "°", "deg ")
+
 func sweepVisible(state workbench.Snapshot) bool {
 	return state.DCSweep != nil && state.DCSweep.Visible
 }
@@ -115,7 +117,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 		if cfg.Parameter == "loop-frequency" && p.ID != "loop:"+cfg.ComponentID {
 			continue
 		}
-		if cfg.Parameter == "frequency" && p.Unit != "V" {
+		if (cfg.Parameter == "frequency" || cfg.Parameter == "noise") && p.Unit != "V" {
 			continue
 		}
 		probeOptions = append(probeOptions, ui.Option{ID: p.ID, Label: p.Label + " · " + p.Unit})
@@ -268,10 +270,7 @@ func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 	yLabel := ""
 	for _, p := range result.Probes {
 		if p.ID == sweep.TraceID {
-			unit := p.Unit
-			if unit == "A" {
-				unit = "mA (display)"
-			}
+			_, unit := sweepDisplayUnit(p.Unit)
 			yLabel = p.Label + " · " + unit
 		}
 	}
@@ -325,10 +324,7 @@ func (s *screen) sweepMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	}
 	palette := s.colorsForTheme(state.Theme)
 	probe := result.Probes[index]
-	factor := 1.
-	if probe.Unit == "A" {
-		factor = 1000
-	}
+	factor, _ := sweepDisplayUnit(probe.Unit)
 	xmin, xmax := math.Min(result.Start, result.Stop), math.Max(result.Start, result.Stop)
 	ymin, ymax := math.Inf(1), math.Inf(-1)
 	for _, p := range result.Points {
@@ -366,7 +362,7 @@ func (s *screen) sweepMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		width := workbench.CanvasTextWidth(label, 1.25)
 		text(math.Max(2, math.Min(x-width/2, v.Width-width-6)), bottom+12, label)
 	}
-	text(left, bottom+27, result.Target.Unit)
+	text(left, bottom+27, sweepBitmapUnits.Replace(result.Target.Unit))
 	points := make([]canvas.Point, len(result.Points))
 	inputs := make([]float64, len(result.Points))
 	for i, p := range result.Points {
@@ -397,4 +393,14 @@ func sweepSpacingLabel(spacing string) string {
 		return "log axis"
 	}
 	return "linear axis"
+}
+
+func sweepDisplayUnit(unit string) (float64, string) {
+	switch unit {
+	case "A":
+		return 1000, "mA (display)"
+	case "V/√Hz":
+		return 1e9, "nV/√Hz (display)"
+	}
+	return 1, unit
 }

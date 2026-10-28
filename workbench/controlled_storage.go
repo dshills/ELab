@@ -11,7 +11,7 @@ func validateRecordedControls(c Compiled, g Graph, r *MixedResult) error {
 		}
 		ids[d.Kind] = append(ids[d.Kind], d.ID)
 	}
-	for _, kind := range []string{"pushbutton", "bouncing-pushbutton", "comparator", "relay"} {
+	for _, kind := range []string{"scr", "triac", "pushbutton", "bouncing-pushbutton", "comparator", "relay"} {
 		if err := recordedObjectIDs(g, kind, ids[kind]); err != nil {
 			return err
 		}
@@ -26,6 +26,12 @@ func validateRecordedControls(c Compiled, g Graph, r *MixedResult) error {
 	for _, actual := range r.Controls {
 		p, _ := g.Component(actual.ID)
 		m := actual.Memory
+		if !IsThyristorKind(p.Kind) && (m.Latched || m.Direction != 0) {
+			return fmt.Errorf("unrelated thyristor memory")
+		}
+		if IsThyristorKind(p.Kind) && (m.Powered || m.Pressed || m.ContactClosed || m.Bouncing || m.StartedAt != 0 || m.ReleaseAt != 0 || (!m.High && (m.Latched || m.Direction != 0)) || (m.High && m.Direction != 1 && m.Direction != -1) || (p.Kind == "scr" && m.Direction < 0)) {
+			return fmt.Errorf("invalid thyristor memory")
+		}
 		if !finite(m.StartedAt) || !finite(m.ReleaseAt) || m.StartedAt < 0 || m.ReleaseAt < 0 || m.StartedAt > r.Time {
 			return fmt.Errorf("invalid control event timestamps")
 		}

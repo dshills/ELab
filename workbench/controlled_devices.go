@@ -27,16 +27,20 @@ type ControlModel struct {
 	RelayPickup       float64 `json:"relay_pickup_current_a"`
 	RelayDropout      float64 `json:"relay_dropout_current_a"`
 	Limitations       string  `json:"limitations"`
+	Thyristor         string  `json:"thyristors,omitempty"`
 }
 
 func ControlledDeviceModel() ControlModel {
-	return ControlModel{ControlModelID, 1, 1e9, .001, 4, .05, 1e9, 50, 1e6, 2, 12, .1, 100, .03, .01, "Generic educational controls. Normally open momentary buttons; clean or deterministic four-transition 1 ms bounce after press/release; Click holds for 50 ms of simulation time. Powered comparator has explicit differential hysteresis and rail-connected 50 Ω output paths. Relay has a 100 Ω /100 mH unpolarized coil, 30 mA pickup /10 mA dropout and isolated SPDT contacts. No contact arcing/wear, physical mechanical delay, comparator propagation/setup timing, noise, heat, protection, current limit or hardware ratings. External resistance/storage determine circuit behavior; fixed bounce is illustrative, not a measured switch."}
+	return ControlModel{ControlModelID, 1, 1e9, .001, 4, .05, 1e9, 50, 1e6, 2, 12, .1, 100, .03, .01, "Generic educational controls. Normally open momentary buttons; clean or deterministic four-transition 1 ms bounce after press/release; Click holds for 50 ms of simulation time. Powered comparator has explicit differential hysteresis and rail-connected 50 Ω output paths. Relay has a 100 Ω /100 mH unpolarized coil, 30 mA pickup /10 mA dropout and isolated SPDT contacts. No contact arcing/wear, physical mechanical delay, comparator propagation/setup timing, noise, heat, protection, current limit or hardware ratings. External resistance/storage determine circuit behavior; fixed bounce is illustrative, not a measured switch.", ""}
 }
 func IsButtonKind(kind string) bool { return kind == "pushbutton" || kind == "bouncing-pushbutton" }
 func IsControlKind(kind string) bool {
-	return IsButtonKind(kind) || kind == "comparator" || kind == "relay"
+	return IsThyristorKind(kind) || IsButtonKind(kind) || kind == "comparator" || kind == "relay"
 }
 func controlPins(kind string) []string {
+	if IsThyristorKind(kind) {
+		return thyristorPins(kind)
+	}
 	switch kind {
 	case "comparator":
 		return []string{"noninverting", "inverting", "out", "vcc", "gnd"}
@@ -49,13 +53,20 @@ func controlModelForGraph(g Graph) *ControlModel {
 	for _, p := range g.Components {
 		if IsControlKind(p.Kind) {
 			m := ControlledDeviceModel()
+			if hasThyristors(g) {
+				m.Thyristor = thyristorDescription
+			}
 			return &m
 		}
 	}
 	return nil
 }
 func validateControlModel(g Graph, m *ControlModel) error {
-	if m != nil && *m != ControlledDeviceModel() {
+	expected := ControlledDeviceModel()
+	if hasThyristors(g) {
+		expected.Thyristor = thyristorDescription
+	}
+	if m != nil && *m != expected {
 		return fmt.Errorf("unsupported controlled-device model")
 	}
 	if controlModelForGraph(g) != nil && m == nil {
@@ -65,6 +76,8 @@ func validateControlModel(g Graph, m *ControlModel) error {
 }
 
 type ControlMemory struct {
+	Latched       bool    `json:"latched,omitempty"`
+	Direction     int     `json:"direction,omitempty"`
 	High          bool    `json:"high"`
 	Powered       bool    `json:"powered"`
 	Pressed       bool    `json:"pressed"`
@@ -112,6 +125,9 @@ func nextButtonEvent(kind string, m ControlMemory, at float64) float64 {
 	return next
 }
 func controlDecision(p Component, v [5]float64, m ControlMemory, at, current float64) (ControlMemory, error) {
+	if IsThyristorKind(p.Kind) {
+		return thyristorDecision(p, v, m)
+	}
 	if IsButtonKind(p.Kind) {
 		return buttonAt(p.Kind, m, at), nil
 	}
@@ -165,6 +181,9 @@ type controlEvaluation struct {
 }
 
 func controlCurrents(p Component, v [5]float64, m ControlMemory) controlEvaluation {
+	if IsThyristorKind(p.Kind) {
+		return thyristorCurrents(p, v, m)
+	}
 	e := controlEvaluation{}
 	model := ControlledDeviceModel()
 	branch := func(a, b int, r float64) {
@@ -237,7 +256,16 @@ func (n *mixedNetwork) controlResult(p Component, x []float64) ControlResult {
 	v := n.controlVoltages(p, x)
 	m := n.controlMemoryFor(p)
 	e := controlCurrents(p, v, m)
-	r := ControlResult{ID: p.ID, Kind: p.Kind, Model: ControlledDeviceModel(), Memory: m, PinCurrents: e.Current, Voltage: v[0] - v[1], Current: e.Current[0], State: "released"}
+	r := ControlResult{ID: p.ID, Kind: p.Kind, Model: componentControlModel(p), Memory: m, PinCurrents: e.Current, Voltage: v[0] - v[1], Current: e.Current[0], State: "released"}
+	if IsThyristorKind(p.Kind) {
+		r.State = "blocking"
+		if m.High {
+			r.State = "gate-supported"
+		}
+		if m.Latched {
+			r.State = "latched"
+		}
+	}
 	if IsButtonKind(p.Kind) {
 		if m.Pressed {
 			r.State = "pressed"

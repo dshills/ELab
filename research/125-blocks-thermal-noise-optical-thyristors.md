@@ -101,3 +101,22 @@ noise references pass with history/save/capture/forgery and user-agent controls.
 A broader run exposed one remaining old category-count fixture; current source
 has 59 physical kinds, 219 commands and 85 examples. Existing capacities and
 integration/numerical limits stay unchanged. Prism review follows before commit.
+
+Item 4 committed 79f5fcd8 after complete initial/follow-up Anthropic Opus 5.5 Prism
+reviews. Item 5 now implements SCR/TRIAC gate-supported versus actual-current
+latching, holding-current and signed commutation, with preserved hybrid trial
+ownership and guard brackets. Independent gate/main Jacobians, current/KCL/power,
+subsample pulse/load threshold, reverse blocking, both AC half cycles and analytic
+holding-time/refinement tests pass. Source examples and config/inspection are
+shared across users/agents. Initial existing relay raced capture hit the original
+100 ms guard; catalog size also reached its existing 64 KiB boundary. Summaries
+are reduced from 96 to 88 runes while filtered full descriptions remain exact.
+Current source is 61 physical kinds / 220 commands / 87 examples; no limits raised.
+
+Item 5 initial/follow-up Prism reviews are complete (6+2 Anthropic Opus 5.5 chunks,
+no skips/truncation); final follow-up has no medium/high findings. Reported
+exponential-junction concern is inapplicable to the explicitly piecewise-linear
+frozen-state model. Pin-name robustness, app-thread testing, notes and rendering
+allocation/readability fixes are included. Corrected complete root suite passes,
+workbench 67.662 s; final offscreen sweep/noise/thyristor controls 2.488 s and lint
+pass. All five implementations are ready for final source/package qualification.

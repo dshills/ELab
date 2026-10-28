@@ -26,6 +26,8 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 		if id == "recording.step-response.set" {
 			c.Preconditions = append(c.Preconditions, "Exact currently selected retained recording ID; stale controls/replaced document refuse")
 		}
+	case "thyristor.configure":
+		c.Effects = []string{thyristorDescription, "Complete saved undoable startup edit; all fields required. Holding current must be strictly below latching current. Edits restart the experiment from blocking state; gate inputs use ordinary sources/buttons, no hidden control command. Rejected edits preserve accepted source/history. Captures retain model/config, conduction/latching/polarity state and all pin currents."}
 	case "photodiode.configure", "photodiode.light.set":
 		bounds("incident_light_uw", "µW", 0, 1000)
 		c.Effects = []string{photodiodeDescription, "Configuration is a complete saved undoable startup edit. Light command stages atomic input_work at accepted time for a fresh transient, preserves voltage/charge/run/time and publishes one saved environment/history edit; newer inputs supersede pending work and failures preserve the committed state. Inspect requested_optical_light and simulation.wait. Incomplete/stale drawings use ordinary startup edit semantics. Parameter light in the existing sweep workflow solves independent DC optical operating points."}
@@ -88,6 +90,9 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	if id == "recording.step-response" || id == "recording.step-response.set" {
 		delete(schema, "x-model-id")
 		schema["x-method-id"] = StepResponseMethod
+	}
+	if id == "thyristor.configure" {
+		schema["x-model-id"] = ThyristorModelID
 	}
 	if id == "photodiode.configure" || id == "photodiode.light.set" {
 		schema["x-model-id"] = PhotodiodeModelID
@@ -236,4 +241,16 @@ func addPhotodiodeSchema(schema map[string]any) {
 		p := inputProperty(schema, f.name)
 		p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
 	}
+}
+
+func addThyristorSchema(schema map[string]any) {
+	inputProperty(schema, "version")["enum"] = []string{ThyristorModelID}
+	for _, f := range []struct {
+		name, unit string
+		min, max   float64
+	}{{"gate_trigger_current_a", "A", 1e-5, .01}, {"latching_current_a", "A", .0001, 1}, {"holding_current_a", "A", 1e-5, .05}, {"on_resistance_ohm", "Ω", .1, 100}, {"forward_drop_v", "V", 0, 2}, {"gate_resistance_ohm", "Ω", 10, 10000}} {
+		p := inputProperty(schema, f.name)
+		p["minimum"], p["maximum"], p["x-unit"] = f.min, f.max, f.unit
+	}
+	schema["x-relations"] = []map[string]any{{"operator": "less-than", "fields": []string{"holding_current_a", "latching_current_a"}}}
 }

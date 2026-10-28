@@ -160,6 +160,11 @@ func probeInventory(g Graph) []Probe {
 				}
 				out = append(out, Probe{"i:" + p.ID + "." + pin, p.ID + "." + pin + " current", "A", p.ID + "." + pin, direction})
 			}
+		case "scr", "triac":
+			out = append(out, Probe{"v:" + p.ID, p.ID + " main voltage", "V", p.ID + "." + p.Terminals[0], p.ID + "." + p.Terminals[1]}, Probe{"i:" + p.ID, p.ID + " main current", "A", p.ID + "." + p.Terminals[0], "into main terminal"})
+			for _, pin := range p.Terminals {
+				out = append(out, Probe{"i:" + p.ID + "." + pin, p.ID + "." + pin + " current", "A", p.ID + "." + pin, "into device"})
+			}
 		case "relay":
 			out = append(out, Probe{"v:" + p.ID, p.ID + " coil voltage", "V", p.ID + ".coil1", p.ID + ".coil2"}, Probe{"i:" + p.ID, p.ID + " coil current", "A", p.ID + ".coil1", p.ID + ".coil2"})
 			for _, pin := range p.Terminals {

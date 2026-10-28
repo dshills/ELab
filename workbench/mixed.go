@@ -420,7 +420,7 @@ func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, 
 			flow(u, v, (voltage(x, u)-voltage(x, v))*g, g)
 		case "linear-regulator", "ldo-regulator":
 			n.stampRegulator(p, x, add, f)
-		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
+		case "scr", "triac", "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			n.stampControl(p, x, add, f)
 		case "bcd-decoder", "seven-segment":
 			n.stampDisplay(p, x, add, f)
@@ -928,7 +928,7 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 			device := n.regulatorResult(p, x)
 			r.Regulators = append(r.Regulators, device)
 			powers += device.Power
-		case "relay", "comparator", "pushbutton", "bouncing-pushbutton":
+		case "scr", "triac", "relay", "comparator", "pushbutton", "bouncing-pushbutton":
 			device := n.controlResult(p, x)
 			r.Controls = append(r.Controls, device)
 			powers += device.Power

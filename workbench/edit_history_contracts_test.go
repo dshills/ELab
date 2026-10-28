@@ -28,14 +28,14 @@ func TestAtomicEditHistoryContractsPreserveDiscoveryAndExposeSupportedCommands(t
 		}
 		if id == "edit.batch" {
 			commands := schema["x-supported-edit-commands"].([]any)
-			if len(commands) != 40 || inputProperty(schema, "edits")["maxItems"] != float64(100) || inputProperty(schema, "name")["x-max-utf8-bytes"] != float64(80) {
+			if len(commands) != 41 || inputProperty(schema, "edits")["maxItems"] != float64(100) || inputProperty(schema, "name")["x-max-utf8-bytes"] != float64(80) {
 				t.Fatal("missing batch domains")
 			}
 			found := map[string]bool{}
 			for _, command := range commands {
 				found[command.(string)] = true
 			}
-			if !found["photodiode.configure"] || !found["photodiode.light.set"] || !found["thermal.configure"] || !found["jfet.configure"] || !found["current-source.configure"] || !found["load.configure"] || !found["passive.configure"] || !found["speaker.configure"] || !found["transistor.profile.set"] {
+			if !found["thyristor.configure"] || !found["photodiode.configure"] || !found["photodiode.light.set"] || !found["thermal.configure"] || !found["jfet.configure"] || !found["current-source.configure"] || !found["load.configure"] || !found["passive.configure"] || !found["speaker.configure"] || !found["transistor.profile.set"] {
 				t.Fatal("new device edits missing from atomic contract")
 			}
 			for _, command := range commands {

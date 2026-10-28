@@ -58,6 +58,8 @@ func ExampleCatalog() []ExampleInfo { return slices.Clone(immutableExampleCatalo
 
 func buildExampleCatalog() []ExampleInfo {
 	catalog := []ExampleInfo{
+		{ID: "scr-latch", Title: "SCR latching LED alarm", Question: "Why does an SCR stay on after its trigger is released?", Expected: "Pressing TRIGGER supplies gate current and latches the LED on. Releasing the button removes gate current while the load maintains conduction; open RESET and advance to interrupt it.", Try: "Select TRIGGER and Press/Release or Click. Inspect SCR1 main/gate currents and latched state. Open RESET then Step to apply the saved switch state; close RESET and trigger again.", Limitation: thyristorDescription},
+		{ID: "triac-phase", Title: "Low-voltage TRIAC phase control", Question: "How does firing time control AC load power?", Expected: "An 8 V peak, 50 Hz source drives a 100Ω load through TR1. Rectified delayed gate crests trigger both half-cycles near their peaks; current commutates below holding current before each zero crossing.", Try: "Probe RL voltage, TR1 main current and gate current. Select VG and adjust phase to shift firing time; compare captures at two phases. All sources are low-voltage educational waveforms.", Limitation: thyristorDescription},
 		{ID: "photodiode-load", Title: "Photodiode light-to-voltage sensor", Question: "How does optical power become current?", Expected: "PD1 is reverse-biased through RL. Increasing incident optical µW increases photocurrent and resistor voltage. The 10 nF junction charges from zero through the external circuit.", Try: "Select PD1 and adjust Incident light. Probe PD1/RL current and voltage, then compare capacitance settings or use the optical-power DC sweep target.", Limitation: photodiodeDescription},
 		{ID: "photodiode-tia", Title: "Photodiode transimpedance amplifier", Question: "How can an op-amp measure a small light current?", Expected: "A 100k feedback resistor converts 10 µA photocurrent into about 1 V output. CF bounds the closed-loop response; the detector operates near zero junction voltage.", Try: "Select PD1 and change incident light from 0 to 40 µW. Observe stored charge continuity and output response. Sweep PD1 optical power to compare the transimpedance against responsivity × RF.", Limitation: photodiodeDescription},
 		{ID: "noise-rc", Title: "RC filter thermal noise", Question: "How do resistance and bandwidth set noise?", Expected: "R1 contributes Johnson noise filtered by C1. Output noise falls above the RC cutoff; integrated RMS depends on the selected bandwidth.", Try: "Open Simulate → sweeps and run the prepared Noise target. Compare output density, input-referred density and integrated RMS; change R1 or C1 and repeat.", Limitation: "Declared independent white sources at DC bias; no flicker/excess noise or hardware noise floor. RMS uses sampled linear-PSD quadrature; refine points and band."},
@@ -457,6 +459,14 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.selected = "Q6"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0005, .02
 		d.probes = []string{"v:VIN.positive", "v:RL", "i:Q6.collector", "i:Q7.collector", "i:Q8.collector", "v:C1"}
+	case "scr-latch":
+		d.graph, d.selected = SCRLatchExampleGraph(), "TRIGGER"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .001, .1
+		d.probes = []string{"i:SCR1", "i:SCR1.gate", "v:SCR1"}
+	case "triac-phase":
+		d.graph, d.selected = TRIACPhaseExampleGraph(), "TR1"
+		d.settings.StepSeconds, d.settings.PlaybackSpeed = .0001, .02
+		d.probes = []string{"v:RL", "i:TR1", "i:TR1.gate", "v:VAC.positive"}
 	case "photodiode-load":
 		d.graph, d.selected = PhotodiodeLoadExampleGraph(), "PD1"
 		d.settings.StepSeconds, d.settings.PlaybackSpeed = .00001, .01

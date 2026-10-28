@@ -69,6 +69,10 @@ func (n *mixedNetwork) inductorStartupCuts() []inductorCut {
 		case "linear-regulator", "ldo-regulator":
 			join(p, "in", "gnd")
 			join(p, "out", "gnd")
+		case "scr", "triac":
+			pins := thyristorPins(p.Kind)
+			join(p, pins[0], pins[1])
+			join(p, "gate", pins[1])
 		case "relay":
 			join(p, "common", "no")
 			join(p, "common", "nc")

@@ -1,6 +1,9 @@
 package workbench
 
 func ControlSymbolPaths(kind string, m ControlMemory) [][]Point {
+	if IsThyristorKind(kind) {
+		return ThyristorSymbolPaths(kind)
+	}
 	if IsButtonKind(kind) {
 		y := -16.
 		if m.ContactClosed {

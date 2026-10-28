@@ -73,6 +73,9 @@ func CanvasPartLabel(part Component) (Point, string) {
 	if IsDisplayKind(part.Kind) {
 		title += " " + part.Name
 	}
+	if IsThyristorKind(part.Kind) {
+		title += " " + strings.ToUpper(part.Kind)
+	}
 	if part.Kind == "comparator" {
 		title += " Hys"
 	}

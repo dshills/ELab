@@ -2,6 +2,8 @@ package workbench
 
 func partAliases(kind string) []string {
 	switch kind {
+	case "scr", "triac":
+		return []string{"thyristor", "latching", "holding", "gate trigger", "phase control", "commutation"}
 	case "photodiode":
 		return []string{"light sensor", "optical", "photocurrent", "transimpedance", "TIA", "responsivity"}
 	case "shift-register":
@@ -99,6 +101,8 @@ func partAliases(kind string) []string {
 }
 func partLimitations(kind string) string {
 	switch kind {
+	case "scr", "triac":
+		return thyristorDescription
 	case "photodiode":
 		return photodiodeDescription
 	case "njfet", "pjfet":

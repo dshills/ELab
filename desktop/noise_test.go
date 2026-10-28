@@ -2,6 +2,7 @@ package main
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -19,10 +20,36 @@ func TestNoiseSweepUserAgentParityAndTheme(t *testing.T) {
 		agentAction(t, service, "simulation.pause", struct{}{})
 		awaitBlockRC(t, service)
 	}
+	uiAction(t, s, "inspector-section-simulation", nil)
+	selectorError := ""
+	s.app.Do(func() {
+		choices, ok := findNode(s.view(), "sweep-probe")
+		if !ok {
+			selectorError = "noise reading selector absent"
+			return
+		}
+		for _, p := range choices.Options {
+			if strings.HasPrefix(p.ID, "i:") {
+				selectorError = "noise selector offers a current probe"
+			}
+		}
+	})
+	if selectorError != "" {
+		t.Fatal(selectorError)
+	}
 	before := s.service.Snapshot()
 	cfg := before.DCSweep.Settings
 	uiAction(t, s, "sweep-start", nil)
 	state := awaitNativeSweep(t, s)
+	axisText := ""
+	s.app.Do(func() {
+		if node, ok := findNode(s.view(), "sweep-axis"); ok {
+			axisText = node.Text
+		}
+	})
+	if !strings.Contains(axisText, "nV/√Hz") {
+		t.Fatal("noise plot display unit unavailable", axisText)
+	}
 	agentAction(t, a, "sweep.start", workbench.SweepStartParams{Settings: &cfg})
 	deadline := time.Now().Add(3 * time.Second)
 	for a.Snapshot().DCSweep.Result == nil && time.Now().Before(deadline) {

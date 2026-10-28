@@ -78,6 +78,8 @@ func routeBody(p Component) routeRect {
 		w, h = 68, 48
 	case "thermistor", "ldr":
 		w, h = 62, 52
+	case "scr", "triac":
+		w, h = 70, 55
 	case "relay":
 		w, h = 102, 92
 	case "potentiometer":
