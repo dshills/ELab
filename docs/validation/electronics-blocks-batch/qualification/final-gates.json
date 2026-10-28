@@ -1,0 +1,126 @@
+[
+  {
+    "name": "final-root-race",
+    "command": [
+      "go",
+      "test",
+      "-race",
+      "./...",
+      "-count=1",
+      "-timeout=30m"
+    ],
+    "exit_code": 0,
+    "seconds": 486.355
+  },
+  {
+    "name": "final-desktop-race",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "test",
+      "-race",
+      "./...",
+      "-count=1",
+      "-timeout=30m"
+    ],
+    "exit_code": 0,
+    "seconds": 246.929
+  },
+  {
+    "name": "final-offscreen-race",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "test",
+      "-race",
+      "-tags=offscreen",
+      "./...",
+      "-count=1",
+      "-timeout=30m"
+    ],
+    "exit_code": 1,
+    "seconds": 526.54
+  },
+  {
+    "name": "final-root-vet",
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "exit_code": 0,
+    "seconds": 5.384
+  },
+  {
+    "name": "final-desktop-vet",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "vet",
+      "./..."
+    ],
+    "exit_code": 0,
+    "seconds": 2.909
+  },
+  {
+    "name": "final-offscreen-vet",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "vet",
+      "-tags=offscreen",
+      "./..."
+    ],
+    "exit_code": 0,
+    "seconds": 2.402
+  },
+  {
+    "name": "final-lint",
+    "command": [
+      "scripts/lint.sh"
+    ],
+    "exit_code": 0,
+    "seconds": 20.465
+  },
+  {
+    "name": "final-python",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "seconds": 1.981
+  },
+  {
+    "name": "final-prd",
+    "command": [
+      "python3",
+      "scripts/prd-audit.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.03
+  },
+  {
+    "name": "final-inventory",
+    "command": [
+      "go",
+      "run",
+      "./cmd/elab-ui-audit",
+      "--verify",
+      "research/13-native-command-inventory.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.678
+  }
+]

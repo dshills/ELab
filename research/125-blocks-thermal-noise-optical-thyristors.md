@@ -135,3 +135,16 @@ Complete final rendered race rerun passes 542.843 s, ordinary focused controls
 layout-source hash; regenerated JSON changes only that one hash, preserving all
 220 commands/527 sites/182 routes/111 sources. Corrected verification passes.
 The failed first verification is retained, not counted as a clean invocation.
+
+All five items are complete and locally committed. Exact clean-source
+0.200.0 /278 app/agent `096eb7bb2c7ba78df9fc747dd5f7354b7db130f1` passes 87 paused/clean exact-graph
+example reopenings, all 156 prior project/SVG byte checks, all five new headless
+and copied-native service workflows, native isolation smoke and four public
+adapters with 102 normal external exits. Full source gates and precise initial
+failure/repair scopes are recorded in the batch README and qualification receipts.
+All 1501 frozen executable/test/dependency inputs and 30 protected prior package/SDK
+identities remain exact. ZIP bytes 42968060, SHA-256 `2cbec34c62d1760932c261ce8f860ffad03afa1463286e11dfd0a23dc711c1c0`; all
+435 payload files/modes, OS extraction and strict ad-hoc seal verify.
+13 complete Anthropic Opus 5.5 Prism reports cover 52 chunks. No new native
+OS/hardware acceptance, owner-project/settings write, push, upload or release
+promotion. Native 3/6/9/11 remain open. No owned fixture remains running.

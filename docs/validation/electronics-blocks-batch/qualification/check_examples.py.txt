@@ -1,0 +1,40 @@
+from pathlib import Path
+import hashlib,json,sys
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/electronics-blocks-batch';p=json.loads((b/'package.json').read_text());folder=Path(p['app']).parent
+sys.path.insert(0,str(r/'scripts'));from acceptance_client import AcceptanceClient
+out=folder/'Examples';old=r/'build/ELab-0.199.0-277-Electronics/Examples';client=AcceptanceClient(p['agent'])
+new=['rc-block','self-heating','class-ab-temperature','noise-rc','noise-amplifier','photodiode-load','photodiode-tia','scr-latch','triac-phase']
+try:
+ client.ask('simulation.pause',mutate=True)
+ catalog=client.ask('examples.list');assert len(catalog)==87
+ previous=json.loads((old/'CATALOG.json').read_text());assert [x for x in catalog if x['id'] not in new]==previous
+ for name in new:
+  client.ask('example.load',dict(id=name,discard_changes=True),mutate=True);client.ask('simulation.pause',mutate=True);client.ask('simulation.restart',mutate=True)
+  state=client.ask('simulation.wait');assert not state['diagnostics'],state['diagnostics']
+  client.ask('project.save',dict(path=str(out/(name+'.elab'))),mutate=True)
+  client.ask('export.schematic.svg',dict(path=str(out/(name+'.svg'))),mutate=True)
+ (out/'CATALOG.json').write_text(json.dumps(catalog,indent=2)+'\n')
+ text=(old/'README.md').read_text()
+ for info in catalog:
+  if info['id'] in new:text+='\n## '+info['title']+'\n\n'+info['question']+'\n\n'+info['expected']+'\n\n**Try:** '+info['try']+'\n\n**Model limits:** '+info['limitation']+'\n'
+ (out/'README.md').write_text(text)
+finally:client.close()
+rows=[]
+for file in sorted(out.glob('*.elab')):
+ expected=json.loads(file.read_text());c=AcceptanceClient(p['agent'])
+ try:
+  c.ask('project.load',dict(path=str(file)),mutate=True);state=c.ask('simulation.wait')
+  assert state['paused'] and not state['document']['dirty'] and state['status'] not in ('error','unsupported'),(file,state['status'])
+  assert dict(components=state['components'],wires=state['wires'])==expected['graph'],file
+  assert len(c.ask('parts.list'))==61 and len(c.ask('capabilities.list')['capabilities'])==220
+ finally:c.close()
+ rows.append(dict(name=file.name,sha256=hashlib.sha256(file.read_bytes()).hexdigest(),paused_clean=True,exact_graph=True,agent_exit_code=c.process.returncode))
+assert len(rows)==87
+unchanged=[]
+for file in sorted(old.iterdir()):
+ if file.suffix in ('.elab','.svg'):
+  assert (out/file.name).read_bytes()==file.read_bytes(),file
+  unchanged.append(file.name)
+assert len(unchanged)==156
+report=dict(passed=True,agent_sha256=p['agent_sha256'],examples_reopened=87,original_78_projects_and_schematics_byte_exact=156,original_78_catalog_entries_exact=True,new_examples=new,changed_existing_metadata=['README.md','CATALOG.json'],examples=rows,scope='Exact matching packaged headless agent; not physical UI input or hardware acceptance')
+(b/'examples.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(dict(passed=True,examples=87,original_graph_files_exact=156)))

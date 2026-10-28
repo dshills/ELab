@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "original_source": "8dd62cc4",
+  "final_source": "096eb7bb2c7ba78df9fc747dd5f7354b7db130f1",
+  "changed_executable_test_inputs": [
+    "desktop/document_workspace.go"
+  ],
+  "original_failed_invocation": {
+    "name": "final-offscreen-race",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "test",
+      "-race",
+      "-tags=offscreen",
+      "./...",
+      "-count=1",
+      "-timeout=30m"
+    ],
+    "exit_code": 1,
+    "seconds": 526.54
+  },
+  "inventory_metadata_failure": {
+    "name": "document-order-inventory",
+    "command": [
+      "go",
+      "run",
+      "./cmd/elab-ui-audit",
+      "--verify",
+      "research/13-native-command-inventory.json"
+    ],
+    "exit_code": 1,
+    "seconds": 0.284
+  },
+  "inventory_metadata_correction": {
+    "name": "document-order-inventory-corrected",
+    "command": [
+      "go",
+      "run",
+      "./cmd/elab-ui-audit",
+      "--verify",
+      "research/13-native-command-inventory.json"
+    ],
+    "exit_code": 0,
+    "correction": "Only the reviewed document_workspace.go source hash changed; all command sites/routes and other inventory content remain exact."
+  },
+  "repair": "Explicit Circuit blocks/Help document group priority; existing paint test reproduced clipping in all themes",
+  "subsequent_complete_rendered_invocation": {
+    "name": "document-order-full-offscreen",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "test",
+      "-race",
+      "-tags=offscreen",
+      "./...",
+      "-count=1",
+      "-timeout=30m"
+    ],
+    "exit_code": 0,
+    "seconds": 542.843
+  },
+  "carried_source_gates": "Root inputs are unchanged; the prior complete ordinary desktop pass is supplemented by focused final-source ordinary tests. Complete final rendered race, both desktop vets, lint and inventory are rerun.",
+  "matrix_scope": "Aggregate complete and affected final-source gates with the original failure retained, not a falsely clean first invocation",
+  "solver_limits_changed": false
+}

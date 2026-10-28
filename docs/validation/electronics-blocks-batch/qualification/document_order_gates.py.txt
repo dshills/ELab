@@ -1,0 +1,10 @@
+from pathlib import Path
+import json,os,subprocess,time
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/electronics-blocks-batch'
+e=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(r/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+steps=[('document-order-full-offscreen',['go','-C','desktop','test','-race','-tags=offscreen','./...','-count=1','-timeout=30m']),('document-order-ordinary',['go','-C','desktop','test','-race','./...','-run','TestMountedInspector|TestBlocks|TestInspectorPagesMatchAgentAndKeepControlsReachable|TestRequestGuidance','-count=1','-timeout=5m']),('document-order-vet',['go','-C','desktop','vet','./...']),('document-order-offscreen-vet',['go','-C','desktop','vet','-tags=offscreen','./...']),('document-order-lint',['scripts/lint.sh']),('document-order-inventory',['go','run','./cmd/elab-ui-audit','--verify','research/13-native-command-inventory.json'])]
+rows=[]
+for name,args in steps:
+ start=time.monotonic();print('START '+name,flush=True)
+ with (b/(name+'.txt')).open('x') as f:code=subprocess.run(args,cwd=r,env=e,stdout=f,stderr=subprocess.STDOUT,timeout=1900).returncode
+ row=dict(name=name,command=args,exit_code=code,seconds=round(time.monotonic()-start,3));rows.append(row);(b/'document-order-gates.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps(row),flush=True)

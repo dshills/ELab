@@ -1,0 +1,18 @@
+"""Serial package qualification; stops at the first failed stage."""
+from pathlib import Path
+import json,os,subprocess,sys,time
+root=Path('/Users/dshills/Development/projects/ELab');batch=root/'build/electronics-blocks-batch'
+assert len(json.loads((batch/'qualification-gates.json').read_text()))==15
+assert all(x['exit_code']==0 for x in json.loads((batch/'qualification-gates.json').read_text()))
+assert not subprocess.check_output(['git','status','--porcelain'],cwd=root,text=True).strip()
+env=dict(os.environ,GOMAXPROCS='4',GOWORK='off',GOPROXY='off',GOTOOLCHAIN='local',GOFLAGS='-p=1 -mod=readonly',GOCACHE=str(root/'build/go-cache'),CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+agent=root/'build/ELab-0.200.0-278-Electronics/elab-agent'
+steps=[('assemble',[sys.executable,str(batch/'package_278.py')],1100),('examples',[sys.executable,str(batch/'check_examples.py')],300),('headless',[sys.executable,str(batch/'new_workflows.py'),'--agent',str(agent),'--output',str(batch/'headless')],180),('runtime',[sys.executable,str(batch/'qualify_runtime.py')],500),('native-features',[sys.executable,str(batch/'native_features.py')],180),('finalize',[sys.executable,str(batch/'finalize_278.py')],300)]
+rows=[]
+for name,cmd,deadline in steps:
+ print('START '+name,flush=True);started=time.monotonic()
+ with (batch/('package-'+name+'.txt')).open('x') as stream:
+  code=subprocess.run(cmd,cwd=root,env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=deadline).returncode
+ row=dict(name=name,command=cmd,exit_code=code,seconds=round(time.monotonic()-started,3));rows.append(row)
+ (batch/'package-gates.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps(row),flush=True)
+ if code:raise SystemExit(code)

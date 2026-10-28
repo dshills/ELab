@@ -1,0 +1,60 @@
+[
+  {
+    "name": "assemble",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "/Users/dshills/Development/projects/ELab/build/electronics-blocks-batch/package_278.py"
+    ],
+    "exit_code": 0,
+    "seconds": 9.642
+  },
+  {
+    "name": "examples",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "/Users/dshills/Development/projects/ELab/build/electronics-blocks-batch/check_examples.py"
+    ],
+    "exit_code": 0,
+    "seconds": 2.095
+  },
+  {
+    "name": "headless",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "/Users/dshills/Development/projects/ELab/build/electronics-blocks-batch/new_workflows.py",
+      "--agent",
+      "/Users/dshills/Development/projects/ELab/build/ELab-0.200.0-278-Electronics/elab-agent",
+      "--output",
+      "/Users/dshills/Development/projects/ELab/build/electronics-blocks-batch/headless"
+    ],
+    "exit_code": 0,
+    "seconds": 0.51
+  },
+  {
+    "name": "runtime",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "/Users/dshills/Development/projects/ELab/build/electronics-blocks-batch/qualify_runtime.py"
+    ],
+    "exit_code": 0,
+    "seconds": 89.344
+  },
+  {
+    "name": "native-features",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "/Users/dshills/Development/projects/ELab/build/electronics-blocks-batch/native_features.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.842
+  },
+  {
+    "name": "finalize",
+    "command": [
+      "/opt/homebrew/opt/python@3.15/bin/python3.15",
+      "/Users/dshills/Development/projects/ELab/build/electronics-blocks-batch/finalize_278.py"
+    ],
+    "exit_code": 0,
+    "seconds": 4.254
+  }
+]

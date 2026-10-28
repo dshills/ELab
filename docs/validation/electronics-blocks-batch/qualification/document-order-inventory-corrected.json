@@ -1,0 +1,12 @@
+{
+  "name": "document-order-inventory-corrected",
+  "command": [
+    "go",
+    "run",
+    "./cmd/elab-ui-audit",
+    "--verify",
+    "research/13-native-command-inventory.json"
+  ],
+  "exit_code": 0,
+  "correction": "Only the reviewed document_workspace.go source hash changed; all command sites/routes and other inventory content remain exact."
+}

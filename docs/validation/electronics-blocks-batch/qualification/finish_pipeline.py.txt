@@ -1,0 +1,22 @@
+from pathlib import Path
+import hashlib,json,subprocess,sys,time
+root=Path('/Users/dshills/Development/projects/ELab');b=root/'build/electronics-blocks-batch'
+end=time.monotonic()+2000
+while True:
+ p=b/'document-order-gates.json';rows=json.loads(p.read_text()) if p.exists() else []
+ if len(rows)==6:break
+ assert all(x['exit_code']==0 for x in rows),rows
+ if time.monotonic()>end:raise TimeoutError('bounded final gate wait')
+ time.sleep(1)
+assert len(rows)==6 and all(x['exit_code']==0 for x in rows[:-1]) and rows[-1]['name']=='document-order-inventory' and rows[-1]['exit_code']==1
+corrected=json.loads((b/'document-order-inventory-corrected.json').read_text());assert corrected['exit_code']==0
+original=json.loads((b/'final-gates.json').read_text());failed=[x for x in original if x['exit_code']]
+assert len(original)==10 and len(failed)==1 and failed[0]['name']=='final-offscreen-race'
+changed=subprocess.check_output(['git','diff','--name-only','8dd62cc4','HEAD'],cwd=root,text=True).splitlines()
+code=[f for f in changed if Path(f).suffix in ('.go','.py','.sh','.mod','.sum')];assert code==['desktop/document_workspace.go'],code
+accepted=[x for x in original if x['exit_code']==0]+rows[:-1]+[corrected];assert len(accepted)==15
+(b/'qualification-gates.json').write_text(json.dumps(accepted,indent=2)+'\n')
+coverage=dict(passed=True,original_source='8dd62cc4',final_source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),changed_executable_test_inputs=code,original_failed_invocation=failed[0],inventory_metadata_failure=rows[-1],inventory_metadata_correction=corrected,repair='Explicit Circuit blocks/Help document group priority; existing paint test reproduced clipping in all themes',subsequent_complete_rendered_invocation=rows[0],carried_source_gates='Root inputs are unchanged; the prior complete ordinary desktop pass is supplemented by focused final-source ordinary tests. Complete final rendered race, both desktop vets, lint and inventory are rerun.',matrix_scope='Aggregate complete and affected final-source gates with the original failure retained, not a falsely clean first invocation',solver_limits_changed=False)
+(b/'qualification-coverage.json').write_text(json.dumps(coverage,indent=2)+'\n')
+print(json.dumps(coverage),flush=True)
+raise SystemExit(subprocess.run([sys.executable,str(b/'package_pipeline.py')],cwd=root).returncode)

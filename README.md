@@ -12,36 +12,37 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
-Source development now includes [reusable circuit blocks](docs/circuit-blocks.md),
-[temperature effects and self-heating](docs/temperature.md),
-[small-signal noise analysis](docs/noise-analysis.md),
-[photodiode sensing](docs/photodiodes.md), and [SCR/TRIAC control](docs/thyristors.md),
-with shared
-user/agent commands. These changes are not yet in the preserved /277 package.
-
-**Current electronics candidate: [ELab 0.199.0 /277](build/ELab-0.199.0-277-Electronics/ELab.app)**
+**Current electronics candidate: [ELab 0.200.0 /278](build/ELab-0.200.0-278-Electronics/ELab.app)**
 adds five capabilities, with the same validated commands available to users and
 AI agents:
 
-- [All-discrete class-AB/speaker transients](docs/class-ab-speaker.md), retaining
-  the original fast compensation and numerical/work guards.
-- [Capacitor ESR/leakage and inductor winding loss](docs/passive-losses.md), with
-  explicit terminal, stored-energy and heat readings.
-- [DC/pulsed current sources and CC/CP electronic loads](docs/current-devices.md),
-  with declared compliance and low-voltage behavior.
-- [Configurable N/P-channel JFETs](docs/jfets.md), with preamp and complementary
-  current-source examples within the existing combined two-FET limit.
-- [Controlled-source loop return ratio and captured step response](docs/feedback-and-step-response.md),
-  with gain/phase margins, overshoot and observed settling. Loop injection targets
-  configured dynamic op-amps; discrete-transistor wire-break analysis is not claimed.
+- [Reusable circuit blocks](docs/circuit-blocks.md): single-level named pins,
+  published values and independent copies across drawings. Members remain ordinary
+  parts with the existing simulation limits.
+- [Temperature effects and self-heating](docs/temperature.md): resistor,
+  silicon-diode and bipolar temperature laws, optional thermal RC and ambient sweeps.
+- [Small-signal noise analysis](docs/noise-analysis.md): declared independent white
+  noise, component contributions, spectral density and integrated RMS budgets.
+- [Photodiode sensing](docs/photodiodes.md): light-controlled photocurrent,
+  dark current, capacitance and a transimpedance-amplifier example.
+- [SCR/TRIAC control](docs/thyristors.md): gate triggering, actual-current latching,
+  holding-current release and low-voltage AC commutation examples.
 
-The matching app/agent package contains **78 examples**, **58 component kinds**
-and **209 shared commands**. Electrical references, routed user/agent parity and
-complete Anthropic Claude Opus 5.5 Prism reviews are recorded in the
-[engineering evidence](docs/validation/electronics-next-five/README.md).
-Resource, numerical accuracy and simulation work limits remain unchanged.
-Generic models and sampled margins do not establish manufacturer fidelity or
-hardware stability. Playback remains explicit.
+The matching app/agent package contains **87 examples**, **61 component kinds**
+and **220 shared commands**. Search Examples for RC block, self-heating, noise,
+photodiode, SCR or TRIAC. Electrical references, user/agent parity, complete
+Anthropic Claude Opus 5.5 Prism reviews and exact package checks are recorded in
+the [engineering evidence](docs/validation/electronics-blocks-batch/README.md).
+Resource, accuracy and simulation work limits remain unchanged. Models are
+illustrative; the guides describe supported domains and assumptions.
+
+The preserved [0.199.0 /277 candidate](build/ELab-0.199.0-277-Electronics/ELab.app)
+contains [all-discrete class-AB/speaker transients](docs/class-ab-speaker.md),
+[passive losses](docs/passive-losses.md), [current sources and electronic loads](docs/current-devices.md),
+[JFETs](docs/jfets.md), and [loop-return/step-response analysis](docs/feedback-and-step-response.md).
+Its matching app/agent has 78 examples, 58 kinds and 209 commands. Loop injection
+targets configured dynamic op-amps; all-discrete physical-wire loop analysis is
+not claimed. [Prior checks](docs/validation/electronics-next-five/README.md).
 
 The preserved [0.198.0 /276 candidate](build/ELab-0.198.0-276-Analysis/ELab.app)
 contains semiconductor AC/Bode sweeps, FFT/distortion, configurable transistor

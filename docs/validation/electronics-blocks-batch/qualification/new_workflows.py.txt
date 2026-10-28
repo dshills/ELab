@@ -1,0 +1,90 @@
+"""Exact packaged service tests for this batch; no physical input assertion."""
+import argparse,hashlib,json,math,sys,time
+from pathlib import Path
+ROOT=Path('/Users/dshills/Development/projects/ELab')
+sys.path.insert(0,str(ROOT/'scripts'))
+from acceptance_client import AcceptanceClient
+
+def wait(read,done,seconds=45):
+ end=time.monotonic()+seconds
+ while True:
+  value=read()
+  if done(value):return value
+  if time.monotonic()>end:raise TimeoutError('owned feature deadline')
+  time.sleep(.02)
+def load(c,name):
+ c.ask('example.load',dict(id=name,discard_changes=True),mutate=True)
+ c.ask('simulation.pause',mutate=True);c.ask('simulation.restart',mutate=True)
+ value=c.ask('simulation.wait');assert value['paused'] and not value['diagnostics'],(name,value['diagnostics']);return value
+def part(state,name):return next(p for p in state['components'] if p['id']==name)
+def capture(c,out,name,duration,step,probes):
+ value=c.ask('simulation.verify',dict(duration_s=duration,sample_step_s=step,probe_ids=probes),mutate=True);identity=value['last_operation']
+ op=wait(lambda:c.ask('operation.inspect',dict(id=identity)),lambda s:s['operation']['status'] in ('completed','failed','canceled'))
+ assert op['operation']['status']=='completed',op
+ c.ask('verification.export',dict(id=identity,path=str(out/(name+'.json')),format='json'),mutate=True)
+ return identity
+
+def save_reopen(c,out,name):
+ before=c.ask('project.inspect');path=out/(name+'.elab');c.ask('project.save',dict(path=str(path)),mutate=True);c.ask('project.load',dict(path=str(path),discard_changes=True),mutate=True);after=c.ask('simulation.wait')
+ assert before['components']==after['components'] and before['wires']==after['wires']
+ assert after['paused'] and not after['document']['dirty'];return after
+
+def exercise(c,out):
+ assert not c.ask('project.inspect')['components']
+ assert len(c.ask('parts.list'))==61 and len(c.ask('capabilities.list')['capabilities'])==220
+ commands=['block.create','block.copy','block.paste','block.parameter.set','block.view.set','block.release','block.inspect','thermal.configure','photodiode.configure','photodiode.light.set','thyristor.configure']
+ for command in commands:
+  detail=c.ask('capabilities.list',dict(command=command))['capabilities'];assert len(detail)==1 and detail[0]['id']==command
+ load(c,'rc-block');c.ask('block.parameter.set',dict(id='FILTER',parameter='resistance',value='2k'),mutate=True);c.ask('simulation.restart',mutate=True)
+ assert abs(c.ask('simulation.wait')['transient']['time_constant_s']-.002)<1e-12
+ c.ask('block.view.set',dict(id='FILTER',expanded=True),mutate=True);c.ask('block.view.set',dict(id='FILTER',expanded=False),mutate=True)
+ original=c.ask('block.inspect',dict(id='FILTER'));assert len(original['block']['members'])==2
+ c.ask('block.copy',dict(id='FILTER'),mutate=True);c.ask('project.clear',dict(discard_changes=True),mutate=True);c.ask('block.paste',dict(id='COPY',position=dict(x=0,y=0)),mutate=True)
+ copied=c.ask('block.inspect',dict(id='COPY'));assert len(copied['block']['members'])==2 and any(p['kind']=='resistor' and p['value']==2000 for p in copied['graph']['components'])
+ save_reopen(c,out,'independent-block')
+
+ state=load(c,'self-heating');cfg=dict(part(state,'R1')['thermal']);cfg['resistance_coefficient_per_k']=.004
+ c.ask('thermal.configure',dict(id='R1',enabled=True,parameters=cfg),mutate=True);c.ask('edit.undo',mutate=True);assert c.ask('project.inspect')['components']==state['components']
+ c.ask('simulation.restart',mutate=True);capture(c,out,'thermal',.1,.001,['i:R1'])
+ record=json.loads((out/'thermal.json').read_text());thermal=record['metadata']['mixed']['thermal'][0]
+ expected=27+25*(1-math.exp(-1));assert abs(thermal['temperature_c']-expected)<.001,thermal
+ assert abs(thermal['thermal_balance_residual_w'])<1e-6
+ save_reopen(c,out,'thermal-capture')
+
+ before=load(c,'noise-rc');settings=dict(component_id='V1',parameter='noise',spacing='logarithmic',start='1 Hz',stop='100 kHz',points=201,probe_ids=['v:C1'])
+ c.ask('sweep.start',dict(settings=settings),mutate=True)
+ sweep=wait(lambda:c.ask('project.inspect')['dc_sweep'],lambda s:bool(s['operations']) and s['operations'][-1]['status'] in ('completed','failed','canceled'))
+ assert sweep['operations'][-1]['status']=='completed',sweep['operations']
+ result=sweep['result'];assert len(result['points'])==201 and len(result['noise']['contributors'])==1
+ exact=4*1.380649e-23*300.15*1000/(2*math.pi*.001)*(math.atan(2*math.pi*100000*.001)-math.atan(2*math.pi*.001))
+ assert abs(result['noise']['output_rms_v'][0]/math.sqrt(exact)-1)<.001
+ assert c.ask('project.inspect')['components']==before['components']
+ c.ask('sweep.export',dict(id=sweep['selected_operation'],path=str(out/'noise.json'),format='json'),mutate=True)
+ c.ask('sweep.export',dict(id=sweep['selected_operation'],path=str(out/'noise.csv'),format='csv'),mutate=True)
+ save_reopen(c,out,'noise-capture')
+
+ state=load(c,'photodiode-load');c.ask('simulation.step',dict(duration_s=.005),mutate=True);before=c.ask('simulation.wait')
+ c.ask('photodiode.light.set',dict(id='PD1',incident_light_uw=20),mutate=True);changed=c.ask('simulation.wait')
+ assert changed['run_id']==before['run_id'] and changed['mixed']['time_s']==before['mixed']['time_s']
+ assert abs(changed['mixed']['photodiodes'][0]['voltage_v']-before['mixed']['photodiodes'][0]['voltage_v'])<1e-10
+ c.ask('simulation.step',dict(duration_s=.001),mutate=True);after=c.ask('simulation.wait');assert abs(after['mixed']['photodiodes'][0]['voltage_v']-before['mixed']['photodiodes'][0]['voltage_v'])>.1
+ save_reopen(c,out,'light-step')
+ load(c,'photodiode-tia');capture(c,out,'photodiode-tia',.0001,.000001,['v:U1','i:PD1']);save_reopen(c,out,'photodiode-capture')
+
+ load(c,'scr-latch');c.ask('button.set',dict(id='TRIGGER',pressed=True),mutate=True);on=c.ask('simulation.wait');assert next(x for x in on['mixed']['controls'] if x['id']=='SCR1')['memory']['latched']
+ c.ask('button.set',dict(id='TRIGGER',pressed=False),mutate=True);held=c.ask('simulation.wait');assert next(x for x in held['mixed']['controls'] if x['id']=='SCR1')['memory']['latched']
+ c.ask('switch.set',dict(id='RESET',closed=False),mutate=True);c.ask('simulation.step',dict(duration_s=.001),mutate=True);off=c.ask('simulation.wait');assert not next(x for x in off['mixed']['controls'] if x['id']=='SCR1')['memory']['high']
+ save_reopen(c,out,'scr-reset')
+ state=load(c,'triac-phase');cfg=dict(part(state,'TR1')['device_parameters']['thyristor']);cfg['holding_current_a']=.001
+ c.ask('thyristor.configure',dict(id='TR1',parameters=cfg),mutate=True);c.ask('edit.undo',mutate=True);assert c.ask('project.inspect')['components']==state['components'];c.ask('simulation.restart',mutate=True)
+ capture(c,out,'triac',.02,.0001,['i:TR1','v:RL','i:TR1.gate']);save_reopen(c,out,'triac-capture')
+ c.ask('project.clear',dict(discard_changes=True),mutate=True)
+ return dict(passed=True,component_kinds=61,commands=220,examples=87,shared_new_commands=commands,block_reused_between_documents=True,thermal_reference_c=thermal['temperature_c'],noise_rms_v=result['noise']['output_rms_v'][0],light_charge_preserved=True,scr_latch_release_reset=True,triac_capture_completed=True,physical_input_acceptance=False)
+
+def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--agent',type=Path,required=True);parser.add_argument('--connect',type=Path);parser.add_argument('--output',type=Path,required=True);a=parser.parse_args();a.output.mkdir(parents=True,exist_ok=False)
+ client=AcceptanceClient(a.agent,a.connect)
+ try:report=exercise(client,a.output)
+ finally:client.close()
+ report.update(agent_exit_code=client.process.returncode,agent_sha256=hashlib.sha256(a.agent.read_bytes()).hexdigest());(a.output/'checks.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
+if __name__=='__main__':main()

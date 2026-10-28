@@ -1,0 +1,80 @@
+[
+  {
+    "name": "document-order-full-offscreen",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "test",
+      "-race",
+      "-tags=offscreen",
+      "./...",
+      "-count=1",
+      "-timeout=30m"
+    ],
+    "exit_code": 0,
+    "seconds": 542.843
+  },
+  {
+    "name": "document-order-ordinary",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "test",
+      "-race",
+      "./...",
+      "-run",
+      "TestMountedInspector|TestBlocks|TestInspectorPagesMatchAgentAndKeepControlsReachable|TestRequestGuidance",
+      "-count=1",
+      "-timeout=5m"
+    ],
+    "exit_code": 0,
+    "seconds": 11.108
+  },
+  {
+    "name": "document-order-vet",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "vet",
+      "./..."
+    ],
+    "exit_code": 0,
+    "seconds": 2.412
+  },
+  {
+    "name": "document-order-offscreen-vet",
+    "command": [
+      "go",
+      "-C",
+      "desktop",
+      "vet",
+      "-tags=offscreen",
+      "./..."
+    ],
+    "exit_code": 0,
+    "seconds": 2.211
+  },
+  {
+    "name": "document-order-lint",
+    "command": [
+      "scripts/lint.sh"
+    ],
+    "exit_code": 0,
+    "seconds": 14.108
+  },
+  {
+    "name": "document-order-inventory",
+    "command": [
+      "go",
+      "run",
+      "./cmd/elab-ui-audit",
+      "--verify",
+      "research/13-native-command-inventory.json"
+    ],
+    "exit_code": 1,
+    "seconds": 0.284
+  }
+]

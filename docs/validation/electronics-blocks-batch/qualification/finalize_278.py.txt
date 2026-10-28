@@ -1,0 +1,53 @@
+from pathlib import Path
+import gzip,hashlib,json,shutil,stat,subprocess,zipfile
+r=Path('/Users/dshills/Development/projects/ELab');b=r/'build/electronics-blocks-batch';e=r/'docs/validation/electronics-blocks-batch/qualification';e.mkdir(parents=True,exist_ok=True);p=json.loads((b/'package.json').read_text());folder=Path(p['app']).parent
+sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
+frozen=json.loads((b/'final-inputs.json').read_text());assert all(sha(r/f)==h for f,h in frozen.items())
+protected=json.loads((b/'preservation-before.json').read_text());assert all(x['exit_code']==0 for x in json.loads((b/'qualification-gates.json').read_text()));assert all(sha(r/f)==h for f,h in protected.items())
+assert sha(Path(p['app'])/'Contents/MacOS/ELab')==p['app_executable_sha256'];assert sha(Path(p['agent']))==p['agent_sha256']
+for name in ['examples.json','runtime-result.json','native-features.json','headless/checks.json']:assert json.loads((b/name).read_text())['passed']
+assert json.loads((b/'headless/checks.json').read_text())['agent_exit_code']==0
+archive=r/'build/releases/ELab-0.200.0-macos-arm64.zip';assert not archive.exists()
+subprocess.run(['ditto','-c','-k','--sequesterRsrc','--keepParent',str(folder),str(archive)],check=True,timeout=120)
+with zipfile.ZipFile(archive) as z:
+ assert z.testzip() is None
+ members=[]
+ for f in sorted(folder.rglob('*')):
+  if not f.is_file():continue
+  name=folder.name+'/'+f.relative_to(folder).as_posix();info=z.getinfo(name)
+  assert z.read(name)==f.read_bytes(),name
+  assert stat.S_IMODE(info.external_attr>>16)==stat.S_IMODE(f.stat().st_mode),name
+  members.append(name)
+extract=b/'archive-extracted';assert not extract.exists();extract.mkdir()
+subprocess.run(['ditto','-x','-k',str(archive),str(extract)],check=True,timeout=120)
+for f in sorted(folder.rglob('*')):
+ if f.is_file():
+  copy=extract/folder.name/f.relative_to(folder);assert copy.read_bytes()==f.read_bytes();assert stat.S_IMODE(copy.stat().st_mode)==stat.S_IMODE(f.stat().st_mode)
+seal=[]
+for app in [Path(p['app']),extract/folder.name/'ELab.app']:
+ q=subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],capture_output=True,text=True,check=True);seal.append(q.stdout+q.stderr)
+(b/'final-signatures.txt').write_text('\n'.join(seal))
+a=dict(path=str(archive),bytes=archive.stat().st_size,sha256=sha(archive),verified_file_members=len(members),archive_test_passed=True,os_extracted_bytes_and_modes_exact=True,strict_adhoc_seal=True)
+(b/'archive.json').write_text(json.dumps(a,indent=2)+'\n');Path(str(archive)+'.sha256').write_text(a['sha256']+'  '+archive.name+'\n')
+for name in ['final-gates.json','document-order-gates.json','qualification-gates.json','qualification-coverage.json','document-order-inventory-corrected.json','prism-summary.json','package.json','examples.json','runtime-invocation.json','runtime-result.json','native-features.json','archive.json','final-signatures.txt','signature.txt','clean-build.txt','packager-output.txt']:
+ shutil.copyfile(b/name,e/name)
+for name in ['native-build-info.txt','agent-build-info.txt']:
+ raw=(b/name).read_bytes();(e/(name+'.gz')).write_bytes(gzip.compress(raw,mtime=0));(e/name).write_text('\n'.join(line.rstrip() for line in raw.decode().splitlines())+'\n')
+for name in ['package_278.py','check_examples.py','qualify_runtime.py','new_workflows.py','native_features.py','document_order_gates.py','finish_pipeline.py','package_pipeline.py','finalize_278.py']:shutil.copyfile(b/name,e/(name+'.txt'))
+for name in ['final-root-corrected.txt','final-root-race.txt','final-desktop-race.txt','final-offscreen-race.txt','final-root-vet.txt','final-desktop-vet.txt','final-offscreen-vet.txt','final-lint.txt','final-python.txt','final-prd.txt','final-inventory.txt']:(e/(name+'.gz')).write_bytes(gzip.compress((b/name).read_bytes(),mtime=0))
+for name in ['document-order-full-offscreen','document-order-ordinary','document-order-vet','document-order-offscreen-vet','document-order-lint','document-order-inventory','document-order-inventory-corrected']:
+ (e/(name+'.txt.gz')).write_bytes(gzip.compress((b/(name+'.txt')).read_bytes(),mtime=0))
+for scope in ['headless']:
+ shutil.copyfile(b/scope/'checks.json',e/(scope+'-checks.json'))
+runtime=Path(json.loads((b/'runtime-result.json').read_text())['directory'])
+assert json.loads((runtime/'features/electronics/checks.json').read_text())['passed']
+assert json.loads((runtime/'features/electronics/checks.json').read_text())['agent_exit_code']==0
+assert json.loads((runtime/'features/final-process-state.json').read_text())['exit_code']==0
+for file,name in [(runtime/'features/electronics/checks.json','native-checks.json'),(runtime/'features/final-process-state.json','native-final-process-state.json'),(runtime/'features/startup.json','native-startup.json')]:shutil.copyfile(file,e/name)
+for file,name in [(runtime/'runtime-report.json','runtime-report.json.gz'),(runtime/'public/report.json','public-report.json.gz')]: (e/name).write_bytes(gzip.compress(file.read_bytes(),mtime=0))
+exits=[json.loads(f.read_text()) for f in (runtime/'public').rglob('process-exit.json')];assert len(exits)==102 and all(x['exit_code']==0 and not x['graceful_wait_timed_out'] for x in exits)
+(e/'external-process-exits.json').write_text(json.dumps(exits,indent=2)+'\n')
+summary=dict(passed=True,version=p['version'],build=p['build'],clean_binary_source=p['source_commit'],app=p['app'],agent=p['agent'],component_kinds=61,public_commands=220,examples=87,source_test_dependency_inputs_exact=len(frozen),protected_package_sdk_identities_exact=len(protected),external_processes_normal_exit=102,native_feature_exit_code=0,physical_native_acceptance=False,prism_provider='anthropic',prism_model='claude-opus-5-5',solver_limits_changed=False,release_promoted=False,pushed=False,release_uploaded=False,archive=a)
+(e/'final-inputs.json.gz').write_bytes(gzip.compress((b/'final-inputs.json').read_bytes(),mtime=0))
+(e/'preservation-before.json').write_bytes((b/'preservation-before.json').read_bytes())
+(e/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))
