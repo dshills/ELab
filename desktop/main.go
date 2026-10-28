@@ -206,7 +206,8 @@ func runNative() (runErr error) {
 type screen struct {
 	blockForm                                            [7]string
 	blockFormReady                                       bool
-	spectrumDrawing                                      *scopeCanvas
+	spectrumDrawing                                      *spectrumCanvas
+	spectrumFieldAccepted                                *spectrumFieldContinuation
 	exampleSearch                                        ui.SearchBox
 	exampleGrid                                          ui.CollectionView
 	exampleSheet                                         ui.Sheet

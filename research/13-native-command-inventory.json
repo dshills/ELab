@@ -44,7 +44,7 @@
     "desktop/layout.go": "1b780e66e228784016e71d4d2d3300620551eb9bb83d47fdc696296a9b2b456d",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/loop_gain.go": "578aa3446a020722d073b9397893c7919e66ea6594e131fff3cc48fcb288881a",
-    "desktop/main.go": "5cd59c3e9f25cd29f287fc8e802ee44baa716ec3ceea3ed927cbec9441ac3bcd",
+    "desktop/main.go": "71edf427083bcc73d2ccadc678130a09461455375ea8968b8aff294e9c79bdc5",
     "desktop/measurement_inspection.go": "06ad8838f3c6a3853e28b42127a0203f632fd1307f0b78e94988916d88e13050",
     "desktop/menus.go": "fb92050da67ff3e2832fdbc153507c9547d39c779ae426bc21977a2ffdc92d71",
     "desktop/menus_darwin.go": "9608dec0abb6de6953e28c0fed26207f99ec40ec9fc4dfff7d38e8a46adadbfe",
@@ -91,8 +91,9 @@
     "desktop/search_layout.go": "9e5a2418e1ed1027276b764e1e78f6870c42ccbd64a9017d340c8c3c39995094",
     "desktop/sensor_controls.go": "e4f63097e974fcce34eb3834c0c53f2bb3f5a91c8f5dc0555727b2a7558f3249",
     "desktop/shutdown.go": "39c1d9db0f15f23fc69d810ed37dc62262f9e752c7f4ae14e45b3a47afe1f337",
-    "desktop/spectrum.go": "91aaedd244949bbaafbed68bb7221ab7a55fa9768d0b79883d019be777b763e9",
-    "desktop/spectrum_dock.go": "73eaed2538319e248f96836d0a5a1777d44fcb84fe958af543734b09e7dec01b",
+    "desktop/spectrum.go": "da807e04dcec240f162b659aed7802c01241d17798574e3481851c5ec4f302f0",
+    "desktop/spectrum_dock.go": "d358f7524c87a7ff3bc701b196734aacc18e10d8b17351869594d79c206ad5d0",
+    "desktop/spectrum_measurements.go": "6089c606298603ce0faa3605176638081cd30252ebc6fcde9cfa71a7c1fc9857",
     "desktop/system_appearance.go": "c7f2818ca8d63e6fffb7da3add2154925b47ae80650e751c8130a99814a97927",
     "desktop/theme.go": "38b2545a0e4bd0dfc41857b0dce49c2a706dfa04d62ac4a1e68418e68e9d48eb",
     "desktop/thermal_controls.go": "12cb33e240fd8737cdec62938f0fcf94ce2efc3adcbd80ff3b9e56aa676a2b06",
@@ -301,8 +302,10 @@
     "source.sine.set",
     "speaker.configure",
     "spectrum.analyze",
+    "spectrum.cursor.set",
     "spectrum.export",
     "spectrum.live.set",
+    "spectrum.markers.set",
     "spectrum.settings.set",
     "sweep.cancel",
     "sweep.cursor.set",
@@ -2521,7 +2524,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 288,
+      "line": 289,
       "function": "*screen.invoke",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, p, s.service.Snapshot().CommandRevision)",
@@ -2529,7 +2532,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 314,
+      "line": 315,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "request-command-field",
       "expression": "Command: id",
@@ -2537,7 +2540,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 318,
+      "line": 319,
       "function": "*screen.invokeAtCommandRevision",
       "kind": "event-or-dispatch-router",
       "expression": "s.service.Dispatch(context.Background(), request, \"user\")",
@@ -2545,7 +2548,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 354,
+      "line": 355,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.undo\", \"Undo\", \"Meta+Z\"}",
@@ -2556,7 +2559,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 354,
+      "line": 355,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"edit.redo\", \"Redo\", \"Meta+Shift+Z\"}",
@@ -2567,7 +2570,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 355,
+      "line": 356,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"project.clear\", \"New blank\", \"\"}",
@@ -2578,7 +2581,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 355,
+      "line": 356,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"drawing.cancel\", \"Cancel drawing\", \"Escape\"}",
@@ -2589,7 +2592,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 356,
+      "line": 357,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"app.close\", \"Close window\", \"Meta+W\"}",
@@ -2600,7 +2603,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.current.reset\", \"Reset current example\", \"\"}",
@@ -2611,7 +2614,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.reset\", \"Load LED example\", \"\"}",
@@ -2622,7 +2625,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rc\", \"Load RC example\", \"\"}",
@@ -2633,7 +2636,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn\", \"Load NPN LED example\", \"\"}",
@@ -2644,7 +2647,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.switch-npn\", \"Load manual transistor LED switch\", \"\"}",
@@ -2655,7 +2658,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.npn-pulse\", \"Load blinking NPN LED\", \"\"}",
@@ -2666,7 +2669,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.flasher\", \"Load capacitor-timed LED flasher\", \"\"}",
@@ -2677,7 +2680,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 357,
+      "line": 358,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"example.rectifier\", \"Load diode rectifier and smoothing\", \"\"}",
@@ -2688,7 +2691,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 358,
+      "line": 359,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.pause\", \"Pause\", \"\"}",
@@ -2699,7 +2702,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 358,
+      "line": 359,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.resume\", \"Resume\", \"\"}",
@@ -2710,7 +2713,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 358,
+      "line": 359,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"simulation.restart\", \"Restart\", \"\"}",
@@ -2721,7 +2724,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 358,
+      "line": 359,
       "function": "*screen.registerCommands",
       "kind": "declared-registry-entry",
       "expression": "{\"view.fit\", \"Fit circuit\", \"\"}",
@@ -2732,7 +2735,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 361,
+      "line": 362,
       "function": "*screen.registerCommands",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Register(command.Command{ID: entry.id, Label: entry.label, Shortcut: entry.shortcut, ShortcutScope: command.AfterFocusShortcuts,\n\tAvailable: func() error {\n\t\tif s.fileBusy || s.pendingCommand != \"\" {\n\t\t\treturn fmt.Errorf(\"finish the current file operation first\")\n\t\t}\n\t\tstate := s.service.Snapshot()\n\t\tif state.Closed \u0026\u0026 entry.id != \"app.close\" {\n\t\t\treturn fmt.Errorf(\"session is closing\")\n\t\t}\n\t\tif entry.id == \"example.current.reset\" \u0026\u0026 state.Example == nil {\n\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t}\n\t\tif entry.id == \"edit.undo\" \u0026\u0026 !state.CanUndo {\n\t\t\treturn fmt.Errorf(\"nothing to undo\")\n\t\t}\n\t\tif entry.id == \"edit.redo\" \u0026\u0026 !state.CanRedo {\n\t\t\treturn fmt.Errorf(\"nothing to redo\")\n\t\t}\n\t\treturn nil\n\t}, Execute: func(context.Context) error {\n\t\tif entry.id == \"app.close\" {\n\t\t\ts.requestClose()\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"example.current.reset\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif state.Example == nil {\n\t\t\t\treturn fmt.Errorf(\"load an example before resetting it\")\n\t\t\t}\n\t\t\tgeneration := state.Document.Generation\n\t\t\ts.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"project.clear\" || entry.id == \"example.reset\" || entry.id == \"example.rc\" || entry.id == \"example.npn\" || entry.id == \"example.npn-pulse\" || entry.id == \"example.flasher\" || entry.id == \"example.switch-npn\" || entry.id == \"example.rectifier\" {\n\t\t\ts.requestReplace(entry.id, workbench.ReplaceParams{})\n\t\t\treturn nil\n\t\t}\n\t\tif entry.id == \"simulation.restart\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\tif part, ok := (workbench.Graph{Components: state.Components}).Component(state.Selected); ok \u0026\u0026 (part.Kind == \"capacitor\" || part.Kind == \"inductor\") {\n\t\t\t\ts.beginComponentStartup(state, part, false)\n\t\t\t\treturn nil\n\t\t\t}\n\t\t}\n\t\tvar p any = struct{}{}\n\t\tif entry.id == \"edit.undo\" || entry.id == \"edit.redo\" {\n\t\t\tstate := s.service.Snapshot()\n\t\t\ttip := state.UndoEntry\n\t\t\tif entry.id == \"edit.redo\" {\n\t\t\t\ttip = state.RedoEntry\n\t\t\t}\n\t\t\tif tip != nil {\n\t\t\t\trevision := tip.CommandRevision\n\t\t\t\tp = workbench.HistoryParams{ExpectedEntryRevision: \u0026revision, AllowOtherActor: tip.Actor != \"user\"}\n\t\t\t}\n\t\t}\n\t\tif entry.id == \"view.fit\" {\n\t\t\tp = workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true}\n\t\t}\n\t\tr := s.invoke(entry.id, p)\n\t\tif r.Error != nil {\n\t\t\treturn fmt.Errorf(\"%s\", r.Error.Message)\n\t\t}\n\t\tif entry.id == \"drawing.cancel\" {\n\t\t\ts.requestKeyboardFocus(\"part-search\")\n\t\t}\n\t\ts.continueSimulationFocus(entry.id, r)\n\t\treturn nil\n\t},\n})",
@@ -2740,7 +2743,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 391,
+      "line": 392,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ExampleResetParams{ExpectedID: state.Example.Info.ID, ExpectedGeneration: \u0026generation})",
@@ -2748,7 +2751,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 395,
+      "line": 396,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.requestReplace(entry.id, workbench.ReplaceParams{})",
@@ -2756,7 +2759,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 420,
+      "line": 421,
       "function": "*screen.registerCommands",
       "kind": "domain-ingress",
       "expression": "s.invoke(entry.id, p)",
@@ -2764,7 +2767,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 474,
+      "line": 475,
       "function": "*screen.button",
       "kind": "event-or-dispatch-router",
       "expression": "s.commands.Invoke(context.Background(), id)",
@@ -2772,7 +2775,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 495,
+      "line": 496,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(id, struct{}{}, rendered.revision, rendered.generation)",
@@ -2780,7 +2783,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 507,
+      "line": 508,
       "function": "*screen.button",
       "kind": "domain-ingress",
       "expression": "s.invoke(id, target)",
@@ -2788,7 +2791,7 @@
     },
     {
       "file": "desktop/main.go",
-      "line": 510,
+      "line": 511,
       "function": "*screen.button",
       "kind": "node-Activate",
       "expression": "Activate: activate",
@@ -4847,10 +4850,124 @@
     },
     {
       "file": "desktop/spectrum_dock.go",
-      "line": 223,
+      "line": 224,
       "function": "*screen.spectrumPanel",
       "kind": "node-Custom",
       "expression": "Custom: s.spectrumDrawing",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 53,
+      "function": "*screen.spectrumMeasurementControls",
+      "kind": "action-factory",
+      "expression": "action(\"spectrum-peaks\", \"Peaks\", \"spectrum.markers.set\", workbench.ScopeVisibilityParams{Visible: !m.Visible})",
+      "public_commands": [
+        "spectrum.markers.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 55,
+      "function": "*screen.spectrumMeasurementControls",
+      "kind": "action-factory",
+      "expression": "action(\"spectrum-cursor-select-\"+name, strings.ToUpper(name), \"spectrum.cursor.set\", workbench.SpectrumCursorParams{Source: source, Cursor: name, Select: true})",
+      "public_commands": [
+        "spectrum.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 68,
+      "function": "*screen.spectrumMeasurementControls",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.SpectrumCursorParams{Source: source, Cursor: name}\n\tif strings.TrimSpace(e.Text) == \"\" {\n\t\tp.Clear = true\n\t\ts.changeSpectrumFrequency(state, owner, p)\n\t} else {\n\t\ts.changeSpectrumFrequency(state, owner, textFieldParams(p, \"frequency_hz\", e.Text))\n\t}\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 78,
+      "function": "*screen.spectrumMeasurementControls",
+      "kind": "action-factory",
+      "expression": "action(\"spectrum-cursor-peak\", \"Peak → cursor\", \"spectrum.cursor.set\", workbench.SpectrumCursorParams{Source: source, Cursor: m.Active, Peak: 1})",
+      "public_commands": [
+        "spectrum.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 82,
+      "function": "*screen.spectrumMeasurementControls",
+      "kind": "action-factory",
+      "expression": "action(\"spectrum-cursor-clear-\"+name, \"Clear \"+strings.ToUpper(name), \"spectrum.cursor.set\", workbench.SpectrumCursorParams{Source: source, Cursor: name, Clear: true})",
+      "public_commands": [
+        "spectrum.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 162,
+      "function": "*spectrumCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.Scroll, func(e events.Event) { forwardScopeScroll(w, e) })",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 164,
+      "function": "*spectrumCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(kind, func(e events.Event) {\n\tframe := c.frame.Load()\n\tpos := e.Pos().Sub(w.Geom.Pos.Content.ToPoint())\n\twithWindowOwner(c.Owner, window, func() {\n\t\tif c.epoch == epoch {\n\t\t\tc.pointer(frame, kind, e.MouseButton(), float64(pos.X))\n\t\t}\n\t})\n\te.SetHandled()\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 175,
+      "function": "*spectrumCanvas.Mount",
+      "kind": "event-or-dispatch-router",
+      "expression": "w.OnFirst(events.KeyChord, func(e events.Event) {\n\tswitch strings.ToLower(string(e.KeyChord())) {\n\tcase \"leftarrow\", \"rightarrow\", \"uparrow\", \"downarrow\":\n\t\te.SetHandled()\n\t}\n})",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 197,
+      "function": "*spectrumCanvas.apply",
+      "kind": "domain-ingress",
+      "expression": "c.screen.invokeAtCommandRevision(\"spectrum.cursor.set\", p, revision, frame.generation)",
+      "public_commands": [
+        "spectrum.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 266,
+      "function": "*screen.changeSpectrumFrequency",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"spectrum.cursor.set\", p, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "spectrum.cursor.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 283,
+      "function": "*screen.spectrumMeasurementAction",
+      "kind": "node-Activate",
+      "expression": "Activate: func() {\n\tcurrent := s.service.Snapshot()\n\tif accepted := s.spectrumFieldAccepted; accepted != nil \u0026\u0026 accepted.owner == owner \u0026\u0026 accepted.from.generation == context.generation \u0026\u0026 accepted.from.revision \u003c= context.revision \u0026\u0026 context.revision \u003c= accepted.to.revision \u0026\u0026 accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {\n\t\tcontext = accepted.to\n\t}\n\ts.invokeAtCommandRevision(command, p, context.revision, context.generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/spectrum_measurements.go",
+      "line": 288,
+      "function": "*screen.spectrumMeasurementAction",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(command, p, context.revision, context.generation)",
       "status": "requires-binding-review"
     },
     {
@@ -5919,8 +6036,10 @@
     "source.sine.set",
     "speaker.configure",
     "spectrum.analyze",
+    "spectrum.cursor.set",
     "spectrum.export",
     "spectrum.live.set",
+    "spectrum.markers.set",
     "spectrum.settings.set",
     "sweep.cancel",
     "sweep.cursor.set",

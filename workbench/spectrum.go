@@ -56,10 +56,11 @@ type SpectrumResult struct {
 	Assumptions        []string           `json:"assumptions"`
 }
 type SpectrumState struct {
-	Live      *LiveSpectrumState `json:"live,omitempty"`
-	Available []Probe            `json:"available"`
-	Settings  SpectrumParams     `json:"settings"`
-	Result    *SpectrumResult    `json:"result,omitempty"`
+	Measurements *SpectrumMeasurements `json:"measurements"`
+	Live         *LiveSpectrumState    `json:"live,omitempty"`
+	Available    []Probe               `json:"available"`
+	Settings     SpectrumParams        `json:"settings"`
+	Result       *SpectrumResult       `json:"result,omitempty"`
 }
 
 func cloneSpectrumResult(p *SpectrumResult) *SpectrumResult {
@@ -81,6 +82,7 @@ func cloneSpectrum(p *SpectrumState) *SpectrumState {
 		return nil
 	}
 	v := *p
+	v.Measurements = cloneSpectrumMeasurements(p.Measurements)
 	v.Live = cloneLiveSpectrumState(p.Live)
 	v.Result = cloneSpectrumResult(p.Result)
 	v.Available = append([]Probe{}, p.Available...)
@@ -312,6 +314,10 @@ func (s *Service) spectrumViewLocked() *SpectrumState {
 		}
 	}
 	v.Live = s.liveSpectrumViewLocked()
+	v.Measurements = s.spectrumMeasurementsLocked("recorded", v.Result)
+	if v.Live != nil {
+		v.Live.Measurements = s.spectrumMeasurementsLocked("live", v.Live.Result)
+	}
 	return v
 }
 func (s *Service) spectrumCommandLocked(command string, raw json.RawMessage) error {
@@ -336,6 +342,7 @@ func (s *Service) spectrumCommandLocked(command string, raw json.RawMessage) err
 		if s.spectrum != nil && s.spectrum.Settings == p {
 			return nil
 		}
+		s.spectrumMeasurements.recorded = spectrumCursorStore{}
 		s.spectrum = &SpectrumState{Settings: p}
 		return nil
 	}
@@ -352,6 +359,9 @@ func (s *Service) spectrumCommandLocked(command string, raw json.RawMessage) err
 	result, err := analyzeSpectrum(op.record, p)
 	if err != nil {
 		return err
+	}
+	if s.spectrum == nil || s.spectrum.Result == nil || s.spectrum.Result.ID != result.ID {
+		s.spectrumMeasurements.recorded = spectrumCursorStore{}
 	}
 	s.spectrum = &SpectrumState{Settings: p, Result: result}
 	return nil

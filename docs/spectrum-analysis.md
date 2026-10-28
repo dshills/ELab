@@ -116,3 +116,68 @@ and rows; it is provenance, not hardware validation. Analysis/settings do not
 change the live circuit, time, physical state or Undo history. Document replacement
 clears the spectrum draft/result. Electrical simulation and analysis never play
 sound automatically.
+
+## Peak markers and frequency/amplitude cursors
+
+In either **Live** or **Recorded** mode, **Peaks** toggles P1–P5 markers.
+They identify the five strongest non-DC local maxima above the display floor
+and within 60 dB of the strongest candidate. Equal plateaus and equal-amplitude
+peaks choose the lower frequency. These labels report sampled FFT bins;
+they do not interpolate a more precise frequency. Peaks remain inspectable by
+agents when their plot markers are hidden.
+
+Select **A** or **B**, then click or drag the spectrum to place that cursor.
+Alternatively enter its frequency in the A/B fields, using numeric Hz or unit
+text such as `100 Hz`, `2 kHz` or `250 mHz`. **Peak → cursor** places the selected
+cursor on P1. Clear A/B removes a cursor; an empty frequency field also clears it.
+Cursors snap to the nearest actual bin, with midpoint ties choosing the lower
+frequency. Each crosshair shows that bin's frequency, peak amplitude in the
+selected probe's unit (V or A), and dB relative to one unit. The horizontal
+line follows the bin's amplitude; it is not an independent amplitude threshold.
+A cursor outside the visible dB scale is labeled **off** without drawing a
+misleading horizontal line on the plot edge.
+
+Readouts include signed B−A differences in Hz, peak amplitude and dB. Bins at
+or below the −300 dB display floor cannot support an exact dB difference, so
+that difference is explicitly unavailable. This floor is not simulated noise.
+The plot scales small voltage/current signals as well as signals above one unit.
+The controls and readout rows keep fixed allocations as frames and values change.
+
+Live cursors retain the requested frequency while new frames arrive, then snap
+again to the current frame's bins. Thus frequency resolution changes can change
+the measured bin. Hold freezes the frame and readings. Changing the probe,
+circuit/run, actuation, scope selection/window or FFT settings retires old live
+anchors. Recorded cursors belong to one exact result; changing its settings or
+analyzing a different result retires them. The two sources have independent A/B
+positions and active cursors. Marker visibility is shared between them.
+
+### Shared measurement commands
+
+```json
+{"command":"spectrum.markers.set","params":{"visible":true}}
+{"command":"spectrum.cursor.set","params":{"source":"live","cursor":"a","frequency_hz":"100 Hz"}}
+{"command":"spectrum.cursor.set","params":{"source":"live","cursor":"b","peak":1}}
+{"command":"spectrum.cursor.set","params":{"source":"recorded","cursor":"b","select":true}}
+{"command":"spectrum.cursor.set","params":{"source":"recorded","cursor":"a","clear":true}}
+```
+
+These are command/parameter fragments: transports also require the normal
+version, request/retry identity and command/document revision guards. A cursor
+command requires `source` (`live`/`recorded`), `cursor` (`a`/`b`) and exactly one
+of `frequency_hz`, `peak` (current rank 1–5), `clear:true` or `select:true`.
+Frequency must be finite, nonnegative and at most the current Nyquist frequency.
+Placement requires a current result; selecting or clearing is allowed without
+one. Optional `result_id` pins an exact current frame and returns `conflict`
+if it has retired. Omit it to target the latest valid live frame.
+
+`project.inspect` and measurement events expose `spectrum.measurements` for
+Recorded and `spectrum.live.measurements` for Live: source/result ID, unit,
+visibility, active cursor, ranked peaks, requested A/B frequencies, actual bin
+readings, validity/reason and available differences. Results and readings are
+detached snapshot data. Discover the complete input contract with detailed
+`capabilities.list`; the compact catalog uses shared schema references.
+
+Markers and cursors are session-only. They do not change FFT bins/THD, physics,
+acquisition, simulation time, Undo history or the document dirty flag. Document
+replacement resets them. Existing spectrum JSON/CSV exports continue to contain
+the captured FFT result, rather than a mutable cursor view.

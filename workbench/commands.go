@@ -91,6 +91,11 @@ var commonSchemas = []struct {
 	Type reflect.Type
 	ID   string
 }{
+	{reflect.TypeOf(SpectrumCursorParams{}), "urn:elab:spectrum-cursor-input:1"},
+	{reflect.TypeOf(ToolParams{}), "urn:elab:drawing-tool-input:1"},
+	{reflect.TypeOf(PositionParams{}), "urn:elab:position-input:1"},
+	{reflect.TypeOf(DraftParams{}), "urn:elab:value-draft-input:1"},
+	{reflect.TypeOf(DiagnosticDetailsParams{}), "urn:elab:diagnostic-details-input:1"},
 	{reflect.TypeOf(ScopeVisibilityParams{}), "urn:elab:scope-visible:1"},
 	{reflect.TypeOf(ScopeViewParams{}), "urn:elab:scope-view:1"},
 	{reflect.TypeOf(LiveSpectrumInput{}), "urn:elab:live-spectrum-input:1"},
@@ -341,6 +346,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 		if common.Type == reflect.TypeOf(TransistorProfile{}) {
 			addTransistorProfileSchema(schema)
 		}
+		if common.Type == reflect.TypeOf(SpectrumCursorParams{}) {
+			addSpectrumMeasurementDetails("spectrum.cursor.set", schema)
+		}
 		if common.Type == reflect.TypeOf(LiveSpectrumInput{}) {
 			addLiveSpectrumCapabilityDetails("spectrum.live.set", schema)
 		}
@@ -463,6 +471,8 @@ func Catalog() []Capability {
 		typedCapability("tolerance.run", "Run bounded seeded R/C/profile-beta Monte Carlo; empty params use current settings", reflect.TypeOf(ToleranceSettings{})),
 		typedCapability("tolerance.cancel", "Cancel the exact current tolerance run; worker retains its slot until retirement", reflect.TypeOf(IDParams{})),
 		typedCapability("tolerance.export", "Export the exact completed tolerance result and captured provenance as JSON or CSV", reflect.TypeOf(VerificationExportParams{})),
+		typedCapability("spectrum.markers.set", "Show/hide spectrum peaks.", reflect.TypeOf(ScopeVisibilityParams{})),
+		typedCapability("spectrum.cursor.set", "Set spectrum cursors.", reflect.TypeOf(SpectrumCursorParams{})),
 		typedCapability("scope.view.set", "Select Scope or Spectrum.", reflect.TypeOf(ScopeViewParams{})),
 		typedCapability("spectrum.live.set", "Configure live spectrum.", reflect.TypeOf(LiveSpectrumInput{})),
 		typedCapability("spectrum.settings.set", "Configure recorded FFT interval, probe, window and declared fundamental; session-only, no live circuit or history change", reflect.TypeOf(SpectrumInput{})),

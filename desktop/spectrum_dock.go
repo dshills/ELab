@@ -16,7 +16,7 @@ func (s *screen) ensureSpectrumDrawing() {
 	}
 	v := canvas.Viewport{Width: 800, Height: 160, Zoom: 1}
 	// Like the scope, FFT has command-owned axes; native wheel only scrolls its dock.
-	s.spectrumDrawing = &scopeCanvas{MeshCanvas: &cogent.MeshCanvas{Owner: s.app, Window: "main", View: &v, Prepare: s.spectrumMesh}}
+	s.spectrumDrawing = &spectrumCanvas{screen: s, MeshCanvas: &cogent.MeshCanvas{Owner: s.app, Window: "main", View: &v, Prepare: s.spectrumMesh}}
 }
 func (s *screen) instrumentPanel(state workbench.Snapshot) ui.Node {
 	if !state.ScopeVisible {
@@ -220,7 +220,9 @@ func (s *screen) spectrumPanel(state workbench.Snapshot) ui.Node {
 	return ui.Node{ID: "spectrum-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
 		{ID: "spectrum-dock-controls", Kind: ui.Toolbar, Style: chromeStyle(), Children: controls},
 		{ID: "spectrum-dock-settings", Kind: ui.Toolbar, Style: chromeStyle(), Children: settings},
+		s.spectrumMeasurementControls(state),
 		{ID: "spectrum-plot", Kind: ui.Extension, Grow: true, Custom: s.spectrumDrawing, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 160}), MaxSize: ui.Some(ui.Size{Height: 160})}, Accessibility: ui.Accessibility{Name: "FFT magnitude in decibels versus frequency in hertz"}},
 		spectrumFixed(quiet("spectrum-dock-summary", summary), 800, 20), detailNode,
+		s.spectrumCursorReadout(state),
 	}}
 }

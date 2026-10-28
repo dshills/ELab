@@ -100,6 +100,7 @@ func (s *Service) detachDocumentLocked() {
 	}
 	s.tolerance = nil
 	s.toleranceSettings = nil
+	s.spectrumMeasurements = spectrumMeasurementStore{}
 	s.spectrum = nil
 	s.liveSpectrum = nil
 	s.scopeView = "scope"

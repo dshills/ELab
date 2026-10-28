@@ -106,15 +106,15 @@ func (s *screen) spectrumInspector(state workbench.Snapshot) []ui.Node {
 	return nodes
 }
 func (s *screen) spectrumMesh(v canvas.Viewport) (*canvas.Mesh, error) {
+	if s.spectrumDrawing != nil {
+		s.spectrumDrawing.frame.Store(nil)
+	}
 	state := s.service.Snapshot()
 	b := &meshBuilder{}
 	if state.Spectrum == nil {
 		return canvas.NewMesh(nil, nil)
 	}
-	r := state.Spectrum.Result
-	if state.ScopeView == "spectrum" && state.Spectrum.Live != nil && state.Spectrum.Live.Settings.Enabled {
-		r = state.Spectrum.Live.Result
-	}
+	r, measurements, source := spectrumDisplay(state)
 	if r == nil {
 		return canvas.NewMesh(nil, nil)
 	}
@@ -137,12 +137,7 @@ func (s *screen) spectrumMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		p := v.World(canvas.Point{X: x, Y: y})
 		b.text(p.X, p.Y, label, palette.Muted)
 	}
-	peak := -300.
-	for _, p := range r.Bins {
-		peak = math.Max(peak, p.DB)
-	}
-	high := math.Max(0, math.Ceil(peak/20)*20)
-	low := high - 100
+	low, high := spectrumAmplitudeRange(r)
 	for i := 0; i <= 4; i++ {
 		f := float64(i) / 4
 		y := bottom - f*(bottom-top)
@@ -158,5 +153,44 @@ func (s *screen) spectrumMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		points[i] = canvas.Point{X: left + p.Frequency/r.Nyquist*(right-left), Y: bottom - (math.Max(low, math.Min(high, p.DB))-low)/(high-low)*(bottom-top)}
 	}
 	line(palette.Accent, points...)
-	return canvas.NewMesh(b.vertices, b.indices)
+	x := func(f float64) float64 { return left + f/r.Nyquist*(right-left) }
+	y := func(db float64) float64 {
+		return bottom - (math.Max(low, math.Min(high, db))-low)/(high-low)*(bottom-top)
+	}
+	if measurements != nil {
+		if measurements.Visible {
+			for _, peak := range measurements.Peaks {
+				p := peak.Reading
+				px, py := x(p.Frequency), y(p.DB)
+				line(palette.Accent, canvas.Point{X: px - 3, Y: py}, canvas.Point{X: px + 3, Y: py})
+				line(palette.Accent, canvas.Point{X: px, Y: py - 3}, canvas.Point{X: px, Y: py + 3})
+				label := fmt.Sprintf("P%d %.4g Hz", peak.Rank, p.Frequency)
+				width := workbench.CanvasTextWidth(label, 1.25)
+				text(math.Max(left, math.Min(right-width, px+4)), top+float64(peak.Rank-1)*13, label)
+			}
+		}
+		for i, cursor := range []*workbench.SpectrumCursor{measurements.A, measurements.B} {
+			if cursor == nil || !cursor.Valid || cursor.Reading == nil {
+				continue
+			}
+			p := cursor.Reading
+			px := x(p.Frequency)
+			line(palette.Ink, canvas.Point{X: px, Y: top}, canvas.Point{X: px, Y: bottom})
+			label := []string{"A", "B"}[i]
+			if p.DB >= low && p.DB <= high {
+				py := y(p.DB)
+				for at := left; at < right; at += 10 {
+					line(palette.Muted, canvas.Point{X: at, Y: py}, canvas.Point{X: math.Min(at+5, right), Y: py})
+				}
+			} else {
+				label += " off"
+			}
+			text(math.Max(left, math.Min(right-40, px+4)), bottom-12-float64(i)*13, label)
+		}
+	}
+	mesh, err := canvas.NewMesh(b.vertices, b.indices)
+	if err == nil && s.spectrumDrawing != nil && !sourcePaneHidden(state) {
+		s.spectrumDrawing.frame.Store(&spectrumPlotFrame{revision: state.CommandRevision, generation: state.Document.Generation, source: source, resultID: r.ID, cursor: activeSpectrumCursor(measurements), left: left, right: right, nyquist: r.Nyquist, dock: state.ScopeView == "spectrum"})
+	}
+	return mesh, err
 }

@@ -31,13 +31,14 @@ type LiveSpectrumParams struct {
 type LiveSpectrumInput LiveSpectrumParams
 
 type LiveSpectrumState struct {
-	Settings LiveSpectrumParams `json:"settings"`
-	Status   string             `json:"status"`
-	Reason   string             `json:"reason,omitempty"`
-	RunID    uint64             `json:"run_id"`
-	Start    float64            `json:"start_s"`
-	End      float64            `json:"end_s"`
-	Result   *SpectrumResult    `json:"result,omitempty"`
+	Measurements *SpectrumMeasurements `json:"measurements"`
+	Settings     LiveSpectrumParams    `json:"settings"`
+	Status       string                `json:"status"`
+	Reason       string                `json:"reason,omitempty"`
+	RunID        uint64                `json:"run_id"`
+	Start        float64               `json:"start_s"`
+	End          float64               `json:"end_s"`
+	Result       *SpectrumResult       `json:"result,omitempty"`
 }
 type liveSpectrumKey struct {
 	Generation, Electrical, Run, Actuation, Settings uint64
@@ -281,6 +282,7 @@ func cloneLiveSpectrumState(in *LiveSpectrumState) *LiveSpectrumState {
 		return nil
 	}
 	out := *in
+	out.Measurements = cloneSpectrumMeasurements(in.Measurements)
 	out.Result = cloneSpectrumResult(in.Result)
 	return &out
 }

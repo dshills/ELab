@@ -32,7 +32,11 @@ Source development also adds Scope/Spectrum tabs and bounded live FFT through
 `scope.view.set` and `spectrum.live.set`; observe `snapshot.spectrum.live` through
 `project.inspect` or events. Live probes are the selected scope probes, and live
 analysis does not advance physics. [Live/recorded contract](spectrum-analysis.md).
-The preserved /281 package predates these two commands; use runtime discovery.
+Use `spectrum.markers.set` and `spectrum.cursor.set` for ranked peaks and A/B
+frequency/amplitude measurements on live or recorded FFT bins. Read the same
+`spectrum.measurements` / `spectrum.live.measurements` used by the UI.
+The preserved /281 package predates Scope/Spectrum; /282 includes those tabs
+and live FFT but predates peak/cursor commands. Use runtime discovery.
 
 ## Request and response
 

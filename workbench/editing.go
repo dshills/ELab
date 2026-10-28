@@ -202,6 +202,15 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 			return err
 		}
 		return s.setScopeViewLocked(p)
+	case "spectrum.markers.set":
+		var p ScopeVisibilityParams
+		if err := params(raw, &p, "visible"); err != nil {
+			return err
+		}
+		s.spectrumMeasurements.hidden = !p.Visible
+		return nil
+	case "spectrum.cursor.set":
+		return s.spectrumCursorCommandLocked(raw)
 	case "spectrum.live.set":
 		var p LiveSpectrumParams
 		if err := params(raw, &p, "enabled"); err != nil {

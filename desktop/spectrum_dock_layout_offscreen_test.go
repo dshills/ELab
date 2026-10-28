@@ -44,7 +44,7 @@ func TestMountedSpectrumControlsRemainStationaryDuringLiveUpdates(t *testing.T) 
 				return root
 			}
 			m := newMountedControlWindowSize(t, s, view, 1040, 600, inspectorLayoutTestTheme())
-			ids := []string{"scope-view-scope", "scope-view-spectrum", "spectrum-source-live", "spectrum-source-recorded", "spectrum-live-hold", "scope-visibility", "spectrum-dock-probe", "spectrum-dock-window", "spectrum-dock-samples", "spectrum-dock-fundamental-label", "spectrum-dock-fundamental", "spectrum-dock-harmonics", "spectrum-dock-summary", "spectrum-dock-detail", "spectrum-plot"}
+			ids := []string{"scope-view-scope", "scope-view-spectrum", "spectrum-source-live", "spectrum-source-recorded", "spectrum-live-hold", "scope-visibility", "spectrum-dock-probe", "spectrum-dock-window", "spectrum-dock-samples", "spectrum-dock-fundamental-label", "spectrum-dock-fundamental", "spectrum-dock-harmonics", "spectrum-dock-summary", "spectrum-dock-detail", "spectrum-plot", "spectrum-peaks", "spectrum-cursor-select-a", "spectrum-cursor-select-b", "spectrum-cursor-label-a", "spectrum-cursor-a", "spectrum-cursor-label-b", "spectrum-cursor-b", "spectrum-cursor-peak", "spectrum-cursor-clear-a", "spectrum-cursor-clear-b", "spectrum-cursor-values", "spectrum-cursor-delta"}
 			bounds := map[string]image.Rectangle{}
 			for _, id := range ids {
 				element := mountedControlElement(t, m, id)
@@ -58,7 +58,7 @@ func TestMountedSpectrumControlsRemainStationaryDuringLiveUpdates(t *testing.T) 
 			}
 			// Every exposed control must fit its row; fixed readout text cannot push
 			// buttons offscreen as result availability, times and FFT values change.
-			for _, row := range []string{"spectrum-dock-controls", "spectrum-dock-settings"} {
+			for _, row := range []string{"spectrum-dock-controls", "spectrum-dock-settings", "spectrum-measurements"} {
 				parent := mountedControlElement(t, m, row).Bounds
 				for _, id := range ids {
 					n, _ := findNode(s.view(), row)
@@ -85,7 +85,7 @@ func TestMountedSpectrumControlsRemainStationaryDuringLiveUpdates(t *testing.T) 
 					t.Fatal(encodeErr, closeErr)
 				}
 			}
-			for _, row := range []string{"spectrum-dock-controls", "spectrum-dock-settings"} {
+			for _, row := range []string{"spectrum-dock-controls", "spectrum-dock-settings", "spectrum-measurements"} {
 				n, _ := findNode(s.view(), row)
 				for i, a := range ids {
 					if _, ok := findNode(n, a); !ok {

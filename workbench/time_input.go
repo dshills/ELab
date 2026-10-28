@@ -81,7 +81,7 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 		command = "edit.batch"
 	}
 	fields := timeCommandFields[command]
-	if len(fields) == 0 && len(waveformQuantityFields[command]) == 0 && command != "edit.batch" && command != "spectrum.live.set" {
+	if len(fields) == 0 && len(waveformQuantityFields[command]) == 0 && command != "edit.batch" && command != "spectrum.live.set" && command != "spectrum.cursor.set" {
 		return raw, nil
 	}
 	if len(raw) == 0 && (command == "spectrum.settings.set" || command == "spectrum.analyze") {
@@ -139,8 +139,12 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 			return nil, err
 		}
 	}
-	if command == "spectrum.settings.set" || command == "spectrum.analyze" || command == "spectrum.live.set" {
-		quantityRaw := object["fundamental_hz"]
+	if command == "spectrum.settings.set" || command == "spectrum.analyze" || command == "spectrum.live.set" || command == "spectrum.cursor.set" {
+		field := "fundamental_hz"
+		if command == "spectrum.cursor.set" {
+			field = "frequency_hz"
+		}
+		quantityRaw := object[field]
 		if len(quantityRaw) > 0 && quantityRaw[0] == '"' {
 			var text string
 			if err := json.Unmarshal(quantityRaw, &text); err != nil {
@@ -148,13 +152,13 @@ func normalizeTimeInput(command string, raw json.RawMessage) (json.RawMessage, e
 			}
 			value, err := parseWaveformQuantity(text, "Hz")
 			if err != nil {
-				return nil, fmt.Errorf("fundamental_hz: %w", err)
+				return nil, fmt.Errorf("%s: %w", field, err)
 			}
 			encoded, err := json.Marshal(value)
 			if err != nil {
 				return nil, err
 			}
-			object["fundamental_hz"] = encoded
+			object[field] = encoded
 		}
 	}
 	if command == "edit.batch" {
