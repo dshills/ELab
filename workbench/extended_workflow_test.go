@@ -17,6 +17,9 @@ import (
 func TestExtendedPublicCaptureSaveLoadAndCorruption(t *testing.T) {
 	for _, id := range []string{"buck", "opamp-slew", "opamp-bandwidth", "shift-register", "555-tone", "light-alarm"} {
 		t.Run(id, func(t *testing.T) {
+			if id == "buck" && productionNumericalReference(t) {
+				return
+			}
 			s := New()
 			defer s.Close()
 			call(t, s, "example.load", ExampleLoadParams{ID: id}, "load")

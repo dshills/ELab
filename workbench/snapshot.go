@@ -120,7 +120,7 @@ func (s *Service) Snapshot() Snapshot { s.mu.Lock(); defer s.mu.Unlock(); return
 func (s *Service) snapshotLocked() Snapshot {
 	page, _, _ := normalizeSchematicPage(&s.exportPage)
 	graph := s.graph.Clone()
-	compiled, _, diagnostic := graph.Compile()
+	compiled, _, diagnostic := s.compileGraphLocked()
 	liveModes := []string{}
 	if diagnostic == nil {
 		liveModes = LiveInputModes(compiled.Analysis)

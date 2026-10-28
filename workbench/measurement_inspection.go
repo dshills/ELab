@@ -62,7 +62,7 @@ func (s *Service) measurementTargetLocked(p MeasurementSelectParams) (*Measureme
 			return t, nil
 		}
 	case "net":
-		c, _, _ := s.graph.Compile()
+		c, _, _ := s.compileGraphLocked()
 		for _, net := range c.Nets {
 			if net.ID == p.ID && len(net.Terminals) > 0 {
 				// Net IDs can change when wiring changes. Follow a terminal identity
@@ -119,7 +119,7 @@ func (s *Service) measurementQueryLocked(raw json.RawMessage) (MeasurementInspec
 			return MeasurementInspection{}, err
 		}
 	}
-	c, _, _ := s.graph.Compile()
+	c, _, _ := s.compileGraphLocked()
 	return s.measurementInspectionLocked(c, target), nil
 }
 func (s *Service) measurementInspectionLocked(c Compiled, target *MeasurementTarget) MeasurementInspection {

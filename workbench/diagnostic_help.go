@@ -193,7 +193,7 @@ func (s *Service) requestDiagnosticLocked(r Request, code, message string) *Diag
 			}
 		}
 	}
-	c, _, _ := s.graph.Compile()
+	c, _, _ := s.compileGraphLocked()
 	help := makeDiagnosticHelp(s.graph, c, Diagnostic{Code: code, Message: message}, "request", refs)
 	if !currentContext {
 		return &help

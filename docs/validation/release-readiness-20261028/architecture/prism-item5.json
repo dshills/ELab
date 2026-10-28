@@ -1,0 +1,189 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "ac264bf01e2080c5e471bc812145f9ea",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "93776648ef85286de6b975488a938522796a2dd7",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 2,
+      "medium": 3,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "ddc77c8430123833",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Cache identity depends on JSON encoding completeness",
+      "message": "The cache key is the SHA-256 of `json.Marshal(graph)`, so it only covers what the JSON encoding includes. Any field that affects compilation but is left out of the encoding is missing from the key. That covers unexported fields, fields tagged `json:\"-\"`, and fields whose custom `MarshalJSON` drops data. If such a field changes, the cache returns a stale compilation. The comment says all graph metadata is included, but nothing enforces this when new fields are added to `Graph`/`Component`.",
+      "suggestion": "Add a test that fails when a new `Graph`/`Component` field is absent from the encoding. For example, set every exported field via reflection and check that the key changes. Alternatively, derive the key from a dedicated canonical encoding owned by the compiler.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/compilation_cache.go",
+          "lines": {
+            "start": 31,
+            "end": 36
+          }
+        }
+      ],
+      "tags": [
+        "cache",
+        "invalidation"
+      ],
+      "evidence": "\tdata, err := json.Marshal(graph)\n\tif err != nil {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f51e1a70fa0bfc87",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Possible stale cache read immediately after graph mutation",
+      "message": "This function runs while an edit is being applied: `before` is the old graph and `s.graph` has just changed. If the compilation cache is keyed by a revision or generation that the caller has not bumped yet, `compileGraphLocked` can return the previous graph's (valid) compile. In that case `interrupted` would be computed wrongly, and visible default probes would not be retained when the drawing becomes incomplete.",
+      "suggestion": "Make sure the cache is invalidated before this call, or key the cache on the graph content. Otherwise call `s.graph.Compile()` directly here, as the code did before, because the graph has just been mutated.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "workbench/scope.go",
+          "lines": {
+            "start": 602,
+            "end": 602
+          }
+        }
+      ],
+      "tags": [
+        "cache",
+        "staleness"
+      ],
+      "evidence": "\t_, _, diagnostic = s.compileGraphLocked()",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "1261741efcdd7f2b",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Cached compiled result shared with background step worker",
+      "message": "`c` used to be a freshly compiled value owned by this call. It now comes from the service compilation cache and is stored in `stepJob.compiled`, which `go s.runStep(job)` reads without holding `s.mu`. The same object may then be reused by later locked callers on the main service, or replaced or mutated when the cache is invalidated. If the cache returns a pointer or shares slices or maps inside `Compiled`, this is a data race on shared compiled state.",
+      "suggestion": "Give the worker an independent copy: either deep-clone the cached `Compiled` before storing it in the job, or keep calling `input.graph.Compile()` on the cloned graph for the worker. Alternatively, document and enforce that cached `Compiled` values are immutable.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/step_work.go",
+          "lines": {
+            "start": 89,
+            "end": 104
+          }
+        }
+      ],
+      "tags": [
+        "concurrency",
+        "cache"
+      ],
+      "evidence": "\tc, _, d := s.compileGraphLocked()",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "5b2b78f5d27b5302",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Retention can exceed sweep capacity when nothing is evictable",
+      "message": "If the store is full and every sweep is kept or active, the eviction loop removes nothing. The new job is still appended, so the store can grow past MaxDCSweepOperations. The bounded-capacity guarantee then depends entirely on every caller first calling requireSweepSlotLocked under the same lock. Nothing in this method enforces or signals that.",
+      "suggestion": "Make retention enforce the limit itself. Either have retainSweepJobLocked return an error (for example, call requireSweepSlotLocked at the top) or panic or assert when no slot could be freed, so the capacity policy cannot be silently bypassed.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/analysis_jobs.go",
+          "lines": {
+            "start": 64,
+            "end": 79
+          }
+        }
+      ],
+      "tags": [
+        "capacity",
+        "invariant"
+      ],
+      "evidence": "\tstore.operations[job.summary.ID] = job\n\tstore.order = append(store.order, job.summary.ID)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "4a2b40e5f86acc20",
+      "severity": "low",
+      "category": "performance",
+      "title": "Double deep clone on miss and full marshal on every call",
+      "message": "On a cache miss, the freshly compiled result is deep-cloned into the cache entry and then deep-cloned again for the caller. Every call, hit or miss, also marshals the whole graph to JSON and hashes it. On large graphs under the service lock, this extra copying and encoding adds latency to every query.",
+      "suggestion": "On a miss, store `cloneCompiled(compiled)` in the cache and return the original `compiled`, which is not shared with anything else. That avoids the second clone. Consider a cheaper revision counter on the service to skip the marshal+hash when the graph has not been edited.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/compilation_cache.go",
+          "lines": {
+            "start": 38,
+            "end": 41
+          }
+        }
+      ],
+      "tags": [
+        "allocation"
+      ],
+      "evidence": "\t\t*c = compilationCache{valid: true, key: key, compiled: cloneCompiled(compiled),\n\t\t\tstatus: status, diagnostic: cloneCompileDiagnostic(diagnostic)}\n\t}\n\treturn cloneCompiled(c.compiled), c.status, cloneCompileDiagnostic(c.diagnostic)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 49678,
+    "totalMs": 20514
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 23,
+    "bytes": 89630,
+    "chunks": 5,
+    "llmCalls": 5,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 53664,
+        "output": 4525,
+        "costUSD": 0.305156
+      }
+    ],
+    "widenedFiles": 12,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

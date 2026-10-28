@@ -163,7 +163,7 @@ func (s *Service) startAudioLocked(p AudioRenderParams) error {
 	if !ok || !isSoundKind(part.Kind) && part.Kind != "speaker" {
 		return fmt.Errorf("choose a loudspeaker, piezo or active buzzer")
 	}
-	c, status, d := s.graph.Compile()
+	c, status, d := s.compileGraphLocked()
 	if status != "" || d != nil {
 		return fmt.Errorf("complete a supported circuit before rendering audio")
 	}

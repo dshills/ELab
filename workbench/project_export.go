@@ -163,7 +163,7 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			}
 			command = "export.scope.csv"
 			capture.artifact.Format = "csv"
-			compiled, _, _ := s.graph.Compile()
+			compiled, _, _ := s.compileGraphLocked()
 			scope := s.scopeLocked(compiled)
 			t := s.transient
 			if t == nil || t.Stale || !scope.WindowValid || len(scope.Traces) == 0 || len(scope.Traces[0].Points) == 0 {

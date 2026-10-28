@@ -172,12 +172,7 @@ func cloneSweepMetadata(in SweepMetadata) SweepMetadata {
 	_ = json.Unmarshal(data, &out)
 	return out
 }
-func (s *Service) ensureSweepsLocked() *sweepStore {
-	if s.sweeps == nil {
-		s.sweeps = &sweepStore{operations: map[string]*sweepJob{}}
-	}
-	return s.sweeps
-}
+
 func (s *Service) sweepSettingsLocked() SweepSettings {
 	if s.sweeps != nil && s.sweeps.settings != nil {
 		return cloneSweepSettings(*s.sweeps.settings)
@@ -321,7 +316,10 @@ func (s *Service) startDCSweepLocked(p SweepStartParams) error {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	job := &sweepJob{summary: SweepSummary{ID: id, Kind: "dc-sweep", Status: "queued", Total: cfg.Points}, metadata: metadata, sourceHash: sweepGraphHash(s.graph), ctx: ctx, cancel: cancel}
-	s.retainSweepJobLocked(job)
+	if err := s.retainSweepJobLocked(job); err != nil {
+		cancel()
+		return err
+	}
 	s.sweepViewerRevision++
 	traceID := plan.probes[0].ID
 	if IsNoiseSweep(cfg.Parameter) {
@@ -433,39 +431,4 @@ func (s *Service) clearSweepsLocked() {
 		}
 	}
 	s.sweeps = nil
-}
-
-func (s *Service) requireSweepSlotLocked() error {
-	if s.sweeps == nil || len(s.sweeps.order) < MaxDCSweepOperations {
-		return nil
-	}
-	for _, id := range s.sweeps.order {
-		job := s.sweeps.operations[id]
-		if !job.keep && !operationActive(job.summary.Status) {
-			return nil
-		}
-	}
-	return &actionError{"record-limit", "Eight sweeps are kept; exclude one before creating or importing another"}
-}
-
-// Admission/publication check capacity first. Eviction never removes kept or
-// active work; an expired selection cannot keep pointing at a removed asset.
-func (s *Service) retainSweepJobLocked(job *sweepJob) {
-	store := s.ensureSweepsLocked()
-	if len(store.order) >= MaxDCSweepOperations {
-		for i, id := range store.order {
-			old := store.operations[id]
-			if old.keep || operationActive(old.summary.Status) {
-				continue
-			}
-			delete(store.operations, id)
-			store.order = append(store.order[:i], store.order[i+1:]...)
-			if store.selected == id {
-				store.selected, store.traceID, store.visible, store.cursor = "", "", false, nil
-			}
-			break
-		}
-	}
-	store.operations[job.summary.ID] = job
-	store.order = append(store.order, job.summary.ID)
 }

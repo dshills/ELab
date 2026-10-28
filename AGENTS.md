@@ -45,3 +45,10 @@ release feature freeze for ongoing development.
 Prioritize known defects and outstanding requirements before optional features.
 Keep code, repository, release evidence, and package quality in scope. Owner
 review is deferred by instruction and must not block engineering progress.
+
+## Code review workflow
+
+Use internal code review for all new work. The owner replaced the earlier Prism
+review requirement on October 28, 2026 because of cost. Do not run Prism or send
+code to an external review provider unless the owner explicitly requests it again.
+Existing Prism receipts remain historical evidence.

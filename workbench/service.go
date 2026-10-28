@@ -21,105 +21,92 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
-	blockClipboard                   *BlockTemplate
-	tolerance                        *toleranceJob
-	toleranceSettings                *ToleranceSettings
-	toleranceSerial                  uint64
-	toleranceWorkers                 int
-	spectrum                         *SpectrumState
-	proposal                         *editProposalState
-	proposalSerial                   uint64
-	exampleBrowser                   ExampleBrowser
-	audio                            *audioJob
-	audioWorkers                     int
-	audioSerial                      uint64
-	audioPlayer                      audioplay.Player
-	audioPlaybackCancel              context.CancelFunc
-	audioPlaybackSerial              uint64
-	inspectorSection                 string
-	workspaceLayout                  WorkspaceLayout
-	shutdown                         *shutdownJob
-	printState                       *PrintState
-	printWork                        *printWork
-	printJobs                        []*PrintJob
-	printSerial, printJobSerial      uint64
-	printBackend                     printspool.Backend
-	printRender                      func(context.Context, exportCapture) ([]byte, error)
-	sweeps                           *sweepStore
-	sweepSerial                      uint64
-	sweepViewerRevision              uint64
-	sweepImport                      sweepImportFunc
-	sweepWorkers                     int
-	sweepCompute                     func(context.Context, sweepPlan, func(int)) (*SweepResult, error)
-	preview                          *previewJob
-	previewSerial                    uint64
-	previewWorkers                   int
-	previewRender                    func(context.Context, exportCapture) ([]byte, error)
-	projectJob                       *projectJob
-	projectWorkers                   int
-	projectJobs                      map[string]*projectJob
-	projectOrder                     []string
-	projectSerial                    uint64
-	projectLoad                      projectLoadFunc
-	projectSave                      projectSaveFunc
-	projectExport                    projectExportFunc
-	projectImport                    projectImportFunc
-	recoveryQueryRead                recoveryRestoreFunc
-	recoveryReadSerial               uint64
-	recoveryReadJobs                 map[string]*recoveryReadJob
-	recoveryReadOrder                []string
-	recoveryReaders                  map[uint64]context.CancelFunc
-	recoveryDismissPrepare           recoveryDismissPrepareFunc
-	recoveryDismissExecute           recoveryDismissExecuteFunc
-	recoveryConfigure                recoveryConfigurationPrepareFunc
-	recoveryRestore                  recoveryRestoreFunc
-	recoveryPrepare                  recoveryPrepareFunc
-	recoveryExecute                  recoveryExecuteFunc
-	recoveryCatalogRevision          uint64
-	viewerRevision                   uint64
-	projectPublish                   projectPublishFunc
-	inputJob                         *inputJob
-	inputSerial                      uint64
-	inputSolve                       inputSolveFunc
-	exampleID                        string
-	exampleDiffID                    string
-	exampleDiffSource                [32]byte
-	exampleDiff                      []EditChange
-	diagnosticDetails                bool
-	displayPreferences               DisplayPreferences
-	measurementTarget                *MeasurementTarget
-	pins                             []PinSpec
-	savedPreferences                 [32]byte
-	dcCompiled                       *Compiled
-	focusProbe                       string
-	stepSerial                       uint64
-	stepJob                          *stepJob
-	actuationRevision                uint64
-	liveSwitchEdit                   bool
-	savedRecordings                  [32]byte
-	restorePaused                    bool
-	recording                        recordingState
-	recovery                         RecoveryState
-	recoverySelectionCleared         bool
-	recoveryStore                    *recoveryStore
-	recoveryCancel                   context.CancelFunc
-	recoveredFrom                    string
-	discardRecoveryOnClose           bool
-	operations                       map[string]*verificationOperation
-	operationOrder                   []string
-	operationSerial                  uint64
-	selectedOperation, lastOperation string
-	verificationSettings             VerificationSettings
-	lastExport                       *Artifact
-	exportPage                       SchematicPage
-	scopeWindow                      *ScopeWindow
-	partCategory                     string
-	partSearch                       string
-	nextHistoryName                  string
-	scopeProbes                      []string
-	scopeConfigured                  bool
-	cursorA, cursorB                 *float64
-	activeCursor                     string
+	// Service.mu owns both stores and all publication/revision transitions.
+	analysisJobs
+	compilation                 compilationCache
+	blockClipboard              *BlockTemplate
+	proposal                    *editProposalState
+	proposalSerial              uint64
+	exampleBrowser              ExampleBrowser
+	audio                       *audioJob
+	audioWorkers                int
+	audioSerial                 uint64
+	audioPlayer                 audioplay.Player
+	audioPlaybackCancel         context.CancelFunc
+	audioPlaybackSerial         uint64
+	inspectorSection            string
+	workspaceLayout             WorkspaceLayout
+	shutdown                    *shutdownJob
+	printState                  *PrintState
+	printWork                   *printWork
+	printJobs                   []*PrintJob
+	printSerial, printJobSerial uint64
+	printBackend                printspool.Backend
+	printRender                 func(context.Context, exportCapture) ([]byte, error)
+	preview                     *previewJob
+	previewSerial               uint64
+	previewWorkers              int
+	previewRender               func(context.Context, exportCapture) ([]byte, error)
+	projectJob                  *projectJob
+	projectWorkers              int
+	projectJobs                 map[string]*projectJob
+	projectOrder                []string
+	projectSerial               uint64
+	projectLoad                 projectLoadFunc
+	projectSave                 projectSaveFunc
+	projectExport               projectExportFunc
+	projectImport               projectImportFunc
+	recoveryQueryRead           recoveryRestoreFunc
+	recoveryReadSerial          uint64
+	recoveryReadJobs            map[string]*recoveryReadJob
+	recoveryReadOrder           []string
+	recoveryReaders             map[uint64]context.CancelFunc
+	recoveryDismissPrepare      recoveryDismissPrepareFunc
+	recoveryDismissExecute      recoveryDismissExecuteFunc
+	recoveryConfigure           recoveryConfigurationPrepareFunc
+	recoveryRestore             recoveryRestoreFunc
+	recoveryPrepare             recoveryPrepareFunc
+	recoveryExecute             recoveryExecuteFunc
+	recoveryCatalogRevision     uint64
+	viewerRevision              uint64
+	projectPublish              projectPublishFunc
+	inputJob                    *inputJob
+	inputSerial                 uint64
+	inputSolve                  inputSolveFunc
+	exampleID                   string
+	exampleDiffID               string
+	exampleDiffSource           [32]byte
+	exampleDiff                 []EditChange
+	diagnosticDetails           bool
+	displayPreferences          DisplayPreferences
+	measurementTarget           *MeasurementTarget
+	pins                        []PinSpec
+	savedPreferences            [32]byte
+	dcCompiled                  *Compiled
+	focusProbe                  string
+	stepSerial                  uint64
+	stepJob                     *stepJob
+	actuationRevision           uint64
+	liveSwitchEdit              bool
+	savedRecordings             [32]byte
+	restorePaused               bool
+	recording                   recordingState
+	recovery                    RecoveryState
+	recoverySelectionCleared    bool
+	recoveryStore               *recoveryStore
+	recoveryCancel              context.CancelFunc
+	recoveredFrom               string
+	discardRecoveryOnClose      bool
+	lastExport                  *Artifact
+	exportPage                  SchematicPage
+	scopeWindow                 *ScopeWindow
+	partCategory                string
+	partSearch                  string
+	nextHistoryName             string
+	scopeProbes                 []string
+	scopeConfigured             bool
+	cursorA, cursorB            *float64
+	activeCursor                string
 
 	mixed                       *MixedResult
 	mixedState                  *mixedState
@@ -186,8 +173,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 		workspaceLayout:        DefaultWorkspaceLayout(),
 		inspectorSection:       "component",
 		revision:               1,
-		sweepImport:            prepareSweepImport,
-		sweepCompute:           computeDCSweep,
+		analysisJobs:           analysisJobs{sweepImport: prepareSweepImport, sweepCompute: computeDCSweep},
 		previewRender:          renderSchematicPage,
 		printRender:            renderSchematicPage,
 		printBackend:           printspool.System(),
@@ -270,8 +256,8 @@ func (s *Service) startLocked() {
 		s.result.Stale = true
 	}
 	s.diagnostics = nil
-	s.circuit = s.graph.Summary()
-	compiled, status, diagnostic := s.graph.Compile()
+	compiled, status, diagnostic := s.compileGraphLocked()
+	s.circuit = s.graph.compiledSummary(compiled, diagnostic)
 	if diagnostic != nil {
 		s.diagnostics = []Diagnostic{*diagnostic}
 		if s.paused {
@@ -519,7 +505,7 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 			if err := params(r.Params, &p, "id"); err != nil {
 				return fail("invalid-params", err.Error())
 			}
-			compiled, _, _ := s.graph.Compile()
+			compiled, _, _ := s.compileGraphLocked()
 			result, err := s.componentExplanationLocked(compiled, p.ID, nil)
 			if err != nil {
 				return fail("not-found", err.Error())

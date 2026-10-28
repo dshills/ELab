@@ -67,7 +67,7 @@ func (s *Service) focusTraceLocked(p IDParams) error {
 		s.focusProbe = ""
 		return nil
 	}
-	c, _, _ := s.graph.Compile()
+	c, _, _ := s.compileGraphLocked()
 	ids := s.scopeProbes
 	if !s.scopeConfigured {
 		ids = defaultProbes(c)

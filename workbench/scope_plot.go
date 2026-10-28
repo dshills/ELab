@@ -44,7 +44,7 @@ func (s *Service) plotProbeSelectionLocked() []string {
 	if s.scopeConfigured {
 		return append([]string{}, s.scopeProbes...)
 	}
-	compiled, _, _ := s.graph.Compile()
+	compiled, _, _ := s.compileGraphLocked()
 	return append([]string{}, defaultProbes(compiled)...)
 }
 

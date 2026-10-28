@@ -1,0 +1,12 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/dshills/elab/workbench
+cpu: Apple M4 Pro
+BenchmarkCompilationBoundary/led/fresh-4         	   51814	      4424 ns/op	    2784 B/op	      45 allocs/op
+BenchmarkCompilationBoundary/led/cached-owned-4  	   61423	      3663 ns/op	    3650 B/op	      13 allocs/op
+BenchmarkCompilationBoundary/discrete-class-ab/fresh-4         	    1587	    140133 ns/op	  107336 B/op	     646 allocs/op
+BenchmarkCompilationBoundary/discrete-class-ab/cached-owned-4  	    5449	     42954 ns/op	   41984 B/op	     100 allocs/op
+BenchmarkCompilationBoundary/rc-block/fresh-4                  	   38584	      6098 ns/op	    6296 B/op	      71 allocs/op
+BenchmarkCompilationBoundary/rc-block/cached-owned-4           	   43636	      5493 ns/op	    4763 B/op	      15 allocs/op
+PASS
+ok  	github.com/dshills/elab/workbench	1.545s

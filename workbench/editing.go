@@ -1272,7 +1272,7 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.paused = false
 		if s.transient != nil && !s.transient.Stale {
-			c, _, d := s.graph.Compile()
+			c, _, d := s.compileGraphLocked()
 			if d == nil && IsTransientAnalysis(c.Analysis) {
 				if s.transient.PendingMode != "" {
 					var err error

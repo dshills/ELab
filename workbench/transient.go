@@ -373,7 +373,7 @@ func (s *Service) transientCommandLocked(command string, raw []byte) error {
 		if err := params(raw, &p, "mode"); err != nil {
 			return err
 		}
-		c, _, d := s.graph.Compile()
+		c, _, d := s.compileGraphLocked()
 		if d != nil || !IsTransientAnalysis(c.Analysis) || s.transient == nil || s.transient.Stale {
 			return &actionError{"unavailable", "complete and simulate a supported transient circuit before changing its input"}
 		}

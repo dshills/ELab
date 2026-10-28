@@ -40,7 +40,11 @@ func productionNumericalReference(t *testing.T) bool {
 	if remaining <= 0 {
 		t.Fatal("no time remains to run the production reference after building it")
 	}
-	command := exec.CommandContext(ctx, binary, "-test.run=^"+regexp.QuoteMeta(t.Name())+"$", "-test.count=1", "-test.v", "-test.short="+strconv.FormatBool(testing.Short()), "-test.timeout="+remaining.String())
+	segments := strings.Split(t.Name(), "/")
+	for i, name := range segments {
+		segments[i] = "^" + regexp.QuoteMeta(name) + "$"
+	}
+	command := exec.CommandContext(ctx, binary, "-test.run="+strings.Join(segments, "/"), "-test.count=1", "-test.v", "-test.short="+strconv.FormatBool(testing.Short()), "-test.timeout="+remaining.String())
 	command.WaitDelay = 250 * time.Millisecond
 	output, err := command.CombinedOutput()
 	if err != nil {

@@ -86,7 +86,7 @@ func (s *Service) startStepLocked(p StepParams) error {
 	if s.stepJob != nil && operationActive(s.stepJob.work.Status) {
 		return &actionError{"busy", "finish or cancel the current manual step"}
 	}
-	c, _, d := s.graph.Compile()
+	c, _, d := s.compileGraphLocked()
 	if !s.paused || d != nil || !IsTransientAnalysis(c.Analysis) || s.transient == nil || s.transient.Stale {
 		return &actionError{"unavailable", "pause a valid transient run before stepping"}
 	}

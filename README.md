@@ -512,3 +512,9 @@ coasting and enable-pin PWM with passive flyback paths. The reversible motor
 example uses ordinary switches and a finite pulse source; users and agents share
 placement, wiring, switch, source, probe and project commands. Live readouts show
 mode, differential output voltage, signed supply current and driver dissipation.
+
+Maintainers can use the [quality and release tooling](docs/release-tooling.md)
+for repeatable local gates and unsigned candidate qualification. The
+[architecture guide](docs/architecture.md) explains the shared command boundary,
+compilation ownership and analysis-job store. Agents can inspect retained data
+through bounded [analysis pages](docs/analysis-pages.md).

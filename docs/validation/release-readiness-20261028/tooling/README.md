@@ -57,3 +57,22 @@ The numerical follow-up timeout finding is repaired: remaining child time is
 checked after building, its own timeout precedes context cancellation, and both
 commands use bounded pipe WaitDelay. Those are test-runner safeguards only.
 Targeted final six-reference checks use the repaired helper.
+
+Authorized conformance/test-spooler rerun passes (184.095 s/1.156 s), as does
+transport (11.510 s). Combined with the completed root run, all package groups
+have passing race coverage with local sockets available; the sandbox invocation
+remains an explicitly failed receipt.
+
+Clean-source assembly from item-4 commit 93776648 succeeds for 0.200.2 /280,
+including matching app, agent and controller VCS identities. The initial sandbox
+attempt could not complete macOS icon conversion and reported denied Go stat
+cache writes; its partial output/logs are preserved as unqualified. The authorized
+macOS rerun succeeds without source or qualified-byte changes. Runtime/extraction
+qualification is recorded separately when complete.
+
+The clean /280 package also passes all 87 example opens with 61 kinds/222
+commands, copied native smoke and four-adapter runtime isolation, all 102 normal
+external exits, exact 437-file archive and strict OS extraction/seals. Its ZIP is
+43,016,644 bytes with SHA-256
+10fcb16791ff3490c7128fdaeae467c20000f967d8d3c6e4b8718cfb319efe54.
+This is the first complete actual assemble/check/archive use of the new CLI.

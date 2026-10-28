@@ -62,7 +62,9 @@ func (s *Service) publishSweepImportLocked(job *projectJob, record *SweepRecord,
 	id := fmt.Sprintf("imported-sweep-%d", s.sweepSerial)
 	sourceHash := hex.EncodeToString(digest[:])
 	operation := &sweepJob{keep: true, record: record, metadata: record.Metadata, sourceHash: sweepGraphHash(record.Metadata.Source.Graph), summary: SweepSummary{ID: id, Kind: "sweep-import", Status: "completed", Actor: job.work.Actor, SourcePath: job.work.Path, SourceSHA256: sourceHash, Completed: len(record.Result.Points), Total: len(record.Result.Points)}}
-	s.retainSweepJobLocked(operation)
+	if err := s.retainSweepJobLocked(operation); err != nil {
+		return err
+	}
 	if selected {
 		store := s.ensureSweepsLocked()
 		store.selected, store.visible, store.traceID, store.cursor = id, true, record.Result.Probes[0].ID, nil

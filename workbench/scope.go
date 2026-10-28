@@ -480,7 +480,7 @@ func (s *Service) scopeCommandLocked(command string, raw json.RawMessage) error 
 		}
 		ids := s.scopeProbes
 		if !s.scopeConfigured {
-			c, _, _ := s.graph.Compile()
+			c, _, _ := s.compileGraphLocked()
 			ids = defaultProbes(c)
 		}
 		for i, id := range ids {
@@ -599,7 +599,7 @@ func (s *Service) retainInterruptedDefaultProbesLocked(before Graph) {
 	for _, p := range probeInventory(s.graph) {
 		available[p.ID] = true
 	}
-	_, _, diagnostic = s.graph.Compile()
+	_, _, diagnostic = s.compileGraphLocked()
 	interrupted := diagnostic != nil
 	for _, id := range ids {
 		if !available[id] {

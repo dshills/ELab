@@ -1,0 +1,20 @@
+=== RUN   TestExtendedPublicCaptureSaveLoadAndCorruption
+=== RUN   TestExtendedPublicCaptureSaveLoadAndCorruption/buck
+    extended_workflow_test.go:20: production-speed numerical reference passed; original assertions and 100ms/512-attempt guards unchanged (child without -race)
+=== RUN   TestExtendedPublicCaptureSaveLoadAndCorruption/opamp-slew
+=== RUN   TestExtendedPublicCaptureSaveLoadAndCorruption/opamp-bandwidth
+=== RUN   TestExtendedPublicCaptureSaveLoadAndCorruption/shift-register
+=== RUN   TestExtendedPublicCaptureSaveLoadAndCorruption/555-tone
+=== RUN   TestExtendedPublicCaptureSaveLoadAndCorruption/light-alarm
+--- PASS: TestExtendedPublicCaptureSaveLoadAndCorruption (6.60s)
+    --- PASS: TestExtendedPublicCaptureSaveLoadAndCorruption/buck (4.70s)
+    --- PASS: TestExtendedPublicCaptureSaveLoadAndCorruption/opamp-slew (0.27s)
+    --- PASS: TestExtendedPublicCaptureSaveLoadAndCorruption/opamp-bandwidth (0.26s)
+    --- PASS: TestExtendedPublicCaptureSaveLoadAndCorruption/shift-register (0.76s)
+    --- PASS: TestExtendedPublicCaptureSaveLoadAndCorruption/555-tone (0.31s)
+    --- PASS: TestExtendedPublicCaptureSaveLoadAndCorruption/light-alarm (0.30s)
+=== RUN   TestInductorNPNIndependentActiveAndFlybackReference
+    inductor_mixed_test.go:196: production-speed numerical reference passed; original assertions and 100ms/512-attempt guards unchanged (child without -race)
+--- PASS: TestInductorNPNIndependentActiveAndFlybackReference (1.18s)
+PASS
+ok  	github.com/dshills/elab/workbench	9.032s

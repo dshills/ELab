@@ -173,7 +173,7 @@ func TestAnalysisRecordingSpectrumTolerancePages(t *testing.T) {
 	}
 }
 func TestAnalysisUnknownAndNotReady(t *testing.T) {
-	s := Service{documentGeneration: 1, operations: map[string]*verificationOperation{"pending": {summary: OperationSummary{Status: "running"}}}}
+	s := Service{documentGeneration: 1, analysisJobs: analysisJobs{operations: map[string]*verificationOperation{"pending": {summary: OperationSummary{Status: "running"}}}}}
 	for _, tc := range []struct{ id, code string }{{"missing", "not-found"}, {"pending", "not-ready"}} {
 		_, err := s.analysisPageLocked(AnalysisPageParams{Kind: "recording", ID: tc.id, DocumentGeneration: 1})
 		if err == nil || err.(*actionError).code != tc.code {

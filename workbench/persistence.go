@@ -643,7 +643,7 @@ func (s *Service) checkDocumentGenerationLocked(expected *uint64) error {
 
 func (s *Service) documentLocked() Document {
 	settings := s.transientSettings
-	compiled, _, _ := s.graph.Compile()
+	compiled, _, _ := s.compileGraphLocked()
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Sweeps: s.projectSweepsLocked(), ExampleID: s.exampleID, Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: s.currentDocumentVersionLocked(), Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}

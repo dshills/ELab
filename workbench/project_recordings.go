@@ -194,18 +194,7 @@ func (s *Service) installProjectRecordingsLocked(project *ProjectRecordings) {
 		}
 	}
 }
-func (s *Service) requireRecordingSlotLocked() error {
-	if len(s.operationOrder) < MaxVerificationOperations {
-		return nil
-	}
-	for _, id := range s.operationOrder {
-		operation := s.operations[id]
-		if !operation.keep && !operationActive(operation.summary.Status) {
-			return nil
-		}
-	}
-	return &actionError{"record-limit", "The project keeps eight recordings. Exclude one from the project before creating or importing another."}
-}
+
 func (s *Service) recordingMembershipHashLocked() [32]byte {
 	ids := []string{}
 	for _, id := range s.operationOrder {

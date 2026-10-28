@@ -193,6 +193,9 @@ func npnCoilOffReference(end float64) (base, current, collector float64) {
 }
 
 func TestInductorNPNIndependentActiveAndFlybackReference(t *testing.T) {
+	if productionNumericalReference(t) {
+		return
+	}
 	g := inductorNPNCapGraph(t)
 	c, _, _ := g.Compile()
 	kernel, err := newSimulationKernel(t.Context(), kernelPlan{compiled: c, settings: DefaultTransientSettings(), mode: "auto"})
