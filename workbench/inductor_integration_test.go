@@ -126,6 +126,9 @@ func TestInductorRadauStiffDecay(t *testing.T) {
 }
 
 func TestInductorMixedOutputWorkEnvelope(t *testing.T) {
+	if productionNumericalReference(t) {
+		return
+	}
 	state, trace := initializeInductorTest(t, inductorNPNCapGraph(t))
 	maximumTime, maximumAttempts := time.Duration(0), 0
 	for sample := 1; sample <= 120; sample++ {

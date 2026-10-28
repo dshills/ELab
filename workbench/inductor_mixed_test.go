@@ -31,6 +31,9 @@ func inductorNPNCapGraph(t *testing.T) Graph {
 }
 
 func TestInductorCoupledNPNGateCapacitorStepRefinement(t *testing.T) {
+	if productionNumericalReference(t) {
+		return
+	}
 	for _, resistance := range []float64{100, 120} {
 		t.Run(fmt.Sprint(resistance), func(t *testing.T) {
 			g := inductorNPNCapGraph(t)

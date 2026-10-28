@@ -132,6 +132,13 @@ def sandbox_profile(roots):
             '(deny network-outbound (remote ip "*:*"))\n')
 
 
+def rehearsal_profile(roots, protect_geometry=False):
+    profile = sandbox_profile(roots)
+    if protect_geometry:
+        profile += '(deny file-write* (subpath '+sb_string(str(Path.home()/'Library/Cogent Core'))+'))\n'
+    return profile
+
+
 def create_output(path, roots):
     if any(path == root or path.is_relative_to(root) for root in roots):
         raise ValueError('runtime artifacts must be outside blocked development directories')
@@ -283,6 +290,7 @@ def run(args):
     directory = args.artifacts.absolute().resolve()
     create_output(directory, roots)
     result = dict(passed=False, scope='macOS copied runtime with development-file and outbound IP denial; controller unrestricted',
+                  geometry_write_protected=bool(getattr(args, 'protect_geometry', False)),
                   app_source=str(app), source_bundle=bundle_tree(app), source_agent_sha256=digest(agent),
                   source_controller_sha256=digest(controller), system_dependencies=dependencies, blocked_development=canaries, stages=[],
                   executable_identity_source='explicit sealed-byte pin' if args.app_executable_sha256 else 'manifest source hash',
@@ -301,7 +309,7 @@ def run(args):
         working = directory/'empty-working-directory'
         working.mkdir()
         profile = directory/'runtime.sb'
-        profile.write_text(sandbox_profile(roots))
+        profile.write_text(rehearsal_profile(roots, getattr(args, 'protect_geometry', False)))
         result['controls'] = controls(directory, profile, canaries, run_child)
         launcher(directory/'native', profile, copied/'Contents/MacOS'/executable.name, working)
         launcher(directory/'agent', profile, directory/'elab-agent', working)
@@ -334,6 +342,7 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--app', type=Path, required=True)
+    parser.add_argument('--protect-geometry', action='store_true', help='add a write denial for the owner shared window-geometry directory')
     parser.add_argument('--app-executable-sha256', help='Independent post-signing executable SHA-256; required when signing changed the packager source bytes')
     parser.add_argument('--agent-binary', type=Path, default=ROOT/'build/elab-agent')
     parser.add_argument('--conformance-binary', type=Path, default=ROOT/'build/elab-conformance')

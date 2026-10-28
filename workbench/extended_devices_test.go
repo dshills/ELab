@@ -268,6 +268,9 @@ func TestOpAmpDynamicsACCorner(t *testing.T) {
 }
 
 func TestShiftCascadeAndSimultaneousLatch(t *testing.T) {
+	if productionNumericalReference(t) {
+		return
+	}
 	b := newExampleBuilder()
 	b.part("VCC", "dc-source", "5", -700, -400, 0)
 	b.ground("GV", "VCC.negative", -700, -200)

@@ -85,6 +85,14 @@ class RuntimeIsolationTests(unittest.TestCase):
             with self.subTest(paths=paths), self.assertRaises(ValueError):
                 isolation.sandbox_profile(paths)
 
+    def test_geometry_protection_is_append_only(self):
+        roots = [Path('/private/tmp/owned-source')]
+        base = isolation.sandbox_profile(roots)
+        self.assertEqual(isolation.rehearsal_profile(roots), base)
+        protected = isolation.rehearsal_profile(roots, True)
+        self.assertTrue(protected.startswith(base))
+        self.assertIn('(deny file-write* (subpath '+isolation.sb_string(str(Path.home()/'Library/Cogent Core'))+'))', protected)
+
     def test_existing_and_blocked_destinations_preserve_contents(self):
         valuable = self.root/'existing'
         valuable.mkdir()

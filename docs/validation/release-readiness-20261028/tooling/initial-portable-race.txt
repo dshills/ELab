@@ -1,0 +1,28 @@
+?   	github.com/dshills/elab/build/electronics-next-five	[no test files]
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	3.368s
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+?   	github.com/dshills/elab/internal/audioplay	[no test files]
+ok  	github.com/dshills/elab/internal/conformance	180.972s
+ok  	github.com/dshills/elab/internal/printspool	1.169s
+ok  	github.com/dshills/elab/internal/schematicpdf	1.158s
+ok  	github.com/dshills/elab/internal/uiaudit	1.512s
+ok  	github.com/dshills/elab/transport	11.271s
+--- FAIL: TestShiftCascadeAndSimultaneousLatch (2.54s)
+    extended_devices_test.go:300: advance 0.1510000000000001: mixed integration exceeded its work budget: elapsed-time limit (26 attempted, maximum 512; 100.822 ms elapsed, maximum 100 ms); reduce sample step
+--- FAIL: TestHBridgePWMExampleResolvesDriveCoastAndFlyback (0.38s)
+    hbridge_test.go:201: 0.25 201 mixed integration exceeded its work budget: elapsed-time limit (80 attempted, maximum 512; 100.000 ms elapsed, maximum 100 ms); reduce sample step at 0.0100347295 s, step 1.47e-06: ratio 0.211, errors <nil> / <nil> / <nil>
+--- FAIL: TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast (0.47s)
+    hbridge_test.go:267: simulation.step: &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (116 attempted, maximum 512; 100.070 ms elapsed, maximum 100 ms); reduce sample step at 0.0602059238 s, step 1.93e-05: ratio +Inf, errors <nil> / mixed integration exceeded its work budget: elapsed-time limit (115 attempted, maximum 512; 100.048 ms elapsed, maximum 100 ms); reduce sample step / <nil>}
+--- FAIL: TestHBridgeCaptureProjectProvenanceAndProbeSigns (0.17s)
+    hbridge_test.go:291: verify failed {FailureHelp:0xc0007ac630 KeptInProject:false SourcePath: SourceSHA256: ID:verify-1 Kind:verify Status:failed Actor:test InputRevision:6 ElectricalRevision:2 DocumentGeneration:2 RequestedDuration:0.01 SimulatedTime:0 CompletedSteps:0 TotalSteps:200 Progress:0 SourceUnchanged:true Error:0xc0000421e0}; error &{Code:integration-time-limit Message:mixed integration exceeded its work budget: elapsed-time limit (76 attempted, maximum 512; 100.029 ms elapsed, maximum 100 ms); reduce sample step at 3.23553631e-05 s, step 9.02e-08: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (75 attempted, maximum 512; 100.007 ms elapsed, maximum 100 ms); reduce sample step}
+--- FAIL: TestInductorMixedOutputWorkEnvelope (0.13s)
+    inductor_integration_test.go:136: 2 mixed integration exceeded its work budget: elapsed-time limit (135 attempted, maximum 512; 100.413 ms elapsed, maximum 100 ms); reduce sample step at 0.00134774861 s, step 3.77e-06: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (134 attempted, maximum 512; 100.327 ms elapsed, maximum 100 ms); reduce sample step
+--- FAIL: TestInductorCoupledNPNGateCapacitorStepRefinement (0.39s)
+    --- FAIL: TestInductorCoupledNPNGateCapacitorStepRefinement/100 (0.20s)
+        inductor_mixed_test.go:42: mixed RLC/NPN refinement 0 2 1 mixed integration exceeded its work budget: elapsed-time limit (108 attempted, maximum 512; 100.148 ms elapsed, maximum 100 ms); reduce sample step at 0.00133759658 s, step 8.42e-08: ratio +Inf, errors <nil> / mixed integration exceeded its work budget: elapsed-time limit (107 attempted, maximum 512; 100.117 ms elapsed, maximum 100 ms); reduce sample step / <nil>
+    --- FAIL: TestInductorCoupledNPNGateCapacitorStepRefinement/120 (0.19s)
+        inductor_mixed_test.go:42: mixed RLC/NPN refinement 0 2 1 mixed integration exceeded its work budget: elapsed-time limit (122 attempted, maximum 512; 100.036 ms elapsed, maximum 100 ms); reduce sample step at 0.00133807588 s, step 7.5e-08: ratio +Inf, errors <nil> / <nil> / mixed integration exceeded its work budget: elapsed-time limit (121 attempted, maximum 512; 100.018 ms elapsed, maximum 100 ms); reduce sample step
+FAIL
+FAIL	github.com/dshills/elab/workbench	337.705s
+FAIL

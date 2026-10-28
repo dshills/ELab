@@ -1,0 +1,142 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "c41a1f2e42fb77c07b86e3abad5552fe",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "7b0be66512205747a9d1ab5681c874b1c521c49a",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 2,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "108ebb5368d3fe8a",
+      "severity": "medium",
+      "category": "performance",
+      "title": "Test binary rebuilt for every reference test",
+      "message": "Every guarded test recompiles the entire package's test binary in a fresh temp dir, and there are 8 such tests. Under `-race`, each call runs a full `go test -c` link step. That can add a lot of time to the race job and may push it past the default `go test` timeout. The binary is identical for every caller.",
+      "suggestion": "Build the non-race binary once per process and reuse it. One option is a package-level `sync.Once` that builds into a directory from `os.MkdirTemp`. Store the path and the build error in package variables, and remove the directory in `TestMain`, or leave it to OS temp cleanup.",
+      "confidence": 0.8,
+      "locations": [
+        {
+          "path": "workbench/production_test_runtime_test.go",
+          "lines": {
+            "start": 20,
+            "end": 24
+          }
+        }
+      ],
+      "tags": [
+        "test-runtime",
+        "build"
+      ],
+      "evidence": "\tbinary := filepath.Join(t.TempDir(), \"workbench-production.test\")\n\tbuild := exec.CommandContext(t.Context(), \"go\", \"test\", \"-c\", \"-race=false\", \"-o\", binary, \".\")",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "fed7cf2bda33d736",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Child process ignores parent test flags/tags and deadline",
+      "message": "The child build and run do not receive the parent's build tags, `-short`, `-test.cpu`, or other test settings. The child timeout is hardcoded to 5m and ignores the parent's deadline. If the parent was run with `-tags` or `-short`, the child may compile or behave differently from what the developer asked for. If the parent deadline is shorter, the parent can be killed by the outer timeout without the child's output being reported.",
+      "suggestion": "Propagate the relevant settings to the child: pass `-short` when `testing.Short()` is true, and derive `-test.timeout` from `t.Deadline()` when one is set. Also document, or forward, the build tags the parent was built with.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/production_test_runtime_test.go",
+          "lines": {
+            "start": 21,
+            "end": 25
+          }
+        }
+      ],
+      "tags": [
+        "test-runtime"
+      ],
+      "evidence": "\tcommand := exec.CommandContext(t.Context(), binary, \"-test.run=^\"+regexp.QuoteMeta(t.Name())+\"$\", \"-test.count=1\", \"-test.v\", \"-test.timeout=5m\")",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "c95378b74a3e67ec",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Hardcoded budget values in log message",
+      "message": "The log message hardcodes 100 ms and 512 attempts. These duplicate `MaxIntegrationWallTime` and `MaxIntegrationAttempts`, so the message will silently become wrong if those constants change.",
+      "suggestion": "Format the message from the actual constants.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/production_test_runtime_test.go",
+          "lines": {
+            "start": 33,
+            "end": 33
+          }
+        }
+      ],
+      "tags": [
+        "logging"
+      ],
+      "evidence": "\tt.Logf(\"production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)\")",
+      "fix": {
+        "before": "\tt.Logf(\"production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)\")",
+        "after": "\tt.Logf(\"production-speed numerical reference passed; original assertions and %s/%d-attempt guards unchanged (child without -race)\", MaxIntegrationWallTime, MaxIntegrationAttempts)"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 19870,
+    "totalMs": 19887
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 7,
+    "bytes": 7485,
+    "chunks": 1,
+    "llmCalls": 1,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 6020,
+        "output": 1964,
+        "costUSD": 0.06336
+      }
+    ],
+    "widenedFiles": 3,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

@@ -1,0 +1,255 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "2549ac9277648a44e07284603688582c",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "7b0be66512205747a9d1ab5681c874b1c521c49a",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 6,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "f5128598a0f8618b",
+      "severity": "medium",
+      "category": "security",
+      "title": "Executable hash taken from manifest instead of disk",
+      "message": "The expected executable hash passed to runtime isolation now comes from the package manifest, not from hashing the file on disk. If the manifest is not checked against the files earlier in `qualify`, a tampered or mismatched executable passes with whatever hash the manifest claims. A missing key also raises a bare KeyError, which is then reported as an opaque CLI error.",
+      "suggestion": "Hash the actual file at `package['app']` and compare it with the manifest entry, failing with a clear message on mismatch. Alternatively, confirm the manifest was already verified against disk before this point.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/release_qualification.py",
+          "lines": {
+            "start": 182,
+            "end": 182
+          }
+        }
+      ],
+      "tags": [
+        "integrity",
+        "manifest"
+      ],
+      "evidence": "app_executable_sha256=package['files'][package['app']+'/Contents/MacOS/ELab']['sha256'],",
+      "fix": {
+        "before": "app_executable_sha256=package['files'][package['app']+'/Contents/MacOS/ELab']['sha256'],",
+        "after": "app_executable_sha256=sha(args.package/package['app']/'Contents/MacOS/ELab'),"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "85079d9c55ccd117",
+      "severity": "low",
+      "category": "correctness",
+      "title": "GateInterrupted produces empty error message",
+      "message": "`__init__` never calls `super().__init__`, so `args` is empty and `str(error)` is ''. The failure records in report.json and failure.json therefore carry an empty error message for SIGTERM/SIGHUP.",
+      "suggestion": "Call `super().__init__` with a descriptive message.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/quality.py",
+          "lines": {
+            "start": 40,
+            "end": 42
+          }
+        }
+      ],
+      "tags": [
+        "signals"
+      ],
+      "evidence": "class GateInterrupted(KeyboardInterrupt):\n    def __init__(self, signum):\n        self.signum = signum",
+      "fix": {
+        "before": "class GateInterrupted(KeyboardInterrupt):\n    def __init__(self, signum):\n        self.signum = signum",
+        "after": "class GateInterrupted(KeyboardInterrupt):\n    def __init__(self, signum):\n        super().__init__('interrupted by signal %d' % signum)\n        self.signum = signum"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "fe0d94181f2763da",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Interrupted step can be left in 'running' state",
+      "message": "A signal can arrive after a step entry is appended with status 'running' but outside the inner try, for example during `save()` or the log `open`. The outer handler then adds a separate 'controller' entry, and the step entry stays permanently 'running' in the report.",
+      "suggestion": "In the outer handler, find any entries still marked 'running' and mark them 'interrupted' before appending the controller entry.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "scripts/quality.py",
+          "lines": {
+            "start": 141,
+            "end": 141
+          }
+        }
+      ],
+      "tags": [
+        "signals",
+        "report",
+        "location-corrected"
+      ],
+      "evidence": "        entry = dict(name='controller', status='interrupted', exit_code=128+getattr(error, 'signum', signal.SIGINT))",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "52e6883aae0b6a2d",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Overly broad exception handler masks bugs as usage errors",
+      "message": "Catching `Exception` turns programming errors (TypeError, AttributeError, KeyError) into `parser.error` usage failures. These exit with code 2 and print no traceback, which hides real bugs in assemble/qualify/archive.",
+      "suggestion": "Record failure.json for any exception, but re-raise unexpected types after recording. Reserve `parser.error` for ValueError/OSError/SubprocessError.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/release_qualification.py",
+          "lines": {
+            "start": 248,
+            "end": 248
+          }
+        }
+      ],
+      "tags": [
+        "exceptions"
+      ],
+      "evidence": "    except (Exception, KeyboardInterrupt) as error:",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "b29f759f800411e9",
+      "severity": "low",
+      "category": "testing",
+      "title": "Conflicting -mod flag not asserted removed",
+      "message": "The test seeds `-mod=mod` but only checks that `-mod=readonly` is appended. It does not check that the conflicting user flag was removed. Duplicate `-mod` flags in GOFLAGS may be rejected or resolved unpredictably, so the read-only guarantee is not fully verified.",
+      "suggestion": "Also assert `'-mod=mod' not in env['GOFLAGS'].split()`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/test_quality.py",
+          "lines": {
+            "start": 72,
+            "end": 73
+          }
+        }
+      ],
+      "evidence": "        self.assertTrue(env['GOFLAGS'].endswith('-p=1 -mod=readonly'))",
+      "fix": {
+        "before": "        self.assertTrue(env['GOFLAGS'].endswith('-p=1 -mod=readonly'))",
+        "after": "        self.assertTrue(env['GOFLAGS'].endswith('-p=1 -mod=readonly'))\n        self.assertNotIn('-mod=mod', env['GOFLAGS'].split())"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "95b7edfb26445894",
+      "severity": "low",
+      "category": "testing",
+      "title": "POSIX-only test without skip guard",
+      "message": "The test relies on SIGTERM delivery, `start_new_session`, exit code 143 and probing with `os.kill(pid, 0)`. All of these are POSIX-only, and the test will fail on Windows runners.",
+      "suggestion": "Decorate the test with `@unittest.skipIf(os.name != 'posix', ...)`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/test_quality.py",
+          "lines": {
+            "start": 76,
+            "end": 76
+          }
+        }
+      ],
+      "tags": [
+        "portability",
+        "location-corrected"
+      ],
+      "evidence": "    def test_sigterm_reaps_owned_process_and_records_interruption(self):",
+      "fix": {
+        "before": "    def test_sigterm_reaps_owned_process_and_records_interruption(self):",
+        "after": "    @unittest.skipIf(__import__('os').name != 'posix', 'requires POSIX signals')\n    def test_sigterm_reaps_owned_process_and_records_interruption(self):"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ad2174adbeb83bcb",
+      "severity": "low",
+      "category": "testing",
+      "title": "Owned grandchild may leak when test fails early",
+      "message": "If an assertion fails before SIGTERM is sent, or the controller does not reap its child, the cleanup only terminates the controller. The grandchild running `time.sleep(30)` is leaked and keeps running after the test. The controller was started with `start_new_session=True`, so the whole group could be cleaned up.",
+      "suggestion": "In `finally`, kill the whole process group with `os.killpg(process.pid, signal.SIGKILL)`, ignoring `ProcessLookupError`, then reap the controller.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "scripts/test_quality.py",
+          "lines": {
+            "start": 105,
+            "end": 112
+          }
+        }
+      ],
+      "tags": [
+        "flaky",
+        "process-leak"
+      ],
+      "evidence": "            finally:\n                if process.poll() is None:\n                    process.terminate()",
+      "fix": {
+        "before": "            finally:\n                if process.poll() is None:\n                    process.terminate()",
+        "after": "            finally:\n                if process.poll() is None:\n                    try:\n                        os.killpg(process.pid, signal.SIGKILL)\n                    except ProcessLookupError:\n                        pass"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 53188,
+    "totalMs": 34499
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 6,
+    "bytes": 30450,
+    "chunks": 2,
+    "llmCalls": 2,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 16154,
+        "output": 5497,
+        "costUSD": 0.174556
+      }
+    ],
+    "widenedFiles": 4,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

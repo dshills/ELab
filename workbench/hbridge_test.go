@@ -183,6 +183,9 @@ func TestHBridgeMotorForwardReverseAndStallReference(t *testing.T) {
 }
 
 func TestHBridgePWMExampleResolvesDriveCoastAndFlyback(t *testing.T) {
+	if productionNumericalReference(t) {
+		return
+	}
 	speeds := []float64{}
 	for _, duty := range []float64{.25, .75} {
 		g := HBridgeExampleGraph()
@@ -223,6 +226,9 @@ func TestHBridgePWMExampleResolvesDriveCoastAndFlyback(t *testing.T) {
 }
 
 func TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast(t *testing.T) {
+	if productionNumericalReference(t) {
+		return
+	}
 	speeds := map[string]float64{}
 	for _, mode := range []string{"brake low", "brake high", "coast", "reverse"} {
 		s := newGraphService(SolveLED, hbridgeConstantGraph())
@@ -278,6 +284,9 @@ func TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast(t *testin
 }
 
 func TestHBridgeCaptureProjectProvenanceAndProbeSigns(t *testing.T) {
+	if productionNumericalReference(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "hbridge-motor"}, "example")

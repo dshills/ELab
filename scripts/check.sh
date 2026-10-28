@@ -1,19 +1,6 @@
 #!/bin/sh
 set -eu
 ELAB_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-cd "$ELAB_ROOT"
-export GOWORK=off
-export GOCACHE="${ELAB_GOCACHE:-$ELAB_ROOT/build/go-cache}"
-export CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native'
-python3 scripts/prd-audit.py --verify research/11-prd-implementation-audit.json
-./scripts/lint.sh
-python3 -m unittest discover -s scripts -p 'test_*.py'
-go test -race ./...
-go vet ./...
-cd desktop
-# Race-instrumented native and mounted-control suites exceed Go's default 10m.
-# This is a test-runner deadline; simulation work/accuracy limits stay unchanged.
-go test -race -timeout=30m ./...
-go vet ./...
-go test -race -tags=offscreen -timeout=30m ./...
-go vet -tags=offscreen ./...
+ELAB_QUALITY_PROFILE=${ELAB_QUALITY_PROFILE:-native}
+ELAB_QUALITY_ARTIFACTS=${ELAB_QUALITY_ARTIFACTS:-"$ELAB_ROOT/build/quality-$(date -u +%Y%m%dT%H%M%SZ)-$$"}
+exec python3 -B "$ELAB_ROOT/scripts/quality.py" --profile "$ELAB_QUALITY_PROFILE" --artifacts "$ELAB_QUALITY_ARTIFACTS"

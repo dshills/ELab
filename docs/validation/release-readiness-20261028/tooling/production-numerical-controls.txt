@@ -1,0 +1,20 @@
+=== RUN   TestShiftCascadeAndSimultaneousLatch
+    extended_devices_test.go:271: production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)
+--- PASS: TestShiftCascadeAndSimultaneousLatch (5.26s)
+=== RUN   TestHBridgePWMExampleResolvesDriveCoastAndFlyback
+    hbridge_test.go:186: production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)
+--- PASS: TestHBridgePWMExampleResolvesDriveCoastAndFlyback (1.70s)
+=== RUN   TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast
+    hbridge_test.go:229: production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)
+--- PASS: TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast (1.21s)
+=== RUN   TestHBridgeCaptureProjectProvenanceAndProbeSigns
+    hbridge_test.go:287: production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)
+--- PASS: TestHBridgeCaptureProjectProvenanceAndProbeSigns (1.26s)
+=== RUN   TestInductorMixedOutputWorkEnvelope
+    inductor_integration_test.go:129: production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)
+--- PASS: TestInductorMixedOutputWorkEnvelope (1.25s)
+=== RUN   TestInductorCoupledNPNGateCapacitorStepRefinement
+    inductor_mixed_test.go:34: production-speed numerical reference passed; original assertions and 100 ms/512-attempt guards unchanged (child without -race)
+--- PASS: TestInductorCoupledNPNGateCapacitorStepRefinement (2.28s)
+PASS
+ok  	github.com/dshills/elab/workbench	14.272s

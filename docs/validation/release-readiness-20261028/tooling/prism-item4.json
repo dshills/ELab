@@ -1,0 +1,303 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "99946d80031c1d34e59d2cce007fa006",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "7b0be66512205747a9d1ab5681c874b1c521c49a",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 6,
+      "medium": 3,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "4a9111ad3398b3fb",
+      "severity": "medium",
+      "category": "bug",
+      "title": "SIGTERM to the runner orphans the owned process group",
+      "message": "Children run in a new session, so they do not receive the runner's signals. Only timeout and KeyboardInterrupt (SIGINT) clean up the group. If quality.py receives SIGTERM, Python exits without running the cleanup and the child process group keeps running unowned. CI job cancellation and `timeout` both send SIGTERM. This breaks the documented guarantee that interruptions are bounded.",
+      "suggestion": "In main, install a SIGTERM (and SIGHUP) handler that raises KeyboardInterrupt or a custom exception. That way the existing killpg cleanup and 'interrupted' report path run, e.g. `signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))`.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "scripts/quality.py",
+          "lines": {
+            "start": 45,
+            "end": 54
+          }
+        }
+      ],
+      "tags": [
+        "signals",
+        "process-group"
+      ],
+      "evidence": "    except (subprocess.TimeoutExpired, KeyboardInterrupt):\n        try:\n            os.killpg(process.pid, signal.SIGTERM)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "7481bb55ab809763",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "report.json can claim pass before input verification",
+      "message": "run_plan writes report.json with passed=True as soon as all steps succeed. That happens before the source-input recheck and the final report write. The recheck can raise: `git ls-files` can fail with CalledProcessError, which is not caught, or a file read can raise an OSError. If it does, the on-disk report.json still claims passed=true with no inputs_unchanged field. This contradicts the documented rule that input changes make the final report fail.",
+      "suggestion": "Have run_plan not persist passed=True, for example by returning before the final save and letting main set it. Alternatively, write the final passed status only after the input verification succeeds. Also catch subprocess.CalledProcessError alongside OSError.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "scripts/quality.py",
+          "lines": {
+            "start": 134,
+            "end": 135
+          }
+        }
+      ],
+      "tags": [
+        "report-integrity",
+        "location-corrected"
+      ],
+      "evidence": "        result = run_plan(steps, args.artifacts.resolve(), ROOT, env, args.command_timeout)\n        unchanged = before == source_inputs(ROOT)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "d655521915d31eda",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Failure record skipped for common exception types",
+      "message": "Several plausible failures are not in this except list, so they escape without a `failure.json` record in the owned directory and end in a raw traceback. Examples: `KeyError` from `package['source_commit']`, `catalog` entries or `zipped.getinfo`; `TypeError` from a malformed manifest or agent reply; `zipfile.BadZipFile` from a corrupt archive. Such a run leaves an artifacts directory that has no report at all.",
+      "suggestion": "Add `KeyError`, `TypeError` and `zipfile.BadZipFile` to the caught exceptions, or catch `Exception` here and re-raise after recording `failure.json`. Move `import zipfile` to the top of the module so the name is available in `main`.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "scripts/release_qualification.py",
+          "lines": {
+            "start": 250,
+            "end": 250
+          }
+        }
+      ],
+      "tags": [
+        "error-handling"
+      ],
+      "evidence": "    except (ValueError, OSError, subprocess.SubprocessError, KeyboardInterrupt) as error:",
+      "fix": {
+        "before": "    except (ValueError, OSError, subprocess.SubprocessError, KeyboardInterrupt) as error:",
+        "after": "    except (ValueError, OSError, subprocess.SubprocessError, KeyError, TypeError, zipfile.BadZipFile, KeyboardInterrupt) as error:"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f5b428d00a46599c",
+      "severity": "low",
+      "category": "correctness",
+      "title": "ELAB_GOCACHE override silently dropped",
+      "message": "The old check.sh honored `ELAB_GOCACHE`. The new runner hardcodes GOCACHE to build/go-cache and ignores any caller override, which is a regression for users relying on ELAB_GOCACHE. It also defeats the setup-go cache in CI: setup-go caches the default GOCACHE, not build/go-cache.",
+      "suggestion": "Preserve the override: `GOCACHE=os.environ.get('ELAB_GOCACHE', str(ROOT/'build/go-cache'))`.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "scripts/quality.py",
+          "lines": {
+            "start": 127,
+            "end": 127
+          }
+        }
+      ],
+      "tags": [
+        "regression",
+        "env",
+        "location-corrected"
+      ],
+      "evidence": "    env = dict(os.environ, GOWORK='off', GOCACHE=str(ROOT/'build/go-cache'),",
+      "fix": {
+        "before": "    env = dict(os.environ, GOWORK='off', GOCACHE=str(ROOT/'build/go-cache'),",
+        "after": "    env = dict(os.environ, GOWORK='off', GOCACHE=os.environ.get('ELAB_GOCACHE', str(ROOT/'build/go-cache')),"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f06a8ef7d1edbe59",
+      "severity": "low",
+      "category": "correctness",
+      "title": "-mod=readonly lost when GOFLAGS preset",
+      "message": "If the caller or CI has any GOFLAGS set, `-mod=readonly` is not applied. The gate then loses its module-immutability guarantee without any notice.",
+      "suggestion": "Always append `-mod=readonly` to any existing GOFLAGS rather than using setdefault.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/quality.py",
+          "lines": {
+            "start": 130,
+            "end": 130
+          }
+        }
+      ],
+      "tags": [
+        "env",
+        "location-corrected"
+      ],
+      "evidence": "    env.setdefault('GOFLAGS', '-p=1 -mod=readonly')",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "75dad85b9bc539e9",
+      "severity": "low",
+      "category": "bug",
+      "title": "CalledProcessError from git not handled",
+      "message": "`git ls-files` and `git rev-parse` use check_output. When they fail, for example outside a git checkout or with no commits, they raise CalledProcessError. That is not an OSError, so the user gets a raw traceback instead of a clean error.",
+      "suggestion": "Catch subprocess.CalledProcessError as well.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "scripts/quality.py",
+          "lines": {
+            "start": 139,
+            "end": 140
+          }
+        }
+      ],
+      "tags": [
+        "error-handling"
+      ],
+      "evidence": "    except OSError as error:\n        parser.error(str(error))",
+      "fix": {
+        "before": "    except OSError as error:\n        parser.error(str(error))",
+        "after": "    except (OSError, subprocess.CalledProcessError) as error:\n        parser.error(str(error))"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "510ac2f6a50c11c6",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Executable pin derived from the file being verified",
+      "message": "The 'explicit sealed-byte pin' is computed by hashing the same executable that the runtime check is about to verify. That makes the pin self-referential rather than independent. The path is also hard-coded instead of being derived from `package['app']`.",
+      "suggestion": "Take the pin from the manifest that `read_package` already verified, e.g. `package['files'][package['app']+'/Contents/MacOS/ELab']['sha256']`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/release_qualification.py",
+          "lines": {
+            "start": 185,
+            "end": 185
+          }
+        }
+      ],
+      "tags": [
+        "integrity",
+        "location-corrected"
+      ],
+      "evidence": "            app_executable_sha256=sha(args.package/'ELab.app/Contents/MacOS/ELab'),",
+      "fix": {
+        "before": "            app_executable_sha256=sha(args.package/'ELab.app/Contents/MacOS/ELab'),",
+        "after": "            app_executable_sha256=package['files']['ELab.app/Contents/MacOS/ELab']['sha256'],"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "62bcbc904834c7b6",
+      "severity": "low",
+      "category": "bug",
+      "title": "Writing failure.json can mask the original error",
+      "message": "The failure handler opens `failure.json` with mode 'x'. If writing it raises, for example because the file already exists or the disk is full, the new exception replaces the original error. The user then sees a confusing `FileExistsError` or `OSError` in place of the real cause, and the 130 exit code for an interrupt is lost.",
+      "suggestion": "Wrap the `failure.json` write in its own try/except that ignores `OSError`, so the original error is still reported.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "scripts/release_qualification.py",
+          "lines": {
+            "start": 252,
+            "end": 254
+          }
+        }
+      ],
+      "tags": [
+        "error-handling"
+      ],
+      "evidence": "            with (owned/'failure.json').open('x') as stream:",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "96f35d5dc87a4446",
+      "severity": "low",
+      "category": "testing",
+      "title": "Archive test does not cover the 'changed package' case",
+      "message": "The test name says it covers both an unqualified package and a changed package. It only exercises one case: a minimal qualification `{passed: True}` against an unmodified package. That case presumably fails because required qualification fields are missing. No assertion checks that a fully valid qualification is rejected when package bytes change after qualification. A regression in the package re-verification step would go unnoticed.\n\n`data` is also unpacked but never used.",
+      "suggestion": "Split the test into separate subtests:\n- (a) a qualification record that is missing or failed;\n- (b) a valid qualification record matching the manifest, followed by mutating `package/'elab-agent'` before calling `archive`.\n\nIn each case, assert that the archive and artifacts were not created.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "scripts/test_release_qualification.py",
+          "lines": {
+            "start": 64,
+            "end": 72
+          }
+        }
+      ],
+      "tags": [
+        "test-coverage"
+      ],
+      "evidence": "            qualification.write_text(json.dumps(dict(passed=True)))\n            args = argparse.Namespace(package=package, artifacts=root/'owned', archive=root/'release.zip', qualification=qualification)\n            with self.assertRaises(ValueError):\n                release.archive(args)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 71094,
+    "totalMs": 31734
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 9,
+    "bytes": 44618,
+    "chunks": 3,
+    "llmCalls": 3,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 24867,
+        "output": 7379,
+        "costUSD": 0.247048
+      }
+    ],
+    "widenedFiles": 1,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

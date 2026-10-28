@@ -1,0 +1,50 @@
+?   	github.com/dshills/elab/build/electronics-next-five	[no test files]
+?   	github.com/dshills/elab/cmd/elab-agent	[no test files]
+ok  	github.com/dshills/elab/cmd/elab-conformance	3.362s
+?   	github.com/dshills/elab/cmd/elab-ui-audit	[no test files]
+?   	github.com/dshills/elab/internal/audioplay	[no test files]
+--- FAIL: TestAnalysisBoundariesInProcessAndSocket (33.91s)
+    --- FAIL: TestAnalysisBoundariesInProcessAndSocket/socket (0.17s)
+        analysis_boundaries_test.go:14: 1 resistors: ordinary agent stopped before endpoint: exit status 1
+--- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures (0.96s)
+    --- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures/capacity-100-nodes (0.14s)
+        capacity_performance_test.go:118: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures/capacity-64-parts (0.01s)
+        capacity_performance_test.go:118: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestCapacityPerformanceMeasuresFullSizeChangedCaptures/capacity-rc-mosfet (0.01s)
+        capacity_performance_test.go:118: ordinary agent stopped before endpoint: exit status 1
+--- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures (1.03s)
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/rl (0.20s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/rlc (0.01s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/flyback (0.01s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+    --- FAIL: TestInductorPerformanceFixturesUseChangedRunsAndFullCaptures/npn-coil (0.01s)
+        performance_test.go:124: ordinary agent stopped before endpoint: exit status 1
+FAIL
+FAIL	github.com/dshills/elab/internal/conformance	127.364s
+--- FAIL: TestCUPSBackendAgainstIsolatedIPPSpooler (0.00s)
+    system_darwin_test.go:30: listen unix /tmp/elab-cups-3862357318/cups.sock: bind: operation not permitted
+FAIL
+FAIL	github.com/dshills/elab/internal/printspool	0.149s
+ok  	github.com/dshills/elab/internal/schematicpdf	1.166s
+ok  	github.com/dshills/elab/internal/uiaudit	1.426s
+--- FAIL: TestAnalysisPagesSocketAndStdioParity (4.78s)
+    analysis_pages_test.go:58: listen unix /tmp/elab-api-259663488/api.sock: bind: operation not permitted
+--- FAIL: TestCapacityNoiseSocketMatchesDirectSnapshot (0.02s)
+    noise_capacity_test.go:45: listen unix /tmp/elab-api-1738956702/api.sock: bind: operation not permitted
+--- FAIL: TestSocketShutdownDrainsAdmittedReplyBeforeClosingConnections (0.00s)
+    socket_shutdown_test.go:39: listen unix /tmp/elab-api-25248743/api.sock: bind: operation not permitted
+--- FAIL: TestSocketForcedCloseStillReleasesIdleConnections (0.00s)
+    socket_shutdown_test.go:84: listen unix /tmp/elab-api-991685006/api.sock: bind: operation not permitted
+--- FAIL: TestStdioAndSocketShareCommands (0.00s)
+    transport_test.go:33: listen unix /tmp/elab-api-1179106264/api.sock: bind: operation not permitted
+--- FAIL: TestSocketRefusesInvalidTokenAndExistingDescriptor (0.00s)
+    transport_test.go:77: listen unix /tmp/elab-api-168812843/api.sock: bind: operation not permitted
+--- FAIL: TestEventObservationOverSocketDoesNotBlockControlAndStdioIdleParity (0.00s)
+    transport_test.go:113: listen unix /tmp/elab-api-1684073941/api.sock: bind: operation not permitted
+FAIL
+FAIL	github.com/dshills/elab/transport	5.008s
+ok  	github.com/dshills/elab/workbench	331.182s
+FAIL
