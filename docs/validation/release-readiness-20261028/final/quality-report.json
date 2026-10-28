@@ -1,0 +1,158 @@
+{
+  "passed": true,
+  "gates_passed": true,
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "steps": [
+    {
+      "name": "sdk",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/prepare-vellum.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 1.145
+    },
+    {
+      "name": "python",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 2.33
+    },
+    {
+      "name": "prd",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "inventory",
+      "command": [
+        "go",
+        "run",
+        "./cmd/elab-ui-audit",
+        "--verify",
+        "research/13-native-command-inventory.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.532
+    },
+    {
+      "name": "portable-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 572.368
+    },
+    {
+      "name": "portable-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 4.784
+    },
+    {
+      "name": "lint",
+      "command": [
+        "scripts/lint.sh"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 17.482
+    },
+    {
+      "name": "desktop-race",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "-race",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 264.701
+    },
+    {
+      "name": "desktop-vet",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.799
+    },
+    {
+      "name": "rendered-race",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 545.479
+    },
+    {
+      "name": "rendered-vet",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 2.255
+    }
+  ],
+  "profile": "native",
+  "source_commit": "93776648ef85286de6b975488a938522796a2dd7",
+  "inputs_unchanged": true
+}

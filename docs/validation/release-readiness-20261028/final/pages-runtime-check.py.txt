@@ -1,0 +1,42 @@
+import gzip,json,subprocess,sys,time
+from pathlib import Path
+r=Path.cwd();b=r/'build/release-readiness-20261028/final-pages';b.mkdir(exist_ok=False);sys.path.insert(0,str(r/'scripts'));from acceptance_client import AcceptanceClient
+agent=r/'build/ELab-0.200.3-281-Readiness/elab-agent';native=r/'build/ELab-0.200.3-281-Readiness/ELab.app/Contents/MacOS/ELab';reports=[]
+for mode in ['stdio','socket','native']:
+ out=b/('pages-'+mode);out.mkdir(exist_ok=False);fixture=out/'capacity.elab';fixture.write_bytes(gzip.decompress((r/'workbench/testdata/noise-capacity.elab.gz').read_bytes()));endpoint=None;app=None;log=None
+ try:
+  if mode!='stdio':
+   endpoint=out/'endpoint.json';argv=[str(agent),'--listen',str(endpoint)]
+   if mode=='native':argv=['sandbox-exec','-p','(version 1)(allow default)(deny file-write* (subpath '+json.dumps(str(Path.home()/'Library/Cogent Core'))+'))',str(native),'--agent-endpoint',str(endpoint),'--no-recovery','--appearance-file',str(out/'appearance.json')]
+   log=(out/'process.txt').open('w');app=subprocess.Popen(argv,stdout=log,stderr=subprocess.STDOUT);end=time.monotonic()+8
+   while not endpoint.exists():
+    if app.poll() is not None or time.monotonic()>end:raise RuntimeError('owned endpoint not ready: PID '+str(app.pid))
+    time.sleep(.02)
+  c=AcceptanceClient(agent,endpoint)
+  try:
+   c.ask('project.load',dict(path=str(fixture)),mutate=True);before=c.ask('simulation.wait');catalog=c.ask('analysis.list');entry=catalog['analyses'][0];points=[];offset=0;maxbytes=0
+   while True:
+    p=c.ask('analysis.page',dict(kind=entry['kind'],id=entry['id'],document_generation=catalog['document_generation'],offset=offset,limit=50));points+=p.get('points',[]);maxbytes=max(maxbytes,len(json.dumps(p).encode()))
+    if p['done']:break
+    assert p['next_offset']>offset;offset=p['next_offset']
+   assert points==before['dc_sweep']['result']['points'] and maxbytes<512*1024
+   after=c.ask('analysis.list');assert catalog==after
+   c.ask('project.clear',dict(discard_changes=True),mutate=True)
+   c.ask('app.close',dict(discard_changes=True),mutate=True)
+  finally:c.close()
+  if app is not None:assert app.wait(timeout=15)==0
+  reports.append(dict(mode=mode,passed=True,rows=len(points),maximum_page_bytes=maxbytes,agent_exit_code=c.process.returncode,host_exit_code=app.returncode if app else None))
+ finally:
+  if app is not None and app.poll() is None:
+   try:
+    if endpoint.exists():
+     clean=AcceptanceClient(agent,endpoint)
+     try:clean.ask('app.close',dict(discard_changes=True),mutate=True)
+     finally:clean.close()
+     app.wait(timeout=15)
+   finally:
+    if app.poll() is None:
+     app.terminate()
+     app.wait(timeout=15)
+  if log:log.close()
+(b/'pages-runtime.json').write_text(json.dumps(reports,indent=2)+'\n');print(json.dumps(reports))

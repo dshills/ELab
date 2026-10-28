@@ -12,11 +12,21 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
-Subsequent source repairs address capacity noise-capture reopening, large agent
-responses and idle snapshot polling. See the [project architecture and code review](research/126-project-code-and-architecture-review.md).
-These repairs are packaged in [ELab 0.200.1 /279](build/ELab-0.200.1-279-Reliability/ELab.app); [package checks](docs/validation/release-readiness-20261028/package/README.md).
+**Current candidate: [ELab 0.200.3 /281](build/ELab-0.200.3-281-Readiness/ELab.app)**,
+with **87 examples**, **61 component kinds** and **222 shared commands**.
+It includes capacity noise-capture/agent-response repairs, bounded
+[analysis queries](docs/analysis-pages.md), cached owned compilation and grouped
+analysis-job storage behind the same user/agent command service. See the
+[release-readiness evidence](docs/validation/release-readiness-20261028/README.md)
+and [architecture guide](docs/architecture.md). The candidate remains unsigned/ad-hoc;
+original native-input, participant, clean-account and public-signing gates stay separate.
 
-**Current electronics candidate: [ELab 0.200.0 /278](build/ELab-0.200.0-278-Electronics/ELab.app)**
+The preserved [0.200.1 /279 repair package](build/ELab-0.200.1-279-Reliability/ELab.app)
+and [0.200.2 /280 tooling candidate](build/ELab-0.200.2-280-Readiness/ELab.app)
+remain unchanged. The [project review](research/126-project-code-and-architecture-review.md)
+records the original defects and their reproduction.
+
+The preserved [0.200.0 /278 electronics candidate](build/ELab-0.200.0-278-Electronics/ELab.app)
 adds five capabilities, with the same validated commands available to users and
 AI agents:
 
@@ -32,7 +42,7 @@ AI agents:
 - [SCR/TRIAC control](docs/thyristors.md): gate triggering, actual-current latching,
   holding-current release and low-voltage AC commutation examples.
 
-The matching app/agent package contains **87 examples**, **61 component kinds**
+The /278 matching app/agent package contains **87 examples**, **61 component kinds**
 and **220 shared commands**. Search Examples for RC block, self-heating, noise,
 photodiode, SCR or TRIAC. Electrical references, user/agent parity, complete
 Anthropic Claude Opus 5.5 Prism reviews and exact package checks are recorded in
