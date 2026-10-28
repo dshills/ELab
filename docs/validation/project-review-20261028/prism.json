@@ -1,0 +1,259 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "4695a6139d46d63a60580cf4ddc9d40b",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "4952e76d9bc35a2e0e1dd3ed9d034e8d20d26bc9",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 2,
+      "medium": 4,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "fadb540b21a78e75",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Cached snapshot may miss changes that don't bump Revision",
+      "message": "The frame loop now reuses a cached snapshot until `Revision` changes. Exit readiness, Closed status and any other state that can change without bumping the session revision would then go unseen. For example, background job completion or endpoint retirement could leave `ReadyToExit()` stale and the window would never close. This holds only if `SnapshotIfChanged` keys solely on `Revision`.",
+      "suggestion": "Make sure every field the loop reads (`ReadyToExit`, Closed, job status) changes the revision or a change token that `SnapshotIfChanged` uses. Otherwise, take a fresh snapshot periodically or on shutdown-related events.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "desktop/main.go",
+          "lines": {
+            "start": 153,
+            "end": 155
+          }
+        }
+      ],
+      "tags": [
+        "staleness",
+        "shutdown"
+      ],
+      "evidence": "\t\t\t\t} else if next, changed := service.SnapshotIfChanged(state.Revision); changed {\n\t\t\t\t\tstate = next\n\t\t\t\t}\n\t\t\t\tif state.ReadyToExit() {",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "f6d3ab4191304e8e",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "Contributor validation narrowed to RMS only",
+      "message": "Previously the whole `Contributors` slice was compared with `reflect.DeepEqual`. Now only each contributor's `RMS` slice is compared. The earlier loop checks ID, ComponentID, Mechanism, Density and Unit against the drives. Any other field that `summarizeNoise` derives (for example a ranking, share or peak) is no longer validated, so a tampered or stale record could pass. The loop also assumes `expected` and `r` have the same number of contributors, with no length check.",
+      "suggestion": "First check `len(expected.Noise.Contributors) == len(r.Noise.Contributors)`. Then compare each contributor exactly on every non-float field: copy both structs, set `RMS` to nil on the copies, and `DeepEqual` them. Compare only the float fields with the roundoff tolerance.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "workbench/noise.go",
+          "lines": {
+            "start": 543,
+            "end": 547
+          }
+        }
+      ],
+      "tags": [
+        "validation",
+        "regression"
+      ],
+      "evidence": "\tfor k, c := range expected.Noise.Contributors {\n\t\tif !noiseRoundoffSlice(c.RMS, r.Noise.Contributors[k].RMS) {\n\t\t\treturn fmt.Errorf(\"noise contributor integral differs from samples\")\n\t\t}\n\t}",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "ad8f3dd0905ca26b",
+      "severity": "medium",
+      "category": "testing",
+      "title": "No baseline assertion that unmodified record validates",
+      "message": "The test only checks that `validateNoiseRecord` returns an error for modified records. It never checks that the unmodified record passes. A validator that always returns an error (for example, because the plan does not match) would make both negative checks pass. The rejections would then prove nothing about detecting material changes.",
+      "suggestion": "Before mutating, assert that validation of an unmodified clone succeeds, e.g. `if err := validateNoiseRecord(plan, cloneSweepResult(state.DCSweep.Result)); err != nil { t.Fatal(err) }`.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "workbench/noise_capacity_test.go",
+          "lines": {
+            "start": 51,
+            "end": 59
+          }
+        }
+      ],
+      "tags": [
+        "test-coverage",
+        "negative-test"
+      ],
+      "evidence": "\tresult := cloneSweepResult(state.DCSweep.Result)\n\tresult.Points[0].Values[0] *= 1.001\n\tif validateNoiseRecord(plan, result) == nil {",
+      "fix": {
+        "before": "\tresult := cloneSweepResult(state.DCSweep.Result)\n\tresult.Points[0].Values[0] *= 1.001\n\tif validateNoiseRecord(plan, result) == nil {",
+        "after": "\tif err := validateNoiseRecord(plan, cloneSweepResult(state.DCSweep.Result)); err != nil {\n\t\tt.Fatal(\"unmodified capture rejected\", err)\n\t}\n\tresult := cloneSweepResult(state.DCSweep.Result)\n\tresult.Points[0].Values[0] *= 1.001\n\tif validateNoiseRecord(plan, result) == nil {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "bff96d1b2bff2589",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Possible index-out-of-range panic building verification preview",
+      "message": "The verification preview indexes `record.rows[len(record.rows)-1]` and `record.metadata.Statistics[i]` without bounds checks. A record with probes but no captured rows panics with index -1. Statistics or Values shorter than Probes also panic. This runs while `s.mu` is held, inside every Snapshot/poll call. A panic here crashes the presentation path, and if it is recovered upstream it can leave the mutex locked.",
+      "suggestion": "Before building readings, check that `len(record.rows) \u003e 0`, `i \u003c len(record.metadata.Statistics)` and `i \u003c len(lastRow.Values)`. Skip the reading or leave `Value` at zero when the data is missing.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/snapshot.go",
+          "lines": {
+            "start": 219,
+            "end": 222
+          }
+        }
+      ],
+      "tags": [
+        "panic",
+        "bounds"
+      ],
+      "evidence": "preview.Readings = append(preview.Readings, VerificationReading{Probe: probe, Value: record.rows[len(record.rows)-1].Values[i], Minimum: stat.Minimum, Maximum: stat.Maximum})",
+      "fix": {
+        "before": "for i, probe := range record.metadata.Probes {\n\t\t\tstat := record.metadata.Statistics[i]",
+        "after": "for i, probe := range record.metadata.Probes {\n\t\t\tif len(record.rows) == 0 || i \u003e= len(record.metadata.Statistics) || i \u003e= len(record.rows[len(record.rows)-1].Values) {\n\t\t\t\tbreak\n\t\t\t}\n\t\t\tstat := record.metadata.Statistics[i]"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "3a3ecea6c05defc5",
+      "severity": "low",
+      "category": "testing",
+      "title": "Multiplicative perturbation is a no-op for zero values",
+      "message": "The test perturbs values multiplicatively. If `Points[0].Values[0]` or `Contributors[0].RMS[0]` is 0 in the fixture (common at a sweep start point), the value does not change. The test would then fail spuriously, and the failure would be misleading.",
+      "suggestion": "Assert that the value is non-zero before perturbing it, or use an additive perturbation that is significant relative to the record's tolerance.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/noise_capacity_test.go",
+          "lines": {
+            "start": 52,
+            "end": 57
+          }
+        }
+      ],
+      "tags": [
+        "fragile-test"
+      ],
+      "evidence": "\tresult.Noise.Contributors[0].RMS[0] *= 1.001",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "701041367d1dc492",
+      "severity": "low",
+      "category": "testing",
+      "title": "Benchmark ignores Wait result and measures an empty state",
+      "message": "The benchmark ignores whatever `s.Wait` returns. If the service never settles or the wait fails, the benchmark still runs. `revision` may then be stale, and the \"unchanged\" sub-benchmark would time full rebuilds instead of idle polls. The benchmark also never loads an example, so \"full\" measures an empty snapshot. Because of that it doesn't show a realistic cost gap between the two paths.",
+      "suggestion": "Check the result of `Wait`, for example `if err := s.Wait(b.Context()); err != nil { b.Fatal(err) }`. Load and pause an example circuit, as the test does, before reading the revision. Optionally assert in the \"unchanged\" loop that `changed` is false.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/snapshot_poll_test.go",
+          "lines": {
+            "start": 34,
+            "end": 35
+          }
+        }
+      ],
+      "tags": [
+        "benchmark",
+        "error-handling"
+      ],
+      "evidence": "\ts.Wait(b.Context())\n\trevision := s.Snapshot().Revision",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 60577,
+    "totalMs": 22392
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 10,
+    "bytes": 76502,
+    "chunks": 5,
+    "llmCalls": 5,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 46828,
+        "output": 5559,
+        "costUSD": 0.298492
+      }
+    ],
+    "widenedFiles": 3,
+    "excluded": [
+      {
+        "path": "workbench/testdata/noise-capacity.elab.gz",
+        "reason": "no text changes (rename, mode change or binary)"
+      }
+    ],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "61f9f3e8fb168557",
+        "severity": "low",
+        "category": "maintainability",
+        "title": "Hard-coded limit in error message",
+        "message": "The \"8 MiB\" error message is hard-coded separately from `MaxResponseBytes`. It will drift the next time the limit changes, as the 1 MiB text nearly did here.",
+        "suggestion": "Build the message from the constant, e.g. `fmt.Sprintf(\"response exceeds %d MiB\", MaxResponseBytes/(1024*1024))`.",
+        "confidence": 0.4,
+        "locations": [
+          {
+            "path": "transport/transport.go",
+            "lines": {
+              "start": 179,
+              "end": 179
+            }
+          }
+        ],
+        "tags": [
+          "constants"
+        ],
+        "evidence": "Error: \u0026workbench.Failure{Code: \"response-too-large\", Message: \"response exceeds 8 MiB\"}})",
+        "fix": {
+          "before": "Error: \u0026workbench.Failure{Code: \"response-too-large\", Message: \"response exceeds 8 MiB\"}})",
+          "after": "Error: \u0026workbench.Failure{Code: \"response-too-large\", Message: fmt.Sprintf(\"response exceeds %d MiB\", MaxResponseBytes/(1024*1024))}})"
+        },
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      },
+      "reason": "quoted evidence not found in transport/transport.go"
+    }
+  ],
+  "suppressed": []
+}

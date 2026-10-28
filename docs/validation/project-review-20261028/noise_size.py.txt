@@ -1,0 +1,20 @@
+from pathlib import Path
+import sys,json,copy,time
+r=Path.cwd();out=r/'build/project-review-20261028';sys.path.insert(0,str(r/'scripts'));from acceptance_client import AcceptanceClient
+p=json.loads((r/'build/ELab-0.200.0-278-Electronics/Examples/noise-rc.elab').read_text());p.pop('example_id',None);base=next(c for c in p['graph']['components'] if c['id']=='R1')
+for n in range(2,63):
+ c=copy.deepcopy(base);c.update(id=f'R{n}',position=dict(x=(n%8)*200,y=400+(n//8)*150));p['graph']['components'].append(c)
+ p['graph']['wires'] += [dict(id=f'WA{n}',**{'from':'V1.positive','to':f'R{n}.1'},connected=True),dict(id=f'WB{n}',**{'from':f'R{n}.2','to':'C1.1'},connected=True)]
+path=out/'capacity-noise.elab';path.write_text(json.dumps(p));c=AcceptanceClient(r/'build/ELab-0.200.0-278-Electronics/elab-agent')
+try:
+ c.ask('project.load',dict(path=str(path)),mutate=True);s=c.ask('simulation.wait');assert not s['diagnostics'],s['diagnostics']
+ c.ask('sweep.start',dict(settings=dict(component_id='V1',parameter='noise',spacing='logarithmic',start='1 Hz',stop='100 kHz',points=201,probe_ids=['v:C1','v:R1','v:R2'])),mutate=True)
+ end=time.monotonic()+40
+ while True:
+  s=c.ask('project.inspect');ops=s['dc_sweep']['operations']
+  if ops and ops[-1]['status'] in ('completed','failed','canceled'):break
+  assert time.monotonic()<end;time.sleep(.02)
+ print(ops)
+ encoded=json.dumps(s,separators=(',',':')).encode();print('snapshot_bytes',len(encoded));(out/'noise-size.json').write_text(json.dumps(dict(snapshot_bytes=len(encoded),status=ops[-1]['status'],simulated_components=s['simulated_component_count']),indent=2))
+ c.ask('project.save',dict(path=str(out/'capacity-noise-captured.elab')),mutate=True)
+finally:c.close()

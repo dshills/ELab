@@ -423,6 +423,32 @@ func cloneNoiseSummary(n *NoiseSummary) *NoiseSummary {
 	}
 	return &out
 }
+
+// Recomputed derived quantities may differ by a few binary64 rounding units
+// after storage or compiler contraction. This bound has no absolute volt floor,
+// so tiny noise values still receive a tight relative check.
+func noiseRoundoffEqual(a, b float64) bool {
+	if !finite(a) || !finite(b) || a < 0 || b < 0 {
+		return false
+	}
+	if a == b {
+		return true
+	}
+	scale := math.Max(a, b)
+	return math.Abs(a-b) <= 32*(scale-math.Nextafter(scale, 0))
+}
+func noiseRoundoffSlice(a, b []float64) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if !noiseRoundoffEqual(a[i], b[i]) {
+			return false
+		}
+	}
+	return true
+}
+
 func validateNoiseRecord(plan sweepPlan, r *SweepResult) error {
 	if !IsNoiseSweep(plan.settings.Parameter) {
 		if r.Noise != nil {
@@ -495,7 +521,7 @@ func validateNoiseRecord(plan sweepPlan, r *SweepResult) error {
 				}
 				sum += v[j]
 			}
-			if density != math.Sqrt(sum) {
+			if !noiseRoundoffEqual(density, math.Sqrt(sum)) {
 				return fmt.Errorf("noise total differs from contributions")
 			}
 			g := q.Gain[j]
@@ -508,15 +534,29 @@ func validateNoiseRecord(plan sweepPlan, r *SweepResult) error {
 			if defined {
 				want = density / gain
 			}
-			if !finite(want) || q.InputDensity[j] != want {
+			if !finite(want) || !noiseRoundoffEqual(q.InputDensity[j], want) {
 				return fmt.Errorf("input-referred density differs")
 			}
 		}
 	}
 	expected := cloneSweepResult(r)
 	summarizeNoise(expected)
-	if !reflect.DeepEqual(expected.Noise.OutputRMS, r.Noise.OutputRMS) || !reflect.DeepEqual(expected.Noise.InputRMS, r.Noise.InputRMS) || !reflect.DeepEqual(expected.Noise.InputDefined, r.Noise.InputDefined) || !reflect.DeepEqual(expected.Noise.Contributors, r.Noise.Contributors) {
+	if !noiseRoundoffSlice(expected.Noise.OutputRMS, r.Noise.OutputRMS) || !noiseRoundoffSlice(expected.Noise.InputRMS, r.Noise.InputRMS) || !reflect.DeepEqual(expected.Noise.InputDefined, r.Noise.InputDefined) {
 		return fmt.Errorf("noise integrals differ from samples")
+	}
+	if len(expected.Noise.Contributors) != len(r.Noise.Contributors) {
+		return fmt.Errorf("noise contributor count differs")
+	}
+	for k, c := range expected.Noise.Contributors {
+		other := r.Noise.Contributors[k]
+		left, right := c, other
+		left.RMS, right.RMS = nil, nil
+		if !reflect.DeepEqual(left, right) {
+			return fmt.Errorf("noise contributor metadata differs")
+		}
+		if !noiseRoundoffSlice(c.RMS, r.Noise.Contributors[k].RMS) {
+			return fmt.Errorf("noise contributor integral differs from samples")
+		}
 	}
 	return nil
 }

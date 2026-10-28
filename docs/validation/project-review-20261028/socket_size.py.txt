@@ -1,0 +1,33 @@
+from pathlib import Path
+import subprocess,json,time,socket
+r=Path.cwd();out=r/'build/project-review-20261028';endpoint=out/'endpoint.json';agent=r/'build/ELab-0.200.0-278-Electronics/elab-agent';log=(out/'socket-server.txt').open('w');p=subprocess.Popen([str(agent),'--listen',str(endpoint)],stdout=log,stderr=log)
+seq=0
+try:
+ end=time.monotonic()+8
+ while not endpoint.exists():
+  assert p.poll() is None and time.monotonic()<end;time.sleep(.02)
+ e=json.loads(endpoint.read_text())
+ def ask(command,params=None,**kwargs):
+  global seq
+  seq+=1;q=dict(version=1,id=str(seq),command=command,params=params or {},**kwargs)
+  with socket.socket(socket.AF_UNIX,socket.SOCK_STREAM) as s:
+   s.settimeout(10);s.connect(e['socket']);s.sendall((e['token']+'\n'+json.dumps(q)+'\n').encode());data=b''
+   while b'\n' not in data:
+    b=s.recv(65536)
+    if not b:break
+    data+=b
+  return json.loads(data)
+ before=ask('project.inspect')['result'];loaded=ask('project.load',dict(path=str(out/'capacity-noise.elab')),expected_command_revision=before['command_revision'],expected_document_generation=before['document']['generation'],key='load')
+ state=loaded['result'];started=ask('sweep.start',dict(settings=dict(component_id='V1',parameter='noise',spacing='logarithmic',start='1 Hz',stop='100 kHz',points=201,probe_ids=['v:C1','v:R1','v:R2'])),expected_command_revision=state['command_revision'],expected_document_generation=state['document']['generation'],key='sweep')
+ end=time.monotonic()+40
+ while True:
+  inspect=ask('project.inspect')
+  if inspect.get('error'):break
+  assert time.monotonic()<end;time.sleep(.02)
+ report=dict(load_error=loaded.get('error'),inspect_error=inspect.get('error'),revision=inspect['revision']);print(json.dumps(report));(out/'socket-size.json').write_text(json.dumps(report,indent=2))
+ clear=ask('project.clear',dict(discard_changes=True),expected_revision=inspect['revision'],key='clear');assert not clear.get('error'),clear
+ state=clear['result'];ask('app.close',dict(discard_changes=True),expected_command_revision=state['command_revision'],expected_document_generation=state['document']['generation'],key='close');p.wait(timeout=10);assert p.returncode==0
+finally:
+ if p.poll() is None:p.terminate();p.wait(timeout=5)
+ log.close()
+ (out/'socket-exit.json').write_text(json.dumps(dict(exit_code=p.returncode,endpoint_exists=endpoint.exists())))

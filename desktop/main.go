@@ -132,6 +132,8 @@ func runNative() (runErr error) {
 		var menusInstalled bool
 		var last, lastCommand uint64
 		var lastFrame, lastMotion time.Time
+		var state workbench.Snapshot
+		var haveState bool
 		for {
 			select {
 			case <-a.Context().Done():
@@ -145,7 +147,12 @@ func runNative() (runErr error) {
 						}
 					}
 				}
-				state := service.Snapshot()
+				if !haveState {
+					state = service.Snapshot()
+					haveState = true
+				} else if next, changed := service.SnapshotIfChanged(state.Revision); changed {
+					state = next
+				}
 				if state.ReadyToExit() {
 					a.Close()
 					return

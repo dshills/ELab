@@ -7,7 +7,12 @@ revision guards, stale-source handling and corresponding UI actions. The
 qualified 0.195.9 /270 package predates these additions; discover the command
 catalog from the actual running build rather than assuming availability.
 
-The /277 electronics candidate exposes 58 component kinds and 209 commands.
+The /278 electronics candidate exposes 61 physical component kinds and 220 commands.
+Its added block, thermal, photodiode and thyristor commands are documented in the
+[circuit-block](circuit-blocks.md), [temperature](temperature.md),
+[photodiode](photodiodes.md) and [thyristor](thyristors.md) guides.
+Noise uses the existing sweep commands with `parameter: "noise"`; see
+[noise analysis](noise-analysis.md).
 Use `passive.configure`, `current-source.configure`, `load.configure` and
 `jfet.configure` for its saved electrical settings. Loop return ratio uses the
 existing sweep commands with `parameter: "loop-frequency"`; captured measurements
@@ -37,7 +42,7 @@ qualifying text after the command name, especially around file publication. Use
 actual IDs/parameter schemas from the catalog and honor those conditions; do not
 dispatch a whole hint string. [Current lifecycle review](../research/40-background-job-coverage.md).
 
-Socket responses are bounded to 1 MiB; an oversized result returns `response-too-large` explicitly.
+Socket responses are bounded to 8 MiB; an oversized result returns `response-too-large` explicitly.
 
 Revision is a session admission version and changes on accepted mutations and solver result publication. `electrical_revision` changes on circuit configuration edits. Live switch/wiper input events preserve it and advance `actuation_revision`; that revision also guards Verify source association. `run_id` identifies calculation attempts. A selection or view change preserves the electrical revision and run. Live transient samples also change the session revision; `command_revision` changes only for admitted commands, allowing clients to distinguish edits from clock updates. The full-state guard requires the latest session revision. The optional command guard instead matches `command_revision`, which changes on every admitted mutation but remains stable during solver publication. It therefore detects intervening actors without clock-only conflicts. If both guards are supplied, both must match. Conflict/retry rules remain explicit. A `conflict` response is an explicit refusal; re-inspect before deciding how to proceed. `capabilities.list.mutation_preconditions` advertises the available guard fields and meanings; older versions only advertise the full-state guard. Native controls use the command guard and do not automatically resubmit after an intervening command conflict.
 

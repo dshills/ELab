@@ -21,7 +21,9 @@ import (
 )
 
 const MaxRequestBytes = 32 * 1024
-const MaxResponseBytes = 1024 * 1024
+
+// Full supported noise sweeps exceed 1 MiB; retain a finite envelope for snapshots.
+const MaxResponseBytes = 8 * 1024 * 1024
 
 type Endpoint struct {
 	Version int    `json:"version"`
@@ -174,7 +176,7 @@ func (server *Server) serveConnection(ctx context.Context, s *workbench.Service,
 	if err == nil && len(encoded) <= MaxResponseBytes {
 		c.Write(append(encoded, '\n'))
 	} else {
-		json.NewEncoder(c).Encode(workbench.Response{Version: 1, ID: result.ID, Revision: result.Revision, Error: &workbench.Failure{Code: "response-too-large", Message: "response exceeds 1 MiB"}})
+		json.NewEncoder(c).Encode(workbench.Response{Version: 1, ID: result.ID, Revision: result.Revision, Error: &workbench.Failure{Code: "response-too-large", Message: "response exceeds 8 MiB"}})
 	}
 }
 

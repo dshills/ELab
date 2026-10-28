@@ -1,0 +1,114 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "eee059a64b32001a727b76c8b4dc3c79",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "4952e76d9bc35a2e0e1dd3ed9d034e8d20d26bc9",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 2,
+      "medium": 0,
+      "high": 0
+    },
+    "highestSeverity": "low"
+  },
+  "findings": [
+    {
+      "id": "32932e080afb2811",
+      "severity": "low",
+      "category": "testing",
+      "title": "Validation plan no longer derived from the saved capture settings",
+      "message": "The test now builds the plan from hand-written settings instead of the settings saved in the capture (`state.DCSweep.Settings`). The capture is therefore validated against a plan that may not match the one it was produced with. The test no longer checks that the saved settings and the recorded result agree. It could pass while the real load path (which validates against the stored settings) rejects or accepts the record differently.",
+      "suggestion": "Build the plan from `state.DCSweep.Settings`, as the load path does. Alternatively, assert that `cfg` equals the stored settings, so the test exercises the same plan the loader uses.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "workbench/noise_capacity_test.go",
+          "lines": {
+            "start": 47,
+            "end": 49
+          }
+        }
+      ],
+      "tags": [
+        "test-fidelity"
+      ],
+      "evidence": "\tcfg := noiseSettings(\"V1\", \"v:C1\")\n\tcfg.ProbeIDs = []string{\"v:C1\", \"v:R1\", \"v:R2\"}\n\tplan, err := newSweepPlan(Graph{state.Components, state.Wires}, cfg)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "47caf345840b456b",
+      "severity": "low",
+      "category": "testing",
+      "title": "Service closed twice (explicit Close plus deferred Close)",
+      "message": "The test now calls `s.Close()` explicitly. The earlier `defer s.Close()` will then run `Close` a second time. If `Close` is not idempotent (for example, it closes a channel or cancels a worker twice), the test panics or hangs during cleanup.",
+      "suggestion": "Make `Close` idempotent, for example with `sync.Once`, and add a test that covers double close. Otherwise, remove the deferred close or guard it.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/snapshot_poll_test.go",
+          "lines": {
+            "start": 29,
+            "end": 32
+          }
+        }
+      ],
+      "tags": [
+        "lifecycle",
+        "double-close"
+      ],
+      "evidence": "\ts.Close()\n\tclosed, changed := s.SnapshotIfChanged(revision)",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 11960,
+    "totalMs": 11965
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 3,
+    "bytes": 8082,
+    "chunks": 1,
+    "llmCalls": 1,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 6426,
+        "output": 1168,
+        "costUSD": 0.049064
+      }
+    ],
+    "widenedFiles": 3,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}
