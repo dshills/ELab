@@ -1,0 +1,58 @@
+import json,subprocess,sys,time
+from pathlib import Path
+root=Path.cwd();sys.path.insert(0,str(root/'scripts'));from acceptance_client import AcceptanceClient
+package=root/'build/ELab-0.200.4-282-Spectrum';agent=package/'elab-agent';native=package/'ELab.app/Contents/MacOS/ELab'
+base=Path('/private/tmp/elab-spectrum-live-282');base.mkdir(exist_ok=False);reports=[];reference=None
+for mode in ['stdio','socket','native']:
+ out=base/mode;out.mkdir();endpoint=None;host=None;log=None;client=None
+ try:
+  if mode!='stdio':
+   endpoint=out/'endpoint.json';command=[str(agent),'--listen',str(endpoint)]
+   if mode=='native':
+    policy='(version 1)(allow default)(deny file-write* (subpath '+json.dumps(str(Path.home()/'Library/Cogent Core'))+'))'
+    command=['sandbox-exec','-p',policy,str(native),'--agent-endpoint',str(endpoint),'--no-recovery','--appearance-file',str(out/'appearance.json')]
+   log=(out/'process.log').open('x');host=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT)
+   deadline=time.monotonic()+8
+   while not endpoint.exists():
+    if host.poll() is not None or time.monotonic()>deadline:raise RuntimeError('owned endpoint startup failed: '+str(host.pid))
+    time.sleep(.02)
+  client=AcceptanceClient(agent,endpoint)
+  ask=client.ask
+  ask('example.load',{'id':'rc'},mutate=True);ask('simulation.pause',mutate=True);ask('simulation.restart',mutate=True);ask('simulation.wait')
+  ask('scope.probes.set',{'ids':['v:C1','i:R1']},mutate=True);ask('simulation.step',{'duration_s':.1},mutate=True)
+  before=ask('simulation.wait');ask('scope.view.set',{'view':'spectrum'},mutate=True)
+  def live_result():
+   deadline=time.monotonic()+4
+   while time.monotonic()<deadline:
+    state=ask('project.inspect');live=state['spectrum'].get('live')
+    if live and live.get('result'):return state,live
+    time.sleep(.03)
+   raise RuntimeError('no fresh live spectrum')
+  state,live=live_result();bins=live['result']['bins']
+  assert state['transient']==before['transient'] and state['document']['dirty']==before['document']['dirty']
+  if reference is None:reference=bins
+  else:assert bins==reference,'FFT values differ across matching adapters'
+  # Removing another channel changes source identity without changing these bins.
+  ask('scope.probes.set',{'ids':['v:C1']},mutate=True);state,live=live_result();assert live['result']['bins']==bins
+  settings=live['settings'];settings['hold']=True;ask('spectrum.live.set',settings,mutate=True)
+  ask('simulation.step',{'duration_s':.01},mutate=True);ask('simulation.wait');time.sleep(.3)
+  held=ask('project.inspect')['spectrum']['live'];assert held['status']=='held' and held['result']['bins']==bins and held['end_s']==live['end_s']
+  ask('project.clear',{'discard_changes':True},mutate=True);state=ask('project.inspect');assert not state['spectrum'].get('live') and state['scope_view']=='scope'
+  ask('app.close',{'discard_changes':True},mutate=True);client.close();assert client.process.returncode==0
+  if host is not None:assert host.wait(timeout=15)==0
+  reports.append(dict(mode=mode,passed=True,bins=len(bins),unchanged_physics=True,identical_cross_adapter_values=True,source_key_revalidated=True,hold_preserved=True,document_clear=True,agent_exit_code=client.process.returncode,host_exit_code=host.returncode if host else None))
+ finally:
+  if client is not None and client.process.poll() is None:
+   try:client.ask('app.close',{'discard_changes':True},mutate=True)
+   finally:client.close()
+  if host is not None and host.poll() is None:
+   try:
+    if endpoint.exists():
+     cleanup=AcceptanceClient(agent,endpoint)
+     try:cleanup.ask('app.close',{'discard_changes':True},mutate=True)
+     finally:cleanup.close()
+     host.wait(timeout=15)
+   finally:
+    if host.poll() is None:host.terminate();host.wait(timeout=15)
+  if log:log.close()
+(root/'build/scope-spectrum-20261028/live-package-report.json').write_text(json.dumps(reports,indent=2)+'\n');print(json.dumps(reports))

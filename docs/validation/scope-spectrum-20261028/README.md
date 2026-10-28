@@ -73,3 +73,27 @@ checks do not close historical native OS-input/rate gates 3/6/9/11.
 Final-source full suite logs, race results, lint/vet and inventory/PRD receipts
 are compressed byte-exactly. No owner projects/settings, verified SDK caches or
 older qualified release bytes were changed. No push or upload.
+
+## Packaged closeout
+
+Implementation commit: e591347f62b3f51699f7ac1df1c27b2500d24a12. Clean matching
+0.200.4 /282 app, agent and conformance controller are assembled from that source.
+All 87 examples reopen paused/clean with exact saved/current graphs; 61 component
+kinds and 224 commands are observed. Copied native smoke and four public adapters
+pass under development-file/outbound-IP denial and fixture-only geometry protection.
+All 102 conformance external processes exit 0 normally.
+
+The exact packaged binaries also pass live FFT checks over stdio, sockets and an
+owned native app: identical 33-bin spectra from real accepted RC samples, unchanged
+physics/dirty state, identical-data source-key revalidation, Hold during stepping,
+document clearing and normal client/host shutdown. The fixture protects shared
+geometry and uses its own appearance state. See live-package-report.json and its
+controller receipt. This is software-service evidence, not native OS-input proof.
+
+All 437 archive payload files verify exact bytes/modes, OS extraction and strict
+ad-hoc seals. ZIP size: 43076950 bytes. SHA-256:
+506e912613409f492f9edd856e13a196b86a011f59da3d377fc3c21d5bf6eff4
+All 38 earlier package/SDK/executable identities remain exact. No source changes
+follow the implementation commit; only documentation/evidence closeout is added.
+The candidate remains unsigned/ad-hoc. Historical native 3/6/9/11, participant,
+clean-account and public-signing/notarization gates remain separate.

@@ -15,5 +15,12 @@ and a commit. No external review. Implementation and regression tests are comple
   and inventory/PRD checks pass. Detailed failures/corrections are retained.
 
 [Evidence and internal review](../docs/validation/scope-spectrum-20261028/README.md).
-[User/agent guide](../docs/spectrum-analysis.md). Matching package checks follow
-from clean committed source; prior /281 and earlier packages remain preserved.
+[User/agent guide](../docs/spectrum-analysis.md). Committed as e591347f. Clean matching 0.200.4 /282 passes all 87 examples,
+standard copied runtime/four-adapter checks, exact-package three-interface live
+checks and strict archive/extraction qualification. All owned clients/hosts close
+normally and all 38 earlier identities are preserved.
+
+App: build/ELab-0.200.4-282-Spectrum/ELab.app.
+ZIP: build/releases/ELab-0.200.4-macos-arm64.zip.
+No source changes follow the implementation commit; final closeout is documentation.
+No external review, push or upload.

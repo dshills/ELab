@@ -12,22 +12,23 @@ work is described below; the preserved release and its evidence remain separate.
 
 ## Current development
 
-Source development adds **Scope / Spectrum** tabs and live FFT using selected
+The signal dock adds **Scope / Spectrum** tabs and live FFT using selected
 scope probes, with Hold and independent recorded analysis. Users and agents share
 `scope.view.set` and `spectrum.live.set`. See the [spectrum guide](docs/spectrum-analysis.md)
 and [internal review/tests](docs/validation/scope-spectrum-20261028/README.md).
-The /281 candidate below predates these changes; a matching build follows.
+These controls are included in the /282 candidate below.
 
-**Current candidate: [ELab 0.200.3 /281](build/ELab-0.200.3-281-Readiness/ELab.app)**,
-with **87 examples**, **61 component kinds** and **222 shared commands**.
+**Current candidate: [ELab 0.200.4 /282](build/ELab-0.200.4-282-Spectrum/ELab.app)**,
+with **87 examples**, **61 component kinds** and **224 shared commands**.
 It includes capacity noise-capture/agent-response repairs, bounded
 [analysis queries](docs/analysis-pages.md), cached owned compilation and grouped
-analysis-job storage behind the same user/agent command service. See the
-[release-readiness evidence](docs/validation/release-readiness-20261028/README.md)
+analysis-job storage behind the same user/agent command service. See the [spectrum checks](docs/validation/scope-spectrum-20261028/README.md),
+[prior release-readiness evidence](docs/validation/release-readiness-20261028/README.md)
 and [architecture guide](docs/architecture.md). The candidate remains unsigned/ad-hoc;
 original native-input, participant, clean-account and public-signing gates stay separate.
 
-The preserved [0.200.1 /279 repair package](build/ELab-0.200.1-279-Reliability/ELab.app)
+The preserved [0.200.3 /281 readiness package](build/ELab-0.200.3-281-Readiness/ELab.app),
+[0.200.1 /279 repair package](build/ELab-0.200.1-279-Reliability/ELab.app)
 and [0.200.2 /280 tooling candidate](build/ELab-0.200.2-280-Readiness/ELab.app)
 remain unchanged. The [project review](research/126-project-code-and-architecture-review.md)
 records the original defects and their reproduction.
