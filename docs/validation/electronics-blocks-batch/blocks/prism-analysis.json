@@ -1,0 +1,152 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "26d7da426a03aa98e68f778143d3654d",
+  "repo": {
+    "root": "/Users/dshills/Development/projects/ELab",
+    "head": "a5f09cc35700d12d2ce2fdefc1d5fb119a86d8ff",
+    "branch": "main"
+  },
+  "inputs": {
+    "mode": "unstaged"
+  },
+  "summary": {
+    "counts": {
+      "low": 1,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "5e34670187e4efeb",
+      "severity": "medium",
+      "category": "bug",
+      "title": "MixedGraph no longer cloned; may alias plan graph",
+      "message": "The code used to store `plan.graph.Clone()`; it now stores `physical` directly. A graph with no blocks may come back from `PhysicalGraph()` sharing its Components slice and maps with `plan.graph`. In that case, any change the mixed network makes to `MixedGraph` would leak into the sweep plan. `solveDCOperatingPoint` in the same diff still clones.",
+      "suggestion": "Keep the defensive copy, `compiled.MixedGraph = physical.Clone()`, unless `PhysicalGraph` is guaranteed to return a deep copy.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/ac_sweep.go",
+          "lines": {
+            "start": 123,
+            "end": 123
+          }
+        }
+      ],
+      "tags": [
+        "aliasing",
+        "mutation",
+        "location-corrected"
+      ],
+      "evidence": "\tcompiled.MixedGraph = physical",
+      "fix": {
+        "before": "\tcompiled.MixedGraph = physical",
+        "after": "\tcompiled.MixedGraph = physical.Clone()"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "088f19374a00aed6",
+      "severity": "medium",
+      "category": "testing",
+      "title": "Test indexes DC result with net map from a different compile",
+      "message": "`solveDCOperatingPoint` now compiles the physical (flattened) graph, so `dc.Nodes` uses the physical compile's net numbering. The test looks up the node index in a compile of the block-level graph instead. The two numberings are not guaranteed to match. The assertion may therefore check the wrong node, passing or failing by coincidence.",
+      "suggestion": "Take the net index from the same compiled graph the solver used, i.e. compile `g.PhysicalGraph()`. Alternatively, check the value through the returned TraceSample.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "workbench/blocks_test.go",
+          "lines": {
+            "start": 396,
+            "end": 397
+          }
+        }
+      ],
+      "tags": [
+        "test",
+        "indexing"
+      ],
+      "evidence": "\tc, _, d := g.Compile()\n\tif d != nil || math.Abs(dc.Nodes[c.TerminalNet[\"FILTER.out\"]]-5) \u003e 1e-10 {",
+      "fix": {
+        "before": "\tc, _, d := g.Compile()\n\tif d != nil || math.Abs(dc.Nodes[c.TerminalNet[\"FILTER.out\"]]-5) \u003e 1e-10 {",
+        "after": "\tphysical, err := g.PhysicalGraph()\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tc, _, d := physical.Compile()\n\tif d != nil || math.Abs(dc.Nodes[c.TerminalNet[\"FILTER.out\"]]-5) \u003e 1e-10 {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "id": "acedc17bd7ac7eaf",
+      "severity": "low",
+      "category": "testing",
+      "title": "AC assertions pass vacuously on empty result",
+      "message": "If the sweep returns zero points, the AC loop runs zero times and the transfer-function check silently passes. `point.AC[0]` would also panic if AC is empty.",
+      "suggestion": "Assert that `len(r.Points) \u003e 0` and that `len(point.AC) \u003e 0` before comparing.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "workbench/blocks_test.go",
+          "lines": {
+            "start": 382,
+            "end": 388
+          }
+        }
+      ],
+      "tags": [
+        "test"
+      ],
+      "evidence": "\tfor _, point := range r.Points {",
+      "fix": {
+        "before": "\tfor _, point := range r.Points {",
+        "after": "\tif len(r.Points) == 0 {\n\t\tt.Fatal(\"AC sweep returned no points\")\n\t}\n\tfor _, point := range r.Points {"
+      },
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 15596,
+    "totalMs": 15607
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "anthropic",
+      "model": "claude-opus-5-5"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5"
+      }
+    ],
+    "files": 3,
+    "bytes": 5549,
+    "chunks": 1,
+    "llmCalls": 1,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-5-5",
+        "input": 5019,
+        "output": 1717,
+        "costUSD": 0.054416
+      }
+    ],
+    "widenedFiles": 1,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

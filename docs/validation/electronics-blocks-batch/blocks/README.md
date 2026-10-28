@@ -104,3 +104,19 @@ is retained in review-source.json. Two medium/eight low observations:
 - 5627538928aaf278: BodyBounds now matches every other part's existing padded
   route bounds; the extra fit margin is deliberately conservative. Direct body
   geometry still comes from BlockBodySize. Shared viewport/edge tests pass.
+
+Analysis continuation after a5f09cc3 reproduced AC rejection of circuit-block
+helper symbols (blocks-ac-before.txt). AC support/bias and shared DC operating
+point setup now explicitly use an owned physical graph. The authored graph,
+source hashes and named-pin probe metadata remain intact. Independent RC complex
+transfer and DC frame checks pass, alongside loop/tolerance controls.
+
+Prism analysis review completes1/1 chunk (3 files, no skips/truncation), two
+medium/one low observations. 5e34670187e4efeb is inapplicable: PhysicalGraph always
+starts with Graph.Clone, even when there are no blocks, and filters the cloned
+components; it never aliases the input. 088f19374a00aed6 is inapplicable because
+Graph.Compile explicitly delegates to that same physical compile and only adds
+alias entries. A new equality assertion checks every physical terminal-net key,
+and the DC verdict additionally reads through the returned frame and canonical
+block probe, independent of a second node-map lookup. acedc17bd7ac7eaf adds exact
+point/response counts to prevent a vacuous pass or an indexing panic.

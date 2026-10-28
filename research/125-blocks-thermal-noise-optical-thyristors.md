@@ -62,3 +62,11 @@ ownership controls pass. Core focused race 8.480 s, ordinary/offscreen final
 controls 1.820/1.847 s; lint and current native source inventory verify. Every
 protected prior package/SDK identity stays exact. This item is committed before
 beginning temperature/self-heating; no new native OS/hardware acceptance claim.
+
+Item 1 committed a5f09cc3. While connecting item 2 sweeps, an additional block
+integration test reproduced AC rejection of the helper kind. DC/AC bias now use
+an owned physical graph; named-pin RC Bode and DC-frame references pass. A third
+complete Anthropic Opus 5.5 Prism review covers the three-file repair (1 chunk);
+two ownership/net-identity assumptions are disproven by implementation and new
+explicit assertions, and the empty-result testing low is fixed. The transparent
+analysis repair commits separately before thermal implementation continues.

@@ -299,6 +299,11 @@ func buildSweepPlan(g Graph, settings SweepSettings, requireComplete bool) (swee
 // from the private MNA plan leaves live transient initialization unchanged. Source
 // waveforms contribute an explicit DC bias, never an arbitrary time-zero sample.
 func solveDCOperatingPoint(ctx context.Context, g Graph, levels []SweepSource) (*MixedResult, TraceSample, error) {
+	physical, err := g.PhysicalGraph()
+	if err != nil {
+		return nil, TraceSample{}, err
+	}
+	g = physical
 	compiled, _, diagnostic := g.Compile()
 	if diagnostic != nil {
 		return nil, TraceSample{}, fmt.Errorf("%s", diagnostic.Message)

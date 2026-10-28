@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"math/cmplx"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -373,5 +374,58 @@ func TestBlockTerminalPointBoundsMalformedCycles(t *testing.T) {
 		if _, ok := (Graph{Components: []Component{a, b}}).TerminalPoint("A.loop"); ok {
 			t.Fatal("malformed nested or cyclic port resolved")
 		}
+	}
+}
+
+func TestBlocksPreserveDCAndACAnalysisThroughNamedPins(t *testing.T) {
+	g := RCBlockExampleGraph()
+	cfg := acSettings("V1", "v:FILTER.out")
+	r := sweepForTest(t, g, cfg)
+	if len(r.Points) != cfg.Points {
+		t.Fatal("AC point inventory", len(r.Points))
+	}
+	for _, point := range r.Points {
+		if len(point.AC) != 1 {
+			t.Fatal("AC response inventory", point)
+		}
+		want := 1 / complex(1, 2*math.Pi*point.Input*.001)
+		got := complex(point.AC[0].Real, point.AC[0].Imaginary)
+		if cmplx.Abs(got-want) > 1e-10 {
+			t.Fatal("block changed analytic RC transfer", point, want)
+		}
+	}
+	dc, frame, err := solveDCOperatingPoint(t.Context(), g, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, _, d := g.Compile()
+	physical, err := g.PhysicalGraph()
+	if err != nil {
+		t.Fatal(err)
+	}
+	flat, _, fd := physical.Compile()
+	if fd != nil {
+		t.Fatal(fd)
+	}
+	for ref, net := range flat.TerminalNet {
+		if c.TerminalNet[ref] != net {
+			t.Fatal("block changed physical net identity", ref)
+		}
+	}
+	measured := false
+	for _, probe := range probeInventory(g) {
+		if probe.ID == "v:FILTER.out" {
+			value, ok := frameValue(frame, probe)
+			if !ok || math.Abs(value-5) > 1e-10 {
+				t.Fatal("DC frame lost canonical block probe", value, ok)
+			}
+			measured = true
+		}
+	}
+	if !measured {
+		t.Fatal("block probe absent")
+	}
+	if d != nil || math.Abs(dc.Nodes[c.TerminalNet["FILTER.out"]]-5) > 1e-10 {
+		t.Fatal("block changed DC bias", dc, d)
 	}
 }

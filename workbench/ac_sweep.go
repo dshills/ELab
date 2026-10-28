@@ -24,6 +24,13 @@ type ACBand struct {
 }
 
 func acSupported(g Graph) error {
+	if g.hasBlocks() {
+		var err error
+		g, err = g.PhysicalGraph()
+		if err != nil {
+			return err
+		}
+	}
 	for _, p := range g.Components {
 		switch p.Kind {
 		case "njfet", "pjfet", "current-source", "electronic-load", "speaker", "npn", "pnp", "nmos", "pmos", "diode", "schottky", "zener", "led", "transformer", "ground", "net-label", "junction", "resistor", "potentiometer", "capacitor", "inductor", "dc-source", "sine-source", "pulse-source", "finite-pulse-source", "opamp", "thermistor", "ldr", "switch":
@@ -104,12 +111,16 @@ func acBands(r *SweepResult) []ACBand {
 	return out
 }
 func computeACSweep(ctx context.Context, plan sweepPlan, progress func(int)) (*SweepResult, error) {
-	compiled, _, diagnostic := plan.graph.Compile()
+	physical, err := plan.graph.PhysicalGraph()
+	if err != nil {
+		return nil, err
+	}
+	compiled, _, diagnostic := physical.Compile()
 	if diagnostic != nil {
 		return nil, fmt.Errorf("%s", diagnostic.Message)
 	}
 	compiled.Analysis = NetworkDCAnalysis
-	compiled.MixedGraph = plan.graph.Clone()
+	compiled.MixedGraph = physical
 	n := newMixedNetwork(compiled)
 	caps := n.caps
 	n.caps = nil
