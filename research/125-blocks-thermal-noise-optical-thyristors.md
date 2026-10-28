@@ -129,3 +129,9 @@ order. Existing focused rendered layout/navigation/block parity tests pass 9.296
 a complete Anthropic Opus 5.5 Prism review reports zero findings. Original failed
 and passing controls are preserved in document-order evidence; full affected
 rendered suite reruns before packaging. All other static/Python/audit gates pass.
+
+Complete final rendered race rerun passes 542.843 s, ordinary focused controls
+11.108 s, both desktop vets and lint pass. Inventory properly refused its stale
+layout-source hash; regenerated JSON changes only that one hash, preserving all
+220 commands/527 sites/182 routes/111 sources. Corrected verification passes.
+The failed first verification is retained, not counted as a clean invocation.
