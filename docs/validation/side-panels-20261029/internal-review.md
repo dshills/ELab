@@ -83,7 +83,12 @@ retained instead of changing the product or reporting an exact unobserved width.
 All owned native sessions closed normally. No owner project/session was used.
 
 Full regression results and matching clean-source candidate checks are recorded
-in the adjacent validation README after completion. Four historical native
+in the adjacent validation README. The matching MCP bridge exercises the same
+new commands, preserves all old catalog IDs, refuses stale/invalid requests and
+captures RC voltage with both panels hidden. Exact candidate native smoke and
+all 87 packaged example graph checks pass. Its initial disabled-recovery smoke
+invocation was a fixture configuration error, corrected without product edits.
+Four historical native
 queue/hardware checks, participant acceptance, clean-account installation and
 public signing retain their existing separate status. This change does not
 qualify those checks or replace the preserved /285 release.

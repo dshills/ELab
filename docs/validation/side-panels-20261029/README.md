@@ -49,11 +49,27 @@ scope distinctions.
 
 ## Package and preserved release boundaries
 
-A matching clean-source development candidate is assembled after the feature
-commit; its build and integration receipts are recorded separately here. These
-source/UI checks do not assert a new complete release qualification. The current
-qualified release remains /285; [all 47 prior package/SDK pins](preservation.json)
-remain exact. Historical native checks 3/6/9/11, participant acceptance,
+The [matching development candidate](candidate.json) is **0.202.0 /286**, built
+from clean source `ad9fa528987db9f243e1599777114a95bee825c6` at
+`build/ELab-0.202.0-286-Panels/`. Its matching agent, 87 example graphs, package
+manifest/bytes and strict ad-hoc integrity seal pass. The workspace guide is
+included beside the app. [MCP integration](packaged-mcp.json) from another working
+directory confirms all previous commands, six tools, unchanged physics on
+navigation, stale/invalid refusals and independent RC capture with both panels
+hidden (3.1606027941427883 V at 20 ms for 20 kΩ / 1 µF, matching the RC equation).
+There are no automatic mutation retries; the owned bridge exits normally.
+
+The [exact candidate native smoke](packaged-native.json) passes its GPU,
+descriptor-command, field, layout and lifecycle stages and exits normally. An
+initial invocation disabled recovery/appearance, which that smoke requires;
+the corrected invocation uses the application's smoke-owned temporary files.
+The failed configuration receipt remains explicit; no product change was made
+for it. Owner geometry writes remained denied.
+
+These source/UI/package checks do not assert a new complete release qualification
+or a full repeated race suite. The current qualified release remains /285;
+[all 47 prior package/SDK pins](preservation.json) remain exact, rechecked after
+the candidate tests. Historical native checks 3/6/9/11, participant acceptance,
 clean-account installation and public signing retain their separate status.
 
 No push, upload, external code review, owner project write or security change was

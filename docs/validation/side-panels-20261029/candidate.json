@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "scope": "Clean-source development candidate, not a full new release qualification",
+  "source_commit": "ad9fa528987db9f243e1599777114a95bee825c6",
+  "package": "build/ELab-0.202.0-286-Panels",
+  "version": "0.202.0",
+  "build": 286,
+  "sha256": {
+    "ELAB_PACKAGE.json": "31d4e0c43ff3bfae0e0d3e64b3eb3559bca6f1cb5a6be506715be2475ed9fa12",
+    "ELab.app/Contents/MacOS/ELab": "7fb9c5a3a9f030cc7275d2cb39b57d07f674303720980bdb3effebba9c81074a",
+    "elab-agent": "e8c0e1cb0470e25fec439759f1e72141310608061d5885bb3688d1a6e8d852bb"
+  },
+  "native_smoke_passed": true,
+  "mcp_panels_and_tools_passed": true,
+  "examples_passed": 87,
+  "strict_ad_hoc_seal_exit_code": 0,
+  "source_inputs_exact": true,
+  "prior_pins_preserved": 47,
+  "initial_native_configuration_failure": "Smoke was invoked with --no-recovery/--no-appearance, disabling controls its recovery/appearance stages require. Corrected invocation uses smoke-owned temporary files; no production change."
+}

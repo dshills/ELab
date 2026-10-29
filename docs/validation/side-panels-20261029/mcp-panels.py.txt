@@ -1,0 +1,44 @@
+from pathlib import Path
+import json,sys,time,math,subprocess,tempfile,uuid
+sys.path.insert(0,str(Path('scripts').resolve()))
+from mcp_client import MCPClient
+agent=Path(sys.argv[1]).resolve(strict=True);out=Path(sys.argv[2]);assert not out.exists()
+baseline=json.loads(subprocess.check_output(['git','show','2f7fb0d6:research/13-native-command-inventory.json'],text=True))['public_commands']
+with tempfile.TemporaryDirectory(prefix='elab-panel-mcp-') as cwd:
+ c=MCPClient(agent,cwd=cwd)
+ try:
+  catalog=c.tool('elab_discover',{})['result']['capabilities'];ids={x['id'] for x in catalog}
+  assert ids==set(baseline)|{'workspace.panels.set','workspace.simulation.set'} and len(ids)==228
+  panels={'parts_visible':False,'inspector_visible':False,'parts_width':320,'inspector_width':480}
+  c.ask('example.load',{'id':'rc'},True);c.ask('simulation.pause',mutate=True)
+  before=c.ask('simulation.wait')
+  c.ask('workspace.panels.set',panels,True)
+  for tool in ['recordings','spectrum','sweeps','tolerances','circuit','live']:
+   c.ask('workspace.simulation.set',{'tool':tool},True)
+  after=c.inspect()
+  for k in ['document','electrical_revision','run_id','transient','scope','components','wires']:
+   assert before[k]==after[k],k
+  assert after['workspace_panels']==panels
+  stale=dict(version=1,id=uuid.uuid4().hex,command='workspace.panels.set',params=panels,key=uuid.uuid4().hex,expected_command_revision=before['command_revision'],expected_document_generation=before['document']['generation'])
+  response=c.tool('elab_command',stale);assert response['error']['code']=='conflict'
+  c.ask('workspace.panels.set',{**panels,'parts_width':223},True,expect='invalid-params')
+  assert c.inspect()==after
+  c.ask('workspace.simulation.set',{'tool':'recordings'},True)
+  c.ask('component.set',{'id':'R1','value':'20k'},True)
+  c.ask('simulation.wait')
+  state=c.ask('simulation.verify',{'duration_s':.02,'sample_step_s':.001,'probe_ids':['v:C1'],'input_mode':'charge'},True)
+  opid=state['last_operation'];deadline=time.monotonic()+5
+  while True:
+   op=c.ask('operation.inspect',{'id':opid})['operation']
+   if op['status']=='completed':break
+   assert op['status']!='failed' and time.monotonic()<deadline
+   time.sleep(.01)
+  page=c.ask('operation.samples',{'id':opid,'offset':20,'limit':1})
+  measured=page['rows'][0]['values'][0]
+  assert math.isclose(measured,5*(1-math.exp(-1)),abs_tol=1e-9)
+  final=c.inspect();assert final['workspace_panels']==panels and final['simulation_tool']=='recordings'
+  result={'passed':True,'scope':'Matching clean-source MCP headless stdio; generated configuration from another working directory','commands':len(ids),'all_previous_commands_retained':True,'six_tools':True,'presentation_preserves_circuit':True,'stale_refused':True,'invalid_atomic':True,'electrical_capture_with_both_panels_hidden':True,'rc_v_at_20ms':measured,'automatic_mutation_retries':0}
+  c.ask('app.close',{'discard_changes':True},True)
+ finally:c.close()
+ result['bridge_exit_code']=c.process.returncode
+out.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))

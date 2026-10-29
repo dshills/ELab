@@ -61,3 +61,9 @@ final regression outcomes, source/package boundaries and native screenshots.
 records decisions, corrections and evidence limits. No external review service
 was used. The preserved qualified /285 release is unchanged; this UI development
 candidate does not close historical native/human/install/signing gates.
+
+The matching **0.202.0 /286 development candidate** is at
+`build/ELab-0.202.0-286-Panels/ELab.app`, with its matching agent and all 87
+examples alongside it. Exact candidate native smoke, MCP panel/tool integration,
+example graph checks and strict ad-hoc seal pass. The implementation commit is
+`ad9fa528`; the subsequent closeout adds receipts only.
