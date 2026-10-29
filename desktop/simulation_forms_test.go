@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/dshills/elab/workbench"
-	"github.com/dshills/vellum/ui"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/ui"
 )
 
 func TestFocusedSimulationFormsRetainExistingDescriptors(t *testing.T) {

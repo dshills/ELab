@@ -22,6 +22,11 @@ def exercise(client):
         client.ask('wire.connect',{'from':a,'to':b},True)
     led = client.ask('simulation.wait')
     assert math.isclose(led['result']['current_a'],.002916796577441,rel_tol=0,abs_tol=5e-12)
+    client.ask('component.set',dict(id='R1',value='2k'),True)
+    dimmed=client.ask('simulation.wait')['result']['current_a']
+    assert .00147 < dimmed < .00149
+    client.ask('edit.undo',mutate=True)
+    assert client.ask('simulation.wait')['result']['current_a']==led['result']['current_a']
     client.ask('example.load',{'id':'rc','discard_changes':True},True)
     client.ask('simulation.pause',mutate=True)
     recordings=[]
@@ -51,6 +56,34 @@ def exercise(client):
                 compared_voltages_v=[reading['a'],reading['b']],automatic_mutation_retries=0)
 
 
+def exercise_first_use_files(client, folder):
+    """Continue the four-task kit in this owned headless circuit, never owner files."""
+    client.ask('example.load',dict(id='flasher',discard_changes=True),True)
+    client.ask('simulation.pause',mutate=True)
+    client.ask('simulation.step',dict(duration_s=.02),True)
+    state=client.ask('simulation.wait')
+    graph={k:state[k] for k in ('components','wires')}
+    assert {d['id'] for d in state['mixed']['leds']}=={'D1','D2'}
+    for section in ['component','selection','measurement','pins','live','recordings','spectrum','sweeps','tolerances','circuit']:
+        before=client.inspect()
+        after=client.ask('workspace.details.set',dict(section=section,visible=True),True)
+        assert after['workspace_details'][section]
+        for key in ['components','wires','transient','mixed','document','run_id','electrical_revision']:
+            assert before.get(key)==after.get(key),(section,key)
+    project=folder/'practice.elab'
+    client.ask('project.save',dict(path=str(project)),True)
+    client.ask('project.clear',mutate=True)
+    client.ask('project.load',dict(path=str(project)),True)
+    loaded=client.ask('simulation.wait')
+    assert not loaded['document']['dirty'] and all(loaded[k]==v for k,v in graph.items())
+    for fmt in ['svg','pdf']:
+        output=folder/('practice.'+fmt)
+        client.ask('export.schematic.'+fmt,dict(path=str(output)),True)
+        data=output.read_bytes()
+        assert data.startswith(b'%PDF-') if fmt=='pdf' else all(p['id'].encode() in data for p in graph['components'])
+    return dict(passed=True,shared_disclosures=10,saved_graph_exact=True,exports=['svg','pdf'],scope='MCP engineering walkthrough; no participant or native OS-input claim')
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--agent',type=Path,required=True)
@@ -73,6 +106,7 @@ def main():
         with tempfile.TemporaryDirectory(prefix='elab-mcp-client-') as cwd:
             client=MCPClient(agent,endpoint,cwd=cwd)
             report=exercise(client)
+            report['first_use_files']=exercise_first_use_files(client,args.artifacts.resolve())
             client.ask('app.close',{'discard_changes':True},True)
             client.close();client=None
             report['bridge_exit_code']=0

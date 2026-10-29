@@ -88,3 +88,20 @@ fixtures. Final compact composition/electrical-summary regressions pass (2.207s)
 Frozen full suites in stage 5 are the final production-source verdict. Earlier
 failed logs are retained: hidden-form fixture setup, duplicate caption ID and the
 initial overly broad whole-tree test for an intentionally retained overview.
+
+## 4. Self-guided hobbyist kit
+
+Reviewed four independent task goals, optional help, disposable-file instructions,
+plain-language feedback form, reset/replacement protection, expected electrical
+values and a separate maintainer key. No participant observations or acceptance
+rates are claimed. START-HERE describes drawers, essentials/Advanced, measurement
+provenance, unsigned installation and explicit matching-agent setup. All three
+guides are copied and hashed by package assembly, not fetched at startup.
+
+Desktop engineering counterparts pass (2.306s), including new flasher save/reopen,
+an independent agent read, complete SVG and valid PDF exports without changing
+the saved graph. The actual MCP executable tests pass (4 tests, 1.823s): generated
+configuration, blank LED/2k/Undo, RC captures/comparison, ten shared disclosures
+with unchanged physical/document state, flasher save/reopen and SVG/PDF files.
+This remains software-route evidence, separate from hobbyist/native OS input.
+Package manifest safety tests pass; final frozen full quality follows stage 5.

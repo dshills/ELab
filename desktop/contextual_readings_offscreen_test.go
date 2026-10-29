@@ -3,9 +3,10 @@
 package main
 
 import (
+	"testing"
+
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
-	"testing"
 )
 
 func TestMountedContextReadingsStayStationaryAsCircuitAdvances(t *testing.T) {

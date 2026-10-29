@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
-	"strings"
 )
 
 // One experiment status; paused never hides an invalid circuit or stale data.

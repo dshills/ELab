@@ -56,11 +56,20 @@ mark the circuit dirty or become part of a saved schematic.
 
 The **Simulate** inspector shows one tool at a time: **Live controls**, **Recorded
 runs**, **Recorded spectrum**, **DC / AC / noise sweeps**, **Component tolerances**
-or **Circuit details**. The chooser stays above the scrolling form. Switching
+or **Circuit details**. The chooser and primary Run/Record action stay above the
+scrolling form. Essentials appear first; **Advanced** keeps the remaining settings. Switching
 tools keeps their accepted settings/results and does not start an analysis or
 stop live simulation. The live Scope/Spectrum dock remains available below.
 
-Users and agents control the same state through `workspace.panels.set` and
+**Inspect** puts value and common actions first, with model/startup/geometry under
+**Details**. **Measure** uses one source chooser; the bottom strip follows that
+measurement, with full readings and the named circuit overview still available.
+
+Try the [self-guided first-use kit](docs/first-use-test-kit.md) for LED drawing,
+RC recording, flasher measurements and saving/exporting. It includes a blank
+feedback form; [expected results](docs/first-use-maintainer-key.md) are separate.
+
+Users and agents control the same state through `workspace.details.set`, `workspace.panels.set` and
 `workspace.simulation.set`; electrical commands still work with either drawer
 closed. See the [workspace reference](docs/workspace-layout.md) for parameters,
 keyboard behavior and layout limits.

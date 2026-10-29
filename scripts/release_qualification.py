@@ -21,7 +21,8 @@ GUIDES = ['agent-api', 'workbench-workflows', 'application-icon', 'discrete-clas
           'ac-frequency-sweeps', 'spectrum-analysis', 'transistor-profiles',
           'tolerance-analysis', 'loudspeaker', 'class-ab-speaker', 'passive-losses',
           'current-devices', 'jfets', 'feedback-and-step-response', 'circuit-blocks',
-          'temperature', 'noise-analysis', 'photodiodes', 'thyristors', 'analysis-pages', 'agent-setup', 'workspace-layout']
+          'temperature', 'noise-analysis', 'photodiodes', 'thyristors', 'analysis-pages', 'agent-setup', 'workspace-layout', 'START-HERE',
+          'first-use-test-kit', 'first-use-maintainer-key']
 MANIFEST = 'ELAB_PACKAGE.json'
 
 
@@ -144,6 +145,7 @@ def assemble(args):
         (args.work/(label+'-build-info.txt')).write_text(info)
     (args.output/'README.md').write_text('ELab '+args.version+' /'+str(args.build)+
         '\n\nUnsigned/ad-hoc candidate. Matching app/agent and curated examples; see included guides.\n'
+        'Start with START-HERE.md; the self-guided kit and maintainer key are included.\n'
         'Qualification is separate. Native OS-input, participant, clean-account and public signing gates remain distinct.\n')
     data = dict(schema=1, version=args.version, build=args.build, source_commit=source,
                 app='ELab.app', agent='elab-agent', files=tree(args.output))

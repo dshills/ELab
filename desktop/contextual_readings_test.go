@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/dshills/elab/workbench"
-	"github.com/dshills/vellum/ui"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/dshills/elab/workbench"
+	"github.com/dshills/vellum/ui"
 )
 
 func TestMeasurementChooserCoversTargetsAndMatchesAgent(t *testing.T) {
