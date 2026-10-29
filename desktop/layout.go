@@ -71,6 +71,9 @@ func constrainRail(nodes []ui.Node, width float32) {
 		}
 		node.MinWidth = min(node.MinWidth, maximum.Width)
 		childWidth := maximum.Width
+		if node.Kind == ui.Disclosure {
+			childWidth = max(24, childWidth-24)
+		}
 		if node.Kind == ui.Row && len(node.Children) > 0 {
 			gap := float32(8)
 			if node.Style.Gap.Set {

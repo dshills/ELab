@@ -49,7 +49,11 @@ func TestBipolarBlankDrawingUsesSameCommandsAndElectricalResults(t *testing.T) {
 			selectedPart, _ := selectedGraph.Component(id)
 			panel := user.componentInspector(selectedState, selectedGraph, selectedPart)
 			readingIndex, modelIndex := -1, -1
-			for i, node := range panel {
+			details, ok := findNode(ui.Node{Children: panel}, "workspace-details-component")
+			if !ok {
+				t.Fatal("missing model Details")
+			}
+			for i, node := range details.Children {
 				if node.ID == "bipolar-selected-reading" {
 					readingIndex = i
 				}

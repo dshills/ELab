@@ -128,6 +128,8 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(struct{}{}), "urn:elab:empty-input:1"},
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
 	{reflect.TypeOf(WorkspacePanels{}), "urn:elab:workspace-panels:1"},
+	{reflect.TypeOf(WorkspaceDetails{}), "urn:elab:workspace-details:1"},
+	{reflect.TypeOf(WorkspaceDetailsParams{}), "urn:elab:workspace-details-input:1"},
 	{reflect.TypeOf(SimulationToolParams{}), "urn:elab:simulation-tool:1"},
 	{reflect.TypeOf(SineParams{}), "urn:elab:sine-source-input:1"},
 	{reflect.TypeOf(PulseParams{}), "urn:elab:pulse-source-input:1"},
@@ -303,6 +305,9 @@ func SchemaRegistry() map[string]json.RawMessage {
 	}
 	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
+		if common.Type == reflect.TypeOf(WorkspaceDetailsParams{}) {
+			inputProperty(schema, "section")["enum"] = workspaceDetailSections()
+		}
 		if common.Type == reflect.TypeOf(WorkspacePanels{}) {
 			addWorkspacePanelBounds(schema)
 		}
@@ -625,6 +630,7 @@ func Catalog() []Capability {
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),
 		typedCapability("example.current.reset", "Restore the current example template, not another example; protects unsaved work and optional expected_example_id/document generation", reflect.TypeOf(ExampleResetParams{})),
 		typedCapability("scope.visibility.set", "Show/hide the scope dock for this session; preserves acquisition, recorded playback and measurements", reflect.TypeOf(ScopeVisibilityParams{})),
+		typedCapability("workspace.details.set", "Show or hide Details/Advanced settings; session only", reflect.TypeOf(WorkspaceDetailsParams{})),
 		typedCapability("workspace.panels.set", "Show, hide and resize side panels; session presentation only", reflect.TypeOf(WorkspacePanels{})),
 		typedCapability("workspace.simulation.set", "Choose one Simulate tool without changing its settings, results or live circuit", reflect.TypeOf(SimulationToolParams{})),
 		typedCapability("workspace.inspector.set", "Select the Component, Simulation or Document inspector; session presentation only", reflect.TypeOf(InspectorParams{})),

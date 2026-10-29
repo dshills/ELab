@@ -116,7 +116,7 @@ func TestOpAmpGuidedMenuEditsPlotsAndProtectedReload(t *testing.T) {
 			for i, n := range nodes {
 				positions[n.ID] = i
 			}
-			if positions["opamp-selected-reading"] >= positions["opamp-plot-row-0"] || positions["opamp-plot-row-1"] >= positions["opamp-model"] || positions["rotate-part"] >= positions["part-assumptions"] {
+			if positions["component-live-summary"] >= positions["opamp-plot-row-0"] || positions["opamp-plot-row-1"] >= positions["workspace-details-component"] || positions["rotate-part"] >= positions["workspace-details-component"] {
 				t.Fatal("live measurements and actions must precede model explanation", positions)
 			}
 			for _, probe := range []struct{ id, name string }{

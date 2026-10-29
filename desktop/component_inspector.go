@@ -13,7 +13,16 @@ import (
 // their ordinary shared commands and the assembled view's revision binding.
 func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Graph, part workbench.Component) []ui.Node {
 	if part.Block != nil {
-		return s.blockInspector(state, part)
+		nodes := s.blockInspector(state, part)
+		var basic, details []ui.Node
+		for _, n := range nodes {
+			if n.ID == "block-heading" || strings.HasPrefix(n.ID, "block-value-") || n.ID == "block-expand" || n.ID == "block-collapse" {
+				basic = append(basic, n)
+			} else {
+				details = append(details, n)
+			}
+		}
+		return append(basic, s.detailsSection(state, "component", "Details", details))
 	}
 	inspector := []ui.Node{}
 	terminals := "Terminals: " + strings.Join(part.Terminals, ", ")
@@ -287,7 +296,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 			inspector[i].ControlStateKey = s.startupControlStateKey(part.ID)
 		}
 	}
-	return inspector
+	return s.compactComponentInspector(state, part, inspector)
 }
 
 // Keep the basic editor and its explicit Apply action ahead of model settings.

@@ -11,6 +11,7 @@ type Snapshot struct {
 	Audio                   *AudioPreview          `json:"audio_preview,omitempty"`
 	InspectorSection        string                 `json:"inspector_section"`
 	WorkspacePanels         WorkspacePanels        `json:"workspace_panels"`
+	WorkspaceDetails        WorkspaceDetails       `json:"workspace_details"`
 	SimulationTool          string                 `json:"simulation_tool"`
 	WorkspaceLayout         WorkspaceLayout        `json:"workspace_layout"`
 	Viewport                ViewportState          `json:"viewport"`
@@ -142,6 +143,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		Proposal:                s.proposalViewLocked(),
 		WorkspaceLayout:         s.workspaceLayout,
 		WorkspacePanels:         s.workspacePanels,
+		WorkspaceDetails:        s.workspaceDetails,
 		SimulationTool:          s.simulationTool,
 		InspectorSection:        s.inspectorSection,
 		Viewport:                cloneViewport(s.viewport),

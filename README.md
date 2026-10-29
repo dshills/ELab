@@ -7,7 +7,7 @@ Build schematics from scratch, change component values, and explore live voltage
 current and timing. The desktop app and AI agents use the same validated commands
 for drawing, simulation, analysis, saving and export.
 
-**Current source: 87 working examples · 61 component kinds · 228 shared commands.**
+**Current source: 87 working examples · 61 component kinds · 229 shared commands.**
 
 ![ELab showing an RC circuit, capacitor inspector, charge/discharge traces and timing cursors in the Light theme](docs/images/rc-scope.jpg)
 

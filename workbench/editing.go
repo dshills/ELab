@@ -760,6 +760,12 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.scopeVisible = p.Visible
 		return nil
+	case "workspace.details.set":
+		var p WorkspaceDetailsParams
+		if err := params(raw, &p, "section", "visible"); err != nil {
+			return err
+		}
+		return s.setWorkspaceDetailsLocked(p)
 	case "workspace.panels.set":
 		var p WorkspacePanels
 		if err := params(raw, &p, "parts_visible", "inspector_visible", "parts_width", "inspector_width"); err != nil {

@@ -8,7 +8,7 @@
     "desktop/audio_controls.go": "145150962fa7aea606b0dbec0f3fc674bf2786120ca7054679fa1e9ba89d60a3",
     "desktop/blocks.go": "5c008ae74991d2728c04f5d68e69e4017740a04ae067faa21d5545d95825b33b",
     "desktop/canvas.go": "7c3291a223c451dbe6efacf217e53a0f484bedc69c8f8757be4378b1c1e7e442",
-    "desktop/component_inspector.go": "624efd1a5c63adf2979ca7b50e9939b3a4486e5962d7c4e438d451d80d9a49f2",
+    "desktop/component_inspector.go": "65a0154879cf95ad5b6ba7411136cd3c7e5249678005fa1e2ee8a62a412f63f7",
     "desktop/component_palette.go": "554968a6746c02a80cc8c8f3fb853e422f0e45e97afa0d68cb95e2eb00da4a9a",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
@@ -41,7 +41,7 @@
     "desktop/inspector_style.go": "83300656b7cb37deac9f6cb46b7704315ba4cbccfa71b738b290b23e3ac758ae",
     "desktop/jfet_controls.go": "bc2d09bede116b403673ea9dda29aa43f33570c6c3e072320d02be6c6336ab86",
     "desktop/keyboard_workflow.go": "b191362c5d182dac02e265925c30bdfcaf5db3bf6a9ef0a189d0e264917c7349",
-    "desktop/layout.go": "1b780e66e228784016e71d4d2d3300620551eb9bb83d47fdc696296a9b2b456d",
+    "desktop/layout.go": "05f9fe8624996f34ec5caf8670327384b9547555820f8aefef43bbb2bffc47ba",
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/loop_gain.go": "578aa3446a020722d073b9397893c7919e66ea6594e131fff3cc48fcb288881a",
     "desktop/main.go": "71edf427083bcc73d2ccadc678130a09461455375ea8968b8aff294e9c79bdc5",
@@ -67,6 +67,7 @@
     "desktop/print_preview.go": "56b3ac5c0c25bbfd5603921a3600dff6a23671defbcd94d9b99c61794f18f158",
     "desktop/printing.go": "9c40645db6de5affc3ae9d654f72c7003671f5d8c23c8bd7de93ffa35bea8c59",
     "desktop/probes.go": "44cf20fe63d68fafdd991d6f0aa4afbc0cf51a452c1ee2892a82bcadff1defe6",
+    "desktop/progressive_details.go": "aa983cd943edfd9a34b661ed01aa81b3ee824e1d2e27240f5bab0cda95619e44",
     "desktop/project_work.go": "916f2081ce3d223b91c0c24081afbdae1e2a6e917ec58d90ebe64e87dc690646",
     "desktop/recorded_playback_actions.go": "a6f7687f201a3b2ea3f91480979ead96e21b54150e54812e0b3e32a24c8b9045",
     "desktop/recorded_timing_actions.go": "32de7374bceba81ba4dc6843765cfa8dd1611a9f6a1508530a3dcf8b5ec6e2a7",
@@ -106,7 +107,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "9252b8abd2b22c272cb9bde0485ac46a067d9cac9bef02c293cb8c87a606c1e9",
+    "desktop/view.go": "b57aecc76c663618d7a3d29b7209c3b9cf4e3c9a008fcab553b71811abd68814",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -342,6 +343,7 @@
     "wire.connect",
     "wire.junction.insert",
     "wire.terminals.set",
+    "workspace.details.set",
     "workspace.inspector.set",
     "workspace.layout.set",
     "workspace.panels.set",
@@ -1016,7 +1018,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 203,
+      "line": 212,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-1k\", \"1 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"1k\"})",
@@ -1024,7 +1026,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 203,
+      "line": 212,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"r-2k\", \"2 kΩ\", workbench.ValueParams{ID: part.ID, Value: \"2k\"})",
@@ -1032,7 +1034,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 216,
+      "line": 225,
       "function": "*screen.componentInspector",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.changeComponentStartup(state, part, fmt.Sprintf(\"%.9g V\", e.Number))\n}",
@@ -1040,7 +1042,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 218,
+      "line": 227,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.componentStartupDefault(state, part)",
@@ -1048,7 +1050,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 219,
+      "line": 228,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-1u\", \"1 µF\", workbench.ValueParams{ID: part.ID, Value: \"1uF\"})",
@@ -1056,7 +1058,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 219,
+      "line": 228,
       "function": "*screen.componentInspector",
       "kind": "callback-factory",
       "expression": "s.valuePresetAction(state, \"c-100u\", \"100 µF\", workbench.ValueParams{ID: part.ID, Value: \"100uF\"})",
@@ -1064,7 +1066,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 298,
+      "line": 307,
       "function": "*screen.partValueEditControls",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -1072,7 +1074,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 298,
+      "line": 307,
       "function": "*screen.partValueEditControls",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply label\")",
@@ -1080,7 +1082,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 323,
+      "line": 332,
       "function": "*screen.partValueEditControls",
       "kind": "node-Change",
       "expression": "Change: s.changeValueDraft",
@@ -1088,7 +1090,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 323,
+      "line": 332,
       "function": "*screen.partValueEditControls",
       "kind": "callback-factory",
       "expression": "s.valueApplyAction(state, part.ID, \"Apply value\")",
@@ -1096,7 +1098,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 329,
+      "line": 338,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"rotate-part\", \"Rotate 90°\", \"component.rotate\", workbench.IDParams{ID: part.ID})",
@@ -1107,7 +1109,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 330,
+      "line": 339,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.action(\"duplicate-part\", \"Duplicate\", \"component.duplicate\", workbench.DuplicateParams{ID: part.ID})",
@@ -1118,7 +1120,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 333,
+      "line": 342,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"rotate-part\", \"Rotate 90°\", owner, true, \"component.rotate\", func(value workbench.ValueParams) any { return workbench.IDParams{ID: value.ID} })",
@@ -1129,7 +1131,7 @@
     },
     {
       "file": "desktop/component_inspector.go",
-      "line": 334,
+      "line": 343,
       "function": "*screen.partGeometryControls",
       "kind": "action-factory",
       "expression": "s.valueRelatedAction(state, \"duplicate-part\", \"Duplicate\", owner, true, \"component.duplicate\", func(value workbench.ValueParams) any { return workbench.DuplicateParams{ID: value.ID} })",
@@ -2481,7 +2483,7 @@
     },
     {
       "file": "desktop/layout.go",
-      "line": 101,
+      "line": 104,
       "function": "findAction",
       "kind": "node-Change",
       "expression": "Change: root.Change",
@@ -2489,7 +2491,7 @@
     },
     {
       "file": "desktop/layout.go",
-      "line": 108,
+      "line": 111,
       "function": "findAction",
       "kind": "node-Activate",
       "expression": "Activate: func() { choices.Change(ui.ChangeEvent{ID: root.ID, Kind: ui.MenuButton, SelectedID: id}) }",
@@ -3606,6 +3608,36 @@
       "expression": "s.cursorAction(state, \"cursor-clear-\"+cursor.id, \"×\", \"scope.cursor.clear\", cursor.id)",
       "public_commands": [
         "scope.cursor.clear"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/progressive_details.go",
+      "line": 11,
+      "function": "*screen.detailsSection",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tparams := workbench.WorkspaceDetailsParams{Section: section, Visible: e.Checked}\n\tif (section == \"component\" || section == \"selection\") \u0026\u0026 state.Selected != \"\" {\n\t\tgraph := workbench.Graph{Components: state.Components, Wires: state.Wires}\n\t\tif part, ok := graph.Component(state.Selected); ok \u0026\u0026 (part.Unit != \"\" || part.Kind == \"net-label\") {\n\n\t\t\taction := s.valueRelatedAction(state, \"details-value-handoff\", \"Details\", workbench.ValueParams{ID: part.ID}, true, \"workspace.details.set\", func(workbench.ValueParams) any { return params })\n\t\t\taction.Activate()\n\t\t\treturn\n\t\t}\n\t}\n\ts.invokeAtCommandRevision(\"workspace.details.set\", params, state.CommandRevision, state.Document.Generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/progressive_details.go",
+      "line": 19,
+      "function": "*screen.detailsSection",
+      "kind": "action-factory",
+      "expression": "s.valueRelatedAction(state, \"details-value-handoff\", \"Details\", workbench.ValueParams{ID: part.ID}, true, \"workspace.details.set\", func(workbench.ValueParams) any { return params })",
+      "public_commands": [
+        "workspace.details.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/progressive_details.go",
+      "line": 24,
+      "function": "*screen.detailsSection",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"workspace.details.set\", params, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "workspace.details.set"
       ],
       "status": "literal-public-route"
     },
@@ -5757,7 +5789,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 328,
+      "line": 335,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -5768,7 +5800,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 335,
+      "line": 342,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -5779,7 +5811,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 337,
+      "line": 344,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Cancel\")",
@@ -5790,7 +5822,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 346,
+      "line": 353,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"Sweeps\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -5801,7 +5833,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 564,
+      "line": 571,
       "function": "*screen.workspaceView",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -5809,7 +5841,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 577,
+      "line": 584,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",
@@ -6194,6 +6226,7 @@
     "wire.connect",
     "wire.junction.insert",
     "wire.terminals.set",
+    "workspace.details.set",
     "workspace.inspector.set",
     "workspace.layout.set",
     "workspace.panels.set",

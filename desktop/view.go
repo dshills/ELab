@@ -273,6 +273,13 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		n.Style.Foreground = ui.Some(color.NRGBA{R: 168, G: 65, B: 68, A: 255})
 		inspector = append(inspector, n)
 	}
+	inspector = compactObjectActions(inspector)
+	// Keep object navigation available without putting three navigation controls
+	// ahead of the selected part's primary value and reading.
+	if len(inspector) >= 3 {
+		navigation := append([]ui.Node{}, inspector[:3]...)
+		inspector = append(inspector[3:], s.detailsSection(state, "selection", "Choose another object", navigation))
+	}
 	inspector = inspectorGroup("object", "Object inspector", inspector)
 	inspector = append(inspector, inspectorGroup("live-sampling", "Live circuit controls", append(s.lcSamplingControls(state), s.npnControls(state)...))...)
 	var circuitControls []ui.Node

@@ -15,6 +15,7 @@ func prepareValuePreset(t *testing.T, s *screen) ui.Node {
 	uiAction(t, s, "example.reset", nil)
 	agentAction(t, s.service, "component.select", workbench.IDParams{ID: "R1"})
 	agentAction(t, s.service, "component.set", workbench.ValueParams{ID: "R1", Value: "3k"})
+	uiAction(t, s, "workspace-details-component", &ui.ChangeEvent{Checked: true})
 	var field ui.Node
 	s.app.Do(func() { field, _ = findNode(s.view(), "value-entry") })
 	return field

@@ -98,3 +98,28 @@ chooser remains a separate analysis of captured data. Every existing electrical,
 file, analysis and instrument command still works with either side panel collapsed.
 Both new commands use the ordinary shared guards, retry identities and view/
 preference events. The request fragments above omit that required envelope.
+
+## Details and Advanced sections
+
+Inspect puts the selected part's value, main actions, live summary and common
+plots first. **Details** retains model settings, initial conditions, full readings,
+coordinates, duplicate and explanation controls. **Choose another object**
+retains the object selector and navigation. Direct actuation such as switches,
+pushbuttons, sensor inputs and potentiometer position stays in the basic view.
+
+The disclosure choice is shared session presentation:
+
+```json
+{"command":"workspace.details.set","params":{"section":"component","visible":true}}
+```
+
+Both parameters are required. `project.inspect.workspace_details` exposes the
+choices. Allowed sections are `component`, `selection`, `measurement`, `pins`,
+`live`, `recordings`, `spectrum`, `sweeps`, `tolerances` and `circuit`. Choices
+start closed and survive document replacement within a session; they are not
+saved in schematic files and do not affect dirty state, electrical results,
+history or accepted analysis settings. Normal guards and exact retry identities
+apply. Hidden controls retain private editor state through collapse, but are
+excluded from visible input/keyboard traversal. Changing documents retires that
+private state through the existing document-generation keys. Electrical commands
+remain available to agents regardless of disclosure state.

@@ -45,6 +45,8 @@ Side-panel visibility/widths and the Simulate task are shared through
 `workspace.panels.set` and `workspace.simulation.set`. They are session layout
 preferences; existing electrical commands work with panels collapsed.
 [Parameters, tools and preservation contract](workspace-layout.md).
+Details/Advanced sections use `workspace.details.set` with `section` and `visible`;
+inspect `workspace_details`. Hidden controls retain the same electrical commands.
 
 ## Request and response
 

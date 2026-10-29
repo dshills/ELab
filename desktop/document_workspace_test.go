@@ -75,7 +75,7 @@ func TestInspectorPagesMatchAgentAndKeepControlsReachable(t *testing.T) {
 		}
 		root := s.view()
 		assertSelection(root, after)
-		target := map[string]string{"component": "selection", "simulation": "setting-step", "document": "pdf-paper"}[section]
+		target := map[string]string{"component": "workspace-details-selection", "simulation": "setting-step", "document": "pdf-paper"}[section]
 		if _, ok := ui.FocusTarget(root, target); !ok {
 			t.Fatal("selected inspector control is unreachable", section, target)
 		}

@@ -336,7 +336,7 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 			return err
 		}
 	}
-	node, ok := findAction(s.view(), id)
+	node, ok := s.reachableAction(id)
 	if !ok && strings.HasPrefix(id, "example.") && id != "example.current.reset" {
 		node, ok = s.button(id, "Template fixture"), true
 	}
@@ -347,7 +347,7 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 				continue
 			}
 			page.Activate()
-			node, ok = findAction(s.view(), id)
+			node, ok = s.reachableAction(id)
 			if !ok && section == "simulation" {
 				for _, option := range simulationTools() {
 					chooser, exists := findAction(s.view(), "simulation-tool")
@@ -355,7 +355,7 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 						break
 					}
 					chooser.Change(ui.ChangeEvent{SelectedID: option.ID})
-					node, ok = findAction(s.view(), id)
+					node, ok = s.reachableAction(id)
 					if ok {
 						break
 					}

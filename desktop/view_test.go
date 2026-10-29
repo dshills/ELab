@@ -52,7 +52,7 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 		if err := ui.Validate(root); err != nil {
 			t.Fatal(err)
 		}
-		node, ok := findAction(root, id)
+		node, ok := s.reachableAction(id)
 		if !ok && strings.HasPrefix(id, "example.") && id != "example.current.reset" {
 			node, ok = s.button(id, "Template fixture"), true
 		}
@@ -65,7 +65,7 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 					continue
 				}
 				page.Activate()
-				node, ok = findAction(s.view(), id)
+				node, ok = s.reachableAction(id)
 				if !ok && section == "simulation" {
 					for _, option := range simulationTools() {
 						chooser, exists := findAction(s.view(), "simulation-tool")
@@ -73,7 +73,7 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 							break
 						}
 						chooser.Change(ui.ChangeEvent{SelectedID: option.ID})
-						node, ok = findAction(s.view(), id)
+						node, ok = s.reachableAction(id)
 						if ok {
 							break
 						}

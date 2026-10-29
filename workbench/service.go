@@ -37,6 +37,7 @@ type Service struct {
 	audioPlaybackSerial         uint64
 	inspectorSection            string
 	workspacePanels             WorkspacePanels
+	workspaceDetails            WorkspaceDetails
 	simulationTool              string
 	workspaceLayout             WorkspaceLayout
 	shutdown                    *shutdownJob

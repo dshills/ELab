@@ -20,7 +20,7 @@ func (s *Service) setWorkspaceLayoutLocked(p WorkspaceLayout) error {
 }
 
 func addWorkspaceCapabilityDetails(id string, schema map[string]any) bool {
-	if addWorkspacePanelDetails(id, schema) {
+	if addWorkspacePanelDetails(id, schema) || addWorkspaceDetailsCapability(id, schema) {
 		return true
 	}
 	if id == "workspace.inspector.set" {
