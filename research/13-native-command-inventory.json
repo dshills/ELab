@@ -50,7 +50,7 @@
     "desktop/menus_darwin.go": "9608dec0abb6de6953e28c0fed26207f99ec40ec9fc4dfff7d38e8a46adadbfe",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
     "desktop/motor_controls.go": "2866498e9ca945053929d531dac3a7abfdb9344185ee3cf30084ea034083244f",
-    "desktop/native_chrome.go": "8cc8d776faf4e9847f921ef70def161bc654be3d37dad934fe48744509a8e6be",
+    "desktop/native_chrome.go": "9b38516a4bdb954372f588254e59e636d36aa83f7e3886703c8924a61eee798c",
     "desktop/noise.go": "1cd522d6ec784b60e1f83cd3d81b7235bd797e15ac37fb6108b334b923f9a5f0",
     "desktop/npn.go": "f355ebca5a937207f73da01d8358831d4f1f8da1e7e95e538ca4eda742f8cbaf",
     "desktop/operation_notice.go": "f4f8858aea77b3874d52061cedfd2206622eaa746608fbff08b02cc999f814b9",
@@ -91,7 +91,7 @@
     "desktop/search_layout.go": "9e5a2418e1ed1027276b764e1e78f6870c42ccbd64a9017d340c8c3c39995094",
     "desktop/sensor_controls.go": "e4f63097e974fcce34eb3834c0c53f2bb3f5a91c8f5dc0555727b2a7558f3249",
     "desktop/shutdown.go": "39c1d9db0f15f23fc69d810ed37dc62262f9e752c7f4ae14e45b3a47afe1f337",
-    "desktop/side_panels.go": "dd840b88aedc52f999e5609e3b7114ed3209aa9cdbd1ec2b083718957ff51e26",
+    "desktop/side_panels.go": "501c2a7ba07509e37aea22337100f4d53e4b8a790b1a8af570a7820fdd635e51",
     "desktop/spectrum.go": "da807e04dcec240f162b659aed7802c01241d17798574e3481851c5ec4f302f0",
     "desktop/spectrum_dock.go": "d358f7524c87a7ff3bc701b196734aacc18e10d8b17351869594d79c206ad5d0",
     "desktop/spectrum_measurements.go": "6089c606298603ce0faa3605176638081cd30252ebc6fcde9cfa71a7c1fc9857",
@@ -106,7 +106,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "ba066fb1ced5195e453aedd1b6542c29f6139f4afaeba0a43d4e0faf6eb9472d",
     "desktop/verification_actions.go": "9458db4304f0c16895274a4ee56b933313bc708d62cc9f076ea856dc66df2f79",
-    "desktop/view.go": "9fb1f72f3cabb38808b95d081e9bc428c7e947f98af266dea3797a5885d54667",
+    "desktop/view.go": "9252b8abd2b22c272cb9bde0485ac46a067d9cac9bef02c293cb8c87a606c1e9",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -4609,7 +4609,7 @@
     },
     {
       "file": "desktop/side_panels.go",
-      "line": 82,
+      "line": 92,
       "function": "*screen.panelToggle",
       "kind": "callback-assignment",
       "expression": "action.Activate = func() {\n\tresponse := s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)\n\tif response.Error == nil {\n\t\ttarget := id\n\t\tif !visible {\n\t\t\tif inspector {\n\t\t\t\ttarget = \"inspector-section-\" + state.InspectorSection\n\t\t\t} else {\n\t\t\t\ttarget = \"part-search\"\n\t\t\t\tif previewVisible(state) {\n\t\t\t\t\ttarget = \"printer-destination\"\n\t\t\t\t} else if sweepVisible(state) {\n\t\t\t\t\ttarget = \"sweep-target\"\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\ts.requestKeyboardFocus(target)\n\t}\n}",
@@ -4617,7 +4617,7 @@
     },
     {
       "file": "desktop/side_panels.go",
-      "line": 83,
+      "line": 93,
       "function": "*screen.panelToggle",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)",
@@ -4628,34 +4628,26 @@
     },
     {
       "file": "desktop/side_panels.go",
-      "line": 118,
+      "line": 128,
       "function": "*screen.sidePanels",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := state.WorkspacePanels\n\tp.InspectorWidth = math.Round(float64((1 - e.Number) * span))\n\tp.InspectorWidth = max(workbench.MinInspectorPanelWidth, min(workbench.MaxInspectorPanelWidth, p.InspectorWidth))\n\tif p.PartsVisible {\n\t\tp.PartsWidth = max(workbench.MinPartsPanelWidth, min(float64(left), float64(sidePanelBudget(total, p))-p.InspectorWidth))\n\t}\n\ts.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := state.WorkspacePanels\n\tp.InspectorWidth = math.Round(float64((1 - e.Number) * span))\n\tif p.InspectorWidth \u003c workbench.MinInspectorPanelWidth/2 {\n\t\tp = state.WorkspacePanels\n\t\tp.InspectorVisible = false\n\t\tif r := s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation); r.Error == nil {\n\t\t\ts.requestKeyboardFocus(\"inspector-toggle\")\n\t\t}\n\t\treturn\n\t}\n\tp.InspectorWidth = max(workbench.MinInspectorPanelWidth, min(workbench.MaxInspectorPanelWidth, p.InspectorWidth))\n\tif p.PartsVisible {\n\t\tp.PartsWidth = max(workbench.MinPartsPanelWidth, min(float64(left), float64(sidePanelBudget(total, p))-p.InspectorWidth))\n\t}\n\ts.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)\n}",
       "status": "requires-binding-review"
-    },
-    {
-      "file": "desktop/side_panels.go",
-      "line": 125,
-      "function": "*screen.sidePanels",
-      "kind": "domain-ingress",
-      "expression": "s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)",
-      "public_commands": [
-        "workspace.panels.set"
-      ],
-      "status": "literal-public-route"
     },
     {
       "file": "desktop/side_panels.go",
       "line": 134,
       "function": "*screen.sidePanels",
-      "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := state.WorkspacePanels\n\tp.PartsWidth = math.Round(float64(e.Number * span))\n\tp.PartsWidth = max(workbench.MinPartsPanelWidth, min(workbench.MaxPartsPanelWidth, p.PartsWidth))\n\tif p.InspectorVisible {\n\t\tp.InspectorWidth = max(workbench.MinInspectorPanelWidth, min(float64(right), float64(sidePanelBudget(total, p))-p.PartsWidth))\n\t}\n\ts.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)\n}",
-      "status": "requires-binding-review"
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "workspace.panels.set"
+      ],
+      "status": "literal-public-route"
     },
     {
       "file": "desktop/side_panels.go",
-      "line": 141,
+      "line": 143,
       "function": "*screen.sidePanels",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)",
@@ -4666,7 +4658,37 @@
     },
     {
       "file": "desktop/side_panels.go",
-      "line": 187,
+      "line": 152,
+      "function": "*screen.sidePanels",
+      "kind": "node-Change",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := state.WorkspacePanels\n\tp.PartsWidth = math.Round(float64(e.Number * span))\n\tif p.PartsWidth \u003c workbench.MinPartsPanelWidth/2 {\n\t\tp = state.WorkspacePanels\n\t\tp.PartsVisible = false\n\t\tif r := s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation); r.Error == nil {\n\t\t\ts.requestKeyboardFocus(\"parts-toggle\")\n\t\t}\n\t\treturn\n\t}\n\tp.PartsWidth = max(workbench.MinPartsPanelWidth, min(workbench.MaxPartsPanelWidth, p.PartsWidth))\n\tif p.InspectorVisible {\n\t\tp.InspectorWidth = max(workbench.MinInspectorPanelWidth, min(float64(right), float64(sidePanelBudget(total, p))-p.PartsWidth))\n\t}\n\ts.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)\n}",
+      "status": "requires-binding-review"
+    },
+    {
+      "file": "desktop/side_panels.go",
+      "line": 158,
+      "function": "*screen.sidePanels",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "workspace.panels.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/side_panels.go",
+      "line": 167,
+      "function": "*screen.sidePanels",
+      "kind": "domain-ingress",
+      "expression": "s.invokeAtCommandRevision(\"workspace.panels.set\", p, state.CommandRevision, state.Document.Generation)",
+      "public_commands": [
+        "workspace.panels.set"
+      ],
+      "status": "literal-public-route"
+    },
+    {
+      "file": "desktop/side_panels.go",
+      "line": 250,
       "function": "*screen.simulationToolChooser",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invokeAtCommandRevision(\"workspace.simulation.set\", workbench.SimulationToolParams{Tool: e.SelectedID}, state.CommandRevision, state.Document.Generation)\n}",
@@ -4674,7 +4696,7 @@
     },
     {
       "file": "desktop/side_panels.go",
-      "line": 188,
+      "line": 251,
       "function": "*screen.simulationToolChooser",
       "kind": "domain-ingress",
       "expression": "s.invokeAtCommandRevision(\"workspace.simulation.set\", workbench.SimulationToolParams{Tool: e.SelectedID}, state.CommandRevision, state.Document.Generation)",
@@ -5604,7 +5626,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 214,
+      "line": 213,
       "function": "*screen.workspaceView",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil) }",
@@ -5612,7 +5634,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 214,
+      "line": 213,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
@@ -5623,7 +5645,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 215,
+      "line": 214,
       "function": "*screen.workspaceView",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil) }",
@@ -5631,7 +5653,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 215,
+      "line": 214,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
@@ -5642,7 +5664,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 216,
+      "line": 215,
       "function": "*screen.workspaceView",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
@@ -5650,7 +5672,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 216,
+      "line": 215,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
@@ -5661,7 +5683,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 233,
+      "line": 232,
       "function": "*screen.workspaceView",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
@@ -5669,7 +5691,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 238,
+      "line": 237,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -5680,7 +5702,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 240,
+      "line": 239,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"selection-previous\", \"Back\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
@@ -5691,7 +5713,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 242,
+      "line": 241,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"selection-next\", \"Next\", \"selection.navigate\", workbench.NavigateParams{Direction: \"next\", Center: true})",
@@ -5702,7 +5724,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 245,
+      "line": 244,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"selection-center\", \"Center\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
@@ -5713,7 +5735,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 259,
+      "line": 258,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -5724,7 +5746,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 273,
+      "line": 272,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -5735,7 +5757,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 329,
+      "line": 328,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -5746,7 +5768,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 336,
+      "line": 335,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -5757,7 +5779,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 338,
+      "line": 337,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Cancel\")",
@@ -5768,7 +5790,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 347,
+      "line": 346,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"Sweeps\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -5779,7 +5801,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 565,
+      "line": 564,
       "function": "*screen.workspaceView",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -5787,7 +5809,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 578,
+      "line": 577,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

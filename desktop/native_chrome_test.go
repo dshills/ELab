@@ -48,9 +48,15 @@ func TestSidePanelHostsDoNotCreateNestedScrollbars(t *testing.T) {
 	navigation.SetName("simulation-tool-navigation")
 	rail := core.NewFrame(scene)
 	rail.SetName("inspector-rail")
+	owned := []*core.Frame{left, right, navigation, rail}
+	for _, name := range []string{"drawer-controls", "parts-drawer-header", "inspector-drawer-header"} {
+		f := core.NewFrame(scene)
+		f.SetName(name)
+		owned = append(owned, f)
+	}
 	s.styleNativeChrome(scene)
 	scene.StyleTree()
-	for _, w := range []*core.Frame{left, right, navigation, rail} {
+	for _, w := range owned {
 		if w.Styles.Overflow.X != styles.OverflowHidden || w.Styles.Overflow.Y != styles.OverflowHidden {
 			t.Fatal("side host retained a second scroller")
 		}

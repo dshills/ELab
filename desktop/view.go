@@ -155,10 +155,9 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		s.button("file.save", "Save"),
 		s.examplesButton(state),
 		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
-		s.panelToggle(state, false), s.panelToggle(state, true),
 	}}
 	// Reserve the complete document action row, including its group dividers.
-	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 520, Height: toolbarHeight})
+	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 380, Height: toolbarHeight})
 	var documentActions []ui.Node
 	for i := range toolbar.Children {
 		action := documentToolbarAction(toolbar.Children[i])

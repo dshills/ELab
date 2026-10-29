@@ -9,6 +9,9 @@ import (
 	"math"
 	"reflect"
 	"testing"
+	"time"
+
+	"cogentcore.org/core/core"
 
 	"cogentcore.org/core/events"
 	"cogentcore.org/core/events/key"
@@ -216,5 +219,186 @@ func TestMountedMaximumPanelPreferencesKeepToolsAndBothGripsUsable(t *testing.T)
 		if !control.Visible || !control.Bounds.In(sheet) {
 			t.Fatal("resize clipped drawing action", id, control.Bounds, sheet)
 		}
+	}
+}
+
+func TestMountedDrawerResizeContinuesWithinOnePointerGesture(t *testing.T) {
+	for _, id := range []string{"parts-split", "inspector-split"} {
+		t.Run(id, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			defer cleanup()
+			m := newMountedControlWindowSize(t, s, func() ui.Node { return sidePanelPaintView(s, 1440) }, 1440, 800, inspectorLayoutTestTheme())
+			grip := sidePanelGrip(t, m, id)
+			start := grip.Min.Add(grip.Size().Div(2))
+			direction := 1
+			if id == "inspector-split" {
+				direction = -1
+			}
+			before := s.service.Snapshot().WorkspacePanels
+			m.input(cogent.ManualInput{Type: events.MouseDown, Button: events.Left, Position: start})
+			if _, err := m.clock.Advance(core.TimingSettings.SlideStartTime + time.Millisecond); err != nil {
+				t.Fatal(err)
+			}
+			m.settle()
+			for _, delta := range []int{16, 48, 72} {
+				m.input(cogent.ManualInput{Type: events.MouseMove, Position: start.Add(image.Pt(direction*delta, 0))})
+				current := s.service.Snapshot().WorkspacePanels
+				change := current.PartsWidth - before.PartsWidth
+				if id == "inspector-split" {
+					change = current.InspectorWidth - before.InspectorWidth
+				}
+				if math.Abs(change-float64(delta)) > 3 {
+					t.Fatalf("ongoing move %d stopped at %g: %s", delta, change, s.errorMessage)
+				}
+			}
+			m.input(cogent.ManualInput{Type: events.MouseUp, Button: events.Left, Position: start.Add(image.Pt(direction*72, 0))})
+			after := s.service.Snapshot().WorkspacePanels
+			change := after.PartsWidth - before.PartsWidth
+			if id == "inspector-split" {
+				change = after.InspectorWidth - before.InspectorWidth
+			}
+			if math.Abs(change-72) > 3 {
+				t.Fatalf("drawer stopped before the pointer finished: change=%g want=72; %s", change, s.errorMessage)
+			}
+		})
+	}
+}
+
+func TestMountedDrawersCloseAtEdgesAndReopenByLabel(t *testing.T) {
+	for _, theme := range []string{"light", "dark", "apollo", "system"} {
+		t.Run(theme, func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			defer cleanup()
+			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": theme})
+			m := newMountedControlWindowSize(t, s, func() ui.Node { return sidePanelPaintView(s, 1040) }, 1040, 800, inspectorLayoutTestTheme())
+			before := s.service.Snapshot()
+			left := mountedControlElement(t, m, "parts-toggle")
+			right := mountedControlElement(t, m, "inspector-toggle")
+			if !left.Visible || !right.Visible || left.Bounds.Min.X > 240 || right.Bounds.Min.X < 700 {
+				t.Fatal("close controls are not at their drawer edges", left.Bounds, right.Bounds)
+			}
+			for _, id := range []string{"parts-toggle", "inspector-toggle"} {
+				clickMountedControl(t, m, id)
+			}
+			for _, id := range []string{"parts-scroll", "inspector-rail", "parts-split", "inspector-split"} {
+				if _, ok := findNode(s.view(), id); ok {
+					t.Fatal("closed drawer remains mounted", id)
+				}
+			}
+			for _, id := range []string{"parts-toggle", "inspector-toggle"} {
+				n := mountedControlElement(t, m, id)
+				if !n.Visible || n.Bounds.Empty() {
+					t.Fatal("no visible edge tab", id)
+				}
+				clickMountedControl(t, m, id)
+			}
+			after := s.service.Snapshot()
+			if after.WorkspacePanels != before.WorkspacePanels {
+				t.Fatal("close/reopen lost preferred width")
+			}
+			assertCursorMeasurementPreservesPhysics(t, before, after)
+		})
+	}
+}
+
+func TestMountedDrawersDragAndKeyboardCloseWithoutLosingWidth(t *testing.T) {
+	for _, inspector := range []bool{false, true} {
+		for _, keyboard := range []bool{false, true} {
+			t.Run(fmt.Sprintf("inspector=%v/keyboard=%v", inspector, keyboard), func(t *testing.T) {
+				s, cleanup := testScreen(t)
+				defer cleanup()
+				m := newMountedControlWindowSize(t, s, func() ui.Node { return sidePanelPaintView(s, 1440) }, 1440, 800, inspectorLayoutTestTheme())
+				before := s.service.Snapshot()
+				id, toggle, panel := "parts-split", "parts-toggle", "parts-scroll"
+				delta := -200
+				code := key.CodeHome
+				if inspector {
+					id, toggle, panel = "inspector-split", "inspector-toggle", "inspector-rail"
+					delta = 240
+					code = key.CodeEnd
+				}
+				b := sidePanelGrip(t, m, id)
+				start := b.Min.Add(b.Size().Div(2))
+				m.input(cogent.ManualInput{Type: events.MouseDown, Button: events.Left, Position: start})
+				if keyboard {
+					m.input(cogent.ManualInput{Type: events.MouseUp, Button: events.Left, Position: start})
+					m.input(cogent.ManualInput{Type: events.KeyChord, Code: code})
+				} else {
+					if _, err := m.clock.Advance(core.TimingSettings.SlideStartTime + time.Millisecond); err != nil {
+						t.Fatal(err)
+					}
+					m.settle()
+					m.input(cogent.ManualInput{Type: events.MouseMove, Position: start.Add(image.Pt(delta/4, 0))})
+					m.input(cogent.ManualInput{Type: events.MouseMove, Position: start.Add(image.Pt(delta, 0))})
+					m.input(cogent.ManualInput{Type: events.MouseUp, Button: events.Left, Position: start.Add(image.Pt(delta, 0))})
+				}
+				after := s.service.Snapshot()
+				visible := after.WorkspacePanels.PartsVisible
+				if inspector {
+					visible = after.WorkspacePanels.InspectorVisible
+				}
+				if visible {
+					t.Fatal("edge gesture did not close the drawer", s.errorMessage)
+				}
+				if _, ok := findNode(s.view(), panel); ok {
+					t.Fatal("closed form still mounted")
+				}
+				if m.snapshot().FocusedID != toggle {
+					t.Fatal("closing lost focus instead of returning to edge tab", m.snapshot().FocusedID)
+				}
+				if after.WorkspacePanels.PartsWidth != before.WorkspacePanels.PartsWidth || after.WorkspacePanels.InspectorWidth != before.WorkspacePanels.InspectorWidth {
+					t.Fatal("closing discarded preferred width")
+				}
+				clickMountedControl(t, m, toggle)
+				if s.service.Snapshot().WorkspacePanels != before.WorkspacePanels {
+					t.Fatal("edge tab did not reopen drawer")
+				}
+				assertCursorMeasurementPreservesPhysics(t, before, s.service.Snapshot())
+			})
+		}
+	}
+}
+
+func TestMountedDrawerClosingDragRefusesInterveningAgent(t *testing.T) {
+	for _, inspector := range []bool{false, true} {
+		t.Run(fmt.Sprint(inspector), func(t *testing.T) {
+			s, cleanup := testScreen(t)
+			defer cleanup()
+			m := newMountedControlWindowSize(t, s, func() ui.Node { return sidePanelPaintView(s, 1440) }, 1440, 800, inspectorLayoutTestTheme())
+			id := "parts-split"
+			delta := -200
+			if inspector {
+				id = "inspector-split"
+				delta = 240
+			}
+			b := sidePanelGrip(t, m, id)
+			start := b.Min.Add(b.Size().Div(2))
+			m.input(cogent.ManualInput{Type: events.MouseDown, Button: events.Left, Position: start})
+			if _, err := m.clock.Advance(core.TimingSettings.SlideStartTime + time.Millisecond); err != nil {
+				t.Fatal(err)
+			}
+			m.settle()
+			p := s.service.Snapshot().WorkspacePanels
+			if inspector {
+				p.PartsWidth = 300
+			} else {
+				p.InspectorWidth = 400
+			}
+			agentAction(t, s.service, "workspace.panels.set", p)
+			m.frame()
+			m.input(cogent.ManualInput{Type: events.MouseMove, Position: start.Add(image.Pt(delta, 0))})
+			m.input(cogent.ManualInput{Type: events.MouseUp, Button: events.Left, Position: start.Add(image.Pt(delta, 0))})
+			if s.service.Snapshot().WorkspacePanels != p {
+				t.Fatal("pre-agent gesture closed a newer drawer state")
+			}
+			b = sidePanelGrip(t, m, id)
+			start = b.Min.Add(b.Size().Div(2))
+			m.input(cogent.ManualInput{Type: events.MouseDown, Button: events.Left, Position: start})
+			m.input(cogent.ManualInput{Type: events.MouseUp, Button: events.Left, Position: start.Add(image.Pt(delta, 0))})
+			current := s.service.Snapshot().WorkspacePanels
+			if inspector && current.InspectorVisible || !inspector && current.PartsVisible {
+				t.Fatal("fresh closing gesture failed", s.errorMessage)
+			}
+		})
 	}
 }

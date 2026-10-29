@@ -72,13 +72,23 @@ func (s *screen) panelToggle(state workbench.Snapshot, inspector bool) ui.Node {
 		p.PartsVisible = !visible
 	}
 	action := s.action(id, text, "workspace.panels.set", p)
-	action = buttonStyle(action, visible)
-	verb := "Show"
-	if visible {
-		verb = "Hide"
+	action = buttonStyle(action, false)
+	verb := "Open"
+	action.Icon = ui.SymbolRight
+	if inspector {
+		action.Icon = ui.SymbolLeft
 	}
-	action.Accessibility.Name = verb + " " + text + " panel"
-	action.Accessibility.Help = verb + " the side panel. Drag its divider to resize; use arrow keys when the divider is focused. The circuit stays unchanged."
+	if visible {
+		verb = "Close"
+		action.Text = "Close"
+		if inspector {
+			action.Icon = ui.SymbolRight
+		} else {
+			action.Icon = ui.SymbolLeft
+		}
+	}
+	action.Accessibility.Name = verb + " " + text + " drawer"
+	action.Accessibility.Help = verb + " the drawer. Drag its inside edge to resize, or toward the outside edge to close. A labelled edge tab reopens it. The circuit stays unchanged."
 	action.Activate = func() {
 		response := s.invokeAtCommandRevision("workspace.panels.set", p, state.CommandRevision, state.Document.Generation)
 		if response.Error == nil {
@@ -113,11 +123,19 @@ func (s *screen) sidePanels(state workbench.Snapshot, parts, sheet, inspector ui
 		span := max(float32(1), remaining-sideDividerWidth)
 		fraction := 1 - right/span
 		content = ui.Node{ID: "inspector-split", Kind: ui.SplitPane, Grow: true, Number: fraction,
-			Numeric:       panelSplitRange(1-panelMaximumWidth(total, state.WorkspacePanels, true)/span, 1-workbench.MinInspectorPanelWidth/span, span),
-			Accessibility: ui.Accessibility{Name: "Inspector width divider", Help: "Drag to resize the inspector. Left/Right changes width; Home/End selects its limits."},
+			Numeric:       panelSplitRange(1-panelMaximumWidth(total, state.WorkspacePanels, true)/span, 1-1/span, span),
+			Accessibility: ui.Accessibility{Name: "Inspector width divider", Help: "Drag to resize; drag toward the right edge to close. Left/Right adjusts width; End closes the drawer, Home widens it."},
 			Children:      []ui.Node{sheet, inspector}, Change: func(e ui.ChangeEvent) {
 				p := state.WorkspacePanels
 				p.InspectorWidth = math.Round(float64((1 - e.Number) * span))
+				if p.InspectorWidth < workbench.MinInspectorPanelWidth/2 {
+					p = state.WorkspacePanels
+					p.InspectorVisible = false
+					if r := s.invokeAtCommandRevision("workspace.panels.set", p, state.CommandRevision, state.Document.Generation); r.Error == nil {
+						s.requestKeyboardFocus("inspector-toggle")
+					}
+					return
+				}
 				p.InspectorWidth = max(workbench.MinInspectorPanelWidth, min(workbench.MaxInspectorPanelWidth, p.InspectorWidth))
 				if p.PartsVisible {
 					p.PartsWidth = max(workbench.MinPartsPanelWidth, min(float64(left), float64(sidePanelBudget(total, p))-p.InspectorWidth))
@@ -129,11 +147,19 @@ func (s *screen) sidePanels(state workbench.Snapshot, parts, sheet, inspector ui
 		span := max(float32(1), total-sideDividerWidth)
 		maxWidth := panelMaximumWidth(total, state.WorkspacePanels, false)
 		content = ui.Node{ID: "parts-split", Kind: ui.SplitPane, Grow: true, Number: left / span,
-			Numeric:       panelSplitRange(workbench.MinPartsPanelWidth/span, max(float32(workbench.MinPartsPanelWidth), maxWidth)/span, span),
-			Accessibility: ui.Accessibility{Name: "Parts width divider", Help: "Drag to resize the parts panel. Left/Right changes width; Home/End selects its limits."},
+			Numeric:       panelSplitRange(1/span, max(float32(workbench.MinPartsPanelWidth), maxWidth)/span, span),
+			Accessibility: ui.Accessibility{Name: "Parts width divider", Help: "Drag to resize; drag toward the left edge to close. Left/Right adjusts width; Home closes the drawer, End widens it."},
 			Children:      []ui.Node{parts, content}, Change: func(e ui.ChangeEvent) {
 				p := state.WorkspacePanels
 				p.PartsWidth = math.Round(float64(e.Number * span))
+				if p.PartsWidth < workbench.MinPartsPanelWidth/2 {
+					p = state.WorkspacePanels
+					p.PartsVisible = false
+					if r := s.invokeAtCommandRevision("workspace.panels.set", p, state.CommandRevision, state.Document.Generation); r.Error == nil {
+						s.requestKeyboardFocus("parts-toggle")
+					}
+					return
+				}
 				p.PartsWidth = max(workbench.MinPartsPanelWidth, min(workbench.MaxPartsPanelWidth, p.PartsWidth))
 				if p.InspectorVisible {
 					p.InspectorWidth = max(workbench.MinInspectorPanelWidth, min(float64(right), float64(sidePanelBudget(total, p))-p.PartsWidth))
@@ -141,7 +167,44 @@ func (s *screen) sidePanels(state workbench.Snapshot, parts, sheet, inspector ui
 				s.invokeAtCommandRevision("workspace.panels.set", p, state.CommandRevision, state.Document.Generation)
 			}}
 	}
-	return ui.Node{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0))}, Children: []ui.Node{content}}
+	return ui.Node{ID: "workspace", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0))}, Children: []ui.Node{s.drawerControls(state, left, right), content}}
+}
+
+// Keep the controls at the drawer edges, outside either scrolling form. The
+// same labelled tab becomes the close action when its drawer opens. Closing
+// frees all horizontal space; no empty collapsed sidebar is retained.
+func (s *screen) drawerControls(state workbench.Snapshot, left, right float32) ui.Node {
+	header := func(inspector bool, width float32, visible bool) ui.Node {
+		action := s.panelToggle(state, inspector)
+		id := "parts-drawer-header"
+		if inspector {
+			id = "inspector-drawer-header"
+		}
+		children := []ui.Node{action}
+		if visible {
+			title := "Parts"
+			if previewVisible(state) {
+				title = "Print"
+			} else if sweepVisible(state) {
+				title = "Sweep"
+			}
+			if inspector {
+				title = "Inspector"
+			}
+			caption := section(id+"-title", title)
+			spacer := ui.Node{ID: id + "-space", Kind: ui.Row, Grow: true}
+			children = []ui.Node{caption, spacer, action}
+			if inspector {
+				children = []ui.Node{action, spacer, caption}
+			}
+		} else {
+			width = 140
+		}
+		return ui.Node{ID: id, Kind: ui.Toolbar, Accessibility: ui.Accessibility{Name: "Drawer controls"},
+			Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.Insets{Left: 8, Right: 8}), Background: ui.Some(paper)}, Children: children}
+	}
+	return ui.Node{ID: "drawer-controls", Kind: ui.Row, Style: ui.Style{GrowX: ui.Some(float32(1)), GrowY: ui.Some(float32(0)), MinSize: ui.Some(ui.Size{Height: 40}), MaxSize: ui.Some(ui.Size{Height: 40}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)},
+		Children: []ui.Node{header(false, left, state.WorkspacePanels.PartsVisible), {ID: "drawer-controls-space", Kind: ui.Row, Grow: true}, header(true, right, state.WorkspacePanels.InspectorVisible)}}
 }
 
 func sidePanelBudget(total float32, p workbench.WorkspacePanels) float32 {

@@ -1,0 +1,14 @@
+from pathlib import Path
+import sys,json
+sys.path.insert(0,str(Path('scripts').resolve()));import quality
+root=Path.cwd();out=root/'build/drawer-correction-20261029/final-gates';env=quality.go_environment(root);env.update(GOPROXY='off',GOTOOLCHAIN='local')
+steps=[
+ ('drawer-race',['go','-C','desktop','test','-race','-tags=offscreen','./...','-run','TestMountedDrawer|TestMountedSidePanel|TestMountedMaximumPanel|TestSidePanel|TestPanelAndTool','-count=1','-timeout=5m']),
+ ('desktop',['go','-C','desktop','test','./...','-count=1','-timeout=10m']),
+ ('rendered',['go','-C','desktop','test','-tags=offscreen','./...','-count=1','-timeout=10m']),
+ ('lint',['scripts/lint.sh']),('desktop-vet',['go','-C','desktop','vet','./...']),('rendered-vet',['go','-C','desktop','vet','-tags=offscreen','./...']),
+ ('python',[sys.executable,'-B','-m','unittest','discover','-s','scripts','-p','test_*.py']),
+ ('inventory',['go','run','./cmd/elab-ui-audit','--verify','research/13-native-command-inventory.json']),
+ ('prd',[sys.executable,'-B','scripts/prd-audit.py','--verify','research/11-prd-implementation-audit.json'])]
+with quality.termination_signals():
+ before=quality.source_inputs(root);r=quality.run_plan(steps,out,root,env,900);r.update(inputs_unchanged=before==quality.source_inputs(root));r['passed']=r['gates_passed'] and r['inputs_unchanged'];quality.write_json(out/'inputs.json',before);quality.write_json(out/'report.json',r);raise SystemExit(0 if r['passed'] else 1)

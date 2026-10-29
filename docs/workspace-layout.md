@@ -40,12 +40,18 @@ The initial section is `component`. This choice is session-only, survives docume
 
 ## Collapsible, resizable side panels
 
-The **Parts** and **Inspector** buttons in the document toolbar show/hide each
-side independently. Drag the divider at a visible panel's inside edge to resize
-it. A focused divider accepts Left/Right and Home/End. Buttons announce Show/Hide
-and continue keyboard focus into a reopened panel or back to its toolbar button
-on collapse. In print/sweep workspaces the left button is labelled Print/Sweep
-and reopens those contextual controls.
+Parts and Inspector are independent docked drawers that move the canvas aside.
+Each open drawer has a **Close** button beside its title at the workspace edge.
+Closing it leaves a labelled **Parts** or **Inspector** edge tab to reopen it;
+the closed form takes no horizontal space. The controls stay above scrolling
+content, rather than being hidden among the document-toolbar actions.
+
+Drag the divider at a drawer's inside edge to resize it. Drag far enough toward
+the outside edge to close it; its preferred open width is retained. A focused
+divider accepts Left/Right; Home closes Parts and End closes Inspector, with
+the opposite key widening it. Buttons announce Open/Close and continue keyboard
+focus into a reopened drawer or back to its edge tab on close. In print/sweep
+workspaces the left tab is labelled Print/Sweep and reopens those controls.
 
 Panel widths and visibility are shared session state:
 
