@@ -28,6 +28,8 @@ type sweepStartWork struct {
 	settings workbench.SweepSettings
 	field    int
 	failed   bool
+	fields   []string
+	details  *workbench.WorkspaceDetailsParams
 }
 
 var sweepStartFields = []string{"sweep-range-start", "sweep-range-stop", "sweep-points"}
@@ -53,7 +55,7 @@ func sweepSettingsOwner(settings workbench.SweepSettings) string {
 func (s *screen) changeSweepField(state workbench.Snapshot, id, text string) {
 	pending := s.pendingSweepStart
 	origin := s.fieldContext
-	if pending != nil && (origin == nil || *origin != pending.context || pending.field >= len(sweepStartFields) || sweepStartFields[pending.field] != id) {
+	if pending != nil && (origin == nil || *origin != pending.context || pending.field >= len(pending.fields) || pending.fields[pending.field] != id) {
 		pending.failed = true
 		s.sweepSettingsAccepted = nil
 		s.errorMessage = "Sweep settings changed. Review them and try again."
@@ -119,6 +121,10 @@ func (s *screen) changeSweepField(state workbench.Snapshot, id, text string) {
 }
 
 func (s *screen) sweepStartAction(state workbench.Snapshot) ui.Node {
+	return s.sweepRelatedAction(state, nil)
+}
+
+func (s *screen) sweepRelatedAction(state workbench.Snapshot, details *workbench.WorkspaceDetailsParams) ui.Node {
 	label := "Run DC sweep"
 	if state.DCSweep.Settings.Parameter == "noise" {
 		label = "Run noise analysis"
@@ -132,7 +138,10 @@ func (s *screen) sweepStartAction(state workbench.Snapshot) ui.Node {
 		if s.pendingSweepStart != nil {
 			return
 		}
-		pending := &sweepStartWork{context: actionContext{state.CommandRevision, state.Document.Generation}, settings: state.DCSweep.Settings}
+		pending := &sweepStartWork{context: actionContext{state.CommandRevision, state.Document.Generation}, settings: state.DCSweep.Settings, details: details, fields: sweepStartFields}
+		if !state.WorkspaceDetails.Sweeps {
+			pending.fields = sweepStartFields[:2]
+		}
 		current := s.service.Snapshot()
 		if accepted := s.sweepSettingsAccepted; accepted != nil && accepted.from.generation == pending.context.generation && accepted.from.revision <= pending.context.revision && pending.context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {
 			pending.context, pending.settings = accepted.to, accepted.settings
@@ -150,7 +159,7 @@ func (s *screen) settleSweepStart(pending *sweepStartWork, index int) {
 	if s.pendingSweepStart != pending || pending.field != index {
 		return
 	}
-	if pending.failed || index == len(sweepStartFields) {
+	if pending.failed || index == len(pending.fields) {
 		s.pendingSweepStart = nil
 		if pending.failed {
 			s.app.Invalidate("main")
@@ -172,7 +181,7 @@ func (s *screen) settleSweepStart(pending *sweepStartWork, index int) {
 	}
 	if s.settleField == nil {
 		done(nil)
-	} else if err := s.settleField(sweepStartFields[index], done); err != nil {
+	} else if err := s.settleField(pending.fields[index], done); err != nil {
 		done(err)
 	}
 }
@@ -180,7 +189,7 @@ func (s *screen) settleSweepStart(pending *sweepStartWork, index int) {
 func (s *screen) finishSweepStart(pending *sweepStartWork) {
 	current := s.service.Snapshot()
 	s.pruneSweepFieldRejections(current)
-	if current.CommandRevision == pending.context.revision && current.Document.Generation == pending.context.generation {
+	if pending.details == nil && current.CommandRevision == pending.context.revision && current.Document.Generation == pending.context.generation {
 		for _, id := range sweepStartFields {
 			if rejected, ok := s.sweepFieldRejected[id]; ok {
 				s.errorMessage, s.requestHelp = rejected.message, rejected.help
@@ -189,6 +198,10 @@ func (s *screen) finishSweepStart(pending *sweepStartWork) {
 				return
 			}
 		}
+	}
+	if pending.details != nil {
+		s.invokeAtCommandRevision("workspace.details.set", *pending.details, pending.context.revision, pending.context.generation)
+		return
 	}
 	s.invokeAtCommandRevision("sweep.start", workbench.SweepStartParams{Settings: &pending.settings}, pending.context.revision, pending.context.generation)
 }

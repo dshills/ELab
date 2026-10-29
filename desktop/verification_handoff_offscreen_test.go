@@ -27,6 +27,7 @@ func mountedVerificationStart(t *testing.T, s *screen) *mountedControlWindow {
 	if s.service.Snapshot().SimulationTool != "recordings" {
 		uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "recordings"})
 	}
+	agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 	m := newMountedControlWindow(t, s, func() ui.Node {
 		assembled := s.view()
 		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: "verify-duration", Sequence: 1}}

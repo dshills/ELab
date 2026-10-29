@@ -69,7 +69,7 @@ func inspectorEditor(n ui.Node) bool {
 }
 
 func polishInspector(node *ui.Node, p appPalette, inInspector bool) {
-	if node.ID == "simulation-tool-navigation" {
+	if node.ID == "simulation-tool-navigation" || node.ID == "simulation-primary-actions" {
 		inInspector = true
 	}
 	if node.ID == "sidebar-content" {

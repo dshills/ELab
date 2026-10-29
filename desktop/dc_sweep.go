@@ -226,7 +226,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 	if sweep.Result != nil && sweep.Result.Loop != nil {
 		nodes = append(nodes, loopMarginReadouts(sweep.Result.Loop)...)
 	}
-	return nodes
+	return s.focusSimulationForm(state, "sweeps", nodes)
 }
 func (s *screen) sweepPanel(state workbench.Snapshot) []ui.Node {
 	sweep := state.DCSweep

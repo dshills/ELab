@@ -37,3 +37,26 @@ Its existing 24-unit content inset is reserved during rail shaping.
 
 Full ordinary desktop, focused rendered/race and shared contract tests pass.
 Final full frozen quality/native/package qualification follows stage 5.
+
+## 2. Focused Simulate forms
+
+Reviewed every original descriptor and callback. Essential inputs stay basic;
+sampling/startup, sweep resolution/probes, spectrum window/interval and seeded
+variation settings move under shared Advanced flags. Recorded Spectrum explains
+its prerequisite and offers Record/Open routes. Compile failures explain that a
+connected supported circuit is required without hiding import or captured data.
+The chosen tool's primary action has one fixed slot outside the scroller.
+
+An actual retained basic Record click reproduced stale-client refusal when the
+old settlement pipeline tried to settle hidden fields. Run now settles only the
+visible fields, using accepted Advanced settings unchanged. Opening/closing
+Advanced reuses the existing exact own-form continuation; it neither launches a
+job nor refreshes intervening agent/document context. Invalid accepted-field
+feedback remains owned and continues to block Run, while navigation allows
+reaching the affected field. Equivalent sweep handling preserves the same guards.
+
+Fixture navigation now opens Advanced before capturing full-form callbacks;
+existing electrical/ownership/refusal assertions remain. Added real retained
+basic Record, private-duration first-click, short-rail stationary-action tests,
+prerequisite routes and descriptor-retention/shared-state controls. Focused
+rendered race suite passes (76.911s); final frozen full gates follow stage 5.

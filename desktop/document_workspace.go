@@ -131,6 +131,15 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 }
 
 func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node, width float32) ui.Node {
+	var primary []ui.Node
+	if state.InspectorSection == "simulation" {
+		id := map[string]string{"recordings": "verify-start", "spectrum": "spectrum-analyze", "sweeps": "sweep-start", "tolerances": "tolerance-run"}[state.SimulationTool]
+		if id != "" {
+			if n, ok := takeVisibleControl(&groups, id); ok {
+				primary = append(primary, buttonStyle(n, true))
+			}
+		}
+	}
 	// Each document and section owns its scroll viewport. Navigation remains
 	// visible outside the scroll area, with no nested native tab-page scroller.
 	rail := ui.Node{ID: inspectorScrollID(state), Kind: ui.Scroll, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", width-48, groups...)}}
@@ -152,6 +161,10 @@ func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node, width
 	navigation := []ui.Node{inset, header}
 	if state.InspectorSection == "simulation" {
 		navigation = append(navigation, s.simulationToolChooser(state, width))
+		if len(primary) > 0 {
+			constrainRail(primary, width-32)
+			navigation = append(navigation, ui.Node{ID: "simulation-primary-actions", Kind: ui.Column, Style: ui.Style{Padding: ui.Some(ui.Insets{Left: 16, Right: 16, Bottom: 8}), Gap: ui.Some(float32(0))}, Children: primary})
+		}
 	}
 	children = append(navigation, children...)
 	return ui.Node{ID: "inspector-rail", Kind: ui.Column, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: children}

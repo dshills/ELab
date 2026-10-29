@@ -18,7 +18,7 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 			active = true
 		}
 	}
-	nodes := []ui.Node{section("verification-title", "Verify from startup"), quiet("verification-help", "Records a separate run from captured startup conditions. Your live circuit and time stay unchanged.")}
+	nodes := []ui.Node{section("verification-title", "Record a run"), quiet("verification-help", "Records a separate run from captured startup conditions. Your live circuit and time stay unchanged.")}
 	nodes = append(nodes, ui.Node{ID: "recording-import", Kind: ui.Button, Text: "Open recorded run…", Accessibility: ui.Accessibility{Name: "Open recorded run"}, Disabled: s.fileBusy || s.pendingCommand != "", Activate: func() { s.beginFile("verification.import", true, workbench.RecordingImportParams{}, nil) }})
 	if transient {
 		for _, field := range []struct {
@@ -118,6 +118,8 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 	nodes = append(nodes, resetButton)
 
 	button := s.verificationAction(state, false)
+	button.Text = "Record from startup"
+	button.Accessibility.Name = "Record from startup"
 	graph := workbench.Graph{Components: state.Components, Wires: state.Wires}
 	_, _, diagnostic := graph.Compile()
 	button.Disabled = button.Disabled || active || diagnostic != nil
@@ -196,5 +198,5 @@ func (s *screen) verificationInspector(state workbench.Snapshot) []ui.Node {
 			nodes = append(nodes, quiet("verify-reading-"+reading.Probe.ID, fmt.Sprintf("%s\nFinal %.5g %s · range %.5g…%.5g", strings.TrimSuffix(reading.Probe.Label, " / ground"), reading.Value*scale, unit, reading.Minimum*scale, reading.Maximum*scale)))
 		}
 	}
-	return nodes
+	return s.focusSimulationForm(state, "recordings", nodes)
 }

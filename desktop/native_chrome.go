@@ -48,7 +48,7 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 			})
 		}
 		if frame := core.AsFrame(widget); frame != nil {
-			sideHost := isSidePanelHost(w) || w.Name == "inspector-rail" || w.Name == "inspector-navigation" || w.Name == "simulation-tool-navigation" || w.Name == "drawer-controls" || w.Name == "parts-drawer-header" || w.Name == "inspector-drawer-header"
+			sideHost := isSidePanelHost(w) || w.Name == "inspector-rail" || w.Name == "inspector-navigation" || w.Name == "simulation-tool-navigation" || w.Name == "simulation-primary-actions" || w.Name == "drawer-controls" || w.Name == "parts-drawer-header" || w.Name == "inspector-drawer-header"
 			install(w, func(style *styles.Style) {
 				style.ScrollbarWidth = units.Dp(8)
 				// Inspector chrome and each side host own a Scroll viewport. A second

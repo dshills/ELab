@@ -103,7 +103,7 @@ func (s *screen) spectrumInspector(state workbench.Snapshot) []ui.Node {
 			}}, false))
 		}
 	}
-	return nodes
+	return s.focusSimulationForm(state, "spectrum", nodes)
 }
 func (s *screen) spectrumMesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if s.spectrumDrawing != nil {

@@ -21,6 +21,14 @@ func (s *screen) detailsSection(state workbench.Snapshot, section, title string,
 				return
 			}
 		}
+		if section == "recordings" {
+			s.verificationRelatedAction(state, false, &params).Activate()
+			return
+		}
+		if section == "sweeps" && state.DCSweep != nil {
+			s.sweepRelatedAction(state, &params).Activate()
+			return
+		}
 		s.invokeAtCommandRevision("workspace.details.set", params, state.CommandRevision, state.Document.Generation)
 	}}
 }

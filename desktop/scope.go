@@ -424,5 +424,5 @@ func (s *screen) transientInspector(state workbench.Snapshot) []ui.Node {
 			s.invoke("simulation.transient.set", next)
 		}})
 	}
-	return nodes
+	return s.focusSimulationForm(state, "live", nodes)
 }

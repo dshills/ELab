@@ -21,6 +21,7 @@ func mountedSweepStart(t *testing.T, s *screen, focus string) *mountedControlWin
 	if s.service.Snapshot().SimulationTool != "sweeps" {
 		uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "sweeps"})
 	}
+	agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "sweeps", Visible: true})
 	m := newMountedControlWindow(t, s, func() ui.Node {
 		assembled := s.view()
 		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: focus, Sequence: 1}}

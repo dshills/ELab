@@ -33,6 +33,7 @@ type verificationActionWork struct {
 	reset     bool
 	transient bool
 	failed    bool
+	details   *workbench.WorkspaceDetailsParams
 }
 
 // Only accepted responses from this form can continue a related action. Keep
@@ -104,6 +105,10 @@ func (s *screen) continueVerificationViewport(from actionContext, accepted workb
 }
 
 func (s *screen) verificationAction(state workbench.Snapshot, reset bool) ui.Node {
+	return s.verificationRelatedAction(state, reset, nil)
+}
+
+func (s *screen) verificationRelatedAction(state workbench.Snapshot, reset bool, details *workbench.WorkspaceDetailsParams) ui.Node {
 	id, text := "verify-start", "Verify"
 	if reset {
 		id, text = "verify-project-startup", "Use project startup"
@@ -113,7 +118,7 @@ func (s *screen) verificationAction(state workbench.Snapshot, reset bool) ui.Nod
 			return
 		}
 		context := actionContext{state.CommandRevision, state.Document.Generation}
-		pending := &verificationActionWork{context: context, settings: state.VerificationSettings, reset: reset, transient: workbench.IsTransientAnalysis(state.Analysis)}
+		pending := &verificationActionWork{context: context, settings: state.VerificationSettings, reset: reset, details: details, transient: workbench.IsTransientAnalysis(state.Analysis)}
 		current := s.service.Snapshot()
 		if accepted := s.verificationAccepted; accepted != nil && accepted.from.generation == context.generation && accepted.from.revision <= context.revision && context.revision <= accepted.to.revision && accepted.to == (actionContext{current.CommandRevision, current.Document.Generation}) {
 			pending.context, pending.settings = accepted.to, accepted.settings
@@ -123,10 +128,13 @@ func (s *screen) verificationAction(state workbench.Snapshot, reset bool) ui.Nod
 			return
 		}
 		if pending.transient {
-			pending.fields = []verificationField{{id: "verify-duration"}, {id: "verify-step"}, {id: "verify-initial", number: true}}
-			for _, part := range state.Components {
-				if part.Kind == "capacitor" {
-					pending.fields = append(pending.fields, verificationField{id: "verify-cap-" + part.ID, number: true})
+			pending.fields = []verificationField{{id: "verify-duration"}}
+			if state.WorkspaceDetails.Recordings {
+				pending.fields = append(pending.fields, verificationField{id: "verify-step"}, verificationField{id: "verify-initial", number: true})
+				for _, part := range state.Components {
+					if part.Kind == "capacitor" {
+						pending.fields = append(pending.fields, verificationField{id: "verify-cap-" + part.ID, number: true})
+					}
 				}
 			}
 		}
@@ -174,7 +182,7 @@ func (s *screen) settleVerificationAction(pending *verificationActionWork, index
 func (s *screen) finishVerificationRequest(pending *verificationActionWork) {
 	current := s.service.Snapshot()
 	s.pruneVerificationRejections(current)
-	if current.CommandRevision == pending.context.revision && current.Document.Generation == pending.context.generation {
+	if pending.details == nil && current.CommandRevision == pending.context.revision && current.Document.Generation == pending.context.generation {
 		// A settled field need not emit Change again for previously delivered
 		// invalid text. Another field's success must not turn that draft into
 		// a capture using the old accepted value. Check after settlement so a
@@ -187,6 +195,10 @@ func (s *screen) finishVerificationRequest(pending *verificationActionWork) {
 				return
 			}
 		}
+	}
+	if pending.details != nil {
+		s.invokeAtCommandRevision("workspace.details.set", *pending.details, pending.context.revision, pending.context.generation)
+		return
 	}
 	if pending.reset {
 		settings := workbench.DefaultVerificationSettings()

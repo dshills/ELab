@@ -123,3 +123,11 @@ apply. Hidden controls retain private editor state through collapse, but are
 excluded from visible input/keyboard traversal. Changing documents retires that
 private state through the existing document-generation keys. Electrical commands
 remain available to agents regardless of disclosure state.
+
+Simulate keeps essential inputs in the basic view and the chosen tool's primary
+Record/Run/Analyze action above its scroller. **Advanced** retains startup and
+sampling overrides, spectrum windows/intervals, sweep resolution/probes and
+variation/trial settings. Closed fields use their accepted settings; opening
+Advanced does not start a job. Recorded Spectrum offers Record/Open routes when
+no completed recording exists. Compile guidance leaves saved-result import and
+existing captured results available.

@@ -16,6 +16,7 @@ func TestDCSweepDeferredSettingsCaptureOnlyOnce(t *testing.T) {
 	t.Cleanup(cleanup)
 	uiAction(t, s, "example.reset", nil)
 	uiAction(t, s, "simulation.pause", nil)
+	agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "sweeps", Visible: true})
 	type settlement struct {
 		id   string
 		done func(error)
@@ -50,6 +51,7 @@ func TestDCSweepSettlementPreservesInterveningWork(t *testing.T) {
 			t.Cleanup(cleanup)
 			uiAction(t, s, "example.reset", nil)
 			uiAction(t, s, "simulation.pause", nil)
+			agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "sweeps", Visible: true})
 			field := verificationControl(t, s, "sweep-range-start")
 			var finish func(error)
 			s.settleField = func(_ string, done func(error)) error {
@@ -146,6 +148,9 @@ func TestDCSweepOwnViewportContinuationDoesNotAdoptOtherWork(t *testing.T) {
 			t.Cleanup(cleanup)
 			uiAction(t, s, "example.reset", nil)
 			uiAction(t, s, "simulation.pause", nil)
+			agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "sweeps", Visible: true})
+			_ = verificationControl(t, s, "sweep-start")
+			uiAction(t, s, "workspace-details-sweeps", &ui.ChangeEvent{Checked: true})
 			button := verificationControl(t, s, "sweep-start")
 			uiAction(t, s, "sweep-points", &ui.ChangeEvent{Text: "7"})
 			switch gap {

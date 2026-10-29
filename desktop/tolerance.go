@@ -147,5 +147,5 @@ func (s *screen) toleranceInspector(state workbench.Snapshot) []ui.Node {
 			}}, false))
 		}
 	}
-	return nodes
+	return s.focusSimulationForm(state, "tolerances", nodes)
 }

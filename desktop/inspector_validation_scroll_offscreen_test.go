@@ -31,6 +31,7 @@ func TestMountedInspectorValidationKeepsTheFocusedIntervalVisible(t *testing.T) 
 				t.Cleanup(cleanup)
 				if recorded {
 					recordedCursorSource(t, s.service)
+					agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 				} else {
 					agentAction(t, s.service, "scope.window.set", workbench.ScopeWindow{Mode: "fixed", End: .02})
 				}

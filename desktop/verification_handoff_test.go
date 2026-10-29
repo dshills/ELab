@@ -25,7 +25,7 @@ func verificationControl(t *testing.T, s *screen, id string) ui.Node {
 	var node ui.Node
 	s.app.Do(func() {
 		var ok bool
-		node, ok = findNode(s.view(), id)
+		node, ok = s.reachableAction(id)
 		if !ok {
 			t.Fatal("missing production verification control", id)
 		}
@@ -38,6 +38,7 @@ func TestVerificationDeferredFieldsCompleteOnlyOnce(t *testing.T) {
 	t.Cleanup(cleanup)
 	uiAction(t, s, "example.rc", nil)
 	agentAction(t, s.service, "simulation.pause", struct{}{})
+	agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 	type settlement struct {
 		id   string
 		done func(error)
@@ -77,6 +78,7 @@ func TestVerificationSettlementPreservesInterveningWork(t *testing.T) {
 			t.Cleanup(cleanup)
 			uiAction(t, s, "example.rc", nil)
 			agentAction(t, s.service, "simulation.pause", struct{}{})
+			agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 			field := verificationControl(t, s, "verify-duration")
 			var finish func(error)
 			s.settleField = func(_ string, done func(error)) error {
@@ -139,6 +141,7 @@ func TestVerificationOwnViewportContinuationDoesNotAdoptOtherWork(t *testing.T) 
 			t.Cleanup(cleanup)
 			uiAction(t, s, "example.rc", nil)
 			agentAction(t, s.service, "simulation.pause", struct{}{})
+			agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 			button := verificationControl(t, s, "verify-start")
 			field := verificationControl(t, s, "verify-duration")
 			s.app.Do(func() { field.Change(ui.ChangeEvent{Text: "20 ms"}) })
