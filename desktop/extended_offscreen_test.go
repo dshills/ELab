@@ -21,6 +21,7 @@ func TestMountedExtendedInspectorsAcrossThemes(t *testing.T) {
 				agentAction(t, s.service, "example.load", workbench.ExampleLoadParams{ID: item.id})
 				agentAction(t, s.service, "simulation.pause", struct{}{})
 				awaitInductorCircuit(t, s.service)
+				agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "component", Visible: true})
 				agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": theme})
 				view := func() ui.Node {
 					rail, _ := findNode(s.view(), "inspector-rail")
@@ -28,6 +29,10 @@ func TestMountedExtendedInspectorsAcrossThemes(t *testing.T) {
 				}
 				m := newMountedControlWindowSize(t, s, view, 340, 1800, inspectorLayoutTestTheme())
 				scroll := mountedControlElement(t, m, inspectorScrollNode(t, s.view()).ID)
+				detailWidth := mountedControlElement(t, m, railLabelBoundsPrefix+"part-terminals").Bounds.Dx()
+				if detailWidth < 200 {
+					t.Fatal("Details body is narrower than the responsive rail permits", detailWidth)
+				}
 				previous := 0
 				for _, id := range item.fields {
 					element := mountedControlElement(t, m, id)
@@ -36,7 +41,7 @@ func TestMountedExtendedInspectorsAcrossThemes(t *testing.T) {
 					}
 					if node, ok := findNode(s.view(), id); ok && node.Kind == ui.Label {
 						frame := mountedControlElement(t, m, railLabelBoundsPrefix+id)
-						if frame.Bounds.Dx() < 230 || !element.Bounds.In(frame.Bounds) {
+						if frame.Bounds.Dx() < detailWidth || !element.Bounds.In(frame.Bounds) {
 							t.Fatal("label clipped within frame", id, element.Bounds, frame.Bounds)
 						}
 					}

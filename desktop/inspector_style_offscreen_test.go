@@ -18,7 +18,7 @@ func TestMountedInspectorFormSpacingAndPaintAcrossThemes(t *testing.T) {
 	for _, mode := range []string{"light", "dark", "system", "apollo"} {
 		for _, page := range []struct{ section, field, label, next string }{
 			{"component", "value-entry", "value-title", "apply-value"},
-			{"simulation", "setting-step", "setting-label-step", "inspector-field-setting-high"},
+			{"simulation", "setting-step", "setting-label-step", "inspector-field-setting-speed"},
 			{"document", "pdf-margin", "pdf-margin-label", "pdf-scale-mode"},
 		} {
 			t.Run(mode+"/"+page.section, func(t *testing.T) {

@@ -17,6 +17,7 @@ func TestMountedHBridgeInspectorReadingsAcrossThemes(t *testing.T) {
 			agentAction(t, s.service, "example.load", workbench.ExampleLoadParams{ID: "hbridge-motor"})
 			agentAction(t, s.service, "simulation.pause", struct{}{})
 			awaitInductorCircuit(t, s.service)
+			agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "component", Visible: true})
 			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": theme})
 			before := s.service.Snapshot()
 			view := func() ui.Node {
@@ -25,11 +26,15 @@ func TestMountedHBridgeInspectorReadingsAcrossThemes(t *testing.T) {
 			}
 			m := newMountedControlWindowSize(t, s, view, 320, 1400, inspectorLayoutTestTheme())
 			scroll := mountedControlElement(t, m, inspectorScrollNode(t, s.view()).ID)
+			detailWidth := mountedControlElement(t, m, railLabelBoundsPrefix+"part-terminals").Bounds.Dx()
+			if detailWidth < 200 {
+				t.Fatal("Details body is narrower than the responsive rail permits", detailWidth)
+			}
 			previous := 0
 			for _, id := range []string{"hbridge-title", "hbridge-controls-help", "hbridge-truth-table", "hbridge-live-help", "hbridge-reading-title", "hbridge-state", "hbridge-inputs", "hbridge-voltage", "hbridge-current", "hbridge-loss", "hbridge-clamps"} {
 				field := mountedControlElement(t, m, id)
 				frame := mountedControlElement(t, m, railLabelBoundsPrefix+id)
-				if !field.Visible || frame.Bounds.Dx() < 230 || !field.Bounds.In(frame.Bounds) || !frame.Bounds.In(scroll.Bounds) || field.Bounds.Min.Y < previous {
+				if !field.Visible || frame.Bounds.Dx() < detailWidth || !field.Bounds.In(frame.Bounds) || !frame.Bounds.In(scroll.Bounds) || field.Bounds.Min.Y < previous {
 					t.Fatal("clipped or overlapping driver inspector", theme, id, field.Bounds, scroll.Bounds)
 				}
 				previous = field.Bounds.Max.Y

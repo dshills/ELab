@@ -20,6 +20,7 @@ import (
 
 func mountedComponentStartup(t *testing.T, s *screen, kind string) *mountedControlWindow {
 	t.Helper()
+	agentAction(t, s.service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "component", Visible: true})
 	field, reset := "inductor-initial", "inductor-initial-default"
 	if kind == "capacitor" {
 		field, reset = "cap-initial", "cap-initial-default"

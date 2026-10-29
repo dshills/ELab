@@ -39,7 +39,7 @@ func TestMountedInspectorDisclosurePaletteAndSharedExpansion(t *testing.T) {
 			m := newMountedControlWindowSize(t, s, view, 320, 360, theme)
 			headingID := ""
 			for _, element := range m.snapshot().Elements {
-				if element.Kind == ui.Disclosure && element.Name == "Technical details" && strings.HasPrefix(element.ID, "disclosure:") {
+				if element.Kind == ui.Disclosure && strings.HasPrefix(element.Name, "All guidance") && strings.HasPrefix(element.ID, "disclosure:") {
 					headingID = element.ID
 				}
 			}
@@ -62,10 +62,22 @@ func TestMountedInspectorDisclosurePaletteAndSharedExpansion(t *testing.T) {
 				}
 			}
 			palette := resolvePalette(mode, false)
-			x, y := heading.Bounds.Max.X-12, heading.Bounds.Min.Y+heading.Bounds.Dy()/2
-			if got := color.NRGBAModel.Convert(im.At(x, y)).(color.NRGBA); got != palette.Surface {
-				t.Fatal("painted disclosure surface ignores session palette", got, palette.Surface)
+			// A long caption can fill the old single-pixel probe position.
+			// Check the painted area, retaining a majority-background assertion.
+			backgroundPixels := 0
+			area := heading.Bounds.Inset(2)
+			for y := area.Min.Y; y < area.Max.Y; y++ {
+				for x := area.Min.X; x < area.Max.X; x++ {
+					if color.NRGBAModel.Convert(im.At(x, y)).(color.NRGBA) == palette.Surface {
+						backgroundPixels++
+					}
+				}
 			}
+			t.Logf("heading=%v surface pixels=%d/%d", heading.Bounds, backgroundPixels, area.Dx()*area.Dy())
+			if backgroundPixels*2 < area.Dx()*area.Dy() {
+				t.Fatal("painted disclosure surface ignores session palette", mode, backgroundPixels, area)
+			}
+
 			// Inspect actual glyph pixels as well as the descriptor: the old
 			// private heading button overrides its parent's controlled foreground.
 			inkPixels := 0

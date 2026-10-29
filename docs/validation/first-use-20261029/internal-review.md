@@ -127,3 +127,28 @@ compiled inputs relative to the preceding full portable gates. Continuation
 repeats inventory/lint and complete final desktop/rendered race/vet; unchanged
 non-desktop gates carry only through exact input comparison. No solver limit,
 SDK, queue contract, component or electrical command changes.
+
+### Final rendered fixture review
+
+The complete a4e7cd84 rendered run completed and reported eight test families
+using former flat-inspector assumptions. Preserve its failed verdict. Seven
+Offscreen-only test files now navigate shared Details before capturing private
+callbacks, compare full-width labels to the actual inset Details body, anchor
+scroll reset to the current object header, use the next basic field for spacing,
+and track actual contextual footer controls while both stepping and genuinely
+resumed integration continue. All original electrical, private-input, stale-agent,
+paint/ink, geometry and scroll-preservation assertions remain.
+
+The longer diagnostic caption crossed the former single-pixel color probe. Its
+paint test now requires a majority of the complete inset heading to match the
+exact palette and retains the readable-ink assertion; final exact surface counts
+are 6009/7320 (Light/Dark) and 6209/7290 (Apollo). All affected families pass across
+the focused runs, including all six component-startup tests. Only Offscreen test
+files change; ordinary desktop, backend, Python, SDK, component/model/limit and
+all packaged app/agent bytes remain exact. Repeat the complete final rendered
+race/vet plus lint/inventory with frozen inputs, carrying completed ordinary and
+portable gates only through explicit scope/byte comparison.
+
+The owner's screenshot was a separate NetForm application, not this ELab build.
+Opened exact /288 ELab normally for owner review (PID37797); leave that session,
+its preferences/projects and NetForm untouched. This is not participant acceptance.

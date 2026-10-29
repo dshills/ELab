@@ -35,7 +35,15 @@ func TestMountedLiveScopeControlsKeepGeometryAcrossSamples(t *testing.T) {
 					return root
 				}
 				m := newMountedControlWindowSize(t, s, view, 1040, 760, inspectorLayoutTestTheme())
-				ids := []string{"scope-title", "scope-caption", "scope-caption-time", "scope-caption-detail", "scope-visibility", "transient-step", "simulation.restart", "scope-trace-row", "export-csv", "scope-trace-focus", "scope-cursors", "cursor-select-a", "cursor-select-b", "current", "voltage", "power", "simulation-info"}
+				ids := []string{"scope-title", "scope-caption", "scope-caption-time", "scope-caption-detail", "scope-visibility", "transient-step", "simulation.restart", "scope-trace-row", "export-csv", "scope-trace-focus", "scope-cursors", "cursor-select-a", "cursor-select-b"}
+				readings, _ := findNode(s.view(), "readings")
+				if len(readings.Children) == 0 {
+					t.Fatal("reading strip has no actual controls")
+				}
+				ids = append(ids, "readings")
+				for _, n := range readings.Children {
+					ids = append(ids, n.ID)
+				}
 				for _, input := range s.service.Snapshot().LiveInputModes {
 					ids = append(ids, "input-"+input)
 				}
