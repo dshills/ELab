@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "exit_code": 0,
+  "command": [
+    "/usr/bin/sandbox-exec",
+    "-p",
+    "(version 1)(allow default)(deny file-write* (subpath \"/Users/dshills/Library/Cogent Core\"))",
+    "/Users/dshills/Development/projects/ELab/build/ELab-0.202.1-287-Drawers/ELab.app/Contents/MacOS/ELab",
+    "--smoke",
+    "--smoke-timeout=120s"
+  ],
+  "scope": "Exact candidate native GPU and descriptor-command smoke; not hardware OS-input acceptance",
+  "temporary_recovery_appearance": true,
+  "owner_geometry_writes_denied": true
+}

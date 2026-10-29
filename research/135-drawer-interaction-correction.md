@@ -21,3 +21,8 @@ opening/closing on selection or live simulation updates.
 [Validation and candidate](../docs/validation/drawers-20261029/README.md) records
 full regression checks and the local candidate. [Internal review](../docs/validation/drawers-20261029/internal-review.md)
 records the original native observations, corrections and scope distinctions.
+
+Implementation commit: `2fa981d9`. The matching **0.202.1 /287** development app
+is `build/ELab-0.202.1-287-Drawers/ELab.app`. Full desktop/rendered suites, drawer
+race checks, lint/vet/tooling, exact native smoke, MCP parity and all 87 packaged
+example graphs pass. The subsequent closeout adds integration receipts only.

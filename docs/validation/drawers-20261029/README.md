@@ -31,7 +31,9 @@ original owner layout was restored. The revised native preview visibly shows
 direct edge Close controls and reopen tabs. Its model changed independently
 while on screen, so it is not claimed as a controlled electrical or interaction
 acceptance trial. Preserve intervening owner work in that preview; it must not
-be discarded for cleanup. Existing owner sessions are untouched.
+be discarded for cleanup. It subsequently exited normally without a controller
+discard command; its [normal exit](preview-normal-exit.json) is recorded. Existing
+owner sessions were not closed by this work.
 
 [Internal review](internal-review.md) covers decisions, corrections, focus,
 guards and native limitations. All non-desktop executable/test/dependency inputs
@@ -40,7 +42,14 @@ same 228 commands remain; no backend, component, model, solver limit or dependen
 changed. [Fifty prior package/SDK identities](preservation.json), including /286,
 remain exact. Historical native/human/install/signing gates are unchanged.
 
-A matching clean-source development candidate and integration checks are added
-after the source commit. This is not a new full release qualification; the
-preserved qualified release remains /285. No push, upload, external review or
-security change was performed.
+The [matching clean-source candidate](candidate.json) is **0.202.1 /287**, source
+`2fa981d9e7f937f9f1c2dcaaba634c13ba783a5b`, at
+`build/ELab-0.202.1-287-Drawers/`. Exact candidate native GPU/descriptor-command
+smoke passes and exits normally. Matching [MCP checks](packaged-mcp.json) retain
+all 228 commands, refuse stale/invalid requests and capture the analytic RC
+voltage with both drawers closed. All 87 packaged example graphs and the strict
+ad-hoc integrity seal pass. Both owned bridge and native smoke exit normally.
+Fifty prior identities are rechecked after integration; all remain exact.
+
+This is not a new full release qualification; the preserved qualified release
+remains /285. No push, upload, external review or security change was performed.
