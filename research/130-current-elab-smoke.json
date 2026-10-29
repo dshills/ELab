@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-29",
+  "source_head": "7f164ce8816ee120459fb6887b7815e26463fa57",
+  "agent_sha256": "a8692df5f7c58b63f688a34aeeb4f48a74231aba23363c8827c2f85788ce9d3a",
+  "scope": "Fresh ELab headless API smoke; competitor values remain the historical October 12 prepared-fixture observations; this is not a fresh cross-product accuracy or usability benchmark.",
+  "component_kinds": 61,
+  "examples": 87,
+  "commands": 226,
+  "limits": {
+    "jfets": 2,
+    "field_effect_transistors_total": 2,
+    "timers555": 2,
+    "pnp_transistors": 16,
+    "bipolar_transistors_total": 16,
+    "integration_attempts_per_sample": 512,
+    "integration_wall_ms_per_sample": 100,
+    "pinned_readings": 8,
+    "drawing_objects": 100,
+    "wires": 300,
+    "simulated_components": 64,
+    "electrical_nodes_including_ground": 100,
+    "sources": 3,
+    "capacitors": 4,
+    "inductors": 4,
+    "npn_transistors": 16,
+    "nmos_transistors": 2,
+    "pmos_transistors": 2,
+    "mosfets_total": 2,
+    "opamps": 2,
+    "resistors": 64,
+    "switches": 8,
+    "silicon_diodes": 8,
+    "potentiometers": 64,
+    "leds": 4,
+    "scope_traces": 6
+  },
+  "led": {
+    "one_k_current_a": 0.0029167965774405296,
+    "two_k_current_a": 0.001476723549138745,
+    "model": {
+      "id": "elab.generic-red-led.v1",
+      "is_a": 1e-20,
+      "n": 2,
+      "rs_ohm": 1,
+      "temperature_c": 27,
+      "limitations": "Educational generic diode; no physical part identity, reverse breakdown, thermal dynamics, ratings, or calibrated brightness."
+    }
+  },
+  "rc": {
+    "at_s": 0.01,
+    "voltage_v": 3.1606027941427883,
+    "engine": "elab.ideal-rc-exact.v1"
+  },
+  "npn": {
+    "on_state": "saturation",
+    "on_vce_v": 0.057533807794293346,
+    "model": "elab.generic-npn.v1",
+    "input_id": "VIN",
+    "off_state": "cutoff",
+    "off_vce_v": 4.249469262682714
+  },
+  "passed": true
+}
