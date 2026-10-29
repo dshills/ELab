@@ -42,9 +42,8 @@ to verified source commits: [checkout v4.2.2](https://github.com/actions/checkou
 [setup-go v5.5.0](https://github.com/actions/setup-go/releases/tag/v5.5.0),
 [setup-python v5.6.0](https://github.com/actions/setup-python/releases/tag/v5.6.0),
 [upload-artifact v4.6.2](https://github.com/actions/upload-artifact/releases/tag/v4.6.2).
-These are deliberate pins, not claims of latest releases. No workflow has been
-pushed or remotely executed by this work; hosted-runner behavior remains to be
-observed when the owner pushes.
+These are deliberate pins, not claims of latest releases. Hosted-runner results must be read from the corresponding GitHub Actions run.
+Local receipts do not establish a hosted CI verdict.
 
 ## Assemble a candidate
 

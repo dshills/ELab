@@ -130,7 +130,7 @@ SDK, queue contract, component or electrical command changes.
 
 ### Final rendered fixture review
 
-The complete a4e7cd84 rendered run completed and reported eight test families
+The complete a4e7cd84 rendered run completed and reported seven test families
 using former flat-inspector assumptions. Preserve its failed verdict. Seven
 Offscreen-only test files now navigate shared Details before capturing private
 callbacks, compare full-width labels to the actual inset Details body, anchor

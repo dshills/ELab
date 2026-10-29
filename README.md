@@ -11,6 +11,8 @@ for drawing, simulation, analysis, saving and export.
 
 ![ELab showing an RC circuit, capacitor inspector, charge/discharge traces and timing cursors in the Light theme](docs/images/rc-scope.jpg)
 
+*Circuit screenshots illustrate earlier builds; current inspectors group additional settings under Details and Advanced.*
+
 *RC charge and discharge: edit the circuit above, inspect the waveforms below.
 Screenshots show an earlier panel layout; the current drawer controls are described below.*
 
@@ -180,18 +182,16 @@ python3 -B scripts/package_app.py --binary build/elab \
 Use a new output path for each bundle. This produces an unsigned/ad-hoc local
 build, not a Developer ID signed or notarized installer. Historical local package
 paths in validation records are not GitHub downloads. Build from source or use
-the qualified local artifacts described below.
+the qualified alpha described below.
 
-The [current local unsigned release](docs/current-release.md) documents the
-matching app/agent archive, checksum and qualification limits.
+The current **0.203.0 /290 unsigned alpha** is available from
+[GitHub Releases](https://github.com/dshills/ELab/releases/tag/v0.203.0-alpha.1).
+[Download the macOS Apple Silicon ZIP](https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/ELab-0.203.0-macos-arm64.zip),
+check [SHA256SUMS](https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/SHA256SUMS.txt)
+and follow the included **START-HERE.md**. The folder includes the matching agent,
+all 87 examples, notices and the self-guided first-use kit. It has no Developer ID
+signature or notarization. [Release details and qualification limits](docs/current-release.md).
 
-The newer local **0.202.1 /287 development candidate** adds the drawer controls
-and Simulate chooser. In a checkout containing the built artifacts, its app,
-matching agent and examples are in `build/ELab-0.202.1-287-Drawers/`.
-[Drawer validation](docs/validation/drawers-20261029/README.md) records passing
-desktop/rendered suites, focused race tests, native smoke, MCP checks and all
-87 packaged example graphs. This candidate is separate from the preserved /285
-qualified release; its local path is not a published GitHub download.
 
 ## Use an AI agent
 

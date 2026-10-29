@@ -1,40 +1,50 @@
-# Current local unsigned release
+# Current unsigned alpha
 
-**ELab 0.201.0 /285**, clean binary source `70e113d5f2767e12963fe47337f35a7200f10a9e`.
-This build includes the inspector usability repairs, Scope/Spectrum tools and
-standard local MCP agent setup. It is a local macOS Apple Silicon build with an
-ad-hoc integrity signature; it has no Developer ID signature or notarization.
-No GitHub download asset was published by this qualification.
+**ELab 0.203.0 /290** is available as a [GitHub prerelease](https://github.com/dshills/ELab/releases/tag/v0.203.0-alpha.1).
 
-From a checkout containing the built artifacts:
+- [Download for macOS Apple Silicon](https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/ELab-0.203.0-macos-arm64.zip).
+- [Start guide](https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/START-HERE.md) and [checksums](https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/SHA256SUMS.txt).
+- ZIP: 46,407,811 bytes; SHA-256 `2416f13dd0f494367f45c7991cc75bd1cb3e69acc1ae1c9971ea8165f9bc05cf`.
+- Clean binary source: `f5c600d07e97a00ee1b967ce91c472235752841b` (the release tag).
 
-- App/agent/examples: `build/ELab-0.201.0-285-Agents/`.
-- Archive: `build/releases/ELab-0.201.0-macos-arm64.zip` (46,309,442 bytes).
-- SHA-256: `f61ef990202f395955d92aef9489e8e9ad49ce968574d0fc76a136f3c4bcbc65`.
+This release simplifies Inspect, focuses each Simulate form with Advanced settings
+and a fixed primary action, and consolidates measurement selection and guidance.
+It retains 61 component kinds, 87 curated editable examples and all 229 shared
+user/AI-agent commands. The only new command in this batch controls presentation
+disclosures. No component, electrical model, solver limit or Vellum update is
+included. See the [workspace guide](workspace-layout.md).
 
-Open `ELab.app` in that directory. The adjacent `elab-agent` matches the app's
-source, and `Examples` contains all 87 curated editable projects. Move the whole
-extracted folder to keep the supplied guides/notices and agent together.
+Extract and keep the entire folder together. It contains ELab.app, a matching
+elab-agent, examples, notices, START-HERE and the [self-guided first-use kit](first-use-test-kit.md)
+with a separate expected-result key. This is an unsigned alpha with an ad-hoc
+integrity seal, without Developer ID signing or notarization. Follow the included
+start guide for macOS opening instructions; do not disable security globally.
 
-For standard agent setup, run the matching executable from its final location:
+Generate standard local MCP configuration from the matching agent's final path:
 
 ```sh
-./build/ELab-0.201.0-285-Agents/elab-agent --mcp-config
+./elab-agent --mcp-config
 ```
 
-Use the printed configuration in your MCP client. It starts an owned headless
-circuit; see the [agent setup guide](agent-setup.md) for explicit desktop connection,
-guards and lifecycle. All 226 existing commands use the same underlying service;
-the raw JSON adapters remain available.
+See [agent setup](agent-setup.md) for explicit desktop endpoints, guards and
+lifecycle. ELab itself needs no provider account/key. Opening/closing Details or
+changing workspace layout does not change the circuit or accepted settings.
 
-[Agent/setup qualification](validation/agent-setup-20261029/README.md) records
-protocol/electrical tests, copied native runtime and four existing adapters,
-all examples, exact archive validation and preserved older artifacts.
-[Usability qualification](validation/usability-release-20261029/README.md) records
-the complete preceding UI/rendered gates and hobbyist workflows; final desktop
-source and used dependency versions are byte-identical to that release.
+[Qualification evidence](validation/first-use-20261029/README.md) records complete
+local portable/ordinary/rendered race and vet checks, lint, exact copied native
+GPU smoke, four runtime adapters, both MCP transports, all extracted example
+graphs, 470 archive payload files with exact bytes/modes and strict seals, normal
+cleanup of 102 external runtime processes, and 53 preserved prior package/SDK
+identities. Uploaded assets were downloaded and matched before publication.
+The final smoke-controller-only selector correction has explicit separate scope
+and exact-package native qualification; earlier failed trials remain recorded.
 
-Participant outcomes, four historical native queue/hardware checks, clean-account
-installation and public signing remain separate. This is engineering-qualified
-unsigned software with those recorded limits. No participant acceptance or native
-OS-input result was inferred from software-route tests.
+Models remain educational approximations. Participant outcomes, historical native
+OS queue/hardware checks 3/6/9/11, clean-account installation and public signing
+remain separate. Software-route evidence is not physical-input acceptance.
+
+For a checkout with local artifacts, the release folder is
+`build/ELab-0.203.0-290-Alpha/` and its ZIP is under `build/releases/`.
+Prior /285 and other qualified packages are preserved. The owner review session
+opened from /288 uses the same normal UI code; later build numbers bind the final
+test-controller/source metadata. That session and owner work are left open.

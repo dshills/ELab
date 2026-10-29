@@ -26,3 +26,12 @@ Vellum change. Use explicit guarded presentation commands for new disclosure
 state; hidden fields remain reachable to both people and agents. Publish only
 reviewed, tested artifacts bound to clean committed source. Existing owner
 projects/sessions are never fixtures. Current source starts at d04e8635.
+
+## Completion
+
+All five engineering stages are complete. Unsigned 0.203.0 /290 is qualified and
+published with matching agent, 87 examples, start guide and self-guided kit.
+See [closeout](137-first-use-alpha-closeout.md) and
+[exact evidence](../docs/validation/first-use-20261029/README.md).
+Participant/native OS-input/install/signing limitations remain explicit; owner
+review is optional. The owner review app was launched and is left untouched.

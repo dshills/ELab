@@ -1,0 +1,504 @@
+{
+  "passed": true,
+  "binary_source_commit": "f5c600d07e97a00ee1b967ce91c472235752841b",
+  "complete_core_gates": {
+    "passed": true,
+    "scope": "Complete final rendered race/vet and lint/inventory; complete unchanged ordinary desktop/portable gates carried by exact scoped inputs",
+    "source_commit": "52b22d4097a8d98c717752bf813575e87abfbfeb",
+    "binary_source_commit": "a4e7cd84fb8db704b11dfa8108ab849611d114a8",
+    "changed_inputs": [
+      "desktop/component_startup_actions_offscreen_test.go",
+      "desktop/disclosure_theme_offscreen_test.go",
+      "desktop/extended_offscreen_test.go",
+      "desktop/hbridge_offscreen_test.go",
+      "desktop/inspector_scroll_offscreen_test.go",
+      "desktop/inspector_style_offscreen_test.go",
+      "desktop/scope_layout_offscreen_test.go"
+    ],
+    "unchanged_production_and_ordinary_inputs": true,
+    "prior_portable_scope": {
+      "passed": false,
+      "scope": "Complete final desktop/rendered gates; passed portable/SDK/Python/PRD gates carried only through exact unchanged non-desktop inputs",
+      "source_commit": "a4e7cd84fb8db704b11dfa8108ab849611d114a8",
+      "carried_source_commit": "9396c2c94042bd9ae8bb6e91c05c422f47dbbaeb",
+      "changed_inputs": [
+        "desktop/document_workspace_offscreen_test.go",
+        "desktop/operation_notice.go"
+      ],
+      "unchanged_non_desktop_inputs": 1161,
+      "carried_steps": [
+        {
+          "name": "sdk",
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "-B",
+            "scripts/prepare-vellum.py"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 0.679
+        },
+        {
+          "name": "python",
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "scripts",
+            "-p",
+            "test_*.py"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 4.441
+        },
+        {
+          "name": "prd",
+          "command": [
+            "/opt/homebrew/opt/python@3.15/bin/python3.15",
+            "-B",
+            "scripts/prd-audit.py",
+            "--verify",
+            "research/11-prd-implementation-audit.json"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 0.029
+        },
+        {
+          "name": "portable-race",
+          "command": [
+            "go",
+            "test",
+            "-race",
+            "./...",
+            "-count=1",
+            "-timeout=30m"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 573.83
+        },
+        {
+          "name": "portable-vet",
+          "command": [
+            "go",
+            "vet",
+            "./..."
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 5.644
+        }
+      ],
+      "final_steps": [
+        {
+          "name": "inventory",
+          "command": [
+            "go",
+            "run",
+            "./cmd/elab-ui-audit",
+            "--verify",
+            "research/13-native-command-inventory.json"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 0.654
+        },
+        {
+          "name": "lint",
+          "command": [
+            "scripts/lint.sh"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 10.809
+        },
+        {
+          "name": "desktop-race",
+          "command": [
+            "go",
+            "-C",
+            "desktop",
+            "test",
+            "-race",
+            "./...",
+            "-count=1",
+            "-timeout=30m"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 445.132
+        },
+        {
+          "name": "desktop-vet",
+          "command": [
+            "go",
+            "-C",
+            "desktop",
+            "vet",
+            "./..."
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "seconds": 2.239
+        },
+        {
+          "name": "rendered-race",
+          "command": [
+            "go",
+            "-C",
+            "desktop",
+            "test",
+            "-race",
+            "-tags=offscreen",
+            "./...",
+            "-count=1",
+            "-timeout=30m"
+          ],
+          "status": "failed",
+          "exit_code": 1,
+          "seconds": 769.592
+        }
+      ],
+      "inputs_unchanged": true,
+      "all_previous_inputs_retained": true
+    },
+    "steps": [
+      {
+        "name": "sdk",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "scripts/prepare-vellum.py"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 0.679
+      },
+      {
+        "name": "python",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "test_*.py"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 4.441
+      },
+      {
+        "name": "prd",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "scripts/prd-audit.py",
+          "--verify",
+          "research/11-prd-implementation-audit.json"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 0.029
+      },
+      {
+        "name": "portable-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "./...",
+          "-count=1",
+          "-timeout=30m"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 573.83
+      },
+      {
+        "name": "portable-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 5.644
+      },
+      {
+        "name": "desktop-race",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "test",
+          "-race",
+          "./...",
+          "-count=1",
+          "-timeout=30m"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 445.132
+      },
+      {
+        "name": "desktop-vet",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "vet",
+          "./..."
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 2.239
+      },
+      {
+        "name": "inventory",
+        "command": [
+          "go",
+          "run",
+          "./cmd/elab-ui-audit",
+          "--verify",
+          "research/13-native-command-inventory.json"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 0.648
+      },
+      {
+        "name": "lint",
+        "command": [
+          "scripts/lint.sh"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 12.654
+      },
+      {
+        "name": "rendered-race",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "test",
+          "-race",
+          "-tags=offscreen",
+          "./...",
+          "-count=1",
+          "-timeout=30m"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 770.937
+      },
+      {
+        "name": "rendered-vet",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "vet",
+          "-tags=offscreen",
+          "./..."
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 2.912
+      }
+    ],
+    "inputs_unchanged": true
+  },
+  "final_smoke_delta": {
+    "passed": true,
+    "changed_inputs": [
+      "desktop/measurement_inspection_smoke.go"
+    ],
+    "exact_two_descriptor_literal_replacement": true,
+    "normal_ui_commands_models_limits_sdk_unchanged": true,
+    "validation": "focused race, lint, ordinary/rendered vet; complete copied native smoke is required on final package"
+  },
+  "exact_runtime_qualification": {
+    "passed": true,
+    "manifest_sha256": "b35966900dcd2178579f49aa0aa6f8199350f4f1edf7fe303f0e7aec4b41d96b",
+    "source_commit": "f5c600d07e97a00ee1b967ce91c472235752841b",
+    "examples": [
+      "555-flasher",
+      "555-one-shot",
+      "555-oscillator",
+      "555-tone",
+      "ac-opamp",
+      "ac-rc",
+      "ac-rlc",
+      "amplifier-distortion",
+      "battery-led",
+      "battery-regulator",
+      "binary-counter",
+      "bipolar-push-pull",
+      "blink",
+      "buck",
+      "button-counter",
+      "button-debounce",
+      "capacitor-loss",
+      "class-ab-speaker",
+      "class-ab-temperature",
+      "cmos",
+      "comparator-counter",
+      "comparator-threshold",
+      "constant-power-load",
+      "coupled-windings",
+      "current-led",
+      "d-flipflop",
+      "decade-counter",
+      "discrete-class-ab",
+      "display-counter",
+      "emitter-follower",
+      "feedback-loop",
+      "flasher",
+      "flyback",
+      "hbridge-motor",
+      "jfet-current",
+      "jfet-preamp",
+      "jk-flipflop",
+      "led-fade",
+      "led",
+      "light-alarm",
+      "load-step",
+      "logic-half-adder",
+      "logic-inverter",
+      "logic-switches",
+      "motor-dc",
+      "motor-pwm",
+      "night-light",
+      "nmos",
+      "noise-amplifier",
+      "noise-rc",
+      "npn",
+      "opamp-bandwidth",
+      "opamp-follower",
+      "opamp-inverting",
+      "opamp-slew",
+      "opto-switch",
+      "photodiode-load",
+      "photodiode-tia",
+      "pjfet-current",
+      "pmos",
+      "pnp",
+      "rc-block",
+      "rc-high-pass",
+      "rc-tolerance",
+      "rc",
+      "rectifier",
+      "regulator-dropout",
+      "regulator-supply",
+      "relay-flasher",
+      "relay-switch",
+      "rl",
+      "rlc",
+      "schottky",
+      "scr-latch",
+      "self-heating",
+      "shift-register",
+      "speaker-amplifier",
+      "split-supply",
+      "step-response",
+      "switch-npn",
+      "t-flipflop",
+      "thermostat",
+      "transformer-supply",
+      "transistor-profile",
+      "triac-phase",
+      "winding-loss",
+      "zener"
+    ],
+    "component_kinds": 61,
+    "commands": 229,
+    "agent_exit_code": 0,
+    "runtime_checked": true
+  },
+  "archive": {
+    "passed": true,
+    "archive": "/Users/dshills/Development/projects/ELab/build/releases/ELab-0.203.0-macos-arm64.zip",
+    "bytes": 46407811,
+    "sha256": "2416f13dd0f494367f45c7991cc75bd1cb3e69acc1ae1c9971ea8165f9bc05cf",
+    "payload_files": 470,
+    "manifest_sha256": "b35966900dcd2178579f49aa0aa6f8199350f4f1edf7fe303f0e7aec4b41d96b"
+  },
+  "uploaded_assets": {
+    "passed": true,
+    "assets": {
+      "ELab-0.203.0-macos-arm64.zip": {
+        "sha256": "2416f13dd0f494367f45c7991cc75bd1cb3e69acc1ae1c9971ea8165f9bc05cf",
+        "bytes": 46407811
+      },
+      "SHA256SUMS.txt": {
+        "sha256": "dc08552f01fdb0046203640452795b57d4137f3cdd008ed28e0478c8f90c2aef",
+        "bytes": 95
+      },
+      "START-HERE.md": {
+        "sha256": "be6d35b8e3584b87b3127b84f34f2f1bc8af596d87f36dbb153dc5a666fe5d16",
+        "bytes": 2717
+      }
+    }
+  },
+  "publication": {
+    "assets": [
+      {
+        "apiUrl": "https://api.github.com/repos/dshills/ELab/releases/assets/689850121",
+        "contentType": "application/zip",
+        "createdAt": "2026-10-29T20:42:17Z",
+        "digest": "sha256:2416f13dd0f494367f45c7991cc75bd1cb3e69acc1ae1c9971ea8165f9bc05cf",
+        "downloadCount": 0,
+        "id": "RA_kwDOVbok484pHkcJ",
+        "label": "",
+        "name": "ELab-0.203.0-macos-arm64.zip",
+        "size": 46407811,
+        "state": "uploaded",
+        "updatedAt": "2026-10-29T20:42:20Z",
+        "url": "https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/ELab-0.203.0-macos-arm64.zip"
+      },
+      {
+        "apiUrl": "https://api.github.com/repos/dshills/ELab/releases/assets/689850120",
+        "contentType": "text/plain; charset=utf-8",
+        "createdAt": "2026-10-29T20:42:17Z",
+        "digest": "sha256:dc08552f01fdb0046203640452795b57d4137f3cdd008ed28e0478c8f90c2aef",
+        "downloadCount": 0,
+        "id": "RA_kwDOVbok484pHkcI",
+        "label": "",
+        "name": "SHA256SUMS.txt",
+        "size": 95,
+        "state": "uploaded",
+        "updatedAt": "2026-10-29T20:42:17Z",
+        "url": "https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/SHA256SUMS.txt"
+      },
+      {
+        "apiUrl": "https://api.github.com/repos/dshills/ELab/releases/assets/689850119",
+        "contentType": "application/octet-stream",
+        "createdAt": "2026-10-29T20:42:17Z",
+        "digest": "sha256:be6d35b8e3584b87b3127b84f34f2f1bc8af596d87f36dbb153dc5a666fe5d16",
+        "downloadCount": 0,
+        "id": "RA_kwDOVbok484pHkcH",
+        "label": "",
+        "name": "START-HERE.md",
+        "size": 2717,
+        "state": "uploaded",
+        "updatedAt": "2026-10-29T20:42:17Z",
+        "url": "https://github.com/dshills/ELab/releases/download/v0.203.0-alpha.1/START-HERE.md"
+      }
+    ],
+    "isDraft": false,
+    "isPrerelease": true,
+    "tagName": "v0.203.0-alpha.1",
+    "url": "https://github.com/dshills/ELab/releases/tag/v0.203.0-alpha.1"
+  }
+}
