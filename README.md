@@ -11,7 +11,8 @@ for drawing, simulation, analysis, saving and export.
 
 ![ELab showing an RC circuit, capacitor inspector, charge/discharge traces and timing cursors in the Light theme](docs/images/rc-scope.jpg)
 
-*RC charge and discharge: edit the circuit above, inspect the waveforms below.*
+*RC charge and discharge: edit the circuit above, inspect the waveforms below.
+Screenshots show an earlier panel layout; the current drawer controls are described below.*
 
 ## What you can do
 
@@ -36,12 +37,33 @@ for drawing, simulation, analysis, saving and export.
   preview atomic edits, apply guarded changes, and observe jobs/events through
   headless stdio or a private local connection to the running desktop app.
 - **Choose your workspace.** Light, Dark, System and Apollo themes, native macOS
-  menus, a searchable component browser, collapsible/resizable side panels, a
-  Simulate tool chooser, and an adjustable schematic/instrument split.
+  menus, a searchable component browser, docked Parts/Inspector drawers, a
+  focused Simulate tool chooser, and an adjustable schematic/instrument split.
 
 See the [drawing workflow](docs/workbench-workflows.md),
 [component browser](docs/component-browser.md), [workspace](docs/workspace-layout.md)
 and [shared command guide](docs/agent-api.md).
+
+## Drawers and Simulate tools
+
+**Parts** and **Inspector** open independently and move the canvas aside. Each
+open drawer has a visible **Close** button at its workspace edge. Closing it
+leaves a labelled tab to reopen it and frees its horizontal space for drawing.
+Drag an inside divider to resize, or toward the outside edge to snap closed.
+With divider focus, Home closes Parts and End closes Inspector. Reopening
+retains the preferred width. Layout choices last for the session and do not
+mark the circuit dirty or become part of a saved schematic.
+
+The **Simulate** inspector shows one tool at a time: **Live controls**, **Recorded
+runs**, **Recorded spectrum**, **DC / AC / noise sweeps**, **Component tolerances**
+or **Circuit details**. The chooser stays above the scrolling form. Switching
+tools keeps their accepted settings/results and does not start an analysis or
+stop live simulation. The live Scope/Spectrum dock remains available below.
+
+Users and agents control the same state through `workspace.panels.set` and
+`workspace.simulation.set`; electrical commands still work with either drawer
+closed. See the [workspace reference](docs/workspace-layout.md) for parameters,
+keyboard behavior and layout limits.
 
 ## Scope and Spectrum
 
@@ -111,8 +133,8 @@ component. Apollo gives the workspace its cyan instrument-console appearance.*
 ## Build and run
 
 The desktop target is **macOS on Apple Silicon**. Packaged candidates have been
-tested on macOS 26.x. The portable Go simulation core and headless agent do not
-require Vellum, a window system or a GPU.
+tested on macOS 26.x and 27.2. The portable Go simulation core and headless agent
+do not require Vellum, a window system or a GPU.
 
 For the desktop build, install **Go 1.25.6 or newer**, **Python 3.10 or newer** and
 **Xcode Command Line Tools**, then run:
@@ -154,12 +176,21 @@ the qualified local artifacts described below.
 The [current local unsigned release](docs/current-release.md) documents the
 matching app/agent archive, checksum and qualification limits.
 
+The newer local **0.202.1 /287 development candidate** adds the drawer controls
+and Simulate chooser. In a checkout containing the built artifacts, its app,
+matching agent and examples are in `build/ELab-0.202.1-287-Drawers/`.
+[Drawer validation](docs/validation/drawers-20261029/README.md) records passing
+desktop/rendered suites, focused race tests, native smoke, MCP checks and all
+87 packaged example graphs. This candidate is separate from the preserved /285
+qualified release; its local path is not a published GitHub download.
+
 ## Use an AI agent
 
-Standard MCP support is included in the current local 0.201.0 /285 build.
-Run its matching agent (or build the current source) with `--mcp-config`, then use
-the printed configuration. It starts a local headless circuit with full command
-discovery, inspection and guarded command dispatch. Add `--connect` when generating
+Standard MCP support is included in local 0.201.0 /285 and newer builds.
+Run the matching agent for your app (or build the current source) with
+`--mcp-config`, then use the printed configuration. It starts a local headless
+circuit with full command discovery, inspection and guarded command dispatch.
+Add `--connect` when generating
 the configuration for an explicitly started desktop endpoint.
 [Setup, examples and lifecycle](docs/agent-setup.md).
 
@@ -219,7 +250,8 @@ Go vet and race tests. Electrical tests cover reference values, conservation,
 transients and guarded failures; integration tests cover shared commands,
 persistence, retries, background work and UI/agent parity.
 
-The [latest spectrum measurement review and test evidence](docs/validation/spectrum-markers-20261028/README.md)
+[Drawer review and test evidence](docs/validation/drawers-20261029/README.md)
+records the latest workspace correction. [Spectrum measurement evidence](docs/validation/spectrum-markers-20261028/README.md)
 records the peak/cursor implementation. Native OS-input, clean-account install,
 participant usability and signing/notarization gates remain separately recorded;
 passing software tests do not close them.
