@@ -1,8 +1,8 @@
 # Connect an AI agent to ELab
 
-Current source supports standard local MCP (`elab-agent --mcp`). The preserved
-0.200.5 /283 package predates this mode. These instructions require an
-MCP-enabled agent executable. It uses the same service,
+ELab supports standard local MCP (`elab-agent --mcp`). Use an MCP-enabled
+agent executable (0.201.0 or newer; the preserved 0.200.5 /283 predates this
+mode). It uses the same service,
 validation, commands, measurements and revision guards as the desktop UI.
 There is no AI provider key or cloud connection to configure in ELab. Your MCP
 client supplies its own model and tool-authorization settings.

@@ -1,6 +1,10 @@
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
+
+import package_app
 import tempfile
 import unittest
 
@@ -43,3 +47,17 @@ class AgentNoticeTests(unittest.TestCase):
             else:
                 p=root/'go.sum';lines=p.read_text().splitlines();lines=[line.replace(line.split()[2],'h1:changed') if line.startswith('github.com/modelcontextprotocol/go-sdk v1.8.0 ') else line for line in lines];p.write_text('\n'.join(lines)+'\n')
             with self.assertRaises(ValueError):agent_notices.verify(root)
+
+    def test_actual_payload_names_pass_the_pinned_packager(self):
+        data=agent_notices.verify(ROOT)
+        names=[agent_notices.bundle_path(name) for name in [*data['files'],'notices.json']]
+        self.assertEqual(len(names),len(set(names)))
+        self.assertTrue(any('-at-v1.8.0/' in name for name in names))
+        scripts=package_app.verify_packager()/'scripts'
+        result=subprocess.run([sys.executable,'-B','-c',
+            'import app_notices,json,sys; names=json.load(sys.stdin); [app_notices.notice_name(n) for n in names]; print(len(names))'],
+            cwd=scripts,input=json.dumps(names),text=True,capture_output=True,check=True)
+        self.assertEqual(int(result.stdout),len(names))
+        for invalid in ['/absolute','../escape','a/../b','bad!','a//b','a/./b','bad.']:
+            with self.subTest(invalid=invalid),self.assertRaises(ValueError):
+                agent_notices.bundle_path(invalid)

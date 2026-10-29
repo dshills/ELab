@@ -56,3 +56,20 @@ independent task completion or every third-party client's settings UI. No owner
 session/project, cloud provider, credential installation, network listener,
 security weakening, new component or solver-limit change is part of this work.
 Complete qualification receipts are added only after actual final runs pass.
+
+## Final assembly seam
+
+The first /284 assembly refused the new module `@version` paths in its bound
+app notices. The separately pinned packager correctly admits a narrower path
+alphabet. Keep it unchanged: spell `@` as `-at-` only in the generated app notice
+copy, reject invalid/mapped duplicate paths, and retain original paths/bytes in
+Licenses/AgentMCP. A regression runs all actual pinned payload names through the
+real pinned packager validator. Failed /284 outputs remain unqualified/preserved.
+All 104 Python tests pass with this repair. No SDK cache or qualified artifact
+was edited.
+
+The initial portable race run passed every package except two existing relay
+work-budget checks (elapsed-time safety refusals, not a race report). Those two
+passed three consecutive targeted reruns with limits unchanged. A full isolated
+workbench rerun and final exact-package checks remain required before promotion;
+retain the initial failed receipt rather than representing it as a clean gate.

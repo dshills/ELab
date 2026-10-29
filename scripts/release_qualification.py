@@ -112,7 +112,9 @@ def assemble(args):
         names = []
         for path in sorted(source_dir.rglob('*')):
             if path.is_file():
-                name = 'NOTICES/'+folder+'/'+path.relative_to(source_dir).as_posix()
+                relative = path.relative_to(source_dir).as_posix()
+                name = agent_notices.bundle_path(relative) if folder == 'AgentMCP' else 'NOTICES/'+folder+'/'+relative
+                check(name not in files, 'duplicate app notice path')
                 dest = notices/name
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(path, dest)

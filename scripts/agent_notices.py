@@ -1,10 +1,27 @@
 """Check pinned notices for the packaged agent's added runtime dependencies."""
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import re
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
+
+
+
+def bundle_path(name):
+    """Map module @version paths into the unchanged pinned packager alphabet.
+
+    Licenses/AgentMCP retains original paths and bytes. The app's bound notice
+    copy uses this documented spelling; callers must reject mapped collisions.
+    """
+    path=PurePosixPath(name)
+    if path.is_absolute() or not path.parts or str(path)!=name:
+        raise ValueError('invalid agent notice path')
+    parts=[part.replace('@','-at-') for part in path.parts]
+    if any(not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*',part) or part.endswith('.') for part in parts):
+        raise ValueError('invalid agent notice path')
+    return 'NOTICES/AgentMCP/'+'/'.join(parts)
 
 
 def verify(root=ROOT):
