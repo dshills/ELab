@@ -105,3 +105,25 @@ configuration, blank LED/2k/Undo, RC captures/comparison, ten shared disclosures
 with unchanged physical/document state, flasher save/reopen and SVG/PDF files.
 This remains software-route evidence, separate from hobbyist/native OS input.
 Package manifest safety tests pass; final frozen full quality follows stage 5.
+
+## 5. Release review: visible correction guidance
+
+A source review found that Notice's help parameter was only accessibility help,
+so closing the duplicate issue list also hid visible next-step instructions.
+The existing rendered guidance regression reproduced this in six task/theme
+cases. Interrupted only the owned quality runner at desktop-race (143, normal
+owned termination), after complete portable race/vet, Python, PRD, SDK and lint
+passes. No incomplete desktop stage is counted as a pass.
+
+The current correction now renders as a separate label beside the Notice;
+summary/AX identity and the full diagnostic disclosure are retained. The revised
+regression mounts that actual production Notice, checks the exact shared action,
+visibility/whole text geometry in all three task sections and four themes, and
+preserves physical state. A focused-fixture hidden toolbar focus request was
+removed from its copied root only; production focus behavior is unchanged.
+All twelve final cases pass (4.769s); inspected the 320-unit Apollo image and its
+complete correction text. Only operation_notice.go and this rendered test change
+compiled inputs relative to the preceding full portable gates. Continuation
+repeats inventory/lint and complete final desktop/rendered race/vet; unchanged
+non-desktop gates carry only through exact input comparison. No solver limit,
+SDK, queue contract, component or electrical command changes.

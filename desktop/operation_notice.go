@@ -36,5 +36,14 @@ func (s *screen) operationNotice(message, help string, failed bool) ui.Node {
 	if failed {
 		text.Style.Foreground = ui.Some(resolvePalette("light", false).Danger)
 	}
-	return node
+	if help == "" {
+		return node
+	}
+	// Accessibility help alone is not a visible next step. Keep the current
+	// correction beside the issue even when the full diagnostic list is closed.
+	action := quiet("message-action", help)
+	action.Accessibility.Name = "How to continue"
+	action.Style.GrowX = ui.Some(float32(1))
+	action.Style.GrowY = ui.Some(float32(0))
+	return ui.Node{ID: "operation-notice-area", Kind: ui.Column, Style: ui.Style{GrowX: ui.Some(float32(1)), GrowY: ui.Some(float32(0)), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(4))}, Children: []ui.Node{node, action}}
 }

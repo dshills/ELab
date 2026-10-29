@@ -10,7 +10,8 @@ elab-agent, 87 editable examples, dependency notices and these guides.
    macOS may block opening it. Check the published SHA-256 and origin first.
    If you trust this build, use macOS Privacy & Security's per-app Open Anyway
    route when offered. Do not disable Gatekeeper or remove quarantine globally.
-   On a managed Mac, your administrator may prohibit unsigned apps.
+   On a managed Mac, your administrator may prohibit unsigned apps. See
+   [Apple’s app-opening guidance](https://support.apple.com/102445).
 3. Open Examples and try **RC charge/discharge** or **Capacitor-timed LED flasher**.
    Complete supported circuits simulate as you draw. Pause freezes accepted
    readings; Restart restores startup; Step advances a paused transient circuit.

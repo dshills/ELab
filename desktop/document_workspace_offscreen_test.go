@@ -18,9 +18,9 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-func TestMountedInspectorRequestGuidanceStaysVisibleOnTaskPages(t *testing.T) {
-	for _, section := range []string{"simulation", "document"} {
-		for _, themeName := range []string{"light", "dark", "apollo"} {
+func TestMountedTaskGuidanceStaysVisibleWithoutOpeningDetails(t *testing.T) {
+	for _, section := range []string{"component", "simulation", "document"} {
+		for _, themeName := range []string{"light", "dark", "apollo", "system"} {
 			t.Run(section+"/"+themeName, func(t *testing.T) {
 				s, cleanup := testScreen(t)
 				t.Cleanup(cleanup)
@@ -36,19 +36,30 @@ func TestMountedInspectorRequestGuidanceStaysVisibleOnTaskPages(t *testing.T) {
 				})
 				before := s.service.Snapshot()
 				view := func() ui.Node {
-					rail, ok := findNode(s.view(), "inspector-rail")
-					if !ok {
-						t.Fatal("missing inspector rail")
+					root := s.view()
+					details, ok := findNode(root, "diagnostic-details")
+					if !ok || details.Checked {
+						t.Fatal("guidance requires opening full details")
 					}
-					return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{rail}}
+					notice, ok := findNode(root, "operation-notice-area")
+					if !ok {
+						t.Fatal("missing visible correction")
+					}
+					action, ok := findNode(notice, "message-action")
+					if !ok || s.requestHelp == nil || action.Text != s.requestHelp.Action {
+						t.Fatal("visible next step differs from shared request help")
+					}
+					root.Children = []ui.Node{notice}
+					root.Focus = ui.FocusRequest{} // This focused fixture excludes the owner toolbar.
+					return root
 				}
 				theme := inspectorLayoutTestTheme()
 				// Preserve the production palette on unstyled child groups; the
 				// width-test helper's white default would falsify dark rendering.
 				theme.Default.Background = ui.Some(color.NRGBA{})
 				m := newMountedControlWindowSize(t, s, view, 320, 360, theme)
-				rail := mountedControlElement(t, m, inspectorScrollNode(t, s.view()).ID)
-				action := mountedControlElement(t, m, "diagnostic-0-action")
+				rail := mountedControlElement(t, m, "root")
+				action := mountedControlElement(t, m, "message-action")
 				if !action.Visible || action.Bounds.Dy() < 28 || !action.Bounds.In(rail.Bounds) {
 					t.Fatalf("correction instructions are clipped: action=%v rail=%v", action.Bounds, rail.Bounds)
 				}
