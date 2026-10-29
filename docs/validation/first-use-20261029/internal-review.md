@@ -60,3 +60,31 @@ existing electrical/ownership/refusal assertions remain. Added real retained
 basic Record, private-duration first-click, short-rail stationary-action tests,
 prerequisite routes and descriptor-retention/shared-state controls. Focused
 rendered race suite passes (76.911s); final frozen full gates follow stage 5.
+
+## 3. Contextual measurements and guidance
+
+The single chooser covers objects, terminals, wires, anchored nets and signed
+voltage/current probes, using unchanged measurement.select/Plot/Pin commands.
+Removed sources remain visibly unavailable. The bottom strip follows the accepted
+measurement rather than advertising empty LED quantities. Whole-circuit metrics
+remain named and unchanged under shared More measurements & circuit overview;
+extra readings and pin management remain reachable through shared disclosures.
+The renderer reuses accepted display strings, references and provenance, never
+recalculates physics. Widths stay fixed while digits change.
+
+Paused status no longer overrides an incomplete, unsupported or invalid circuit;
+transient stale results are included. The current canvas notice includes the
+first issue's action. All issue summaries/objects/technical explanations remain
+in the existing diagnostics.details.set disclosure instead of being duplicated
+above the inspector. Fixed instrument insertion uses the workspace boundary,
+independent of the reading strip's content. No electrical or command behavior
+was removed. Internal review caught a selector/caption duplicate ID immediately;
+the caption now has its own identity. Full-form timing/startup fixtures open
+Advanced before installing deferred settlement hooks and capturing baselines.
+
+Ordinary desktop passed at the intermediate composition (69.851s); focused
+rendered race passed (11.745s), including corrected full-form timing/startup
+fixtures. Final compact composition/electrical-summary regressions pass (2.207s).
+Frozen full suites in stage 5 are the final production-source verdict. Earlier
+failed logs are retained: hidden-form fixture setup, duplicate caption ID and the
+initial overly broad whole-tree test for an intentionally retained overview.

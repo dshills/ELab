@@ -19,6 +19,7 @@ func prepareRecordedTiming(t *testing.T, service *workbench.Service) {
 	agentAction(t, service, "recording.view.set", workbench.RecordingViewParams{Mode: "recorded"})
 	agentAction(t, service, "workspace.inspector.set", workbench.InspectorParams{Section: "simulation"})
 	agentAction(t, service, "workspace.simulation.set", workbench.SimulationToolParams{Tool: "recordings"})
+	agentAction(t, service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 	state := service.Snapshot()
 	agentAction(t, service, "recording.timing.set", workbench.RecordingTimingParams{ID: state.Recording.ID, ProbeID: "v:VIN.positive", Level: "2.5 V", Direction: "both", End: .5})
 }

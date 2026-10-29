@@ -131,3 +131,17 @@ variation/trial settings. Closed fields use their accepted settings; opening
 Advanced does not start a job. Recorded Spectrum offers Record/Open routes when
 no completed recording exists. Compile guidance leaves saved-result import and
 existing captured results available.
+
+## Measurements and guidance
+
+**Measure** has one source chooser for components, wires, terminals, nets and
+voltage/current probes. Follow schematic selection restores automatic inspection;
+Plot and Pin keep their existing shared commands. The bottom strip follows that
+measurement and preserves signed units and stale/unavailable qualifiers. A blank
+circuit shows a selection prompt. The prior named whole-circuit metrics remain
+under **Circuit overview**, controlled by the `measurement` Details section.
+
+The header reports the actual experiment state; paused does not cover up an
+invalid/unsupported circuit. The canvas shows the current actionable guidance;
+**All guidance & technical details** in the inspector retains every issue,
+related object and technical explanation through `diagnostics.details.set`.

@@ -10,49 +10,53 @@ import (
 
 func (s *screen) measurementInspector(state workbench.Snapshot) []ui.Node {
 	inspection := state.MeasurementInspection
-	nodes := []ui.Node{section("measurement-title", "Live measurements"), quiet("measurement-help", "Plot live opens the scope and highlights the source. Keeps existing traces (six maximum). Pin adds a reading to the sheet.")}
-	selectTarget := func(kind, name string, options []ui.Option) ui.Node {
-		selected := "__none"
-		if inspection.Target != nil && inspection.Target.Kind == kind {
-			selected = inspection.Target.ID
-			found := false
-			for _, option := range options {
-				if option.ID == selected {
-					found = true
-				}
-			}
-			if !found {
-				options = append(options, ui.Option{ID: selected, Label: selected + " · unavailable"})
-			}
-		}
-		return ui.Node{ID: "inspect-" + kind, Kind: ui.Selector, Options: options, SelectedID: selected, Accessibility: ui.Accessibility{Name: name}, Change: func(e ui.ChangeEvent) {
-			p := workbench.MeasurementSelectParams{Kind: kind, ID: e.SelectedID}
-			if e.SelectedID == "__none" {
-				p = workbench.MeasurementSelectParams{}
-			}
-			s.invoke("measurement.select", p)
-		}}
-	}
-	terminals := []ui.Option{{ID: "__none", Label: "Measure a terminal…"}}
+	nodes := []ui.Node{section("measurement-title", "Measure"), quiet("measurement-help", "Choose a source or select it on the schematic. Plot adds a scope trace; Pin adds a reading to the sheet.")}
+	options := []ui.Option{{ID: "__none", Label: "Follow schematic selection"}}
+	add := func(kind, id, name string) { options = append(options, ui.Option{ID: kind + "|" + id, Label: name}) }
 	for _, part := range state.Components {
+		add("object", part.ID, part.ID+" · component")
 		for _, terminal := range part.Terminals {
 			ref := part.ID + "." + terminal
-			terminals = append(terminals, ui.Option{ID: ref, Label: ref + " / ground"})
+			add("terminal", ref, ref+" · terminal / ground")
 		}
 	}
-	nets := []ui.Option{{ID: "__none", Label: "Measure a net…"}}
+	for _, wire := range state.Wires {
+		add("object", wire.ID, wire.ID+" · wire net")
+	}
 	for _, net := range state.Nets {
 		name := net.ID
 		if len(net.Labels) > 0 {
 			name += " · " + strings.Join(net.Labels, ", ")
 		}
-		nets = append(nets, ui.Option{ID: net.ID, Label: fmt.Sprintf("%s · %d terminals", name, len(net.Terminals))})
+		add("net", net.ID, fmt.Sprintf("%s · %d terminals", name, len(net.Terminals)))
 	}
-	probes := []ui.Option{{ID: "__none", Label: "Measure voltage/current…"}}
 	for _, probe := range state.Scope.Available {
-		probes = append(probes, ui.Option{ID: probe.ID, Label: probe.Label + " · " + probe.Unit})
+		add("probe", probe.ID, probe.Label+" · "+probe.Unit)
 	}
-	nodes = append(nodes, selectTarget("terminal", "Inspect named terminal voltage", terminals), selectTarget("net", "Inspect named electrical net", nets), selectTarget("probe", "Inspect voltage or current probe", probes))
+	selected := "__none"
+	// Object selection and explicit object measurement share the same service
+	// target. Show the exact accepted target rather than guessing its origin.
+	if inspection.Target != nil {
+		selected = inspection.Target.Kind + "|" + inspection.Target.ID
+		found := false
+		for _, o := range options {
+			found = found || o.ID == selected
+		}
+		if !found {
+			options = append(options, ui.Option{ID: selected, Label: inspection.Target.ID + " · unavailable"})
+		}
+	}
+	nodes = append(nodes, ui.Node{ID: "measurement-source", Kind: ui.Selector, Options: options, SelectedID: selected, Accessibility: ui.Accessibility{Name: "Measurement source", Help: "Component, terminal, wire, net or voltage/current probe. Follow schematic selection restores automatic inspection."}, Change: func(e ui.ChangeEvent) {
+		p := workbench.MeasurementSelectParams{}
+		if e.SelectedID != "__none" {
+			kind, id, ok := strings.Cut(e.SelectedID, "|")
+			if !ok {
+				return
+			}
+			p = workbench.MeasurementSelectParams{Kind: kind, ID: id}
+		}
+		s.invoke("measurement.select", p)
+	}})
 	if inspection.Target == nil {
 		return append(nodes, quiet("measurement-empty", "Select a component, terminal or wire to inspect. Wires show their net voltage; current cues require a uniquely determined wire current."))
 	}
@@ -62,7 +66,7 @@ func (s *screen) measurementInspector(state workbench.Snapshot) []ui.Node {
 	} else if inspection.ResultKind == "transient" && len(inspection.Readings) > 0 {
 		caption += fmt.Sprintf(" · sample %.5g ms", inspection.Readings[0].Time*1000)
 	}
-	nodes = append(nodes, quiet("measurement-source", caption))
+	nodes = append(nodes, quiet("measurement-caption", caption))
 	if inspection.Reason != "" {
 		nodes = append(nodes, quiet("measurement-reason", inspection.Reason))
 	}
@@ -73,17 +77,25 @@ func (s *screen) measurementInspector(state workbench.Snapshot) []ui.Node {
 	for _, pin := range state.PinnedReadings {
 		pinned[pin.Definition.ID] = true
 	}
-	for _, reading := range inspection.Readings {
+	var more []ui.Node
+	for index, reading := range inspection.Readings {
+		var row []ui.Node
 		id := reading.Probe.ID
-		nodes = append(nodes, quiet("measurement-value-"+id, reading.Display), quiet("measurement-reference-"+id, reading.ReferenceDisplay))
+		row = append(row, quiet("measurement-value-"+id, reading.Display), quiet("measurement-reference-"+id, reading.ReferenceDisplay))
 		if reading.Reason != "" {
-			nodes = append(nodes, quiet("measurement-status-"+id, reading.Reason))
+			row = append(row, quiet("measurement-status-"+id, reading.Reason))
 		}
 		plot := s.action("measurement-plot-"+id, "Plot live", "scope.probe.plot", workbench.IDParams{ID: id})
 		plot.Disabled = state.Transient == nil || !inspection.Available
 		pin := s.action("measurement-pin-"+id, "Pin", "measurement.pin.add", workbench.PinSpec{ID: id, Position: defaultPinPosition(state, id)})
 		pin.Disabled = pinned[id] || len(state.PinnedReadings) >= workbench.MaxPinnedReadings || !inspection.Available
-		nodes = append(nodes, ui.Node{ID: "measurement-actions-" + id, Kind: ui.Row, Children: []ui.Node{plot, pin}})
+		row = append(row, ui.Node{ID: "measurement-actions-" + id, Kind: ui.Row, Children: []ui.Node{plot, pin}})
+		if index == 0 {
+			nodes = append(nodes, row...)
+		} else {
+			more = append(more, row...)
+		}
 	}
+	nodes = append(nodes, s.detailsSection(state, "measurement", "More measurements & circuit overview", more))
 	return append(nodes, s.action("measurement-clear", "Inspect selected object", "measurement.select", workbench.MeasurementSelectParams{}))
 }

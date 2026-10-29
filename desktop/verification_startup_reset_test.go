@@ -26,6 +26,7 @@ func prepareInductorVerification(t *testing.T, service *workbench.Service, examp
 	if _, err := service.Wait(ctx); err != nil {
 		t.Fatal(err)
 	}
+	agentAction(t, service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 	cfg := workbench.VerificationSettings{Duration: .005, Step: .0005, InputMode: "high", Inductors: []workbench.InductorInitial{{ID: "L1", Current: .03}}, Capacitors: []workbench.CapacitorInitial{}}
 	initial := 1.
 	cfg.InitialVoltage = &initial

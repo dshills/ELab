@@ -171,5 +171,5 @@ func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node, width
 }
 
 func compactReadingStatus(text string) ui.Node {
-	return ui.Node{ID: "simulation-info", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 5, Bottom: 5, Left: 12, Right: 12}), Gap: ui.Some(float32(2)), Background: ui.Some(paper), MinSize: ui.Some(ui.Size{Width: 232}), MaxSize: ui.Some(ui.Size{Width: 232})}, Children: []ui.Node{section("simulation-title", "Live simulation"), quiet("reading-status", text)}}
+	return ui.Node{ID: "simulation-info", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 5, Bottom: 5, Left: 12, Right: 12}), Gap: ui.Some(float32(2)), Background: ui.Some(paper), MinSize: ui.Some(ui.Size{Width: 232}), MaxSize: ui.Some(ui.Size{Width: 232})}, Children: []ui.Node{section("simulation-title", "Circuit overview"), quiet("reading-status", text)}}
 }

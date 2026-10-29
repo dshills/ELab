@@ -171,34 +171,7 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 	if state.Paused {
 		pause, pauseText = "simulation.resume", "Resume"
 	}
-	status := "Building · live simulation ready"
-	switch state.Status {
-	case "running":
-		status = "● Live · DC simulation"
-		if workbench.IsTransientAnalysis(state.Analysis) {
-			status = "● Live · " + state.Analysis
-		}
-	case "paused":
-		status = "Ⅱ Paused"
-	case "error":
-		status = "Check circuit"
-	case "unsupported":
-		status = "Circuit not supported"
-	case "updating":
-		status = "Solving…"
-	}
-	if state.Paused {
-		status = "Ⅱ Paused"
-		if state.Status == "updating" {
-			status = "Initializing · paused"
-		}
-	}
-	if state.StepWork != nil && (state.StepWork.Status == "queued" || state.StepWork.Status == "running" || state.StepWork.Status == "canceling") {
-		status = fmt.Sprintf("Stepping · %.0f%% · committed readings paused", 100*state.StepWork.Progress)
-	}
-	if state.Result != nil && state.Result.Stale || state.NPN != nil && state.NPN.Stale || state.Mixed != nil && state.Mixed.Stale {
-		status += " · stale reading"
-	}
+	status := simulationStatus(state)
 	statusNode := label("status", status)
 	statusNode.Style.Foreground = ui.Some(accent)
 	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
@@ -303,7 +276,7 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 	if workbench.IsTransientAnalysis(state.Analysis) || state.Transient != nil {
 		inspector = append(inspector, inspectorGroup("probes", "Scope probes", s.probeInspector(state))...)
 	}
-	inspector = append(inspector, inspectorGroup("pinned", "Pinned readings", s.pinnedReadingControls(state))...)
+	inspector = append(inspector, inspectorGroup("pinned", "Pinned readings", []ui.Node{s.detailsSection(state, "pins", "Pinned readings", s.pinnedReadingControls(state))})...)
 	inspector = append(inspector, inspectorGroup("display", "Circuit display", s.displayControls(state))...)
 	inspector = append(inspector, inspectorGroup("appearance", "Appearance", s.appearanceControls(state))...)
 	if !previewVisible(state) {
@@ -395,6 +368,9 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		}
 	}
 	messageHelp := ""
+	if len(state.DiagnosticPresentation.Items) > 0 && message == state.DiagnosticPresentation.Items[0].Summary {
+		messageHelp = state.DiagnosticPresentation.Items[0].Action
+	}
 	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage {
 		messageHelp = s.requestHelp.Action
 	}
@@ -535,6 +511,21 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		}
 		return ui.Node{ID: id, Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.Insets{Top: 5, Bottom: 5, Left: 12, Right: 12}), Gap: ui.Some(float32(2)), Background: ui.Some(paper)}, Children: []ui.Node{titleNode, n}}
 	}
+	overview := []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), compactReadingStatus(readStatus)}
+	if state.MeasurementInspection.Target != nil && (state.Result != nil || state.NPN != nil || state.Mixed != nil || state.Transient != nil) {
+		for i := range inspector {
+			if inspector[i].ID != "inspector-group-measurements" {
+				continue
+			}
+			for j := range inspector[i].Children {
+				n := &inspector[i].Children[j]
+				if n.ID == "workspace-details-measurement" {
+					n.Children = append(n.Children, section("overview-title", "Circuit overview"))
+					n.Children = append(n.Children, overview...)
+				}
+			}
+		}
+	}
 	// Native max sizes constrain content, while padding consumes extra space.
 	// Bound descendants too: a long selector or button must not widen the rail.
 	if previewVisible(state) {
@@ -586,7 +577,7 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 			ui.Node{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: partsWidth}), MaxSize: ui.Some(ui.Size{Width: partsWidth}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", partsWidth-48, palette...)}},
 			ui.Node{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(8)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: schematicChildren},
 			s.inspectorRail(state, inspector, railWidth), totalWidth, leftWidth, rightWidth),
-		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 48}), Gap: ui.Some(float32(1)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), compactReadingStatus(readStatus)}},
+		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 48}), Gap: ui.Some(float32(1)), Align: ui.Some(ui.AlignCenter)}, Children: contextualReadings(state, metric, overview)},
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 24}), Padding: ui.Some(ui.Insets{Left: 10, Right: 10}), Gap: ui.Some(float32(8))}, Children: []ui.Node{footer, {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),
 	}}
@@ -603,7 +594,7 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		if state.ScopeVisible {
 			root.Children[1] = s.workspaceDock(root.Children[1], s.instrumentPanel(state), state)
 		} else {
-			index := len(root.Children) - 3
+			index := 2 // Between the drawing workspace and its readings/footer.
 			children := append([]ui.Node{}, root.Children[:index]...)
 			children = append(children, s.instrumentPanel(state))
 			children = append(children, root.Children[index:]...)

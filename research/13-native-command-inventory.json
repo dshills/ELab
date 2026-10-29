@@ -12,15 +12,16 @@
     "desktop/component_palette.go": "554968a6746c02a80cc8c8f3fb853e422f0e45e97afa0d68cb95e2eb00da4a9a",
     "desktop/component_startup_actions.go": "a7801c73956c5036ffcb0e41b39aaa638fdf9647f5ce3762b626f7ef72bd4291",
     "desktop/component_symbols.go": "78ba01645c8c53f8cb4b39a4aa5b62d7fda3adf12e48bc1ed66c14b160265727",
+    "desktop/contextual_readings.go": "957bf00bd9dbf3654f6a5966adb1d127d2ff5fda705ea397c4295916285a65df",
     "desktop/current_controls.go": "c7ea9dfd95563fbbdcc43b693dd40db3fe1fb1f66e648ff31d2dcde923b84e43",
     "desktop/cursor_actions.go": "fefec629a794097a6ce7c11d1badc9a9e1a35a17704683de58a673d547130486",
     "desktop/cursor_rejection.go": "d635c20a969208dbaf163fe1b66b3b5de6b624154739529b326aeea4e3b839da",
     "desktop/dc_sweep.go": "953749cfe4a969991630526b5851ac95347ff24a48a34392a310e3ae4524d5cf",
     "desktop/dc_sweep_actions.go": "fc0294ada6a29e5fa37bc5faf56559e9c871a442eb29451c95dba15d8dea94b6",
     "desktop/dc_sweep_canvas.go": "457023ebaf9d3d5a07602597975e78f5cea11cb3f77c7cbfe770d0fe363a9331",
-    "desktop/diagnostic_help.go": "822fcdf9c5904570b42bf1b98322de00ed9fdbd17299584cefedcfeb8098f171",
+    "desktop/diagnostic_help.go": "8289640bc174d41757fc1a58fcc1ba3c243afbef7eec2f07f2d0cf63dc398ad5",
     "desktop/display_preferences.go": "c66d99755baf629d01d283d598d4fe5812c2b20553dfb19f1a527c3ec008e9e9",
-    "desktop/document_workspace.go": "5654d2efe998c2db68543aac929ad04733e006adeedb68a7ad60983fdde592c3",
+    "desktop/document_workspace.go": "ad5cb9b0c2098277a40db81570eaebfed7a9719886fa87fe1d3bb77933e77e24",
     "desktop/drawing.go": "316ce40a1ceeba9db4f2401893b98c5128bf3273d21616718eeb4165151bd118",
     "desktop/drawing_preview.go": "c5faa6a382db37aa8748cafa9dcc9e655cc40a3d71218684facc88cb2ccf3a6c",
     "desktop/edit_proposal.go": "85b9470a7665f55758da21fe42f802c033101887faea9ec7889a2ceb055ab1df",
@@ -45,7 +46,7 @@
     "desktop/lifecycle.go": "7a8d9d38331a4b07a2ddfbc63f3283739ed05db7d98dc77fa7957890f5ad58d5",
     "desktop/loop_gain.go": "578aa3446a020722d073b9397893c7919e66ea6594e131fff3cc48fcb288881a",
     "desktop/main.go": "71edf427083bcc73d2ccadc678130a09461455375ea8968b8aff294e9c79bdc5",
-    "desktop/measurement_inspection.go": "06ad8838f3c6a3853e28b42127a0203f632fd1307f0b78e94988916d88e13050",
+    "desktop/measurement_inspection.go": "376a932bf9db08cd0f04e21ff593dad57d58984c660367609da68bbeced6efc3",
     "desktop/menus.go": "fb92050da67ff3e2832fdbc153507c9547d39c779ae426bc21977a2ffdc92d71",
     "desktop/menus_darwin.go": "9608dec0abb6de6953e28c0fed26207f99ec40ec9fc4dfff7d38e8a46adadbfe",
     "desktop/menus_other.go": "933f36929566cc8e40c0e2afa85e3c99e4c40c1516c607cb8eec0dd59ef50c2e",
@@ -108,7 +109,7 @@
     "desktop/value_apply.go": "ff6bdf287e6ddd8deba1178a1b223dfff5055552fc8eea8e4c02250a373dfead",
     "desktop/verification.go": "cab2c89897ee122abaef7fd1d323fa5926412c5883fa237ab4126cc2d725792d",
     "desktop/verification_actions.go": "8328a373eb80644cccfc170691dfe08b0dd15e6af1714f33947332dccda32ae0",
-    "desktop/view.go": "b57aecc76c663618d7a3d29b7209c3b9cf4e3c9a008fcab553b71811abd68814",
+    "desktop/view.go": "283d87130d8f602f6e1e8480229929cc7f5894330fdc223ca373c92cc7f97eb6",
     "desktop/viewport.go": "51df8542fe930574a7b2f68c7b8d4f69ddc08e79bac88177e29903adc33fa8fc",
     "desktop/waveforms.go": "390003d60a30a2ad2e9621cfac5e85caf0d61851478d05a0fdee9827be2f5fdd",
     "desktop/window_lifetime.go": "58ae149bc449de5245857e6f99f5cf0acb04a41fa68b1782173759aaa79d6b22",
@@ -1686,7 +1687,7 @@
     },
     {
       "file": "desktop/diagnostic_help.go",
-      "line": 30,
+      "line": 29,
       "function": "*screen.diagnosticControls",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\ts.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})\n}",
@@ -1694,7 +1695,7 @@
     },
     {
       "file": "desktop/diagnostic_help.go",
-      "line": 31,
+      "line": 30,
       "function": "*screen.diagnosticControls",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"diagnostics.details.set\", workbench.DiagnosticDetailsParams{Visible: e.Checked})",
@@ -2816,15 +2817,15 @@
     },
     {
       "file": "desktop/measurement_inspection.go",
-      "line": 28,
+      "line": 49,
       "function": "*screen.measurementInspector",
       "kind": "node-Change",
-      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.MeasurementSelectParams{Kind: kind, ID: e.SelectedID}\n\tif e.SelectedID == \"__none\" {\n\t\tp = workbench.MeasurementSelectParams{}\n\t}\n\ts.invoke(\"measurement.select\", p)\n}",
+      "expression": "Change: func(e ui.ChangeEvent) {\n\tp := workbench.MeasurementSelectParams{}\n\tif e.SelectedID != \"__none\" {\n\t\tkind, id, ok := strings.Cut(e.SelectedID, \"|\")\n\t\tif !ok {\n\t\t\treturn\n\t\t}\n\t\tp = workbench.MeasurementSelectParams{Kind: kind, ID: id}\n\t}\n\ts.invoke(\"measurement.select\", p)\n}",
       "status": "requires-binding-review"
     },
     {
       "file": "desktop/measurement_inspection.go",
-      "line": 33,
+      "line": 58,
       "function": "*screen.measurementInspector",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"measurement.select\", p)",
@@ -2835,7 +2836,7 @@
     },
     {
       "file": "desktop/measurement_inspection.go",
-      "line": 82,
+      "line": 88,
       "function": "*screen.measurementInspector",
       "kind": "action-factory",
       "expression": "s.action(\"measurement-plot-\"+id, \"Plot live\", \"scope.probe.plot\", workbench.IDParams{ID: id})",
@@ -2846,7 +2847,7 @@
     },
     {
       "file": "desktop/measurement_inspection.go",
-      "line": 84,
+      "line": 90,
       "function": "*screen.measurementInspector",
       "kind": "action-factory",
       "expression": "s.action(\"measurement-pin-\"+id, \"Pin\", \"measurement.pin.add\", workbench.PinSpec{ID: id, Position: defaultPinPosition(state, id)})",
@@ -2857,7 +2858,7 @@
     },
     {
       "file": "desktop/measurement_inspection.go",
-      "line": 88,
+      "line": 100,
       "function": "*screen.measurementInspector",
       "kind": "action-factory",
       "expression": "s.action(\"measurement-clear\", \"Inspect selected object\", \"measurement.select\", workbench.MeasurementSelectParams{})",
@@ -5711,7 +5712,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 213,
+      "line": 186,
       "function": "*screen.workspaceView",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil) }",
@@ -5719,7 +5720,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 213,
+      "line": 186,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
@@ -5730,7 +5731,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 214,
+      "line": 187,
       "function": "*screen.workspaceView",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil) }",
@@ -5738,7 +5739,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 214,
+      "line": 187,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
@@ -5749,7 +5750,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 215,
+      "line": 188,
       "function": "*screen.workspaceView",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil) }",
@@ -5757,7 +5758,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 215,
+      "line": 188,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
@@ -5768,7 +5769,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 232,
+      "line": 205,
       "function": "*screen.workspaceView",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tid := e.SelectedID\n\tif id == \"__none\" {\n\t\tid = \"\"\n\t}\n\ts.invoke(\"component.select\", workbench.IDParams{ID: id})\n}",
@@ -5776,7 +5777,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 237,
+      "line": 210,
       "function": "*screen.workspaceView",
       "kind": "domain-ingress",
       "expression": "s.invoke(\"component.select\", workbench.IDParams{ID: id})",
@@ -5787,7 +5788,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 239,
+      "line": 212,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"selection-previous\", \"Back\", \"selection.navigate\", workbench.NavigateParams{Direction: \"previous\", Center: true})",
@@ -5798,7 +5799,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 241,
+      "line": 214,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"selection-next\", \"Next\", \"selection.navigate\", workbench.NavigateParams{Direction: \"next\", Center: true})",
@@ -5809,7 +5810,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 244,
+      "line": 217,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"selection-center\", \"Center\", \"view.selection.center\", workbench.CenterSelectionParams{ID: state.Selected})",
@@ -5820,7 +5821,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 258,
+      "line": 231,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"wire-insert-junction\", \"Insert junction on this wire\", \"wire.junction.insert\", workbench.JunctionInsertParams{WireIDs: []string{w.ID}})",
@@ -5831,7 +5832,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 272,
+      "line": 245,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"delete-object\", \"Delete selected\", \"object.delete\", workbench.IDParams{ID: state.Selected})",
@@ -5842,7 +5843,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 335,
+      "line": 308,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"tool-\"+tool, strings.ToUpper(tool[:1])+tool[1:], \"drawing.tool.set\", workbench.ToolParams{Tool: tool})",
@@ -5853,7 +5854,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 342,
+      "line": 315,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(\"view.fit\", \"Fit\")",
@@ -5864,7 +5865,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 344,
+      "line": 317,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(\"drawing.cancel\", \"Cancel\")",
@@ -5875,7 +5876,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 353,
+      "line": 326,
       "function": "*screen.workspaceView",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"Sweeps\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -5886,7 +5887,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 571,
+      "line": 562,
       "function": "*screen.workspaceView",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -5894,7 +5895,7 @@
     },
     {
       "file": "desktop/view.go",
-      "line": 584,
+      "line": 575,
       "function": "*screen.workspaceView",
       "kind": "registry-button",
       "expression": "s.button(pause, pauseText)",

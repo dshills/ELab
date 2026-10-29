@@ -28,7 +28,7 @@ func TestNativeDCInspectionAndPinControlsAreAvailable(t *testing.T) {
 	if len(s.service.Snapshot().PinnedReadings) != 2 {
 		t.Fatal("general DC pin selector is inaccessible")
 	}
-	uiAction(t, s, "inspect-probe", &ui.ChangeEvent{SelectedID: "i:D1"})
+	uiAction(t, s, "measurement-source", &ui.ChangeEvent{SelectedID: "probe|i:D1"})
 	if got := s.service.Snapshot().MeasurementInspection; got.Target.Kind != "probe" || got.Readings[0].Probe.Reference != "D1.cathode" {
 		t.Fatal("named current inspection lost reference")
 	}
@@ -56,7 +56,7 @@ func TestNativeTerminalClickAndNetSelectorMatchAgentCommands(t *testing.T) {
 	if !reflect.DeepEqual(clicked.MeasurementInspection, s.service.Snapshot().MeasurementInspection) {
 		t.Fatal("native terminal click differs from shared command")
 	}
-	uiAction(t, s, "inspect-net", &ui.ChangeEvent{SelectedID: "net:C1.1"})
+	uiAction(t, s, "measurement-source", &ui.ChangeEvent{SelectedID: "net|net:C1.1"})
 	net := s.service.Snapshot().MeasurementInspection
 	if net.Target.Anchor != "C1.1" || len(net.Wires) != 1 || net.Wires[0] != "W2" {
 		t.Fatal("native net selector loses association")

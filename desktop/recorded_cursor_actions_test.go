@@ -23,6 +23,7 @@ func recordedCursorSource(t *testing.T, service *workbench.Service) {
 	duration := .02
 	agentAction(t, service, "simulation.verify", workbench.VerifyParams{Duration: &duration})
 	completedVerification(t, service, service.Snapshot().LastOperation)
+	agentAction(t, service, "workspace.details.set", workbench.WorkspaceDetailsParams{Section: "recordings", Visible: true})
 	agentAction(t, service, "recording.view.set", workbench.RecordingViewParams{Mode: "recorded"})
 }
 
