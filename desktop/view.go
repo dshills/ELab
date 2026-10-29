@@ -83,6 +83,10 @@ func (s *screen) action(id, text, command string, p any) ui.Node {
 	return buttonStyle(ui.Node{ID: id, Kind: ui.Button, Text: text, Accessibility: ui.Accessibility{Name: text}, Activate: func() { s.invokeAtCommandRevision(command, p, context.revision, context.generation) }}, false)
 }
 func (s *screen) view() ui.Node {
+	return s.workspaceView(s.workspaceWidth())
+}
+
+func (s *screen) workspaceView(totalWidth float32) ui.Node {
 	state := s.service.Snapshot()
 	s.pruneComponentStartup(state)
 	s.pruneSweepFieldRejections(state)
@@ -151,9 +155,10 @@ func (s *screen) view() ui.Node {
 		s.button("file.save", "Save"),
 		s.examplesButton(state),
 		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
+		s.panelToggle(state, false), s.panelToggle(state, true),
 	}}
 	// Reserve the complete document action row, including its group dividers.
-	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 380, Height: toolbarHeight})
+	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 520, Height: toolbarHeight})
 	var documentActions []ui.Node
 	for i := range toolbar.Children {
 		action := documentToolbarAction(toolbar.Children[i])
@@ -270,7 +275,8 @@ func (s *screen) view() ui.Node {
 		inspector = append(inspector, n)
 	}
 	inspector = inspectorGroup("object", "Object inspector", inspector)
-	circuitControls := append(s.lcSamplingControls(state), s.npnControls(state)...)
+	inspector = append(inspector, inspectorGroup("live-sampling", "Live circuit controls", append(s.lcSamplingControls(state), s.npnControls(state)...))...)
+	var circuitControls []ui.Node
 	if workbench.IsNetworkAnalysis(state.Analysis) {
 		circuitControls = append(circuitControls, section("mixed-title", "Circuit network"), quiet("mixed-help", "Bounded network simulation reports device currents, capacitor state and conservation residuals."))
 		if r := state.Mixed; r != nil {
@@ -307,6 +313,8 @@ func (s *screen) view() ui.Node {
 	}
 	inspector = append(inspector, inspectorGroup("recovery", "Recovery", s.recoveryInspector(state))...)
 	inspector = append(inspector, inspectorGroup("verification", "Recorded verification", s.verificationInspector(state))...)
+	inspector = append(inspector, inspectorGroup("spectrum", "Recorded spectrum", s.spectrumInspector(state))...)
+	inspector = append(inspector, inspectorGroup("tolerance", "Component tolerances", s.toleranceInspector(state))...)
 	if !sweepVisible(state) {
 		inspector = append(inspector, inspectorGroup("sweep", "Frequency & DC sweeps", s.sweepInspector(state))...)
 	}
@@ -535,6 +543,8 @@ func (s *screen) view() ui.Node {
 	} else if sweepVisible(state) {
 		palette = s.sweepInspector(state)
 	}
+	leftWidth, rightWidth := sidePanelWidths(totalWidth, state.WorkspacePanels)
+	partsWidth, railWidth := max(float32(224), leftWidth), max(float32(296), rightWidth)
 	palette, inspector = s.organizeWorkspace(palette, inspector, state)
 	var fieldValidation map[string]string
 	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage && state.Selected != "" &&
@@ -542,8 +552,8 @@ func (s *screen) view() ui.Node {
 		fieldValidation = map[string]string{"value-entry": s.requestHelp.Summary}
 	}
 	prepareInspectorGroups(inspector, fieldValidation)
-	constrainRail(palette, 176)
-	constrainRail(inspector, inspectorContentWidth)
+	constrainRail(palette, partsWidth-48)
+	constrainRail(inspector, railWidth-48)
 	filename := documentName(state)
 	if state.Document.Dirty {
 		filename += " · Unsaved"
@@ -566,13 +576,10 @@ func (s *screen) view() ui.Node {
 	}
 	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1)), Background: ui.Some(surface)}, Children: []ui.Node{
 		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 48}), MaxSize: ui.Some(ui.Size{Height: 48}), Padding: ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 12, Right: 12}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{s.documentTitle(state), toolbar, statusNode, {ID: "simulation-toolbar", Kind: ui.Toolbar, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 76}), MaxSize: ui.Some(ui.Size{Width: 76}), Padding: ui.Some(ui.UniformInsets(0))}, Children: []ui.Node{s.button(pause, pauseText)}}}},
-		{ID: "workspace", Kind: ui.Row, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1))}, Children: []ui.Node{
-			{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 224}), MaxSize: ui.Some(ui.Size{Width: 224}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", 176, palette...)}},
-			{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(8)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: schematicChildren},
-			// A replacement document owns a fresh inspector viewport. Reusing the
-			// previous document's long recording offset can leave a shorter form blank.
-			s.inspectorRail(state, inspector),
-		}},
+		s.sidePanels(state,
+			ui.Node{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: partsWidth}), MaxSize: ui.Some(ui.Size{Width: partsWidth}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", partsWidth-48, palette...)}},
+			ui.Node{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(8)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: schematicChildren},
+			s.inspectorRail(state, inspector, railWidth), totalWidth, leftWidth, rightWidth),
 		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 48}), Gap: ui.Some(float32(1)), Align: ui.Some(ui.AlignCenter)}, Children: []ui.Node{metric("current", currentTitle, current), metric("voltage", voltageTitle, voltage), metric("power", powerTitle, power), compactReadingStatus(readStatus)}},
 		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 24}), Padding: ui.Some(ui.Insets{Left: 10, Right: 10}), Gap: ui.Some(float32(8))}, Children: []ui.Node{footer, {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
 		s.filePrompt(),

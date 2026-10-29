@@ -1,0 +1,29 @@
+from pathlib import Path
+import json,os,sys,subprocess
+sys.path.insert(0,str(Path('scripts').resolve()))
+import quality
+root=Path.cwd();out=root/'build/ui-simplification-20261029/reviewed-gates'
+env=quality.go_environment(root);env.update(GOPROXY='off',GOTOOLCHAIN='local')
+steps=[
+ ('sdk',[sys.executable,'-B','scripts/prepare-vellum.py']),
+ ('python',[sys.executable,'-B','-m','unittest','discover','-s','scripts','-p','test_*.py']),
+ ('prd',[sys.executable,'-B','scripts/prd-audit.py','--verify','research/11-prd-implementation-audit.json']),
+ ('inventory',['go','run','./cmd/elab-ui-audit','--verify','research/13-native-command-inventory.json']),
+ ('portable',['go','test','./...','-count=1','-timeout=30m']),
+ ('desktop',['go','-C','desktop','test','./...','-count=1','-timeout=10m']),
+ ('rendered',['go','-C','desktop','test','-tags=offscreen','./...','-count=1','-timeout=10m']),
+ ('shared-race',['go','test','-race','./workbench','-run','TestWorkspacePanel|TestWorkspacePresentation|TestElectricalCommands','-count=1','-timeout=5m']),
+ ('mounted-race',['go','-C','desktop','test','-race','-tags=offscreen','./...','-run','TestMountedSidePanel|TestMountedSimulationTool|TestMountedMaximumPanel|TestSidePanel|TestSimulationChooser|TestSimulationTools|TestPanelAndTool|TestInspectorForm|TestInspectorDisclosure','-count=1','-timeout=5m']),
+ ('lint',['scripts/lint.sh']),
+ ('portable-vet',['go','vet','./...']),
+ ('desktop-vet',['go','-C','desktop','vet','./...']),
+ ('rendered-vet',['go','-C','desktop','vet','-tags=offscreen','./...']),
+]
+with quality.termination_signals():
+ before=quality.source_inputs(root)
+ result=quality.run_plan(steps,out,root,env,2400)
+ result.update(profile='panels-and-tools: full ordinary portable/desktop/rendered plus focused races',inputs_unchanged=before==quality.source_inputs(root),source_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
+ result['passed']=result['gates_passed'] and result['inputs_unchanged']
+ quality.write_json(out/'inputs.json',before)
+ quality.write_json(out/'report.json',result)
+ raise SystemExit(0 if result['passed'] else 1)

@@ -69,6 +69,9 @@ func inspectorEditor(n ui.Node) bool {
 }
 
 func polishInspector(node *ui.Node, p appPalette, inInspector bool) {
+	if node.ID == "simulation-tool-navigation" {
+		inInspector = true
+	}
 	if node.ID == "sidebar-content" {
 		inInspector = true
 		node.Style.Gap = ui.Some(float32(20))

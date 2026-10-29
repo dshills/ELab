@@ -12,6 +12,7 @@ import (
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
 	"github.com/dshills/vellum/drivers/cogent"
+	"github.com/dshills/vellum/ui"
 )
 
 // Exercise real Vellum label mounting, text shaping and final allocation. A
@@ -150,7 +151,11 @@ func nativeInspectorTextSmoke(ctx context.Context, a *app.Application, s *screen
 					return
 				}
 			}
-			done <- smokeUI(s, "inspector-section-simulation", nil)
+			if err := smokeUI(s, "inspector-section-simulation", nil); err != nil {
+				done <- err
+				return
+			}
+			done <- smokeUI(s, "simulation-tool", &ui.ChangeEvent{SelectedID: "circuit"})
 		}); err != nil {
 			return err
 		}

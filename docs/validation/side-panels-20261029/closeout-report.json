@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "gates_passed": true,
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "steps": [
+    {
+      "name": "lint",
+      "command": [
+        "scripts/lint.sh"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 18.432
+    },
+    {
+      "name": "portable-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 4.783
+    },
+    {
+      "name": "desktop-vet",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.757
+    },
+    {
+      "name": "rendered-vet",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "vet",
+        "-tags=offscreen",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 2.247
+    },
+    {
+      "name": "formatted-capacity",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "-tags=offscreen",
+        "./...",
+        "-run",
+        "TestNativeCapacitySharedConstructionAndMesh",
+        "-count=1",
+        "-timeout=5m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 6.557
+    }
+  ],
+  "inputs_unchanged": true
+}

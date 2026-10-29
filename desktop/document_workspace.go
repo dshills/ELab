@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -50,6 +49,11 @@ func (s *screen) documentTitle(state workbench.Snapshot) ui.Node {
 // semantic command, revision guards and ID; page selection is shared with agents.
 func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Snapshot) ([]ui.Node, []ui.Node) {
 	var parts, document, help, experiment []ui.Node
+	// Output/sweep workspaces retain their own left-hand controls. The right
+	// rail still selects one task instead of reverting to every inspector form.
+	if sourcePaneHidden(state) {
+		parts, library = library, nil
+	}
 	reachedOutput := false
 	for _, n := range library {
 		if strings.HasPrefix(n.ID, "example-") || n.ID == "example.current.reset" {
@@ -69,9 +73,6 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 		} else {
 			parts = append(parts, n)
 		}
-	}
-	if previewVisible(state) || sweepVisible(state) {
-		return library, groups
 	}
 	pages := map[string][]ui.Node{"component": {}, "simulation": {}, "document": {}}
 	for _, group := range groups {
@@ -96,7 +97,7 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 				pages[page] = append(pages[page], group)
 			}
 			continue
-		case "circuit", "probes", "transient", "verification", "sweep":
+		case "circuit", "live-sampling", "probes", "transient", "verification", "sweep", "spectrum", "tolerance":
 			section = "simulation"
 		case "appearance", "display", "output", "recovery", "project-work":
 			section = "document"
@@ -114,35 +115,46 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 		priority["guidance"] = -1
 	}
 	selected := pages[state.InspectorSection]
+	if state.InspectorSection == "simulation" {
+		filtered := make([]ui.Node, 0, len(selected))
+		for _, group := range selected {
+			if tool := simulationGroupTool(group.ID); tool == "" || tool == state.SimulationTool {
+				filtered = append(filtered, group)
+			}
+		}
+		selected = filtered
+	}
 	slices.SortStableFunc(selected, func(a, b ui.Node) int {
 		return priority[strings.TrimPrefix(a.ID, "inspector-group-")] - priority[strings.TrimPrefix(b.ID, "inspector-group-")]
 	})
 	return parts, selected
 }
 
-func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node) ui.Node {
+func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node, width float32) ui.Node {
 	// Each document and section owns its scroll viewport. Navigation remains
 	// visible outside the scroll area, with no nested native tab-page scroller.
-	rail := ui.Node{ID: fmt.Sprintf("sidebar-%d-%s", state.Document.Generation, state.InspectorSection), Kind: ui.Scroll, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", inspectorContentWidth, groups...)}}
+	rail := ui.Node{ID: inspectorScrollID(state), Kind: ui.Scroll, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", width-48, groups...)}}
 	children := []ui.Node{rail}
-	if !previewVisible(state) && !sweepVisible(state) {
-		var actions []ui.Node
-		for _, item := range []struct{ id, label string }{{"component", "Inspect"}, {"simulation", "Simulate"}, {"document", "Document"}} {
-			action := s.action("inspector-section-"+item.id, item.label, "workspace.inspector.set", workbench.InspectorParams{Section: item.id})
-			action = buttonStyle(action, state.InspectorSection == item.id)
-			action.Accessibility.Name = item.label + " inspector"
-			if state.InspectorSection == item.id {
-				action.Accessibility.Help = "Selected inspector section."
-			}
-			actions = append(actions, inspectorTabCell(action, item.id, state.InspectorSection == item.id))
+	var actions []ui.Node
+	for _, item := range []struct{ id, label string }{{"component", "Inspect"}, {"simulation", "Simulate"}, {"document", "Document"}} {
+		action := s.action("inspector-section-"+item.id, item.label, "workspace.inspector.set", workbench.InspectorParams{Section: item.id})
+		action = buttonStyle(action, state.InspectorSection == item.id)
+		action.Accessibility.Name = item.label + " inspector"
+		if state.InspectorSection == item.id {
+			action.Accessibility.Help = "Selected inspector section."
 		}
-		// Keep vertical spacing outside the height-constrained toolbar. Native
-		// sibling allocation otherwise lets the scrolling form cover its underline.
-		inset := ui.Node{ID: "inspector-navigation-top-space", Kind: ui.Row, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 14}), MaxSize: ui.Some(ui.Size{Height: 14}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}}
-		header := ui.Node{ID: "inspector-navigation", Kind: ui.Toolbar, Style: ui.Style{Background: ui.Some(paper), Padding: ui.Some(ui.Insets{Left: 16, Right: 16}), Gap: ui.Some(float32(0)), MinSize: ui.Some(ui.Size{Height: 34}), MaxSize: ui.Some(ui.Size{Height: 34})}, Accessibility: ui.Accessibility{Name: "Inspector section"}, Children: actions}
-		children = append([]ui.Node{inset, header}, children...)
+		actions = append(actions, inspectorTabCell(action, item.id, state.InspectorSection == item.id))
 	}
-	return ui.Node{ID: "inspector-rail", Kind: ui.Column, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 296}), MaxSize: ui.Some(ui.Size{Width: 296}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: children}
+	// Keep vertical spacing outside the height-constrained toolbar. Native
+	// sibling allocation otherwise lets the scrolling form cover its underline.
+	inset := ui.Node{ID: "inspector-navigation-top-space", Kind: ui.Row, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 14}), MaxSize: ui.Some(ui.Size{Height: 14}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}}
+	header := ui.Node{ID: "inspector-navigation", Kind: ui.Toolbar, Style: ui.Style{Background: ui.Some(paper), Padding: ui.Some(ui.Insets{Left: 16, Right: 16}), Gap: ui.Some(float32(0)), MinSize: ui.Some(ui.Size{Height: 34}), MaxSize: ui.Some(ui.Size{Height: 34})}, Accessibility: ui.Accessibility{Name: "Inspector section"}, Children: actions}
+	navigation := []ui.Node{inset, header}
+	if state.InspectorSection == "simulation" {
+		navigation = append(navigation, s.simulationToolChooser(state, width))
+	}
+	children = append(navigation, children...)
+	return ui.Node{ID: "inspector-rail", Kind: ui.Column, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: children}
 }
 
 func compactReadingStatus(text string) ui.Node {

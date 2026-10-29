@@ -20,6 +20,9 @@ func (s *Service) setWorkspaceLayoutLocked(p WorkspaceLayout) error {
 }
 
 func addWorkspaceCapabilityDetails(id string, schema map[string]any) bool {
+	if addWorkspacePanelDetails(id, schema) {
+		return true
+	}
 	if id == "workspace.inspector.set" {
 		inputProperty(schema, "section")["enum"] = []string{"component", "simulation", "document"}
 		schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "workspace-inspector", Preconditions: []string{"Ordinary revision/document guards and retries apply"}, Effects: []string{"Select Component, Simulation or Document inspector; default component", "Session only, survives document replacement; does not change circuit, simulation, history, dirty state or saved files"}, Errors: []commandFailureDetail{{"invalid-params", "admission", "Missing/unknown section, malformed or extra fields"}, {"conflict", "admission", "Revision/document guard changed"}}, Completion: &commandCompletionDetail{Mode: "immediate shared inspector selection", Observe: []string{"project.inspect.inspector_section", "events.poll"}}}

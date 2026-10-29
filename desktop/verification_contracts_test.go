@@ -6,6 +6,7 @@ import (
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
+	"github.com/dshills/vellum/ui"
 )
 
 func TestNativeVerifyModesFollowSharedInventory(t *testing.T) {
@@ -18,6 +19,7 @@ func TestNativeVerifyModesFollowSharedInventory(t *testing.T) {
 		cfg.InputMode = "charge"
 		agentAction(t, s.service, "verification.settings.set", cfg)
 		uiAction(t, s, "inspector-section-simulation", nil)
+		uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "recordings"})
 		state := s.service.Snapshot()
 		s.app.Do(func() {
 			node, ok := findAction(s.view(), "verify-mode")
@@ -63,6 +65,7 @@ func TestNativeDCVerifyCanResetIncompatibleDefaults(t *testing.T) {
 	settings.Step = .002
 	agentAction(t, s.service, "verification.settings.set", settings)
 	uiAction(t, s, "inspector-section-simulation", nil)
+	uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "recordings"})
 	s.app.Do(func() {
 		if _, ok := findAction(s.view(), "verify-project-startup"); !ok {
 			t.Fatal("DC workflow hides the reset needed to clear incompatible retained startup defaults")

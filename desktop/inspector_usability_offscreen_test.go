@@ -263,6 +263,9 @@ func TestMountedRemainingInspectorCaptionsFitMonoFont(t *testing.T) {
 				awaitNativeSweep(t, s)
 			}
 			agentAction(t, s.service, "workspace.inspector.set", workbench.InspectorParams{Section: section})
+			if page == "comparison" {
+				agentAction(t, s.service, "workspace.simulation.set", workbench.SimulationToolParams{Tool: "recordings"})
+			}
 			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": "apollo"})
 			for _, id := range expected {
 				if _, ok := findNode(s.view(), id); !ok {

@@ -18,6 +18,9 @@ func mountedSweepStart(t *testing.T, s *screen, focus string) *mountedControlWin
 	if s.service.Snapshot().InspectorSection != "simulation" {
 		uiAction(t, s, "inspector-section-simulation", nil)
 	}
+	if s.service.Snapshot().SimulationTool != "sweeps" {
+		uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "sweeps"})
+	}
 	m := newMountedControlWindow(t, s, func() ui.Node {
 		assembled := s.view()
 		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: focus, Sequence: 1}}

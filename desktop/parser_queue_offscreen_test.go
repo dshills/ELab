@@ -32,6 +32,9 @@ func TestMountedParserQueueCannotInstallPreAgentRefusal(t *testing.T) {
 			if _, ok := findNode(s.view(), entry.id); !ok {
 				uiAction(t, s, "inspector-section-simulation", nil)
 			}
+			if _, ok := findNode(s.view(), entry.id); !ok {
+				_ = verificationControl(t, s, entry.id)
+			}
 			m := mountedAssembledDiscreteControl(t, s, entry.id)
 			typeMountedCursor(t, m, entry.id, "oops")
 			before := s.service.Snapshot()

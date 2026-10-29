@@ -15,6 +15,12 @@ func verificationControl(t *testing.T, s *screen, id string) ui.Node {
 	t.Helper()
 	if _, ok := findNode(s.view(), id); !ok {
 		uiAction(t, s, "inspector-section-simulation", nil)
+		for _, option := range simulationTools() {
+			if _, ok := findNode(s.view(), id); ok {
+				break
+			}
+			uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: option.ID})
+		}
 	}
 	var node ui.Node
 	s.app.Do(func() {

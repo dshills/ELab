@@ -24,6 +24,9 @@ func mountedVerificationStart(t *testing.T, s *screen) *mountedControlWindow {
 	if s.service.Snapshot().InspectorSection != "simulation" {
 		uiAction(t, s, "inspector-section-simulation", nil)
 	}
+	if s.service.Snapshot().SimulationTool != "recordings" {
+		uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "recordings"})
+	}
 	m := newMountedControlWindow(t, s, func() ui.Node {
 		assembled := s.view()
 		root := ui.Node{ID: "root", Kind: ui.Column, Focus: ui.FocusRequest{ID: "verify-duration", Sequence: 1}}

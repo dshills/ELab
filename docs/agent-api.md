@@ -41,6 +41,11 @@ frequency/amplitude measurements on live or recorded FFT bins. Read the same
 The preserved /281 package predates Scope/Spectrum; /282 includes those tabs
 and live FFT but predates peak/cursor commands. Use runtime discovery.
 
+Side-panel visibility/widths and the Simulate task are shared through
+`workspace.panels.set` and `workspace.simulation.set`. They are session layout
+preferences; existing electrical commands work with panels collapsed.
+[Parameters, tools and preservation contract](workspace-layout.md).
+
 ## Request and response
 
 ```json

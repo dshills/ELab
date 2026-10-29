@@ -21,7 +21,7 @@ GUIDES = ['agent-api', 'workbench-workflows', 'application-icon', 'discrete-clas
           'ac-frequency-sweeps', 'spectrum-analysis', 'transistor-profiles',
           'tolerance-analysis', 'loudspeaker', 'class-ab-speaker', 'passive-losses',
           'current-devices', 'jfets', 'feedback-and-step-response', 'circuit-blocks',
-          'temperature', 'noise-analysis', 'photodiodes', 'thyristors', 'analysis-pages', 'agent-setup']
+          'temperature', 'noise-analysis', 'photodiodes', 'thyristors', 'analysis-pages', 'agent-setup', 'workspace-layout']
 MANIFEST = 'ELAB_PACKAGE.json'
 
 

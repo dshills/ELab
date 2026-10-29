@@ -26,7 +26,7 @@ The fraction is a preference rather than a guaranteed minimum pixel size. Large 
 
 ## Inspector sections
 
-The document workspace separates the right inspector into **Inspect**, **Simulate**, and **Document**. Navigation stays above a single scrolling form. Inspect contains selected-object editing and measurements. Simulate starts with live timing and sampling controls, followed by probes, verification and sweeps. Document starts with export/print actions and page settings, followed by appearance, display and recovery. The component library remains on the left.
+The document workspace separates the right inspector into **Inspect**, **Simulate**, and **Document**. Navigation stays above a single scrolling form. Inspect contains selected-object editing and measurements. Simulate shows one tool at a time; see the tool chooser below. Document starts with export/print actions and page settings, followed by appearance, display and recovery. The component library remains on the left.
 
 Users and agents select the same section:
 
@@ -36,4 +36,59 @@ Users and agents select the same section:
 
 Allowed `section` values are `component`, `simulation`, and `document`; they map to Inspect, Simulate, and Document respectively. The normal request envelope, mutation guards and retry key are required as described in the agent API. `project.inspect.inspector_section` reports the accepted section. Detailed discovery describes the contract, and view/preference events announce changes.
 
-The initial section is `component`. This choice is session-only, survives document replacement, and is absent from saved schematic files. It changes no graph, electrical revision, simulation time, history, dirty state, probes or cursor measurements. Hidden sections have no mounted fields or keyboard targets. Each newly selected section and replacement document starts at the top of its form; ordinary edits and repaints preserve the current section's scroll. Print-preview and sweep workspaces retain their existing focused inspectors.
+The initial section is `component`. This choice is session-only, survives document replacement, and is absent from saved schematic files. It changes no graph, electrical revision, simulation time, history, dirty state, probes or cursor measurements. Hidden sections have no mounted fields or keyboard targets. Each newly selected section and replacement document starts at the top of its form; ordinary edits and repaints preserve the current section's scroll. Print-preview and sweep workspaces retain their contextual left controls and the right-hand task navigation.
+
+## Collapsible, resizable side panels
+
+The **Parts** and **Inspector** buttons in the document toolbar show/hide each
+side independently. Drag the divider at a visible panel's inside edge to resize
+it. A focused divider accepts Left/Right and Home/End. Buttons announce Show/Hide
+and continue keyboard focus into a reopened panel or back to its toolbar button
+on collapse. In print/sweep workspaces the left button is labelled Print/Sweep
+and reopens those contextual controls.
+
+Panel widths and visibility are shared session state:
+
+```json
+{"command":"workspace.panels.set","params":{"parts_visible":false,"inspector_visible":true,"parts_width":280,"inspector_width":420}}
+```
+
+All four parameters are required; widths are finite logical units independent
+of display density. Parts accepts 224–360; Inspector accepts 296–560. The native
+layout temporarily narrows preferred widths when necessary to leave drawing
+space. Inspect `workspace_panels` for the accepted preferences. Collapse retains
+widths; changing documents retains these session choices. They are not saved in
+schematic files or persisted across app launches, and do not mark a circuit dirty.
+Existing `workspace.layout.set` keeps its original vertical scope-split contract.
+
+## One Simulate tool at a time
+
+The Simulate inspector has a persistent tool chooser, with just the selected
+tool's form beneath it:
+
+| `tool` | Visible controls |
+| --- | --- |
+| `live` | Live timing, source/LC sampling, base drive, probes and example experiments |
+| `recordings` | Verify from startup, recording import/selection, playback, comparison, timing and exports |
+| `spectrum` | Recorded FFT and distortion, its settings/results and exports |
+| `sweeps` | Existing DC, AC response, loop/noise sweeps and retained results |
+| `tolerances` | Existing component-tolerance trials and their settings/results |
+| `circuit` | Network details, capacity and circuit information |
+
+```json
+{"command":"workspace.simulation.set","params":{"tool":"recordings"}}
+```
+
+Observe `simulation_tool` in `project.inspect`. The default is `live`; the choice
+survives document replacement within this session. Navigation does not start a
+job, change panel visibility/inspector section, or discard another tool's accepted
+settings or results. Hidden forms are unmounted and absent from keyboard traversal;
+selecting another tool starts at its top. The chooser remains above scrolling
+content, and print/sweep views retain task navigation. Error guidance stays with
+the active task. Large individual forms still scroll rather than clipping fields.
+
+The live Scope/Spectrum instrument dock is unchanged; recorded spectrum in this
+chooser remains a separate analysis of captured data. Every existing electrical,
+file, analysis and instrument command still works with either side panel collapsed.
+Both new commands use the ordinary shared guards, retry identities and view/
+preference events. The request fragments above omit that required envelope.

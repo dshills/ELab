@@ -48,8 +48,15 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 			})
 		}
 		if frame := core.AsFrame(widget); frame != nil {
+			sideHost := isSidePanelHost(w) || w.Name == "inspector-rail" || w.Name == "inspector-navigation" || w.Name == "simulation-tool-navigation"
 			install(w, func(style *styles.Style) {
 				style.ScrollbarWidth = units.Dp(8)
+				// Inspector chrome and each side host own a Scroll viewport. A second
+				// auto-scroller on Splits' private host reserves another bar
+				// and makes an exactly fitted panel overflow horizontally.
+				if sideHost {
+					style.Overflow.Set(styles.OverflowHidden)
+				}
 			})
 			for _, scrollbar := range frame.Scrolls {
 				if scrollbar == nil {
@@ -82,4 +89,14 @@ func (s *screen) nativeColors() appPalette {
 		return *palette
 	}
 	return resolvePalette("light", false)
+}
+
+// Only the owned left Parts host and right Inspector host are viewports here.
+// Preserve the center workspace and every managed Scroll's normal overflow.
+func isSidePanelHost(w *core.WidgetBase) bool {
+	if w.Parent == nil || w.Parent.AsTree().NumChildren() != 2 {
+		return false
+	}
+	parent := w.Parent.AsTree()
+	return parent.Name == "parts-split" && parent.Child(0).AsTree() == w.AsTree() || parent.Name == "inspector-split" && parent.Child(1).AsTree() == w.AsTree()
 }

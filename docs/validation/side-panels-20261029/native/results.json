@@ -1,0 +1,59 @@
+{
+  "scope": "Owned CUA native session; not hardware-rate/OS-queue qualification",
+  "before": {
+    "workspace_panels": {
+      "parts_visible": true,
+      "inspector_visible": true,
+      "parts_width": 224,
+      "inspector_width": 296
+    },
+    "simulation_tool": "live",
+    "paused": true,
+    "document": {
+      "preferences_dirty": false,
+      "schematic_dirty": false,
+      "recordings_dirty": false,
+      "recording_count": 0,
+      "path": "",
+      "dirty": false,
+      "format_version": 4,
+      "generation": 2
+    },
+    "electrical_revision": 2,
+    "run_id": 2
+  },
+  "after": {
+    "workspace_panels": {
+      "parts_visible": true,
+      "inspector_visible": true,
+      "parts_width": 229,
+      "inspector_width": 363
+    },
+    "simulation_tool": "recordings",
+    "paused": true,
+    "document": {
+      "preferences_dirty": false,
+      "schematic_dirty": false,
+      "recordings_dirty": false,
+      "recording_count": 0,
+      "path": "",
+      "dirty": false,
+      "format_version": 4,
+      "generation": 2
+    },
+    "electrical_revision": 2,
+    "run_id": 2
+  },
+  "example": "rc",
+  "normal_exit": {
+    "pid": 54417,
+    "exit_code": 0
+  },
+  "screenshot_sha256": {
+    "01-live-controls.png": "304ce2361a687b2668f31f823470e88f24bb4f43099212861bf651e54f5502e2",
+    "03-recordings-scrolled.png": "319bf3fad86e50098e52f5df549b145e00068ee53df1bfdca6007eb594141f9c",
+    "04-scrollbar-drag.png": "690cf8d453d4b36695ed5a97b9239263047b0635d5053593964ef8f8ba114f27",
+    "05-wider-inspector.png": "064478e570b54767fd521e0f43cb02f9a653e973dfebc28558c987d654d050b2"
+  },
+  "controller_note": "Initial guessed 358..362 inspector-width assertion failed; actual accepted width is 363. No production change made for the controller assertion."
+}

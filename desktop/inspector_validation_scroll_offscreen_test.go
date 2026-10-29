@@ -35,6 +35,9 @@ func TestMountedInspectorValidationKeepsTheFocusedIntervalVisible(t *testing.T) 
 					agentAction(t, s.service, "scope.window.set", workbench.ScopeWindow{Mode: "fixed", End: .02})
 				}
 				agentAction(t, s.service, "workspace.inspector.set", workbench.InspectorParams{Section: "simulation"})
+				if recorded {
+					agentAction(t, s.service, "workspace.simulation.set", workbench.SimulationToolParams{Tool: "recordings"})
+				}
 				view := func() ui.Node {
 					rail, ok := findNode(s.view(), "inspector-rail")
 					if !ok {

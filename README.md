@@ -7,7 +7,7 @@ Build schematics from scratch, change component values, and explore live voltage
 current and timing. The desktop app and AI agents use the same validated commands
 for drawing, simulation, analysis, saving and export.
 
-**Current source: 87 working examples · 61 component kinds · 226 shared commands.**
+**Current source: 87 working examples · 61 component kinds · 228 shared commands.**
 
 ![ELab showing an RC circuit, capacitor inspector, charge/discharge traces and timing cursors in the Light theme](docs/images/rc-scope.jpg)
 
@@ -36,8 +36,8 @@ for drawing, simulation, analysis, saving and export.
   preview atomic edits, apply guarded changes, and observe jobs/events through
   headless stdio or a private local connection to the running desktop app.
 - **Choose your workspace.** Light, Dark, System and Apollo themes, native macOS
-  menus, a searchable component browser, Inspect/Simulate/Document panels, and an
-  adjustable schematic/instrument split.
+  menus, a searchable component browser, collapsible/resizable side panels, a
+  Simulate tool chooser, and an adjustable schematic/instrument split.
 
 See the [drawing workflow](docs/workbench-workflows.md),
 [component browser](docs/component-browser.md), [workspace](docs/workspace-layout.md)

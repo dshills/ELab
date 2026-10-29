@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 	"time"
+
+	"github.com/dshills/vellum/ui"
 )
 
 func TestNativeCapacitySharedConstructionAndMesh(t *testing.T) {
@@ -19,6 +21,7 @@ func TestNativeCapacitySharedConstructionAndMesh(t *testing.T) {
 		t.Fatal("native capacity failed", err)
 	}
 	uiAction(t, s, "inspector-section-simulation", nil)
+	uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "circuit"})
 	if _, ok := findNode(s.view(), "circuit-capacity"); !ok {
 		t.Fatal("capacity assumptions hidden")
 	}

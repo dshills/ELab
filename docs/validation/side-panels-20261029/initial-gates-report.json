@@ -1,0 +1,77 @@
+{
+  "passed": false,
+  "gates_passed": false,
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "steps": [
+    {
+      "name": "sdk",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/prepare-vellum.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 1.12
+    },
+    {
+      "name": "python",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 5.467
+    },
+    {
+      "name": "prd",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.033
+    },
+    {
+      "name": "inventory",
+      "command": [
+        "go",
+        "run",
+        "./cmd/elab-ui-audit",
+        "--verify",
+        "research/13-native-command-inventory.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.141
+    },
+    {
+      "name": "portable",
+      "command": [
+        "go",
+        "test",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "failed",
+      "exit_code": 1,
+      "seconds": 153.46
+    }
+  ],
+  "profile": "panels-and-tools: full ordinary portable/desktop/rendered plus focused races",
+  "inputs_unchanged": true,
+  "source_commit": "2f7fb0d61bfd55f27a05a734aa81e8fc52e22f18"
+}

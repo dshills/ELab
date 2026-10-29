@@ -127,6 +127,10 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(ProjectWork{}), "urn:elab:project-work:1"},
 	{reflect.TypeOf(struct{}{}), "urn:elab:empty-input:1"},
 	{reflect.TypeOf(WorkspaceLayout{}), "urn:elab:workspace-layout:1"},
+	{reflect.TypeOf(WorkspacePanels{}), "urn:elab:workspace-panels:1"},
+	{reflect.TypeOf(SimulationToolParams{}), "urn:elab:simulation-tool:1"},
+	{reflect.TypeOf(SineParams{}), "urn:elab:sine-source-input:1"},
+	{reflect.TypeOf(PulseParams{}), "urn:elab:pulse-source-input:1"},
 	{reflect.TypeOf(VerifyParams{}), "urn:elab:verification-input:1"},
 	{reflect.TypeOf(RecoveryInspection{}), "urn:elab:recovery-inspection:1"},
 	{reflect.TypeOf(RecoveryReadChunk{}), "urn:elab:recovery-read-chunk:1"},
@@ -299,6 +303,21 @@ func SchemaRegistry() map[string]json.RawMessage {
 	}
 	for _, common := range commonSchemas {
 		schema := structSchema(common.Type)
+		if common.Type == reflect.TypeOf(WorkspacePanels{}) {
+			addWorkspacePanelBounds(schema)
+		}
+		if common.Type == reflect.TypeOf(SimulationToolParams{}) {
+			inputProperty(schema, "tool")["enum"] = []string{"live", "recordings", "spectrum", "sweeps", "tolerances", "circuit"}
+		}
+		// Reuse local input definitions in discovery rather than repeating the
+		// nested waveform object in the compact catalog. Keep numeric output
+		// Waveform types separate from command-only quantity/time grammar.
+		if common.Type == reflect.TypeOf(SineParams{}) {
+			schema = timeInputSchema("source.sine.set", schema)
+		}
+		if common.Type == reflect.TypeOf(PulseParams{}) {
+			schema = timeInputSchema("source.pulse.set", schema)
+		}
 		if common.Type == reflect.TypeOf(WorkspaceLayout{}) {
 			p := inputProperty(schema, "schematic_fraction")
 			p["minimum"], p["maximum"], p["default"] = .35, .85, .65
@@ -606,6 +625,8 @@ func Catalog() []Capability {
 		typedCapability("example.load", "Load a known example ID into a new editable document; protects unsaved work and optional document generation", reflect.TypeOf(ExampleLoadParams{})),
 		typedCapability("example.current.reset", "Restore the current example template, not another example; protects unsaved work and optional expected_example_id/document generation", reflect.TypeOf(ExampleResetParams{})),
 		typedCapability("scope.visibility.set", "Show/hide the scope dock for this session; preserves acquisition, recorded playback and measurements", reflect.TypeOf(ScopeVisibilityParams{})),
+		typedCapability("workspace.panels.set", "Show, hide and resize side panels; session presentation only", reflect.TypeOf(WorkspacePanels{})),
+		typedCapability("workspace.simulation.set", "Choose one Simulate tool without changing its settings, results or live circuit", reflect.TypeOf(SimulationToolParams{})),
 		typedCapability("workspace.inspector.set", "Select the Component, Simulation or Document inspector; session presentation only", reflect.TypeOf(InspectorParams{})),
 		typedCapability("workspace.layout.set", "Set the session schematic/scope split; preserves circuit, simulation and measurements", reflect.TypeOf(WorkspaceLayout{})),
 		typedCapability("diagnostics.details.set", "Show diagnostic details; session only; targets in diagnostic_presentation", reflect.TypeOf(DiagnosticDetailsParams{})),

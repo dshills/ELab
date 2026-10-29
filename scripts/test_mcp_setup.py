@@ -30,7 +30,7 @@ class MCPSetupTests(unittest.TestCase):
             c=MCPClient(self.agent,cwd=cwd)
             try:
                 report=demo.exercise(c)
-                self.assertEqual(report['commands'],226)
+                self.assertEqual(report['commands'],228)
                 self.assertEqual(report['bounded_rows'],5)
                 self.assertEqual(report['automatic_mutation_retries'],0)
                 self.assertLess(report['compared_voltages_v'][1],report['compared_voltages_v'][0])

@@ -1,0 +1,8 @@
+from pathlib import Path
+import sys,json
+sys.path.insert(0,str(Path('scripts').resolve()));import quality
+root=Path.cwd();out=root/'build/ui-simplification-20261029/closeout-gates'
+env=quality.go_environment(root);env.update(GOPROXY='off',GOTOOLCHAIN='local')
+steps=[('lint',['scripts/lint.sh']),('portable-vet',['go','vet','./...']),('desktop-vet',['go','-C','desktop','vet','./...']),('rendered-vet',['go','-C','desktop','vet','-tags=offscreen','./...']),('formatted-capacity',['go','-C','desktop','test','-tags=offscreen','./...','-run','TestNativeCapacitySharedConstructionAndMesh','-count=1','-timeout=5m'])]
+with quality.termination_signals():
+ before=quality.source_inputs(root);r=quality.run_plan(steps,out,root,env,600);r.update(inputs_unchanged=before==quality.source_inputs(root));r['passed']=r['gates_passed'] and r['inputs_unchanged'];quality.write_json(out/'inputs.json',before);quality.write_json(out/'report.json',r);raise SystemExit(0 if r['passed'] else 1)

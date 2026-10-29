@@ -36,6 +36,8 @@ type Service struct {
 	audioPlaybackCancel         context.CancelFunc
 	audioPlaybackSerial         uint64
 	inspectorSection            string
+	workspacePanels             WorkspacePanels
+	simulationTool              string
 	workspaceLayout             WorkspaceLayout
 	shutdown                    *shutdownJob
 	printState                  *PrintState
@@ -172,6 +174,8 @@ func newService(solver func(context.Context, Circuit) (Result, error)) *Service 
 func newGraphService(solver func(context.Context, Circuit) (Result, error), graph Graph) *Service {
 	s := &Service{
 		workspaceLayout:        DefaultWorkspaceLayout(),
+		workspacePanels:        DefaultWorkspacePanels(),
+		simulationTool:         "live",
 		inspectorSection:       "component",
 		revision:               1,
 		analysisJobs:           analysisJobs{sweepImport: prepareSweepImport, sweepCompute: computeDCSweep},

@@ -21,6 +21,7 @@ func TestNoiseSweepUserAgentParityAndTheme(t *testing.T) {
 		awaitBlockRC(t, service)
 	}
 	uiAction(t, s, "inspector-section-simulation", nil)
+	uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "sweeps"})
 	selectorError := ""
 	s.app.Do(func() {
 		choices, ok := findNode(s.view(), "sweep-probe")

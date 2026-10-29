@@ -1,0 +1,152 @@
+{
+  "passed": false,
+  "gates_passed": false,
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "steps": [
+    {
+      "name": "sdk",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/prepare-vellum.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.899
+    },
+    {
+      "name": "python",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 4.745
+    },
+    {
+      "name": "prd",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.03
+    },
+    {
+      "name": "inventory",
+      "command": [
+        "go",
+        "run",
+        "./cmd/elab-ui-audit",
+        "--verify",
+        "research/13-native-command-inventory.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.194
+    },
+    {
+      "name": "portable",
+      "command": [
+        "go",
+        "test",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 112.018
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "./...",
+        "-count=1",
+        "-timeout=10m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 54.159
+    },
+    {
+      "name": "rendered",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "-tags=offscreen",
+        "./...",
+        "-count=1",
+        "-timeout=10m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 95.93
+    },
+    {
+      "name": "shared-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "./workbench",
+        "-run",
+        "TestWorkspacePanel|TestWorkspacePresentation|TestElectricalCommands",
+        "-count=1",
+        "-timeout=5m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 10.427
+    },
+    {
+      "name": "mounted-race",
+      "command": [
+        "go",
+        "-C",
+        "desktop",
+        "test",
+        "-race",
+        "-tags=offscreen",
+        "./...",
+        "-run",
+        "TestMountedSidePanel|TestMountedSimulationTool|TestMountedMaximumPanel|TestSidePanel|TestSimulationChooser|TestSimulationTools|TestPanelAndTool|TestInspectorForm|TestInspectorDisclosure",
+        "-count=1",
+        "-timeout=5m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 31.871
+    },
+    {
+      "name": "lint",
+      "command": [
+        "scripts/lint.sh"
+      ],
+      "status": "failed",
+      "exit_code": 1,
+      "seconds": 5.076
+    }
+  ],
+  "profile": "panels-and-tools: full ordinary portable/desktop/rendered plus focused races",
+  "inputs_unchanged": true,
+  "source_commit": "2f7fb0d61bfd55f27a05a734aa81e8fc52e22f18"
+}

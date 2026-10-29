@@ -24,6 +24,7 @@ func TestMountedInspectorTextGroupsUseAvailableRailWidth(t *testing.T) {
 				t.Fatal(err)
 			}
 			uiAction(t, s, "inspector-section-simulation", nil)
+			uiAction(t, s, "simulation-tool", &ui.ChangeEvent{SelectedID: "circuit"})
 			before := s.service.Snapshot()
 			view := func() ui.Node {
 				group, ok := findNode(s.view(), "inspector-group-circuit")

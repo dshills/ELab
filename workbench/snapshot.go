@@ -10,6 +10,8 @@ type Snapshot struct {
 	ExampleBrowser          ExampleBrowser         `json:"example_browser"`
 	Audio                   *AudioPreview          `json:"audio_preview,omitempty"`
 	InspectorSection        string                 `json:"inspector_section"`
+	WorkspacePanels         WorkspacePanels        `json:"workspace_panels"`
+	SimulationTool          string                 `json:"simulation_tool"`
 	WorkspaceLayout         WorkspaceLayout        `json:"workspace_layout"`
 	Viewport                ViewportState          `json:"viewport"`
 	PulseTimings            []PulseTiming          `json:"pulse_timings"`
@@ -139,6 +141,8 @@ func (s *Service) snapshotLocked() Snapshot {
 		Spectrum:                s.spectrumViewLocked(),
 		Proposal:                s.proposalViewLocked(),
 		WorkspaceLayout:         s.workspaceLayout,
+		WorkspacePanels:         s.workspacePanels,
+		SimulationTool:          s.simulationTool,
 		InspectorSection:        s.inspectorSection,
 		Viewport:                cloneViewport(s.viewport),
 		PulseTimings:            s.pulseTimingsLocked(),

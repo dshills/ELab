@@ -348,6 +348,19 @@ func smokeUI(s *screen, id string, event *ui.ChangeEvent) error {
 			}
 			page.Activate()
 			node, ok = findAction(s.view(), id)
+			if !ok && section == "simulation" {
+				for _, option := range simulationTools() {
+					chooser, exists := findAction(s.view(), "simulation-tool")
+					if !exists {
+						break
+					}
+					chooser.Change(ui.ChangeEvent{SelectedID: option.ID})
+					node, ok = findAction(s.view(), id)
+					if ok {
+						break
+					}
+				}
+			}
 			if ok {
 				break
 			}
