@@ -152,3 +152,21 @@ portable gates only through explicit scope/byte comparison.
 The owner's screenshot was a separate NetForm application, not this ELab build.
 Opened exact /288 ELab normally for owner review (PID37797); leave that session,
 its preferences/projects and NetForm untouched. This is not participant acceptance.
+
+### Packaged native smoke seam
+
+Complete final rendered race/vet pass (770.937s /2.912s) with frozen inputs.
+The first package controller destination was inside a blocked development root;
+the runtime harness correctly refused it. Retry uses a new /private/tmp folder.
+Its copied native smoke passed GPU/LED/RC/NPN/mixed, files/recovery/recordings,
+primitives, capacity, trace focus and pin stages, then refused the obsolete
+inspect-terminal test control. The application now exposes measurement-source.
+Only two descriptor literals in nativeMeasurementInspectionSmoke change to the
+existing terminal|GND.reference choice. Its pin count, signed ground reading,
+physics and fresh highlighted-net GPU assertions remain unchanged. This function
+is called only from the --smoke path. No normal UI, commands, models, solver,
+SDK or ordinary test source changes. Focused shared measurement race tests pass
+(2.310s); lint and both vets pass. Carry the completed normal-code gates with this
+explicit smoke-only source delta, then repeat the entire copied native smoke and
+public runtime qualification on a new clean-source package. Earlier failures and
+unqualified packages remain preserved. The owner's /288 session stays open.

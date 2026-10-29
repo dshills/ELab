@@ -37,7 +37,7 @@ func nativeMeasurementInspectionSmoke(ctx context.Context, a *app.Application, s
 		for _, action := range []struct {
 			id    string
 			event *ui.ChangeEvent
-		}{{"simulation.pause", nil}, {"selection", &ui.ChangeEvent{SelectedID: "R1"}}, {"measurement-pin-i:R1", nil}, {"pin-reading-probe", &ui.ChangeEvent{SelectedID: "v:D1"}}, {"inspect-terminal", &ui.ChangeEvent{SelectedID: "GND.reference"}}} {
+		}{{"simulation.pause", nil}, {"selection", &ui.ChangeEvent{SelectedID: "R1"}}, {"measurement-pin-i:R1", nil}, {"pin-reading-probe", &ui.ChangeEvent{SelectedID: "v:D1"}}, {"measurement-source", &ui.ChangeEvent{SelectedID: "terminal|GND.reference"}}} {
 			s.view()
 			if err := smokeUI(s, action.id, action.event); err != nil {
 				ready <- err
