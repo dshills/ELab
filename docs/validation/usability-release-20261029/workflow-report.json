@@ -1,0 +1,1329 @@
+{
+  "passed": true,
+  "transport": "exact-packaged-native-private-socket",
+  "agent_sha256": "1e558232e50431821c00704b8df42b39ac2f5ce13c502030e156e7309fb19c11",
+  "host": {
+    "os": "27.2",
+    "architecture": "arm64"
+  },
+  "controller_sha256": {
+    "v1-workflows.py": "ac5c1637259b60194d68c35ef73af9c70d0bdb7dc9d40ce09684920b3ead6816",
+    "acceptance_client.py": "9432f7887ff6c02360c2564a8355984dcdc3a7bcd93b98676a394cd5402adff6"
+  },
+  "limitations": [
+    "Public command workflows are not physical desktop drawing or typing acceptance",
+    "CPU/RSS and command response timings do not measure visible input-to-pixel latency",
+    "One workstation and a bounded wall-clock run do not establish universal stability"
+  ],
+  "native_pid": 45451,
+  "app_sha256": "1643bf6ac41a59a8fa9c4e5e7bd09dc59cc4e6c19e20f8bd60c9c9cdaf333278",
+  "startup_s": 0.7365379999973811,
+  "shared_geometry_writes_denied": true,
+  "workflows": [
+    {
+      "name": "blank-led",
+      "current_a": 0.0029167965774405296,
+      "checks": [
+        "individual placement",
+        "four terminal connections",
+        "value edit",
+        "undo",
+        "DC current"
+      ],
+      "artifacts": {
+        "graph": {
+          "components": [
+            {
+              "id": "V1",
+              "kind": "dc-source",
+              "name": "DC source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -200,
+                "y": 0
+              },
+              "value": 5,
+              "unit": "V",
+              "model": "ideal-dc.v1",
+              "rotation": 0
+            },
+            {
+              "id": "R1",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 0,
+                "y": -120
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "D1",
+              "kind": "led",
+              "name": "Red LED",
+              "terminals": [
+                "anode",
+                "cathode"
+              ],
+              "position": {
+                "x": 200,
+                "y": 0
+              },
+              "value": 0,
+              "model": "elab.generic-red-led.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GND",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": -200,
+                "y": 120
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W1",
+              "from": "V1.positive",
+              "to": "R1.1",
+              "connected": true
+            },
+            {
+              "id": "W2",
+              "from": "R1.2",
+              "to": "D1.anode",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "D1.cathode",
+              "to": "GND.reference",
+              "connected": true
+            },
+            {
+              "id": "W4",
+              "from": "GND.reference",
+              "to": "V1.negative",
+              "connected": true
+            }
+          ]
+        },
+        "document_sha256": "daae4a7007596ec189fbbd73407db2c4d8d3ab591fb7f71fb4aa8de1651aa90c",
+        "recording_count": 0,
+        "exports": {
+          "svg": {
+            "bytes": 11155,
+            "sha256": "f2e5634e2f41d0574604a2d5ce9cc63bfaf698edcc0b70ed9d8b83fd26017df2"
+          },
+          "png": {
+            "bytes": 92841,
+            "sha256": "5945d8817f919023337c781fcc49c6f293bec4edac0e2ca147cd4023cc3f368b"
+          },
+          "pdf": {
+            "bytes": 19358,
+            "sha256": "44690178a7f72cccadbca2d72188d5bce734b93e78fd5cc3fdcd6567a7993240"
+          }
+        }
+      }
+    },
+    {
+      "name": "rc-charge-discharge",
+      "voltage_10ms_v": 3.1606027941427883,
+      "discharged_v": 1.1627207896741483,
+      "artifacts": {
+        "graph": {
+          "components": [
+            {
+              "id": "V1",
+              "kind": "pulse-source",
+              "name": "Pulse source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -200,
+                "y": 0
+              },
+              "value": 5,
+              "unit": "V",
+              "model": "ideal-square.v1",
+              "rotation": 0
+            },
+            {
+              "id": "R1",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 0,
+                "y": -110
+              },
+              "value": 10000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "C1",
+              "kind": "capacitor",
+              "name": "Capacitor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 200,
+                "y": 0
+              },
+              "value": 1e-06,
+              "unit": "F",
+              "model": "ideal-capacitor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GND",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 0,
+                "y": 110
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W1",
+              "from": "V1.positive",
+              "to": "R1.1",
+              "connected": true
+            },
+            {
+              "id": "W2",
+              "from": "R1.2",
+              "to": "C1.1",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "C1.2",
+              "to": "GND.reference",
+              "connected": true
+            },
+            {
+              "id": "W4",
+              "from": "GND.reference",
+              "to": "V1.negative",
+              "connected": true
+            }
+          ]
+        },
+        "document_sha256": "923f757503789752ae8058082f36dfb6323a35b29d61204aab527f7b7e0cedb4",
+        "recording_count": 0,
+        "exports": {
+          "svg": {
+            "bytes": 11988,
+            "sha256": "65f38230b5fcae5ca4ec7fd323a05ec1664093680e0981b9f7256fc67911d5ec"
+          },
+          "png": {
+            "bytes": 99565,
+            "sha256": "45343057fff0ccd48556f4235e22045840a2d22413f709b67ff960f2bd0f8464"
+          },
+          "pdf": {
+            "bytes": 21500,
+            "sha256": "ebd580184e30a79972ae37009ec5073f58284b8c446f09283d4ca30bd7399e8e"
+          }
+        }
+      }
+    },
+    {
+      "name": "555-counter",
+      "digits": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "changes": 13,
+      "artifacts": {
+        "graph": {
+          "components": [
+            {
+              "id": "V1",
+              "kind": "dc-source",
+              "name": "DC source",
+              "terminals": [
+                "positive",
+                "negative"
+              ],
+              "position": {
+                "x": -1190,
+                "y": 0
+              },
+              "value": 5,
+              "unit": "V",
+              "model": "ideal-dc.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GNDV",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": -1190,
+                "y": 150
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "id": "U1",
+              "kind": "timer555",
+              "name": "555 timer",
+              "terminals": [
+                "gnd",
+                "trigger",
+                "out",
+                "reset",
+                "control",
+                "threshold",
+                "discharge",
+                "vcc"
+              ],
+              "position": {
+                "x": -570,
+                "y": 0
+              },
+              "value": 0,
+              "model": "elab.generic-cmos-555.v1",
+              "rotation": 0
+            },
+            {
+              "id": "C1",
+              "kind": "capacitor",
+              "name": "Capacitor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": -950,
+                "y": 200
+              },
+              "value": 9.999999999999999e-06,
+              "unit": "F",
+              "model": "ideal-capacitor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GND1",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": -950,
+                "y": 340
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "initial_voltage_v": 3.3333333333333335,
+              "id": "CC",
+              "kind": "capacitor",
+              "name": "Capacitor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": -610,
+                "y": 230
+              },
+              "value": 1e-08,
+              "unit": "F",
+              "model": "ideal-capacitor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GNDC",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": -610,
+                "y": 340
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GNDU",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": -350,
+                "y": 180
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "id": "JV",
+              "kind": "junction",
+              "name": "Junction",
+              "terminals": [
+                "node"
+              ],
+              "position": {
+                "x": -950,
+                "y": -350
+              },
+              "value": 0,
+              "model": "junction.v1",
+              "rotation": 0
+            },
+            {
+              "id": "JT",
+              "kind": "junction",
+              "name": "Junction",
+              "terminals": [
+                "node"
+              ],
+              "position": {
+                "x": -950,
+                "y": 100
+              },
+              "value": 0,
+              "model": "junction.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RA",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": -950,
+                "y": -220
+              },
+              "value": 10000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 90
+            },
+            {
+              "id": "JD",
+              "kind": "junction",
+              "name": "Junction",
+              "terminals": [
+                "node"
+              ],
+              "position": {
+                "x": -950,
+                "y": -110
+              },
+              "value": 0,
+              "model": "junction.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RB",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": -950,
+                "y": -20
+              },
+              "value": 47000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 90
+            },
+            {
+              "id": "U2",
+              "kind": "decade-counter",
+              "name": "Decade counter",
+              "terminals": [
+                "clk",
+                "reset",
+                "enable",
+                "q0",
+                "q1",
+                "q2",
+                "q3",
+                "vcc",
+                "gnd"
+              ],
+              "position": {
+                "x": 50,
+                "y": 0
+              },
+              "value": 0,
+              "model": "elab.generic-sequential-cmos.v1",
+              "rotation": 0
+            },
+            {
+              "id": "U3",
+              "kind": "bcd-decoder",
+              "name": "BCD decoder",
+              "terminals": [
+                "b0",
+                "b1",
+                "b2",
+                "b3",
+                "a",
+                "b",
+                "c",
+                "d",
+                "e",
+                "f",
+                "g",
+                "vcc",
+                "gnd"
+              ],
+              "position": {
+                "x": 650,
+                "y": 0
+              },
+              "value": 0,
+              "model": "elab.generic-seven-segment.v1",
+              "rotation": 0
+            },
+            {
+              "id": "DS1",
+              "kind": "seven-segment",
+              "name": "Seven-segment display",
+              "terminals": [
+                "a",
+                "b",
+                "c",
+                "d",
+                "e",
+                "f",
+                "g",
+                "common"
+              ],
+              "position": {
+                "x": 1460,
+                "y": 0
+              },
+              "value": 0,
+              "model": "elab.generic-seven-segment.v1",
+              "rotation": 0
+            },
+            {
+              "label": "VCC",
+              "id": "POWER",
+              "kind": "net-label",
+              "name": "Net label",
+              "terminals": [
+                "node"
+              ],
+              "position": {
+                "x": -850,
+                "y": -460
+              },
+              "value": 0,
+              "model": "net-label.v1",
+              "rotation": 0
+            },
+            {
+              "label": "VCC",
+              "id": "P2",
+              "kind": "net-label",
+              "name": "Net label",
+              "terminals": [
+                "node"
+              ],
+              "position": {
+                "x": 50,
+                "y": -260
+              },
+              "value": 0,
+              "model": "net-label.v1",
+              "rotation": 0
+            },
+            {
+              "label": "VCC",
+              "id": "P3",
+              "kind": "net-label",
+              "name": "Net label",
+              "terminals": [
+                "node"
+              ],
+              "position": {
+                "x": 650,
+                "y": -330
+              },
+              "value": 0,
+              "model": "net-label.v1",
+              "rotation": 0
+            },
+            {
+              "label": "VCC",
+              "id": "ENABLE",
+              "kind": "net-label",
+              "name": "Net label",
+              "terminals": [
+                "node"
+              ],
+              "position": {
+                "x": -140,
+                "y": 70
+              },
+              "value": 0,
+              "model": "net-label.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GND2",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 50,
+                "y": 290
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GNDR",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": -140,
+                "y": 180
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GND3",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 650,
+                "y": 350
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "id": "GNDD",
+              "kind": "ground",
+              "name": "Ground",
+              "terminals": [
+                "reference"
+              ],
+              "position": {
+                "x": 1460,
+                "y": 350
+              },
+              "value": 0,
+              "model": "ground.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RS1",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 1050,
+                "y": -150
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RS2",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 1050,
+                "y": -100
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RS3",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 1050,
+                "y": -50
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RS4",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 1050,
+                "y": 0
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RS5",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 1050,
+                "y": 50
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RS6",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 1050,
+                "y": 100
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            },
+            {
+              "id": "RS7",
+              "kind": "resistor",
+              "name": "Resistor",
+              "terminals": [
+                "1",
+                "2"
+              ],
+              "position": {
+                "x": 1050,
+                "y": 150
+              },
+              "value": 1000,
+              "unit": "\u03a9",
+              "model": "ideal-resistor.v1",
+              "rotation": 0
+            }
+          ],
+          "wires": [
+            {
+              "id": "W1",
+              "from": "V1.negative",
+              "to": "GNDV.reference",
+              "connected": true
+            },
+            {
+              "id": "W2",
+              "from": "V1.positive",
+              "to": "JV.node",
+              "connected": true
+            },
+            {
+              "id": "W3",
+              "from": "JV.node",
+              "to": "U1.vcc",
+              "connected": true
+            },
+            {
+              "id": "W4",
+              "from": "U1.vcc",
+              "to": "U1.reset",
+              "connected": true
+            },
+            {
+              "id": "W5",
+              "from": "U1.gnd",
+              "to": "GNDU.reference",
+              "connected": true
+            },
+            {
+              "id": "W6",
+              "from": "U1.control",
+              "to": "CC.1",
+              "connected": true
+            },
+            {
+              "id": "W7",
+              "from": "CC.2",
+              "to": "GNDC.reference",
+              "connected": true
+            },
+            {
+              "id": "W8",
+              "from": "C1.1",
+              "to": "JT.node",
+              "connected": true
+            },
+            {
+              "id": "W9",
+              "from": "C1.2",
+              "to": "GND1.reference",
+              "connected": true
+            },
+            {
+              "id": "W10",
+              "from": "JT.node",
+              "to": "U1.threshold",
+              "connected": true
+            },
+            {
+              "id": "W11",
+              "from": "JV.node",
+              "to": "RA.1",
+              "connected": true
+            },
+            {
+              "id": "W12",
+              "from": "RA.2",
+              "to": "JD.node",
+              "connected": true
+            },
+            {
+              "id": "W13",
+              "from": "JD.node",
+              "to": "U1.discharge",
+              "connected": true
+            },
+            {
+              "id": "W14",
+              "from": "JT.node",
+              "to": "U1.trigger",
+              "connected": true
+            },
+            {
+              "id": "W15",
+              "from": "JD.node",
+              "to": "RB.1",
+              "connected": true
+            },
+            {
+              "id": "W16",
+              "from": "RB.2",
+              "to": "JT.node",
+              "connected": true
+            },
+            {
+              "id": "W17",
+              "from": "JV.node",
+              "to": "POWER.node",
+              "connected": true
+            },
+            {
+              "id": "W18",
+              "from": "U2.vcc",
+              "to": "P2.node",
+              "connected": true
+            },
+            {
+              "id": "W19",
+              "from": "U3.vcc",
+              "to": "P3.node",
+              "connected": true
+            },
+            {
+              "id": "W20",
+              "from": "U2.enable",
+              "to": "ENABLE.node",
+              "connected": true
+            },
+            {
+              "id": "W21",
+              "from": "U2.gnd",
+              "to": "GND2.reference",
+              "connected": true
+            },
+            {
+              "id": "W22",
+              "from": "U2.reset",
+              "to": "GNDR.reference",
+              "connected": true
+            },
+            {
+              "id": "W23",
+              "from": "U3.gnd",
+              "to": "GND3.reference",
+              "connected": true
+            },
+            {
+              "id": "W24",
+              "from": "DS1.common",
+              "to": "GNDD.reference",
+              "connected": true
+            },
+            {
+              "id": "W25",
+              "from": "U1.out",
+              "to": "U2.clk",
+              "connected": true
+            },
+            {
+              "id": "W26",
+              "from": "U2.q0",
+              "to": "U3.b0",
+              "connected": true
+            },
+            {
+              "id": "W27",
+              "from": "U2.q1",
+              "to": "U3.b1",
+              "connected": true
+            },
+            {
+              "id": "W28",
+              "from": "U2.q2",
+              "to": "U3.b2",
+              "connected": true
+            },
+            {
+              "id": "W29",
+              "from": "U2.q3",
+              "to": "U3.b3",
+              "connected": true
+            },
+            {
+              "id": "W30",
+              "from": "U3.a",
+              "to": "RS1.1",
+              "connected": true
+            },
+            {
+              "id": "W31",
+              "from": "RS1.2",
+              "to": "DS1.a",
+              "connected": true
+            },
+            {
+              "id": "W32",
+              "from": "U3.b",
+              "to": "RS2.1",
+              "connected": true
+            },
+            {
+              "id": "W33",
+              "from": "RS2.2",
+              "to": "DS1.b",
+              "connected": true
+            },
+            {
+              "id": "W34",
+              "from": "U3.c",
+              "to": "RS3.1",
+              "connected": true
+            },
+            {
+              "id": "W35",
+              "from": "RS3.2",
+              "to": "DS1.c",
+              "connected": true
+            },
+            {
+              "id": "W36",
+              "from": "U3.d",
+              "to": "RS4.1",
+              "connected": true
+            },
+            {
+              "id": "W37",
+              "from": "RS4.2",
+              "to": "DS1.d",
+              "connected": true
+            },
+            {
+              "id": "W38",
+              "from": "U3.e",
+              "to": "RS5.1",
+              "connected": true
+            },
+            {
+              "id": "W39",
+              "from": "RS5.2",
+              "to": "DS1.e",
+              "connected": true
+            },
+            {
+              "id": "W40",
+              "from": "U3.f",
+              "to": "RS6.1",
+              "connected": true
+            },
+            {
+              "id": "W41",
+              "from": "RS6.2",
+              "to": "DS1.f",
+              "connected": true
+            },
+            {
+              "id": "W42",
+              "from": "U3.g",
+              "to": "RS7.1",
+              "connected": true
+            },
+            {
+              "id": "W43",
+              "from": "RS7.2",
+              "to": "DS1.g",
+              "connected": true
+            }
+          ]
+        },
+        "document_sha256": "3a40b0c53ed4cbd8c08f6df02f9c36f14e76d9b3fe3a2aa3c1a6b5587428849b",
+        "recording_count": 1,
+        "exports": {
+          "svg": {
+            "bytes": 48864,
+            "sha256": "e7c8bab138a1c934406a01f44fe70aeca349e83f0e7fa7565daf03836e6f090e"
+          },
+          "png": {
+            "bytes": 102301,
+            "sha256": "68deaaf66780f41ed18c2224e98e63822e2c70d062b27f42504b8cea6f38b7cc"
+          },
+          "pdf": {
+            "bytes": 32709,
+            "sha256": "06556cabb38bd6cb40fc3f6a6006d1bbd848b5e89a5b5f8dbec998a828945544"
+          }
+        }
+      }
+    }
+  ],
+  "soak": {
+    "passed": true,
+    "requested_wall_s": 120.0,
+    "observed_wall_s": 120.01052112500474,
+    "cycles": 12,
+    "circuits": [
+      "flasher",
+      "rc"
+    ],
+    "scope": "public API against continuously integrating owned process; not visible latency",
+    "samples": [
+      {
+        "cycle": 0,
+        "circuit": "rc",
+        "elapsed_s": 2.0492680000024848,
+        "accepted_time_s": 0.04,
+        "epoch_wall_s": 2.035195541990106,
+        "rss_bytes": 317751296,
+        "cpu_s": 7.38
+      },
+      {
+        "cycle": 1,
+        "circuit": "rc",
+        "elapsed_s": 12.051209541998105,
+        "accepted_time_s": 0.23900000000000002,
+        "epoch_wall_s": 2.0470502079988364,
+        "rss_bytes": 305364992,
+        "cpu_s": 8.12
+      },
+      {
+        "cycle": 2,
+        "circuit": "rc",
+        "elapsed_s": 22.060465625007055,
+        "accepted_time_s": 0.438,
+        "epoch_wall_s": 2.057133790993248,
+        "rss_bytes": 313425920,
+        "cpu_s": 8.91
+      },
+      {
+        "cycle": 3,
+        "circuit": "rc",
+        "elapsed_s": 32.07099062499765,
+        "accepted_time_s": 0.637,
+        "epoch_wall_s": 2.066994999986491,
+        "rss_bytes": 313606144,
+        "cpu_s": 9.75
+      },
+      {
+        "cycle": 4,
+        "circuit": "rc",
+        "elapsed_s": 42.06893725000555,
+        "accepted_time_s": 0.836,
+        "epoch_wall_s": 2.06314412500069,
+        "rss_bytes": 313786368,
+        "cpu_s": 10.59
+      },
+      {
+        "cycle": 5,
+        "circuit": "rc",
+        "elapsed_s": 52.07241158300894,
+        "accepted_time_s": 1.035,
+        "epoch_wall_s": 2.0680010420037434,
+        "rss_bytes": 313901056,
+        "cpu_s": 11.45
+      },
+      {
+        "cycle": 6,
+        "circuit": "flasher",
+        "elapsed_s": 62.078115583004546,
+        "accepted_time_s": 1,
+        "epoch_wall_s": 2.0658828749874374,
+        "rss_bytes": 314146816,
+        "cpu_s": 12.44
+      },
+      {
+        "cycle": 7,
+        "circuit": "flasher",
+        "elapsed_s": 72.12431141700654,
+        "accepted_time_s": 5.9750000000000005,
+        "epoch_wall_s": 2.1182085420005023,
+        "rss_bytes": 316506112,
+        "cpu_s": 14.21
+      },
+      {
+        "cycle": 8,
+        "circuit": "flasher",
+        "elapsed_s": 82.14297741699556,
+        "accepted_time_s": 10.925,
+        "epoch_wall_s": 2.1369498330022907,
+        "rss_bytes": 320749568,
+        "cpu_s": 16.08
+      },
+      {
+        "cycle": 9,
+        "circuit": "flasher",
+        "elapsed_s": 92.13848916700226,
+        "accepted_time_s": 15.875,
+        "epoch_wall_s": 2.131147832988063,
+        "rss_bytes": 320913408,
+        "cpu_s": 18.2
+      },
+      {
+        "cycle": 10,
+        "circuit": "flasher",
+        "elapsed_s": 102.13692816700495,
+        "accepted_time_s": 20.825,
+        "epoch_wall_s": 2.1266415829886682,
+        "rss_bytes": 327680000,
+        "cpu_s": 19.94
+      },
+      {
+        "cycle": 11,
+        "circuit": "flasher",
+        "elapsed_s": 112.14040925000154,
+        "accepted_time_s": 25.775,
+        "epoch_wall_s": 2.1298747079999885,
+        "rss_bytes": 328286208,
+        "cpu_s": 21.71
+      }
+    ],
+    "rss_min_bytes": 305364992,
+    "rss_max_bytes": 328286208,
+    "rss_final_bytes": 328286208,
+    "cpu_s": 14.330000000000002
+  },
+  "command_count": 647,
+  "command_timings": {
+    "component.move": {
+      "count": 12,
+      "p95_ms": 5.788166003185324,
+      "max_ms": 5.788166003185324
+    },
+    "component.place": {
+      "count": 4,
+      "p95_ms": 0.6347909948090091,
+      "max_ms": 0.6347909948090091
+    },
+    "component.set": {
+      "count": 1,
+      "p95_ms": 0.45687500096391886,
+      "max_ms": 0.45687500096391886
+    },
+    "edit.undo": {
+      "count": 13,
+      "p95_ms": 5.715457999031059,
+      "max_ms": 5.715457999031059
+    },
+    "example.load": {
+      "count": 4,
+      "p95_ms": 2.6724170020315796,
+      "max_ms": 2.6724170020315796
+    },
+    "export.schematic.pdf": {
+      "count": 3,
+      "p95_ms": 20.879582996712998,
+      "max_ms": 20.879582996712998
+    },
+    "export.schematic.png": {
+      "count": 3,
+      "p95_ms": 38.39437500573695,
+      "max_ms": 38.39437500573695
+    },
+    "export.schematic.svg": {
+      "count": 3,
+      "p95_ms": 26.897458999883384,
+      "max_ms": 26.897458999883384
+    },
+    "operation.inspect": {
+      "count": 14,
+      "p95_ms": 1.4636249979957938,
+      "max_ms": 1.4636249979957938
+    },
+    "project.inspect": {
+      "count": 282,
+      "p95_ms": 6.4580409962218255,
+      "max_ms": 8.231833999161609
+    },
+    "project.save": {
+      "count": 15,
+      "p95_ms": 23.531416998594068,
+      "max_ms": 23.531416998594068
+    },
+    "simulation.input.set": {
+      "count": 1,
+      "p95_ms": 0.4100420046597719,
+      "max_ms": 0.4100420046597719
+    },
+    "simulation.pause": {
+      "count": 20,
+      "p95_ms": 4.752875000122003,
+      "max_ms": 6.262875001993962
+    },
+    "simulation.restart": {
+      "count": 4,
+      "p95_ms": 1.3636249932460487,
+      "max_ms": 1.3636249932460487
+    },
+    "simulation.resume": {
+      "count": 14,
+      "p95_ms": 4.559041000902653,
+      "max_ms": 4.559041000902653
+    },
+    "simulation.step": {
+      "count": 102,
+      "p95_ms": 36.67762500117533,
+      "max_ms": 40.00262499903329
+    },
+    "simulation.verify": {
+      "count": 13,
+      "p95_ms": 6.7677080078283325,
+      "max_ms": 6.7677080078283325
+    },
+    "simulation.wait": {
+      "count": 122,
+      "p95_ms": 6.904541005496867,
+      "max_ms": 7.815457996912301
+    },
+    "verification.export": {
+      "count": 1,
+      "p95_ms": 24.61570799641777,
+      "max_ms": 24.61570799641777
+    },
+    "view.pan": {
+      "count": 12,
+      "p95_ms": 5.34758300636895,
+      "max_ms": 5.34758300636895
+    },
+    "wire.connect": {
+      "count": 4,
+      "p95_ms": 0.4752910026581958,
+      "max_ms": 0.4752910026581958
+    }
+  },
+  "backend_api_p95_ms": 24.111708989948966,
+  "native_exit_code": 0,
+  "normal_cleanup_passed": true
+}

@@ -151,6 +151,9 @@ build, not a Developer ID signed or notarized installer. Historical local packag
 paths in validation records are not GitHub downloads. Build this source to get
 the newest peak/cursor functionality.
 
+The [current local unsigned release](docs/current-release.md) documents the
+matching app/agent archive, checksum and qualification limits.
+
 ## Use an AI agent
 
 Run a headless session:

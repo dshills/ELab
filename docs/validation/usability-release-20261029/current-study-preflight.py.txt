@@ -1,0 +1,30 @@
+import json,math,sys
+from pathlib import Path
+sys.path.insert(0,str(Path.cwd()/'scripts'))
+from acceptance_client import AcceptanceClient
+agent=Path('build/ELab-0.200.5-283-Usability/elab-agent').resolve()
+c=AcceptanceClient(agent)
+try:
+ c.ask('project.load',{'path':str(Path('research/first-use-study/fixtures/RC-no-traces.elab').resolve())},True)
+ s=c.ask('simulation.wait')
+ assert not s['paused'] and not s['document']['dirty'] and s['selected']==''
+ assert s['scope']['selected']==[] and s['scope']['traces']==[] and s['scope_visible']
+ assert s['transient']['sample']['time_s']==0 and not s['transient']['stale']
+ c.ask('simulation.pause',mutate=True)
+ paused=c.ask('project.inspect')
+ assert paused['paused'] and not paused['transient']['stale']
+ c.ask('component.set',{'id':'C1','value':'2uF'},True)
+ stale=c.ask('project.inspect')
+ assert stale['paused'] and stale['transient']['stale']
+ c.ask('simulation.restart',mutate=True);c.ask('simulation.wait')
+ sampled=c.ask('simulation.step',{'duration_s':.01},True)
+ assert math.isclose(sampled['transient']['sample']['voltage_v'],5*(1-math.exp(-.5)),rel_tol=0,abs_tol=1e-9)
+ c.ask('app.close',{'discard_changes':True},True)
+ report=dict(passed=True,source_commit='407a5c487a5883e01838abd0b71cda1206bce018',package='0.200.5 /283',
+             empty_scope=True,empty_selection=True,fresh_running_state=True,paused_state=True,stale_state=True,
+             corrected_rc_equation=True,participants=0,study_gate_passed=None,scope='exact packaged headless service; not a participant/native UI outcome')
+finally:c.close()
+assert c.process.returncode==0
+report['agent_exit_code']=c.process.returncode
+Path('build/usability-release-20261029/current-study-preflight.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report))

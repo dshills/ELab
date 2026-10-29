@@ -27,3 +27,12 @@ This continuation does not start circuit-capacity/model-import/KiCad feature
 work. Participant recruitment/first-use outcomes and native checks 3/6/9/11 are
 separate, still unqualified. No owner session/project is a test fixture and no
 push/upload is part of these local engineering checks.
+
+## Usability/release closeout
+
+Code/review commit `407a5c48`; all 11 complete native gates, 15 interaction
+families, exact matching runtime/examples, hobbyist workflows, current study
+fixture preflight and archive qualification pass. Unsigned 0.200.5 /283 is ready
+locally; [evidence](../docs/validation/usability-release-20261029/README.md).
+No human or historical native acceptance outcome was fabricated. Agent setup
+implementation begins after this engineering closeout.
