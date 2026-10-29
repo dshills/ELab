@@ -208,7 +208,7 @@ func (s *screen) sweepInspector(state workbench.Snapshot) []ui.Node {
 				nodes = append(nodes, quiet("sweep-error", op.Error.Message))
 			}
 			if op.Status == "completed" {
-				nodes = append(nodes, ui.Node{ID: "sweep-keep", Kind: ui.Checkbox, Text: "Keep in project", Checked: op.Kept, Accessibility: ui.Accessibility{Name: "Keep sweep in project"}, Change: func(e ui.ChangeEvent) {
+				nodes = append(nodes, ui.Node{ID: "sweep-keep", Kind: ui.Checkbox, Text: "Keep in project", Checked: op.Kept, Accessibility: ui.Accessibility{Name: "Keep in project", Help: "Save this captured sweep with the project."}, Change: func(e ui.ChangeEvent) {
 					s.invoke("sweep.keep.set", workbench.RecordingKeepParams{ID: op.ID, Keep: e.Checked})
 				}})
 				for _, format := range []string{"json", "csv"} {

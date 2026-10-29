@@ -59,19 +59,7 @@ func TestMountedInspectorPrimaryActionsFitShortRail(t *testing.T) {
 	}
 }
 func TestMountedInspectorCheckboxCaptionsFitMonoFont(t *testing.T) {
-	data, err := fs.ReadFile(fonts.Default, "robotomono/RobotoMono-Regular.ttf")
-	if err != nil {
-		t.Fatal(err)
-	}
-	parsed, err := opentype.Parse(data)
-	if err != nil {
-		t.Fatal(err)
-	}
-	face, err := opentype.NewFace(parsed, &opentype.FaceOptions{Size: 12, DPI: 72, Hinting: font.HintingNone})
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer face.Close()
+	face := inspectorCaptionFont(t)
 	for _, item := range []struct{ example, part, kind string }{{"discrete-class-ab", "Q6", ""}, {"opamp-follower", "U1", ""}, {"rc", "C1", ""}, {"rc", "R1", ""}, {"hbridge-motor", "MTR1", ""}, {"", "PART", "transformer"}, {"", "PART", "electronic-load"}, {"", "PART", "current-source"}} {
 		t.Run(item.example+"/"+item.part+item.kind, func(t *testing.T) {
 			s, cleanup := testScreen(t)
@@ -92,44 +80,13 @@ func TestMountedInspectorCheckboxCaptionsFitMonoFont(t *testing.T) {
 			agentAction(t, s.service, "simulation.pause", struct{}{})
 			agentAction(t, s.service, "component.select", workbench.IDParams{ID: item.part})
 			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": "apollo"})
-			view := func() ui.Node {
-				root := s.view()
-				object, _ := findNode(root, "inspector-group-object")
-				var boxes []ui.Node
-				var collect func(ui.Node)
-				collect = func(n ui.Node) {
-					if n.Kind == ui.Checkbox {
-						boxes = append(boxes, n)
-					}
-					for _, child := range n.Children {
-						collect(child)
-					}
+			assertMountedInspectorCaptions(t, s, face, func() ui.Node {
+				object, ok := findNode(s.view(), "inspector-group-object")
+				if !ok {
+					t.Fatal("missing object inspector")
 				}
-				collect(object)
-				root.Children = []ui.Node{panel("caption-test-rail", 280, boxes...)}
-				return root
-			}
-			m := newMountedControlWindowSize(t, s, view, 320, 760, inspectorLayoutTestTheme())
-			var inspect func(ui.Node)
-			inspect = func(n ui.Node) {
-				if n.Kind == ui.Checkbox {
-					box := mountedControlElement(t, m, n.ID).Bounds
-					// The native Switch caption is deliberately single-line. Reserve the
-					// checkbox glyph and gap, then measure the shipped Apollo font advances.
-					available := box.Dx() - 20
-					for _, caption := range []string{n.Text, n.Accessibility.Name} {
-						width := font.MeasureString(face, caption).Ceil()
-						if width > available {
-							t.Errorf("%s caption clips: %q needs %dpx; %dpx available in %v", n.ID, caption, width, available, box)
-						}
-					}
-				}
-				for _, child := range n.Children {
-					inspect(child)
-				}
-			}
-			rail, _ := findNode(s.view(), "inspector-group-object")
-			inspect(rail)
+				return object
+			})
 		})
 	}
 }
@@ -216,6 +173,103 @@ func TestMountedInspectorPlotRefusesHeldAgentAndDocumentEdits(t *testing.T) {
 			if after := s.service.Snapshot(); s.errorMessage != "" || after.CommandRevision != before.CommandRevision+1 {
 				t.Fatal("fresh plot failed", s.errorMessage)
 			}
+		})
+	}
+}
+
+func inspectorCaptionFont(t *testing.T) font.Face {
+	t.Helper()
+	data, err := fs.ReadFile(fonts.Default, "robotomono/RobotoMono-Regular.ttf")
+	if err != nil {
+		t.Fatal(err)
+	}
+	parsed, err := opentype.Parse(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	face, err := opentype.NewFace(parsed, &opentype.FaceOptions{Size: 12, DPI: 72, Hinting: font.HintingNone})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = face.Close() })
+	return face
+}
+
+func assertMountedInspectorCaptions(t *testing.T, s *screen, face font.Face, source func() ui.Node) {
+	t.Helper()
+	var collect func(ui.Node) []ui.Node
+	collect = func(n ui.Node) []ui.Node {
+		var boxes []ui.Node
+		if n.Kind == ui.Checkbox {
+			boxes = append(boxes, n)
+		}
+		for _, child := range n.Children {
+			boxes = append(boxes, collect(child)...)
+		}
+		return boxes
+	}
+	view := func() ui.Node {
+		root := s.view()
+		boxes := collect(source())
+		if len(boxes) == 0 {
+			t.Fatal("fixture has no checkboxes")
+		}
+		root.Children = []ui.Node{panel("caption-test-rail", 280, boxes...)}
+		return root
+	}
+	m := newMountedControlWindowSize(t, s, view, 320, 760, inspectorLayoutTestTheme())
+	for _, n := range collect(source()) {
+		box := mountedControlElement(t, m, n.ID).Bounds
+		if box.Empty() {
+			t.Fatal("unlaid checkbox", n.ID)
+		}
+		// The shipped native Switch caption is single-line. Its glyph and gap
+		// consume 20 points; measure both names with the actual Apollo font.
+		available := box.Dx() - 20
+		for _, caption := range []string{n.Text, n.Accessibility.Name} {
+			if width := font.MeasureString(face, caption).Ceil(); width > available {
+				t.Errorf("%s caption clips: %q needs %dpx; %dpx available in %v", n.ID, caption, width, available, box)
+			}
+		}
+	}
+}
+
+func TestMountedRemainingInspectorCaptionsFitMonoFont(t *testing.T) {
+	face := inspectorCaptionFont(t)
+	for _, page := range []string{"output", "comparison", "sweep"} {
+		t.Run(page, func(t *testing.T) {
+			var s *screen
+			if page == "comparison" {
+				s, _ = capturedComparisonScreen(t)
+			} else {
+				var cleanup func()
+				s, cleanup = testScreen(t)
+				t.Cleanup(cleanup)
+				agentAction(t, s.service, "example.reset", workbench.ReplaceParams{})
+				agentAction(t, s.service, "simulation.pause", struct{}{})
+			}
+			section := "simulation"
+			expected := []string{"sweep-keep"}
+			if page == "output" {
+				section = "document"
+				expected = []string{"pdf-tile", "pdf-color", "pdf-measurements"}
+			}
+			if page == "comparison" {
+				expected = []string{"recorded-compare-overlay", "recorded-compare-statistics"}
+			}
+			if page == "sweep" {
+				uiAction(t, s, "sweep-points", &ui.ChangeEvent{Text: "11"})
+				uiAction(t, s, "sweep-start", nil)
+				awaitNativeSweep(t, s)
+			}
+			agentAction(t, s.service, "workspace.inspector.set", workbench.InspectorParams{Section: section})
+			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": "apollo"})
+			for _, id := range expected {
+				if _, ok := findNode(s.view(), id); !ok {
+					t.Fatal("missing fixture control", id)
+				}
+			}
+			assertMountedInspectorCaptions(t, s, face, s.view)
 		})
 	}
 }

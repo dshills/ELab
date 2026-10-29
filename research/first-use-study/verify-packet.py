@@ -8,7 +8,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT/'scripts'))
-from wiring_replay import validate_release
+from study_packet_origin import validate_origin
 
 
 def read(path):
@@ -30,7 +30,9 @@ def main():
     section = text.split('### Formative hobbyist test\n', 1)[1].split('\n## 12 Delivery sequence', 1)[0]
     assert hashlib.sha256(section.encode()).hexdigest() == checkpoint['source_section_sha256']
     assert (folder/'prd-formative-excerpt.md').read_text() == ('### Formative hobbyist test\n'+section).rstrip('\n')+'\n'
-    identity = validate_release(ROOT, ROOT/'research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json')
+    archived = read(folder/'fixtures/preflight.json')['release']
+    receipt_bytes = (ROOT/'research/ui-audit/first-version/recorded-timing-feedback-review-checkpoint.json').read_bytes()
+    identity = validate_origin(ROOT, checkpoint, archived, receipt_bytes)
     assert identity['receipt_sha256'] == checkpoint['review_receipt_sha256']
     assert identity['release'] == checkpoint['build'] == '0.148.0 /165'
     assert identity['agent_sha256'] == checkpoint['agent_sha256']
@@ -67,7 +69,9 @@ def main():
     assert all(state['transient']['input_mode'] == 'auto' for state in states.values())
     print(json.dumps(dict(packet_integrity_verified=True, fixture_preflight_passed=True,
                           planned_participants=10, measured_participants=0, study_run=False,
-                          study_gate_passed=None, owner_acceptance=False)))
+                          study_gate_passed=None, owner_acceptance=False,
+                          scope="archived packet and recorded preflight integrity",
+                          current_runtime_qualified=False)))
 
 
 if __name__ == '__main__':

@@ -61,7 +61,7 @@ func (s *screen) recordingComparisonControls(state workbench.Snapshot) []ui.Node
 	if s.recordedComparisonRejected != nil {
 		nodes = append(nodes, quiet("recorded-compare-pending", "Showing the last accepted comparison.\nCorrect the time to update these results."))
 	}
-	nodes = append(nodes, ui.Node{ID: "recorded-compare-overlay", Kind: ui.Checkbox, Text: "Overlay reference", Checked: comparison.Settings.ShowOverlay, Accessibility: ui.Accessibility{Name: "Overlay captured reference B", Help: "A solid, B dashed; original captured seconds with shared voltage/current axes. No alignment or extrapolation. Plot cursors stay on selected A."}, Change: func(e ui.ChangeEvent) {
+	nodes = append(nodes, ui.Node{ID: "recorded-compare-overlay", Kind: ui.Checkbox, Text: "Overlay reference", Checked: comparison.Settings.ShowOverlay, Accessibility: ui.Accessibility{Name: "Overlay reference", Help: "A solid, B dashed; original captured seconds with shared voltage/current axes. No alignment or extrapolation. Plot cursors stay on selected A."}, Change: func(e ui.ChangeEvent) {
 		next := workbench.RecordingCompareParams(comparison.Settings)
 		next.ShowOverlay = e.Checked
 		s.invoke("recording.compare.set", next)
@@ -77,7 +77,7 @@ func (s *screen) recordingComparisonControls(state workbench.Snapshot) []ui.Node
 	if !comparison.Available {
 		return append(nodes, quiet("recorded-compare-unavailable", comparison.Reason))
 	}
-	nodes = append(nodes, ui.Node{ID: "recorded-compare-statistics", Kind: ui.Checkbox, Text: "Whole-run statistics", Checked: comparison.Settings.ShowStatistics, Accessibility: ui.Accessibility{Name: "Show whole-run comparison statistics"}, Change: func(e ui.ChangeEvent) {
+	nodes = append(nodes, ui.Node{ID: "recorded-compare-statistics", Kind: ui.Checkbox, Text: "Whole-run statistics", Checked: comparison.Settings.ShowStatistics, Accessibility: ui.Accessibility{Name: "Whole-run statistics", Help: "Show statistics for the complete captured runs, rather than only the comparison time."}, Change: func(e ui.ChangeEvent) {
 		next := workbench.RecordingCompareParams(comparison.Settings)
 		next.ShowStatistics = e.Checked
 		s.invoke("recording.compare.set", next)

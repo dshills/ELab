@@ -107,4 +107,4 @@ The owner reviews the completed summary, issues and corrections. Meeting these s
 python3 -B research/first-use-study/verify-packet.py
 ```
 
-This read-only check binds the packet to the unchanged PRD study section and exact private review, verifies the empty-plot fixture and prepared status conditions, and reports zero measured participants with a null study decision. It does not score people or certify study completion.
+This read-only check binds the packet to the unchanged PRD study section, pinned historical review receipt and archived source/SDK ledger. It verifies the archived empty-plot fixture and recorded status preparations, and reports zero measured participants with a null study decision. It neither runs the old binaries nor qualifies the current application. Current-release workflows are checked separately with the matching packaged agent; no historical observation is relabeled as a new participant session.

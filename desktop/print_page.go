@@ -47,7 +47,7 @@ func (s *screen) schematicPageControls(state workbench.Snapshot) []ui.Node {
 		next.Scale = &v
 		s.changeOutputPage(next)
 	}})
-	nodes = append(nodes, ui.Node{ID: "pdf-tile", Kind: ui.Checkbox, Text: "Tile across pages", Checked: page.Tile, Accessibility: ui.Accessibility{Name: "Tile schematic at explicit scale"}, Change: func(e ui.ChangeEvent) {
+	nodes = append(nodes, ui.Node{ID: "pdf-tile", Kind: ui.Checkbox, Text: "Tile across pages", Checked: page.Tile, Accessibility: ui.Accessibility{Name: "Tile across pages", Help: "Tile the schematic across pages at the explicit scale."}, Change: func(e ui.ChangeEvent) {
 		next := page
 		next.Tile = e.Checked
 		if next.Tile && next.Scale == nil {
@@ -72,11 +72,11 @@ func (s *screen) schematicPageControls(state workbench.Snapshot) []ui.Node {
 		checked   bool
 	}{{"color", "Color output", page.Color}, {"measurements", "Live readings", page.Measurements}} {
 		toggle := toggle
-		name := toggle.label
+		help := "Use color for the schematic export or printout."
 		if toggle.id == "measurements" {
-			name = "Include live measurement overlays"
+			help = "Include live measurement overlays in the schematic export or printout."
 		}
-		nodes = append(nodes, ui.Node{ID: "pdf-" + toggle.id, Kind: ui.Checkbox, Text: toggle.label, Checked: toggle.checked, Accessibility: ui.Accessibility{Name: name}, Change: func(e ui.ChangeEvent) {
+		nodes = append(nodes, ui.Node{ID: "pdf-" + toggle.id, Kind: ui.Checkbox, Text: toggle.label, Checked: toggle.checked, Accessibility: ui.Accessibility{Name: toggle.label, Help: help}, Change: func(e ui.ChangeEvent) {
 			next := page
 			if toggle.id == "color" {
 				next.Color = e.Checked
