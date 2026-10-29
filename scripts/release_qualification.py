@@ -13,6 +13,7 @@ import sys
 
 from acceptance_client import AcceptanceClient
 import quality
+import agent_notices
 import runtime_isolation
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +21,7 @@ GUIDES = ['agent-api', 'workbench-workflows', 'application-icon', 'discrete-clas
           'ac-frequency-sweeps', 'spectrum-analysis', 'transistor-profiles',
           'tolerance-analysis', 'loudspeaker', 'class-ab-speaker', 'passive-losses',
           'current-devices', 'jfets', 'feedback-and-step-response', 'circuit-blocks',
-          'temperature', 'noise-analysis', 'photodiodes', 'thyristors', 'analysis-pages']
+          'temperature', 'noise-analysis', 'photodiodes', 'thyristors', 'analysis-pages', 'agent-setup']
 MANIFEST = 'ELAB_PACKAGE.json'
 
 
@@ -95,10 +96,17 @@ def assemble(args):
     for source_dir, name in [(args.examples, 'Examples'), (args.licenses, 'Licenses')]:
         tree(source_dir)
         shutil.copytree(source_dir, args.output/name)
+    # Refresh only the newly owned output copy from the authoritative pinned
+    # source, never the caller's supplied license corpus or an older package.
+    agent_notices.verify(ROOT)
+    added = args.output/'Licenses/AgentMCP'
+    if added.exists():
+        shutil.rmtree(added)
+    shutil.copytree(ROOT/'third_party/agent-mcp', added)
     notices = args.work/'notices'
     notices.mkdir()
     files, components = {}, []
-    for folder in ['Vellum', 'Gonum']:
+    for folder in ['Vellum', 'Gonum', 'AgentMCP']:
         source_dir = args.output/'Licenses'/folder
         check(source_dir.is_dir(), 'missing explicit '+folder+' notices')
         names = []

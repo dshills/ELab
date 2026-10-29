@@ -61,7 +61,9 @@ new non-overlapping outputs. It builds matching agent/native/conformance binarie
 uses the pinned icon/notice packager, verifies all three clean VCS identities and
 writes ELAB_PACKAGE.json with every payload file's SHA-256 and mode. Curated
 examples must match the current built-in IDs/graphs; update that input corpus
-when intentional example changes occur. Explicit notices are inherited inputs,
+when intentional example changes occur. The added agent runtime notices are
+pinned in `third_party/agent-mcp`, checked against go.mod/go.sum, and refreshed
+only in each newly owned package output. Explicit existing notices are inherited inputs,
 not an automatic license/rights clearance for future dependency changes.
 
 ## Qualify and archive

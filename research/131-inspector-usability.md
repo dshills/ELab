@@ -51,3 +51,11 @@ outcomes. Historical native checks 3/6/9/11 remain separate and open.
 
 Items 2–5 are authorized direction, not implemented by this inspector commit.
 Work remains in order; owner review is not an engineering gate.
+
+## Engineering continuation
+
+The remaining output/comparison/sweep captions and available release checks
+closed in `407a5c48` / `7264d30a`: unsigned 0.200.5 /283 is qualified locally.
+Human first-use/native queue gates remain separate. Priority 2 now adds standard
+local MCP over the unchanged 226 commands; see
+[the continuation](132-usability-release-and-agent-setup.md).

@@ -156,7 +156,13 @@ matching app/agent archive, checksum and qualification limits.
 
 ## Use an AI agent
 
-Run a headless session:
+Current source adds standard MCP support; preserved 0.200.5 /283 predates it.
+Build the current agent and run it with `--mcp-config`, then use the printed configuration. It starts a local headless circuit with full command
+discovery, inspection and guarded command dispatch. Add `--connect` when generating
+the configuration for an explicitly started desktop endpoint.
+[Setup, examples and lifecycle](docs/agent-setup.md).
+
+The raw JSON protocol remains available. Run a headless session:
 
 ```sh
 go run ./cmd/elab-agent

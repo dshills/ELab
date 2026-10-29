@@ -1,5 +1,8 @@
 # ELab agent protocol, version 1
 
+For standard MCP clients, see [agent setup](agent-setup.md). The MCP tools forward
+this same envelope and preserve explicit guards, retry identities and refusals.
+
 Current development adds noncommitting drawing and atomic-batch previews,
 component explanations, an explicit plot-and-focus action and shared edit
 proposals. See [the workbench workflow contract](workbench-workflows.md) for

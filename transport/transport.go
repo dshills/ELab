@@ -9,7 +9,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net"
 	"os"
@@ -31,7 +30,8 @@ type Endpoint struct {
 	Token   string `json:"token"`
 }
 
-func response(ctx context.Context, s *workbench.Service, line []byte, actor string) workbench.Response {
+// DispatchLine validates the same bounded envelope for every local adapter.
+func DispatchLine(ctx context.Context, s *workbench.Service, line []byte, actor string) workbench.Response {
 	var request workbench.Request
 	if len(line) > MaxRequestBytes {
 		return workbench.Response{Version: 1, Error: &workbench.Failure{Code: "request-too-large", Message: "request exceeds 32 KiB"}}
@@ -48,7 +48,7 @@ func Stdio(ctx context.Context, s *workbench.Service, in io.Reader, out io.Write
 	scanner.Buffer(make([]byte, 4096), MaxRequestBytes+1)
 	encoder := json.NewEncoder(out)
 	for scanner.Scan() {
-		if err := encoder.Encode(response(ctx, s, scanner.Bytes(), "agent.stdio")); err != nil {
+		if err := encoder.Encode(DispatchLine(ctx, s, scanner.Bytes(), "agent.stdio")); err != nil {
 			return err
 		}
 		if s.ReadyToExit() {
@@ -171,7 +171,7 @@ func (server *Server) serveConnection(ctx context.Context, s *workbench.Service,
 	}
 	bounded, cancel := context.WithTimeout(ctx, 6*time.Second)
 	defer cancel()
-	result := response(bounded, s, line, "agent.socket")
+	result := DispatchLine(bounded, s, line, "agent.socket")
 	encoded, err := json.Marshal(result)
 	if err == nil && len(encoded) <= MaxResponseBytes {
 		c.Write(append(encoded, '\n'))
@@ -208,36 +208,18 @@ func (s *Server) Close() {
 // RemoteStdio forwards lines to a running UI or headless server. Inspect again
 // after transport failure, or retry with the original mutation key.
 func RemoteStdio(ctx context.Context, descriptor string, in io.Reader, out io.Writer) error {
-	data, err := os.ReadFile(descriptor)
+	client, err := NewRemoteClient(descriptor)
 	if err != nil {
 		return err
-	}
-	var endpoint Endpoint
-	if err = workbench.DecodeStrict(data, &endpoint); err != nil {
-		return err
-	}
-	if endpoint.Version != 1 || len(endpoint.Token) != 64 {
-		return fmt.Errorf("unsupported or invalid endpoint")
 	}
 	scanner := bufio.NewScanner(in)
 	scanner.Buffer(make([]byte, 4096), MaxRequestBytes+1)
 	for scanner.Scan() {
-		d := net.Dialer{Timeout: 3 * time.Second}
-		c, err := d.DialContext(ctx, "unix", endpoint.Socket)
+		line, err := client.Send(ctx, scanner.Bytes())
 		if err != nil {
 			return err
 		}
-		c.SetDeadline(time.Now().Add(10 * time.Second))
-		_, err = fmt.Fprintf(c, "%s\n%s\n", endpoint.Token, scanner.Bytes())
-		if err == nil {
-			var line []byte
-			line, err = bufio.NewReader(io.LimitReader(c, MaxResponseBytes+1)).ReadBytes('\n')
-			if err == nil {
-				_, err = out.Write(line)
-			}
-		}
-		c.Close()
-		if err != nil {
+		if _, err = out.Write(line); err != nil {
 			return err
 		}
 	}
