@@ -36,3 +36,22 @@ fixture preflight and archive qualification pass. Unsigned 0.200.5 /283 is ready
 locally; [evidence](../docs/validation/usability-release-20261029/README.md).
 No human or historical native acceptance outcome was fabricated. Agent setup
 implementation begins after this engineering closeout.
+
+## Agent setup closeout
+
+Implementation `84b97d54`, packaging repair `70e113d5`; internal
+review only. Standard local MCP now exposes complete discovery/inspection and the
+same guarded 226 commands. Generated configuration uses absolute executable and
+explicit optional endpoint paths, needs no ELab cloud/API key and edits no client
+settings. Raw JSON modes remain available. Empty/failed/retired endpoints refuse
+without falling back to a new circuit; mutations gain no automatic retries.
+
+Unsigned **0.201.0 /285** is qualified locally with exact app/agent/87 examples,
+protocol/electrical tests, 104 tooling tests, copied runtime/public adapters and
+archive checks. Two initial relay timing-budget test refusals pass targeted and
+full isolated reruns without changing limits. The initial failed /284 notice-path
+assembly is preserved; its corrected mapping is regression-tested against the
+unchanged pinned packager. See [full evidence](../docs/validation/agent-setup-20261029/README.md)
+and [current release](../docs/current-release.md). All 47 preservation identities
+verify. No new components, commands, solver limits, Vellum changes, external review,
+push or upload. Participant/native/clean-account/signing limits remain separate.

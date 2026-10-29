@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "source_commit": "70e113d5f2767e12963fe47337f35a7200f10a9e",
+  "initial_full_portable_passed": false,
+  "initial_failure": "Two existing workbench relay elapsed-time safety refusals; no race reports",
+  "failed_package_full_rerun_passed": true,
+  "changed_inputs_since_initial": [
+    "scripts/agent_notices.py",
+    "scripts/release_qualification.py",
+    "scripts/test_agent_notices.py"
+  ],
+  "all_Go_module_inputs_exact": true,
+  "python_tests": 104,
+  "desktop_sources_and_used_dependencies_exact_to_283": true,
+  "carried_desktop_full_rendered_evidence": "../usability-release-20261029/",
+  "new_desktop_checks": [
+    "complete ordinary tests",
+    "focused rendered agent-interleaving race tests",
+    "vet",
+    "lint"
+  ],
+  "limits": "Software routes only; historical native checks 3/6/9/11, participants, clean-account installation and signing remain separate"
+}

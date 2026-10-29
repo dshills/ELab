@@ -1,0 +1,59 @@
+"""Owned native MCP software-route check; no OS input/hardware acceptance."""
+import json
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import time
+sys.path.insert(0,str(Path.cwd()/'scripts'))
+from mcp_client import MCPClient
+from acceptance_client import AcceptanceClient
+
+package=Path(sys.argv[1]).resolve(strict=True)
+out=Path(sys.argv[2]).resolve();out.mkdir(exist_ok=False,parents=True)
+endpoint=out/'endpoint.json'
+app=package/'ELab.app/Contents/MacOS/ELab'
+log=(out/'host.txt').open('xb')
+host=subprocess.Popen(['/usr/bin/sandbox-exec','-p','(version 1)(allow default)(deny file-write* (subpath "/Users/dshills/Library/Cogent Core"))',str(app),'--agent-endpoint',str(endpoint),'--no-recovery','--no-appearance'],stdout=log,stderr=subprocess.STDOUT)
+client=None
+closer=None
+try:
+    deadline=time.monotonic()+8
+    while not endpoint.exists():
+        if host.poll() is not None or time.monotonic()>deadline:raise RuntimeError('owned native startup failed')
+        time.sleep(.02)
+    with tempfile.TemporaryDirectory(prefix='elab-native-mcp-cwd-') as cwd:
+        client=MCPClient(package/'elab-agent',endpoint,cwd=cwd)
+        before=client.inspect()
+        assert not before['components']
+        catalog=client.tool('elab_discover',{})['result']['capabilities']
+        assert len(catalog)==226
+        # One simple edit does not change window layout; explicit fresh guards.
+        client.ask('component.place',dict(kind='resistor',id='R1',position=dict(x=0,y=0)),True)
+        state=client.inspect()
+        assert len(state['components'])==1
+        client.ask('component.set',{'id':'R1','value':'10k'},True)
+        final=client.inspect()
+        client.close();client=None
+        assert host.poll() is None,'disconnect closed native host'
+        closer=AcceptanceClient(package/'elab-agent',endpoint)
+        observed=closer.ask('project.inspect')
+        assert observed['components']==final['components']
+        closer.ask('app.close',{'discard_changes':True},True)
+        closer.close();closer=None
+        assert host.wait(timeout=8)==0
+        report=dict(passed=True,scope='MCP to owned native service, not OS input',commands=len(catalog),tools=3,shared_graph_exact=True,bridge_disconnect_preserves_host=True,automatic_mcp_retries=0,bridge_exit_code=0,host_exit_code=host.returncode)
+        (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+        print(json.dumps(report))
+finally:
+    if client is not None:client.close()
+    if closer is not None:closer.close()
+    if host.poll() is None:
+        # Failure cleanup uses the owned endpoint before any forced process stop.
+        try:
+            cleanup=AcceptanceClient(package/'elab-agent',endpoint)
+            cleanup.ask('app.close',{'discard_changes':True},True)
+            cleanup.close();host.wait(timeout=8)
+        except BaseException:
+            host.terminate();host.wait(timeout=8)
+    log.close()

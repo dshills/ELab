@@ -148,16 +148,17 @@ python3 -B scripts/package_app.py --binary build/elab \
 
 Use a new output path for each bundle. This produces an unsigned/ad-hoc local
 build, not a Developer ID signed or notarized installer. Historical local package
-paths in validation records are not GitHub downloads. Build this source to get
-the newest peak/cursor functionality.
+paths in validation records are not GitHub downloads. Build from source or use
+the qualified local artifacts described below.
 
 The [current local unsigned release](docs/current-release.md) documents the
 matching app/agent archive, checksum and qualification limits.
 
 ## Use an AI agent
 
-Current source adds standard MCP support; preserved 0.200.5 /283 predates it.
-Build the current agent and run it with `--mcp-config`, then use the printed configuration. It starts a local headless circuit with full command
+Standard MCP support is included in the current local 0.201.0 /285 build.
+Run its matching agent (or build the current source) with `--mcp-config`, then use
+the printed configuration. It starts a local headless circuit with full command
 discovery, inspection and guarded command dispatch. Add `--connect` when generating
 the configuration for an explicitly started desktop endpoint.
 [Setup, examples and lifecycle](docs/agent-setup.md).

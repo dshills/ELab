@@ -70,6 +70,11 @@ was edited.
 
 The initial portable race run passed every package except two existing relay
 work-budget checks (elapsed-time safety refusals, not a race report). Those two
-passed three consecutive targeted reruns with limits unchanged. A full isolated
-workbench rerun and final exact-package checks remain required before promotion;
-retain the initial failed receipt rather than representing it as a clean gate.
+passed three consecutive targeted reruns with limits unchanged. The subsequent
+full isolated workbench race run passes with unchanged solver limits. Exact-package checks pass as recorded in README.md; the initial failed
+receipt remains retained rather than represented as a clean gate.
+
+Final review verifies that the bridge adds no command engine, invented revision
+or retry identity, implicit reconnect/fallback, external provider or client-file
+mutation. Final archive/source/notice/preservation receipts are exact. Remaining
+native/human/install/signing acceptance limits remain explicit and unchanged.

@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "gates_passed": true,
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "steps": [
+    {
+      "name": "workbench-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "./workbench",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 344.316
+    },
+    {
+      "name": "python",
+      "command": [
+        "/opt/homebrew/opt/python@3.15/bin/python3.15",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 4.448
+    },
+    {
+      "name": "portable-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 4.299
+    }
+  ],
+  "source_commit": "70e113d5f2767e12963fe47337f35a7200f10a9e",
+  "inputs_unchanged": true
+}

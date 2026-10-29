@@ -1,0 +1,13 @@
+from pathlib import Path
+import subprocess
+import sys
+sys.path.insert(0,str(Path.cwd()/'scripts'))
+import quality
+root=Path.cwd();out=root/'build/agent-setup-20261029/final-gates'
+before=quality.source_inputs(root)
+steps=[('workbench-race',['go','test','-race','./workbench','-count=1','-timeout=30m']),('python',[sys.executable,'-B','-m','unittest','discover','-s','scripts','-p','test_*.py']),('portable-vet',['go','vet','./...'])]
+result=quality.run_plan(steps,out,root,quality.go_environment(root),2400)
+result.update(source_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),inputs_unchanged=before==quality.source_inputs(root))
+result['passed']=result['gates_passed'] and result['inputs_unchanged']
+quality.write_json(out/'inputs.json',before);quality.write_json(out/'report.json',result)
+raise SystemExit(0 if result['passed'] else 1)
