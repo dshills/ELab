@@ -92,6 +92,6 @@ func (s *screen) motorControls(state workbench.Snapshot, part workbench.Componen
 			apply(next)
 		}})
 	}
-	nodes = append(nodes, ui.Node{ID: "motor-locked", Kind: ui.Checkbox, Text: "Lock the rotor for stall testing", Checked: config.Locked, Change: func(e ui.ChangeEvent) { v := config; v.Locked = e.Checked; apply(v) }})
+	nodes = append(nodes, ui.Node{ID: "motor-locked", Kind: ui.Checkbox, Text: "Lock rotor (stall)", Accessibility: ui.Accessibility{Name: "Lock rotor (stall)", Help: "Hold the rotor stationary to observe stall current."}, Checked: config.Locked, Change: func(e ui.ChangeEvent) { v := config; v.Locked = e.Checked; apply(v) }})
 	return nodes
 }

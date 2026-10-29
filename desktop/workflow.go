@@ -131,8 +131,14 @@ func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Componen
 				}
 			}
 			n := s.action("plot-"+probe.ID, text, "scope.probe.plot", workbench.IDParams{ID: probe.ID})
+			if p.Unit != "" || p.Kind == "net-label" {
+				// Focus loss may commit the value draft before a plot click. Continue only
+				// that editor's own accepted changes; never apply the draft as a value.
+				probeID := probe.ID
+				n = s.valueRelatedAction(state, "plot-"+probeID, text, workbench.ValueParams{ID: p.ID}, true, "scope.probe.plot", func(workbench.ValueParams) any { return workbench.IDParams{ID: probeID} })
+			}
 			n.Accessibility.Help = "Show this live trace and highlight its source. Existing traces are kept; remove one if six are already plotted."
-			n.Disabled = state.Transient == nil
+			n.Disabled = n.Disabled || state.Transient == nil
 			nodes = append(nodes, n)
 		}
 	}
@@ -163,7 +169,7 @@ func (s *screen) partPlotControls(state workbench.Snapshot, p workbench.Componen
 		}
 	}
 	if len(nodes) > 0 {
-		nodes = append(nodes, quiet("plot-help", "Adds a trace; replaces the last when six are shown."))
+		nodes = append(nodes, quiet("plot-help", "Keeps existing traces. Remove one if six are already plotted."))
 	}
 	return nodes
 }

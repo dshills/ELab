@@ -23,7 +23,8 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	if part.Kind == "opamp" {
 		terminals = "Inputs + / - · out · power V+ / V-"
 	}
-	inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name), quiet("part-terminals", terminals))
+	inspector = append(inspector, heading("inspector", part.ID+" · "+part.Name))
+	inspector = append(inspector, s.partValueEditControls(state, part)...)
 	if part.Kind == "opamp" {
 		if r := state.Mixed; r != nil {
 			for _, u := range r.OpAmps {
@@ -36,7 +37,11 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 				}
 			}
 		}
-	} else {
+	}
+	inspector = append(inspector, s.partPlotControls(state, part)...)
+	inspector = append(inspector, section("part-details-title", "Component details"), quiet("part-terminals", terminals))
+
+	if part.Kind != "opamp" {
 		model := part.Model
 		if part.Device != nil && part.Device.Passive != nil {
 			model = workbench.PassiveLossModelID
@@ -175,7 +180,7 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 	}
 
 	if part.Kind == "net-label" {
-		inspector = append(inspector, section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: s.changeValueDraft}, s.valueApplyAction(state, part.ID, "Apply label"), quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
+		inspector = append(inspector, quiet("label-connectivity-help", "Names are case-sensitive. GND is a name; connect it to a ground symbol to establish the reference."))
 	}
 	if workbench.IsConnectivityPrimitive(part.Kind) {
 		for _, net := range state.Nets {
@@ -187,29 +192,6 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		}
 	}
 	if part.Unit != "" {
-		valueTitle := "Value · " + part.Unit
-		if part.Kind == "battery" {
-			valueTitle = "Full-charge voltage · V"
-		}
-		if part.Kind == "thermistor" {
-			valueTitle = "Reference resistance at 25 °C · Ω"
-		}
-		if part.Kind == "ldr" {
-			valueTitle = "Reference resistance at 10 lux · Ω"
-		}
-		if workbench.IsRegulatorKind(part.Kind) {
-			valueTitle = "Output setpoint · V"
-		}
-		if part.Kind == "relay" {
-			valueTitle = "Coil inductance · H"
-		}
-		if part.Kind == "comparator" {
-			valueTitle = "Hysteresis width · V"
-		}
-		if part.Kind == "zener" {
-			valueTitle = "Breakdown voltage · V"
-		}
-		inspector = append(inspector, section("value-title", valueTitle), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF"}, Change: s.changeValueDraft}, buttonStyle(s.valueApplyAction(state, part.ID, "Apply value"), true))
 		if domain, ok := workbench.ValueDomainForKind(part.Kind); ok {
 			inspector = append(inspector, quiet("value-domain-range", domain.Range), quiet("value-domain-syntax", domain.Syntax))
 			if domain.Relation != "" {
@@ -238,7 +220,19 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		}
 
 	} else if workbench.IsBipolarKind(part.Kind) {
-		inspector = append(inspector, quiet("npn-model", fmt.Sprintf("Generic %s · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay.", strings.ToUpper(part.Kind))))
+		model := fmt.Sprintf("Generic %s · βF 100 / βR 1\nIS 10 fA · 27°C\nInstantaneous junction response.\nNo heating or switching delay.", strings.ToUpper(part.Kind))
+		profile := part.Device != nil && part.Device.Bipolar != nil
+		if profile || part.Thermal != nil {
+			model = "Educational " + strings.ToUpper(part.Kind) + " model."
+			if profile {
+				model += "\nUses the saved transistor profile above."
+			}
+			if part.Thermal != nil {
+				model += "\nUses the temperature settings above."
+			}
+			model += "\nNo manufacturer identity."
+		}
+		inspector = append(inspector, quiet("npn-model", model))
 	} else if part.Kind == "schottky" {
 		inspector = append(inspector, quiet("diode-model", "Generic Schottky diode · 27°C\nIS 0.2 µA · n 1.05 · Rs 2 Ω\nLower forward drop; reverse leakage included."))
 	} else if part.Kind == "diode" {
@@ -247,14 +241,17 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		inspector = append(inspector, quiet("led-model", "Generic red LED\nBrightness is illustrative."))
 	}
 	inspector = append(inspector, s.waveformControls(state, part)...)
-	inspector = append(inspector, s.partPlotControls(state, part)...)
 	if part.Kind == "opamp" {
 		inspector = append(inspector, s.partGeometryControls(state, part)...)
-		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model), quiet("opamp-model", "Gain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nBandwidth and slew are optional below."))
+		inspector = append(inspector, quiet("part-model-id", "Model: "+part.Model), quiet("opamp-model", "Gain 100,000 · input 10 MΩ\nOutput 50 Ω scale · active limit 20 mA\nBandwidth and slew limits are optional."))
 	}
 	for _, entry := range workbench.Library() {
 		if entry.Kind == part.Kind {
-			inspector = append(inspector, quiet("part-assumptions", entry.Limitations))
+			assumptions := entry.Limitations
+			if workbench.IsBipolarKind(part.Kind) && (part.Thermal != nil || part.Device != nil && part.Device.Bipolar != nil) {
+				assumptions = "Base model assumptions, before the optional profile and temperature settings above:\n" + assumptions
+			}
+			inspector = append(inspector, quiet("part-assumptions", assumptions))
 			break
 		}
 	}
@@ -289,6 +286,41 @@ func (s *screen) componentInspector(state workbench.Snapshot, graph workbench.Gr
 		if inspector[i].ID == "cap-initial" || inspector[i].ID == "inductor-initial" {
 			inspector[i].ControlStateKey = s.startupControlStateKey(part.ID)
 		}
+	}
+	return inspector
+}
+
+// Keep the basic editor and its explicit Apply action ahead of model settings.
+// Editing a draft still does not configure the component until Apply is used.
+func (s *screen) partValueEditControls(state workbench.Snapshot, part workbench.Component) []ui.Node {
+	inspector := []ui.Node{}
+	if part.Kind == "net-label" {
+		return []ui.Node{section("label-title", "Net label · exact matching"), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Net label name"}, Change: s.changeValueDraft}, s.valueApplyAction(state, part.ID, "Apply label")}
+	}
+	if part.Unit != "" {
+		valueTitle := "Value · " + part.Unit
+		if part.Kind == "battery" {
+			valueTitle = "Full-charge voltage · V"
+		}
+		if part.Kind == "thermistor" {
+			valueTitle = "Reference resistance at 25 °C · Ω"
+		}
+		if part.Kind == "ldr" {
+			valueTitle = "Reference resistance at 10 lux · Ω"
+		}
+		if workbench.IsRegulatorKind(part.Kind) {
+			valueTitle = "Output setpoint · V"
+		}
+		if part.Kind == "relay" {
+			valueTitle = "Coil inductance · H"
+		}
+		if part.Kind == "comparator" {
+			valueTitle = "Hysteresis width · V"
+		}
+		if part.Kind == "zener" {
+			valueTitle = "Breakdown voltage · V"
+		}
+		inspector = append(inspector, section("value-title", valueTitle), ui.Node{ID: "value-entry", Kind: ui.TextField, Text: state.Drawing.Value, Accessibility: ui.Accessibility{Name: "Component value", Help: "Use the shown part bounds and units, such as 2.2k Ω, 500 mV, or 1 µF"}, Change: s.changeValueDraft}, buttonStyle(s.valueApplyAction(state, part.ID, "Apply value"), true))
 	}
 	return inspector
 }

@@ -40,7 +40,7 @@ func (s *screen) transformerControls(state workbench.Snapshot, part workbench.Co
 			apply(next)
 		}})
 	}
-	nodes = append(nodes, ui.Node{ID: "transformer-reverse", Kind: ui.Checkbox, Text: "Reverse secondary dot", Checked: c.Reversed, Accessibility: ui.Accessibility{Name: "Reverse secondary winding polarity"}, Change: func(e ui.ChangeEvent) { next := c; next.Reversed = e.Checked; apply(next) }}, quiet("transformer-derived", fmt.Sprintf("Secondary inductance %.6g H", c.Inductance*c.Ratio*c.Ratio)), quiet("transformer-assumptions", "Linear core · zero startup currents · no saturation or isolation rating. Exact coupling 1 is unsupported."))
+	nodes = append(nodes, ui.Node{ID: "transformer-reverse", Kind: ui.Checkbox, Text: "Reverse secondary dot", Checked: c.Reversed, Accessibility: ui.Accessibility{Name: "Reverse secondary dot", Help: "Reverse the secondary winding polarity relative to the primary dot."}, Change: func(e ui.ChangeEvent) { next := c; next.Reversed = e.Checked; apply(next) }}, quiet("transformer-derived", fmt.Sprintf("Secondary inductance %.6g H", c.Inductance*c.Ratio*c.Ratio)), quiet("transformer-assumptions", "Linear core · zero startup currents · no saturation or isolation rating. Exact coupling 1 is unsupported."))
 	if state.Mixed != nil {
 		for _, r := range state.Mixed.Transformers {
 			if r.ID == part.ID {

@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "component": {
+    "device_parameters": {
+      "passive": {
+        "version": "elab.passive-loss.v1",
+        "esr_ohm": 1,
+        "leakage_resistance_ohm": 1000000,
+        "winding_resistance_ohm": 0
+      }
+    },
+    "id": "C1",
+    "kind": "capacitor",
+    "name": "Capacitor",
+    "terminals": [
+      "1",
+      "2"
+    ],
+    "position": {
+      "x": 200,
+      "y": 0
+    },
+    "value": 1e-06,
+    "unit": "F",
+    "model": "ideal-capacitor.v1",
+    "rotation": 0
+  },
+  "draft": "2uF",
+  "traces": [
+    "v:C1",
+    "i:R1",
+    "i:C1"
+  ],
+  "command_revision": 27
+}

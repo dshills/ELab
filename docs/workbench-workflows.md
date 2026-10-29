@@ -1,7 +1,7 @@
 # Draw, understand and experiment
 
-The existing 53 component kinds and electrical models are unchanged. These
-workflow additions use the same semantic service for the desktop and agents.
+Drawing, inspection and experiment workflows use the same semantic service for
+the desktop and agents.
 
 ## Drawing
 
@@ -25,6 +25,16 @@ The normal command/retry key requirements still apply. Occupied/ambiguous
 candidates are not commits. Invalid query shapes/coordinates are rejected.
 
 ## Understanding a component
+
+The Inspect panel puts the selected component's value, explicit **Apply value**
+action and available **Plot** actions ahead of detailed model settings. Op-amp
+readings stay immediately above their compact Plot controls. Temperature,
+losses, startup settings and model explanations remain available below.
+
+Typing keeps a draft until Apply; plotting finishes the text entry without
+changing the configured component value. Agents use `editor.value.set` for the
+draft, `component.set` to apply a value, and `scope.probe.plot` to plot. An
+intervening agent edit or document replacement still retires a held action.
 
 Select a component and read **Understand this component** in Inspect. Existing
 value and geometry edits stay ahead of the explanatory section. Accepted current,

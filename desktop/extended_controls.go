@@ -33,7 +33,7 @@ func (s *screen) extendedControls(state workbench.Snapshot, p workbench.Componen
 		apply := func(v workbench.TransistorProfile, on bool) {
 			s.invokeAtCommandRevision("transistor.profile.set", workbench.TransistorProfileParams{ID: p.ID, Enabled: on, Parameters: v}, state.CommandRevision, state.Document.Generation)
 		}
-		nodes = append(nodes, section("transistor-profile-title", "Transistor model"), ui.Node{ID: "transistor-profile-enabled", Kind: ui.Checkbox, Text: "Use configurable educational profile", Checked: enabled, Accessibility: ui.Accessibility{Name: "Enable transistor profile"}, Change: func(e ui.ChangeEvent) {
+		nodes = append(nodes, section("transistor-profile-title", "Transistor model"), ui.Node{ID: "transistor-profile-enabled", Kind: ui.Checkbox, Text: "Custom transistor model", Checked: enabled, Accessibility: ui.Accessibility{Name: "Custom transistor model", Help: "Use configurable educational transistor parameters instead of the generic profile."}, Change: func(e ui.ChangeEvent) {
 			if e.Checked != enabled {
 				apply(c, e.Checked)
 			}
@@ -42,7 +42,7 @@ func (s *screen) extendedControls(state workbench.Snapshot, p workbench.Componen
 			field("transistor-beta", "Forward gain · β", c.ForwardBeta, 1, 1000, 1, func(v float64) { n := c; n.ForwardBeta = v; apply(n, true) })
 			field("transistor-reverse-beta", "Reverse gain", c.ReverseBeta, .1, 100, .1, func(v float64) { n := c; n.ReverseBeta = v; apply(n, true) })
 			field("transistor-is", "Transport IS · fA", c.SaturationCurrent*1e15, .001, 1e5, .001, func(v float64) { n := c; n.SaturationCurrent = decimalControlSI(v, -15); apply(n, true) })
-			nodes = append(nodes, ui.Node{ID: "transistor-early-enabled", Kind: ui.Checkbox, Text: "Include Early effect", Checked: c.EarlyVoltage > 0, Accessibility: ui.Accessibility{Name: "Include transistor Early effect"}, Change: func(e ui.ChangeEvent) {
+			nodes = append(nodes, ui.Node{ID: "transistor-early-enabled", Kind: ui.Checkbox, Text: "Include Early effect", Checked: c.EarlyVoltage > 0, Accessibility: ui.Accessibility{Name: "Include Early effect", Help: "Include the transistor Early effect using the configured Early voltage."}, Change: func(e ui.ChangeEvent) {
 				if e.Checked == (c.EarlyVoltage > 0) {
 					return
 				}
@@ -103,7 +103,7 @@ func (s *screen) extendedControls(state workbench.Snapshot, p workbench.Componen
 		apply := func(v workbench.OpAmpDynamics, on bool) {
 			s.invokeAtCommandRevision("opamp.dynamics.set", workbench.DynamicsParams{ID: p.ID, Enabled: on, Parameters: v}, state.CommandRevision, state.Document.Generation)
 		}
-		nodes = append(nodes, section("opamp-dynamics-title", "Frequency response"), ui.Node{ID: "opamp-dynamics-enabled", Kind: ui.Checkbox, Text: "Enable bandwidth and slew limits", Checked: enabled, Accessibility: ui.Accessibility{Name: "Enable op-amp dynamics"}, Change: func(e ui.ChangeEvent) {
+		nodes = append(nodes, section("opamp-dynamics-title", "Frequency response"), ui.Node{ID: "opamp-dynamics-enabled", Kind: ui.Checkbox, Text: "Bandwidth / slew limits", Checked: enabled, Accessibility: ui.Accessibility{Name: "Bandwidth / slew limits", Help: "Include the configured gain-bandwidth and slew-rate limits."}, Change: func(e ui.ChangeEvent) {
 			if e.Checked != enabled {
 				apply(c, e.Checked)
 			}

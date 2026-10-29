@@ -25,7 +25,7 @@ func (s *screen) passiveControls(state workbench.Snapshot, p workbench.Component
 	apply := func(c workbench.PassiveConfig, on bool) {
 		s.invokeAtCommandRevision("passive.configure", workbench.PassiveParams{ID: p.ID, Enabled: on, Parameters: c}, state.CommandRevision, state.Document.Generation)
 	}
-	nodes := []ui.Node{section("passive-title", "Component losses"), {ID: "passive-enabled", Kind: ui.Checkbox, Text: "Include electrical losses", Checked: enabled, Accessibility: ui.Accessibility{Name: "Include capacitor or inductor losses"}, Change: func(e ui.ChangeEvent) {
+	nodes := []ui.Node{section("passive-title", "Component losses"), {ID: "passive-enabled", Kind: ui.Checkbox, Text: "Include electrical losses", Checked: enabled, Accessibility: ui.Accessibility{Name: "Include electrical losses", Help: "Include capacitor ESR and leakage, or inductor winding resistance."}, Change: func(e ui.ChangeEvent) {
 		if e.Checked != enabled {
 			apply(cfg, e.Checked)
 		}
@@ -49,7 +49,7 @@ func (s *screen) passiveControls(state workbench.Snapshot, p workbench.Component
 	}
 	if p.Kind == "capacitor" {
 		field("passive-esr", "Series ESR · Ω (0 off)", cfg.ESR, 0, 1e5, .1, 0, func(c *workbench.PassiveConfig, v float64) { c.ESR = v })
-		nodes = append(nodes, ui.Node{ID: "passive-leak-enabled", Kind: ui.Checkbox, Text: "Include leakage", Checked: cfg.Leakage > 0, Accessibility: ui.Accessibility{Name: "Include capacitor leakage"}, Change: func(e ui.ChangeEvent) {
+		nodes = append(nodes, ui.Node{ID: "passive-leak-enabled", Kind: ui.Checkbox, Text: "Include leakage", Checked: cfg.Leakage > 0, Accessibility: ui.Accessibility{Name: "Include leakage", Help: "Include capacitor leakage across the terminals."}, Change: func(e ui.ChangeEvent) {
 			if e.Checked == (cfg.Leakage > 0) {
 				return
 			}

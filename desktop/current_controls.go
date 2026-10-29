@@ -51,7 +51,7 @@ func (s *screen) currentControls(state workbench.Snapshot, p workbench.Component
 		field("current-low", "Low current · mA", c.Low*1000, 0, 1000, 1, func(v float64) { c.Low = decimalControlSI(v, -3) })
 		field("current-compliance", "Compliance · V", c.Compliance, 1, 24, .1, func(v float64) { c.Compliance = v })
 	} else {
-		nodes = append(nodes, ui.Node{ID: "load-power", Kind: ui.Checkbox, Text: "Constant power (W)", Checked: l.Mode == "cp", Accessibility: ui.Accessibility{Name: "Constant power mode; unchecked is constant current"}, Change: func(e ui.ChangeEvent) {
+		nodes = append(nodes, ui.Node{ID: "load-power", Kind: ui.Checkbox, Text: "Constant power (W)", Checked: l.Mode == "cp", Accessibility: ui.Accessibility{Name: "Constant power (W)", Help: "Checked uses constant power in watts; unchecked uses constant current in amperes."}, Change: func(e ui.ChangeEvent) {
 			if e.Checked == (l.Mode == "cp") {
 				return
 			}
@@ -72,7 +72,7 @@ func (s *screen) currentControls(state workbench.Snapshot, p workbench.Component
 		field("load-max-current", "Maximum current · A", l.MaximumCurrent, .001, 1, .01, func(v float64) { l.MaximumCurrent = v })
 	}
 	setTiming := func(t workbench.CurrentTiming) { c.Timing = t; l.Timing = t }
-	nodes = append(nodes, ui.Node{ID: "current-pulsed", Kind: ui.Checkbox, Text: "Pulse between levels", Checked: timing.Pulsed, Accessibility: ui.Accessibility{Name: "Pulse between current or load levels"}, Change: func(e ui.ChangeEvent) {
+	nodes = append(nodes, ui.Node{ID: "current-pulsed", Kind: ui.Checkbox, Text: "Pulse between levels", Checked: timing.Pulsed, Accessibility: ui.Accessibility{Name: "Pulse between levels", Help: "Pulse between the configured high and low current or load levels."}, Change: func(e ui.ChangeEvent) {
 		if e.Checked == timing.Pulsed {
 			return
 		}
