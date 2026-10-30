@@ -16,9 +16,15 @@ import (
 
 func mountedSpectrumMeasurements(t *testing.T, s *screen) *mountedControlWindow {
 	t.Helper()
+	s.app.Do(func() {
+		if _, ok := s.reachableAction("spectrum-cursor-a"); !ok {
+			t.Fatal("missing spectrum measurement controls")
+		}
+	})
 	view := func() ui.Node {
 		root := s.view()
 		dock, _ := findNode(root, "instrument-panel")
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{dock}
 		var omit func(*ui.Node)
 		omit = func(n *ui.Node) {
@@ -33,7 +39,7 @@ func mountedSpectrumMeasurements(t *testing.T, s *screen) *mountedControlWindow 
 		omit(&root)
 		return root
 	}
-	m := newMountedControlWindowSize(t, s, view, 900, 600, inspectorLayoutTestTheme())
+	m := newMountedControlWindowSize(t, s, view, 900, 1100, inspectorLayoutTestTheme())
 	s.settleField = func(id string, done func(error)) error { return cogent.SettleTextField(m.ctx, s.app, "main", id, done) }
 	return m
 }
@@ -50,7 +56,7 @@ func TestMountedSpectrumMeasurementLayoutAndEdits(t *testing.T) {
 			for _, id := range ids {
 				e := mountedControlElement(t, m, id)
 				bounds[id] = e.Bounds
-				if !e.Visible || !e.Bounds.In(image.Rect(0, 0, 900, 600)) {
+				if !e.Visible || e.Bounds.Empty() || !e.Bounds.In(image.Rect(0, 0, 900, 1100)) {
 					t.Errorf("not fully visible %s %v", id, e.Bounds)
 				}
 			}

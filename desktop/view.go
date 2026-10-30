@@ -12,10 +12,10 @@ import (
 
 var (
 	ink     = color.NRGBA{R: 29, G: 29, B: 31, A: 255}
-	muted   = color.NRGBA{R: 110, G: 110, B: 115, A: 255}
-	accent  = color.NRGBA{R: 0, G: 112, B: 235, A: 255}
+	muted   = color.NRGBA{R: 92, G: 92, B: 98, A: 255}
+	accent  = color.NRGBA{R: 10, G: 132, B: 255, A: 255}
 	paper   = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
-	surface = color.NRGBA{R: 242, G: 242, B: 247, A: 255}
+	surface = color.NRGBA{R: 246, G: 246, B: 248, A: 255}
 )
 
 func label(id, text string) ui.Node { return ui.Node{ID: id, Kind: ui.Label, Text: text} }
@@ -122,10 +122,11 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 			pane = "sweep"
 		}
 	}
-	if previewVisible(state) || s.fileBusy || s.pendingCommand != "" || state.ExampleBrowser.Visible {
+	if previewVisible(state) || s.fileBusy || s.pendingCommand != "" || state.ExampleBrowser.Visible || s.nativeConnectOpen || s.nativeSweepOpen {
 		pane = ""
 	}
-	if pane != s.nativePointerPane {
+	pointerPaneChanged := pane != s.nativePointerPane
+	if pointerPaneChanged {
 		s.drawing.pointer.invalidateFrame()
 		s.nativePointerPane = pane
 	}
@@ -142,7 +143,7 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		drawRevision = state.CommandRevision
 	}
 	reduceMotion := s.reduceMotion.Load()
-	if drawRevision != s.lastDrawRevision || state.Analysis != s.lastDrawAnalysis || colors != s.lastPalette || reduceMotion != s.lastReduceMotion {
+	if pointerPaneChanged || drawRevision != s.lastDrawRevision || state.Analysis != s.lastDrawAnalysis || colors != s.lastPalette || reduceMotion != s.lastReduceMotion {
 		s.renderRevision++
 		s.lastDrawRevision = drawRevision
 		s.lastDrawAnalysis = state.Analysis
@@ -150,32 +151,6 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		s.lastReduceMotion = reduceMotion
 	}
 	s.drawing.Revision = s.renderRevision
-	toolbar := ui.Node{ID: "toolbar", Kind: ui.Toolbar, Style: chromeStyle(), Children: []ui.Node{
-		s.commandMenu("file-menu", "File", [][2]string{{"project.clear", "New schematic"}, {"file.open", "Open…"}, {"file.save", "Save"}, {"file.save-as", "Save as…"}, {"app.close", "Close window"}}),
-		s.button("file.save", "Save"),
-		s.examplesButton(state),
-		s.button("edit.undo", "Undo"), s.button("edit.redo", "Redo"), s.themeMenu(state.Theme),
-	}}
-	// Reserve the complete document action row, including its group dividers.
-	toolbar.Style.MinSize = ui.Some(ui.Size{Width: 380, Height: toolbarHeight})
-	var documentActions []ui.Node
-	for i := range toolbar.Children {
-		action := documentToolbarAction(toolbar.Children[i])
-		documentActions = append(documentActions, action)
-		if action.ID == "file.save" || action.ID == "examples-menu" || action.ID == "edit.redo" {
-			documentActions = append(documentActions, toolbarDivider(action.ID))
-		}
-	}
-	toolbar.Children = documentActions
-	pause, pauseText := "simulation.pause", "Pause"
-	if state.Paused {
-		pause, pauseText = "simulation.resume", "Resume"
-	}
-	status := simulationStatus(state)
-	statusNode := label("status", status)
-	statusNode.Style.Foreground = ui.Some(accent)
-	statusNode.Style.Typography = ui.Some(ui.Typography{Size: 13, Weight: 600})
-	statusNode.Style.MaxSize = ui.Some(ui.Size{Width: 180})
 
 	palette := s.componentPalette(state)
 	palette = append(palette, s.placementControls(state)...)
@@ -294,9 +269,7 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 	inspector = append(inspector, inspectorGroup("verification", "Recorded verification", s.verificationInspector(state))...)
 	inspector = append(inspector, inspectorGroup("spectrum", "Recorded spectrum", s.spectrumInspector(state))...)
 	inspector = append(inspector, inspectorGroup("tolerance", "Component tolerances", s.toleranceInspector(state))...)
-	if !sweepVisible(state) {
-		inspector = append(inspector, inspectorGroup("sweep", "Frequency & DC sweeps", s.sweepInspector(state))...)
-	}
+	inspector = append(inspector, inspectorGroup("sweep", "Frequency & DC sweeps", s.sweepInspector(state))...)
 	tools := ui.Node{ID: "tools", Kind: ui.Toolbar, Grow: true, Style: chromeStyle(), Children: []ui.Node{}}
 	// Leave room for padding, outlines and keyboard focus rings instead of
 	// cropping the buttons at the old 32 units.
@@ -324,18 +297,6 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		Padding: ui.Some(ui.Insets{Top: 3, Bottom: 3}), Gap: ui.Some(float32(8)), Align: ui.Some(ui.AlignCenter),
 	}, Children: []ui.Node{cancel, {ID: "tool-spacer", Kind: ui.ToolbarFlexibleSpace}, secondaryDrawingActions(state.CommandRevision,
 		s.action("sweep-open", "Sweeps", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), fit)}})
-	hints := "Drag parts to move · R rotate · Delete remove · W wire · scroll to zoom"
-	switch state.Drawing.Tool {
-	case "wire":
-		hints = "Click two terminal dots to connect them · Esc cancels"
-	case "pan":
-		hints = "Drag the sheet to pan · scroll to zoom"
-	case "place":
-		hints = "Click to place " + state.Drawing.Kind + " · Esc cancels"
-	}
-	if state.Drawing.WireStart != "" {
-		hints = "Wire from " + state.Drawing.WireStart + " · click its destination"
-	}
 	message := ""
 	for _, candidate := range state.Recovery.Candidates {
 		if !candidate.ActiveSession || candidate.OwnerStatus == workbench.RecoveryOwnerUnknown {
@@ -537,70 +498,20 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		}
 		palette = append(s.printingControls(state), s.schematicPageControls(state)...)
 		palette = append(palette, exports...)
-	} else if sweepVisible(state) {
-		palette = s.sweepInspector(state)
 	}
-	leftWidth, rightWidth := sidePanelWidths(totalWidth, state.WorkspacePanels)
-	partsWidth, railWidth := max(float32(224), leftWidth), max(float32(296), rightWidth)
 	palette, inspector = s.organizeWorkspace(palette, inspector, state)
+	inspector = s.nativeInspectorGroups(state, inspector)
 	var fieldValidation map[string]string
 	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage && state.Selected != "" &&
 		strings.HasPrefix(s.requestHelp.Summary, state.Selected+" needs a valid ") {
 		fieldValidation = map[string]string{"value-entry": s.requestHelp.Summary}
 	}
 	prepareInspectorGroups(inspector, fieldValidation)
-	constrainRail(palette, partsWidth-48)
-	constrainRail(inspector, railWidth-48)
-	filename := documentName(state)
-	if state.Document.Dirty {
-		filename += " · Unsaved"
-	}
-	footer := quiet("footer", fmt.Sprintf("%d components · %d wires", len(state.Components), len(state.Wires)))
-	// The title and history already identify the document and last change.
-	// Keep the status row compact; retain the full summary for hover and AX.
-	footer.Accessibility.Help = fmt.Sprintf("%s · %d components · %d wires · last change: %s", filename, len(state.Components), len(state.Wires), state.LastActor)
-	schematicChildren := []ui.Node{tools, {ID: "schematic", Kind: ui.Extension, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 80})}, Custom: s.drawing}, quiet("schematic-help", hints)}
+	notice := ui.Node{}
 	if message != "" {
-		schematicChildren = append(schematicChildren, messages)
+		notice = messages
 	}
-	if previewVisible(state) {
-		schematicChildren = append(s.printPreviewPanel(state), messages)
-	} else if sweepVisible(state) {
-		schematicChildren = append(s.sweepPanel(state), messages)
-		s.previewPixels = previewPixels{}
-	} else {
-		s.previewPixels = previewPixels{}
-	}
-	root := ui.Node{ID: "root", Kind: ui.Column, Grow: true, Style: ui.Style{Gap: ui.Some(float32(1)), Background: ui.Some(surface)}, Children: []ui.Node{
-		{ID: "header", Kind: ui.Row, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 48}), MaxSize: ui.Some(ui.Size{Height: 48}), Padding: ui.Some(ui.Insets{Top: 4, Bottom: 4, Left: 12, Right: 12}), Gap: ui.Some(float32(10)), Align: ui.Some(ui.AlignCenter), Background: ui.Some(paper)}, Children: []ui.Node{s.documentTitle(state), toolbar, statusNode, {ID: "simulation-toolbar", Kind: ui.Toolbar, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 76}), MaxSize: ui.Some(ui.Size{Width: 76}), Padding: ui.Some(ui.UniformInsets(0))}, Children: []ui.Node{s.button(pause, pauseText)}}}},
-		s.sidePanels(state,
-			ui.Node{ID: "parts-scroll", Kind: ui.Scroll, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: partsWidth}), MaxSize: ui.Some(ui.Size{Width: partsWidth}), Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("palette", partsWidth-48, palette...)}},
-			ui.Node{ID: "schematic-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(8)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: schematicChildren},
-			s.inspectorRail(state, inspector, railWidth), totalWidth, leftWidth, rightWidth),
-		{ID: "readings", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 48}), Gap: ui.Some(float32(1)), Align: ui.Some(ui.AlignCenter)}, Children: contextualReadings(state, metric, overview)},
-		{ID: "footer-row", Kind: ui.Row, Grow: true, Style: ui.Style{MaxSize: ui.Some(ui.Size{Height: 24}), Padding: ui.Some(ui.Insets{Left: 10, Right: 10}), Gap: ui.Some(float32(8))}, Children: []ui.Node{footer, {ID: "footer-spacer", Kind: ui.Row, Grow: true, MinWidth: 1}, quiet("zoom", fmt.Sprintf("%.0f%%", state.View.Zoom*100)), quiet("grid-info", "10-unit snap · local workspace")}},
-		s.filePrompt(),
-	}}
-	if sourcePaneHidden(state) {
-		children := make([]ui.Node, 0, len(root.Children))
-		for _, child := range root.Children {
-			if child.ID != "readings" {
-				children = append(children, child)
-			}
-		}
-		root.Children = children
-	}
-	if !sourcePaneHidden(state) {
-		if state.ScopeVisible {
-			root.Children[1] = s.workspaceDock(root.Children[1], s.instrumentPanel(state, totalWidth), state)
-		} else {
-			index := 2 // Between the drawing workspace and its readings/footer.
-			children := append([]ui.Node{}, root.Children[:index]...)
-			children = append(children, s.instrumentPanel(state, totalWidth))
-			children = append(children, root.Children[index:]...)
-			root.Children = children
-		}
-	}
+	root := s.nativeShell(state, totalWidth, palette, inspector, tools, notice, overview)
 	root.Children = append(root.Children, s.exampleBrowserView(state))
 	if s.keyboardFocus.ID != "" {
 		if _, ok := ui.FocusTarget(root, s.keyboardFocus.ID); ok {
@@ -612,6 +523,7 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 	applyPalette(&root, colors)
 	polishToolbars(&root, colors, false)
 	polishInspector(&root, colors, false)
+	polishNativeDesign(&root, colors)
 	reserveManagedFocusOutline(&root)
 	theme := s.scopedTheme(colors, state.Display.Preferences.ReducedMotion)
 	root.Theme = &theme

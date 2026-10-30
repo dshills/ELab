@@ -15,7 +15,7 @@ func prepareInspectorGroups(nodes []ui.Node, validation map[string]string) {
 		if strings.HasPrefix(n.ID, "inspector-group-") && len(n.Children) > 0 {
 			n.Style.Gap = ui.Some(float32(8))
 			first := n.Children[0]
-			if first.Kind != ui.Label || first.Style.Typography.Value.Weight < 600 {
+			if first.ID != "native-object-header" && (first.Kind != ui.Label || first.Style.Typography.Value.Weight < 600) {
 				title := section("inspector-heading-"+strings.TrimPrefix(n.ID, "inspector-group-"), n.Accessibility.Name)
 				n.Children = append([]ui.Node{title}, n.Children...)
 			}

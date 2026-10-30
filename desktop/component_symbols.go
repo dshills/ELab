@@ -66,8 +66,8 @@ func styleComponentRow(widget core.Widget, w *core.WidgetBase) bool {
 		w.FinalStyler(func(s *styles.Style) {
 			s.Min.Y = units.Dp(28)
 			s.Max.Y = units.Dp(28)
-			s.IconSize.Set(units.Dp(28))
-			s.Font.Size = units.Dp(12)
+			s.IconSize.Set(units.Dp(20))
+			s.Font.Size = units.Dp(13)
 			s.Padding.Set(units.Dp(4))
 			s.Gap.X = units.Dp(6)
 			s.Border.Width.Zero()

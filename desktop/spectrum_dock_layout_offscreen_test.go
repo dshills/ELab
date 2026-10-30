@@ -26,9 +26,15 @@ func TestMountedSpectrumControlsRemainStationaryDuringLiveUpdates(t *testing.T) 
 			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": theme})
 			agentAction(t, s.service, "simulation.restart", struct{}{})
 			agentAction(t, s.service, "scope.view.set", workbench.ScopeViewParams{View: "spectrum"})
+			s.app.Do(func() {
+				if _, ok := s.reachableAction("spectrum-source-live"); !ok {
+					t.Fatal("missing live spectrum controls")
+				}
+			})
 			view := func() ui.Node {
 				root := s.view()
 				dock, _ := findNode(root, "instrument-panel")
+				root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 				root.Children = []ui.Node{dock}
 				var omit func(*ui.Node)
 				omit = func(n *ui.Node) {
@@ -43,13 +49,13 @@ func TestMountedSpectrumControlsRemainStationaryDuringLiveUpdates(t *testing.T) 
 				omit(&root)
 				return root
 			}
-			m := newMountedControlWindowSize(t, s, view, 1040, 600, inspectorLayoutTestTheme())
+			m := newMountedControlWindowSize(t, s, view, 1040, 1100, inspectorLayoutTestTheme())
 			ids := []string{"scope-view-scope", "scope-view-spectrum", "spectrum-source-live", "spectrum-source-recorded", "spectrum-live-hold", "scope-visibility", "spectrum-dock-probe", "spectrum-dock-window", "spectrum-dock-samples", "spectrum-dock-fundamental-label", "spectrum-dock-fundamental", "spectrum-dock-harmonics", "spectrum-dock-summary", "spectrum-dock-detail", "spectrum-plot", "spectrum-peaks", "spectrum-cursor-select-a", "spectrum-cursor-select-b", "spectrum-cursor-label-a", "spectrum-cursor-a", "spectrum-cursor-label-b", "spectrum-cursor-b", "spectrum-cursor-peak", "spectrum-cursor-clear-a", "spectrum-cursor-clear-b", "spectrum-cursor-values", "spectrum-cursor-delta"}
 			bounds := map[string]image.Rectangle{}
 			for _, id := range ids {
 				element := mountedControlElement(t, m, id)
 				bounds[id] = element.Bounds
-				if !element.Visible || !element.Bounds.In(image.Rect(0, 0, 1040, 600)) {
+				if !element.Visible || !element.Bounds.In(image.Rect(0, 0, 1040, 1100)) {
 					t.Errorf("control not fully visible: %s visible=%v bounds=%v", id, element.Visible, element.Bounds)
 				}
 				if os.Getenv("ELAB_SPECTRUM_CAPTURE") != "" {
@@ -144,6 +150,7 @@ func TestMountedSpectrumTabsAndHoldRouteSharedCommands(t *testing.T) {
 	view := func() ui.Node {
 		root := s.view()
 		dock, _ := findNode(root, "instrument-panel")
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{dock}
 		var omit func(*ui.Node)
 		omit = func(n *ui.Node) {
@@ -158,7 +165,7 @@ func TestMountedSpectrumTabsAndHoldRouteSharedCommands(t *testing.T) {
 		omit(&root)
 		return root
 	}
-	m := newMountedControlWindowSize(t, s, view, 1040, 600, inspectorLayoutTestTheme())
+	m := newMountedControlWindowSize(t, s, view, 1040, 1100, inspectorLayoutTestTheme())
 	click := func(id string) {
 		t.Helper()
 		at := mountedControlElement(t, m, id).Bounds.Min.Add(mountedControlElement(t, m, id).Bounds.Size().Div(2))
@@ -171,6 +178,7 @@ func TestMountedSpectrumTabsAndHoldRouteSharedCommands(t *testing.T) {
 	if state := s.service.Snapshot(); state.ScopeView != "spectrum" || state.Spectrum.Live == nil || !state.Spectrum.Live.Settings.Enabled {
 		t.Fatal("mounted Spectrum tab did not dispatch")
 	}
+	click("workspace-details-instrument")
 	click("spectrum-live-hold")
 	if !s.service.Snapshot().Spectrum.Live.Settings.Hold {
 		t.Fatal("mounted Hold did not dispatch")

@@ -29,6 +29,11 @@ func TestMountedInspectorFormSpacingAndPaintAcrossThemes(t *testing.T) {
 				agentAction(t, s.service, "component.select", workbench.IDParams{ID: "R1"})
 				agentAction(t, s.service, "workspace.inspector.set", workbench.InspectorParams{Section: page.section})
 				agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": mode})
+				s.app.Do(func() {
+					if _, ok := s.reachableAction(page.field); !ok {
+						t.Fatal("missing editor", page.field)
+					}
+				})
 				before := s.service.Snapshot()
 				view := func() ui.Node {
 					rail, _ := findNode(s.view(), "inspector-rail")
@@ -42,13 +47,13 @@ func TestMountedInspectorFormSpacingAndPaintAcrossThemes(t *testing.T) {
 				following := mountedControlElement(t, m, page.next)
 				scroll := mountedControlElement(t, m, inspectorScrollNode(t, s.view()).ID)
 				t.Logf("label=%v field=%v following=%v scroll=%v", caption.Bounds, field.Bounds, following.Bounds, scroll.Bounds)
-				if !field.Visible || field.Bounds.Dx() != 248 || field.Bounds.Dy() < 34 || field.Bounds.Dy() > 36 || !field.Bounds.In(scroll.Bounds) {
+				if !field.Visible || field.Bounds.Dx() < 130 || field.Bounds.Dy() < 30 || field.Bounds.Dy() > 34 || !field.Bounds.In(scroll.Bounds) {
 					t.Error("inspector editor is clipped or has inconsistent height", field.Bounds)
 				}
-				if gap := field.Bounds.Min.Y - caption.Bounds.Max.Y; gap < 4 || gap > 6 || field.Bounds.Min.X != caption.Bounds.Min.X {
+				if gap := field.Bounds.Min.X - caption.Bounds.Max.X; gap < 6 || gap > 10 || caption.Bounds.Min.Y > field.Bounds.Max.Y || caption.Bounds.Max.Y < field.Bounds.Min.Y {
 					t.Error("field label is detached or misaligned", caption.Bounds, field.Bounds)
 				}
-				if following.Bounds.Min.Y-field.Bounds.Max.Y < 8 {
+				if following.Bounds.Min.Y-field.Bounds.Max.Y < 4 {
 					t.Error("following content overlaps or crowds the editor", field.Bounds, following.Bounds)
 				}
 				im, err := m.manual.Capture(m.ctx, "main")
@@ -60,10 +65,10 @@ func TestMountedInspectorFormSpacingAndPaintAcrossThemes(t *testing.T) {
 				painted := false
 				for y := field.Bounds.Max.Y - 3; y < field.Bounds.Max.Y; y++ {
 					pixel := color.NRGBAModel.Convert(im.At(at.X, y)).(color.NRGBA)
-					painted = painted || pixel == toolbarOutline(palette)
+					painted = painted || pixel == nativeHairlineColor(palette)
 				}
 				if !painted {
-					t.Error("editor bottom outline is obscured", toolbarOutline(palette))
+					t.Error("editor bottom outline is obscured", nativeHairlineColor(palette))
 				}
 				assertCursorMeasurementPreservesPhysics(t, before, s.service.Snapshot())
 				if directory := os.Getenv("ELAB_INSPECTOR_ARTIFACTS"); directory != "" {

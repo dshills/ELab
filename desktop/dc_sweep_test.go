@@ -119,8 +119,8 @@ func TestNativeDCSweepMatchesAgentAndUsesParameterAxis(t *testing.T) {
 		if _, ok := findAction(root, "sweep-plot"); !ok {
 			t.Fatal("sweep graph missing")
 		}
-		if _, ok := findAction(root, "schematic"); ok {
-			t.Fatal("hidden drawing still mounted")
+		if _, ok := findAction(root, "schematic"); !ok {
+			t.Fatal("sweep dock lost the schematic")
 		}
 		mesh, err := s.sweepMesh(*s.sweepDrawing.View)
 		if err != nil || mesh == nil {

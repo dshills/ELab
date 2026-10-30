@@ -31,7 +31,7 @@ func TestMountedInspectorTextGroupsUseAvailableRailWidth(t *testing.T) {
 				if !ok {
 					t.Fatal("missing production circuit-information group")
 				}
-				return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{panel("test-rail", 248, group)}}
+				return ui.Node{ID: "root", Kind: ui.Column, Grow: true, Children: []ui.Node{panel("test-rail", 240, group)}}
 			}
 			m := newMountedControlWindowSize(t, s, view, 320, 1100, inspectorLayoutTestTheme())
 			for pass := range 2 {
@@ -44,8 +44,8 @@ func TestMountedInspectorTextGroupsUseAvailableRailWidth(t *testing.T) {
 					bounds[element.ID] = element.Bounds
 				}
 				group := bounds["inspector-group-circuit"]
-				if group.Dx() < 240 || group.Dx() > 249 {
-					t.Errorf("circuit text group shrank inside a 248-unit rail: %v", group)
+				if group.Dx() < 239 || group.Dx() > 241 {
+					t.Errorf("circuit text group shrank inside the production 240-unit content rail: %v", group)
 				}
 				ids := []string{"circuit-capacity", "selection-navigation-help"}
 				if example != "rc" {
@@ -54,8 +54,8 @@ func TestMountedInspectorTextGroupsUseAvailableRailWidth(t *testing.T) {
 				for _, id := range ids {
 					label := bounds[id]
 					frame := bounds[railLabelBoundsPrefix+id]
-					if frame.Dx() < 235 || frame.Dx() > 237 {
-						t.Errorf("%s has a %d-pixel wrapping frame instead of the available 236 pixels: %v", id, frame.Dx(), frame)
+					if frame.Dx() < 227 || frame.Dx() > 229 {
+						t.Errorf("%s has a %d-pixel wrapping frame instead of the available 228 pixels: %v", id, frame.Dx(), frame)
 					}
 					if label.Empty() || !label.In(frame) || !frame.In(group) {
 						t.Errorf("reading %s escaped its frame or accessibility group: label=%v frame=%v group=%v", id, label, frame, group)

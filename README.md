@@ -16,6 +16,15 @@ for drawing, simulation, analysis, saving and export.
 *RC charge and discharge: edit the circuit above, inspect the waveforms below.
 Screenshots show an earlier panel layout; the current drawer controls are described below.*
 
+## Experimental Native UI
+
+The `exp-ui` branch rebuilds the workspace from the supplied `exp-design`
+references: full-height side rails, a centered toolbar, floating drawing tools,
+and a Scope/Spectrum/Sweep dock. Existing user and AI agent commands, simulation
+models, local files and exports are retained. This experiment is kept separate
+from main. See [design QA](design-qa.md) and the
+[validation record](docs/validation/experimental-native-ui/README.md).
+
 ## What you can do
 
 - **Draw and edit schematics.** Search components by name or hobbyist alias,
@@ -48,9 +57,10 @@ and [shared command guide](docs/agent-api.md).
 
 ## Drawers and Simulate tools
 
-**Parts** and **Inspector** open independently and move the canvas aside. Each
-open drawer has a visible **Close** button at its workspace edge. Closing it
-leaves a labelled tab to reopen it and frees its horizontal space for drawing.
+**Parts** and **Inspector** open independently and move the canvas aside. The
+Parts sidebar button sits above the library and moves into the toolbar when
+closed. The Inspector button stays at the toolbar’s right edge. Both announce
+Open/Close and free their horizontal space for drawing when closed.
 Drag an inside divider to resize, or toward the outside edge to snap closed.
 With divider focus, Home closes Parts and End closes Inspector. Reopening
 retains the preferred width. Layout choices last for the session and do not

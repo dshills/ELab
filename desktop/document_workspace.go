@@ -9,21 +9,6 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-func documentToolbarAction(n ui.Node) ui.Node {
-	symbols := map[string]ui.Symbol{"file.save": ui.SymbolSave, "edit.undo": ui.SymbolUndo, "edit.redo": ui.SymbolRedo, "theme-menu": ui.SymbolSun}
-	if icon, ok := symbols[n.ID]; ok {
-		n.Icon = icon
-		if n.Text != "" && (n.ID == "edit.undo" || n.ID == "edit.redo") {
-			n.Accessibility.Name = n.Text
-		}
-		// The accessible name retains the complete action and history actor.
-		n.Text = ""
-	}
-	n.Appearance = ui.ButtonQuiet
-	n.Style.CornerRadius = ui.Some(float32(5))
-	return n
-}
-
 func documentName(state workbench.Snapshot) string {
 	if state.Document.Path != "" {
 		return filepath.Base(state.Document.Path)
@@ -51,7 +36,7 @@ func (s *screen) organizeWorkspace(library, groups []ui.Node, state workbench.Sn
 	var parts, document, help, experiment []ui.Node
 	// Output/sweep workspaces retain their own left-hand controls. The right
 	// rail still selects one task instead of reverting to every inspector form.
-	if sourcePaneHidden(state) {
+	if previewVisible(state) {
 		parts, library = library, nil
 	}
 	reachedOutput := false
@@ -142,7 +127,7 @@ func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node, width
 	}
 	// Each document and section owns its scroll viewport. Navigation remains
 	// visible outside the scroll area, with no nested native tab-page scroller.
-	rail := ui.Node{ID: inspectorScrollID(state), Kind: ui.Scroll, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", width-48, groups...)}}
+	rail := ui.Node{ID: inspectorScrollID(state), Kind: ui.Scroll, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper)}, Children: []ui.Node{panel("sidebar-content", width-40, groups...)}}
 	children := []ui.Node{rail}
 	var actions []ui.Node
 	for _, item := range []struct{ id, label string }{{"component", "Inspect"}, {"simulation", "Simulate"}, {"document", "Document"}} {
@@ -167,6 +152,12 @@ func (s *screen) inspectorRail(state workbench.Snapshot, groups []ui.Node, width
 		}
 	}
 	children = append(navigation, children...)
+	if state.InspectorSection == "simulation" && state.SimulationTool == "live" {
+		step := s.action("native-simulate-step", "Step +1 sample", "simulation.step.start", workbench.StepParams{Duration: state.TransientSettings.StepSeconds})
+		step.Disabled = !state.Paused || state.Transient == nil || state.Transient.Stale
+		children = append(children, quiet("native-run-summary", nativeStepSummary(state)), ui.Node{ID: "native-simulate-actions", Kind: ui.Row, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(8))}, Children: []ui.Node{step, s.action("native-simulate-restart", "Restart", "simulation.restart", struct{}{})}})
+	}
+
 	return ui.Node{ID: "inspector-rail", Kind: ui.Column, Grow: true, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width}), MaxSize: ui.Some(ui.Size{Width: width}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: children}
 }
 

@@ -29,8 +29,8 @@ var popupCallbacks = struct {
 var popupToken atomic.Uint64
 
 func (s *screen) platformSelectors(node *ui.Node, revision uint64) {
-	if node.ID == exampleBrowserID {
-		// This sheet is mounted in a separate native scene. The canvas-based
+	if node.ID == exampleBrowserID || node.ID == "native-connect-popover" || node.ID == "native-sweep-popover" {
+		// These sheets/popovers mount in separate native scenes. The canvas-based
 		// AppKit proxy cannot locate its controls; retain the framework's
 		// scoped selector, which owns modal coordinates and keyboard focus.
 		return

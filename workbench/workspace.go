@@ -8,7 +8,7 @@ type WorkspaceLayout struct {
 }
 
 func DefaultWorkspaceLayout() WorkspaceLayout {
-	return WorkspaceLayout{SchematicFraction: .65}
+	return WorkspaceLayout{SchematicFraction: .70}
 }
 
 func (s *Service) setWorkspaceLayoutLocked(p WorkspaceLayout) error {
@@ -35,7 +35,7 @@ func addWorkspaceCapabilityDetails(id string, schema map[string]any) bool {
 		Version: 1, Scope: "workspace-layout",
 		Preconditions: []string{"Ordinary revision/document guards and retry retention apply"},
 		Effects: []string{
-			"Set the schematic's fraction of the vertical schematic/scope split, from 0.35 to 0.85; default 0.65",
+			"Set the schematic's fraction of the vertical schematic/scope split, from 0.35 to 0.85; default 0.70",
 			"Session only; preserved through example load/reset, New, file open and recovery; not saved in schematic files",
 			"Preserves graph, electrical state/run/time/charge, history, dirty state, scope visibility, probes, cursors and recorded playback",
 			"Native divider drag/keyboard/accessibility and agents use this command; collapsed/unavailable scope and output/sweep panes hide the split but retain its fraction",

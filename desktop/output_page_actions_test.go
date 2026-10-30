@@ -11,6 +11,11 @@ import (
 func captureOutputAction(t *testing.T, s *screen, id string) ui.Node {
 	t.Helper()
 	uiAction(t, s, "inspector-section-document", nil)
+	s.app.Do(func() {
+		if _, ok := s.reachableAction("pdf-margin"); !ok {
+			t.Fatal("missing output settings")
+		}
+	})
 	var node ui.Node
 	s.app.Do(func() {
 		state := s.service.Snapshot()

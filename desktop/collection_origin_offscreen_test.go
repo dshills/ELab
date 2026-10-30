@@ -22,6 +22,7 @@ func mountedExampleCollection(t *testing.T, s *screen) *mountedControlWindow {
 		root := s.view()
 		grid, ok := findNode(root, "example-grid")
 		if !ok && (!s.service.Snapshot().ExampleBrowser.Visible || s.pendingCommand != "" || s.fileBusy) {
+			root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 			root.Children = []ui.Node{{ID: "browser-closed", Kind: ui.Label, Text: "Examples closed"}}
 			root.Focus = ui.FocusRequest{}
 			return root
@@ -29,6 +30,7 @@ func mountedExampleCollection(t *testing.T, s *screen) *mountedControlWindow {
 		if !ok || grid.Collection == nil {
 			t.Fatal("assembled browser collection missing")
 		}
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{grid}
 		root.Focus = ui.FocusRequest{ID: "example-grid", Sequence: 1}
 		return root

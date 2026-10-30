@@ -43,6 +43,9 @@ func uiAction(t *testing.T, s *screen, id string, event *ui.ChangeEvent) {
 		if id == "examples-menu" && event != nil {
 			id, event = event.SelectedID, nil
 		}
+		if id == "examples-menu" && event == nil {
+			event = &ui.ChangeEvent{SelectedID: "browse"}
+		}
 		// Follow the visible browser navigation for non-Common fixture parts.
 		if id == "part-list" && event != nil && !matchingPart(s.view(), event.SelectedID) {
 			category, _ := findAction(s.view(), "part-category")

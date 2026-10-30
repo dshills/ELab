@@ -14,28 +14,26 @@ import (
 )
 
 type capturedWireChoice struct {
-	node             ui.Node
-	choices          menuChoices
-	index            int
-	revision, serial uint64
+	node    ui.Node
+	choices menuChoices
+	index   int
 }
 
-// Capture the assembled macOS adapter's real options and bound callback. The
-// test supplies its completion; it does not open or interact with an OS menu.
+// Capture the assembled popover selector and its original bound callback.
+// This supplies a descriptor completion; mounted routing is tested separately.
 func captureWireChoice(t *testing.T, s *screen, id, target string) capturedWireChoice {
 	t.Helper()
 	var result capturedWireChoice
 	s.app.Do(func() {
-		state := s.service.Snapshot()
 		node, ok := findNode(s.view(), id)
 		if !ok {
 			t.Fatalf("missing native wiring control %s", id)
 		}
-		choices, ok := node.Custom.(menuChoices)
-		if !ok || node.Kind != ui.Button {
-			t.Fatalf("%s did not use native menu adapter", id)
+		if node.Kind != ui.Selector || node.Change == nil {
+			t.Fatalf("%s did not retain its scene selector", id)
 		}
-		result = capturedWireChoice{node: node, choices: choices, index: -1, revision: state.CommandRevision, serial: s.menuSerial}
+		choices := menuChoices{Kind: node.Kind, Options: node.Options, Change: node.Change}
+		result = capturedWireChoice{node: node, choices: choices, index: -1}
 		for i, option := range choices.Options {
 			if option.ID == target {
 				result.index = i
@@ -50,10 +48,15 @@ func captureWireChoice(t *testing.T, s *screen, id, target string) capturedWireC
 }
 
 func completeWireChoice(s *screen, choice capturedWireChoice) {
-	s.app.Do(func() { s.acceptMenuChoice(choice.node, choice.choices, choice.index, choice.serial, choice.revision) })
+	s.app.Do(func() {
+		if choice.index < 0 || choice.index >= len(choice.choices.Options) {
+			return
+		}
+		choice.choices.Change(ui.ChangeEvent{Kind: choice.choices.Kind, SelectedID: choice.choices.Options[choice.index].ID})
+	})
 }
 
-func TestNativeNamedWiringMenuBindingsMatchAgentLED(t *testing.T) {
+func TestNamedWiringPopoverBindingsMatchAgentLED(t *testing.T) {
 	s, cleanup := testScreen(t)
 	t.Cleanup(cleanup)
 	agent := workbench.New()
@@ -86,17 +89,17 @@ func TestNativeNamedWiringMenuBindingsMatchAgentLED(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertNamedWiringParity(t, actual, expected)
-	recordNamedWiringObservation(t, "native-adapter-complete", actual)
+	recordNamedWiringObservation(t, "popover-binding-complete", actual)
 	if actual.Result == nil || actual.Result.Stale || math.Abs(actual.Result.Current-.002916796577441) > 5e-12 {
-		t.Fatal("native adapter LED current differs from reference", actual.Result)
+		t.Fatal("popover binding LED current differs from reference", actual.Result)
 	}
 	if s.fieldContext != nil || s.menuCommandRevision != nil {
-		t.Fatal("native adapter leaked field/menu context")
+		t.Fatal("popover binding leaked field/menu context")
 	}
 }
 
-func TestNativeNamedWiringMenuRefusesRetiredChoices(t *testing.T) {
-	for _, scenario := range []string{"agent-endpoints", "document-replaced", "newer-menu", "invalid-index", "duplicate-completion"} {
+func TestNamedWiringPopoverRefusesRetiredChoices(t *testing.T) {
+	for _, scenario := range []string{"agent-endpoints", "document-replaced", "agent-tool", "invalid-index"} {
 		t.Run(scenario, func(t *testing.T) {
 			s, cleanup := testScreen(t)
 			t.Cleanup(cleanup)
@@ -107,12 +110,10 @@ func TestNativeNamedWiringMenuRefusesRetiredChoices(t *testing.T) {
 				agentAction(t, s.service, "wire.terminals.set", workbench.TerminalsParams{From: "R1.2", To: "D1.anode"})
 			case "document-replaced":
 				agentAction(t, s.service, "project.clear", workbench.ReplaceParams{DiscardChanges: true})
-			case "newer-menu":
-				s.app.Do(func() { s.menuSerial++ })
+			case "agent-tool":
+				agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "select"})
 			case "invalid-index":
 				choice.index = len(choice.choices.Options)
-			case "duplicate-completion":
-				completeWireChoice(s, choice)
 			}
 			before := s.service.Snapshot()
 			focus := s.keyboardFocus
@@ -131,7 +132,7 @@ func TestNativeNamedWiringMenuRefusesRetiredChoices(t *testing.T) {
 	}
 }
 
-func TestNativeNamedWiringPlaceholderClearsOnlyItsEndpoint(t *testing.T) {
+func TestNamedWiringPopoverPlaceholderClearsOnlyItsEndpoint(t *testing.T) {
 	s, cleanup := testScreen(t)
 	t.Cleanup(cleanup)
 	prepareNamedWiringLED(t, s.service)
@@ -142,5 +143,30 @@ func TestNativeNamedWiringPlaceholderClearsOnlyItsEndpoint(t *testing.T) {
 	s.app.Do(func() { connect, _ = findNode(s.view(), "connect-terminals") })
 	if s.errorMessage != "" || state.Drawing.From != "" || state.Drawing.To != "R1.1" || !connect.Disabled || len(state.Wires) != 0 {
 		t.Fatal("placeholder cleared wrong endpoint or enabled Connect", state.Drawing, s.errorMessage)
+	}
+}
+
+// Managed selectors intentionally continue their own accepted choices. Unlike
+// an AppKit completion, a retained field callback is not a one-shot token.
+func TestNamedWiringPopoverContinuesOnlyItsOwnChoices(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	prepareNamedWiringLED(t, s.service)
+	choice := captureWireChoice(t, s, "wire-from", "V1.positive")
+	completeWireChoice(s, choice)
+	for i, o := range choice.choices.Options {
+		if o.ID == "R1.1" {
+			choice.index = i
+		}
+	}
+	completeWireChoice(s, choice)
+	if s.service.Snapshot().Drawing.From != "R1.1" {
+		t.Fatal("selector did not continue its own accepted choice", s.errorMessage)
+	}
+	agentAction(t, s.service, "wire.terminals.set", workbench.TerminalsParams{From: "D1.anode", To: "R1.2"})
+	before := s.service.Snapshot()
+	completeWireChoice(s, choice)
+	if !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("selector borrowed an agent revision")
 	}
 }

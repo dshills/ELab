@@ -88,7 +88,7 @@ func TestSidePanelSizingClampsDisplayWithoutChangingPreferences(t *testing.T) {
 	for _, total := range []float32{1024, 1264, 1744} {
 		p := workbench.WorkspacePanels{PartsVisible: true, InspectorVisible: true, PartsWidth: 360, InspectorWidth: 560}
 		left, right := sidePanelWidths(total, p)
-		if left < 224 || right < 296 || left+right > total-minimumDrawingWidth-2*sideDividerWidth {
+		if left < workbench.MinPartsPanelWidth || right < workbench.MinInspectorPanelWidth || left+right > total-minimumDrawingWidth-2*sideDividerWidth {
 			t.Fatal("side panels consumed drawing space", total, left, right)
 		}
 		s, cleanup := testScreen(t)

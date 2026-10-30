@@ -29,6 +29,7 @@ func mountedRecordedPlay(t *testing.T, s *screen, focus string) *mountedControlW
 			fields.Children = append(fields.Children, node)
 		}
 		play, _ := findNode(panel, "recorded-play")
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{fields, play}
 		s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
 		return root

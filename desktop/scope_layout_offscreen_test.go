@@ -28,22 +28,17 @@ func TestMountedLiveScopeControlsKeepGeometryAcrossSamples(t *testing.T) {
 				// digit boundaries and transistor regions. No snapshot/model data
 				// is fabricated, and all updates use the public service commands.
 				agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: .001})
-				view := func() ui.Node {
-					root := toolbarPaintView(s)
-					readings, _ := findNode(s.view(), "readings")
-					root.Children = append(root.Children[:len(root.Children)-1], readings, root.Children[len(root.Children)-1])
-					return root
-				}
-				m := newMountedControlWindowSize(t, s, view, 1040, 760, inspectorLayoutTestTheme())
+				s.app.Do(func() {
+					if _, ok := s.reachableAction("cursor-select-a"); !ok {
+						t.Fatal("missing live controls")
+					}
+				})
+				view := func() ui.Node { return toolbarPaintView(s) }
+				m := newMountedControlWindowSize(t, s, view, 1040, 1100, inspectorLayoutTestTheme())
 				ids := []string{"scope-title", "scope-caption", "scope-caption-time", "scope-caption-detail", "scope-visibility", "transient-step", "simulation.restart", "scope-trace-row", "export-csv", "scope-trace-focus", "scope-cursors", "cursor-select-a", "cursor-select-b"}
-				readings, _ := findNode(s.view(), "readings")
-				if len(readings.Children) == 0 {
-					t.Fatal("reading strip has no actual controls")
-				}
-				ids = append(ids, "readings")
-				for _, n := range readings.Children {
-					ids = append(ids, n.ID)
-				}
+				// Contextual readings now live in Inspect and have their own
+				// stationary-reading fixture; the removed strip is not mounted.
+
 				for _, input := range s.service.Snapshot().LiveInputModes {
 					ids = append(ids, "input-"+input)
 				}

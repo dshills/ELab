@@ -49,6 +49,7 @@ func TestMountedTaskGuidanceStaysVisibleWithoutOpeningDetails(t *testing.T) {
 					if !ok || s.requestHelp == nil || action.Text != s.requestHelp.Action {
 						t.Fatal("visible next step differs from shared request help")
 					}
+					root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 					root.Children = []ui.Node{notice}
 					root.Focus = ui.FocusRequest{} // This focused fixture excludes the owner toolbar.
 					return root

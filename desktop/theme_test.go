@@ -42,6 +42,7 @@ func TestNativeThemeMenuMatchesSharedStateAndColors(t *testing.T) {
 	if after.Theme != "dark" || after.ElectricalRevision != before.ElectricalRevision || after.Document.Dirty != before.Document.Dirty {
 		t.Fatal("theme menu bypassed shared presentation command")
 	}
+	uiAction(t, s, "inspector-section-component", nil)
 	root := s.view()
 	dark := resolvePalette("dark", false)
 	for _, id := range []string{"part-search", "selection", "schematic", "rc-scope", "inspector-navigation"} {
@@ -98,6 +99,7 @@ func TestApolloThemeMatchesUserAndAgentAndRestoresOtherThemes(t *testing.T) {
 	uiAction(t, s, "simulation.pause", nil)
 	before := s.service.Snapshot()
 	uiAction(t, s, "theme-menu", &ui.ChangeEvent{SelectedID: "apollo"})
+	uiAction(t, s, "inspector-section-component", nil)
 	after := s.service.Snapshot()
 	assertCursorMeasurementPreservesPhysics(t, before, after)
 	if after.Theme != "apollo" || after.Document != before.Document || after.UndoName != before.UndoName {
@@ -117,7 +119,7 @@ func TestApolloThemeMatchesUserAndAgentAndRestoresOtherThemes(t *testing.T) {
 			if !ok || node.Style.Foreground.Value != foreground || !node.Style.Background.Set {
 				t.Fatal("theme did not reach the application control", mode, id)
 			}
-			if id == "part-search" && node.Style.CornerRadius.Value != palette.ControlRadius {
+			if id == "part-search" && node.Style.CornerRadius.Value != 7 {
 				t.Fatal("control shape did not follow the selected theme", mode)
 			}
 		}

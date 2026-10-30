@@ -10,6 +10,7 @@ void elabRemovePointerMonitor(void);
 import "C"
 
 import (
+	"image"
 	"sync"
 	"sync/atomic"
 
@@ -23,6 +24,8 @@ type pointerFrame struct {
 	view        canvas.Viewport
 	ready       bool
 	pane, token string
+	excluded    [4]image.Rectangle
+	epoch       uint64
 }
 type pointerBridge struct {
 	enabled      atomic.Bool
@@ -55,11 +58,15 @@ func (b *pointerBridge) invalidateFrame() {
 		return
 	}
 	b.mu.Lock()
+	b.frame.epoch++
 	b.frame.ready = false
 	b.active = false
 	b.mu.Unlock()
 }
 func (b *pointerBridge) publish(x, y float64, view canvas.Viewport, pane ...string) {
+	b.publishExcluding(x, y, view, [4]image.Rectangle{}, pane...)
+}
+func (b *pointerBridge) publishExcluding(x, y float64, view canvas.Viewport, excluded [4]image.Rectangle, pane ...string) {
 	if b == nil {
 		return
 	}
@@ -71,7 +78,7 @@ func (b *pointerBridge) publish(x, y float64, view canvas.Viewport, pane ...stri
 	if len(pane) > 1 {
 		token = pane[1]
 	}
-	b.frame = pointerFrame{x: x, y: y, view: view, ready: true, pane: kind, token: token}
+	b.frame = pointerFrame{x: x, y: y, view: view, ready: true, pane: kind, token: token, excluded: excluded, epoch: b.frame.epoch}
 	b.mu.Unlock()
 }
 func (b *pointerBridge) close() {
@@ -97,6 +104,12 @@ func goELabPointer(phase C.int, x, y, scroll C.double) C.int {
 		return 0
 	}
 	inside := px >= frame.x && py >= frame.y && px < frame.x+frame.view.Width && py < frame.y+frame.view.Height
+	for _, rect := range frame.excluded {
+		if image.Pt(int(px), int(py)).In(rect) {
+			inside = false
+			break
+		}
+	}
 	if phase == 4 {
 		if frame.pane != "schematic" {
 			b.mu.Unlock()

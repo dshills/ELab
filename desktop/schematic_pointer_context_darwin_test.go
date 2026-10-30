@@ -4,8 +4,11 @@ package main
 
 import (
 	"fmt"
+	"image"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/vellum/app"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/canvas"
@@ -167,5 +170,45 @@ func TestSweepNativeQueuedReleaseSurvivesOnlyOwnCursorRepaint(t *testing.T) {
 				t.Fatal("own cursor repaint swallowed native release", after.DCSweep.Cursor, s.errorMessage)
 			}
 		})
+	}
+}
+
+func TestNativeFloatingOverlayDoesNotAdmitCanvasMouseDown(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	window, err := s.app.OpenWindow(app.Window{ID: "main", Title: applicationWindowTitle, Width: 800, Height: 500, View: s.view})
+	if err != nil {
+		t.Fatal(err)
+	}
+	delivered := 0
+	b := &pointerBridge{owner: s.app, window: window, route: func(string, int, workbench.Point, workbench.Point) { delivered++ }}
+	b.enabled.Store(true)
+	b.publishExcluding(0, 0, *s.drawing.View, [4]image.Rectangle{image.Rect(30, 400, 330, 450)}, "schematic", "fixture")
+	previous := activePointer.Swap(b)
+	defer activePointer.Store(previous)
+	if handled := goELabPointer(0, 50, 420, 0); handled != 0 {
+		t.Fatal("floating button was intercepted as a canvas mouse down", handled)
+	}
+	s.app.Do(func() {})
+	if delivered != 0 {
+		t.Fatal("floating control routed into the schematic", delivered)
+	}
+}
+
+func TestNativeModalCycleRetiresAnOldPreparedPointer(t *testing.T) {
+	s, cleanup := testScreen(t)
+	defer cleanup()
+	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "place", Kind: "resistor"})
+	prepareSchematicPointer(t, s)
+	b := &pointerBridge{route: s.routeNativePointer}
+	b.enabled.Store(true)
+	b.publish(0, 0, *s.drawing.View, "schematic", s.drawing.pointerToken())
+	old := b.frame
+	b.invalidateFrame()
+	b.publish(0, 0, *s.drawing.View, "schematic", s.drawing.pointerToken())
+	before := s.service.Snapshot()
+	s.app.Do(func() { b.deliver(old, 0, workbench.Point{}, workbench.Point{}) })
+	if !reflect.DeepEqual(before, s.service.Snapshot()) {
+		t.Fatal("old pointer survived a modal open/close cycle with unchanged electrical state")
 	}
 }

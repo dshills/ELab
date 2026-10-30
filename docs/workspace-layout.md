@@ -1,8 +1,8 @@
 # Adjustable schematic and scope workspace
 
-When a live or recorded scope is expanded, drag the divider between the schematic and scope to choose how much space each gets. The default assigns 65% of the central workspace to the schematic. The divider accepts 35–85%, leaving both panes available. With divider focus, Up/Down changes the share by two percentage points and Home/End selects the limits. The accessible divider exposes the same accepted value.
+When a live or recorded scope is expanded, drag the divider between the schematic and scope to choose how much space each gets. The default assigns 70% of the central workspace to the schematic. The divider accepts 35–85%, leaving both panes available. With divider focus, Up/Down changes the share by two percentage points and Home/End selects the limits. The accessible divider exposes the same accepted value.
 
-Scope contents fill the available width and scroll vertically when their controls do not fit. Wheel input over the plot scrolls its containing scope pane; it never zooms the trace. Collapsing the scope removes the divider and keeps the chosen fraction for the next expansion. Print preview and DC sweep hide the source/scope split while retaining its preference.
+Scope contents fill the available width and scroll vertically when their controls do not fit. Wheel input over the plot scrolls its containing scope pane; it never zooms the trace. Collapsing the scope removes the divider and keeps the chosen fraction for the next expansion. Print preview hides the split while retaining its preference. On the experimental Native UI branch, sweeps use a third instrument tab beneath the schematic.
 
 ## Shared command
 
@@ -60,7 +60,7 @@ Panel widths and visibility are shared session state:
 ```
 
 All four parameters are required; widths are finite logical units independent
-of display density. Parts accepts 224–360; Inspector accepts 296–560. The native
+of display density. Parts accepts 224–360; Inspector accepts 280–560. The native
 layout temporarily narrows preferred widths when necessary to leave drawing
 space. Inspect `workspace_panels` for the accepted preferences. Collapse retains
 widths; changing documents retains these session choices. They are not saved in
@@ -145,3 +145,32 @@ The header reports the actual experiment state; paused does not cover up an
 invalid/unsupported circuit. The canvas shows the current actionable guidance;
 **All guidance & technical details** in the inspector retains every issue,
 related object and technical explanation through `diagnostics.details.set`.
+
+
+## Experimental Native UI (`exp-ui`)
+
+This branch follows the reference images in `exp-design`: full-height Parts and
+Inspector rails, a centered document toolbar, floating drawing/zoom controls,
+and Scope/Spectrum/Sweep tabs below the sheet. It remains an experiment and has
+not been merged into main. The original drawing, simulation, file and agent
+commands remain authoritative.
+
+The default Parts/Inspector widths are 240/280 logical units. The Parts toggle
+is at the top of its rail; when closed it moves into the document toolbar. The
+Inspector toggle stays at the toolbar's right edge. Both are named Open/Close in
+accessibility and tooltips. They shift the canvas aside and retain the shared
+resize/drag-to-close commands. The older labelled edge-tab descriptions above
+refer to main's previous presentation.
+
+Connect by name and Sweeps open anchored popovers. Their selectors stay inside
+the popup's native scene; Escape or outside-click dismisses it. Sweep fields
+scroll within a bounded popup. Live instrument settings and cursors remain under
+**Instrument controls & cursors**, which scrolls with the dock. Controls use
+stable slots so availability changes do not move adjacent actions.
+
+Inspect retains selected-object fields, measurements and pinned editors.
+Simulate keeps the existing tool chooser with live settings first. Document
+starts with real local-file storage, Save/Save As and export/print actions;
+advanced display/recovery settings remain under a disclosure. No cloud save or
+URL sharing is implied. See the [implementation notes](../exp-design/implementation-notes.md)
+and [validation record](validation/experimental-native-ui/README.md).

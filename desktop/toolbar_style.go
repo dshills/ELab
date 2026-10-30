@@ -9,13 +9,6 @@ import (
 
 const toolbarHeight float32 = 40
 
-func toolbarDivider(id string) ui.Node {
-	return ui.Node{ID: "toolbar-divider-" + id, Kind: ui.Row, Style: ui.Style{
-		MinSize: ui.Some(ui.Size{Width: 1, Height: 18}), MaxSize: ui.Some(ui.Size{Width: 1, Height: 18}),
-		Padding: ui.Some(ui.UniformInsets(0)),
-	}}
-}
-
 // Apply only to toolbar descendants after palette resolution. Inspector tabs
 // and the drawing-mode group retain their own presentation. Existing control
 // identities, callback captures, enablement and editing state are untouched.

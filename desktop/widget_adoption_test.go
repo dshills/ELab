@@ -158,19 +158,19 @@ func TestWidgetCanvasAppearanceRevisionInvalidatesWithoutModelEdits(t *testing.T
 	}
 }
 
-func TestWidgetOverflowRetainsCommandFreshness(t *testing.T) {
+func TestNativeExamplesMenuRetainsCommandFreshness(t *testing.T) {
 	s, closeScreen := testScreen(t)
 	t.Cleanup(closeScreen)
 	uiAction(t, s, "example.reset", nil)
 	var old ui.Node
-	s.app.Do(func() { old, _ = findNode(s.view(), ui.ToolbarOverflowID("drawing-secondary-actions")) })
+	s.app.Do(func() { old, _ = findNode(s.view(), "examples-menu") })
 	agentAction(t, s.service, "component.select", workbench.IDParams{ID: "R1"})
 	before := s.service.Snapshot()
 	s.app.Do(func() {
 		s.view()
-		old.Change(ui.ChangeEvent{SelectedID: "sweep-open"})
+		old.Change(ui.ChangeEvent{SelectedID: "browse"})
 	})
 	if !reflect.DeepEqual(before, s.service.Snapshot()) {
-		t.Fatal("old overflow choice borrowed a refreshed command context")
+		t.Fatal("old examples menu choice borrowed a refreshed command context")
 	}
 }

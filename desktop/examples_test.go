@@ -83,7 +83,7 @@ func TestManualTransistorExampleMenuAndSwitchMatchAgent(t *testing.T) {
 	}
 	uiAction(t, s, "switch-actuate", nil)
 	uiAction(t, s, "examples-menu", &ui.ChangeEvent{SelectedID: "example.rc"})
-	if s.pendingCommand != "example.rc" || s.service.Snapshot().Example.Info.ID != "switch-npn" {
+	if s.pendingCommand != "example.load" || s.service.Snapshot().Example.Info.ID != "switch-npn" {
 		t.Fatal("replacement loses unsaved manual-switch experiment")
 	}
 	uiAction(t, s, "cancel-file-action", nil)

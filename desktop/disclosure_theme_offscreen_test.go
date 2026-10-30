@@ -7,7 +7,6 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/dshills/elab/workbench"
@@ -39,7 +38,7 @@ func TestMountedInspectorDisclosurePaletteAndSharedExpansion(t *testing.T) {
 			m := newMountedControlWindowSize(t, s, view, 320, 360, theme)
 			headingID := ""
 			for _, element := range m.snapshot().Elements {
-				if element.Kind == ui.Disclosure && strings.HasPrefix(element.Name, "All guidance") && strings.HasPrefix(element.ID, "disclosure:") {
+				if element.Kind == ui.Disclosure && element.Parent == "diagnostic-details" {
 					headingID = element.ID
 				}
 			}

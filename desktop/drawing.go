@@ -3,12 +3,9 @@ package main
 import (
 	"image/color"
 	"math"
-	"strings"
 
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/canvas"
-	"golang.org/x/image/font/basicfont"
-	"golang.org/x/image/math/fixed"
 )
 
 type meshBuilder struct {
@@ -41,25 +38,22 @@ func (b *meshBuilder) text(x, y float64, text string, c color.NRGBA) {
 	b.textAtScale(x, y, text, c, 1.25)
 }
 func (b *meshBuilder) textAtScale(x, y float64, text string, c color.NRGBA, scale float64) {
-	// Tessellate the bundled bitmap font into retained geometry. Labels follow the
-	// same world transform as symbols and need no per-frame CPU image readback.
-	text = strings.ReplaceAll(text, "Ω", "ohm")
-	text = strings.ReplaceAll(text, "·", "|")
+	// Retain antialiased outline-font coverage in geometry. No OS font lookup
+	// or image readback is needed while live traces update.
 	for _, r := range text {
-		rect, mask, origin, advance, ok := basicfont.Face7x13.Glyph(fixed.P(0, 0), r)
-		if !ok {
-			r = '?'
-			rect, mask, origin, advance, _ = basicfont.Face7x13.Glyph(fixed.P(0, 0), r)
-		}
-		for py := rect.Min.Y; py < rect.Max.Y; py++ {
-			for px := rect.Min.X; px < rect.Max.X; px++ {
-				_, _, _, alpha := mask.At(origin.X+px-rect.Min.X, origin.Y+py-rect.Min.Y).RGBA()
-				if alpha > 0 {
-					b.quad(x+float64(px)*scale, y+float64(py)*scale, scale, scale, c)
+		glyph := nativeCanvasGlyph()(r)
+		for py := glyph.bounds.Min.Y; py < glyph.bounds.Max.Y; py++ {
+			for px := glyph.bounds.Min.X; px < glyph.bounds.Max.X; px++ {
+				alpha := glyph.alpha[(py-glyph.bounds.Min.Y)*glyph.bounds.Dx()+px-glyph.bounds.Min.X]
+				if alpha == 0 {
+					continue
 				}
+				ink := c
+				ink.A = uint8(uint32(c.A) * uint32(alpha) / 255)
+				b.quad(x+float64(px)*scale, y+float64(py)*scale, scale, scale, ink)
 			}
 		}
-		x += float64(advance) / 64 * scale
+		x += glyph.advance * scale
 	}
 }
 func schematic(state workbench.Snapshot, view canvas.Viewport, phase float64) (*canvas.Mesh, error) {
@@ -73,10 +67,10 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 		annotated[a.ID] = true
 	}
 	ink, muted, accent := palette.Ink, palette.Muted, palette.Accent
-	wireColor := traceColor(color.NRGBA{R: 56, G: 125, B: 147, A: 255}, palette)
+	wireColor := palette.Ink
 	grid := palette.Grid
-	selectedColor := color.NRGBA{R: 40, G: 158, B: 180, A: 255}
-	pendingColor := color.NRGBA{R: 212, G: 138, B: 28, A: 255}
+	selectedColor := palette.Accent
+	pendingColor := palette.Accent
 	proposed := map[string]bool{}
 	if state.Proposal != nil && !state.Proposal.Stale {
 		for _, change := range state.Proposal.Preview.Changes {
@@ -134,7 +128,7 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 	connectionCount := map[string]int{}
 	for _, w := range state.Wires {
 		c := wireColor
-		if reading, ok := wireDisplays[w.ID]; ok {
+		if reading, ok := wireDisplays[w.ID]; ok && state.Display.Preferences.VoltageColor {
 			c = displayColor(reading.Color)
 		}
 		width := 2.5
@@ -282,6 +276,9 @@ func schematicWithPalette(state workbench.Snapshot, view canvas.Viewport, phase 
 		b.stroke(c, 1.5, canvas.Point{X: min.X, Y: min.Y}, canvas.Point{X: max.X, Y: min.Y}, canvas.Point{X: max.X, Y: max.Y}, canvas.Point{X: min.X, Y: max.Y}, canvas.Point{X: min.X, Y: min.Y})
 		b.text(min.X+12, min.Y+23, reading.Display, c)
 		b.text(min.X+12, min.Y+43, reading.ReferenceDisplay, c)
+	}
+	for _, pill := range nativeProbePills(state, view, palette) {
+		b.nativePill(pill, view)
 	}
 	if len(state.Components) == 0 {
 		b.text(view.Center.X-150, view.Center.Y, "Choose a part and click to place it", ink)

@@ -25,8 +25,28 @@ func (s *screen) instrumentPanel(state workbench.Snapshot, width float32) ui.Nod
 		if view == "spectrum" {
 			label = "Spectrum"
 		}
-		action := buttonStyle(s.action("scope-view-"+view, label, "scope.view.set", workbench.ScopeViewParams{View: view}), state.ScopeView == view)
-		tabs = append(tabs, inspectorTabCell(action, "plot-"+view, state.ScopeView == view))
+		action := buttonStyle(s.action("scope-view-"+view, label, "scope.view.set", workbench.ScopeViewParams{View: view}), state.ScopeView == view && !sweepVisible(state))
+		if state.DCSweep != nil && state.DCSweep.Visible {
+			selectedView := view
+			action.Activate = func() {
+				r := s.invokeAtCommandRevision("scope.view.set", workbench.ScopeViewParams{View: selectedView}, state.CommandRevision, state.Document.Generation)
+				if r.Error == nil {
+					accepted, ok := r.Result.(workbench.Snapshot)
+					if ok {
+						s.invokeAtCommandRevision("sweep.visibility.set", workbench.SweepVisibilityParams{Visible: false}, accepted.CommandRevision, accepted.Document.Generation)
+					}
+				}
+			}
+		}
+		tabs = append(tabs, inspectorTabCell(action, "plot-"+view, state.ScopeView == view && !sweepVisible(state)))
+	}
+	if state.DCSweep != nil && (state.DCSweep.Visible || len(state.DCSweep.Operations) > 0) {
+		tab := buttonStyle(s.action("scope-view-sweep", "Sweep", "sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}), state.DCSweep.Visible)
+		tab.Activate = func() {
+			s.invokeAtCommandRevision("sweep.visibility.set", workbench.SweepVisibilityParams{Visible: true}, state.CommandRevision, state.Document.Generation)
+			s.nativeSweepOpen = false
+		}
+		tabs = append(tabs, inspectorTabCell(tab, "plot-sweep", state.DCSweep.Visible))
 	}
 	body := s.collapsedScope(state)
 	if state.ScopeVisible {
@@ -35,6 +55,13 @@ func (s *screen) instrumentPanel(state workbench.Snapshot, width float32) ui.Nod
 			body = s.spectrumPanel(state)
 		}
 	}
+	if state.DCSweep != nil && state.DCSweep.Visible && state.ScopeVisible {
+		body = ui.Node{ID: "native-sweep-panel", Kind: ui.Column, Grow: true, Children: s.sweepPanel(state)}
+	}
+	body, dockActions := s.nativeInstrumentBody(state, body, width)
+	tabs = []ui.Node{{ID: "native-instrument-segments", Kind: ui.Row, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(2)), Gap: ui.Some(float32(0)), CornerRadius: ui.Some(float32(7)), Background: ui.Some(nativeSegmentToken)}, Children: tabs}}
+	tabs = append(tabs, nativeSpace("native-dock-space"))
+	tabs = append(tabs, dockActions...)
 	// The Spectrum settings can be wider than a compact viewport. Bound the
 	// explanation to the actual dock width before shaping text; text-only Scope
 	// must also not shrink to the longest word's intrinsic width.
@@ -44,7 +71,7 @@ func (s *screen) instrumentPanel(state workbench.Snapshot, width float32) ui.Nod
 		}
 	}
 	return ui.Node{ID: "instrument-panel", Kind: ui.Column, Grow: state.ScopeVisible, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: []ui.Node{
-		{ID: "instrument-tabs", Kind: ui.Row, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 36}), MaxSize: ui.Some(ui.Size{Height: 36}), Padding: ui.Some(ui.Insets{Left: 10}), Gap: ui.Some(float32(4))}, Accessibility: ui.Accessibility{Name: "Signal display"}, Children: tabs}, body,
+		{ID: "instrument-tabs", Kind: ui.Toolbar, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 36}), MaxSize: ui.Some(ui.Size{Height: 36}), Padding: ui.Some(ui.Insets{Left: 10}), Gap: ui.Some(float32(4))}, Accessibility: ui.Accessibility{Name: "Signal display"}, Children: tabs}, body,
 	}}
 }
 func spectrumFixed(n ui.Node, width, height float32) ui.Node {

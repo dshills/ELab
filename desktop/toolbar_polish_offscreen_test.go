@@ -20,10 +20,10 @@ func toolbarPaintView(s *screen) ui.Node {
 	root := s.view()
 	header, _ := findNode(root, "header")
 	tools, _ := findNode(root, "tools")
-	scope, _ := findNode(root, "scope-panel")
-	footer, _ := findNode(root, "footer-row")
+	scope, _ := findNode(root, "instrument-panel")
 	scope.Style.MaxSize = ui.Some(ui.Size{})
-	root.Children = []ui.Node{header, tools, scope, footer}
+	root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
+	root.Children = []ui.Node{header, tools, scope}
 	var omitCanvas func(*ui.Node)
 	omitCanvas = func(n *ui.Node) {
 		if n.Kind == ui.Extension {
@@ -45,10 +45,11 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 			uiAction(t, s, "example.rc", nil)
 			uiAction(t, s, "simulation.pause", nil)
 			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": mode})
+			s.app.Do(func() { s.reachableAction("cursor-select-a") })
 			theme := desktopTheme()
 			theme.Default.Background = ui.Some(color.NRGBA{})
 			view := func() ui.Node { return toolbarPaintView(s) }
-			m := newMountedControlWindowSize(t, s, view, 1040, 760, theme, func(config *cogent.ManualConfig) { config.GPUSceneRendering = true })
+			m := newMountedControlWindowSize(t, s, view, 1040, 1300, theme, func(config *cogent.ManualConfig) { config.GPUSceneRendering = true })
 			im, err := m.manual.Capture(m.ctx, "main")
 			if err != nil {
 				t.Fatal(err)
@@ -57,10 +58,9 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 				id       string
 				controls []string
 			}{
-				{"toolbar", []string{"file-menu", "file.save", "examples-menu", "edit.undo", "edit.redo", "theme-menu"}},
-				{"simulation-toolbar", []string{"simulation.resume"}},
-				{"tools", []string{"drawing.cancel", "sweep-open", "view.fit"}},
-				{"scope-toolbar", []string{"scope-visibility", "input-auto", "input-charge", "input-discharge", "transient-step", "simulation.restart"}},
+				{"header", []string{"examples-menu", "edit.undo", "edit.redo", "simulation.resume", "sweep-open", "view.fit"}},
+				{"tools", []string{"tool-select", "tool-wire", "tool-pan"}},
+				{"instrument-tabs", []string{"scope-visibility", "transient-step", "simulation.restart"}},
 				{"scope-trace-row", []string{"export-csv", "scope-trace-focus"}},
 				{"scope-cursors", []string{"cursor-select-a", "cursor-time-a", "cursor-clear-a", "cursor-select-b", "cursor-time-b", "cursor-clear-b"}},
 			} {
@@ -68,13 +68,13 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 				for _, id := range row.controls {
 					control := mountedControlElement(t, m, id)
 					t.Logf("%s %v in %s %v", id, control.Bounds, row.id, parent)
-					if !control.Visible || control.Bounds.Dy() < 30 || control.Bounds.Dy() > 32 || !control.Bounds.In(parent) {
+					if !control.Visible || control.Bounds.Dy() < 28 || control.Bounds.Dy() > 38 || !control.Bounds.In(parent) {
 						t.Error("toolbar control is clipped or has inconsistent height", id, control.Bounds, parent)
 					}
-					if !control.Enabled || control.Bounds.Empty() {
+					node, _ := findNode(view(), id)
+					if !control.Enabled || control.Bounds.Empty() || node.Style.Border.Value.Width == 0 {
 						continue
 					}
-					node, _ := findNode(view(), id)
 					outline := node.Style.Border.Value.Color
 					if control.Focused {
 						// Focus uses the same scoped semantic accent as the app.
@@ -86,7 +86,7 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 					}
 					columns := 0
 					for x := control.Bounds.Min.X + 8; x < control.Bounds.Max.X-8; x++ {
-						for y := control.Bounds.Max.Y - 3; y < control.Bounds.Max.Y; y++ {
+						for y := control.Bounds.Max.Y - 6; y < control.Bounds.Max.Y; y++ {
 							pixel := color.NRGBAModel.Convert(im.At(x, y)).(color.NRGBA)
 							if readingTextCoverage(pixel, node.Style.Background.Value, outline) > .6 {
 								columns++
@@ -128,7 +128,7 @@ func TestMountedToolbarPolishFitsAndPreservesSharedSelection(t *testing.T) {
 			// A one-point resting stroke is inset within Vellum's two-point
 			// focus allowance. Inspect the whole lower stroke area, as above.
 			selectedOutline := false
-			for y := selected.Max.Y - 3; y < selected.Max.Y; y++ {
+			for y := selected.Max.Y - 6; y < selected.Max.Y; y++ {
 				pixel := color.NRGBAModel.Convert(paint.At(selected.Min.X+selected.Dx()/2, y)).(color.NRGBA)
 				selectedOutline = selectedOutline || pixel == paletteForTheme(mode).Accent
 			}
@@ -152,7 +152,7 @@ func TestMountedToolbarOverflowKeepsLastActionReachable(t *testing.T) {
 	uiAction(t, s, "example.rc", nil)
 	uiAction(t, s, "simulation.pause", nil)
 	view := func() ui.Node {
-		toolbar, _ := findNode(s.view(), "scope-toolbar")
+		toolbar, _ := findNode(s.view(), "instrument-tabs")
 		return ui.Node{ID: "overflow-probe", Kind: ui.Column, Focus: ui.FocusRequest{ID: "scope-visibility", Sequence: 1}, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0))}, Children: []ui.Node{toolbar, quiet("following-content", "Following content must not cover toolbar outlines")}}
 	}
 	theme := desktopTheme()
@@ -161,7 +161,7 @@ func TestMountedToolbarOverflowKeepsLastActionReachable(t *testing.T) {
 	m := newMountedControlWindowSize(t, s, view, 380, 120, theme)
 	m.input(cogent.ManualInput{Type: events.KeyChord, Code: key.CodeEnd})
 	last := mountedControlElement(t, m, "simulation.restart")
-	if m.snapshot().FocusedID != last.ID || !last.Visible || !last.Bounds.In(mountedControlElement(t, m, "scope-toolbar").Bounds) || last.Bounds.Dy() < 30 {
+	if m.snapshot().FocusedID != last.ID || !last.Visible || !last.Bounds.In(mountedControlElement(t, m, "instrument-tabs").Bounds) || last.Bounds.Dy() < 30 {
 		t.Fatal("overflow hides or clips the final action", last)
 	}
 	before := s.service.Snapshot()

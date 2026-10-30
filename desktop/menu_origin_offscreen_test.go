@@ -24,6 +24,7 @@ func mountedExampleCategory(t *testing.T, s *screen) *mountedControlWindow {
 		root := s.view()
 		n, ok := findNode(root, "example-category")
 		if !ok && !s.service.Snapshot().ExampleBrowser.Visible {
+			root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 			root.Children = []ui.Node{{ID: "closed-browser", Kind: ui.Label, Text: "Examples closed"}}
 			root.Focus = ui.FocusRequest{}
 			return root
@@ -31,6 +32,7 @@ func mountedExampleCategory(t *testing.T, s *screen) *mountedControlWindow {
 		if !ok || n.Kind != ui.Selector {
 			t.Fatal("assembled browser lost its managed selector")
 		}
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{n}
 		if root.Focus.ID != n.ID {
 			root.Focus = ui.FocusRequest{}
@@ -151,7 +153,7 @@ func TestMountedHeldExampleCategoryRetainsAgentSearch(t *testing.T) {
 	}
 }
 
-func TestMountedQueuedOverflowRetainsAgentViewport(t *testing.T) {
+func TestMountedQueuedNativeFitRetainsAgentViewport(t *testing.T) {
 	s, cleanup := testScreen(t)
 	defer cleanup()
 	agentAction(t, s.service, "example.reset", workbench.ReplaceParams{})
@@ -159,19 +161,15 @@ func TestMountedQueuedOverflowRetainsAgentViewport(t *testing.T) {
 	agentAction(t, s.service, "view.pan", map[string]float64{"dx": 20, "dy": 0})
 	m := newMountedControlWindowSize(t, s, func() ui.Node {
 		root := s.view()
-		bar, ok := findNode(root, "drawing-secondary-actions")
+		bar, ok := findNode(root, "header")
 		if !ok {
-			t.Fatal("missing assembled secondary toolbar")
+			t.Fatal("missing assembled native toolbar")
 		}
-		bar.Style.MinSize = ui.Some(ui.Size{Width: 80, Height: 30})
-		bar.Style.MaxSize = bar.Style.MinSize
-		bar.Style.GrowX = ui.Some(float32(0))
+		root.Kind = ui.Column
 		root.Children, root.Focus = []ui.Node{bar}, ui.FocusRequest{}
 		return root
-	}, 320, 180, inspectorLayoutTestTheme())
-	more := ui.ToolbarOverflowID("drawing-secondary-actions")
-	clickMountedControl(t, m, more)
-	item := mountedMenuItem(t, m, more, "view.fit")
+	}, 1040, 180, inspectorLayoutTestTheme())
+	item := mountedControlElement(t, m, "view.fit")
 	at := item.Bounds.Min.Add(item.Bounds.Size().Div(2))
 	m.input(cogent.ManualInput{Type: events.MouseDown, Button: events.Left, Position: at})
 	before := s.service.Snapshot()
@@ -192,11 +190,9 @@ func TestMountedQueuedOverflowRetainsAgentViewport(t *testing.T) {
 	}
 	m.settle()
 	if !reflect.DeepEqual(agent, s.service.Snapshot()) {
-		t.Fatal("old overflow Fit overwrote agent viewport")
+		t.Fatal("old native Fit overwrote agent viewport")
 	}
-	clickMountedControl(t, m, more)
-	item = mountedMenuItem(t, m, more, "view.fit")
-	clickMountedControl(t, m, item.ID)
+	clickMountedControl(t, m, "view.fit")
 	fresh := s.service.Snapshot()
 	if !fresh.Viewport.Following || fresh.CommandRevision != agent.CommandRevision+1 || fresh.LastActor != "user" || !reflect.DeepEqual(agent.Components, fresh.Components) || !reflect.DeepEqual(agent.Result, fresh.Result) {
 		t.Fatal("fresh Fit did not resume the shared viewport command")

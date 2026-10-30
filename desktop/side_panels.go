@@ -21,7 +21,7 @@ const minimumDrawingWidth float32 = 400
 func (s *screen) workspaceWidth() float32 {
 	if s.drawing != nil && s.drawing.widget != nil {
 		for p := s.drawing.widget.Parent; p != nil; p = p.AsTree().Parent {
-			if p.AsTree().Name != "workspace" {
+			if p.AsTree().Name != "workspace" && p.AsTree().Name != "root" {
 				continue
 			}
 			if widget, ok := p.(core.Widget); ok {
@@ -33,7 +33,7 @@ func (s *screen) workspaceWidth() float32 {
 			}
 		}
 	}
-	return minimumWindowWidthDP - 16
+	return 1440
 }
 
 // Clamp the displayed widths, not the stored preference. Re-expanding a panel
@@ -62,8 +62,6 @@ func (s *screen) panelToggle(state workbench.Snapshot, inspector bool) ui.Node {
 	id, text, visible := "parts-toggle", "Parts", p.PartsVisible
 	if previewVisible(state) {
 		text = "Print"
-	} else if sweepVisible(state) {
-		text = "Sweep"
 	}
 	if inspector {
 		id, text, visible = "inspector-toggle", "Inspector", p.InspectorVisible
@@ -100,8 +98,6 @@ func (s *screen) panelToggle(state workbench.Snapshot, inspector bool) ui.Node {
 					target = "part-search"
 					if previewVisible(state) {
 						target = "printer-destination"
-					} else if sweepVisible(state) {
-						target = "sweep-target"
 					}
 				}
 			}

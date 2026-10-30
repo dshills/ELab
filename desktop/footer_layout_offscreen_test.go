@@ -15,7 +15,7 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
-func TestMountedFooterFitsOneLineWithLongDocumentName(t *testing.T) {
+func TestMountedSidebarFooterFitsOneLineWithLongDocumentName(t *testing.T) {
 	for _, mode := range []string{"light", "dark", "apollo"} {
 		for _, width := range []int{1040, 1440} {
 			t.Run(fmt.Sprintf("%s/%d", mode, width), func(t *testing.T) {
@@ -32,16 +32,17 @@ func TestMountedFooterFitsOneLineWithLongDocumentName(t *testing.T) {
 				// driver deliberately excludes ELab's custom schematic extension.
 				view := func() ui.Node {
 					root := s.view()
-					footer, ok := findNode(root, "footer-row")
+					footer, ok := findNode(root, "native-parts-footer")
 					if !ok {
-						t.Fatal("missing production footer")
+						t.Fatal("missing production sidebar footer")
 					}
-					root.Children = []ui.Node{{ID: "workspace-space", Kind: ui.Column, Grow: true}, footer}
+					root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
+					root.Children = []ui.Node{footer}
 					return root
 				}
-				m := newMountedControlWindowSize(t, s, view, float32(width), 120, theme)
+				m := newMountedControlWindowSize(t, s, view, 240, 120, theme)
 				bounds := mountedControlElement(t, m, "footer").Bounds
-				row := mountedControlElement(t, m, "footer-row").Bounds
+				row := mountedControlElement(t, m, "native-parts-footer").Bounds
 				t.Logf("footer label=%v row=%v", bounds, row)
 				if bounds.Empty() || bounds.Dy() > 20 || !bounds.In(row) {
 					t.Error("footer text wraps or paints outside its allocated row")

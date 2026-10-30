@@ -101,8 +101,8 @@ func TestNativePrintPreviewUsesSharedCommandsAndProtectsHiddenCanvas(t *testing.
 		if _, ok := findAction(root, "scope-panel"); !ok {
 			t.Fatal("back did not restore scope")
 		}
-		if _, ok := findAction(root, "readings"); !ok {
-			t.Fatal("back did not restore readings")
+		if _, ok := findAction(root, "inspector-rail"); !ok {
+			t.Fatal("back did not restore measurement inspector")
 		}
 		if s.previewPixels.image != nil {
 			t.Fatal("closed pixels retained")

@@ -186,6 +186,7 @@ func TestMountedMaximumPanelPreferencesKeepToolsAndBothGripsUsable(t *testing.T)
 	defer cleanup()
 	p := workbench.WorkspacePanels{PartsVisible: true, InspectorVisible: true, PartsWidth: 360, InspectorWidth: 560}
 	agentAction(t, s.service, "workspace.panels.set", p)
+	agentAction(t, s.service, "drawing.tool.set", workbench.ToolParams{Tool: "wire"})
 	m := newMountedControlWindowSize(t, s, func() ui.Node { return sidePanelPaintView(s, 1040) }, 1040, 800, inspectorLayoutTestTheme())
 	if s.service.Snapshot().WorkspacePanels != p {
 		t.Fatal("native allocation overwrote preferred widths")
@@ -197,9 +198,12 @@ func TestMountedMaximumPanelPreferencesKeepToolsAndBothGripsUsable(t *testing.T)
 			t.Fatal("maximum side panels clip drawing action", id, control.Bounds, sheet)
 		}
 	}
-	overflow := mountedControlElement(t, m, ui.ToolbarOverflowID("drawing-secondary-actions"))
-	if !overflow.Visible || !overflow.Bounds.In(sheet) {
-		t.Fatal("secondary actions have no visible overflow route", overflow.Bounds, sheet)
+	header := mountedControlElement(t, m, "header").Bounds
+	for _, id := range []string{"sweep-open", "view.fit"} {
+		e := mountedControlElement(t, m, id)
+		if !e.Visible || !e.Bounds.In(header) {
+			t.Fatal("native toolbar action clipped", id, e.Bounds, header)
+		}
 	}
 	// The inspector is already at its minimum displayed width. Its grip must
 	// still grow it by taking available space from the opposite panel.
@@ -214,7 +218,7 @@ func TestMountedMaximumPanelPreferencesKeepToolsAndBothGripsUsable(t *testing.T)
 		t.Fatal("constrained inspector could not grow", original, width, s.errorMessage)
 	}
 	sheet = mountedControlElement(t, m, "schematic-panel").Bounds
-	for _, id := range []string{"tool-select", "tool-wire", "tool-pan", "drawing.cancel", ui.ToolbarOverflowID("drawing-secondary-actions")} {
+	for _, id := range []string{"tool-select", "tool-wire", "tool-pan", "drawing.cancel"} {
 		control := mountedControlElement(t, m, id)
 		if !control.Visible || !control.Bounds.In(sheet) {
 			t.Fatal("resize clipped drawing action", id, control.Bounds, sheet)

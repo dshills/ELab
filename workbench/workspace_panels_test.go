@@ -32,7 +32,7 @@ func TestWorkspacePanelsAndToolsPreserveCircuitAndResults(t *testing.T) {
 func TestWorkspacePanelsAndToolsInvalidRequestsAreAtomic(t *testing.T) {
 	s := New()
 	defer s.Close()
-	for _, p := range []any{map[string]any{}, map[string]any{"parts_visible": false}, WorkspacePanels{true, true, 223, 296}, WorkspacePanels{true, true, 361, 296}, WorkspacePanels{true, true, 224, 295}, WorkspacePanels{true, true, 224, 561}, map[string]any{"parts_visible": nil, "inspector_visible": true, "parts_width": 224, "inspector_width": 296}, map[string]any{"parts_visible": true, "inspector_visible": true, "parts_width": 224, "inspector_width": 296, "extra": true}} {
+	for _, p := range []any{map[string]any{}, map[string]any{"parts_visible": false}, WorkspacePanels{true, true, 223, 296}, WorkspacePanels{true, true, 361, 296}, WorkspacePanels{true, true, 224, MinInspectorPanelWidth - 1}, WorkspacePanels{true, true, 224, 561}, map[string]any{"parts_visible": nil, "inspector_visible": true, "parts_width": 224, "inspector_width": 296}, map[string]any{"parts_visible": true, "inspector_visible": true, "parts_width": 224, "inspector_width": 296, "extra": true}} {
 		before := s.Snapshot()
 		refuse(t, s, "workspace.panels.set", p, "invalid-params")
 		if !reflect.DeepEqual(before, s.Snapshot()) {

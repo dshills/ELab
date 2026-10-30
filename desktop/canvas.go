@@ -56,6 +56,10 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		}
 	})
 	w.OnFirst(events.Scroll, func(e events.Event) {
+		if nativeSheetOverlayHit(w, e.Pos()) {
+			e.SetHandled()
+			return
+		}
 		if scroll, ok := e.(*events.MouseScroll); ok {
 			context := c.pointerContext.Load()
 			withWindowOwner(c.Owner, window, func() {
@@ -69,6 +73,11 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		}
 	})
 	w.OnFirst(events.MouseDown, func(e events.Event) {
+		if nativeSheetOverlayHit(w, e.Pos()) {
+			c.pointerGesture = nil
+			e.SetHandled()
+			return
+		}
 		context := c.pointerContext.Load()
 		withWindowOwner(c.Owner, window, func() {
 			if e.MouseButton() != events.Left {
@@ -80,6 +89,9 @@ func (c *commandCanvas) Mount(parent tree.Node) core.Widget {
 		e.SetHandled()
 	})
 	w.OnFirst(events.MouseMove, func(e events.Event) {
+		if nativeSheetOverlayHit(w, e.Pos()) {
+			return
+		}
 		context := c.pointerContext.Load()
 		withWindowOwner(c.Owner, window, func() { c.previewPointer(context, c.world(e, w)) })
 	})
@@ -260,7 +272,7 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 			origin.X += float32(w.Scene.SceneGeom.Pos.X)
 			origin.Y += float32(w.Scene.SceneGeom.Pos.Y)
 		}
-		s.drawing.pointer.publish(float64(origin.X), float64(origin.Y), v, "schematic", s.drawing.pointerToken())
+		s.drawing.pointer.publishExcluding(float64(origin.X), float64(origin.Y), v, nativeSheetExclusions(w), "schematic", s.drawing.pointerToken())
 	}
 	if s.drawing != nil && s.drawing.dragging && s.drawing.dragGeneration == state.Document.Generation {
 		for i, reading := range state.PinnedReadings {

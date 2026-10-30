@@ -48,19 +48,19 @@ func scopeProbeColors(traces []workbench.ScopeTrace) []string {
 func probeColor(name string) color.NRGBA {
 	switch name {
 	case "Coral":
-		return color.NRGBA{R: 220, G: 85, B: 75, A: 255}
+		return color.NRGBA{R: 224, G: 83, B: 58, A: 255}
 	case "Rose":
 		return color.NRGBA{R: 184, G: 56, B: 118, A: 255}
 	case "Purple":
 		return color.NRGBA{R: 126, G: 94, B: 180, A: 255}
 	case "Amber":
-		return color.NRGBA{R: 201, G: 137, B: 36, A: 255}
+		return color.NRGBA{R: 217, G: 139, B: 0, A: 255}
 	case "Blue":
 		return color.NRGBA{R: 67, G: 118, B: 201, A: 255}
 	default:
 		// Measurement colors retain their named identities independently of
 		// the interface selection accent.
-		return color.NRGBA{R: 18, G: 117, B: 113, A: 255}
+		return color.NRGBA{R: 30, G: 138, B: 122, A: 255}
 	}
 }
 func (s *screen) probeInspector(state workbench.Snapshot) []ui.Node {

@@ -17,6 +17,11 @@ func scopeContextRC(t *testing.T) (*screen, func()) {
 	agentAction(t, s.service, "simulation.restart", struct{}{})
 	agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: .02})
 	s.app.Do(func() {
+		// Cursor/context fixtures begin with their real instrument controls open,
+		// before any admitted input origin or revision is captured.
+		if _, ok := s.reachableAction("cursor-time-a"); !ok {
+			t.Fatal("missing live cursor controls")
+		}
 		if _, err := s.scopeMesh(*s.scope.View); err != nil {
 			t.Fatal(err)
 		}

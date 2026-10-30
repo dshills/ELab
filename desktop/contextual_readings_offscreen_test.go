@@ -20,17 +20,18 @@ func TestMountedContextReadingsStayStationaryAsCircuitAdvances(t *testing.T) {
 			agentAction(t, s.service, "appearance.theme.set", map[string]string{"theme": theme})
 			m := newMountedControlWindowSize(t, s, func() ui.Node {
 				root := s.view()
-				row, _ := findNode(root, "readings")
+				row, _ := findNode(root, "inspector-group-measurements")
+				root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 				root.Children = []ui.Node{row}
 				return root
-			}, 900, 64, inspectorLayoutTestTheme())
-			id := "context-reading-v:C1.1-value"
+			}, 280, 500, inspectorLayoutTestTheme())
+			id := "measurement-value-v:C1.1"
 			before := mountedControlElement(t, m, id)
 			for range 3 {
 				agentAction(t, s.service, "simulation.step", workbench.StepParams{Duration: .001})
 				m.frame()
 				after := mountedControlElement(t, m, id)
-				if !after.Visible || after.Bounds != before.Bounds || after.Bounds.Max.Y > 64 {
+				if !after.Visible || after.Bounds != before.Bounds || after.Bounds.Max.Y > 500 {
 					t.Fatal("live digits move their control", before.Bounds, after.Bounds)
 				}
 			}

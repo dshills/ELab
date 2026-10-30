@@ -24,6 +24,8 @@ import (
 	"github.com/dshills/vellum/ui"
 )
 
+var applicationWindowTitle = "ELab · Live electronics"
+
 func main() {
 	if err := runNative(); err != nil {
 		log.Print(err)
@@ -98,7 +100,7 @@ func runNative() (runErr error) {
 	scopeView := canvas.Viewport{Width: 800, Height: 120, Zoom: 1}
 	screen.scope = &scopeCanvas{MeshCanvas: &cogent.MeshCanvas{Owner: a, Window: "main", View: &scopeView, Prepare: screen.scopeMesh, OnError: func(err error) { log.Print("scope: ", err) }}, screen: screen}
 	screen.registerCommands()
-	width, height := float32(minimumWindowWidthDP), float32(initialWindowHeightDP)
+	width, height := float32(1440), float32(900)
 	if *smoke {
 		// The full pixel-inspection fixture includes two distant reading cards.
 		// Compact-window layout is inspected separately in the UI audit.
@@ -106,7 +108,7 @@ func runNative() (runErr error) {
 	}
 	// Keep the system title bar outside the editor content so macOS owns window
 	// dragging, double-click behavior and the standard window controls.
-	screen.window, err = a.OpenWindow(app.Window{ID: "main", Title: "ELab · Live electronics", Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
+	screen.window, err = a.OpenWindow(app.Window{ID: "main", Title: applicationWindowTitle, Width: width, Height: height, View: screen.view, CloseRequest: screen.requestClose})
 	if err != nil {
 		return err
 	}
@@ -204,6 +206,7 @@ func runNative() (runErr error) {
 }
 
 type screen struct {
+	nativeConnectOpen, nativeSweepOpen                   bool
 	blockForm                                            [7]string
 	blockFormReady                                       bool
 	spectrumDrawing                                      *spectrumCanvas

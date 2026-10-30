@@ -25,6 +25,7 @@ func mountedUsabilityInspector(t *testing.T, s *screen, height float32) *mounted
 		if !ok {
 			t.Fatal("missing production inspector")
 		}
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{rail}
 		return root // Preserve the production theme, including Apollo's real mono font.
 	}
@@ -214,6 +215,7 @@ func assertMountedInspectorCaptions(t *testing.T, s *screen, face font.Face, sou
 		if len(boxes) == 0 {
 			t.Fatal("fixture has no checkboxes")
 		}
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{panel("caption-test-rail", 280, boxes...)}
 		return root
 	}

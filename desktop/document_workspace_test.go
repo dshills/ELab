@@ -55,13 +55,12 @@ func TestInspectorPagesMatchAgentAndKeepControlsReachable(t *testing.T) {
 		t.Helper()
 		palette := paletteForTheme(state.Theme)
 		for _, section := range []string{"component", "simulation", "document"} {
-			labelColor, indicatorColor := palette.Muted, palette.Grid
+			foreground, background := palette.Muted, nativeSegmentColor(palette)
 			if section == state.InspectorSection {
-				labelColor, indicatorColor = palette.Accent, palette.Accent
+				foreground, background = palette.Ink, palette.Paper
 			}
-			tab, tabOK := findNode(root, "inspector-section-"+section)
-			indicator, indicatorOK := findNode(root, "inspector-tab-indicator-"+section)
-			if !tabOK || !indicatorOK || tab.Style.Foreground.Value != labelColor || indicator.Style.Background.Value != indicatorColor {
+			tab, ok := findNode(root, "inspector-section-"+section)
+			if !ok || tab.Style.Foreground.Value != foreground || tab.Style.Background.Value != background {
 				t.Fatal("tab selection differs from shared state", section, state.InspectorSection)
 			}
 		}
@@ -75,7 +74,7 @@ func TestInspectorPagesMatchAgentAndKeepControlsReachable(t *testing.T) {
 		}
 		root := s.view()
 		assertSelection(root, after)
-		target := map[string]string{"component": "workspace-details-selection", "simulation": "setting-step", "document": "pdf-paper"}[section]
+		target := map[string]string{"component": "workspace-details-selection", "simulation": "setting-step", "document": "workspace-details-native-document"}[section]
 		if _, ok := ui.FocusTarget(root, target); !ok {
 			t.Fatal("selected inspector control is unreachable", section, target)
 		}

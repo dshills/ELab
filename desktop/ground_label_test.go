@@ -30,7 +30,7 @@ func TestNativeGroundCaptionUsesSharedAnchorAtEveryRotation(t *testing.T) {
 					ink, count := paletteForTheme(s.service.Snapshot().Theme).Ink, 0
 					for _, vertex := range mesh.Vertices() {
 						p := vertex.Position
-						if vertex.Color == ink && p.X >= at.X && p.X <= at.X+float64(len(id))*8.75+2 && p.Y >= at.Y-18 && p.Y <= at.Y+5 {
+						if vertex.Color.R == ink.R && vertex.Color.G == ink.G && vertex.Color.B == ink.B && vertex.Color.A > 96 && p.X >= at.X && p.X <= at.X+float64(len(id))*8.75+2 && p.Y >= at.Y-18 && p.Y <= at.Y+5 {
 							count++
 						}
 					}

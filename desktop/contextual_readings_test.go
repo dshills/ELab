@@ -37,7 +37,7 @@ func TestContextReadingsFollowTargetWithoutInventedLEDValues(t *testing.T) {
 	if _, ok := findNode(root, "current-title"); ok {
 		t.Fatal("blank circuit shows LED metrics")
 	}
-	if _, ok := findNode(root, "measurement-context-empty"); !ok {
+	if _, ok := findNode(root, "inspection-help"); !ok {
 		t.Fatal("blank lacks useful prompt")
 	}
 	agentAction(t, s.service, "example.rc", workbench.ReplaceParams{})
@@ -45,7 +45,7 @@ func TestContextReadingsFollowTargetWithoutInventedLEDValues(t *testing.T) {
 	agentAction(t, s.service, "measurement.select", workbench.MeasurementSelectParams{Kind: "terminal", ID: "C1.1"})
 	before := s.service.Snapshot()
 	root = s.view()
-	n, ok := findNode(root, "context-reading-v:C1.1-value")
+	n, ok := findNode(root, "measurement-value-v:C1.1")
 	if !ok || !strings.Contains(n.Text, "V") {
 		t.Fatal("terminal has no contextual voltage", n.Text)
 	}

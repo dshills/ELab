@@ -35,7 +35,7 @@ func resolvePalette(mode string, systemDark bool) appPalette {
 			Danger: color.NRGBA{R: 255, G: 147, B: 153, A: 255}, ControlRadius: 5,
 		}
 	}
-	return appPalette{Ink: ink, Muted: muted, Accent: accent, Paper: paper, Surface: surface, Grid: color.NRGBA{R: 224, G: 224, B: 228, A: 255}, Danger: color.NRGBA{R: 168, G: 65, B: 68, A: 255}, ControlRadius: 5}
+	return appPalette{Ink: ink, Muted: muted, Accent: accent, Paper: paper, Surface: surface, Grid: color.NRGBA{R: 214, G: 214, B: 219, A: 255}, Danger: color.NRGBA{R: 215, G: 0, B: 21, A: 255}, ControlRadius: 5}
 }
 
 // Resolve colors per descriptor tree, without mutating a live driver theme or
@@ -54,7 +54,7 @@ func applyPalette(node *ui.Node, palette appPalette) {
 			return palette.Paper
 		case surface:
 			return palette.Surface
-		case color.NRGBA{R: 168, G: 65, B: 68, A: 255}:
+		case color.NRGBA{R: 215, G: 0, B: 21, A: 255}:
 			return palette.Danger
 		}
 		return c

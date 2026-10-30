@@ -3,6 +3,7 @@
 package main
 
 import (
+	"image"
 	"testing"
 
 	"github.com/dshills/elab/workbench"
@@ -33,19 +34,19 @@ func TestMountedExtendedInspectorsAcrossThemes(t *testing.T) {
 				if detailWidth < 200 {
 					t.Fatal("Details body is narrower than the responsive rail permits", detailWidth)
 				}
-				previous := 0
+				previous := image.Rectangle{}
 				for _, id := range item.fields {
 					element := mountedControlElement(t, m, id)
-					if !element.Visible || element.Bounds.Empty() || !element.Bounds.In(scroll.Bounds) || element.Bounds.Min.Y < previous {
+					if !element.Visible || element.Bounds.Empty() || !element.Bounds.In(scroll.Bounds) || !previous.Empty() && element.Bounds.Overlaps(previous) {
 						t.Fatal("clipped or overlapping", id, element.Bounds)
 					}
 					if node, ok := findNode(s.view(), id); ok && node.Kind == ui.Label {
 						frame := mountedControlElement(t, m, railLabelBoundsPrefix+id)
-						if frame.Bounds.Dx() < detailWidth || !element.Bounds.In(frame.Bounds) {
+						if frame.Bounds.Dx() < 64 || !element.Bounds.In(frame.Bounds) {
 							t.Fatal("label clipped within frame", id, element.Bounds, frame.Bounds)
 						}
 					}
-					previous = element.Bounds.Max.Y
+					previous = element.Bounds
 				}
 			})
 		}

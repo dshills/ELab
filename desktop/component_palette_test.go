@@ -22,7 +22,7 @@ func TestComponentListFocusOrderAndNoMatches(t *testing.T) {
 	root = s.view()
 	order := ui.FocusOrder(root)
 	previous := -1
-	for _, id := range []string{"part-search", "part-search-clear", "part-list", "position-x", "position-y", "place-at-position", "wire-by-name"} {
+	for _, id := range []string{"part-search", "part-search-clear", "part-category", "part-list", "position-x", "position-y", "place-at-position", "wire-by-name"} {
 		index := slices.Index(order, id)
 		if id == "wire-by-name" {
 			continue

@@ -43,6 +43,7 @@ func TestMountedDCInstrumentNavigationAndExplanation(t *testing.T) {
 						}
 					}
 					omitPlots(&dock)
+					root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 					root.Children = []ui.Node{{ID: "test-scroll", Kind: ui.Scroll, Grow: true, Children: []ui.Node{dock}}}
 					return root
 				}
@@ -79,7 +80,7 @@ func TestMountedDCInstrumentNavigationAndExplanation(t *testing.T) {
 							// Text bounds follow shaped lines (and vary with font).
 							// Check the allocation that actually controls wrapping.
 							frame := mountedControlElement(t, m, railLabelBoundsPrefix+id).Bounds
-							if frame.Dx() < width-60 || !frame.In(image.Rect(0, 0, width, 600)) {
+							if frame.Dx() < min(width-60, 300) || !frame.In(image.Rect(0, 0, width, 600)) {
 								t.Fatalf("explanation lacks its viewport wrapping allocation: %v", frame)
 							}
 						}

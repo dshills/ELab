@@ -34,6 +34,7 @@ func mountedRecordedStep(t *testing.T, s *screen, focus string) *mountedControlW
 			}
 			actions.Children = append(actions.Children, node)
 		}
+		root.Kind = ui.Column // Reduced fixtures stack controls independently of the full-height native shell.
 		root.Children = []ui.Node{fields, actions}
 		s.bindFieldContext(&root, actionContext{state.CommandRevision, state.Document.Generation})
 		return root

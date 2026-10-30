@@ -1,0 +1,147 @@
+{
+  "branch": "exp-ui",
+  "base_commit": "f2a6cd10",
+  "scope": "experimental native UI; no merge or push",
+  "package": {
+    "path": "build/ELab-0.204.0-302-Native-Experiment/ELab.app",
+    "binary_sha256": "3702379a8b8fd7411df9aee36cc7e7b199bac1914d63bda8ca8f2092bde1eab7",
+    "signing": "ad-hoc only",
+    "notarized": false,
+    "strict_seal_verified": true
+  },
+  "race_runs": [
+    {
+      "log": "build/native-design/validation/desktop-final-green.jsonl",
+      "sha256": "f4898de82bd364bd440e4db5a10df4db488b43db143ba4c72f6b4c1d3be5dbf9",
+      "top_level_pass": 411,
+      "top_level_fail": 0,
+      "package_result": "pass",
+      "failed_tests": []
+    },
+    {
+      "log": "build/native-design/validation/offscreen-acceptance.jsonl",
+      "sha256": "6f027660066e43ef73122c439bb59812474557a2928a0292530c16d0a4a76d74",
+      "top_level_pass": 159,
+      "top_level_fail": 2,
+      "package_result": "fail",
+      "failed_tests": [
+        "TestMountedSpectrumControlsRemainStationaryDuringLiveUpdates",
+        "TestMountedToolbarPolishFitsAndPreservesSharedSelection"
+      ]
+    },
+    {
+      "log": "build/native-design/validation/instrument-slot-final.jsonl",
+      "sha256": "8e669ed91fe74c10ec3f5668a7a95d4a05a6295c6cd3150645505b03ea989381",
+      "top_level_pass": 6,
+      "top_level_fail": 0,
+      "package_result": "pass",
+      "failed_tests": []
+    },
+    {
+      "log": "build/native-design/validation/rendered-closeout.jsonl",
+      "sha256": "6db2ac6a810e1a67b96da2744eedc968d7b772c8ac0d1e333bc7a8601dd3d14b",
+      "top_level_pass": 34,
+      "top_level_fail": 0,
+      "package_result": "pass",
+      "failed_tests": []
+    },
+    {
+      "log": "build/native-design/validation/compact-acceptance.jsonl",
+      "sha256": "d7bbbbe5e7cab98aa5453f721ce5951faf18287a6870da2c94bd16b9ed5bd28d",
+      "top_level_pass": 4,
+      "top_level_fail": 0,
+      "package_result": "pass",
+      "failed_tests": []
+    }
+  ],
+  "notes": [
+    "The broad rendered run found two failures. Instrument-slot followups repair selected-state and disabled-button geometry; rendered closeout and compact followups pass.",
+    "The ordinary full run passed 411 top-level tests before final compact-only layout refinements. Focused compact race tests and native verification cover those refinements.",
+    "Root portable race run passed solver, transport and conformance suites; its stale source ledger was refreshed and the final uiaudit race followup passes.",
+    "No SDK cache, simulator limits, component models, owner documents or qualified packages were changed.",
+    "Source inventory preserves 229 public commands, 63 aliases and the same 189 routed command names.",
+    "The final native /302 check confirms vertical-only inspector scrolling with both drawers and three instrument tabs; geometry restored and owned fixture closed normally.",
+    "The final inspector paint fixture binds its disclosure by stable parent identity, rather than the renamed visible caption. Light/Dark/Apollo expansion and paint followup passes."
+  ],
+  "input_images": {
+    "exp-design/Native \u00b7 Document + Examples@1x.png": "e901a02923d3a8325808ebf28ddc1c160b6e36e13e93a35e890d12fb35dbeab9",
+    "exp-design/Native \u00b7 Simulate + Spectrum@1x.png": "4a87e806b70180544d35fedc10cc01b80ad2171b78ea7b73f2d84412d7f59ac8",
+    "exp-design/Native \u00b7 Sweeps@1x.png": "3532c3e1bb51ee395f1f14d924e0acc63e6c6ce99e502bc72039d5b02374ab44",
+    "exp-design/Native \u00b7 Wire mode + Connect by name@1x.png": "187e42db9b98c064420561be045f41f4cec12d9ce4570a44eb09a028e5bedc26"
+  },
+  "checks": {
+    "portable-final.log": {
+      "sha256": "8aa02e3039825dee3c92c11cdad64ac46eb09905192a9f839238aca7d0a4361e",
+      "log": "build/native-design/validation/portable-final.log"
+    },
+    "python-final.log": {
+      "sha256": "5a3e5c27b32e24baf8ee7b2555a392abbe04623cf712820f7cb14eed1abacefd",
+      "log": "build/native-design/validation/python-final.log"
+    },
+    "lint-301.log": {
+      "sha256": "73ed684d9af7a312312e0e824ebcd821c4c0675c0b89ee5ea9ec657f60a0f5f9",
+      "log": "build/native-design/validation/lint-301.log"
+    },
+    "vet-301.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log": "build/native-design/validation/vet-301.log"
+    },
+    "uiaudit-301.log": {
+      "sha256": "1982f40d1472fee3aba79514038877167d55b3cab331b3203afbf4afd07496b8",
+      "log": "build/native-design/validation/uiaudit-301.log"
+    },
+    "native-pointer-contracts-final.log": {
+      "sha256": "c256cb1f982298584187abf7a5d49dd02b311ddc539c2959b16602836fba2d7a",
+      "log": "build/native-design/validation/native-pointer-contracts-final.log"
+    },
+    "named-popover-acceptance.log": {
+      "sha256": "78653198ca954cd439b3e7adc7bf62250d5f64eadd5e7702f551503f0fbfb959",
+      "log": "build/native-design/validation/named-popover-acceptance.log"
+    },
+    "compact-contracts-final.log": {
+      "sha256": "31f0735ad815162d32d4affaa820f6fe82054b1736629aba55f8bf6d89a5ee72",
+      "log": "build/native-design/validation/compact-contracts-final.log"
+    },
+    "compact-three-actions-final.log": {
+      "log": "build/native-design/validation/compact-three-actions-final.log",
+      "sha256": "8717e7484e6e61ef410c962cac5c2fc6f5b26e11ae45b0c54946c4cac60542ff"
+    },
+    "popover-final-followup.log": {
+      "sha256": "a0b81794cdb372d87e96e9c2bc4553f5701df25ffff1917c64a5577622cf59ae",
+      "log": "build/native-design/validation/popover-final-followup.log"
+    },
+    "sweep-selection-final.log": {
+      "sha256": "0167a5de44bcd49798b9dc63fab3819893bd86fbe2b9fbc4386df336b2186745",
+      "log": "build/native-design/validation/sweep-selection-final.log"
+    },
+    "lint-302.log": {
+      "log": "build/native-design/validation/lint-302.log",
+      "sha256": "73ed684d9af7a312312e0e824ebcd821c4c0675c0b89ee5ea9ec657f60a0f5f9"
+    },
+    "vet-302.log": {
+      "log": "build/native-design/validation/vet-302.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "uiaudit-302.log": {
+      "log": "build/native-design/validation/uiaudit-302.log",
+      "sha256": "e834814e7438fc3a7a8905664e51729222c10beb926b981367751c9335a95f84"
+    },
+    "inspector-final.log": {
+      "sha256": "45a2abe8ce1dd35580f977cbc53f5ff6e05a9f2bb41651671bec0b1b4a60ed93",
+      "log": "build/native-design/validation/inspector-final.log"
+    },
+    "disclosure-final.log": {
+      "log": "build/native-design/validation/disclosure-final.log",
+      "sha256": "f5d944f2be437866685fb667bfe52768437f285db43edcd6f79cf674aec3e1c5"
+    },
+    "lint-commit.log": {
+      "log": "build/native-design/validation/lint-commit.log",
+      "sha256": "73ed684d9af7a312312e0e824ebcd821c4c0675c0b89ee5ea9ec657f60a0f5f9"
+    }
+  },
+  "final_native_captures": {
+    "full_light": "build/native-design/session-301/simulate-spectrum.jpg",
+    "compact_dark": "build/native-design/session-302/dark-compact-drawers.jpg",
+    "other_matched_states": "build/native-design/session-299/"
+  }
+}

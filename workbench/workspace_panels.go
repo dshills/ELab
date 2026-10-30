@@ -5,7 +5,7 @@ import "fmt"
 const (
 	MinPartsPanelWidth     = 224
 	MaxPartsPanelWidth     = 360
-	MinInspectorPanelWidth = 296
+	MinInspectorPanelWidth = 280
 	MaxInspectorPanelWidth = 560
 )
 
@@ -19,12 +19,12 @@ type WorkspacePanels struct {
 }
 
 func DefaultWorkspacePanels() WorkspacePanels {
-	return WorkspacePanels{PartsVisible: true, InspectorVisible: true, PartsWidth: MinPartsPanelWidth, InspectorWidth: MinInspectorPanelWidth}
+	return WorkspacePanels{PartsVisible: true, InspectorVisible: true, PartsWidth: 240, InspectorWidth: MinInspectorPanelWidth}
 }
 
 func (s *Service) setWorkspacePanelsLocked(p WorkspacePanels) error {
 	if !finite(p.PartsWidth) || p.PartsWidth < MinPartsPanelWidth || p.PartsWidth > MaxPartsPanelWidth || !finite(p.InspectorWidth) || p.InspectorWidth < MinInspectorPanelWidth || p.InspectorWidth > MaxInspectorPanelWidth {
-		return fmt.Errorf("parts_width must be 224–360 and inspector_width 296–560 logical units")
+		return fmt.Errorf("parts_width must be 224–360 and inspector_width 280–560 logical units")
 	}
 	s.workspacePanels = p
 	return nil

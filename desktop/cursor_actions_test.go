@@ -12,6 +12,11 @@ import (
 func TestCursorActionWaitsForDeferredTimeFields(t *testing.T) {
 	s, cleanup := scopeContextRC(t)
 	t.Cleanup(cleanup)
+	s.app.Do(func() {
+		if _, ok := s.reachableAction("cursor-time-a"); !ok {
+			t.Fatal("missing cursor controls")
+		}
+	})
 	finish := map[string]func(error){}
 	requests := 0
 	s.settleField = func(id string, done func(error)) error {
@@ -54,6 +59,11 @@ func TestCursorActionDeferredCommitDoesNotAdoptInterveningAgentContext(t *testin
 		t.Run(scenario, func(t *testing.T) {
 			s, cleanup := scopeContextRC(t)
 			t.Cleanup(cleanup)
+			s.app.Do(func() {
+				if _, ok := s.reachableAction("cursor-time-a"); !ok {
+					t.Fatal("missing cursor controls")
+				}
+			})
 			var finish func(error)
 			s.settleField = func(_ string, done func(error)) error { finish = done; return nil }
 			var field ui.Node
@@ -100,6 +110,11 @@ func TestCursorActionSettlementFailurePreservesCursorState(t *testing.T) {
 		t.Run(mode, func(t *testing.T) {
 			s, cleanup := scopeContextRC(t)
 			t.Cleanup(cleanup)
+			s.app.Do(func() {
+				if _, ok := s.reachableAction("cursor-time-a"); !ok {
+					t.Fatal("missing cursor controls")
+				}
+			})
 			var finish func(error)
 			s.settleField = func(_ string, done func(error)) error {
 				finish = done
@@ -139,6 +154,11 @@ func TestCursorActionContinuesOnlyConsecutiveOwnTimeFields(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			s, cleanup := scopeContextRC(t)
 			t.Cleanup(cleanup)
+			s.app.Do(func() {
+				if _, ok := s.reachableAction("cursor-time-a"); !ok {
+					t.Fatal("missing cursor controls")
+				}
+			})
 			var button ui.Node
 			s.app.Do(func() { button, _ = findNode(s.view(), "cursor-select-b") })
 			before := s.service.Snapshot()
@@ -161,6 +181,11 @@ func TestCursorActionContinuationRefusesInterveningWork(t *testing.T) {
 		t.Run(scenario, func(t *testing.T) {
 			s, cleanup := scopeContextRC(t)
 			t.Cleanup(cleanup)
+			s.app.Do(func() {
+				if _, ok := s.reachableAction("cursor-time-a"); !ok {
+					t.Fatal("missing cursor controls")
+				}
+			})
 			var button ui.Node
 			s.app.Do(func() { button, _ = findNode(s.view(), "cursor-select-b") })
 			if scenario == "agent-before-field" {

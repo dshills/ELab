@@ -2,6 +2,7 @@ package main
 
 import (
 	"image"
+	"strings"
 
 	"cogentcore.org/core/core"
 	"cogentcore.org/core/styles"
@@ -27,6 +28,9 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 		changed = true
 	}
 	scene.WidgetWalkDown(func(widget core.Widget, w *core.WidgetBase) bool {
+		if s.styleNativeSheet(widget, w) {
+			changed = true
+		}
 		if styleComponentRow(widget, w) {
 			changed = true
 		}
@@ -47,6 +51,18 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 				}
 			})
 		}
+		// The existing managed list row retains selection, focus and input. Its
+		// symbol gets the small paper thumbnail shown in the supplied design.
+		if w.Name == "stack" && w.Parent != nil && w.Parent.AsTree().Parent != nil && w.Parent.AsTree().Parent.AsTree().Name == "part-list" {
+			install(w, func(style *styles.Style) {
+				p := s.nativeColors()
+				style.Padding.Set(units.Dp(1), units.Dp(6))
+				style.Background = image.NewUniform(p.Paper)
+				style.Border.Width.Set(units.Dp(1))
+				style.Border.Color.Set(image.NewUniform(p.Grid))
+				style.Border.Radius.Set(units.Dp(4))
+			})
+		}
 		if frame := core.AsFrame(widget); frame != nil {
 			sideHost := isSidePanelHost(w) || w.Name == "inspector-rail" || w.Name == "inspector-navigation" || w.Name == "simulation-tool-navigation" || w.Name == "simulation-primary-actions" || w.Name == "drawer-controls" || w.Name == "parts-drawer-header" || w.Name == "inspector-drawer-header"
 			install(w, func(style *styles.Style) {
@@ -56,6 +72,12 @@ func (s *screen) styleNativeChrome(scene *core.Scene) bool {
 				// and makes an exactly fitted panel overflow horizontally.
 				if sideHost {
 					style.Overflow.Set(styles.OverflowHidden)
+				}
+				// Inspector forms are bounded to the rail before text shaping.
+				// Their scroll viewport has one axis; native focus allowances
+				// must not create a horizontal scrollbar beneath the form.
+				if strings.HasPrefix(w.Name, "sidebar-") && w.Name != "sidebar-content" {
+					style.Overflow.X = styles.OverflowHidden
 				}
 			})
 			for _, scrollbar := range frame.Scrolls {
