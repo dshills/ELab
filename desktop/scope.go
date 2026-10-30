@@ -218,6 +218,17 @@ func (s *screen) scopePanel(state workbench.Snapshot) ui.Node {
 	if state.Recording != nil && state.Recording.Viewing {
 		return s.recordingPanel(state)
 	}
+	if state.Transient == nil {
+		controls := []ui.Node{s.scopeVisibilityButton(state)}
+		if workbench.IsTransientAnalysis(state.Analysis) {
+			// Paused circuits drawn from scratch need Restart to initialize
+			// their first run, before any time samples exist.
+			controls = append(controls, s.button("simulation.restart", "Restart"))
+		}
+		return ui.Node{ID: "scope-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(8)), Background: ui.Some(paper)}, Children: []ui.Node{
+			{ID: "scope-empty-controls", Kind: ui.Toolbar, Style: chromeStyle(), Children: controls}, instrumentEmptyNotice(state, false),
+		}}
+	}
 	t := state.Transient
 	npn := workbench.IsNPNTransientAnalysis(state.Analysis) || t != nil && workbench.IsNPNTransientEngine(t.Engine)
 	caption := "Transient · waiting for a valid run"

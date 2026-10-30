@@ -1,0 +1,41 @@
+{
+  "review": "internal",
+  "receipts": {
+    "desktop-race.log": {
+      "exit_code": 1,
+      "output": "# github.com/dshills/elab/desktop.test\nld: warning: ignoring duplicate libraries: '-lobjc'\n--- FAIL: TestFlasherDrawingInitialConditionsAndAgentParity (3.79s)\n    view_test.go:88: missing UI control simulation.restart\n--- FAIL: TestNPNPulseDrawingAndControlsMatchAgents (1.36s)\n    view_test.go:88: missing UI control simulation.restart\nFAIL\nFAIL\tgithub.com/dshills/elab/desktop\t441.904s\nFAIL\n"
+    },
+    "initialization-repair.log": {
+      "exit_code": 0,
+      "output": "# github.com/dshills/elab/desktop.test\nld: warning: ignoring duplicate libraries: '-lobjc'\nPASS\nok  \tgithub.com/dshills/elab/desktop\t14.949s\n"
+    },
+    "desktop-race-final.log": {
+      "exit_code": 0,
+      "output": "# github.com/dshills/elab/desktop.test\nld: warning: ignoring duplicate libraries: '-lobjc'\nok  \tgithub.com/dshills/elab/desktop\t455.845s\n"
+    },
+    "rendered-reviewed.log": {
+      "exit_code": 0,
+      "output": "# github.com/dshills/elab/desktop.test\nld: warning: ignoring duplicate libraries: '-lobjc'\nPASS\nok  \tgithub.com/dshills/elab/desktop\t114.957s\n"
+    },
+    "rendered-npn.log": {
+      "exit_code": 0,
+      "output": "# github.com/dshills/elab/desktop.test\nld: warning: ignoring duplicate libraries: '-lobjc'\nPASS\nok  \tgithub.com/dshills/elab/desktop\t7.829s\n"
+    },
+    "lint-reviewed.log": {
+      "exit_code": 0,
+      "output": "{\"passed\": true, \"sdk\": \"/Users/dshills/Development/projects/ELab/build/.vellum-sdk-4cf0176-elab1\", \"source\": \"19c9ebc37ed9f06daa824e024b331caf9700f4b0\"}\n"
+    },
+    "vet-ordinary-final.log": {
+      "exit_code": 0,
+      "output": ""
+    },
+    "vet-reviewed.log": {
+      "exit_code": 0,
+      "output": ""
+    },
+    "build.log": {
+      "exit_code": 0,
+      "output": "go: writing stat cache: open /Users/dshills/Development/Go/pkg/mod/cache/download/github.com/dshills/elab/desktop/@v/v0.0.0-20261029204932-afefb1236475.info215453740.tmp: operation not permitted\n# github.com/dshills/elab/desktop\nld: warning: ignoring duplicate libraries: '-lobjc'\n"
+    }
+  }
+}

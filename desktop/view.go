@@ -590,13 +590,13 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 		}
 		root.Children = children
 	}
-	if scopeAvailable(state) && !sourcePaneHidden(state) {
+	if !sourcePaneHidden(state) {
 		if state.ScopeVisible {
-			root.Children[1] = s.workspaceDock(root.Children[1], s.instrumentPanel(state), state)
+			root.Children[1] = s.workspaceDock(root.Children[1], s.instrumentPanel(state, totalWidth), state)
 		} else {
 			index := 2 // Between the drawing workspace and its readings/footer.
 			children := append([]ui.Node{}, root.Children[:index]...)
-			children = append(children, s.instrumentPanel(state))
+			children = append(children, s.instrumentPanel(state, totalWidth))
 			children = append(children, root.Children[index:]...)
 			root.Children = children
 		}

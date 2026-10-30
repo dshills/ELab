@@ -78,6 +78,11 @@ keyboard behavior and layout limits.
 
 ## Scope and Spectrum
 
+Both tabs stay accessible for every circuit, even with the dock collapsed. DC
+and empty circuits explain why no time-based data is available and point to
+transient examples or **Simulate → Recorded runs**. Opening an instrument never
+changes the circuit or starts a recording.
+
 The **Scope** plots up to six selected voltage/current channels. Place A/B cursors
 by clicking, dragging or entering times; inspect timing differences, interval
 statistics and recorded experiments without changing the live circuit.

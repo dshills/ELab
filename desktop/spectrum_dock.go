@@ -18,10 +18,7 @@ func (s *screen) ensureSpectrumDrawing() {
 	// Like the scope, FFT has command-owned axes; native wheel only scrolls its dock.
 	s.spectrumDrawing = &spectrumCanvas{screen: s, MeshCanvas: &cogent.MeshCanvas{Owner: s.app, Window: "main", View: &v, Prepare: s.spectrumMesh}}
 }
-func (s *screen) instrumentPanel(state workbench.Snapshot) ui.Node {
-	if !state.ScopeVisible {
-		return s.collapsedScope(state)
-	}
+func (s *screen) instrumentPanel(state workbench.Snapshot, width float32) ui.Node {
 	tabs := []ui.Node{}
 	for _, view := range []string{"scope", "spectrum"} {
 		label := "Scope"
@@ -31,11 +28,22 @@ func (s *screen) instrumentPanel(state workbench.Snapshot) ui.Node {
 		action := buttonStyle(s.action("scope-view-"+view, label, "scope.view.set", workbench.ScopeViewParams{View: view}), state.ScopeView == view)
 		tabs = append(tabs, inspectorTabCell(action, "plot-"+view, state.ScopeView == view))
 	}
-	body := s.scopePanel(state)
-	if state.ScopeView == "spectrum" {
-		body = s.spectrumPanel(state)
+	body := s.collapsedScope(state)
+	if state.ScopeVisible {
+		body = s.scopePanel(state)
+		if state.ScopeView == "spectrum" {
+			body = s.spectrumPanel(state)
+		}
 	}
-	return ui.Node{ID: "instrument-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: []ui.Node{
+	// The Spectrum settings can be wider than a compact viewport. Bound the
+	// explanation to the actual dock width before shaping text; text-only Scope
+	// must also not shrink to the longest word's intrinsic width.
+	for i := range body.Children {
+		if body.Children[i].ID == "instrument-empty" {
+			constrainRail(body.Children[i].Children, max(200, width-20))
+		}
+	}
+	return ui.Node{ID: "instrument-panel", Kind: ui.Column, Grow: state.ScopeVisible, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0)), Background: ui.Some(paper)}, Children: []ui.Node{
 		{ID: "instrument-tabs", Kind: ui.Row, Style: ui.Style{MinSize: ui.Some(ui.Size{Height: 36}), MaxSize: ui.Some(ui.Size{Height: 36}), Padding: ui.Some(ui.Insets{Left: 10}), Gap: ui.Some(float32(4))}, Accessibility: ui.Accessibility{Name: "Signal display"}, Children: tabs}, body,
 	}}
 }
@@ -198,6 +206,10 @@ func (s *screen) spectrumPanel(state workbench.Snapshot) ui.Node {
 		result = live.Result
 		summary = "Live spectrum · " + live.Status
 		detail = live.Reason
+		if result == nil && state.Transient == nil {
+			summary = "Live spectrum · no time-based data"
+			detail = "Use a transient circuit or select a recording."
+		}
 		if result != nil {
 			summary = fmt.Sprintf("Live spectrum · %s · %.5g–%.5g s", live.Status, live.Start, live.End)
 		}
@@ -217,12 +229,18 @@ func (s *screen) spectrumPanel(state workbench.Snapshot) ui.Node {
 	}
 	s.ensureSpectrumDrawing()
 	s.spectrumDrawing.Revision = s.spectrumAppearance.next(state.Revision, s.colorsForTheme(state.Theme))
-	return ui.Node{ID: "spectrum-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: []ui.Node{
+	children := []ui.Node{
 		{ID: "spectrum-dock-controls", Kind: ui.Toolbar, Style: chromeStyle(), Children: controls},
+	}
+	if result == nil && state.Transient == nil {
+		children = append(children, instrumentEmptyNotice(state, !isLive))
+	}
+	children = append(children, []ui.Node{
 		{ID: "spectrum-dock-settings", Kind: ui.Toolbar, Style: chromeStyle(), Children: settings},
 		s.spectrumMeasurementControls(state),
 		{ID: "spectrum-plot", Kind: ui.Extension, Grow: true, Custom: s.spectrumDrawing, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: 240, Height: 160}), MaxSize: ui.Some(ui.Size{Height: 160})}, Accessibility: ui.Accessibility{Name: "FFT magnitude in decibels versus frequency in hertz"}},
 		spectrumFixed(quiet("spectrum-dock-summary", summary), 800, 20), detailNode,
 		s.spectrumCursorReadout(state),
-	}}
+	}...)
+	return ui.Node{ID: "spectrum-panel", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(10)), Gap: ui.Some(float32(4)), Background: ui.Some(paper)}, Children: children}
 }

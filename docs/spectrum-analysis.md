@@ -5,6 +5,13 @@ waveform controls. Spectrum puts the existing FFT plot in the dock, with **Live*
 and **Recorded** source choices. Both tabs and all settings use the same shared
 commands for the desktop and AI agents.
 
+Both tabs remain available for DC and empty circuits, including when the dock is
+collapsed. Use **Show scope** to expand it. When no time-based data exists, an
+explanation points to transient examples and **Simulate → Recorded runs**. A DC
+operating point alone is not a waveform. Selecting a tab does not change the
+circuit, advance simulation time, or start a recording. Recorded analysis stays
+independent of the current circuit.
+
 ## Live spectrum
 
 Opening Spectrum for the first time enables live FFT with a Hann window and an
