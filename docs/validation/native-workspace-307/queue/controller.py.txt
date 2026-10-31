@@ -1,0 +1,33 @@
+from pathlib import Path
+import sys,json,time
+out=Path(__file__).resolve().parent; r=out.parents[1]
+sys.path.insert(0,str(r/'scripts'))
+from mcp_client import MCPClient
+marks=out/'marks'
+client=MCPClient(r/'build/ELab-0.204.0-307-Alpha/elab-agent','/private/tmp/elab-307-queue.endpoint.json',timeout_s=4)
+processed=set(); rows=[]; deadline=time.monotonic()+900
+try:
+ while time.monotonic()<deadline and not (marks/'stop').exists() and len(processed)<10:
+  for queued in marks.glob('*.queued'):
+   field=queued.stem
+   if field in processed or not (marks/(field+'.barrier')).is_file():continue
+   processed.add(field)
+   mark=lambda k:marks/(field+'.'+k)
+   assert not mark('parser').exists()
+   before=client.inspect()
+   newer=client.ask('editor.value.set',{'value':'agent-'+field},True)
+   assert newer['command_revision']==before['command_revision']+1 and newer['drawing']['value']=='agent-'+field
+   committed=time.time_ns()
+   assert not mark('parser').exists() and not mark('timedout').exists()
+   mark('release').write_text(str(committed))
+   limit=time.monotonic()+4
+   while time.monotonic()<limit and not mark('finished').exists():time.sleep(.005)
+   assert mark('parser').exists() and mark('finished').exists() and not mark('timedout').exists()
+   after=client.inspect()
+   assert before['command_revision']+1==after['command_revision'] and after['drawing']==newer['drawing']
+   assert all(after.get(k)==newer.get(k) for k in ('verification_settings','source_settings','document','components','wires','scope','recording','dc_sweep','transient','run_id','electrical_revision'))
+   rows.append(dict(field=field,queued=queued.read_text(),held=mark('barrier').read_text(),agent_committed_ns=committed,delivered_to_parser=mark('parser').read_text(),delivery_finished=mark('finished').read_text(),before_revision=before['command_revision'],agent_revision=newer['command_revision'],after_revision=after['command_revision']))
+   (out/'observations.json').write_text(json.dumps(rows,indent=2))
+   print('PASS',field,flush=True)
+  time.sleep(.02)
+finally:client.close()

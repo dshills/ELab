@@ -1,0 +1,30 @@
+{
+  "command_revision": 35,
+  "verification_settings": {
+    "duration_s": 0.02,
+    "sample_step_s": 0.0005,
+    "input_mode": "auto",
+    "capacitor_initials": []
+  },
+  "run_id": 3,
+  "electrical_revision": 2,
+  "seek_time_s": 0.003,
+  "sweep": {
+    "component_id": "V1",
+    "parameter": "voltage",
+    "start": "1 V",
+    "stop": "4 V",
+    "points": 7
+  },
+  "timing": {
+    "id": "verify-1",
+    "probe_id": "v:C1",
+    "level": "3 V",
+    "second_level": "4 V",
+    "direction": "both",
+    "start_s": 0.001,
+    "end_s": 0.45,
+    "limit": 8
+  },
+  "final_agent_draft": "agent-sweep-points"
+}

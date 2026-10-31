@@ -92,6 +92,11 @@ when the SDK and its portable/driver inputs are byte-identical.
 
 ## Explicit limits and deferred acceptance
 
+**October 31 update.** Native queued-Return checks 9 and 11 have since passed
+in an instrumented diagnostic from build 307 source. Checks 3 and 6 remain open.
+See the [ten event sequences and fresh corrections](validation/native-workspace-307/queue/README.md).
+The original acceptance scope below describes the earlier v1 candidate.
+
 Native checks **3, 6, 9 and 11** remain independent gates: Save-panel editing,
 controlled divider hardware rates, and precise native pre-agent parser origin
 for recorded position and Verify/time/sweep fields. The current CUA attachment
