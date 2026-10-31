@@ -242,6 +242,9 @@ func TestExtendedAutomaticPlacementAndConfigurationBatch(t *testing.T) {
 }
 
 func TestShiftPublicSwitchBoundariesPreserveClockAndStorage(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "shift-register"}, "load")

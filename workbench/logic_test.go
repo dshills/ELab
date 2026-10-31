@@ -12,6 +12,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 var logicKinds = []string{"logic-not", "logic-and", "logic-or", "logic-nand", "logic-nor", "logic-xor", "logic-xnor"}
@@ -324,6 +326,9 @@ func TestLogicCascadeAndExternalRCTiming(t *testing.T) {
 	}
 }
 func TestLogicWiringValidationAndTimerIntegration(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, kind := range logicKinds {
 		f := logicFixture(t, kind, 0, 5, 5, 0, 1000)
 		f.graph.Components = append(f.graph.Components[:1], f.graph.Components[2:]...)

@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 var sequentialKinds = []string{"d-flipflop", "jk-flipflop", "t-flipflop", "binary-counter", "decade-counter"}
@@ -174,6 +176,9 @@ func TestSequentialPinCurrentsJacobianAndPassivePower(t *testing.T) {
 	}
 }
 func TestSequentialExampleSequencesAndElectricalBalance(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, kind := range sequentialKinds {
 		t.Run(kind, func(t *testing.T) {
 			s := New()
@@ -244,6 +249,9 @@ func TestSequentialExampleSequencesAndElectricalBalance(t *testing.T) {
 	}
 }
 func TestSequentialProjectsCapturesModelsAndStrictArrays(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "binary-counter"}, "load")
@@ -359,6 +367,9 @@ func seqKernelFixture(t *testing.T, feedback bool, reverse bool) *mixedNetwork {
 	return n
 }
 func TestSequentialCommonClockPipelineAndFeedbackToggle(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, reverse := range []bool{false, true} {
 		n := seqKernelFixture(t, false, reverse)
 		trace := &Transient{Engine: SequentialEngineID, Mode: "auto", Settings: DefaultTransientSettings()}
@@ -399,6 +410,9 @@ func TestSequentialCommonClockPipelineAndFeedbackToggle(t *testing.T) {
 	}
 }
 func TestSequentialLiveEnableResetAndNoReleaseEdge(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "binary-counter"}, "load")
@@ -431,6 +445,9 @@ func TestSequentialLiveEnableResetAndNoReleaseEdge(t *testing.T) {
 	}
 }
 func TestSequentialMixedStorageAndTimerDrivenClock(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	// Capacitor voltage and coil current must survive a memory/output transition.
 	f := newOpAmpNetworkFixture()
 	f.add(t, "VP", "dc-source", "5", "vcc", "0")

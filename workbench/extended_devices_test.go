@@ -211,6 +211,9 @@ func TestBuckStartupRippleDutyAndLoad(t *testing.T) {
 	}
 }
 func TestShiftRegisterClockLatchClearAndEnable(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	k := extendedKernel(t, "shift-register")
 	advanceExtended(t, k, 1.62, .0025)
 	r := k.mixed.result.Shifts[0]
