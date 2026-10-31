@@ -5,6 +5,7 @@ import json
 import math
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import time
 
@@ -76,12 +77,17 @@ def exercise_first_use_files(client, folder):
     client.ask('project.load',dict(path=str(project)),True)
     loaded=client.ask('simulation.wait')
     assert not loaded['document']['dirty'] and all(loaded[k]==v for k,v in graph.items())
-    for fmt in ['svg','pdf']:
+    exports = ['svg', 'pdf'] if sys.platform == 'darwin' else ['svg']
+    for fmt in exports:
         output=folder/('practice.'+fmt)
         client.ask('export.schematic.'+fmt,dict(path=str(output)),True)
         data=output.read_bytes()
         assert data.startswith(b'%PDF-') if fmt=='pdf' else all(p['id'].encode() in data for p in graph['components'])
-    return dict(passed=True,shared_disclosures=10,saved_graph_exact=True,exports=['svg','pdf'],scope='MCP engineering walkthrough; no participant or native OS-input claim')
+    if 'pdf' not in exports:
+        pdf = folder/'practice.pdf'
+        client.ask('export.schematic.pdf', dict(path=str(pdf)), True, expect='unsupported')
+        assert not pdf.exists()
+    return dict(passed=True,shared_disclosures=10,saved_graph_exact=True,exports=exports,scope='MCP engineering walkthrough; no participant or native OS-input claim')
 
 
 def main():

@@ -29,6 +29,10 @@ elab-agent, editable examples, dependency notices and these guides.
 7. Save your own copy before modifying something you want to keep. Document has
    SVG/PDF/PNG export and print preview. Start with Fit to page for one sheet.
 
+To try the four-MOSFET bridge, open **Examples → Power & relays → Four-MOSFET H-bridge**
+or open `Examples/discrete-hbridge.elab`. Pause, restart and step across 20 ms.
+The 100 Ω load reverses from about −4.725 V to +4.725 V. See [the bridge guide](hbridge.md).
+
 For a structured first try, open `first-use-test-kit.md`. It includes help and a
 blank feedback form; the separate maintainer key contains expected values.
 For agents, run `./elab-agent --mcp-config` from its final location and follow

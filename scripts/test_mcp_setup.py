@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -35,6 +36,7 @@ class MCPSetupTests(unittest.TestCase):
                 self.assertEqual(report['automatic_mutation_retries'],0)
                 self.assertLess(report['compared_voltages_v'][1],report['compared_voltages_v'][0])
                 files=demo.exercise_first_use_files(c,Path(cwd))
+                self.assertEqual(files['exports'], ['svg', 'pdf'] if sys.platform == 'darwin' else ['svg'])
                 self.assertTrue(files['saved_graph_exact'])
                 self.assertEqual(files['shared_disclosures'],10)
                 closed=c.ask('app.close',{'discard_changes':True},True)
