@@ -10,7 +10,7 @@ feedback; its existence does not mean anyone has passed the tasks.
 Follow `START-HERE.md` beside the app. Keep the whole extracted folder together.
 Use a new folder named `ELab practice` for every file in this test. Do not use a
 personal project. If an existing document is open, save it before starting.
-Use File > New (the document menu) for the first task. If something is confusing,
+In the macOS **File** menu, choose **New blank** for the first task. If something is confusing,
 write it down before trying to work around it. Stop a task after five minutes
 without progress; incomplete tasks are useful feedback, not a failure by you.
 
@@ -27,15 +27,14 @@ once. Explain in your own words whether the circuit is running or paused.
 
 <details><summary>Help if needed</summary>
 
-Open Parts using its edge tab. Search for each component, select it and click the
-canvas to place it. Use Select to move parts. Use Wire and click two terminal
+If Parts is closed, use the sidebar button at the left end of the toolbar.
+Search for each component, select it and click the canvas to place it. Use Select to move parts. Use Wire and click two terminal
 dots for each connection: source + → resistor → LED anode; LED cathode → ground;
 ground → source −. Cancel or Escape abandons an unfinished drawing operation.
 Select a component, open Inspect, type its Value and choose Apply. Complete
-circuits simulate automatically. Select the LED; Measure and the bottom strip
-show accepted readings. Plot adds a scope trace when transient data is available;
-Pin places a live reading on the schematic. Close a drawer with its close button;
-reopen using the labelled edge tab. Drag its divider to resize it.
+circuits simulate automatically. Select the LED and read its current in Inspect.
+Under Measure, Plot adds a scope trace when transient data is available. Pin places a live reading on the schematic.
+The sidebar button at the right end of the toolbar opens or closes Inspector.
 
 </details>
 
@@ -52,8 +51,8 @@ Find where to change the recorded sample step, then return to the basic form.
 <details><summary>Help if needed</summary>
 
 Use Examples to search for RC charge/discharge. A replacement prompt protects
-modified work; save your practice circuit or explicitly discard it. In Simulate,
-choose Live controls for input/step controls. Restart uses the saved startup
+modified work; save your practice circuit or explicitly discard it. In the Scope dock use the Source row to choose Charge or Discharge.
+Simulate → Live controls contains the time-step settings. Restart uses the saved startup
 condition; stepping while paused makes time easier to inspect. Choose Recorded
 runs, enter a duration of 20 ms, then Record from startup. Advanced contains sample
 step and startup overrides. Opening Advanced does not start a recording. Choose
@@ -76,9 +75,10 @@ you think each view tells you. Exact spectral analysis is not required here.
 
 Use Examples search for the capacitor-timed flasher. Select Q1/Q2 and Plot their
 collector voltages, or choose the available probes in Simulate > Live controls.
-Open the instrument dock if closed. Use its Scope tab and cursors A/B on matching
-edges of one waveform; Δt is the interval. A live trace can have startup behavior;
-measure after several cycles. Set C1 and C2 to twice their original values through
+Open the instrument dock if closed. In its **Scope** tab, expand **Instrument
+controls & cursors**. Place cursors A and B on matching edges of one waveform.
+Δt is the interval. Measure after several cycles to avoid startup effects.
+Set C1 and C2 to twice their original values through
 Inspect. The Spectrum tab uses the same live probes. More settings stay available
 in the relevant tool's Advanced section. Generic device models are educational.
 
@@ -95,7 +95,8 @@ check that the drawing fits on one page. Do not send a print job for this test.
 
 <details><summary>Help if needed</summary>
 
-Use the document menu for Save As and Open. Document > Share and print contains
+Use File > Save As and File > Open. The toolbar export button offers SVG and PDF.
+The Document inspector contains
 export/preview controls. Fit to page is the easiest single-page output setting;
 explicit scale may require multiple pages. Preview the output before exporting.
 Keep all test files in your practice folder. Opening a clean example should show
@@ -117,22 +118,22 @@ ELab version/build / macOS / window size / theme:
 Prior electronics experience / prior schematic app experience:
 
 Task 1: completed / partial / blocked
-Minutes / help used / wrong turns:
+Minutes / first point where help was needed / help used / wrong turns:
 Current at 1k / 2k / Undo observation:
 What I expected / what happened:
 
 Task 2: completed / partial / blocked
-Minutes / help used / wrong turns:
+Minutes / first point where help was needed / help used / wrong turns:
 Charge voltage / discharge voltage:
 Live vs recorded explanation / Advanced discovery:
 
 Task 3: completed / partial / blocked
-Minutes / help used / wrong turns:
+Minutes / first point where help was needed / help used / wrong turns:
 Probes / period before / period after:
 Scope vs Spectrum explanation / moving controls:
 
 Task 4: completed / partial / blocked
-Minutes / help used / wrong turns:
+Minutes / first point where help was needed / help used / wrong turns:
 Saved/reopened / exports / page count:
 
 Three most confusing moments:

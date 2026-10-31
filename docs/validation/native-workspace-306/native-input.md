@@ -1,0 +1,12 @@
+# Native input on the redesigned workspace
+
+On October 31, 2026, a disposable ELab 0.204.0 /305 window ran on Apple Silicon macOS 27.2 from source `af28acc4`. The matching agent connected only to that window. Recovery and appearance persistence were disabled and shared window-geometry writes were denied. The fixture closed normally after discarding its test recording.
+
+| Original check | Observed in the packaged window | What remains open |
+| --- | --- | --- |
+| 3. Save filename | File → Save As showed a focused filename. After clicking the field and pressing Right, Command-A and typing FixtureBeta produced **UntitledFixtureBeta**. Edit → Select All followed by typing produced **FixtureGamma**. Cancel returned to the original document without writing a file. | Keyboard replacement still fails on the desktop automation route. The same failure was previously reproduced in a separate standard AppKit app. Test an ordinary keyboard before attributing it to ELab. |
+| 6. Divider | Dragging the middle divider up 140 pixels changed its reported fraction from 0.7 to 0.5736462. Dragging it back restored 0.7. The document remained Untitled with zero parts and wires. | The available drag call accepts endpoints only. Slow and fast hardware event rates were not measured. |
+| 9. Recorded position | In a 20 ms RC recording sampled at 1 ms, the native field displayed the unfinished draft **oldtime**. The agent selected index 7. The field showed 7 ms before and after Return. A fresh native edit to 3 ms was accepted and independently read back as 0.003 s. | This exercises a private draft spanning an agent change. The macOS delivery point for an already-queued Return is not controllable here. |
+| 11. Verify/time/sweep | The native Verify duration displayed the unfinished draft **broken**. The agent committed 32 ms. Return preserved 32 ms. A fresh native edit set 20 ms, and Record from startup captured that duration with a 1 ms step. | Verify passed for this ordering. The complete queued-Return matrix, including time and sweep fields, has retained-driver coverage only. |
+
+The interaction runner passed 15 families, 51 top-level tests and 159 subtests, including all ten parser-origin cases. The [matrix](../v1-acceptance/interaction-matrix.json) states its driver scope. These observations supplement the [native reference comparison](../v1-acceptance/native-reference/observations.md).
