@@ -44,7 +44,7 @@ func nativeProbePills(state workbench.Snapshot, view canvas.Viewport, palette ap
 	names := scopeProbeColors(state.Scope.Traces)
 	var out []nativeProbePill
 	for i, trace := range state.Scope.Traces {
-		if len(trace.Points) == 0 {
+		if len(trace.Points) == 0 || trace.Points[len(trace.Points)-1].Time != state.Transient.Sample.Time {
 			continue
 		}
 		part, terminal, ok := graph.Terminal(trace.Probe.Positive)

@@ -227,10 +227,7 @@ func (s *screen) nativeShell(state workbench.Snapshot, total float32, palette, i
 	palette = remaining
 	tools = s.nativeToolPill(state, tools)
 	if centerWidth < 700 {
-		w := float32(132)
-		if len(tools.Children) > 4 {
-			w = 210
-		}
+		w := nativeToolPillWidth(true, len(tools.Children) > 4)
 		tools.Style.MinSize = ui.Some(ui.Size{Width: w, Height: 34})
 		tools.Style.MaxSize = tools.Style.MinSize
 		for i := range tools.Children {
@@ -306,9 +303,10 @@ func (s *screen) nativeToolPill(state workbench.Snapshot, old ui.Node) ui.Node {
 	if group, ok := findNode(old, "drawing-mode-tabs"); ok {
 		for _, n := range group.Children {
 			n.Accessibility.Name = n.Text
-			n.Text = ""
+			if n.ID != "tool-wire" {
+				n.Text = ""
+			}
 			n.Icon = ui.SymbolRight
-			n = nativeFixed(n, 24, 24)
 			nodes = append(nodes, n)
 		}
 	}
@@ -325,10 +323,7 @@ func (s *screen) nativeToolPill(state workbench.Snapshot, old ui.Node) ui.Node {
 		hint = "Drag to pan · scroll to zoom"
 	}
 	nodes = append(nodes, quiet("schematic-help", hint))
-	width := float32(300)
-	if len(nodes) > 4 {
-		width = 420
-	}
+	width := nativeToolPillWidth(false, len(nodes) > 4)
 	return ui.Node{ID: "tools", Kind: ui.Toolbar, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: width, Height: 34}), MaxSize: ui.Some(ui.Size{Width: width, Height: 34}), Padding: ui.Some(ui.UniformInsets(4)), Gap: ui.Some(float32(6)), CornerRadius: ui.Some(float32(13)), Background: ui.Some(paper), Align: ui.Some(ui.AlignCenter), Border: ui.Some(ui.Border{Width: 1, Color: nativeHairlineToken}), GrowX: ui.Some(float32(0)), GrowY: ui.Some(float32(0))}, Children: nodes}
 }
 

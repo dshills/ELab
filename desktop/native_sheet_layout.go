@@ -56,6 +56,19 @@ func (s *screen) styleNativeSheet(widget core.Widget, w *core.WidgetBase) bool {
 	return false
 }
 
+func nativeToolPillWidth(compact, cancel bool) float32 {
+	if compact {
+		if cancel {
+			return 250
+		}
+		return 172
+	}
+	if cancel {
+		return 460
+	}
+	return 340
+}
+
 // Custom units are evaluated by Core after the parent receives its current
 // allocation. Reading Geom in a Styler instead uses the previous frame and can
 // strand a floating control offscreen after a resize or drawer change.
@@ -69,16 +82,7 @@ func nativeOverlayStyle(name string, cancel bool, st *styles.Style) {
 	}
 	pill := func(uc *units.Context) float32 {
 		width := uc.Paw / scale(uc)
-		if width < 700 {
-			if cancel {
-				return 210
-			}
-			return 132
-		}
-		if cancel {
-			return min(float32(420), width-160)
-		}
-		return min(float32(300), width-160)
+		return nativeToolPillWidth(width < 700, cancel)
 	}
 	switch name {
 	case "schematic":
@@ -99,7 +103,14 @@ func nativeOverlayStyle(name string, cancel bool, st *styles.Style) {
 		st.Max = st.Min
 		st.Grow.Set(0, 0)
 		st.Pos.X = units.Custom(func(uc *units.Context) float32 { return max(0, uc.Paw-130*scale(uc)) })
-		st.Pos.Y = units.Custom(func(uc *units.Context) float32 { return max(0, uc.Pah-52*scale(uc)) })
+		st.Pos.Y = units.Custom(func(uc *units.Context) float32 {
+			// At narrow widths the labeled tool bar can reach the zoom control.
+			offset := float32(52)
+			if width := uc.Paw / scale(uc); width < nativeToolPillWidth(width < 700, true)+260 {
+				offset += 44
+			}
+			return max(0, uc.Pah-offset*scale(uc))
+		})
 	case "native-sampling-notice", "operation-notice", "operation-notice-area":
 		maxWidth, height := float32(650), float32(34)
 		if name == "native-sampling-notice" {

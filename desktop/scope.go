@@ -67,9 +67,12 @@ func (c *scopeCanvas) Mount(parent tree.Node) core.Widget {
 	return widget
 }
 func (s *screen) scopeMesh(v canvas.Viewport) (*canvas.Mesh, error) {
+	return s.scopeMeshFromState(s.service.Snapshot(), v)
+}
+
+func (s *screen) scopeMeshFromState(state workbench.Snapshot, v canvas.Viewport) (*canvas.Mesh, error) {
 	s.scope.frame.Store(nil)
 	b := &meshBuilder{}
-	state := s.service.Snapshot()
 	palette := s.colorsForTheme(state.Theme)
 	muted := palette.Muted
 	t := state.Transient

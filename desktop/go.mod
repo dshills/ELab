@@ -5,7 +5,7 @@ go 1.25.6
 require (
 	cogentcore.org/core v0.3.46-0.20261009095036-5cc519b24044
 	github.com/dshills/vellum v1.0.0
-	github.com/dshills/vellum/drivers/cogent v0.0.0-20261026183335-4cf01763c1fd
+	github.com/dshills/vellum/drivers/cogent v0.0.0-20261030194403-0f81df6e6a4f
 )
 
 require (
@@ -47,10 +47,10 @@ require (
 )
 
 replace (
-	cogentcore.org/core => ../build/.vellum-sdk-4cf0176-elab1/drivers/cogent/build/upstream
-	github.com/dshills/vellum => ../build/.vellum-sdk-4cf0176-elab1
-	github.com/dshills/vellum/drivers/cogent => ../build/.vellum-sdk-4cf0176-elab1/drivers/cogent
-	github.com/go-text/typesetting => ../build/.vellum-sdk-4cf0176-elab1/drivers/cogent/build/typesetting
+	cogentcore.org/core => ../build/.vellum-sdk-0f81df6-elab1/drivers/cogent/build/upstream
+	github.com/dshills/vellum => ../build/.vellum-sdk-0f81df6-elab1
+	github.com/dshills/vellum/drivers/cogent => ../build/.vellum-sdk-0f81df6-elab1/drivers/cogent
+	github.com/go-text/typesetting => ../build/.vellum-sdk-0f81df6-elab1/drivers/cogent/build/typesetting
 )
 
 require (

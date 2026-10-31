@@ -16,13 +16,15 @@ for drawing, simulation, analysis, saving and export.
 *RC charge and discharge: edit the circuit above, inspect the waveforms below.
 Screenshots show an earlier panel layout; the current drawer controls are described below.*
 
-## Experimental Native UI
+## Native workspace
 
-The `exp-ui` branch rebuilds the workspace from the supplied `exp-design`
-references: full-height side rails, a centered toolbar, floating drawing tools,
-and a Scope/Spectrum/Sweep dock. Existing user and AI agent commands, simulation
-models, local files and exports are retained. This experiment is kept separate
-from main. See [design QA](design-qa.md) and the
+The workspace has full-height side rails, a centered toolbar, floating drawing
+tools, and a Scope/Spectrum/Sweep dock. Use **Wire** in the floating toolbar to
+connect terminals. In the
+RC charging example, **Auto**, **Charge**, and **Discharge** are above the live
+plot; waveform cursors remain under **Instrument controls & cursors**. The
+schematic’s probe badges, scope, and inspector show the same displayed sample.
+See [design QA](design-qa.md) and the
 [validation record](docs/validation/experimental-native-ui/README.md).
 
 ## What you can do

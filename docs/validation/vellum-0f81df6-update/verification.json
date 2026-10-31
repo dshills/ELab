@@ -1,0 +1,48 @@
+{
+  "upstream_commit": "0f81df6e6a4f9698fe3358710132a14987ad1f37",
+  "derived_source": "bce8a844a50eb359d0db6393c2e2d4a5f473a125",
+  "derived_tree": "cc4bc24e1cc5db60c6e478733b3a5d96a124ed78",
+  "sdk_archive_sha256": "8524224a35180d41c264d5455ff1f26648b1f1fdb27d95c27295144cc40285a3",
+  "verified_sdk_files": 9056,
+  "upstream_packager_files": 14,
+  "desktop_module_replacements": 4,
+  "build": {
+    "path": "build/ELab-0.204.0-303-Vellum/ELab.app",
+    "application_version": "0.204.0",
+    "build": "303",
+    "binary_sha256": "5c28aa9219350f0a540eb48f389eca8590e085514d6c5f9aa7c004914aec33eb",
+    "macos_minimum": "27.0",
+    "strict_adhoc_signature": true
+  },
+  "checks": {
+    "ordinary_desktop_before_toolbar": "passed",
+    "tool_tests": 16,
+    "stable_v1_api": "passed",
+    "merged_driver_controls": "passed",
+    "focused_elab_mounted": "9 passed",
+    "full_elab_offscreen": {
+      "command": "go -C desktop test -tags=offscreen -count=1 ./...",
+      "top_level_counts": {
+        "pass": 574,
+        "fail": 1
+      },
+      "failing_tests": [
+        "TestMountedDrawersCloseAtEdgesAndReopenByLabel"
+      ],
+      "baseline": "same failure in all four themes using prior module and original UI source"
+    },
+    "native_smoke": {
+      "tested": "new SDK before toolbar correction and previous experiment package /302",
+      "result": "nativeTraceFocusSmoke: UI control scope-trace-focus is missing or disabled"
+    },
+    "sdk_native_media": "TestNativeMediaReadAdmission rejects silent WAV on new and previous SDKs",
+    "ordinary_desktop_final": {
+      "command": "go -C desktop test -p=1 -mod=readonly -count=1 ./...",
+      "result": "ok  \tgithub.com/dshills/elab/desktop\t60.366s"
+    }
+  },
+  "preserved": {
+    "build/ELab-0.204.0-302-Native-Experiment/ELab.app/Contents/MacOS/ELab": "3702379a8b8fd7411df9aee36cc7e7b199bac1914d63bda8ca8f2092bde1eab7",
+    "third_party/vellum/vellum-4cf0176-elab1.tar.gz": "a77bca8b644f1ce94107376bb020a3cc5b23d23cdc422ec1af6485343ba0efcb"
+  }
+}

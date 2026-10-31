@@ -1,12 +1,23 @@
 # Current Vellum SDK integration
 
-## Current runtime · October 26, 2026
+## Current runtime · October 31, 2026
 
-The development runtime now pins the latest public Vellum v1.0.0 source
+ELab pins the SDK and macOS packager to Vellum's public main commit
+[`0f81df6`](https://github.com/dshills/vellum/commit/0f81df6e6a4f9698fe3358710132a14987ad1f37).
+It follows the [v1.0.0 source release](https://github.com/dshills/vellum/releases/tag/v1.0.0)
+and retains that version in its metadata. The private SDK includes ELab's input
+and layout compatibility changes at `bce8a844a50eb359d0db6393c2e2d4a5f473a125`.
+The four desktop module replacements use the 9,056-file SDK in
+`build/.vellum-sdk-0f81df6-elab1`. Build scripts verify and extract it locally.
+The packager uses unmodified files from the upstream commit, including its macOS
+deployment-target checks. See the [integration results](validation/vellum-0f81df6-update/README.md).
+
+## Previous runtime · October 26, 2026
+
+At this checkpoint the development runtime pinned the then-current public Vellum v1.0.0 source
 [`4cf0176`](https://github.com/dshills/vellum/commit/4cf01763c1fd5501648ea19b4bb406fe62446319),
 with ELab compatibility source `19c9ebc37ed9f06daa824e024b331caf9700f4b0`. The icon packager is
-already pinned to the same upstream source. GitHub's published release list
-still has the older alpha.3 prerelease; this pin follows newer public main.
+already pinned to the same upstream source. At the time of that check, the latest published release was still alpha.3.
 
 The private SDK archive is `vellum-4cf0176-elab1.tar.gz`, containing 8862
 verified files; all four module replacements use `build/.vellum-sdk-4cf0176-elab1`. Complete

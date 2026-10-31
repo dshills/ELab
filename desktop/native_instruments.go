@@ -18,13 +18,19 @@ func (s *screen) nativeInstrumentBody(state workbench.Snapshot, body ui.Node, wi
 		return body, nil
 	}
 	var plot, footer, empty ui.Node
-	var advanced, header []ui.Node
+	var advanced, header, drive []ui.Node
 	for _, n := range body.Children {
 		switch n.ID {
 		case "scope-toolbar", "scope-empty-controls", "spectrum-dock-controls":
 			var rest []ui.Node
 			for _, c := range n.Children {
 				switch c.ID {
+				case "input-auto", "input-charge", "input-discharge":
+					if state.Analysis == "RC transient" && n.ID == "scope-toolbar" {
+						drive = append(drive, c)
+					} else {
+						rest = append(rest, c)
+					}
 				case "scope-visibility", "transient-step", "simulation.restart":
 					header = append(header, c)
 				default:
@@ -135,6 +141,13 @@ func (s *screen) nativeInstrumentBody(state workbench.Snapshot, body ui.Node, wi
 	children := []ui.Node{}
 	if empty.ID != "" {
 		children = append(children, empty)
+	}
+	if len(drive) > 0 {
+		children = append(children, ui.Node{ID: "native-rc-drive", Kind: ui.Row,
+			Accessibility: ui.Accessibility{Name: "RC source mode"},
+			Style:         ui.Style{Align: ui.Some(ui.AlignCenter), Gap: ui.Some(float32(4)), Padding: ui.Some(ui.UniformInsets(0))},
+			Children:      append([]ui.Node{quiet("native-rc-drive-label", "Source")}, drive...),
+		})
 	}
 	if plot.ID != "" {
 		children = append(children, ui.Node{ID: "native-plot-card", Kind: ui.Column, Grow: true, Style: ui.Style{Padding: ui.Some(ui.UniformInsets(0)), Background: ui.Some(paper), CornerRadius: ui.Some(float32(8)), Border: ui.Some(ui.Border{Width: 1, Color: nativeHairlineToken})}, Children: []ui.Node{plot}})

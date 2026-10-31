@@ -82,6 +82,13 @@ func polishNativeDesign(n *ui.Node, p appPalette) {
 		for i := range n.Children {
 			c := &n.Children[i]
 			if c.Kind == ui.Button || c.Kind == ui.MenuButton {
+				// Keep text actions as tall as the icon actions even when the
+				// platform theme uses a more compact intrinsic text height.
+				if c.Text != "" {
+					minimum := c.Style.MinSize.Value
+					minimum.Height = max(minimum.Height, 20)
+					c.Style.MinSize = ui.Some(minimum)
+				}
 				c.Style.Border = ui.Some(ui.Border{})
 				if c.ID != "simulation.pause" && c.ID != "simulation.resume" && c.ID != "native-stop-sweep" {
 					c.Style.Background = ui.Some(p.Surface)
@@ -92,7 +99,12 @@ func polishNativeDesign(n *ui.Node, p appPalette) {
 
 	if strings.HasPrefix(n.ID, "tool-") && n.Kind == ui.Button {
 		n.MinWidth, n.MinHeight = 0, 0
-		n.Style.MinSize, n.Style.MaxSize = ui.Some(ui.Size{Width: 24, Height: 24}), ui.Some(ui.Size{Width: 24, Height: 24})
+		width := float32(24)
+		if n.ID == "tool-wire" {
+			width = 64 // icon plus a visible mode label
+		}
+		n.Style.MinSize = ui.Some(ui.Size{Width: width, Height: 24})
+		n.Style.MaxSize = n.Style.MinSize
 		n.Style.Padding = ui.Some(ui.UniformInsets(4))
 		n.Style.Border = ui.Some(ui.Border{})
 	}

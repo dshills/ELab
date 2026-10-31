@@ -87,7 +87,10 @@ func (s *screen) view() ui.Node {
 }
 
 func (s *screen) workspaceView(totalWidth float32) ui.Node {
-	state := s.service.Snapshot()
+	return s.workspaceFrame(s.service.Snapshot(), totalWidth)
+}
+
+func (s *screen) workspaceFrame(state workbench.Snapshot, totalWidth float32) ui.Node {
 	s.pruneComponentStartup(state)
 	s.pruneSweepFieldRejections(state)
 	s.pruneRecordedPlaybackRejections(state)
@@ -138,10 +141,16 @@ func (s *screen) workspaceView(totalWidth float32) ui.Node {
 	s.observeSchematicViewport(*s.drawing.View, state)
 	s.drawing.View.Center = canvas.Point{X: state.View.Center.X, Y: state.View.Center.Y}
 	s.drawing.View.Zoom = state.View.Zoom
-	drawRevision := state.Revision
-	if state.Analysis == "RC transient" {
-		drawRevision = state.CommandRevision
+	// The inspector and schematic badges share this presentation frame. Sample
+	// ticks advance Revision without changing CommandRevision; the render owner
+	// may prepare the mesh after the solver has already accepted another tick.
+	s.drawing.Prepare = func(v canvas.Viewport) (*canvas.Mesh, error) {
+		return s.meshFromState(state, v)
 	}
+	s.scope.Prepare = func(v canvas.Viewport) (*canvas.Mesh, error) {
+		return s.scopeMeshFromState(state, v)
+	}
+	drawRevision := state.Revision
 	reduceMotion := s.reduceMotion.Load()
 	if pointerPaneChanged || drawRevision != s.lastDrawRevision || state.Analysis != s.lastDrawAnalysis || colors != s.lastPalette || reduceMotion != s.lastReduceMotion {
 		s.renderRevision++

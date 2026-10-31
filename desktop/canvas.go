@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"slices"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -258,7 +259,10 @@ func (s *screen) canvasClick(p workbench.Point) {
 	}
 }
 func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
-	state := s.service.Snapshot()
+	return s.meshFromState(s.service.Snapshot(), v)
+}
+
+func (s *screen) meshFromState(state workbench.Snapshot, v canvas.Viewport) (*canvas.Mesh, error) {
 	if s.drawing != nil {
 		s.drawing.preparedCommandRevision = state.CommandRevision
 		s.drawing.preparedGeneration = state.Document.Generation
@@ -277,11 +281,13 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 	if s.drawing != nil && s.drawing.dragging && s.drawing.dragGeneration == state.Document.Generation {
 		for i, reading := range state.PinnedReadings {
 			if "pin|"+reading.Definition.ID == s.drawing.dragID {
+				state.PinnedReadings = slices.Clone(state.PinnedReadings)
 				state.PinnedReadings[i].Definition.Position = workbench.Point{X: math.Round((s.drawing.dragOrigin.X+s.drawing.dragDelta.X)/10) * 10, Y: math.Round((s.drawing.dragOrigin.Y+s.drawing.dragDelta.Y)/10) * 10}
 			}
 		}
 		for i, part := range state.Components {
 			if part.ID == s.drawing.dragID {
+				state.Components = slices.Clone(state.Components)
 				state.Components[i].Position = workbench.Point{X: math.Round((s.drawing.dragOrigin.X+s.drawing.dragDelta.X)/10) * 10, Y: math.Round((s.drawing.dragOrigin.Y+s.drawing.dragDelta.Y)/10) * 10}
 			}
 		}
@@ -291,7 +297,7 @@ func (s *screen) mesh(v canvas.Viewport) (*canvas.Mesh, error) {
 		phase = math.Mod(time.Since(s.displayStarted).Seconds(), 1)
 	}
 	if s.requestHelp != nil && s.requestHelp.Details == s.errorMessage && s.requestHelpRevision == state.CommandRevision {
-		state.DiagnosticPresentation.Items = append(state.DiagnosticPresentation.Items, *s.requestHelp)
+		state.DiagnosticPresentation.Items = append(slices.Clip(state.DiagnosticPresentation.Items), *s.requestHelp)
 	}
 	if s.reduceMotion.Load() {
 		state.Display.Animate = false

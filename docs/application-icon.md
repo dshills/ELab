@@ -6,13 +6,13 @@ on a blue instrument tile. The editable [SVG](../assets/app-icon.svg) and
 
 The pinned Vellum source provides this feature through its **packager**. ELab
 pins the unmodified packaging tools at
-[`4cf0176`](https://github.com/dshills/vellum/commit/4cf01763c1fd5501648ea19b4bb406fe62446319),
+[`0f81df6`](https://github.com/dshills/vellum/commit/0f81df6e6a4f9698fe3358710132a14987ad1f37),
 whose release metadata says v1.0.0. The icon option was introduced in
 [`3fadc8f`](https://github.com/dshills/vellum/commit/3fadc8fcd3db7aa4b1adf6739a00cd4f56ca393d).
 At the icon integration's October 26 inspection, GitHub's release list reported
 alpha.3; the selected tool came from the newer public main source. The first
-icon-only /273 update kept the independent elab9 UI runtime. The subsequent [runtime upgrade](vellum-refresh.md) now selects the same public v1
-source with ELab compatibility fixes. The icon and shared commands are retained.
+icon-only /273 update kept the independent elab9 UI runtime. The [runtime SDK](vellum-refresh.md) now follows the same upstream commit
+with ELab compatibility fixes. The icon and shared commands are retained.
 
 ## Build an app with its icon
 
