@@ -16,10 +16,12 @@ import (
 func nativeTraceFocusSmoke(ctx context.Context, a *app.Application, s *screen) error {
 	ready := make(chan error, 1)
 	if err := a.PostWait(ctx, func() {
+		// A paused example can have no samples yet. Initialize the live run
+		// before asking the scope to focus one of its traces.
 		for _, action := range []struct {
 			command string
 			params  any
-		}{{"example.flasher", workbench.ReplaceParams{DiscardChanges: true}}, {"simulation.pause", struct{}{}}, {"scope.probes.set", workbench.ProbeParams{IDs: []string{"i:D1", "v:C1"}}}, {"view.fit", workbench.FitParams{Width: 800, Height: 500}}} {
+		}{{"example.flasher", workbench.ReplaceParams{DiscardChanges: true}}, {"simulation.pause", struct{}{}}, {"scope.probes.set", workbench.ProbeParams{IDs: []string{"i:D1", "v:C1"}}}, {"simulation.restart", struct{}{}}, {"view.fit", workbench.FitParams{Width: 800, Height: 500}}} {
 			if r := s.invoke(action.command, action.params); r.Error != nil {
 				ready <- fmt.Errorf("trace focus setup: %s", r.Error.Message)
 				return

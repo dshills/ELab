@@ -96,7 +96,7 @@ func (s *screen) nativeToolbar(state workbench.Snapshot, width float32) ui.Node 
 	primary.Style.MaxSize = ui.Some(ui.Size{})
 	primary.Style.GrowX = ui.Some(float32(1))
 	primarySlot := ui.Node{ID: "native-primary-slot", Kind: ui.Column, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: primaryWidth, Height: 34}), MaxSize: ui.Some(ui.Size{Width: primaryWidth, Height: 34}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0))}, Children: []ui.Node{primary}}
-	actions = append(actions, sweep, fit, primarySlot, share, inspector)
+	actions = append(actions, nativeSpace("native-header-space"), sweep, fit, primarySlot, share, inspector)
 	gap := float32(8)
 	if width < 640 {
 		gap = 4

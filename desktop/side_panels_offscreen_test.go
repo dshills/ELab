@@ -278,8 +278,10 @@ func TestMountedDrawersCloseAtEdgesAndReopenByLabel(t *testing.T) {
 			before := s.service.Snapshot()
 			left := mountedControlElement(t, m, "parts-toggle")
 			right := mountedControlElement(t, m, "inspector-toggle")
-			if !left.Visible || !right.Visible || left.Bounds.Min.X > 240 || right.Bounds.Min.X < 700 {
-				t.Fatal("close controls are not at their drawer edges", left.Bounds, right.Bounds)
+			leftGap := sidePanelGrip(t, m, "parts-split").Min.X - left.Bounds.Max.X
+			rightGap := sidePanelGrip(t, m, "inspector-split").Min.X - right.Bounds.Max.X
+			if !left.Visible || !right.Visible || leftGap < 0 || leftGap > 24 || rightGap < 0 || rightGap > 24 {
+				t.Fatalf("close controls are not beside their dividers: parts gap %d, inspector gap %d", leftGap, rightGap)
 			}
 			for _, id := range []string{"parts-toggle", "inspector-toggle"} {
 				clickMountedControl(t, m, id)

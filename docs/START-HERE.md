@@ -1,7 +1,7 @@
 # Start with ELab
 
 ELab is a local schematic editor with live educational circuit simulation.
-This alpha is for macOS on Apple Silicon. It includes ELab.app, a matching
+This build requires macOS 27.0 or later on Apple Silicon. It includes ELab.app, a matching
 elab-agent, 87 editable examples, dependency notices and these guides.
 
 1. Extract the downloaded ZIP and keep the whole folder. Move it somewhere
@@ -15,14 +15,15 @@ elab-agent, 87 editable examples, dependency notices and these guides.
 3. Open Examples and try **RC charge/discharge** or **Capacitor-timed LED flasher**.
    Complete supported circuits simulate as you draw. Pause freezes accepted
    readings; Restart restores startup; Step advances a paused transient circuit.
-4. **Parts** and **Inspector** are drawers: close with their close buttons, reopen
-   with labelled edge tabs, and drag dividers to resize. They move the canvas
-   aside. **Inspect** edits a selected part; Details has model/startup/geometry.
+4. Use the sidebar button at the top of **Parts** to close it. The left end of
+   the toolbar reopens Parts. The rightmost sidebar button toggles **Inspector**.
+   Drag either divider to resize. In **Inspect**, select a part to edit its value
+   or open Details for model settings.
 5. **Simulate** chooses one tool. Basic inputs and its Record/Run action come
    first; Advanced retains the rest. The instrument dock's **Scope / Spectrum**
    tabs share live probes. Recorded runs and their spectrum are separate captures.
-6. **Measure** chooses a component, wire, terminal, net or probe. The bottom strip
-   follows that target. Plot adds a trace; Pin adds a live reading to the drawing.
+6. **Measure** chooses a component, wire, terminal, net or probe. Inspect shows
+   readings for that target. Plot adds a trace. Pin adds a reading to the drawing.
    Full readings and the original network overview remain under More measurements.
 7. Save your own copy before modifying something you want to keep. Document has
    SVG/PDF/PNG export and print preview. Start with Fit to page for one sheet.

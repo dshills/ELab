@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"image"
 	"log"
+	"math"
 	"reflect"
 	"sync/atomic"
 
@@ -81,12 +82,19 @@ func nativeWorkspaceSmoke(ctx context.Context, s *screen) error {
 		return fmt.Errorf("divider changed physics/document/measurements")
 	}
 	if err := owner(func() error {
-		if s.scope.View.Width < s.drawing.View.Width {
-			return fmt.Errorf("scope failed to fill split width: %g < %g", s.scope.View.Width, s.drawing.View.Width)
-		}
 		plot := s.scope.widget
 		if plot == nil {
 			return fmt.Errorf("scope plot has no mounted widget")
+		}
+		// The native card sits inside the dock padding and scrollbar. Compare
+		// the GPU viewport with the card's usable width, excluding plot chrome.
+		card, ok := plot.ParentByName("native-plot-card").(core.Widget)
+		if !ok {
+			return fmt.Errorf("scope plot has no mounted card")
+		}
+		want := card.AsWidget().Geom.Size.Actual.Content.X - (plot.Geom.Size.Actual.Total.X - plot.Geom.Size.Actual.Content.X)
+		if want <= 0 || math.Abs(s.scope.View.Width-float64(want)) > 1 {
+			return fmt.Errorf("scope viewport width %g does not fill its card content %g", s.scope.View.Width, want)
 		}
 		host, ok := plot.ParentByName("scope-scroll").(core.Widget)
 		if !ok {

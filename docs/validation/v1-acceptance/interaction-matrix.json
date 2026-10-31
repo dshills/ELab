@@ -101,7 +101,7 @@
     },
     {
       "id": "menus",
-      "acceptance": "Queued and held category origin, own focus and overflow actions",
+      "acceptance": "Queued and held category origin, own focus and queued Fit actions",
       "tests": [
         {
           "name": "TestMountedQueuedExampleCategoryRetainsAgentSearch",
@@ -112,7 +112,7 @@
           "source": "desktop/menu_origin_offscreen_test.go"
         },
         {
-          "name": "TestMountedQueuedOverflowRetainsAgentViewport",
+          "name": "TestMountedQueuedNativeFitRetainsAgentViewport",
           "source": "desktop/menu_origin_offscreen_test.go"
         }
       ]
