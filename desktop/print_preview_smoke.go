@@ -132,10 +132,11 @@ func nativePrintPreviewSmoke(ctx context.Context, a *app.Application, s *screen)
 		return err
 	}
 	rebuilt := false
+	lastInk := 0
 	for {
 		select {
 		case <-ctx.Done():
-			return ctx.Err()
+			return fmt.Errorf("waiting for restored schematic strokes (last frame %d ink pixels): %w", lastInk, ctx.Err())
 		case <-ticker.C:
 		}
 		if err := a.PostWait(ctx, func() {
@@ -151,15 +152,22 @@ func nativePrintPreviewSmoke(ctx context.Context, a *app.Application, s *screen)
 				action <- err
 				return
 			}
+			// Count the actual schematic strokes; paper and grid have separate colors in every theme.
+			stroke := s.colorsForTheme(s.service.Snapshot().Theme).Ink
 			ink := 0
 			for y := pixels.Bounds().Min.Y; y < pixels.Bounds().Max.Y; y++ {
 				for x := pixels.Bounds().Min.X; x < pixels.Bounds().Max.X; x++ {
 					p := pixels.NRGBAAt(x, y)
-					if p.A > 200 && p.R < 120 && p.G > 60 && p.B > 60 {
+					// Allow the renderer to blend edge pixels without counting grid or paper.
+					dr := max(p.R, stroke.R) - min(p.R, stroke.R)
+					dg := max(p.G, stroke.G) - min(p.G, stroke.G)
+					db := max(p.B, stroke.B) - min(p.B, stroke.B)
+					if p.A > 200 && max(dr, dg, db) <= 16 {
 						ink++
 					}
 				}
 			}
+			lastInk = ink
 			if ink < 200 {
 				action <- cogent.ErrFrameNotReady
 				return

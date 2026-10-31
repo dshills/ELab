@@ -129,7 +129,7 @@ func (s *screen) nativeExamplesMenu(state workbench.Snapshot) ui.Node {
 		}
 	}
 	options = append(options, ui.Option{ID: "browse", Label: "Browse all examples…"})
-	for _, pair := range [][2]string{{"project.clear", "New schematic"}, {"file.open", "Open…"}, {"file.save", "Save"}, {"file.save-as", "Save as…"}} {
+	for _, pair := range [][2]string{{"project.clear", "New schematic"}, {"file.open", "Open…"}, {"file.save", "Save"}, {"file.save-as", "Save as…"}, {"app.close", "Close window"}} {
 		actions[pair[0]] = s.button(pair[0], pair[1])
 		options = append(options, ui.Option{ID: pair[0], Label: pair[1]})
 	}

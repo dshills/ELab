@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/dshills/vellum/app"
-	"github.com/dshills/vellum/ui"
 )
 
 // Run last: the explicit Discard decision closes this owned smoke session.
@@ -32,8 +31,17 @@ func nativeLifecycleSmoke(ctx context.Context, a *app.Application, s *screen) er
 			done <- fmt.Errorf("canceled close changed circuit/history/physics")
 			return
 		}
-		if err := smokeUI(s, "file-menu", &ui.ChangeEvent{SelectedID: "app.close"}); err != nil {
-			done <- err
+		// Dispatch through the actual menu descriptor and its selected option.
+		// The harness's generic fixture helper translates example choices.
+		menu, ok := findNode(s.view(), "examples-menu")
+		closeItem, offered := findAction(menu, "app.close")
+		if !ok || menu.Disabled || !offered || closeItem.Disabled || closeItem.Activate == nil {
+			done <- fmt.Errorf("Close window is unavailable in the file actions menu")
+			return
+		}
+		closeItem.Activate()
+		if s.errorMessage != "" {
+			done <- fmt.Errorf("Close window: %s", s.errorMessage)
 			return
 		}
 		if s.pendingCommand != "app.close" {
