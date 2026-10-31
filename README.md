@@ -203,13 +203,14 @@ build, not a Developer ID signed or notarized installer. Historical local packag
 paths in validation records are not GitHub downloads. Build from source or use
 the qualified alpha described below.
 
-The current **0.204.0 /309 unsigned alpha** requires an Apple Silicon Mac running macOS 27.2 or later.
-[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.204.0-alpha.1/ELab-0.204.0-macos-arm64.zip) and
-[verify its checksum](https://github.com/dshills/ELab/releases/download/v0.204.0-alpha.1/SHA256SUMS.txt).
+The current **0.205.0 /311 unsigned alpha** requires an Apple Silicon Mac running macOS 27.2 or later.
+[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.205.0-alpha.1/ELab-0.205.0-macos-arm64.zip) and
+[verify its checksum](https://github.com/dshills/ELab/releases/download/v0.205.0-alpha.1/SHA256SUMS.txt).
 Follow **START-HERE.md** in the extracted folder. The alpha includes the matching
-agent, 87 editable examples, notices and the self-guided first-use kit.
+agent, 88 editable examples, notices and the self-guided first-use kit.
+Open **Examples → Power & relays → Four-MOSFET H-bridge** to try the new circuit.
 The app has an ad-hoc signature and Gatekeeper can block it.
-[Release notes](https://github.com/dshills/ELab/releases/tag/v0.204.0-alpha.1) · [Qualification and installation results](docs/current-release.md).
+[Release notes](https://github.com/dshills/ELab/releases/tag/v0.205.0-alpha.1) · [Qualification and installation results](docs/current-release.md).
 
 
 ## Use an AI agent

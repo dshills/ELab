@@ -1,0 +1,318 @@
+{
+  "version": "0.205.0",
+  "build": 311,
+  "release_tag": "v0.205.0-alpha.1",
+  "source_commit": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+  "archive_files": 473,
+  "archive_bytes": 46822732,
+  "github_asset_sha256": {
+    "ELab-0.205.0-macos-arm64.zip": "b238ec256eae30778e435e0c7af56141d4f7bec1a6a0e1c1453b9bc18696d973",
+    "START-HERE.md": "1f1e162ba344d207ce2488d4ed4ad28b4aa0fa1d058652b9d3d5d62162a86ea0",
+    "SHA256SUMS.txt": "c27f771ddf8e44eddd23a886b76222b8c24fbc5e3b1d17f108e543bcda40806a"
+  },
+  "manifest_sha256": "0bd83dbdcbb5de5e368a26fc6b0ff214a0cac0b0bea0356af56617c048fdb4ff",
+  "native_sha256": "7b65f121d1f351168da7642b2c362f09f5abf636608dcd0a0a8083a1fe7bb70c",
+  "agent_sha256": "b3ee63b633937273298beeaefda48d29f9b1d83b56d2defcb7c6915acbec03c0",
+  "controller_sha256": "4eafbfaa0d205d1df2da1a5d6b660712edd561b47c7ccdeaf5da8b85f84e2cc1",
+  "component_kinds": 61,
+  "commands": 229,
+  "examples": 88,
+  "examples_reopened_clean": true,
+  "native_smoke_passed": true,
+  "runtime_adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "mcp_transports": [
+    "MCP headless stdio",
+    "MCP to owned private socket"
+  ],
+  "mcp_exports": [
+    "svg",
+    "pdf"
+  ],
+  "local_quality_gates": [
+    {
+      "name": "portable-race",
+      "source": "15b4ff75087d1b2d823ab96c304cef723e3e93d9",
+      "passed": true,
+      "seconds": 603.462
+    },
+    {
+      "name": "portable-vet",
+      "source": "15b4ff75087d1b2d823ab96c304cef723e3e93d9",
+      "passed": true,
+      "seconds": 6.534
+    },
+    {
+      "name": "desktop-race",
+      "source": "15b4ff75087d1b2d823ab96c304cef723e3e93d9",
+      "passed": true,
+      "seconds": 444.504
+    },
+    {
+      "name": "desktop-vet",
+      "source": "15b4ff75087d1b2d823ab96c304cef723e3e93d9",
+      "passed": true,
+      "seconds": 1.138
+    },
+    {
+      "name": "rendered-race",
+      "source": "15b4ff75087d1b2d823ab96c304cef723e3e93d9",
+      "passed": true,
+      "seconds": 819.364
+    },
+    {
+      "name": "rendered-vet",
+      "source": "15b4ff75087d1b2d823ab96c304cef723e3e93d9",
+      "passed": true,
+      "seconds": 2.222
+    },
+    {
+      "name": "sdk",
+      "source": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+      "passed": true,
+      "seconds": 0.534
+    },
+    {
+      "name": "python",
+      "source": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+      "passed": true,
+      "seconds": 5.652
+    },
+    {
+      "name": "prd",
+      "source": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+      "passed": true,
+      "seconds": 0.033
+    },
+    {
+      "name": "inventory",
+      "source": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+      "passed": true,
+      "seconds": 0.545
+    },
+    {
+      "name": "lint",
+      "source": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+      "passed": true,
+      "seconds": 22.681
+    }
+  ],
+  "changed_quality_inputs_after_go_tests": [
+    ".github/workflows/quality.yml",
+    "scripts/mcp-demo.py",
+    "scripts/release_qualification.py",
+    "scripts/test_mcp_setup.py"
+  ],
+  "downloaded_hbridge": {
+    "passed": true,
+    "source_commit": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+    "build": 311,
+    "zip_sha256": "b238ec256eae30778e435e0c7af56141d4f7bec1a6a0e1c1453b9bc18696d973",
+    "platform": "27.2",
+    "architecture": "arm64",
+    "minimum_macos": "27.2",
+    "clean_account": false,
+    "quarantine_present": false,
+    "gatekeeper_code": 3,
+    "gatekeeper": "ELab.app: rejected",
+    "native_exit": 0,
+    "project": "Examples/discrete-hbridge.elab",
+    "mosfets": {
+      "pmos": 2,
+      "nmos": 2
+    },
+    "negative": {
+      "voltage_v": -4.7253319037622035,
+      "current_a": -0.04725331903762203
+    },
+    "positive": {
+      "voltage_v": 4.725331894137437,
+      "current_a": 0.04725331894137437
+    },
+    "recording_seconds": 0.045,
+    "recording_rows": 50,
+    "direction_sequence_v": [
+      5,
+      0,
+      5
+    ],
+    "lossless_recording_reopen": true,
+    "package_unchanged": true
+  },
+  "hosted_ci": {
+    "conclusion": "failure",
+    "headSha": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+    "status": "completed",
+    "url": "https://github.com/dshills/ELab/actions/runs/41212276815",
+    "jobs_by_runner": {
+      "macos": {
+        "job": {
+          "conclusion": "failure",
+          "name": "macos",
+          "status": "completed",
+          "url": "https://github.com/dshills/ELab/actions/runs/41212276815/job/124569576947"
+        },
+        "release": {
+          "source": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+          "passed": false,
+          "failed_gates": {
+            "portable-race": [
+              "TestButtonCoarseOutputDoesNotMissBounceAndCapturesValidate",
+              "TestCapacityNoiseSocketMatchesDirectSnapshot",
+              "TestClassABSpeakerSharedCaptureAndSavedExample",
+              "TestDigitalDisplay555CounterAllDigits",
+              "TestElectricalReferencesAndFlasherRefinementThroughPublicCommands",
+              "TestExtendedExamplesElectrical",
+              "TestFlasherProbesBackfillAndCursorTiming",
+              "TestInductorPublicWorkflowAndEvidenceComparison",
+              "TestMCPSameCatalogCommandsGuardsAndRetries",
+              "TestMixedCapacitanceSetsFlasherPeriod",
+              "TestMixedServiceHistoryPersistenceAndRuntime",
+              "TestMotorPWM555DrivesShaftAndFlyback",
+              "TestPerformanceSuiteRetainsCoverageAndCircuitIdentities",
+              "TestRecordingTimingBothFlasherSides",
+              "TestRelayProtectedDriverAndPulseRelease",
+              "TestRelaySharedCaptureAndProjectReopen",
+              "TestSensorExampleThresholdsAndRelayStorage"
+            ]
+          }
+        },
+        "baseline": {
+          "source": "7f164ce8816ee120459fb6887b7815e26463fa57",
+          "passed": false,
+          "failed_gates": {
+            "portable-race": [
+              "TestBuckStartupRippleDutyAndLoad",
+              "TestButtonCoarseOutputDoesNotMissBounceAndCapturesValidate",
+              "TestCapacityNoiseSocketMatchesDirectSnapshot",
+              "TestClassABSpeakerSharedCaptureAndSavedExample",
+              "TestDigitalDisplay555CounterAllDigits",
+              "TestElectricalReferencesAndFlasherRefinementThroughPublicCommands",
+              "TestExtendedExamplesElectrical",
+              "TestFlasherProbesBackfillAndCursorTiming",
+              "TestInductorLEDSmallAndLargeInductanceStartup",
+              "TestInductorPublicWorkflowAndEvidenceComparison",
+              "TestMixedCapacitanceSetsFlasherPeriod",
+              "TestMixedServiceHistoryPersistenceAndRuntime",
+              "TestMotorPWM555DrivesShaftAndFlyback",
+              "TestPerformanceMeasurementsUseFreshChangedRuns",
+              "TestPerformanceSuiteRetainsCoverageAndCircuitIdentities",
+              "TestRecordingTimingBothFlasherSides",
+              "TestRelayProtectedDriverAndPulseRelease",
+              "TestRelaySharedCaptureAndProjectReopen",
+              "TestSensorExampleThresholdsAndRelayStorage",
+              "TestTimer555ExamplesCaptureSaveRecoveryAndStrictImport"
+            ]
+          }
+        }
+      },
+      "portable": {
+        "job": {
+          "conclusion": "failure",
+          "name": "portable",
+          "status": "completed",
+          "url": "https://github.com/dshills/ELab/actions/runs/41212276815/job/124569576952"
+        },
+        "release": {
+          "source": "0e282e6dabf5cd8f9a4d3ade54a1c1ff03a57d8e",
+          "passed": false,
+          "failed_gates": {
+            "portable-race": [
+              "TestAnalysisCapacityPagesReassembleAndOwnData",
+              "TestAnalysisPagesSocketAndStdioParity",
+              "TestBuckStartupRippleDutyAndLoad",
+              "TestButtonCoarseOutputDoesNotMissBounceAndCapturesValidate",
+              "TestCapacityNoiseSocketMatchesDirectSnapshot",
+              "TestCapacityPublicReportRecomputesAndRejectsCorruption",
+              "TestClassABSpeakerSharedCaptureAndSavedExample",
+              "TestDigitalDisplay555CounterAllDigits",
+              "TestElectricalReferencesAndFlasherRefinementThroughPublicCommands",
+              "TestExtendedExamplesElectrical",
+              "TestFlasherProbesBackfillAndCursorTiming",
+              "TestInductorLEDSmallAndLargeInductanceStartup",
+              "TestInductorLEDZeroCurrentStartup",
+              "TestInductorPublicWorkflowAndEvidenceComparison",
+              "TestMixedCapacitanceSetsFlasherPeriod",
+              "TestMixedServiceHistoryPersistenceAndRuntime",
+              "TestMotorLiveLoadPreservesStorageAndCapture",
+              "TestMotorPWM555DrivesShaftAndFlyback",
+              "TestNoiseCapacitySavedCaptureReopensAndRejectsMaterialChanges",
+              "TestPerformanceMeasurementsUseFreshChangedRuns",
+              "TestPerformanceSuiteRetainsCoverageAndCircuitIdentities",
+              "TestRecordingTimingBothFlasherSides",
+              "TestRelayProtectedDriverAndPulseRelease",
+              "TestRelaySharedCaptureAndProjectReopen",
+              "TestSensorExampleThresholdsAndRelayStorage",
+              "TestTimer555ExamplesCaptureSaveRecoveryAndStrictImport"
+            ]
+          }
+        },
+        "baseline": {
+          "source": "7f164ce8816ee120459fb6887b7815e26463fa57",
+          "passed": false,
+          "failed_gates": {
+            "portable-race": [
+              "TestAnalysisCapacityPagesReassembleAndOwnData",
+              "TestAnalysisPagesSocketAndStdioParity",
+              "TestBuckStartupRippleDutyAndLoad",
+              "TestButtonCoarseOutputDoesNotMissBounceAndCapturesValidate",
+              "TestCapacityNoiseSocketMatchesDirectSnapshot",
+              "TestCapacityPublicReportRecomputesAndRejectsCorruption",
+              "TestClassABSpeakerSharedCaptureAndSavedExample",
+              "TestDigitalDisplay555CounterAllDigits",
+              "TestElectricalReferencesAndFlasherRefinementThroughPublicCommands",
+              "TestExtendedExamplesElectrical",
+              "TestFlasherProbesBackfillAndCursorTiming",
+              "TestInductorLEDSmallAndLargeInductanceStartup",
+              "TestInductorLEDZeroCurrentStartup",
+              "TestInductorPublicWorkflowAndEvidenceComparison",
+              "TestMixedCapacitanceSetsFlasherPeriod",
+              "TestMixedServiceHistoryPersistenceAndRuntime",
+              "TestMotorLiveLoadPreservesStorageAndCapture",
+              "TestMotorPWM555DrivesShaftAndFlyback",
+              "TestNoiseCapacitySavedCaptureReopensAndRejectsMaterialChanges",
+              "TestPerformanceMeasurementsUseFreshChangedRuns",
+              "TestPerformanceSuiteRetainsCoverageAndCircuitIdentities",
+              "TestRecordingTimingBothFlasherSides",
+              "TestRelayProtectedDriverAndPulseRelease",
+              "TestRelaySharedCaptureAndProjectReopen",
+              "TestSensorExampleThresholdsAndRelayStorage",
+              "TestTimer555ExamplesCaptureSaveRecoveryAndStrictImport"
+            ]
+          }
+        }
+      }
+    },
+    "baseline_workflow": "https://github.com/dshills/ELab/actions/runs/40859825622"
+  },
+  "public_release": {
+    "isDraft": false,
+    "isPrerelease": true,
+    "publishedAt": "2026-10-31T15:12:17Z",
+    "tagName": "v0.205.0-alpha.1",
+    "url": "https://github.com/dshills/ELab/releases/tag/v0.205.0-alpha.1"
+  },
+  "x86_64_fixture_comparison": {
+    "platform": "darwin/amd64 under Rosetta, CGO_ENABLED=0",
+    "previous_tag": "v0.204.0-alpha.1",
+    "same_failed_tests": [
+      "TestCapacityPublicReportRecomputesAndRejectsCorruption",
+      "TestNoiseCapacitySavedCaptureReopensAndRejectsMaterialChanges"
+    ],
+    "passing_release_hbridge_tests": [
+      "TestDiscreteHBridgeReversesRecordsAndReopens",
+      "TestFourFETBudgetRetainsTwoJFETLimit"
+    ]
+  },
+  "targeted_mcp_guard_repeat": {
+    "test": "TestMCPSameCatalogCommandsGuardsAndRetries/2025-11-25/local",
+    "platform": "macOS 27.2 arm64",
+    "race": true,
+    "passed_runs": 20,
+    "failed_runs": 0
+  }
+}
