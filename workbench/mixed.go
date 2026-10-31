@@ -706,16 +706,29 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 	size := n.matrixSize(dt)
 	x := make([]float64, size)
 	copy(x, guess)
-	if dt == 0 && !n.dc {
-		for k := range n.inductors {
-			// Start on the immutable current constraint, including pA-scale
-			// intent; a residual tolerance must not erase a small startup.
-			x[n.inductorIndex(k)] = old[len(n.caps)+k]
-		}
-	}
 	for iter := 0; iter < maxMixedNewtonIterations; iter++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
+		}
+		if dt == 0 && !n.dc {
+			// Storage is fixed during a zero-time input change. Reapply exact
+			// grounded constraints before checking KCL, since elimination can
+			// introduce a one-ULP correction into an otherwise zero update.
+			for k := range n.inductors {
+				x[n.inductorIndex(k)] = old[len(n.caps)+k]
+			}
+			for k, p := range n.caps {
+				if isJunctionCap(p) || capacitorESR(p) != 0 {
+					continue
+				}
+				one, two := n.pin(p, "1"), n.pin(p, "2")
+				if one >= 0 && two < 0 {
+					x[one] = old[k]
+				}
+				if two >= 0 && one < 0 {
+					x[two] = -old[k]
+				}
+			}
 		}
 		a, f := n.equations(x, old, dt, t, at)
 		good := true
