@@ -17,6 +17,20 @@ issues by wrong turn/confusion and severity. Never convert automated engineering
 checks into participant success rates or invent completion times. A few volunteer
 sessions can reveal problems; they cannot establish broad usability statistics.
 
+## Observing the redesigned workspace
+
+Use the same build for three to five hobbyists who have never used ELab. Give
+each person the task kit with the hints collapsed. Observe the first attempt at
+each task, note the control they looked for and ask what they expected before
+opening a hint. Record a stopped task as blocked. Keep observations and contact
+information separate and use participant codes in the notes.
+
+After the sessions, count distinct people who encountered each obstacle. Keep
+data loss or an incorrect displayed measurement as a separate defect even if
+only one person encountered it. For the most repeated obstacle, reproduce the
+steps, fix it and rerun the original task with a new first-time participant.
+Use the blank feedback form in the kit for this formative round.
+
 ## Maintained engineering counterparts
 
 These test the same mechanics and electrical values through actual desktop
