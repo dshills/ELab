@@ -5,11 +5,15 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
 )
 
 func TestHBridgeNativeExampleSwitchesPlotsAndAgentParity(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	u, cleanup := testScreen(t)
 	defer cleanup()
 	a := workbench.New()

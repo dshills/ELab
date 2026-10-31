@@ -10,6 +10,7 @@ import (
 
 	"cogentcore.org/core/events"
 	"cogentcore.org/core/events/key"
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/drivers/cogent"
 	"github.com/dshills/vellum/ui"
@@ -74,6 +75,9 @@ func TestMountedScopeCursorEnterSelectClearMatchesPublicAgent(t *testing.T) {
 		step, dt   float64
 	}{{"rc", "4 ms", "16 ms", 1, .02, .012}, {"flasher", "100 ms", "260 ms", 70, .005, .16}} {
 		t.Run(family.name, func(t *testing.T) {
+			if family.name == "flasher" && testutil.RunAtProductionSpeed(t) {
+				return
+			}
 			s, cleanup := testScreen(t)
 			t.Cleanup(cleanup)
 			agent := workbench.New()
