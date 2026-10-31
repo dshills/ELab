@@ -1,7 +1,8 @@
 # Start with ELab
 
 ELab is a local schematic editor with live educational circuit simulation.
-This build requires macOS 27.0 or later on Apple Silicon. It includes ELab.app, a matching
+This alpha runs on Apple Silicon. Check the minimum macOS version in the
+README.md beside the app before opening it. The folder includes ELab.app, a matching
 elab-agent, 87 editable examples, dependency notices and these guides.
 
 1. Extract the downloaded ZIP and keep the whole folder. Move it somewhere

@@ -5,11 +5,13 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import plistlib
 import re
 import shutil
 import stat
 import subprocess
 import sys
+from xml.parsers.expat import ExpatError
 
 from acceptance_client import AcceptanceClient
 import quality
@@ -143,8 +145,17 @@ def assemble(args):
         info = subprocess.check_output(['go', 'version', '-m', str(binary)], text=True)
         check('vcs.revision='+source in info and 'vcs.modified=false' in info, 'build must match clean source')
         (args.work/(label+'-build-info.txt')).write_text(info)
+    try:
+        with (args.output/'ELab.app/Contents/Info.plist').open('rb') as info:
+            bundle_info = plistlib.load(info)
+    except (OSError, ValueError, ExpatError) as error:
+        raise ValueError('cannot read packaged Info.plist') from error
+    minimum_os = bundle_info.get('LSMinimumSystemVersion') if isinstance(bundle_info, dict) else None
+    check(isinstance(minimum_os, str) and re.fullmatch(r'[0-9]{1,3}(?:\.[0-9]{1,3}){0,2}', minimum_os),
+          'packaged Info.plist must declare a valid LSMinimumSystemVersion')
     (args.output/'README.md').write_text('ELab '+args.version+' /'+str(args.build)+
-        '\n\nUnsigned/ad-hoc candidate. Matching app/agent and curated examples; see included guides.\n'
+        f'\n\nELab.app requires macOS {minimum_os} or later on Apple Silicon.\n'
+        'Unsigned/ad-hoc candidate. Matching app/agent and curated examples; see included guides.\n'
         'Start with START-HERE.md; the self-guided kit and maintainer key are included.\n'
         'Qualification is separate. Native OS-input, participant, clean-account and public signing gates remain distinct.\n')
     data = dict(schema=1, version=args.version, build=args.build, source_commit=source,
