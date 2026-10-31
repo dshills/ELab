@@ -36,12 +36,12 @@ func nativeLifecycleSmoke(ctx context.Context, a *app.Application, s *screen) er
 		menu, ok := findNode(s.view(), "examples-menu")
 		closeItem, offered := findAction(menu, "app.close")
 		if !ok || menu.Disabled || !offered || closeItem.Disabled || closeItem.Activate == nil {
-			done <- fmt.Errorf("Close window is unavailable in the file actions menu")
+			done <- fmt.Errorf("file actions menu does not offer Close window")
 			return
 		}
 		closeItem.Activate()
 		if s.errorMessage != "" {
-			done <- fmt.Errorf("Close window: %s", s.errorMessage)
+			done <- fmt.Errorf("close window: %s", s.errorMessage)
 			return
 		}
 		if s.pendingCommand != "app.close" {
