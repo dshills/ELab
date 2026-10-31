@@ -283,7 +283,7 @@ func measurePerformance(s *session, name string, index int, condition string) (s
 	}
 	sample.FreshResultMS = float64(time.Since(started)) / float64(time.Millisecond)
 	if !performanceFresh(state, name) || state.ElectricalRevision <= before.ElectricalRevision || state.RunID <= before.RunID {
-		return sample, fmt.Errorf("edit did not produce a fresh changed run")
+		return sample, fmt.Errorf("edit did not produce a fresh changed run for %s: status %s, run %d -> %d, electrical revision %d -> %d, diagnostics %+v", name, state.Status, before.RunID, state.RunID, before.ElectricalRevision, state.ElectricalRevision, state.Diagnostics)
 	}
 	sample.RunID, sample.ElectricalRevision = state.RunID, state.ElectricalRevision
 	sample.ProbeIDs = append([]string(nil), state.Scope.Selected...)

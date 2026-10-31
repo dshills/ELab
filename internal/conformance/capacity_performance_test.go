@@ -7,10 +7,14 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 )
 
 func TestCapacityPerformanceMeasuresFullSizeChangedCaptures(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	factory := ordinaryAgentFactory(t)
 	ctx, cancel := context.WithTimeout(t.Context(), 2*time.Minute)
 	defer cancel()
