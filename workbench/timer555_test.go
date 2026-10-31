@@ -8,9 +8,14 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestTimer555InitialExamples(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, g := range []Graph{Timer555FlasherExampleGraph(), Timer555OscillatorExampleGraph(), Timer555OneShotExampleGraph()} {
 		c, status, d := g.Compile()
 		if d != nil {
@@ -130,6 +135,9 @@ func timer555Kernel(t *testing.T, g Graph) *simulationKernel {
 	return k
 }
 func TestTimer555RepeatedCyclesAgainstIndependentRCReference(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, step := range []float64{.001, .005} {
 		k := timer555Kernel(t, Timer555FlasherExampleGraph())
 		for i := 1; i <= int(2.5/step); i++ {
@@ -179,6 +187,9 @@ func TestTimer555RepeatedCyclesAgainstIndependentRCReference(t *testing.T) {
 	}
 }
 func TestTimer555OneShotWidthAndResetPriorityInCircuit(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	g := Timer555OneShotExampleGraph()
 	k := timer555Kernel(t, g)
 	for i := 1; i <= 800; i++ {
@@ -220,6 +231,9 @@ func TestTimer555OneShotWidthAndResetPriorityInCircuit(t *testing.T) {
 	}
 }
 func TestTimer555LiveWiperPreservesMemoryChargeAndTime(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "555-oscillator"}, "load")
@@ -241,6 +255,9 @@ func TestTimer555LiveWiperPreservesMemoryChargeAndTime(t *testing.T) {
 	}
 }
 func TestTimer555FailedStepLeavesAcceptedStateAndTraceUntouched(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	k := timer555Kernel(t, Timer555FlasherExampleGraph())
 	for i := 1; i <= 620; i++ {
 		if err := k.advance(context.Background(), float64(i)*.001); err != nil {
@@ -266,6 +283,9 @@ func TestTimer555FailedStepLeavesAcceptedStateAndTraceUntouched(t *testing.T) {
 }
 
 func TestTimer555InductorLoadKeepsCurrentAtOutputEdge(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	g := Timer555FlasherExampleGraph()
 	// The control bypass is optional in this noise-free model. Leave it open
 	// here so the existing conservative LC ceiling is set by the timing cap.
@@ -312,6 +332,9 @@ func TestTimer555InductorLoadKeepsCurrentAtOutputEdge(t *testing.T) {
 }
 
 func TestTimer555ExternalControlChangesTripLevels(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	g := Timer555FlasherExampleGraph()
 	parts := []Component{}
 	for _, p := range g.Components {
@@ -353,6 +376,9 @@ func TestTimer555ExternalControlChangesTripLevels(t *testing.T) {
 	}
 }
 func TestTimer555LiveSwitchPreservesHighLatchInHoldBand(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	g := Timer555FlasherExampleGraph()
 	sw, _ := MakeComponent("S1", "switch", Point{260, 0}, "")
 	g.Components = append(g.Components, sw)
@@ -381,6 +407,9 @@ func TestTimer555LiveSwitchPreservesHighLatchInHoldBand(t *testing.T) {
 }
 
 func TestTimer555TwoIndependentLatches(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	g := Timer555FlasherExampleGraph()
 	second := g.Clone()
 	for i := range second.Components {
