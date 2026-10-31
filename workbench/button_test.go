@@ -34,6 +34,9 @@ func TestButtonDeterministicBounceAndAutomaticRelease(t *testing.T) {
 	}
 }
 func TestButtonCounterAndRCDebounceThroughSharedCommands(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, id := range []string{"button-counter", "button-debounce"} {
 		t.Run(id, func(t *testing.T) {
 			s := New()
@@ -156,6 +159,9 @@ func TestButtonCoarseOutputDoesNotMissBounceAndCapturesValidate(t *testing.T) {
 }
 
 func TestButtonSwitchedRCMatchesIndependentExponentials(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	b := newExampleBuilder()
 	b.part("V1", "dc-source", "5", 0, 0, 0)
 	b.ground("GND", "V1.negative", 0, 200)

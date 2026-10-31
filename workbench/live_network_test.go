@@ -40,8 +40,8 @@ func promptLiveCommand(t *testing.T, s *Service, command string, p any) Response
 	started := time.Now()
 	go func() {
 		raw, _ := json.Marshal(p)
-		rev := s.Snapshot().Revision
-		r := Request{Version: 1, ID: command, Command: command, Params: raw, ExpectedRevision: &rev, Key: command + fmt.Sprint(started.UnixNano())}
+		state := s.Snapshot()
+		r := Request{Version: 1, ID: command, Command: command, Params: raw, ExpectedCommandRevision: &state.CommandRevision, ExpectedDocumentGeneration: &state.Document.Generation, Key: command + fmt.Sprint(started.UnixNano())}
 		result <- s.Dispatch(context.Background(), r, "test")
 	}()
 	select {
