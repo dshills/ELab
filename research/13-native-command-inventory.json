@@ -54,7 +54,7 @@
     "desktop/native_artwork.go": "3abd419a9b2db263afa317d84d2e7b87194a95cad88ab451cf0c018403aceb69",
     "desktop/native_canvas_font.go": "9188e1b8ee2fa3d4b3224d507bb4159a0be039b2cf1b5185e606ef78d35f8807",
     "desktop/native_chrome.go": "162aeeee5fb122aadb42d2cb4b18954db2b4a3644d235af50b258228771062b8",
-    "desktop/native_design.go": "d248ab25bad0a040afc69cf14366a7b46d6871d5c9fcb73839fb13f05e818438",
+    "desktop/native_design.go": "06987ffb30ca6be7ee300fc2d189775f218c5acea4ca7112c66d884b1166e25e",
     "desktop/native_inspector.go": "3b49be2cfdd10c5f0101e78a5de041e644c031759fc8b5cbf6e08569d4fb0439",
     "desktop/native_instruments.go": "c8ec626083dad025a1864f5b0be017b43102ca7baf7712b4cb38725661bbbb3b",
     "desktop/native_pointer_regions.go": "6305bf759671679bbae667c2f18bf63794e43e3296960bc1eafb0e923e77a4a0",
@@ -3054,7 +3054,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 52,
+      "line": 54,
       "function": "*screen.nativeToolbar",
       "kind": "action-factory",
       "expression": "s.action(\"sweep-open\", \"Sweeps\", \"sweep.visibility.set\", workbench.SweepVisibilityParams{Visible: true})",
@@ -3065,7 +3065,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 54,
+      "line": 56,
       "function": "*screen.nativeToolbar",
       "kind": "callback-assignment",
       "expression": "sweep.Activate = func() {\n\tsweepActivate()\n\tif s.errorMessage == \"\" {\n\t\ts.nativeSweepOpen = true\n\t}\n}",
@@ -3073,7 +3073,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 60,
+      "line": 62,
       "function": "*screen.nativeToolbar",
       "kind": "action-factory",
       "expression": "s.action(\"view.fit\", \"Fit\", \"view.fit\", workbench.FitParams{Width: s.drawing.View.Width, Height: s.drawing.View.Height, FollowViewport: true})",
@@ -3084,7 +3084,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 65,
+      "line": 67,
       "function": "*screen.nativeToolbar",
       "kind": "registry-button",
       "expression": "s.button(pause, label)",
@@ -3092,7 +3092,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 69,
+      "line": 71,
       "function": "*screen.nativeToolbar",
       "kind": "action-factory",
       "expression": "s.action(\"native-stop-sweep\", \"Stop sweep\", \"sweep.cancel\", workbench.IDParams{ID: op.ID})",
@@ -3103,7 +3103,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 125,
+      "line": 126,
       "function": "*screen.nativeExamplesMenu",
       "kind": "node-Activate",
       "expression": "Activate: func() { s.openBrowserExample(target) }",
@@ -3111,7 +3111,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 133,
+      "line": 134,
       "function": "*screen.nativeExamplesMenu",
       "kind": "registry-button",
       "expression": "s.button(pair[0], pair[1])",
@@ -3119,7 +3119,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 136,
+      "line": 137,
       "function": "*screen.nativeExamplesMenu",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tif n, ok := actions[e.SelectedID]; ok \u0026\u0026 !n.Disabled {\n\t\tn.Activate()\n\t}\n}",
@@ -3127,7 +3127,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 143,
+      "line": 144,
       "function": "*screen.nativeExportMenu",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.pdf\", true, workbench.PDFExportParams{}, nil)",
@@ -3138,7 +3138,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 143,
+      "line": 144,
       "function": "*screen.nativeExportMenu",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.png\", true, workbench.PNGExportParams{}, nil)",
@@ -3149,7 +3149,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 143,
+      "line": 144,
       "function": "*screen.nativeExportMenu",
       "kind": "domain-ingress",
       "expression": "s.beginFile(\"export.schematic.svg\", true, workbench.SaveParams{}, nil)",
@@ -3160,7 +3160,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 144,
+      "line": 145,
       "function": "*screen.nativeExportMenu",
       "kind": "node-Change",
       "expression": "Change: func(e ui.ChangeEvent) {\n\tif fn := entries[e.SelectedID]; fn != nil {\n\t\tfn()\n\t}\n}",
@@ -3168,7 +3168,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 166,
+      "line": 167,
       "function": "*screen.nativeParts",
       "kind": "callback-assignment",
       "expression": "n.Activate = func() {\n\told()\n\tif s.errorMessage == \"\" {\n\t\ts.nativeConnectOpen = true\n\t}\n}",
@@ -3176,7 +3176,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 202,
+      "line": 203,
       "function": "*screen.nativeZoom",
       "kind": "action-factory",
       "expression": "s.action(\"native-zoom-out\", \"Zoom out\", \"view.zoom\", map[string]any{\"factor\": lo / state.View.Zoom})",
@@ -3187,7 +3187,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 203,
+      "line": 204,
       "function": "*screen.nativeZoom",
       "kind": "action-factory",
       "expression": "s.action(\"native-zoom-in\", \"Zoom in\", \"view.zoom\", map[string]any{\"factor\": hi / state.View.Zoom})",
@@ -3198,7 +3198,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 239,
+      "line": 240,
       "function": "*screen.nativeShell",
       "kind": "node-Custom",
       "expression": "Custom: s.drawing",
@@ -3206,7 +3206,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 285,
+      "line": 286,
       "function": "*screen.nativeShell",
       "kind": "node-Dismiss",
       "expression": "Dismiss: func() { s.nativeSweepOpen = false; s.app.Invalidate(\"main\") }",
@@ -3214,7 +3214,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 294,
+      "line": 295,
       "function": "*screen.nativeShell",
       "kind": "callback-assignment",
       "expression": "cancel.Activate = func() { s.nativeConnectOpen = false; s.app.Invalidate(\"main\") }",
@@ -3222,7 +3222,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 296,
+      "line": 297,
       "function": "*screen.nativeShell",
       "kind": "node-Dismiss",
       "expression": "Dismiss: func() { s.nativeConnectOpen = false; s.app.Invalidate(\"main\") }",
@@ -3230,7 +3230,7 @@
     },
     {
       "file": "desktop/native_design.go",
-      "line": 350,
+      "line": 351,
       "function": "*screen.nativeSheetNotice",
       "kind": "action-factory",
       "expression": "s.action(\"native-fit-sampling\", \"Use \"+nativeQuantity(advice.RecommendedStep, \"s\"), \"simulation.sampling.fit\", struct{}{})",

@@ -37,7 +37,9 @@ func (s *screen) nativeToolbar(state workbench.Snapshot, width float32) ui.Node 
 	actions = append(actions, nativeIcon(s.button("edit.undo", "Undo"), ui.SymbolUndo), nativeIcon(s.button("edit.redo", "Redo"), ui.SymbolRedo), s.nativeExamplesMenu(state))
 	title := s.documentTitle(state)
 	title.Style.MinSize = ui.Some(ui.Size{Width: 80, Height: 34})
-	title.Style.MaxSize = ui.Some(ui.Size{Width: max(80, width-420), Height: 34})
+	// The title column absorbs all remaining space. Its labels have their own
+	// width limits so a change between Live and Paused cannot move actions.
+	title.Style.MaxSize = ui.Some(ui.Size{Height: 34})
 	title.Children[0].Style.MaxSize = ui.Some(ui.Size{Width: max(80, min(420, width-420)), Height: 18})
 	subtitle := quiet("document-subtitle", nativeRunSubtitle(state))
 	subtitle.Style.Typography = ui.Some(ui.Typography{Size: 11})
@@ -82,7 +84,6 @@ func (s *screen) nativeToolbar(state workbench.Snapshot, width float32) ui.Node 
 		sweep = nativeIcon(sweep, ui.SymbolSearch)
 		title = actions[len(actions)-1]
 		title.Style.MinSize = ui.Some(ui.Size{Width: 24, Height: 34})
-		title.Style.MaxSize = ui.Some(ui.Size{Width: max(24, width-460), Height: 34})
 		for i := range title.Children {
 			title.Children[i].Style.MaxSize = ui.Some(ui.Size{Width: max(24, width-460), Height: 16})
 		}
@@ -96,7 +97,7 @@ func (s *screen) nativeToolbar(state workbench.Snapshot, width float32) ui.Node 
 	primary.Style.MaxSize = ui.Some(ui.Size{})
 	primary.Style.GrowX = ui.Some(float32(1))
 	primarySlot := ui.Node{ID: "native-primary-slot", Kind: ui.Column, Style: ui.Style{MinSize: ui.Some(ui.Size{Width: primaryWidth, Height: 34}), MaxSize: ui.Some(ui.Size{Width: primaryWidth, Height: 34}), Padding: ui.Some(ui.UniformInsets(0)), Gap: ui.Some(float32(0))}, Children: []ui.Node{primary}}
-	actions = append(actions, nativeSpace("native-header-space"), sweep, fit, primarySlot, share, inspector)
+	actions = append(actions, sweep, fit, primarySlot, share, inspector)
 	gap := float32(8)
 	if width < 640 {
 		gap = 4
