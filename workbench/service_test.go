@@ -15,13 +15,10 @@ func call(t *testing.T, s *Service, command string, p any, key string) Response 
 	if err != nil {
 		t.Fatal(err)
 	}
-	rev := s.Snapshot().Revision
-	r := s.Dispatch(context.Background(), Request{Version: 1, ID: key, Command: command, Params: raw, ExpectedRevision: &rev, Key: key}, "test")
-	// Resolve only a known admission conflict with an async result commit.
-	if r.Error != nil && r.Error.Code == "conflict" {
-		rev = r.Revision
-		r = s.Dispatch(context.Background(), Request{Version: 1, ID: key, Command: command, Params: raw, ExpectedRevision: &rev, Key: key}, "test")
-	}
+	// Solver progress changes the presentation revision. Ordinary test edits
+	// use the same command/document guards as current UI and agent callers.
+	state := s.Snapshot()
+	r := s.Dispatch(context.Background(), Request{Version: 1, ID: key, Command: command, Params: raw, ExpectedCommandRevision: &state.CommandRevision, ExpectedDocumentGeneration: &state.Document.Generation, Key: key}, "test")
 	if r.Error != nil {
 		t.Fatalf("%s: %+v", command, r.Error)
 	}
