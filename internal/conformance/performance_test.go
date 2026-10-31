@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 )
 
@@ -27,6 +28,9 @@ func TestPerformancePercentilesAndRejectMissingTiming(t *testing.T) {
 }
 
 func TestPerformanceSuiteRetainsCoverageAndCircuitIdentities(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	for _, count := range []int{0, 19, 101} {
@@ -67,6 +71,9 @@ func TestPerformanceMeasurementsUseFreshChangedRuns(t *testing.T) {
 	defer cancel()
 	for _, name := range []string{"led", "rc", "npn", "npn-pulse", "flasher"} {
 		t.Run(name, func(t *testing.T) {
+			if name == "flasher" && testutil.RunAtProductionSpeed(t) {
+				return
+			}
 			err := electricalSession(ctx, InProcess, t.TempDir(), func(s *session) error {
 				if err := preparePerformance(s, name); err != nil {
 					return err

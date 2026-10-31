@@ -6,9 +6,14 @@ import (
 	"math"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestInductorPublicWorkflowAndEvidenceComparison(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	ctx, cancel := context.WithTimeout(t.Context(), time.Minute)
 	defer cancel()
 	report, err := RunInductors(ctx, InProcess, t.TempDir())

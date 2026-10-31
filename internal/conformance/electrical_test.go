@@ -4,9 +4,14 @@ import (
 	"context"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestElectricalReferencesAndFlasherRefinementThroughPublicCommands(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 	report, err := RunElectrical(ctx, InProcess, t.TempDir())

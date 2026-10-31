@@ -40,7 +40,7 @@ func TestNoiseCapacitySavedCaptureReopensAndRejectsMaterialChanges(t *testing.T)
 		t.Fatal("missing capacity capture")
 	}
 	for _, pair := range [][2]float64{{1e-20, 1.001e-20}, {0, 1e-30}, {1e-9, 2e-9}, {math.MaxFloat64, 1}, {1, math.Inf(1)}} {
-		if noiseRoundoffEqual(pair[0], pair[1]) {
+		if nonnegativeRoundoffEqual(pair[0], pair[1]) {
 			t.Fatal("material noise corruption accepted", pair)
 		}
 	}

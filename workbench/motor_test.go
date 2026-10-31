@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func motorGraph(locked bool, voltage string) Graph {
@@ -70,6 +72,9 @@ func TestMotorDCOperatingPointAndLoad(t *testing.T) {
 }
 
 func TestMotorPWM555DrivesShaftAndFlyback(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	speeds := []float64{}
 	for _, position := range []float64{.05, .5, .95} {
 		g := MotorExampleGraph(true)
@@ -107,6 +112,9 @@ func TestMotorPWM555DrivesShaftAndFlyback(t *testing.T) {
 }
 
 func TestMotorLiveLoadPreservesStorageAndCapture(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "motor-dc"}, "load")

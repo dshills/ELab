@@ -427,7 +427,7 @@ func cloneNoiseSummary(n *NoiseSummary) *NoiseSummary {
 // Recomputed derived quantities may differ by a few binary64 rounding units
 // after storage or compiler contraction. This bound has no absolute volt floor,
 // so tiny noise values still receive a tight relative check.
-func noiseRoundoffEqual(a, b float64) bool {
+func nonnegativeRoundoffEqual(a, b float64) bool {
 	if !finite(a) || !finite(b) || a < 0 || b < 0 {
 		return false
 	}
@@ -442,7 +442,7 @@ func noiseRoundoffSlice(a, b []float64) bool {
 		return false
 	}
 	for i := range a {
-		if !noiseRoundoffEqual(a[i], b[i]) {
+		if !nonnegativeRoundoffEqual(a[i], b[i]) {
 			return false
 		}
 	}
@@ -521,7 +521,7 @@ func validateNoiseRecord(plan sweepPlan, r *SweepResult) error {
 				}
 				sum += v[j]
 			}
-			if !noiseRoundoffEqual(density, math.Sqrt(sum)) {
+			if !nonnegativeRoundoffEqual(density, math.Sqrt(sum)) {
 				return fmt.Errorf("noise total differs from contributions")
 			}
 			g := q.Gain[j]
@@ -534,7 +534,7 @@ func validateNoiseRecord(plan sweepPlan, r *SweepResult) error {
 			if defined {
 				want = density / gain
 			}
-			if !finite(want) || !noiseRoundoffEqual(q.InputDensity[j], want) {
+			if !finite(want) || !nonnegativeRoundoffEqual(q.InputDensity[j], want) {
 				return fmt.Errorf("input-referred density differs")
 			}
 		}

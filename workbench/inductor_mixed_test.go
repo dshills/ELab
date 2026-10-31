@@ -6,6 +6,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func inductorNPNCapGraph(t *testing.T) Graph {
@@ -31,7 +33,7 @@ func inductorNPNCapGraph(t *testing.T) Graph {
 }
 
 func TestInductorCoupledNPNGateCapacitorStepRefinement(t *testing.T) {
-	if productionNumericalReference(t) {
+	if testutil.RunAtProductionSpeed(t) {
 		return
 	}
 	for _, resistance := range []float64{100, 120} {
@@ -193,7 +195,7 @@ func npnCoilOffReference(end float64) (base, current, collector float64) {
 }
 
 func TestInductorNPNIndependentActiveAndFlybackReference(t *testing.T) {
-	if productionNumericalReference(t) {
+	if testutil.RunAtProductionSpeed(t) {
 		return
 	}
 	g := inductorNPNCapGraph(t)

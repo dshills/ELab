@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func timingQuery(t *testing.T, s *Service, p any) *RecordingTiming {
@@ -237,6 +239,9 @@ func TestThresholdUnitsAndNumericTimingSchemas(t *testing.T) {
 
 // Use a post-startup interval: the first startup edge spacing is not a period.
 func TestRecordingTimingBothFlasherSides(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := pausedFlasher(t)
 	defer s.Close()
 	duration := 1.2

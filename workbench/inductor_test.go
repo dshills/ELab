@@ -5,6 +5,8 @@ import (
 	"math"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func inductorTestGraph(t *testing.T, supply, resistance, inductance float64, capacitance *float64) Graph {
@@ -316,6 +318,9 @@ func TestInductorParallelAndPersistentCirculatingCurrent(t *testing.T) {
 }
 
 func TestInductorLEDZeroCurrentStartup(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	g := inductorTestGraph(t, 5, 100, 1, nil)
 	led, _ := MakeComponent("D1", "led", Point{X: 800}, "")
 	g.Components = append(g.Components, led)
@@ -382,6 +387,9 @@ func inductorLEDReference(at float64) float64 {
 }
 
 func TestInductorLEDSmallAndLargeInductanceStartup(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, inductance := range []float64{1e-6, .001, 100} {
 		g := inductorTestGraph(t, 5, 100, inductance, nil)
 		led, _ := MakeComponent("D1", "led", Point{X: 800}, "")

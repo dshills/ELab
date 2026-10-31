@@ -12,12 +12,14 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestExtendedPublicCaptureSaveLoadAndCorruption(t *testing.T) {
 	for _, id := range []string{"buck", "opamp-slew", "opamp-bandwidth", "shift-register", "555-tone", "light-alarm"} {
 		t.Run(id, func(t *testing.T) {
-			if id == "buck" && productionNumericalReference(t) {
+			if id == "buck" && testutil.RunAtProductionSpeed(t) {
 				return
 			}
 			s := New()

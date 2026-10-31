@@ -50,15 +50,34 @@ func TestCapacityNoiseSocketMatchesDirectSnapshot(t *testing.T) {
 	req := workbench.Request{Version: 1, ID: "load", Command: "project.load", Params: params, ExpectedCommandRevision: &rev, Key: "load"}
 	raw, _ := json.Marshal(req)
 	var output bytes.Buffer
-	if err = RemoteStdio(context.Background(), descriptor, bytes.NewReader(append(raw, '\n')), &output); err != nil {
-		t.Fatal(err)
+	type socketSnapshot struct {
+		Result    workbench.Snapshot
+		Error     *workbench.Failure
+		Duplicate bool
 	}
-	var response struct {
-		Result workbench.Snapshot
-		Error  *workbench.Failure
+	send := func() socketSnapshot {
+		t.Helper()
+		output.Reset()
+		if err := RemoteStdio(t.Context(), descriptor, bytes.NewReader(append(raw, '\n')), &output); err != nil {
+			t.Fatal(err)
+		}
+		var response socketSnapshot
+		if err := json.Unmarshal(output.Bytes(), &response); err != nil {
+			t.Fatal(err)
+		}
+		return response
 	}
-	if err = json.Unmarshal(output.Bytes(), &response); err != nil {
-		t.Fatal(err)
+	response := send()
+	if response.Error != nil && response.Error.Code == "canceled" {
+		// A slow load can outlast the socket wait. The admitted work and its
+		// retry key survive, so the identical request returns its final result.
+		if _, err := s.Wait(t.Context()); err != nil {
+			t.Fatal(err)
+		}
+		response = send()
+		if !response.Duplicate {
+			t.Fatal("original load was not replayed")
+		}
 	}
 	if response.Error != nil {
 		t.Fatal(response.Error)

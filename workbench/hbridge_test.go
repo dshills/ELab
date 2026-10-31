@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestHBridgeJacobianPassivityAndLocalReference(t *testing.T) {
@@ -183,7 +185,7 @@ func TestHBridgeMotorForwardReverseAndStallReference(t *testing.T) {
 }
 
 func TestHBridgePWMExampleResolvesDriveCoastAndFlyback(t *testing.T) {
-	if productionNumericalReference(t) {
+	if testutil.RunAtProductionSpeed(t) {
 		return
 	}
 	speeds := []float64{}
@@ -226,7 +228,7 @@ func TestHBridgePWMExampleResolvesDriveCoastAndFlyback(t *testing.T) {
 }
 
 func TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast(t *testing.T) {
-	if productionNumericalReference(t) {
+	if testutil.RunAtProductionSpeed(t) {
 		return
 	}
 	speeds := map[string]float64{}
@@ -284,7 +286,7 @@ func TestHBridgeSwitchModesPreserveMotorStorageAndBrakeFasterThanCoast(t *testin
 }
 
 func TestHBridgeCaptureProjectProvenanceAndProbeSigns(t *testing.T) {
-	if productionNumericalReference(t) {
+	if testutil.RunAtProductionSpeed(t) {
 		return
 	}
 	s := New()

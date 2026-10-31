@@ -148,13 +148,20 @@ func TestCapacityPublicReportRecomputesAndRejectsCorruption(t *testing.T) {
 	if err := CompareCapacity(reference, reference); err != nil {
 		t.Fatal("genuine public capacity evidence refused", err)
 	}
-	for _, mutation := range []string{"missing-case", "wrong-limits", "wrong-size", "wrong-clock", "wrong-engine", "changed-graph", "missing-edge", "changed-row", "changed-fine-row", "foreign-node", "changed-model", "changed-damping", "negative-kcl", "missing-boundary", "changed-boundary", "missing-reopen", "changed-reopen"} {
+	for _, mutation := range []string{"changed-check-reference", "changed-check-error", "changed-check-tolerance", "missing-case", "wrong-limits", "wrong-size", "wrong-clock", "wrong-engine", "changed-graph", "missing-edge", "changed-row", "changed-fine-row", "foreign-node", "changed-model", "changed-damping", "negative-kcl", "missing-boundary", "changed-boundary", "missing-reopen", "changed-reopen"} {
 		t.Run(mutation, func(t *testing.T) {
 			var changed CapacityResult
 			if err := json.Unmarshal(data, &changed); err != nil {
 				t.Fatal(err)
 			}
 			switch mutation {
+			case "changed-check-reference":
+				changed.Checks[0].Reference += changed.Checks[0].Tolerance / 100
+				changed.Checks[0].AbsoluteError = math.Abs(changed.Checks[0].Actual - changed.Checks[0].Reference)
+			case "changed-check-error":
+				changed.Checks[0].AbsoluteError = math.Nextafter(changed.Checks[0].AbsoluteError, 1)
+			case "changed-check-tolerance":
+				changed.Checks[0].Tolerance *= 1.01
 			case "missing-case":
 				changed.Cases = changed.Cases[:2]
 			case "wrong-limits":

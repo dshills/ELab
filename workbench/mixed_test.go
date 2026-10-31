@@ -9,6 +9,8 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestMixedFlasherKernel(t *testing.T) {
@@ -63,6 +65,9 @@ func TestMixedFlasherKernel(t *testing.T) {
 }
 
 func TestMixedCapacitanceSetsFlasherPeriod(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	simulate := func(scale float64) []float64 {
 		g := FlasherExampleGraph()
 		for i, p := range g.Components {
@@ -202,6 +207,9 @@ func pausedFlasher(t *testing.T) *Service {
 	return s
 }
 func TestMixedServiceHistoryPersistenceAndRuntime(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := pausedFlasher(t)
 	defer s.Close()
 	call(t, s, "simulation.step", StepParams{.3}, "step")

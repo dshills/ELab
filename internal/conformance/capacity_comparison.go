@@ -87,8 +87,17 @@ func CompareCapacity(reference, actual CapacityResult) error {
 				}
 			}
 		}
-		if !reflect.DeepEqual(checks.Checks, result.Checks) {
-			return fmt.Errorf("capacity checks differ from recomputed references")
+		for i, want := range checks.Checks {
+			got := result.Checks[i]
+			// The matrix exponential and load-line references can round differently
+			// across CPUs. Allow a tiny fraction of the engineering tolerance
+			// only for derived values. Check the saved sample and error exactly.
+			roundoff := 1e-8 * want.Tolerance
+			if got.Name != want.Name || got.Actual != want.Actual || got.Passed != want.Passed ||
+				!(math.Abs(got.Reference-want.Reference) <= roundoff && math.Abs(got.Tolerance-want.Tolerance) <= roundoff) ||
+				got.AbsoluteError != math.Abs(got.Actual-got.Reference) || !(got.AbsoluteError <= got.Tolerance) {
+				return fmt.Errorf("capacity check %s differs from recomputed reference", want.Name)
+			}
 		}
 	}
 	normalize := func(result CapacityResult) CapacityResult {

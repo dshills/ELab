@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestSensorResistanceLawsAndBounds(t *testing.T) {
@@ -84,6 +86,9 @@ func TestSensorElectricalDividerAndConservation(t *testing.T) {
 	}
 }
 func TestSensorExampleThresholdsAndRelayStorage(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, example := range []string{"night-light", "thermostat"} {
 		s := New()
 		func() {

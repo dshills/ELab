@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestInductorRadauCollocationMomentsAndFifthOrder(t *testing.T) {
@@ -126,7 +128,7 @@ func TestInductorRadauStiffDecay(t *testing.T) {
 }
 
 func TestInductorMixedOutputWorkEnvelope(t *testing.T) {
-	if productionNumericalReference(t) {
+	if testutil.RunAtProductionSpeed(t) {
 		return
 	}
 	state, trace := initializeInductorTest(t, inductorNPNCapGraph(t))

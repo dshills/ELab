@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestDigitalDisplayDecoderTruthAndJacobian(t *testing.T) {
@@ -101,6 +103,9 @@ func TestDigitalDisplaySegmentElectricalLawAndIsolation(t *testing.T) {
 	}
 }
 func TestDigitalDisplay555CounterAllDigits(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	g := DisplayCounterExampleGraph()
 	c, _, d := g.Compile()
 	if d != nil {

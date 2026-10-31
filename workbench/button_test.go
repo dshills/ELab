@@ -5,6 +5,8 @@ import (
 	"math"
 	"path/filepath"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestButtonDeterministicBounceAndAutomaticRelease(t *testing.T) {
@@ -97,6 +99,9 @@ func TestButtonCounterAndRCDebounceThroughSharedCommands(t *testing.T) {
 	}
 }
 func TestButtonCoarseOutputDoesNotMissBounceAndCapturesValidate(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "button-debounce"}, "load")

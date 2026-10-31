@@ -5,6 +5,8 @@ import (
 	"math"
 	"path/filepath"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestRelayCoilExponentialThresholdAndIsolatedContacts(t *testing.T) {
@@ -88,6 +90,9 @@ func TestRelayCoilExponentialThresholdAndIsolatedContacts(t *testing.T) {
 	}
 }
 func TestRelayProtectedDriverAndPulseRelease(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, manual := range []bool{false, true} {
 		g := RelayExampleGraph(manual)
 		c, _, d := g.Compile()
@@ -141,6 +146,9 @@ func TestRelayProtectedDriverAndPulseRelease(t *testing.T) {
 	}
 }
 func TestRelaySharedCaptureAndProjectReopen(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "relay-flasher"}, "load")

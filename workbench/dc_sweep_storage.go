@@ -71,7 +71,17 @@ func validateSweepRecord(data []byte) (*SweepRecord, error) {
 	}
 	for i, point := range r.Points {
 		expected := sweepAxisPoint(plan.start, plan.stop, len(r.Points), i, m.Settings.Spacing)
-		if point.Input != expected || len(point.Values) != len(r.Probes) || !finite(point.KCLResidual) || point.KCLResidual < 0 || !finite(point.PowerResidual) {
+		validInput := point.Input == expected
+		if m.Settings.Spacing == "logarithmic" && i > 0 {
+			// Interior log/exp results may differ across math implementations.
+			// Preserve the exact endpoints and the requested strict ordering.
+			if i < len(r.Points)-1 {
+				validInput = point.Input > 0 && nonnegativeRoundoffEqual(point.Input, expected)
+			}
+			previous := r.Points[i-1].Input
+			validInput = validInput && (plan.start < plan.stop && previous < point.Input || plan.start > plan.stop && previous > point.Input)
+		}
+		if !validInput || len(point.Values) != len(r.Probes) || !finite(point.KCLResidual) || point.KCLResidual < 0 || !finite(point.PowerResidual) {
 			return nil, fmt.Errorf("invalid sweep point %d", i)
 		}
 		for j, value := range point.Values {

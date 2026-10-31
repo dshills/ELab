@@ -12,8 +12,8 @@ Portable runs trusted SDK preparation, Python tests, PRD/inventory verification,
 complete portable race tests and vet. Native adds lint/imports, complete desktop
 and rendered race suites and both vets. Go test-runner timeouts are 30 minutes;
 `--command-timeout` bounds each owned command separately. Simulator accuracy,
-integration/work and resource limits do not change. Eight timing-sensitive
-numerical references run their original assertions in fresh ordinary child test
+integration/work and resource limits do not change. Timing-sensitive
+numerical and performance references run their original assertions in fresh ordinary child test
 binaries when the parent uses -race; the rest of the suite stays instrumented.
 The children inherit GOFLAGS (including any supplied build tags), preserve
 -short, and finish before the parent deadline. Explicit extra parent-only build

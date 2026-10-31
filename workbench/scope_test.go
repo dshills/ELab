@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func scopeTrace(t *testing.T, s Snapshot, id string) ScopeTrace {
@@ -19,6 +21,9 @@ func scopeTrace(t *testing.T, s Snapshot, id string) ScopeTrace {
 	return ScopeTrace{}
 }
 func TestFlasherProbesBackfillAndCursorTiming(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := pausedFlasher(t)
 	defer s.Close()
 	call(t, s, "simulation.step", StepParams{1}, "one-second")

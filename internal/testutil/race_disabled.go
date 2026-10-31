@@ -1,5 +1,5 @@
 //go:build !race
 
-package workbench
+package testutil
 
 const raceInstrumentedTests = false

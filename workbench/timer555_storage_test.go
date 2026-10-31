@@ -8,9 +8,14 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestTimer555ExamplesCaptureSaveRecoveryAndStrictImport(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	for _, id := range []string{"555-flasher", "555-oscillator", "555-one-shot"} {
 		t.Run(id, func(t *testing.T) {
 			s := New()

@@ -108,6 +108,14 @@ func TestLogSweepSharedPersistenceImportAndInvalidReadPurity(t *testing.T) {
 	if err != nil || record.Result.Spacing != "logarithmic" {
 		t.Fatal("log record invalid", err)
 	}
+	// A saved interior point can differ by a math-library rounding step.
+	original := record.Result.Points[1].Input
+	record.Result.Points[1].Input = math.Nextafter(original, record.Result.Stop)
+	rounded, _ := json.Marshal(record)
+	if _, err := validateSweepRecord(rounded); err != nil {
+		t.Fatal("roundoff in stored log axis refused", err)
+	}
+	record.Result.Points[1].Input = original
 	record.Result.Spacing = "linear"
 	bad, _ := json.Marshal(record)
 	if _, err := validateSweepRecord(bad); err == nil {

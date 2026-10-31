@@ -5,6 +5,8 @@ import (
 	"encoding/binary"
 	"math"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func extendedKernel(t *testing.T, id string) *simulationKernel {
@@ -34,6 +36,9 @@ func advanceExtended(t *testing.T, k *simulationKernel, end, dt float64) {
 func TestExtendedExamplesElectrical(t *testing.T) {
 	for _, id := range []string{"buck", "opamp-slew", "opamp-bandwidth", "shift-register", "555-tone", "light-alarm"} {
 		t.Run(id, func(t *testing.T) {
+			if id == "buck" && testutil.RunAtProductionSpeed(t) {
+				return
+			}
 			k := extendedKernel(t, id)
 			end := .002
 			if id == "shift-register" {
@@ -142,6 +147,9 @@ func TestSoundWAVAndExplicitRender(t *testing.T) {
 }
 
 func TestBuckStartupRippleDutyAndLoad(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	k := extendedKernel(t, "buck")
 	min, max, mean := math.Inf(1), math.Inf(-1), 0.
 	for j := 1; j <= 10000; j++ {
@@ -268,7 +276,7 @@ func TestOpAmpDynamicsACCorner(t *testing.T) {
 }
 
 func TestShiftCascadeAndSimultaneousLatch(t *testing.T) {
-	if productionNumericalReference(t) {
+	if testutil.RunAtProductionSpeed(t) {
 		return
 	}
 	b := newExampleBuilder()

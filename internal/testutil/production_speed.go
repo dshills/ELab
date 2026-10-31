@@ -1,4 +1,4 @@
-package workbench
+package testutil
 
 import (
 	"context"
@@ -11,11 +11,11 @@ import (
 	"time"
 )
 
-// productionNumericalReference preserves the real wall-budget contract for
-// timing-sensitive numerical references under a race-instrumented test runner.
+// RunAtProductionSpeed runs a deadline-sensitive test at ordinary binary speed
+// when the parent is race-instrumented. A true return means the child passed.
 // The same unmodified test body runs in a fresh ordinary test process. Worker,
 // ownership and controlled-clock tests elsewhere still run under -race.
-func productionNumericalReference(t *testing.T) bool {
+func RunAtProductionSpeed(t *testing.T) bool {
 	t.Helper()
 	if !raceInstrumentedTests {
 		return false
@@ -30,7 +30,7 @@ func productionNumericalReference(t *testing.T) bool {
 	}
 	ctx, cancel := context.WithDeadline(t.Context(), deadline)
 	defer cancel()
-	binary := filepath.Join(t.TempDir(), "workbench-production.test")
+	binary := filepath.Join(t.TempDir(), "production.test")
 	build := exec.CommandContext(ctx, "go", "test", "-c", "-race=false", "-o", binary, ".")
 	build.WaitDelay = 250 * time.Millisecond
 	if output, err := build.CombinedOutput(); err != nil {
@@ -53,6 +53,6 @@ func productionNumericalReference(t *testing.T) bool {
 	if !strings.Contains(string(output), "--- PASS: "+t.Name()+" ") {
 		t.Fatalf("production child did not prove it ran %s:\n%s", t.Name(), output)
 	}
-	t.Logf("production-speed numerical reference passed; original assertions and %s/%d-attempt guards unchanged (child without -race)", MaxIntegrationWallTime, MaxIntegrationAttempts)
+	t.Log("original assertions passed in the production-speed child")
 	return true
 }

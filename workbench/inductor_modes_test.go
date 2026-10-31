@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestClassABSpeakerCompletedOutputsAndWorkCounts(t *testing.T) {
@@ -170,6 +172,9 @@ func TestClassABSpeakerOutputRefinementAndBothPolarities(t *testing.T) {
 }
 
 func TestClassABSpeakerSharedCaptureAndSavedExample(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	s := New()
 	defer s.Close()
 	call(t, s, "example.load", ExampleLoadParams{ID: "class-ab-speaker"}, "load")

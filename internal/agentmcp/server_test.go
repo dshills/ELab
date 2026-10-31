@@ -166,7 +166,11 @@ func TestMCPSameCatalogCommandsGuardsAndRetries(t *testing.T) {
 					t.Fatal("stale revision was refreshed")
 				}
 				mutate("example.load", workbench.ExampleLoadParams{ID: "rc", DiscardChanges: true})
-				replaced := s.Snapshot()
+				mutate("simulation.pause", struct{}{})
+				replaced, err := s.Wait(t.Context())
+				if err != nil {
+					t.Fatal(err)
+				}
 				old.Key = "old-document"
 				old.ExpectedCommandRevision = &replaced.CommandRevision
 				refused = tool(t, c, "elab_command", old)
