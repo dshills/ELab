@@ -10,6 +10,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 	transformers := []Component{}
 	inductors := []Component{}
 	fets := []Component{}
+	jfetCount := 0
 	opamps := []Component{}
 	timers := []Component{}
 	logic := []Component{}
@@ -44,7 +45,10 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 			caps = append(caps, p)
 		case "inductor":
 			inductors = append(inductors, p)
-		case "njfet", "pjfet", "nmos", "pmos":
+		case "njfet", "pjfet":
+			jfetCount++
+			fallthrough
+		case "nmos", "pmos":
 			fets = append(fets, p)
 		case "linear-regulator", "ldo-regulator":
 			regulators = append(regulators, p)
@@ -176,7 +180,7 @@ func compileNetwork(out Compiled, g Graph, groups map[string][]string, root func
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 
-	if len(inductors) > MaxNetworkInductors || len(fets) > MaxNetworkMOSFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
+	if len(inductors) > MaxNetworkInductors || len(fets) > MaxNetworkMOSFETs || jfetCount > MaxNetworkJFETs || SimulatedComponentCount(g) > MaxSimulatedComponents || len(pots) > MaxNetworkPotentiometers || len(diodes)+len(optos) > MaxNetworkDiodes || len(switches) > MaxNetworkSwitches || len(sources) > MaxNetworkSources || len(caps) > MaxNetworkCapacitors || len(qs)+len(optos) > MaxNetworkTransistors || len(rs) > MaxNetworkResistors || len(leds) > MaxNetworkLEDs || len(out.Nets) > MaxElectricalNodes {
 		return fail("unsupported", "mixed-limit", networkLimitMessage(), "")
 	}
 	if len(grounds) == 0 || len(sources) == 0 || len(rs)+len(switches)+len(diodes)+len(pots)+len(opamps)+len(timers)+len(logic)+len(sequential)+len(displays)+len(controls)+len(regulators)+len(motors)+len(optos)+len(transformers)+len(bridges) == 0 && !hasPassiveDissipation(g) && !hasCurrentDevices(g) {

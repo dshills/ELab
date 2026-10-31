@@ -21,7 +21,23 @@ func TestCapacityLimitEnvelopeAcceptsOnlyExactHistoricalOrCurrentFields(t *testi
 	if !capacityLimitsCompatible(current) {
 		t.Fatal("current limits refused")
 	}
-	preExpansion := current
+	oldFETs := current
+	oldFETs.MOSFETs, oldFETs.PMOS, oldFETs.CombinedMOSFETs, oldFETs.CombinedFETs = 2, 2, 2, 2
+	if !capacityLimitsCompatible(oldFETs) {
+		t.Fatal("pre-bridge envelope refused")
+	}
+	for _, hybrid := range []func(*workbench.CircuitLimits){
+		func(l *workbench.CircuitLimits) { l.CombinedMOSFETs = 2 },
+		func(l *workbench.CircuitLimits) { l.MOSFETs, l.PMOS = 2, 2 },
+		func(l *workbench.CircuitLimits) { l.JFETs, l.CombinedFETs = 0, 0 },
+	} {
+		invalid := current
+		hybrid(&invalid)
+		if capacityLimitsCompatible(invalid) {
+			t.Fatal("accepted an unpublished mixed four-FET envelope", invalid)
+		}
+	}
+	preExpansion := oldFETs
 	preExpansion.Transistors, preExpansion.PNP, preExpansion.CombinedBipolar = 2, 2, 2
 	if !capacityLimitsCompatible(preExpansion) {
 		t.Fatal("pre-expansion limits refused")
@@ -200,6 +216,7 @@ func TestCapacityHistoricalFETDiscoveryAllowsOnlyPairedAbsence(t *testing.T) {
 		return v
 	}()} {
 		old := base
+		old.MOSFETs, old.PMOS, old.CombinedMOSFETs = 2, 2, 2
 		old.JFETs, old.CombinedFETs = 0, 0
 		if !capacityLimitsCompatible(old) {
 			t.Fatal("pre-JFET discovery envelope refused", old)

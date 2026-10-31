@@ -74,6 +74,7 @@ func buildExampleCatalog() []ExampleInfo {
 		{ID: "555-tone", Title: "555 piezo tone", Question: "555 piezo tone", Expected: "The real 555 drives a capacitive piezo through RS. Select BZ1, render a preview, then explicitly Play or export WAV.", Try: "Select BZ1, render a short preview, then Play. Change RA, RB or C1 and render again to compare the pitch.", Limitation: ExtendedDeviceModel().Sound},
 		{ID: "light-alarm", Title: "Light-sensitive buzzer alarm", Question: "Light-sensitive buzzer alarm", Expected: "Lower the LDR light level to activate the comparator and buzzer. Audio preview is explicit; simulation never starts playback.", Try: "Lower the light level on LDR1, then render and Play a BZ1 preview. Raise the light level and compare.", Limitation: ExtendedDeviceModel().Sound},
 
+		{ID: "discrete-hbridge", Title: "Four-MOSFET H-bridge", Question: "How can one supply drive current both ways through a load?", Expected: "The direction pulse and its inverse turn on opposite MOSFET pairs. RL sees alternating positive and negative voltage and current.", Try: "Pause and step across a direction edge. Compare RL voltage and current, then change RL from 100 Ω to 200 Ω and repeat.", Limitation: "Generic complementary MOSFETs drive a resistive load. The logic inverter supplies complementary gate signals; gate charge, dead time and switching losses are not modeled."},
 		{ID: "hbridge-motor", Title: "Reversible PWM motor driver", Question: "How do direction, PWM, braking and coasting change motor current and speed?", Expected: "S1 closed / S2 open drives forward; reverse those switches for reverse. Both equal brake; open SEN to coast. Flyback clamps carry winding current after disable.", Try: "Select MTR1 for RPM and current. Change PWM high/low times, then compare brake and coast from the same speed. Mode changes preserve shaft speed and winding current at the switching instant.", Limitation: HBridgeDeviceModel().Limitations},
 		{ID: "led", Title: "LED current limiter", Question: "How does resistance change LED current?", Expected: "Increasing the series resistance lowers current and the illustrative LED brightness.", Try: "Change R1 from 1 kΩ to 2 kΩ and compare signed current.", Limitation: "Generic red LED; brightness is illustrative and there is no thermal behavior or physical part rating."},
 		{ID: "split-supply", Title: "Split-rail DC supply", Question: "How do two positive batteries create a negative rail?", Expected: "The midpoint reference makes the rails +3 V and −3 V. Each source remains +3 V across its own terminals; R1 sees 6 V and carries 6 mA.", Try: "Inspect V2.negative relative to ground, then V2 across its terminals. Change either source to 5 V or move ground to the bottom rail and compare.", Limitation: "Ideal DC sources have no output resistance, current limit, battery discharge or physical ratings. The network still needs one common reference; ideal voltage-source/capacitor constraint loops refuse."},
@@ -210,6 +211,12 @@ func findExample(id string) (exampleDefinition, bool) {
 		d.probes = []string{"v:BZ1", "i:BZ1"}
 		d.view = View{Zoom: .55}
 
+	case "discrete-hbridge":
+		d.graph = discreteHBridgeExampleGraph()
+		d.settings.HighSeconds, d.settings.LowSeconds = .02, .02
+		d.selected = "RL"
+		d.probes = []string{"v:DIR.positive", "v:RL", "i:RL"}
+		d.view = View{Center: Point{X: -120}, Zoom: .55}
 	case "hbridge-motor":
 		d.graph = HBridgeExampleGraph()
 		d.selected = "U1"

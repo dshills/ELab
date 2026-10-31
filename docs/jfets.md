@@ -20,8 +20,8 @@ source; gate/drain positive into device.
 
 The small-signal AC stamp uses the analytic Jacobian at solved bias. External
 capacitors use the existing transient/AC engines. No intrinsic charge, noise,
-breakdown, heating, ratings or fitted silicon identity is claimed. MOSFETs and
-JFETs share the existing combined two-FET budget; the budget is not enlarged.
+breakdown, heating, ratings or fitted silicon identity is claimed. A network can contain up to two JFETs within its combined budget of four
+MOSFETs and JFETs.
 Source/part/node/storage/work/accuracy limits remain unchanged.
 
 In the preamp, RD/RS establish bias and COUT removes DC before RL. Changing

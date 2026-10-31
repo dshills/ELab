@@ -97,3 +97,19 @@ The enable/output arrangement follows the general approach illustrated by
 winding-current recirculation and fast/slow decay; its two-input truth table and
 hardware protections differ from ELab's model. Neither datasheet defines ELab's
 numerical model or establishes physical component suitability.
+
+
+## Four-MOSFET bridge
+
+Open **Four-MOSFET H-bridge** from Power & relays. The direction pulse drives one
+PMOS/NMOS pair directly and a powered logic inverter drives the other pair.
+The 100 Ω load connects between their drains. In the first 20 ms the left
+output is low and the right output is high. The next 20 ms reverse the polarity.
+The scope shows the direction input, differential load voltage and load current.
+
+With the 5 V supply, expect about −4.725 V and −47.25 mA in the first direction
+and +4.725 V and +47.25 mA in the other. Each conducting MOSFET drops about
+137 mV. Pause and Restart, then step across 20 ms to see the change. A recording
+longer than 40 ms includes both directions and the return. Keep and save the
+recording to reopen it beside the same circuit. The models omit gate charge,
+switching losses and dead time.

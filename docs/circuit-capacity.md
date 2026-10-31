@@ -15,7 +15,7 @@ The tested envelope admits **64 simulated parts and 100 electrical nodes includi
 | Sources | 3 |
 | Capacitors | 4 |
 | Inductors | 4 |
-| MOSFETs, NMOS/PMOS combined | 2 |
+| FETs, all polarities combined | 4 total, including at most 2 JFETs |
 | Powered op-amps | 2 |
 | 555 timers | 2 |
 | Bipolar transistors, NPN/PNP combined, including optocoupler phototransistors | 16 |
