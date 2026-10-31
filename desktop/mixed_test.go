@@ -8,11 +8,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
 )
 
 func TestFlasherDrawingInitialConditionsAndAgentParity(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	user, close := testScreen(t)
 	defer close()
 	agent := workbench.New()

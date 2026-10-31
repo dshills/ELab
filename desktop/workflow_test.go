@@ -9,12 +9,16 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/app"
 	"github.com/dshills/vellum/ui"
 )
 
 func TestNextWorkflowControlsUseAgentCommands(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	user, close := testScreen(t)
 	defer close()
 	if err := user.app.Open(app.Window{ID: "main", Title: "Workflow test", Width: 1260, Height: 900, View: user.view}); err != nil {

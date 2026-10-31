@@ -15,9 +15,10 @@ and rendered race suites and both vets. Go test-runner timeouts are 30 minutes;
 integration/work and resource limits do not change. Timing-sensitive
 numerical and performance references run their original assertions in fresh ordinary child test
 binaries when the parent uses -race; the rest of the suite stays instrumented.
-The children inherit GOFLAGS (including any supplied build tags), preserve
--short, and finish before the parent deadline. Explicit extra parent-only build
-tags/CPU flags are not forwarded; these gate plans do not use them. Native requires macOS;
+The children inherit GOFLAGS, forward the parent's build tags (including
+offscreen mode), preserve -short, and finish before the parent deadline.
+Explicit extra parent-only CPU flags are not forwarded. These gate plans do
+not use them. Native requires macOS;
 the process-group runner supports POSIX hosts. `scripts/check.sh` delegates to
 the native plan with a fresh output directory, overridable through
 ELAB_QUALITY_PROFILE and ELAB_QUALITY_ARTIFACTS.

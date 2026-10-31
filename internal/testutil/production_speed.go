@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"testing"
@@ -31,7 +32,15 @@ func RunAtProductionSpeed(t *testing.T) bool {
 	ctx, cancel := context.WithDeadline(t.Context(), deadline)
 	defer cancel()
 	binary := filepath.Join(t.TempDir(), "production.test")
-	build := exec.CommandContext(ctx, "go", "test", "-c", "-race=false", "-o", binary, ".")
+	args := []string{"test", "-c", "-race=false", "-o", binary}
+	if info, ok := debug.ReadBuildInfo(); ok {
+		for _, setting := range info.Settings {
+			if setting.Key == "-tags" {
+				args = append(args, "-tags", setting.Value)
+			}
+		}
+	}
+	build := exec.CommandContext(ctx, "go", append(args, ".")...)
 	build.WaitDelay = 250 * time.Millisecond
 	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("build production numerical reference: %v\n%s", err, output)

@@ -4,11 +4,15 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 	"github.com/dshills/vellum/ui"
 )
 
 func TestClassABSpeakerBrowserStepAndAgentParity(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	user, cleanup := testScreen(t)
 	defer cleanup()
 	agent := workbench.New()
