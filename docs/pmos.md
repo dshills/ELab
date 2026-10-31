@@ -31,7 +31,7 @@ Change RG to **10 kΩ** and add **1 µF from gate to source**. With the existing
 
 NMOS and PMOS can share a network. The public reference builds a resistor-loaded complementary inverter with both drains joined and both gates driven together. A low input produces nearly 5 V output, high input nearly zero; an intermediate input conducts through both devices. Results and captures retain both model dependencies and signed branch currents.
 
-`limits.nmos_transistors` remains for existing clients. New `pmos_transistors` and `mosfets_total` expose the envelope: **two MOSFETs total across both polarities**, not two of each. Other drawing/global/device/source/solver budgets remain. DC source terminals may float in a referenced network; waveform-source negatives remain grounded. MOSFET sources themselves may sit above ground. Floating gates require an external reference path. Gate may join source/drain explicitly; a direct drain/source short retains the existing diagnostic.
+`limits.nmos_transistors` remains for existing clients. The `pmos_transistors` and `mosfets_total` fields expose the four-device ceiling shared across both polarities. JFETs count toward the same total and retain their own limit of two. Other drawing/global/device/source/solver budgets remain. DC source terminals may float in a referenced network; waveform-source negatives remain grounded. MOSFET sources themselves may sit above ground. Floating gates require an external reference path. Gate may join source/drain explicitly; a direct drain/source short retains the existing diagnostic.
 
 ## Files and validation
 

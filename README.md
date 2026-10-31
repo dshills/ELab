@@ -7,7 +7,7 @@ Build schematics from scratch, change component values, and explore live voltage
 current and timing. The desktop app and AI agents use the same validated commands
 for drawing, simulation, analysis, saving and export.
 
-**Current source: 87 working examples · 61 component kinds · 229 shared commands.**
+**Current source: 88 working examples · 61 component kinds · 229 shared commands.**
 
 ![ELab showing an RC circuit, capacitor inspector, charge/discharge traces and timing cursors in the Light theme](docs/images/rc-scope.jpg)
 
@@ -116,6 +116,8 @@ A/B cursors compare the 10 Hz and 30 Hz bins.*
 
 ## Electronics library
 
+In the current source, open **Four-MOSFET H-bridge** under Power & relays to watch a 5 V supply drive current in either direction through a 100 Ω load. [Discrete bridge walkthrough](docs/hbridge.md#four-mosfet-bridge).
+
 | Area | Components and capabilities |
 | --- | --- |
 | Sources and power | DC, sine and pulse sources; current sources, electronic loads, batteries with charge/sag, rectifiers and voltage regulators |
@@ -135,7 +137,7 @@ and [numerical qualification](docs/numerical-qualification.md).
 
 ### From a first LED to a discrete amplifier
 
-Open **Examples** to browse topic categories, search across all 87 circuits, and
+Open **Examples** to browse topic categories, search across all 88 circuits, and
 see schematic previews, a question to explore, an experiment and model limits.
 Opening an example retains Save/Discard/Cancel protection for your current work.
 

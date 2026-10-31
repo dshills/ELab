@@ -201,7 +201,7 @@ func TestJFETCombinedFETCapacityAndStrictConfig(t *testing.T) {
 	}
 	_, _, d := b.graph.Compile()
 	if d == nil || d.Code != "mixed-limit" {
-		t.Fatal("combined FET limit", d)
+		t.Fatal("third JFET did not retain its own limit", d)
 	}
 	p, _ := MakeComponent("J1", "njfet", Point{}, "")
 	for _, c := range []JFETConfig{{JFETModelID, .005, 0, 0}, {JFETModelID, .005, 2, 0}, {JFETModelID, 0, -2, 0}, {JFETModelID, .005, -2, -1}, {"unknown", .005, -2, 0}} {

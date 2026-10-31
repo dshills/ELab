@@ -238,10 +238,12 @@ func TestComplementaryMOSInverterConservationCaptureAndCombinedLimit(t *testing.
 			t.Fatal("mixed MOS capture", err)
 		}
 		s.Close()
-		extra, _ := MakeComponent("M3", "pmos", Point{400, -100}, "")
-		g.Components = append(g.Components, extra)
-		for _, pin := range extra.Terminals {
-			g.Wires = append(g.Wires, Wire{ID: "WX" + pin, From: "M3." + pin, To: "MP." + pin, Connected: true})
+		for _, id := range []string{"M3", "M4", "M5"} {
+			extra, _ := MakeComponent(id, "pmos", Point{400, -100}, "")
+			g.Components = append(g.Components, extra)
+			for _, pin := range extra.Terminals {
+				g.Wires = append(g.Wires, Wire{ID: "W" + id + pin, From: id + "." + pin, To: "MP." + pin, Connected: true})
+			}
 		}
 		if _, _, d := g.Compile(); d == nil || d.Code != "mixed-limit" {
 			t.Fatal("N/P combined limit missing", d)

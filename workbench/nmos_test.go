@@ -241,7 +241,7 @@ func TestNMOSConstructionAndCapacity(t *testing.T) {
 		t.Fatal("auto ID")
 	}
 	g := nmosDCGraph()
-	for i := 2; i <= 3; i++ {
+	for i := 2; i <= 5; i++ {
 		m, _ := MakeComponent(fmt.Sprintf("M%d", i), "nmos", Point{float64(i) * 100, 300}, "")
 		g.Components = append(g.Components, m)
 		for _, pin := range m.Terminals {

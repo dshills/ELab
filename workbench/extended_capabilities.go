@@ -35,7 +35,7 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	case "thermal.configure":
 		c.Effects = []string{thermalDescription, "All fields required even when disabling; enabled=false restores the exact original law. Supported resistor, silicon diode, NPN and PNP only. Ambient -40..125 °C; accepted self-heated state -40..150 °C. Settings are saved, undoable electrical startup edits. Thermal readings are a separate heat domain, not electrical capacitor energy."}
 	case "jfet.configure":
-		c.Effects = []string{jfetDescription, "Complete saved undoable electrical edit, all fields required. Cutoff sign must match N/P kind. Existing combined two-FET budget includes MOSFETs and JFETs."}
+		c.Effects = []string{jfetDescription, "Complete saved undoable electrical edit, all fields required. Cutoff sign must match N/P kind. Up to two JFETs within the four-FET network budget."}
 	case "current-source.configure", "load.configure":
 		c.Effects = []string{currentDeviceDescription, "Complete saved undoable startup edit; all fields and pulse timing required even in DC. Source 0–1 A/compliance 1–24 V; load cc 0–1 A or cp 0–24 W, minimum 0.1–12 V, current limit 0.001–1 A. Low level must not exceed high. Pulse phase/edge rules match finite source timing. No solver-limit changes."}
 	case "passive.configure":
