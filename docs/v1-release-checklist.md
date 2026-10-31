@@ -92,10 +92,13 @@ when the SDK and its portable/driver inputs are byte-identical.
 
 ## Explicit limits and deferred acceptance
 
-**October 31 update.** Native queued-Return checks 9 and 11 have since passed
-in an instrumented diagnostic from build 307 source. Checks 3 and 6 remain open.
-See the [ten event sequences and fresh corrections](validation/native-workspace-307/queue/README.md).
-The original acceptance scope below describes the earlier v1 candidate.
+**October 31 update.** Check 3 passed with the owner's physical keyboard. The
+owner also confirmed that dragging worked. Check 6 still lacks a measured pair
+of slow and fast divider gestures. Checks 9 and 11 passed in ten instrumented
+native Return sequences. [Physical input](validation/native-workspace-309/physical-input.md)
+and [queue ordering](validation/native-workspace-307/queue/README.md).
+
+The following paragraph records the original October 26 acceptance scope.
 
 Native checks **3, 6, 9 and 11** remain independent gates: Save-panel editing,
 controlled divider hardware rates, and precise native pre-agent parser origin

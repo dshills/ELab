@@ -1,0 +1,237 @@
+{
+  "package_source": "d9b1181e57471a81d3bca83608ddc8a15af7f2e3",
+  "build": 309,
+  "version": "0.204.0",
+  "macos_minimum": "27.2",
+  "platform": "darwin/arm64",
+  "signing": "ad-hoc",
+  "examples": 87,
+  "components": 61,
+  "commands": 229,
+  "manifest_sha256": "b68354df9cbb9dc914afda2cf712774a91ce0414908dcdfa2ad93b2a6660dba4",
+  "zip_sha256": "6d11a73b69625ace0507a13627bcd8328c1554a554a6df873f98005d800511d0",
+  "zip_bytes": 46797797,
+  "zip_files": 470,
+  "copied_app_executable_sha256": "edf543625fda494b8c4c16ec42ca2900c388063d417a40d72486435ff40f0b58",
+  "agent_sha256": "ed53b31a3c40edb90d7a2d57716ce0f492ee127f8a34b52fb6f0fc84df95d5a2",
+  "controller_sha256": "7e1c6b6398e2a126b2cb1008664cf8fb6bb4194f89f0b18eeeff1e2ad7651f52",
+  "normal_example_agent_exit": 0,
+  "copied_bundle_unchanged": true,
+  "agent_unchanged": true,
+  "controller_unchanged": true,
+  "exact_runtime": [
+    {
+      "name": "native-smoke",
+      "command": [
+        "/private/tmp/elab-309-runtime-qualification/runtime/native",
+        "--smoke",
+        "--smoke-timeout",
+        "2m"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 42.31573658398702
+    },
+    {
+      "name": "public-suites",
+      "command": [
+        "build/assembly-309/elab-conformance",
+        "--agent-binary",
+        "/private/tmp/elab-309-runtime-qualification/runtime/agent",
+        "--native-binary",
+        "/private/tmp/elab-309-runtime-qualification/runtime/native",
+        "--project-contract-suite",
+        "--electrical-suite",
+        "--inductor-suite",
+        "--opamp-suite",
+        "--opamp-storage-suite",
+        "--capacity-suite",
+        "--artifacts",
+        "/private/tmp/elab-309-runtime-qualification/runtime/public"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "elapsed_seconds": 46.52703237498645
+    }
+  ],
+  "public_adapters": [
+    "in-process",
+    "headless-stdio",
+    "headless-socket",
+    "native-socket"
+  ],
+  "MCP": [
+    {
+      "transport": "MCP headless stdio",
+      "bridge_exit": 0,
+      "passed": true
+    },
+    {
+      "transport": "MCP to owned private socket",
+      "bridge_exit": 0,
+      "passed": true
+    }
+  ],
+  "frozen_source_quality": {
+    "passed": true,
+    "inputs_unchanged": true,
+    "previous_profile_inputs_unchanged": true,
+    "changes_after_portable": [
+      "desktop/lifecycle_smoke.go",
+      "desktop/native_design.go",
+      "scripts/release_qualification.py"
+    ],
+    "carried": [
+      {
+        "name": "portable-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "./...",
+          "-count=1",
+          "-timeout=30m"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 577.963
+      },
+      {
+        "name": "portable-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 6.415
+      }
+    ],
+    "executed": [
+      {
+        "name": "sdk",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "scripts/prepare-vellum.py"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 0.872
+      },
+      {
+        "name": "python",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "test_*.py"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 5.137
+      },
+      {
+        "name": "prd",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "scripts/prd-audit.py",
+          "--verify",
+          "research/11-prd-implementation-audit.json"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 0.032
+      },
+      {
+        "name": "inventory",
+        "command": [
+          "go",
+          "run",
+          "./cmd/elab-ui-audit",
+          "--verify",
+          "research/13-native-command-inventory.json"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 0.162
+      },
+      {
+        "name": "lint",
+        "command": [
+          "scripts/lint.sh"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 17.565
+      },
+      {
+        "name": "desktop-race",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "test",
+          "-race",
+          "./...",
+          "-count=1",
+          "-timeout=30m"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 443.083
+      },
+      {
+        "name": "desktop-vet",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "vet",
+          "./..."
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 2.174
+      },
+      {
+        "name": "rendered-race",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "test",
+          "-race",
+          "-tags=offscreen",
+          "./...",
+          "-count=1",
+          "-timeout=30m"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 826.036
+      },
+      {
+        "name": "rendered-vet",
+        "command": [
+          "go",
+          "-C",
+          "desktop",
+          "vet",
+          "-tags=offscreen",
+          "./..."
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 4.227
+      }
+    ]
+  }
+}
