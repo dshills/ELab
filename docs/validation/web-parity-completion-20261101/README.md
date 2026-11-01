@@ -46,3 +46,31 @@ independence from live components/transient state. Browser checks cover DC/AC,
 retained navigation, native defaults, exact index and End-key selection, and
 captured assumptions. Full web race suite passed. See [Prism findings and fixes](sweeps-review.md) and
 [the complete review receipt](sweeps-prism.json).
+
+## 3. Recording analysis
+
+The dedicated Scope now opens comparison, threshold timing and step-response
+workflows. Forms bind to the selected capture, document/server identity and
+acknowledged command revision. Stale sources disable editing; the “Use current
+settings” action explicitly refreshes drafts. Acknowledged local analysis changes can
+continue without accepting an intervening external edit. Refused inputs remain
+editable with native validation reasons.
+
+Comparison reports native A/B readings, B − A, exact sample provenance and
+optional whole-record statistics/reference overlay. Timing uses captured probe
+units, optional transition levels, direction/interval and complete paged crossing
+brackets with native bounds. Step response accepts supplied reference levels,
+tolerance and continuous hold, and shows native overshoot/settling or its reason
+for unavailability. All three analyses can be cleared explicitly.
+
+Validation: all 23 frontend tests at qualification time and syntax checks passed; race-enabled HTTP
+coverage verifies comparison/overlay, timing pages and brackets, RC settling,
+clear commands, stale-source refusal and clean-document/live-data immutability.
+Embedded module routes are checked for JavaScript content and no-store caching.
+Browser checks covered unit-error correction, timing pagination, A/B values,
+false-preference round trips, 39.1 ms RC settling, cross-tab source protection and
+refresh, and a 600 × 900 layout without page overflow. No console errors.
+Prism completed with full coverage. See [findings and fixes](recording-review.md),
+[the review receipt](recording-prism.json), [frontend results](checks/frontend.txt),
+and [HTTP race results](checks/web-race.txt). The frontend runner is
+`scripts/check-web.mjs`; HTTP tests are in `exp-web/recording_analysis_test.go`.

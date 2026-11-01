@@ -110,3 +110,6 @@ body[data-palette=apollo]{--text:#d1f3f5;--muted:#9ac0c7;--line:#284953;--surfac
 .interval-measures strong{display:block;color:var(--text);font-weight:550;font-size:18px;margin-top:5px}
 #scope-settings-content .analysis-toolbar input,#scope-settings-content .analysis-toolbar select{width:140px}
 @media(max-width:650px){.scope-settings-grid{grid-template-columns:1fr}.scope-source-row label{flex-basis:100%}.scope-controls{margin:0 10px 6px;max-height:44%}#recording-position-label{min-width:95px;font-size:10px}.recording-exact-fields{gap:8px}#scope-settings-dialog>.dialog-heading{padding:20px 22px 12px}#scope-settings-content{padding:0 22px 22px}}
+
+.recording-analysis-body{padding:0 30px 26px}.recording-analysis-body .segmented{margin:16px 0}.analysis-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.analysis-actions button{padding:8px 12px;border:1px solid var(--line);border-radius:8px}.recording-analysis-body .scope-settings-grid{gap:14px}.recording-analysis-body .interval-measures{margin:14px 0}
+@media(max-width:650px){.recording-analysis-body{padding:0 22px 22px}}

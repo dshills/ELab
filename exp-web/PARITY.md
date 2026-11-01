@@ -16,7 +16,7 @@ qualified native alpha.
 | Live controls | Switch, momentary/bouncing button hold/release/click, potentiometer, sensor/light/temperature and motor load |
 | Measurements | Accepted readings, stale-state explanations, native wire colors/current cues, pinned readings, LED and seven-segment indicators, IC labels |
 | Scope | Direct live/captured source picker, trace chooser, precise time windows and cursors, A/B values and deltas, exact current sample markers/readings, DC points and recorded reference overlay |
-| Recording analysis | Direct capture settings/progress/cancel, keep toggle, playback/scrubber, index/time seek, speed and interval RMS/statistics; import/export, threshold timing, step response and comparison in Tools |
+| Recording analysis | Direct capture/progress/cancel/keep, playback/scrubber/seek, speed/RMS/statistics; dedicated comparison/reference overlay, threshold/transition timing with complete pages, and step-response/settling controls; import/export |
 | Spectrum | Dedicated live/recorded source and capture/channel selection, FFT window/grid and fundamental/harmonics, hold/off, native ranked peaks and A/B frequency cursors/deltas, THD and recorded exports |
 | Sweeps | Dedicated DC/AC/noise/loop methods, multi-probe/range/grid controls, retained results/progress/cancel/keep, native captured channels, exact index/keyboard/plot cursors, native analyses/assumptions and pinned exports |
 | Tolerances | Seeded native Monte Carlo settings, progress, trials/statistics and full JSON/CSV export |
@@ -106,12 +106,18 @@ suite. HTTP tests exercise all four native methods; browser checks cover DC/AC,
 retained results, exact cursors and correction of refused entries. Prism completed
 with full coverage. See [review and fixes](../docs/validation/web-parity-completion-20261101/sweeps-review.md).
 
-### Remaining workflow work
+### Recording-analysis workflow, 2026-11-01
 
-The feature-family table includes native commands exposed through Tools. Dedicated
-web workflows still need the next usability pass: recording comparison, threshold
-timing and step response. These are available through native forms today. Their direct workspace
-presentation has not yet reached the native client's level.
+Scope now exposes captured comparison, threshold/transition timing and step
+response directly. All 23 frontend tests, race-enabled web regressions, combined
+shared race qualification and vet passed. Browser checks include native comparison
+values, exact timing pages, RC settling, omitted-zero/false settings, stale-source
+refusal and a 600 × 900 layout. Prism completed with full coverage; accepted
+refinements were internally verified. See [review and evidence](../docs/validation/web-parity-completion-20261101/recording-review.md).
+
+The dedicated spectrum, sweep and recording-analysis workflow milestones are
+complete. Platform adaptations and numerical-model limits above remain part of
+this local macOS candidate's scope.
 
 ## Internal review
 
@@ -123,4 +129,6 @@ review and browser checks: shared-library isolation, lost-update races, nullable
 schema references and empty defaults, nested-array reindexing, model-ID form
 submission shadowing, stale result replacement, audio snapshot field routing,
 paused storage-error visibility and read-only example previews clearing project
-association, and RC charge/discharge buttons using network-only mode IDs. No external review provider was used.
+association, and RC charge/discharge buttons using network-only mode IDs. Initial qualification used internal review. The later dedicated workflow milestones
+were reviewed with Prism at the owner’s explicit request; their complete receipts
+and finding resolutions are retained in the qualification record.

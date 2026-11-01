@@ -1,0 +1,395 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "851e4dc36e8ebe7f01c67f823ad89f0b",
+  "repo": {
+    "root": ".",
+    "head": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+    "branch": "exp-web"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 11,
+      "medium": 1,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "78a33e649e9d178f",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "update() crashes if the recording disappears while the analysis dialog is open",
+      "message": "update() explicitly anticipates that context.recording may be absent while the dialog is open (it guards with !r for the open button and for $('recording-analysis-reload').disabled=pending||!r), but after the stale check it dereferences r unconditionally: r.duration_s, r.comparison, r.timing and r.step_response. If the recording is removed or becomes undefined while the dialog is open, update() throws a TypeError on every call, which also breaks whatever caller loop invokes update() on state changes, leaving the dialog wedged.",
+      "suggestion": "Guard the rest of update() on the recording existing, e.g. change `if(stale)return;` to `if(stale||!r)return;` (and consider closing the dialog when the recording is gone).",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "exp-web/static/recording-analysis.mjs",
+          "lines": {
+            "start": 58,
+            "end": 60
+          }
+        }
+      ],
+      "tags": [
+        "null-guard",
+        "TypeError",
+        "dialog"
+      ],
+      "evidence": "  if(stale)return;\n  content.querySelector('[data-recording-analysis=\"step\"] button:not([type=\"button\"])').disabled=pending||r.duration_s===0;\n  const c=r.comparison;",
+      "fix": {
+        "before": "  if(stale)return;",
+        "after": "  if(stale||!r)return;"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "975a26237f8fc2c8",
+      "severity": "low",
+      "category": "style",
+      "title": "Unquoted UI label \"Use current settings\" reads as an imperative clause",
+      "message": "\"Stale sources disable editing; Use current settings explicitly refreshes drafts.\" capitalizes a UI control name mid-sentence, so on first read the text parses as two imperative clauses (\"... disable editing. Use current settings.\") rather than naming the control that refreshes the drafts.",
+      "suggestion": "Set the control name off from the sentence, e.g. \"Stale sources disable editing; the \\\"Use current settings\\\" action explicitly refreshes drafts.\"",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/README.md",
+          "lines": {
+            "start": 54,
+            "end": 55
+          }
+        }
+      ],
+      "tags": [
+        "docs",
+        "readability"
+      ],
+      "evidence": "acknowledged command revision. Stale sources disable editing; Use current\nsettings explicitly refreshes drafts. Acknowledged local analysis changes can",
+      "fix": {
+        "before": "acknowledged command revision. Stale sources disable editing; Use current\nsettings explicitly refreshes drafts. Acknowledged local analysis changes can",
+        "after": "acknowledged command revision. Stale sources disable editing; the \"Use current settings\" action\nexplicitly refreshes drafts. Acknowledged local analysis changes can"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "153fa710c385c6ec",
+      "severity": "low",
+      "category": "docs",
+      "title": "Validation claims are not linked to their artifacts",
+      "message": "The paragraph asserts specific results \u2014 \"all 23 frontend tests and syntax checks passed\", race-enabled HTTP coverage, and browser checks at 600 \u00d7 900 \u2014 but unlike the rest of this document it links to no receipts, scripts, or commands, so a reader cannot locate or re-run any of the evidence. The hard-coded test count (\"23\") will also silently rot as the suite in exp-web grows.",
+      "suggestion": "Point each claim at its artifact, e.g. \"Validation: all tests in recording-analysis.test.mjs (23 at time of writing) and syntax checks passed\", and reference the sweep scripts/receipts backing the HTTP-race and browser coverage, matching how the earlier sections link sweeps-review.md / sweeps-prism.json.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/README.md",
+          "lines": {
+            "start": 66,
+            "end": 72
+          }
+        }
+      ],
+      "tags": [
+        "docs",
+        "traceability",
+        "test-evidence"
+      ],
+      "evidence": "Validation: all 23 frontend tests and syntax checks passed; race-enabled HTTP\ncoverage verifies comparison/overlay, timing pages and brackets, RC settling,",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "49f996f8a7f76afe",
+      "severity": "low",
+      "category": "docs",
+      "title": "Validation section ships with its Prism review still pending",
+      "message": "The new section records the recording-analysis validation as finished (\"Validation: all 23 frontend tests and syntax checks passed\", \"No console errors\") yet closes by stating the Prism review is still pending and that its receipt \"will be added on completion\". The rest of this README presents the Prism artifacts (sweeps-review.md / sweeps-prism.json) as the authoritative, complete review record, so a reader following those links has no way to tell that the new section 3 claims are unreviewed, and the promise of future edits is easy to leave unfulfilled.",
+      "suggestion": "Land this README update together with the completed Prism receipt and resolution for the recording-analysis work, or make the pending state explicit and trackable, e.g. \"Prism review in progress (tracked in <ticket>); receipt and resolution will be appended to this section.\" If the review has since completed, replace the sentence with the actual receipt links.",
+      "confidence": 0.65,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/README.md",
+          "lines": {
+            "start": 73,
+            "end": 73
+          }
+        }
+      ],
+      "tags": [
+        "docs",
+        "validation-record",
+        "process"
+      ],
+      "evidence": "Prism review is pending; its receipt and resolution will be added on completion.",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "b3d78ec2674b04db",
+      "severity": "low",
+      "category": "testing",
+      "title": "Checkbox-style booleans only tested on the 'on' path",
+      "message": "Only the happy path show_overlay:'on' -> true (and the implicit show_statistics default false) is covered. There is no test that 'off' or an absent checkbox serializes to false, nor that show_statistics:'on' serializes to true. If the implementation used plain truthiness (Boolean(value)) or an inverted default, 'off' would be sent as true and no test would catch it.",
+      "suggestion": "Add assertions for the complementary cases, e.g. edit('compare',{time_s:'1 ms',show_overlay:'off',show_statistics:'on'},'capture-a') expecting show_overlay:false and show_statistics:true (adjust expected values to the documented native contract).",
+      "confidence": 0.7,
+      "locations": [
+        {
+          "path": "exp-web/recording-analysis.test.mjs",
+          "lines": {
+            "start": 6,
+            "end": 6
+          }
+        }
+      ],
+      "tags": [
+        "coverage",
+        "boolean-coercion"
+      ],
+      "evidence": " assert.deepEqual(edit('compare',{reference_id:'capture-b',time_s:'11.4 ms',show_overlay:'on'},'capture-a'),{name:'recording.compare.set',params:{id:'capture-a',reference_id:'capture-b',time_s:'11.4 ms',show_overlay:true,show_statistics:false}});",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "e5add6bc406e1a6a",
+      "severity": "low",
+      "category": "testing",
+      "title": "Timing set-path assertions do not pin the full params object",
+      "message": "The timing case asserts seven fields individually and never verifies probe_id or direction passthrough, so dropping, renaming, or adding keys in the timing params object would not fail the suite. Additionally direction:'both' equals the default that clear-timing emits, so this input cannot distinguish real passthrough from a hardcoded default value.",
+      "suggestion": "Assert the whole params object with deepEqual (mirroring the clear-* tests, whose expected shape is {id,probe_id,level,direction,start_s,end_s,offset,limit}) so both value conversions and the exact key set are pinned. If the native contract allows it, also use a non-default direction value.",
+      "confidence": 0.75,
+      "locations": [
+        {
+          "path": "exp-web/recording-analysis.test.mjs",
+          "lines": {
+            "start": 7,
+            "end": 8
+          }
+        }
+      ],
+      "tags": [
+        "coverage",
+        "assertions"
+      ],
+      "evidence": " const timing=edit('timing',{probe_id:'i:R1',level:'10 \u00b5A',second_level:'20 \u00b5A',direction:'both',start_s:'5 ms',end_s:'50 ms',limit:'20'},'capture-a');\n assert.equal(timing.params.id,'capture-a');assert.equal(timing.params.level,'10 \u00b5A');assert.equal(timing.params.second_level,'20 \u00b5A');assert.equal(timing.params.start_s,'5 ms');assert.equal(timing.params.end_s,'50 ms');assert.equal(timing.params.offset,0);assert.equal(timing.params.limit,20);",
+      "fix": {
+        "before": " const timing=edit('timing',{probe_id:'i:R1',level:'10 \u00b5A',second_level:'20 \u00b5A',direction:'both',start_s:'5 ms',end_s:'50 ms',limit:'20'},'capture-a');\n assert.equal(timing.params.id,'capture-a');assert.equal(timing.params.level,'10 \u00b5A');assert.equal(timing.params.second_level,'20 \u00b5A');assert.equal(timing.params.start_s,'5 ms');assert.equal(timing.params.end_s,'50 ms');assert.equal(timing.params.offset,0);assert.equal(timing.params.limit,20);",
+        "after": " const timing=edit('timing',{probe_id:'i:R1',level:'10 \u00b5A',second_level:'20 \u00b5A',direction:'both',start_s:'5 ms',end_s:'50 ms',limit:'20'},'capture-a');\n assert.deepEqual(timing.params,{id:'capture-a',probe_id:'i:R1',level:'10 \u00b5A',second_level:'20 \u00b5A',direction:'both',start_s:'5 ms',end_s:'50 ms',offset:0,limit:20});"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "e46f8dbc2170bae7",
+      "severity": "low",
+      "category": "style",
+      "title": "Seven assertions crammed onto one line hamper failure triage",
+      "message": "Line 8 packs seven assert.equal calls into a single ~300-character line (line 6 similarly combines a deepEqual with dense object literals). When one assertion fails, the runner only reports the line number, so triage requires manually matching expected/actual pairs out of an unreadable wall of text. This significantly hurts the debuggability the test file exists to provide.",
+      "suggestion": "Put each assertion on its own line, e.g. assert.equal(timing.params.start_s,'5 ms'); on one line and assert.equal(timing.params.limit,20); on the next, so each failure maps to exactly one check.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "exp-web/recording-analysis.test.mjs",
+          "lines": {
+            "start": 8,
+            "end": 8
+          }
+        }
+      ],
+      "tags": [
+        "readability",
+        "test-diagnostics"
+      ],
+      "evidence": " assert.equal(timing.params.id,'capture-a');assert.equal(timing.params.level,'10 \u00b5A');assert.equal(timing.params.second_level,'20 \u00b5A');assert.equal(timing.params.start_s,'5 ms');assert.equal(timing.params.end_s,'50 ms');assert.equal(timing.params.offset,0);assert.equal(timing.params.limit,20);",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "3cccbb242ed2a776",
+      "severity": "low",
+      "category": "testing",
+      "title": "Capture-ID guard only exercised for the compare action",
+      "message": "Only the compare action is exercised with an empty capture ID. If the timing, step, or clear builders skip the guard (or clear commands are not actually capture-bound in the same way), the suite stays green while malformed commands with empty IDs can be produced.",
+      "suggestion": "Assert the guard for every action name, e.g. for(const action of ['compare','timing','step','clear-compare','clear-timing','clear-step'])assert.throws(()=>edit(action,{},''),/recorded experiment/); (adjust the list/message to the real contract).",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "exp-web/recording-analysis.test.mjs",
+          "lines": {
+            "start": 10,
+            "end": 10
+          }
+        }
+      ],
+      "tags": [
+        "coverage",
+        "validation"
+      ],
+      "evidence": " assert.throws(()=>edit('compare',{},''),/recorded experiment/);",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "408bd568017d9d3f",
+      "severity": "low",
+      "category": "testing",
+      "title": "timingPage tests lack a last-page and a clamped previousOffset case",
+      "message": "Every non-empty timingPage case has next:true, and no case has offset < limit. A last page where next_offset reaches total_crossings (next:false with non-zero start/end) and the previousOffset clamp when offset-limit goes negative (e.g. offset 1, limit 2) are untested, so off-by-one errors in end/next or a negative previousOffset would ship unnoticed.",
+      "suggestion": "Add a final-page case such as timingPage({settings:{offset:3,limit:5},total_crossings:4,next_offset:4}) asserting next:false with non-zero start/end, and an offset:1,limit:2 case pinning previousOffset clamping to 0 (match the exact values to the native contract).",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "exp-web/recording-analysis.test.mjs",
+          "lines": {
+            "start": 22,
+            "end": 24
+          }
+        }
+      ],
+      "tags": [
+        "coverage",
+        "pagination",
+        "edge-case"
+      ],
+      "evidence": " assert.deepEqual(timingPage({settings:{limit:1},total_crossings:4,next_offset:1}),{start:1,end:1,total:4,previous:false,next:true,previousOffset:0});\n assert.deepEqual(timingPage({settings:{offset:2,limit:1},total_crossings:4,next_offset:3}),{start:3,end:3,total:4,previous:true,next:true,previousOffset:1});\n assert.deepEqual(timingPage({settings:{},total_crossings:0,next_offset:0}),{start:0,end:0,total:0,previous:false,next:false,previousOffset:0});",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "acd053a3273ebc60",
+      "severity": "low",
+      "category": "testing",
+      "title": "json.Marshal errors silently ignored when building the raw conflict request",
+      "message": "Both json.Marshal calls discard their errors. Today these cannot fail, but if the params or request types ever gain a field that json cannot encode, the test would silently POST a request with nil/garbage params and fail later with a misleading \"stale analysis capture accepted\" message instead of pointing at the marshalling failure.",
+      "suggestion": "Check both marshal errors explicitly so a future type change fails loudly at the source, e.g. `params, err := json.Marshal(...); if err != nil { t.Fatal(err) }` and likewise for `raw`.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "exp-web/recording_analysis_test.go",
+          "lines": {
+            "start": 75,
+            "end": 76
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "tests"
+      ],
+      "evidence": "params, _ := json.Marshal(workbench.RecordingCompareParams{ID: a, ReferenceID: b})\n\traw, _ := json.Marshal(workbench.Request{Version: 1, ID: token(), Key: token(), Command: \"recording.compare.set\", Params: params, ExpectedCommandRevision: &fresh.CommandRevision, ExpectedDocumentGeneration: &fresh.Document.Generation})",
+      "fix": {
+        "before": "params, _ := json.Marshal(workbench.RecordingCompareParams{ID: a, ReferenceID: b})\n\traw, _ := json.Marshal(workbench.Request{Version: 1, ID: token(), Key: token(), Command: \"recording.compare.set\", Params: params, ExpectedCommandRevision: &fresh.CommandRevision, ExpectedDocumentGeneration: &fresh.Document.Generation})",
+        "after": "params, err := json.Marshal(workbench.RecordingCompareParams{ID: a, ReferenceID: b})\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\traw, err := json.Marshal(workbench.Request{Version: 1, ID: token(), Key: token(), Command: \"recording.compare.set\", Params: params, ExpectedCommandRevision: &fresh.CommandRevision, ExpectedDocumentGeneration: &fresh.Document.Generation})\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "a4daac8d6961d603",
+      "severity": "low",
+      "category": "testing",
+      "title": "t.Fatalf in module loop hides failures for later modules",
+      "message": "The loop over the four embedded modules aborts at the first failing path, so a regression that breaks several modules is reported one run at a time and the remaining modules go unverified in that run.",
+      "suggestion": "Use t.Errorf instead of t.Fatalf inside the loop so every failing module is reported in a single run.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "exp-web/recording_analysis_test.go",
+          "lines": {
+            "start": 89,
+            "end": 89
+          }
+        }
+      ],
+      "tags": [
+        "tests"
+      ],
+      "evidence": "t.Fatalf(\"embedded module %s unavailable or cacheable: %d %v\", path, response.Code, response.Header())",
+      "fix": {
+        "before": "t.Fatalf(\"embedded module %s unavailable or cacheable: %d %v\", path, response.Code, response.Header())",
+        "after": "t.Errorf(\"embedded module %s unavailable or cacheable: %d %v\", path, response.Code, response.Header())"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "058fbae633778643",
+      "severity": "low",
+      "category": "bug",
+      "title": "errorMessage assumes error.message exists and is a string",
+      "message": "errorMessage reads error.message without checking it exists. If a rejection value is not an Error (e.g. a string, plain object, or undefined from a lower layer), the helper either throws its own TypeError inside the catch blocks \u2014 so feedback.textContent is never set and the async click listener rejects unhandled \u2014 or returns undefined, which is stringified into the feedback/toast as the literal text \"undefined\". Both catch blocks (submit handler and click handler) route through this helper, so any non-Error rejection is mishandled.",
+      "suggestion": "Normalize the message before testing it: `const message=typeof error?.message==='string'?error.message:String(error);` then run the regex against `message` and fall back to `message`.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "exp-web/static/recording-analysis.mjs",
+          "lines": {
+            "start": 83,
+            "end": 83
+          }
+        }
+      ],
+      "tags": [
+        "error-handling",
+        "robustness",
+        "location-corrected"
+      ],
+      "evidence": " const errorMessage=error=>/expected command revision|document generation/.test(error.message)?'The workbench changed while these entries were open. Use current settings to refresh them.':error.message;",
+      "fix": {
+        "before": " const errorMessage=error=>/expected command revision|document generation/.test(error.message)?'The workbench changed while these entries were open. Use current settings to refresh them.':error.message;",
+        "after": " const errorMessage=error=>{const message=typeof error?.message==='string'?error.message:String(error);return /expected command revision|document generation/.test(message)?'The workbench changed while these entries were open. Use current settings to refresh them.':message;};"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 1305577,
+    "totalMs": 694303
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      }
+    ],
+    "files": 7,
+    "bytes": 49426,
+    "chunks": 3,
+    "llmCalls": 8,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3",
+        "input": 29319,
+        "output": 243364,
+        "reasoning": 238074,
+        "cachedInput": 6080
+      }
+    ],
+    "widenedFiles": 1,
+    "splits": 2,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

@@ -1,4 +1,5 @@
 import {escapeHTML as esc} from './forms.mjs';
+import {recordingAnalyses} from './recording-analysis.mjs';
 
 export function scopeContext(state,instance='') {
  const recording=state.recording?.viewing?state.recording:null;
@@ -43,6 +44,7 @@ export function scopePlotDomain(scope,traces) {
 
 export function scopeControls(api) {
  const $=id=>document.getElementById(id),root=$('scope-controls'),dialog=$('scope-settings-dialog');
+ const analysisUI=recordingAnalyses({...api,context:()=>scopeContext(api.state(),api.instance?.())});
  let owner='',dialogOwner='',dialogState,rangeGuard,rangeOwner,pending=0;
  const capture=()=>({guard:api.guards(),owner:scopeContext(api.state(),api.instance?.()).owner});
  const assertOwner=expected=>{if(scopeContext(api.state(),api.instance?.()).owner!==expected)throw new Error('The scope source changed. Reopen these controls for the current source.');};
@@ -62,7 +64,7 @@ export function scopeControls(api) {
   const state=api.state(),context=scopeContext(state,api.instance?.()),r=context.recording;
   if(context.owner!==owner) {
    owner=context.owner;rangeGuard=null;rangeOwner=null;
-   root.innerHTML=`<div class="scope-source-row"><label>Scope source<select id="scope-source" aria-label="Scope source"></select></label><button id="scope-settings-button">Traces & interval</button><button id="recording-keep" class="hidden"></button></div><div id="scope-capture-status" class="scope-capture-status hidden" role="status"><span id="scope-capture-label"></span><progress id="scope-capture-progress" max="1" aria-label="Recording progress"></progress><button id="scope-capture-cancel">Cancel recording</button></div><div id="recording-player" class="recording-player hidden"><div class="recording-playback"><button id="recording-previous" aria-label="Previous recorded sample" title="Previous recorded sample">‹</button><button id="recording-play" aria-label="Play recording">Play</button><button id="recording-next" aria-label="Next recorded sample" title="Next recorded sample">›</button><input id="recording-position" type="range" min="0" step="1" aria-label="Recorded sample position"><span id="recording-position-label"></span></div><details id="recording-exact"><summary>Position & speed</summary><div class="recording-exact-fields"><form data-scope-edit="index"><label>Sample index<input name="index" type="number" min="0" step="1" required></label><button>Go</button></form><form data-scope-edit="seek"><label>Seek time<input name="time_s" type="text" required></label><button>Seek</button></form><form data-scope-edit="speed"><label>Playback speed<input name="speed" type="number" min="0.001" max="10" step="any" required aria-describedby="recording-speed-unit"></label><button>Apply</button></form></div><button type="button" id="recording-reset-entries">Use current position</button><p id="recording-speed-unit">Speed is simulated seconds per real second. Playback leaves the live circuit unchanged.</p></details><p id="recording-edit-feedback" class="settings-feedback error" role="status"></p><div id="recording-sample-readings" class="recording-sample-readings"></div></div>`;
+   root.innerHTML=`<div class="scope-source-row"><label>Scope source<select id="scope-source" aria-label="Scope source"></select></label><button id="scope-settings-button">Traces & interval</button><button id="recording-analysis-button" class="hidden">Analyze recording</button><button id="recording-keep" class="hidden"></button></div><div id="scope-capture-status" class="scope-capture-status hidden" role="status"><span id="scope-capture-label"></span><progress id="scope-capture-progress" max="1" aria-label="Recording progress"></progress><button id="scope-capture-cancel">Cancel recording</button></div><div id="recording-player" class="recording-player hidden"><div class="recording-playback"><button id="recording-previous" aria-label="Previous recorded sample" title="Previous recorded sample">‹</button><button id="recording-play" aria-label="Play recording">Play</button><button id="recording-next" aria-label="Next recorded sample" title="Next recorded sample">›</button><input id="recording-position" type="range" min="0" step="1" aria-label="Recorded sample position"><span id="recording-position-label"></span></div><details id="recording-exact"><summary>Position & speed</summary><div class="recording-exact-fields"><form data-scope-edit="index"><label>Sample index<input name="index" type="number" min="0" step="1" required></label><button>Go</button></form><form data-scope-edit="seek"><label>Seek time<input name="time_s" type="text" required></label><button>Seek</button></form><form data-scope-edit="speed"><label>Playback speed<input name="speed" type="number" min="0.001" max="10" step="any" required aria-describedby="recording-speed-unit"></label><button>Apply</button></form></div><button type="button" id="recording-reset-entries">Use current position</button><p id="recording-speed-unit">Speed is simulated seconds per real second. Playback leaves the live circuit unchanged.</p></details><p id="recording-edit-feedback" class="settings-feedback error" role="status"></p><div id="recording-sample-readings" class="recording-sample-readings"></div></div>`;
   }
   const completed=(state.operations||[]).filter(o=>o.status==='completed'),source=$('scope-source');
   const options='<option value="">Live circuit</option>'+completed.map(o=>`<option value="${esc(o.id)}">${esc(o.id)}${o.kept_in_project?' · kept':''}</option>`).join('');
@@ -93,6 +95,7 @@ export function scopeControls(api) {
    root.querySelector('input[name="index"]').max=r.sample_count-1;
    $('recording-sample-readings').textContent=(r.readings||[]).map(v=>`${v.probe.label} ${api.fmt(v.value,v.probe.unit,5)}`).join(' · ')||'No captured traces selected.';
   }
+  analysisUI.update();
   if(dialog.open) {
    const changed=dialogOwner!==context.owner;
    $('scope-settings-stale').classList.toggle('hidden',!changed);
