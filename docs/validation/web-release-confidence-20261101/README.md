@@ -42,7 +42,12 @@ at `814eba14` passed all four functional journeys on all three engines (12 total
 All three accessibility journeys caught the same visible-label/spoken-name
 mismatch in the brand and schematic parts. Those defects are fixed in the
 follow-up, with a new frontend regression; the gate remains enabled. A second run
-must qualify the fixes and the added keyboard placement assertion.
+passed the functional journeys including keyboard placement, but showed that
+reordering spoken wording alone did not fix the names: adjacent positioned SVG
+text nodes had no whitespace boundaries, and the visible decorative brand mark
+was included by the visible-label comparison. The next fix adds real text-node
+boundaries and lets the brand derive its name from its nondecorative contents.
+The gate remains enabled for the next run.
 
 Final hosted results are pending. Before this milestone, GitHub had only main; its
 latest quality run at `cd6dcdcdd123c1356c8aa8e525a146b47ed96f22` passed. That result
