@@ -18,7 +18,7 @@ qualified native alpha.
 | Scope | Direct live/captured source picker, trace chooser, precise time windows and cursors, A/B values and deltas, exact current sample markers/readings, DC points and recorded reference overlay |
 | Recording analysis | Direct capture settings/progress/cancel, keep toggle, playback/scrubber, index/time seek, speed and interval RMS/statistics; import/export, threshold timing, step response and comparison in Tools |
 | Spectrum | Dedicated live/recorded source and capture/channel selection, FFT window/grid and fundamental/harmonics, hold/off, native ranked peaks and A/B frequency cursors/deltas, THD and recorded exports |
-| Sweeps | DC, AC gain/phase, noise and loop response, spacing/point/probe settings, retained selection, exact cursor, keep/import/export and result trace plot |
+| Sweeps | Dedicated DC/AC/noise/loop methods, multi-probe/range/grid controls, retained results/progress/cancel/keep, native captured channels, exact index/keyboard/plot cursors, native analyses/assumptions and pinned exports |
 | Tolerances | Seeded native Monte Carlo settings, progress, trials/statistics and full JSON/CSV export |
 | Projects | Native `.elab` import/export, kept recordings/sweeps/models, named local library and Save a copy |
 | Durability | Atomic checkpoints and named revisions; restart/lost-cookie recovery, retained previous saves, reversible Trash, stale-editor/concurrent-save protection |
@@ -99,12 +99,18 @@ captured results separate from live frames and refuses stale source edits. All
 completed with full coverage; accepted findings were fixed and internally checked.
 See [evidence and finding resolutions](../docs/validation/web-parity-completion-20261101/spectrum-review.md).
 
+### Sweep workflow, 2026-11-01
+
+Dedicated sweep workflows passed all 19 frontend tests and the full web race
+suite. HTTP tests exercise all four native methods; browser checks cover DC/AC,
+retained results, exact cursors and correction of refused entries. Prism completed
+with full coverage. See [review and fixes](../docs/validation/web-parity-completion-20261101/sweeps-review.md).
+
 ### Remaining workflow work
 
 The feature-family table includes native commands exposed through Tools. Dedicated
-web workflows still need the next usability passes: sweep method selection, retained-result
-navigation and plot cursors; and recording comparison, threshold timing and step
-response. These are available through native forms today. Their direct workspace
+web workflows still need the next usability pass: recording comparison, threshold
+timing and step response. These are available through native forms today. Their direct workspace
 presentation has not yet reached the native client's level.
 
 ## Internal review

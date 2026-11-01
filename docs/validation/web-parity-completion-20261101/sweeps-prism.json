@@ -1,0 +1,406 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "dd5f2997ea9ba3f2c5f9943e81d81b22",
+  "repo": {
+    "root": ".",
+    "head": "0ec15551010fb0410a148ed3d404f24755798f59",
+    "branch": "exp-web"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 9,
+      "medium": 2,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "1c1e0721bbdbc013",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Null dereference when inspected is null and no operation is selected",
+      "message": "inspected?.id===s?.selected_operation evaluates to true whenever both sides are undefined \u2014 i.e. before any inspection has run while the dc_sweep state (or its selected_operation field) is absent, which the surrounding code clearly anticipates (s?.selected_operation||'' on the result-select line). The truthy branch then calls resultTable(inspected.metadata) with inspected===null, throwing a TypeError that aborts update() and leaves the panel half-rendered on every state refresh until the user inspects something.",
+      "suggestion": "Guard inspected explicitly instead of relying on optional chaining, so the undefined===undefined case falls through to the empty branch: const metadata=inspected&&inspected.id===s?.selected_operation?resultTable(inspected.metadata):'';",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "exp-web/static/sweep.mjs",
+          "lines": {
+            "start": 70,
+            "end": 70
+          }
+        }
+      ],
+      "tags": [
+        "null-safety",
+        "optional-chaining"
+      ],
+      "evidence": "  const source=root.querySelector('#sweep-source'),metadata=inspected?.id===s?.selected_operation?resultTable(inspected.metadata):'';if(source.innerHTML!==metadata)source.innerHTML=metadata;",
+      "fix": {
+        "before": "  const source=root.querySelector('#sweep-source'),metadata=inspected?.id===s?.selected_operation?resultTable(inspected.metadata):'';if(source.innerHTML!==metadata)source.innerHTML=metadata;",
+        "after": "  const source=root.querySelector('#sweep-source'),metadata=inspected&&inspected.id===s?.selected_operation?resultTable(inspected.metadata):'';if(source.innerHTML!==metadata)source.innerHTML=metadata;"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "09a5cafb0fac7a90",
+      "severity": "medium",
+      "category": "testing",
+      "title": "sweepRequest output contract only partially asserted",
+      "message": "The automatic case verifies start, stop and points but never asserts that the passed spacing ('logarithmic') or the target's component_id/parameter reach settings, and no case exercises sweepRequest filling omitted values from sweepDefaults. A regression in sweep.mjs that drops the spacing or the target fields would pass this suite silently.",
+      "suggestion": "Assert the remaining settings fields for the automatic case and add one defaults-fallback case, e.g. after the points assertion: `assert.equal(automatic.settings.spacing,'logarithmic');` plus a case like `assert.equal(sweepRequest({stop:'10 Hz'},target).settings.start,sweepDefaults(target).start);` (adjust key names to the actual settings contract).",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "exp-web/sweep.test.mjs",
+          "lines": {
+            "start": 8,
+            "end": 12
+          }
+        }
+      ],
+      "tags": [
+        "testing",
+        "coverage"
+      ],
+      "evidence": " const automatic=sweepRequest(values,target);\n assert.equal('probe_ids' in automatic.settings,false,'automatic output must omit the list, not submit an invalid empty list');\n assert.equal(automatic.settings.start,'1 kHz');\n assert.equal(automatic.settings.stop,'10 Hz');\n assert.equal(automatic.settings.points,9);",
+      "fix": {
+        "before": " assert.equal(automatic.settings.points,9);",
+        "after": " assert.equal(automatic.settings.points,9);\n assert.equal(automatic.settings.spacing,'logarithmic');"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "e086c68217af22c7",
+      "severity": "low",
+      "category": "docs",
+      "title": "README promises validation results that do not follow",
+      "message": "The new section closes with \"Full-suite result and Prism resolution follow below\", but the added content ends there; the promised full-suite result and Prism resolution are absent, leaving the README with a dangling reference.",
+      "suggestion": "Append the full-suite run result and Prism resolution to the section, or reword the closing sentence (e.g. \"Full-suite result and Prism resolution are recorded once the run completes\") so the document does not reference content that is not present.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/README.md",
+          "lines": {
+            "start": 47,
+            "end": 47
+          }
+        }
+      ],
+      "tags": [
+        "documentation"
+      ],
+      "evidence": "captured assumptions. Full-suite result and Prism resolution follow below.",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "0d43bd1cc44239f2",
+      "severity": "low",
+      "category": "testing",
+      "title": "Sweep wait uses a hard 5s deadline with 1ms busy-polling",
+      "message": "The result poll caps at a hard-coded 5 seconds and re-fetches full state every millisecond. On a loaded CI runner a 9-point sweep can exceed the cap, making this test flaky, and when a sweep fails to start the loop spins the full 5 seconds before failing with a generic message that does not distinguish timeout from error.",
+      "suggestion": "Give the sweep a more generous deadline and a coarser poll interval so the test stays stable on slow runners, e.g. deadline := time.Now().Add(30 * time.Second) with time.Sleep(10 * time.Millisecond) in the loop.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "exp-web/analysis_test.go",
+          "lines": {
+            "start": 149,
+            "end": 152
+          }
+        }
+      ],
+      "tags": [
+        "flakiness",
+        "polling"
+      ],
+      "evidence": "\t\t\tdeadline := time.Now().Add(5 * time.Second)\n\t\t\tfor f.state().DCSweep.Result == nil && time.Now().Before(deadline) {\n\t\t\t\ttime.Sleep(time.Millisecond)\n\t\t\t}",
+      "fix": {
+        "before": "\t\t\tf.command(\"sweep.start\", workbench.SweepStartParams{Settings: &cfg})\n\t\t\tdeadline := time.Now().Add(5 * time.Second)\n\t\t\tfor f.state().DCSweep.Result == nil && time.Now().Before(deadline) {\n\t\t\t\ttime.Sleep(time.Millisecond)\n\t\t\t}",
+        "after": "\t\t\tf.command(\"sweep.start\", workbench.SweepStartParams{Settings: &cfg})\n\t\t\tdeadline := time.Now().Add(30 * time.Second)\n\t\t\tfor f.state().DCSweep.Result == nil && time.Now().Before(deadline) {\n\t\t\t\ttime.Sleep(10 * time.Millisecond)\n\t\t\t}"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "678f472e4e476094",
+      "severity": "low",
+      "category": "testing",
+      "title": "after.DCSweep.Result dereferenced without a nil check",
+      "message": "The assertion reads after.DCSweep.Result.Points without confirming Result is still non-nil after the trace-select and cursor-set commands. If the viewer ever clears or replaces the captured result while leaving the cursor set, the test panics with a nil dereference instead of failing cleanly with diagnostics.",
+      "suggestion": "Guard the dereference by adding after.DCSweep.Result == nil || as the first clause of the condition so a cleared result is reported as a test failure rather than a panic.",
+      "confidence": 0.35,
+      "locations": [
+        {
+          "path": "exp-web/analysis_test.go",
+          "lines": {
+            "start": 172,
+            "end": 172
+          }
+        }
+      ],
+      "tags": [
+        "nil-safety"
+      ],
+      "evidence": "\t\t\tif after.DCSweep.Cursor == nil || *after.DCSweep.Cursor != index || after.DCSweep.TraceID != result.Probes[len(result.Probes)-1].ID || !reflect.DeepEqual(result.Points, after.DCSweep.Result.Points) {",
+      "fix": {
+        "before": "\t\t\tif after.DCSweep.Cursor == nil || *after.DCSweep.Cursor != index || after.DCSweep.TraceID != result.Probes[len(result.Probes)-1].ID || !reflect.DeepEqual(result.Points, after.DCSweep.Result.Points) {",
+        "after": "\t\t\tif after.DCSweep.Result == nil || after.DCSweep.Cursor == nil || *after.DCSweep.Cursor != index || after.DCSweep.TraceID != result.Probes[len(result.Probes)-1].ID || !reflect.DeepEqual(result.Points, after.DCSweep.Result.Points) {"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "1ea65531a944e48d",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Export URL built by raw string concatenation",
+      "message": "\"/api/download?\"+f.query(kind)+\"&id=\"+s.Selected interpolates the operation ID into the URL without escaping. If IDs (or the value returned by f.query) ever contain characters requiring percent-encoding, the request targets the wrong resource and the export assertion silently validates something else.",
+      "suggestion": "Escape the identifier before interpolating, e.g. \"&id=\"+url.QueryEscape(s.Selected) (adding net/url to the imports), or build the whole query with url.Values.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "exp-web/analysis_test.go",
+          "lines": {
+            "start": 184,
+            "end": 184
+          }
+        }
+      ],
+      "tags": [
+        "url-escaping"
+      ],
+      "evidence": "\t\t\t\texport := f.request(\"POST\", \"/api/download?\"+f.query(kind)+\"&id=\"+s.Selected, nil, \"\")",
+      "fix": {
+        "before": "\t\t\t\texport := f.request(\"POST\", \"/api/download?\"+f.query(kind)+\"&id=\"+s.Selected, nil, \"\")",
+        "after": "\t\t\t\texport := f.request(\"POST\", \"/api/download?\"+f.query(kind)+\"&id=\"+url.QueryEscape(s.Selected), nil, \"\")"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "dc434b8df2de7eda",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Query-string cache bust only covers the entry assets, not transitively imported modules",
+      "message": "The `?v=web-11` cache-bust tokens only version the two entry assets (`/styles.css` and `/app.js`). Because `app.js` is loaded as an ES module (`type=\"module\"`), any local modules it imports (e.g. other files under `/static/`, which this repo contains) are fetched by their bare URLs with no version token. If the static file server sends cacheable responses for those paths, clients can keep executing stale imported modules after this deploy even though the entry-point URL changed, partially defeating the version bump.",
+      "suggestion": "Either confirm the static server sends `Cache-Control: no-cache` (revalidate) for unversioned assets, or version imported modules too (e.g. `import { x } from \"./sweep.mjs?v=web-11\"`, or use a build step that fingerprints filenames such as `app-a1b2c3.js` and rewrites imports so every module URL changes when its content changes).",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "exp-web/static/index.html",
+          "lines": {
+            "start": 3,
+            "end": 3
+          }
+        }
+      ],
+      "tags": [
+        "caching",
+        "cache-busting",
+        "es-modules",
+        "static-assets"
+      ],
+      "evidence": "<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta name=\"theme-color\" content=\"#f6f7f8\"><title>ELab \u00b7 Web workbench</title><link rel=\"stylesheet\" href=\"/styles.css?v=web-11\"><script type=\"module\" src=\"/app.js?v=web-11\"></script></head>",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "70c0be9e9273470a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Trace select value is not validated against the current result's probes",
+      "message": "trace.value applies the persisted trace_id without checking it against the current result's probe list. If the stored trace refers to a probe that is not in the newly selected operation's result (different retained sweep, or a re-run with different measurements), the value matches no option, the select renders blank, findIndex on the next line yields -1, and the chart is plotted with y: p.values[-1] === undefined \u2014 an empty plot with no trace selected until the user manually re-picks one.",
+      "suggestion": "Validate trace_id against the current result and fall back to the first probe: const traced=result?.probes.find(p=>p.id===s?.trace_id)||result?.probes[0];trace.value=traced?.id||'';",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "exp-web/static/sweep.mjs",
+          "lines": {
+            "start": 63,
+            "end": 63
+          }
+        }
+      ],
+      "tags": [
+        "stale-state",
+        "ui"
+      ],
+      "evidence": "  if(trace.innerHTML!==traces)trace.innerHTML=traces;trace.value=s?.trace_id||result?.probes[0]?.id||'';trace.disabled=pending||!result;",
+      "fix": {
+        "before": "  if(trace.innerHTML!==traces)trace.innerHTML=traces;trace.value=s?.trace_id||result?.probes[0]?.id||'';trace.disabled=pending||!result;",
+        "after": "  if(trace.innerHTML!==traces)trace.innerHTML=traces;const traced=result?.probes.find(p=>p.id===s?.trace_id)||result?.probes[0];trace.value=traced?.id||'';trace.disabled=pending||!result;"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "b12f012aabe637a8",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Stale-source guard in run() can never fire",
+      "message": "The expected=identity() default parameter is evaluated immediately before the function body runs, and identity() is a synchronous pure read of state, so expected!==identity() is always false when defaulted \u2014 and no caller ever passes an explicit expected. The 'Sweep source changed' guard is dead code that implies a staleness check which does not actually exist.",
+      "suggestion": "Either drop the parameter and the check, or make it real: capture identity() when the panel state is rendered (e.g. store lastRendered=identity() in update()) and have callers pass that value so changes since render are detected.",
+      "confidence": 0.7,
+      "locations": [
+        {
+          "path": "exp-web/static/sweep.mjs",
+          "lines": {
+            "start": 72,
+            "end": 74
+          }
+        }
+      ],
+      "tags": [
+        "dead-code",
+        "concurrency"
+      ],
+      "evidence": " async function run(name,params,guard=api.guards(),expected=identity()) {\n  if(pending)throw new Error('Wait for the current sweep action to finish.');\n  if(expected!==identity())throw new Error('Sweep source changed. Review the current controls.');",
+      "fix": {
+        "before": " async function run(name,params,guard=api.guards(),expected=identity()) {\n  if(pending)throw new Error('Wait for the current sweep action to finish.');\n  if(expected!==identity())throw new Error('Sweep source changed. Review the current controls.');",
+        "after": " async function run(name,params,guard=api.guards()) {\n  if(pending)throw new Error('Wait for the current sweep action to finish.');"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "df90d4a3c9085143",
+      "severity": "low",
+      "category": "testing",
+      "title": "Explicit empty probe list path is untested",
+      "message": "Line 9's message declares that submitting an empty probe list would be invalid, yet only the omitted-argument case is covered. `sweepRequest(values,target,[])` \u2014 an easy caller mistake \u2014 has no assertion, so a regression that emits `probe_ids: []` would pass unnoticed.",
+      "suggestion": "Confirm the intended contract in sweep.mjs and add an assertion for the explicit empty list, e.g. `assert.equal('probe_ids' in sweepRequest(values,target,[]).settings,false,'an explicitly empty list must be omitted like the automatic case');`",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "exp-web/sweep.test.mjs",
+          "lines": {
+            "start": 13,
+            "end": 13
+          }
+        }
+      ],
+      "tags": [
+        "testing",
+        "coverage"
+      ],
+      "evidence": " assert.deepEqual(sweepRequest(values,target,['v:C1','v:R1']).settings.probe_ids,['v:C1','v:R1']);",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "032b32b71bf240e2",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Probe-override assertion lacks an explanatory message",
+      "message": "This assertion shows that a caller-specified probe list ['v:C1'] is silently discarded for loop-frequency and replaced with ['loop:U2'], contradicting the preservation asserted on the previous line. Every neighbouring assertion carries a rationale message, so the missing message here makes a deliberate contract look like a copy-paste error.",
+      "suggestion": "Add an explanatory message, and double-check in sweep.mjs that discarding user-selected probes for loop analyses is intended: `assert.deepEqual(sweepRequest(values,{component_id:'U2',parameter:'loop-frequency'},['v:C1']).settings.probe_ids,['loop:U2'],'loop-frequency analysis replaces the requested probes with the component loop probe');`",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "exp-web/sweep.test.mjs",
+          "lines": {
+            "start": 14,
+            "end": 14
+          }
+        }
+      ],
+      "tags": [
+        "maintainability",
+        "docs"
+      ],
+      "evidence": " assert.deepEqual(sweepRequest(values,{component_id:'U2',parameter:'loop-frequency'},['v:C1']).settings.probe_ids,['loop:U2']);",
+      "fix": {
+        "before": " assert.deepEqual(sweepRequest(values,{component_id:'U2',parameter:'loop-frequency'},['v:C1']).settings.probe_ids,['loop:U2']);",
+        "after": " assert.deepEqual(sweepRequest(values,{component_id:'U2',parameter:'loop-frequency'},['v:C1']).settings.probe_ids,['loop:U2'],'loop-frequency analysis replaces the requested probes with the component loop probe');"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 1270085,
+    "totalMs": 1033965
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      }
+    ],
+    "files": 6,
+    "bytes": 50535,
+    "chunks": 3,
+    "llmCalls": 8,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3",
+        "input": 32167,
+        "output": 217515,
+        "reasoning": 213164,
+        "cachedInput": 10368
+      }
+    ],
+    "widenedFiles": 1,
+    "splits": 2,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "09e2c240829c9307",
+        "severity": "low",
+        "category": "correctness",
+        "title": "Truthiness check silently drops falsy download ids",
+        "message": "The new options handling in download() uses a truthiness test for options.id, so an id of 0 or '' is treated as absent and the id query parameter is silently omitted. The server would then export the default item instead of the requested one, with no error surfaced to the user. The adjacent guard fallbacks correctly use the nullish coalescing operator, so this check is inconsistent with the rest of the expression and will misbehave if any caller passes a numeric trace/probe index.",
+        "suggestion": "Use a nullish check so falsy-but-valid ids are forwarded: replace ...(options.id?{id:options.id}:{}) with ...(options.id!=null?{id:options.id}:{}).",
+        "confidence": 0.45,
+        "locations": [
+          {
+            "path": "exp-web/static/app.js",
+            "lines": {
+              "start": 142,
+              "end": 142
+            }
+          }
+        ],
+        "tags": [
+          "truthiness",
+          "optional-params"
+        ],
+        "evidence": "...(options.id?{id:options.id}:{})",
+        "fix": {
+          "before": "...(options.id?{id:options.id}:{})",
+          "after": "...(options.id!=null?{id:options.id}:{})"
+        },
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      },
+      "reason": "quoted evidence not found in exp-web/static/app.js"
+    }
+  ],
+  "suppressed": []
+}

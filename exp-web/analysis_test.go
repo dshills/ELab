@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"math"
+	"net/url"
 	"reflect"
 	"strconv"
 	"testing"
@@ -124,5 +125,77 @@ func TestBrowserACCapturePersistsAcrossServiceLoss(t *testing.T) {
 	imported := restored.request("POST", "/api/import-result?kind=sweep&"+restored.query(""), exported.Body.Bytes(), "")
 	if imported.Code != 200 {
 		t.Fatal(imported.Body.String())
+	}
+}
+
+func TestBrowserSweepMethodsExposeCapturedChannelsAndExactCursors(t *testing.T) {
+	for _, tc := range []struct{ example, component, parameter, start, stop string }{
+		{"rc", "V1", "voltage", "0 V", "5 V"},
+		{"ac-rc", "V1", "frequency", "10 Hz", "10 kHz"},
+		{"noise-rc", "V1", "noise", "1 Hz", "100 kHz"},
+		{"feedback-loop", "U1", "loop-frequency", ".1 Hz", "100 kHz"},
+	} {
+		t.Run(tc.parameter, func(t *testing.T) {
+			f := fixture(t)
+			f.command("simulation.pause", struct{}{})
+			f.command("example.load", workbench.ExampleLoadParams{ID: tc.example, DiscardChanges: true})
+			f.command("simulation.pause", struct{}{})
+			f.wait()
+			before := f.state()
+			cfg := workbench.SweepSettings{ComponentID: tc.component, Parameter: tc.parameter, Start: tc.start, Stop: tc.stop, Points: 9, Spacing: "logarithmic"}
+			if tc.parameter == "voltage" {
+				cfg.Spacing = "linear"
+			} // No probe list: native defaults.
+			f.command("sweep.start", workbench.SweepStartParams{Settings: &cfg})
+			deadline := time.Now().Add(30 * time.Second)
+			for time.Now().Before(deadline) {
+				sweep := f.state().DCSweep
+				if sweep.Result != nil {
+					break
+				}
+				for _, op := range sweep.Operations {
+					if op.Status == "failed" || op.Status == "canceled" {
+						t.Fatalf("sweep terminated: %+v", op)
+					}
+				}
+				time.Sleep(10 * time.Millisecond)
+			}
+			s := f.state().DCSweep
+			if s.Result == nil || len(s.Result.Points) != 9 || len(s.Result.Probes) == 0 {
+				t.Fatal("missing captured sweep", s)
+			}
+			if tc.parameter == "noise" && s.Result.Noise == nil {
+				t.Fatal("missing native integrated noise")
+			}
+			if tc.parameter == "loop-frequency" && s.Result.Loop == nil {
+				t.Fatal("missing native loop margins")
+			}
+			if tc.parameter == "frequency" && len(s.Result.AC) == 0 {
+				t.Fatal("missing native AC bands")
+			}
+			result := s.Result
+			capturedDirty := f.state().Document.Dirty
+			f.command("sweep.trace.select", workbench.IDParams{ID: result.Probes[len(result.Probes)-1].ID})
+			index := 7
+			f.command("sweep.cursor.set", workbench.SweepCursorParams{OperationID: s.Selected, Index: &index})
+			after := f.state()
+			if after.DCSweep == nil || after.DCSweep.Result == nil || after.DCSweep.Cursor == nil || *after.DCSweep.Cursor != index || after.DCSweep.TraceID != result.Probes[len(result.Probes)-1].ID || !reflect.DeepEqual(result.Points, after.DCSweep.Result.Points) {
+				t.Fatal("exact captured channel/index changed", after.DCSweep)
+			}
+			if !reflect.DeepEqual(before.Components, after.Components) || !reflect.DeepEqual(before.Transient, after.Transient) || capturedDirty != after.Document.Dirty {
+				t.Fatal("sweep changed live source or viewer changed captured dirty state")
+			}
+			f.command("sweep.keep.set", workbench.RecordingKeepParams{ID: s.Selected, Keep: true})
+			f.command("sweep.cursor.set", workbench.SweepCursorParams{OperationID: s.Selected}) // Explicit null clears.
+			if f.state().DCSweep.Cursor != nil {
+				t.Fatal("cursor did not clear")
+			}
+			for _, kind := range []string{"sweep-json", "sweep-csv"} {
+				export := f.request("POST", "/api/download?"+f.query(kind)+"&id="+url.QueryEscape(s.Selected), nil, "")
+				if export.Code != 200 || export.Body.Len() == 0 {
+					t.Fatal("captured export failed", kind, export.Body.String())
+				}
+			}
+		})
 	}
 }

@@ -28,3 +28,21 @@ Prism receipts and finding resolutions are retained alongside each milestone.
 
 The qualified native alpha and the owner's persistent project library remain
 preserved. Browser tests use disposable storage on port 8789.
+
+## 2. Sweeps
+
+Dedicated DC/component, AC gain/phase, white-noise and loop-response methods use
+native target inventories and defaults. Measurement selection supports native
+multiple-output limits and omission for automatic selection. Retained results,
+progress/cancellation, project membership, captured trace selection, exact stored
+point indices and keyboard/plot cursors are directly accessible. Draft settings
+never relabel previously captured results. Native statistics, integrated noise,
+AC bands, loop margins and source assumptions are displayed without recomputing
+numerical analyses in JavaScript. Exports pin the selected captured operation.
+
+Validation: 19 frontend tests; race-enabled HTTP checks of all four methods,
+converted captured channel IDs, exact point selection/clear, JSON/CSV exports and
+independence from live components/transient state. Browser checks cover DC/AC,
+retained navigation, native defaults, exact index and End-key selection, and
+captured assumptions. Full web race suite passed. See [Prism findings and fixes](sweeps-review.md) and
+[the complete review receipt](sweeps-prism.json).
