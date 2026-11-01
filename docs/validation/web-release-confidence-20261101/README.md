@@ -1,0 +1,57 @@
+# Web release-confidence gate
+
+This milestone prepares `exp-web` for promotion. It does not merge main or replace
+the qualified native alpha or the preserved web alpha archive.
+
+## Changes and internal review
+
+- Native buttons replace the parts library's incomplete listbox semantics.
+- All dialogs have accessible names; tabs identify their panels, use one tab stop
+  per group and support arrows/Home/End through their existing activation paths.
+- Drawing shortcuts respect text composition, consumed events, modal dialogs and
+  browser modifier shortcuts. Command-K cannot stack a command dialog over another
+  modal. Text editing retains normal undo behavior.
+- Focusable panel dividers expose their current size.
+- Locked test-only Playwright/axe dependencies and independent CI jobs cover three
+  browser engines. The runtime and packaged app acquire no npm dependencies.
+
+Internal review checked shortcut propagation, dynamic tab rendering, native dialog
+focus behavior, private test-library ownership, server shutdown, browser evidence
+scope, pinned dependency integrity and workflow permissions. Tests activate the
+real UI and native host without bypassing commands through test-only app APIs.
+The browser host is opt-in locally and refuses to reuse an existing server.
+
+## Local checks
+
+- All 26 frontend logic tests and module syntax checks pass.
+- All 108 Python tests pass, including dependency-lock qualification inputs.
+- `go test -race ./exp-web -count=1` passes (12.074 s); `go vet ./exp-web` passes.
+- `actionlint .github/workflows/quality.yml` and `git diff --check` pass.
+- Playwright discovers 15 journeys, five for each engine, without launching a
+  browser. Actual browser execution is delegated to hosted CI.
+- No desktop launch, browser opening or screen capture was performed locally;
+  the owner's subscription-video pause remains in effect.
+
+Hosted results are pending. Before this milestone, GitHub had only main; its
+latest quality run at `cd6dcdcdd123c1356c8aa8e525a146b47ed96f22` passed. That result
+does not qualify the web branch.
+
+## Promotion gates
+
+1. All branch CI jobs pass, including portable/native suites and browser journeys.
+2. After the video pause ends, check the packaged candidate in installed macOS
+   browsers, keyboard focus/VoiceOver and pointer resizing. WebKit on Linux is not
+   a substitute for installed Safari, and axe is not a screen-reader evaluation.
+3. Run an everyday-use pilot with disposable circuits: create a small LED circuit;
+   edit/record/analyze RC; inspect the four-MOSFET bridge; save, quit/reopen and
+   recover; export/import a native project. Record completion, confusing steps,
+   data loss, errors and any advantage over the native reference. No data loss or
+   blocked core workflow is acceptable for promotion.
+
+The pilot requires human use and cannot be declared passed from automation.
+Rebuild and qualify a new web package from the eventual promoted commit; the
+existing alpha archive remains an immutable earlier candidate.
+
+References: [WAI tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/),
+[Playwright CI](https://playwright.dev/docs/ci),
+[automated accessibility limits](https://playwright.dev/docs/accessibility-testing).

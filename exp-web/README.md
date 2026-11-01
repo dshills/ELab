@@ -139,6 +139,11 @@ installation. The shared portable/native quality plans run these frontend checks
 and their input signatures include JS, HTML and CSS. The GitHub workflow runs on
 `exp-web`, `main`, PRs and the existing Codex branch pattern.
 
+Separate [browser qualification](browser/README.md) uses locked development-only
+dependencies for Chromium, Firefox and WebKit CI journeys. See the
+[promotion gates](../docs/validation/web-release-confidence-20261101/README.md)
+for hosted evidence, manual accessibility and pilot requirements.
+
 See [PARITY.md](PARITY.md) for the feature matrix, verification evidence, internal
 review and platform differences. This is a local-server web app, not a browser-only
 WASM application or an authenticated hosted multi-user service.

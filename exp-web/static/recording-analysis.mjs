@@ -1,3 +1,4 @@
+import {syncTabs} from './accessibility.mjs';
 import {escapeHTML as esc} from './forms.mjs';
 import {resultTable} from './results.mjs';
 
@@ -26,7 +27,7 @@ export function recordingAnalyses(api) {
  const capture=()=>({owner:api.context().owner,guard:api.guards()});
  function chooseTab(next) {
   tab=next;
-  for(const b of dialog.querySelectorAll('[data-recording-tab]')){const selected=b.dataset.recordingTab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-selected',String(selected));}
+  for(const b of dialog.querySelectorAll('[data-recording-tab]')){const selected=b.dataset.recordingTab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-selected',String(selected));}syncTabs();
   for(const panel of content.querySelectorAll('[data-analysis-panel]'))panel.classList.toggle('hidden',panel.dataset.analysisPanel!==tab);
  }
  function updateUnits(form) {
