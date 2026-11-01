@@ -1,4 +1,8 @@
 // Keep drawing shortcuts out of text composition and browser/OS shortcuts.
+export function componentName(part) {
+ return [...(part.labels||[]).map(label=>label.text),part.id,part.value_text,part.name].filter(Boolean).join(' ');
+}
+
 export function workbenchKey(event, modalOpen=false) {
  if(event.defaultPrevented||event.isComposing||event.keyCode===229||event.altKey||modalOpen)return null;
  const key=event.key.toLowerCase(),mod=event.metaKey||event.ctrlKey;

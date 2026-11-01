@@ -89,6 +89,10 @@ test('narrow layout exposes parts and inspector without losing keyboard controls
  await part.focus();
  await page.keyboard.press('Enter');
  await expect(page.locator('#schematic')).toHaveClass(/tool-place/);
+ await expect(page.locator('#schematic')).toBeFocused();
+ const count=await page.locator('#graph-counts').textContent();
+ await page.keyboard.press('Enter');
+ await expect(page.locator('#graph-counts')).not.toHaveText(count);
  await page.getByRole('button',{name:'Show inspector',exact:true}).click();
  await expect(page.getByRole('tab',{name:'Simulate',exact:true})).toBeVisible();
  await expect(page.locator('#app')).toHaveJSProperty('scrollWidth',600);
@@ -99,6 +103,6 @@ test('workbench and modal have no serious or critical automated accessibility vi
   if(modal)await page.getByRole('button',{name:'Projects',exact:true}).click();
   const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
   await testInfo.attach(modal?'projects-accessibility':'workbench-accessibility',{body:JSON.stringify(result.violations,null,2),contentType:'application/json'});
-  expect(result.violations.filter(item=>['serious','critical'].includes(item.impact))).toEqual([]);
+  expect.soft(result.violations.filter(item=>['serious','critical'].includes(item.impact))).toEqual([]);
  }
 });

@@ -1,6 +1,11 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {workbenchKey,nextTabIndex,syncTabs,bindTabs} from './static/accessibility.mjs';
+import {componentName,workbenchKey,nextTabIndex,syncTabs,bindTabs} from './static/accessibility.mjs';
+
+test('component spoken names contain the complete visible label in drawing order',()=>{
+ assert.equal(componentName({id:'R1',name:'Resistor',value_text:'10 kΩ',labels:[{text:'R'},{text:'+'}]}),'R + R1 10 kΩ Resistor');
+ assert.equal(componentName({id:'G1',name:'Ground'}),'G1 Ground');
+});
 
 const event=(key,options={})=>({key,target:{closest:()=>null},...options});
 test('drawing shortcuts preserve browser modifiers, composition and text editing',()=>{

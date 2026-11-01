@@ -11,6 +11,11 @@ the qualified native alpha or the preserved web alpha archive.
 - Drawing shortcuts respect text composition, consumed events, modal dialogs and
   browser modifier shortcuts. Command-K cannot stack a command dialog over another
   modal. Text editing retains normal undo behavior.
+- Choosing a part moves focus to the schematic for Enter placement; the canvas
+  itself respects composition/modifier guards. Drawing tools expose pressed state.
+- Schematic accessible names contain the visible symbol annotations, identifier
+  and value in drawing order, followed by the component type. The brand's spoken
+  name matches its visible wording and omits its decorative mark.
 - Focusable panel dividers expose their current size.
 - Locked test-only Playwright/axe dependencies and independent CI jobs cover three
   browser engines. The runtime and packaged app acquire no npm dependencies.
@@ -23,7 +28,7 @@ The browser host is opt-in locally and refuses to reuse an existing server.
 
 ## Local checks
 
-- All 26 frontend logic tests and module syntax checks pass.
+- All 27 frontend logic tests and module syntax checks pass.
 - All 108 Python tests pass, including dependency-lock qualification inputs.
 - `go test -race ./exp-web -count=1` passes (12.074 s); `go vet ./exp-web` passes.
 - `actionlint .github/workflows/quality.yml` and `git diff --check` pass.
@@ -32,7 +37,14 @@ The browser host is opt-in locally and refuses to reuse an existing server.
 - No desktop launch, browser opening or screen capture was performed locally;
   the owner's subscription-video pause remains in effect.
 
-Hosted results are pending. Before this milestone, GitHub had only main; its
+The [first hosted run](https://github.com/dshills/ELab/actions/runs/41355009855)
+at `814eba14` passed all four functional journeys on all three engines (12 total).
+All three accessibility journeys caught the same visible-label/spoken-name
+mismatch in the brand and schematic parts. Those defects are fixed in the
+follow-up, with a new frontend regression; the gate remains enabled. A second run
+must qualify the fixes and the added keyboard placement assertion.
+
+Final hosted results are pending. Before this milestone, GitHub had only main; its
 latest quality run at `cd6dcdcdd123c1356c8aa8e525a146b47ed96f22` passed. That result
 does not qualify the web branch.
 
