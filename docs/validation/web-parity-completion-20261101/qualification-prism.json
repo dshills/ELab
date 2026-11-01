@@ -1,0 +1,176 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "ed9bc3255287be8cc187f95d5fde15ec",
+  "repo": {
+    "root": ".",
+    "head": "d9e367bb273e7cccefbb162b494145eee54f237d",
+    "branch": "exp-web"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 4,
+      "medium": 0,
+      "high": 0
+    },
+    "highestSeverity": "low"
+  },
+  "findings": [
+    {
+      "id": "f8575eb1f150ff05",
+      "severity": "low",
+      "category": "docs",
+      "title": "Markdown link targets a loopback URL",
+      "message": "The README renders a clickable link to http://localhost:8788/. Anywhere other than the machine that ran the qualification (e.g. a docs site, code review UI, or another workstation), clicking it navigates to the reader's own loopback port, which is misleading dead link. The surrounding prose already states the check was local.",
+      "suggestion": "Use inline code instead of a hyperlink so the address is recorded without pretending to be a navigable link.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/README.md",
+          "lines": {
+            "start": 98,
+            "end": 98
+          }
+        }
+      ],
+      "tags": [
+        "docs",
+        "links",
+        "localhost"
+      ],
+      "evidence": "The running embedded build was checked at [localhost:8788](http://localhost:8788/):",
+      "fix": {
+        "before": "The running embedded build was checked at [localhost:8788](http://localhost:8788/):",
+        "after": "The running embedded build was checked at `localhost:8788`:"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "710a19eb84074eaa",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Machine-readable record uses an abbreviated commit hash",
+      "message": "The new \"source_commit\" field records only a 7-character abbreviated hash, while the same machine-readable record uses full 40-character hashes (\"source_base_commit\") and a full SHA-256 (\"installed_binary_sha256\"). Per the README this commit lives in a separate repository, so a short hash is ambiguous and cannot be resolved or verified from this JSON alone.",
+      "suggestion": "Record the full 40-character commit hash for the committed budget change, and note which repository it belongs to, e.g. \"source_commit\": \"<full 40-char hash of 3807dd6>\" plus a \"source_repository\" field, so the record is self-contained and consistent with the other full-length identifiers.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/prism-budget-validation.json",
+          "lines": {
+            "start": 50,
+            "end": 51
+          }
+        }
+      ],
+      "tags": [
+        "validation-record",
+        "traceability",
+        "consistency"
+      ],
+      "evidence": "  \"source_commit\": \"3807dd6\",",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "e305c3970b0f0f35",
+      "severity": "low",
+      "category": "testing",
+      "title": "Full-suite race evidence predates the final qualified commit",
+      "message": "The only full-suite run (`go test -race ./... -count=1 -timeout=30m`, 330.473 s) was executed before the final presentation/test-diagnostic refinements, yet `code_commit` names the final commit and `artifact.sha256` the final binary. The qualification of the whole native runtime therefore rests on the bare assertion that it was unchanged: only the web package (`go test -race ./exp-web`) and `go vet` were re-run on final source. The JSON records no per-check commit or timestamp, so a reader cannot tell which checks exercised which source state.",
+      "suggestion": "Re-run the combined `go test -race ./... -count=1 -timeout=30m` against the final commit `d9e367bb` and record the new timing and log, or add explicit per-check `commit`/`ran_at_utc` fields (and a `limits` entry) stating that the combined-suite timing predates the final refinements.",
+      "confidence": 0.7,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/qualification.json",
+          "lines": {
+            "start": 18,
+            "end": 23
+          }
+        }
+      ],
+      "tags": [
+        "evidence",
+        "provenance"
+      ],
+      "evidence": "      \"scope\": \"Combined run before the final presentation/test-diagnostic refinements; native runtime unchanged.\"",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "6bc58a13f1a298f0",
+      "severity": "low",
+      "category": "maintainability",
+      "title": "Inconsistent duration field names in checks array",
+      "message": "The two `go test -race` entries in the `checks` array record their durations under different keys: `workbench_seconds` (line 21) for the combined run and `seconds` (line 28) for the web run. Any consumer that reads timings uniformly from this array will silently drop one of them, and the heterogeneous optional fields (`scope`, `tests`, `node_version`) with no discriminator make the array schema brittle to validate.",
+      "suggestion": "Standardize on a single key such as `seconds` (or an explicit `duration_seconds` field) for every timed check entry so all durations are readable the same way.",
+      "confidence": 0.85,
+      "locations": [
+        {
+          "path": "docs/validation/web-parity-completion-20261101/qualification.json",
+          "lines": {
+            "start": 21,
+            "end": 28
+          }
+        }
+      ],
+      "tags": [
+        "schema-consistency"
+      ],
+      "evidence": "      \"workbench_seconds\": 330.473,",
+      "fix": {
+        "before": "      \"workbench_seconds\": 330.473,",
+        "after": "      \"seconds\": 330.473,"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 388164,
+    "totalMs": 388195
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      }
+    ],
+    "files": 6,
+    "bytes": 20714,
+    "chunks": 1,
+    "llmCalls": 3,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3",
+        "input": 13074,
+        "output": 81326,
+        "reasoning": 80085,
+        "cachedInput": 2560
+      }
+    ],
+    "widenedFiles": 2,
+    "splits": 1,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [],
+  "suppressed": []
+}

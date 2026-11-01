@@ -1,0 +1,31 @@
+{
+  "baseline_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+  "qualified_commit": "d9e367bb273e7cccefbb162b494145eee54f237d",
+  "comparison": "git diff --name-only baseline qualified",
+  "changed_paths": [
+    "docs/validation/web-parity-completion-20261101/README.md",
+    "docs/validation/web-parity-completion-20261101/checks/frontend.txt",
+    "docs/validation/web-parity-completion-20261101/checks/native-inventory.txt",
+    "docs/validation/web-parity-completion-20261101/checks/quality-runner.txt",
+    "docs/validation/web-parity-completion-20261101/checks/requirements.txt",
+    "docs/validation/web-parity-completion-20261101/checks/shared-race.txt",
+    "docs/validation/web-parity-completion-20261101/checks/vet.txt",
+    "docs/validation/web-parity-completion-20261101/checks/web-race.txt",
+    "docs/validation/web-parity-completion-20261101/recording-analysis-narrow.png",
+    "docs/validation/web-parity-completion-20261101/recording-comparison-result.png",
+    "docs/validation/web-parity-completion-20261101/recording-comparison.png",
+    "docs/validation/web-parity-completion-20261101/recording-prism.json",
+    "docs/validation/web-parity-completion-20261101/recording-review.md",
+    "docs/validation/web-parity-completion-20261101/recording-step.png",
+    "exp-web/PARITY.md",
+    "exp-web/recording-analysis.test.mjs",
+    "exp-web/recording_analysis_test.go",
+    "exp-web/static/index.html",
+    "exp-web/static/recording-analysis.mjs",
+    "exp-web/static/scope-controls.mjs",
+    "exp-web/static/styles.css"
+  ],
+  "production_go_changes": [],
+  "module_manifest_changes": [],
+  "scope": "Shared Go runtime and dependencies are unchanged. Frontend and test changes have their own final checks."
+}

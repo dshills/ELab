@@ -64,5 +64,6 @@ inventory checks. No remote CI run or physical printer output is claimed.
 The Prism change is installed locally: initial output allowance 32,768, final
 unsplittable retry 65,536, Wafer HTTP request timeout 900 seconds. Review and
 provider race tests and vet passed; a 24,000-token regression completes without
-splitting. Its four source changes remain uncommitted in the separate Prism
-repository; they are not part of this ELab commit.
+splitting. At the Spectrum milestone its four source changes were uncommitted in the
+separate Prism repository. They were subsequently committed there as `3807dd6`;
+that tool commit is separate from the ELab implementation commits.

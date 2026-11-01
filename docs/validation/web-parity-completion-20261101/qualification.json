@@ -1,0 +1,181 @@
+{
+  "status": "qualified local macOS web candidate",
+  "qualified_at_utc": "2026-11-01T20:14:32.068086+00:00",
+  "code_commit": "d9e367bb273e7cccefbb162b494145eee54f237d",
+  "branch": "exp-web",
+  "artifact": {
+    "path": "build/elab-web",
+    "sha256": "107e9ecd3e05882a8d76728864c3013d0bae41a52bb4e534e44666093276d2e4",
+    "embedded_assets": true,
+    "build_source_clean": true,
+    "go_version": "go1.27.3",
+    "target": "darwin/arm64",
+    "cgo_enabled": true,
+    "info": "checks/build-info.txt"
+  },
+  "checks": [
+    {
+      "command": "go test -race ./... -count=1 -timeout=30m",
+      "exit_code": 0,
+      "log": "checks/shared-race.txt",
+      "scope": "Combined run before the final presentation/test-diagnostic refinements; native runtime unchanged.",
+      "kind": "go_test",
+      "source_base_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+      "log_last_written_at_utc": "2026-11-01T20:02:49.566260+00:00",
+      "timestamp_basis": "Original local log filesystem modification time, not an asserted command start time.",
+      "source_state": "Base plus staged recording-analysis milestone, before final presentation/test-diagnostic refinements.",
+      "shared_runtime_proof": "checks/shared-runtime-identity.json",
+      "timing": {
+        "duration_seconds": 330.473,
+        "basis": "Go-reported package test time, excluding build/command overhead",
+        "package": "github.com/dshills/elab/workbench"
+      }
+    },
+    {
+      "command": "go test -race ./exp-web -count=1",
+      "exit_code": 0,
+      "log": "checks/web-race.txt",
+      "scope": "Final source after review refinements.",
+      "kind": "go_test",
+      "source_base_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+      "log_last_written_at_utc": "2026-11-01T20:08:07.671978+00:00",
+      "timestamp_basis": "Original local log filesystem modification time, not an asserted command start time.",
+      "source_equivalent_commit": "d9e367bb273e7cccefbb162b494145eee54f237d",
+      "source_state": "Final uncommitted source subsequently committed unchanged as source_equivalent_commit.",
+      "timing": {
+        "duration_seconds": 12.201,
+        "basis": "Go-reported package test time, excluding build/command overhead",
+        "package": "github.com/dshills/elab/exp-web"
+      }
+    },
+    {
+      "command": "node scripts/check-web.mjs",
+      "exit_code": 0,
+      "tests": 23,
+      "log": "checks/frontend.txt",
+      "node_version": "v26.13.0",
+      "kind": "frontend_test",
+      "source_base_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+      "log_last_written_at_utc": "2026-11-01T20:07:54.042270+00:00",
+      "timestamp_basis": "Original local log filesystem modification time, not an asserted command start time.",
+      "source_equivalent_commit": "d9e367bb273e7cccefbb162b494145eee54f237d",
+      "source_state": "Final uncommitted source subsequently committed unchanged as source_equivalent_commit."
+    },
+    {
+      "command": "go vet ./...",
+      "exit_code": 0,
+      "log": "checks/vet.txt",
+      "scope": "Final web package rechecked after test-diagnostic refinements.",
+      "kind": "go_vet",
+      "source_base_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+      "log_last_written_at_utc": "2026-11-01T20:03:34.077196+00:00",
+      "timestamp_basis": "Original local log filesystem modification time, not an asserted command start time.",
+      "source_state": "Base plus staged recording-analysis milestone, before final presentation/test-diagnostic refinements.",
+      "shared_runtime_proof": "checks/shared-runtime-identity.json",
+      "final_package_recheck": {
+        "command": "go vet ./exp-web",
+        "exit_code": 0,
+        "source_equivalent_commit": "d9e367bb273e7cccefbb162b494145eee54f237d"
+      }
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p 'test_*.py'",
+      "exit_code": 0,
+      "tests": 104,
+      "log": "checks/quality-runner.txt",
+      "kind": "python_unittest",
+      "source_base_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+      "log_last_written_at_utc": "2026-11-01T19:57:09.015949+00:00",
+      "timestamp_basis": "Original local log filesystem modification time, not an asserted command start time.",
+      "source_state": "Scripts/native inventory unchanged between source_base_commit and code_commit."
+    },
+    {
+      "command": "python3 -B scripts/prd-audit.py --verify research/11-prd-implementation-audit.json",
+      "exit_code": 0,
+      "log": "checks/requirements.txt",
+      "scope": "Coverage only: 17 implemented, 10 partial; not product acceptance.",
+      "kind": "source_audit",
+      "source_base_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+      "log_last_written_at_utc": "2026-11-01T19:56:25.621015+00:00",
+      "timestamp_basis": "Original local log filesystem modification time, not an asserted command start time.",
+      "source_state": "Scripts/native inventory unchanged between source_base_commit and code_commit."
+    },
+    {
+      "command": "go run ./cmd/elab-ui-audit --verify research/13-native-command-inventory.json",
+      "exit_code": 0,
+      "log": "checks/native-inventory.txt",
+      "scope": "229 public commands; source inventory, not a runtime-completeness claim.",
+      "kind": "source_audit",
+      "source_base_commit": "b54a53f378a900b5f9fa5b2fa3aaabebeefdd12a",
+      "log_last_written_at_utc": "2026-11-01T19:56:26.294878+00:00",
+      "timestamp_basis": "Original local log filesystem modification time, not an asserted command start time.",
+      "source_state": "Scripts/native inventory unchanged between source_base_commit and code_commit."
+    }
+  ],
+  "implementation_reviews": {
+    "spectrum": {
+      "coverage_complete": true,
+      "counts": {
+        "low": 8,
+        "medium": 5,
+        "high": 0
+      },
+      "receipt": "spectrum-prism.json",
+      "resolution": "spectrum-review.md"
+    },
+    "sweeps": {
+      "coverage_complete": true,
+      "counts": {
+        "low": 9,
+        "medium": 2,
+        "high": 0
+      },
+      "receipt": "sweeps-prism.json",
+      "resolution": "sweeps-review.md"
+    },
+    "recording": {
+      "coverage_complete": true,
+      "counts": {
+        "low": 11,
+        "medium": 1,
+        "high": 0
+      },
+      "receipt": "recording-prism.json",
+      "resolution": "recording-review.md"
+    }
+  },
+  "prism": {
+    "source_commit": "3807dd607903b77e47cc2605a58243a8858f0329",
+    "installed_binary_sha256": "c1e616892944eda102714d68445c37cfec09e0af7b3d1df524cf7e0bdcdb6201",
+    "initial_output_tokens": 32768,
+    "final_unsplittable_retry_output_tokens": 65536,
+    "wafer_http_timeout_seconds": 900,
+    "provider": "wafer",
+    "model": "GLM-5.3",
+    "review_configuration": "Configured defaults, with owner-requested output increase and supporting HTTP timeout."
+  },
+  "browser": {
+    "environment": "Codex in-app browser on macOS",
+    "fixture_url": "http://localhost:8789/",
+    "qualified_url": "http://localhost:8788/",
+    "responsive_layout": {
+      "width": 600,
+      "height": 900,
+      "page_scroll_width": 600,
+      "dialog_width": 568,
+      "form_width": 472
+    },
+    "console_errors": 0,
+    "embedded_build_smoke": "Scope, Spectrum and Sweep load; native connection online; new recording-analysis dialog and modules present.",
+    "fixture_server_closed_normally": true
+  },
+  "limits": [
+    "Local Go server required; no WASM-only or hosted/cloud runtime.",
+    "macOS and the in-app browser were exercised; remote Linux CI and other browsers/platforms were not qualified here.",
+    "Browser file, media and print flows adapt OS integrations; physical printer jobs were not submitted.",
+    "Native educational-model/device and size limits remain. Requirement inventory still has 10 partial items.",
+    "The combined race run predates final presentation/test-diagnostic refinements. Final web, frontend and browser checks cover the qualified source; shared Go runtime identity is documented in checks/shared-runtime-identity.json."
+  ],
+  "preservation": "Qualified native alpha, existing project library and user-owned app sessions preserved. Browser fixture work uses separate disposable storage.",
+  "schema_version": 1
+}

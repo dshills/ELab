@@ -53,27 +53,29 @@ qualified native alpha.
 
 ## Verification
 
-- `go test -race ./exp-web -count=1`: browser HTTP integration coverage, including
-  RC values, H-bridge direction reversal, native file/recording round-trip, model
-  settings, stale guards, origin/path boundaries, atomic autosave/recovery, shared
-  library lost-update refusal, lost-cookie discovery, storage failure/rescue,
-  AC complex-reference values and kept curve recovery, WAV bytes and macOS PDF/PNG.
-- `go test -race ./... -count=1 -timeout=30m`: all packages passed across the initial
-  run and the targeted rerun of socket-dependent packages. The sandbox initially
-  refused Unix socket binds; `internal/agentmcp`, `internal/conformance`,
-  `internal/printspool` and `transport` passed when rerun outside that restriction.
-  Native core race tests completed successfully (about 320 seconds).
-- `go vet ./...`, internal staticcheck for web/core and goimports checks: passed.
-- `node scripts/check-web.mjs`: all JS/module syntax checks and nine frontend
-  settings/schema tests passed. Quality-runner Python tests passed.
-- Browser checks: named save/library/Trash/restore; applying 40 °C thermal settings;
-  acknowledged 2.2 µF edit surviving reload and an actual forced process crash;
-  automatic reconnection; native Monte Carlo completion (16 trials); inspector and Simulate controls
-  accessible at 600 × 900; native WAV
-  loaded into browser media and explicitly played to its 20 ms end with no media
-  error. Browser print preview loaded the complete native SVG without submitting
-  a physical job. Earlier editor/RC/H-bridge/recording/spectrum/sweep checks remain covered
-  by the HTTP tests and the initial browser comparison work.
+Final qualified code: `d9e367bb` on `exp-web`, using Go 1.27.3, Node v26.13.0 and
+macOS/arm64. The embedded build is running at `http://localhost:8788/`.
+[Qualification, receipts and logs](../docs/validation/web-parity-completion-20261101/README.md)
+record the exact code, binary checksum, review scope and limits.
+
+- The combined `go test -race ./... -count=1 -timeout=30m` passed, including native
+  core (330.473 s), conformance, agent/MCP, storage, printing, PDF and web tests.
+  After the final presentation/test-diagnostic refinements, the complete web race
+  suite passed again (12.201 s); the shared native runtime was unchanged.
+- `go vet ./...` passed; the final web package was rechecked after those refinements.
+  The prior native staticcheck/goimports checks remain recorded in earlier evidence.
+- `node scripts/check-web.mjs` passed module syntax checks and all 23 frontend
+  tests at qualification time. Python quality-runner tests passed (104).
+- Browser checks cover the earlier project/recovery, model, audio, print-preview
+  and recorded-Scope flows, plus dedicated live/recorded FFT, DC/AC sweeps,
+  retained result navigation, exact plot/index cursors, comparison/overlay,
+  threshold pages and bounds, RC step settling, unit/refusal correction and
+  cross-tab source protection. Narrow-layout checks used 600 × 900.
+- The embedded build's Scope/Spectrum/Sweep load with no browser console errors.
+  HTTP tests verify JavaScript modules are included and served with no-store
+  caching, plus native FFT/THD, all four sweep methods, captured analysis purity,
+  stale-source refusal and exact exports. No remote CI or physical print claim
+  is made.
 
 ### Recorded-scope workflow, 2026-11-01
 

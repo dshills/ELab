@@ -1,0 +1,20 @@
+build/elab-web: go1.27.3
+	path	github.com/dshills/elab/exp-web
+	mod	github.com/dshills/elab	v0.205.0-alpha.1.0.20261101201025-d9e367bb273e	
+	dep	golang.org/x/sys	v0.41.0	h1:Ivj+2Cp/ylzLiEU89QhWblYnOE9zerudt9Ftecq2C6k=
+	dep	gonum.org/v1/gonum	v0.17.0	h1:VbpOemQlsSMrYmn7T2OUvQ4dqxQXU+ouZFQsZOx50z4=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	DefaultGODEBUG=cryptocustomrand=1,httpservecontentmaxranges=1,tlssecpmlkem=0,tracebacklabels=0,urlstrictcolons=0,x509sslcertoverrideplatform=0
+	build	CGO_ENABLED=1
+	build	CGO_CFLAGS=
+	build	CGO_CPPFLAGS=
+	build	CGO_CXXFLAGS=
+	build	CGO_LDFLAGS=
+	build	GOARCH=arm64
+	build	GOOS=darwin
+	build	GOARM64=v8.0
+	build	vcs=git
+	build	vcs.revision=d9e367bb273e7cccefbb162b494145eee54f237d
+	build	vcs.time=2026-11-01T20:10:25Z
+	build	vcs.modified=false

@@ -20,11 +20,13 @@ A/B bins at 10/20 Hz and a 10 Hz delta. Live controls exercised separately.
 
 Prism receipts and finding resolutions are retained alongside each milestone.
 
-## Remaining sequence
+## Milestone sequence
 
-2. Dedicated sweep methods, retained results, exact cursors and native analyses.
-3. Recording comparison, edge timing and step response.
-4. Combined automated/browser validation and qualification of the running app.
+2. Dedicated sweep methods, retained results, exact cursors and native analyses —
+   completed in `b54a53f3`.
+3. Recording comparison, edge timing and step response — completed in `d9e367bb`.
+4. Combined automated/browser validation and qualification of the running app —
+   evidence below.
 
 The qualified native alpha and the owner's persistent project library remain
 preserved. Browser tests use disposable storage on port 8789.
@@ -74,3 +76,49 @@ Prism completed with full coverage. See [findings and fixes](recording-review.md
 [the review receipt](recording-prism.json), [frontend results](checks/frontend.txt),
 and [HTTP race results](checks/web-race.txt). The frontend runner is
 `scripts/check-web.mjs`; HTTP tests are in `exp-web/recording_analysis_test.go`.
+
+## 4. Combined qualification
+
+Qualified code: `d9e367bb273e7cccefbb162b494145eee54f237d` on `exp-web`.
+The embedded macOS/arm64 build was compiled from that clean source, using Go
+1.27.3 with CGO. Its SHA-256 is
+`107e9ecd3e05882a8d76728864c3013d0bae41a52bb4e534e44666093276d2e4`.
+See the [machine-readable qualification](qualification.json) and
+[embedded build information](checks/build-info.txt).
+
+The complete combined race suite passed (workbench 330.473 s), followed by the
+final web race check (12.201 s) after the small presentation/test-diagnostic
+review refinements. The native runtime was unchanged by those refinements.
+All-package vet passed, with the final web package rechecked. All 23 frontend
+tests and module syntax checks passed; the Python quality runner passed 104 tests.
+The requirement and command inventories verify source coverage, and do not
+establish product acceptance: the requirement audit still records ten partial
+items. Logs are in [checks](checks/).
+
+The running embedded build was checked at `http://localhost:8788/`:
+Scope, Spectrum and Sweep load and the local engine is connected, with no browser
+console errors. [Its screenshot](qualified-web.png) shows the default RC example.
+The deeper workflows were checked with disposable storage on port 8789; that
+owned test server was closed normally.
+The owner's default project library and qualified native alpha remain preserved.
+
+Qualification is for the local macOS candidate in the in-app browser. A local Go
+server is required. Remote Linux CI, other browser/platform combinations and
+physical printer jobs were not exercised in this qualification. Native OS flows
+use the browser adaptations listed in [PARITY.md](../../../exp-web/PARITY.md).
+
+Prism's larger output budget is committed separately in its own repository as
+`3807dd6`: 32,768 initial output tokens, 65,536 on the final unsplittable retry,
+and a 900-second Wafer request timeout. Review/provider race tests and vet passed;
+completed live reviews confirmed full coverage. Configured provider/model settings were retained; the output allowance and
+Wafer HTTP timeout changed as documented.
+
+The [qualification-record review](qualification-prism.json) completed with full
+coverage and four low findings. The local URL is recorded as text; the Prism
+budget receipt now names its repository and full commit. Per-check source states
+and log timestamps distinguish the combined run from final package/frontend
+rechecks; [the source comparison](checks/shared-runtime-identity.json) establishes
+unchanged production Go code/dependencies. Go timings use the same fields and
+explicitly identify the measured package, rather than claiming whole-command
+elapsed time. These documentation refinements were internally checked for valid
+JSON, links, commit identities and binary checksum; no runtime code changed.
