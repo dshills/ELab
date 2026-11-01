@@ -1,0 +1,3 @@
+const status=document.getElementById('print-status');
+document.getElementById('print-button').onclick=()=>window.print();
+try{const response=await fetch('/api/state');if(!response.ok)throw new Error('Cannot access the local workspace.');const {state}=await response.json();const query=new URLSearchParams({kind:'svg',revision:state.command_revision,generation:state.document.generation});const exportResponse=await fetch('/api/download?'+query,{method:'POST'});if(!exportResponse.ok)throw new Error('The schematic changed while preparing. Reload this page.');document.getElementById('print-sheet').innerHTML=await exportResponse.text();status.textContent='Ready. Printing uses your browser’s printer or PDF destination.';}catch(error){status.textContent=error.message;}

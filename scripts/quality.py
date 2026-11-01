@@ -21,6 +21,7 @@ def gate_plan(profile):
         ('python', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'scripts', '-p', 'test_*.py']),
         ('prd', [sys.executable, '-B', 'scripts/prd-audit.py', '--verify', 'research/11-prd-implementation-audit.json']),
         ('inventory', ['go', 'run', './cmd/elab-ui-audit', '--verify', 'research/13-native-command-inventory.json']),
+        ('web-ui', ['node', 'scripts/check-web.mjs']),
         ('portable-race', ['go', 'test', '-race', './...', '-count=1', '-timeout=30m']),
         ('portable-vet', ['go', 'vet', './...']),
     ]
@@ -158,7 +159,7 @@ def source_inputs(root):
         if not raw:
             continue
         name = os.fsdecode(raw)
-        if not (name.endswith(('.go', '.py', '.sh', '.mod', '.sum', '.yml', '.yaml')) or name.startswith('third_party/') and name.endswith(('.json', '.gz'))):
+        if not (name.endswith(('.go', '.py', '.sh', '.mod', '.sum', '.yml', '.yaml', '.js', '.mjs', '.html', '.css')) or name.startswith('third_party/') and name.endswith(('.json', '.gz'))):
             continue
         path = root / name
         inputs[name] = hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None

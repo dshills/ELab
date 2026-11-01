@@ -11,7 +11,7 @@ cd "$ELAB_ROOT/tools"
 go build -mod=readonly -o "$ELAB_ROOT/build/tools/staticcheck" honnef.co/go/tools/cmd/staticcheck
 go build -mod=readonly -o "$ELAB_ROOT/build/tools/goimports" golang.org/x/tools/cmd/goimports
 cd "$ELAB_ROOT"
-ELAB_UNFORMATTED=$("$ELAB_ROOT/build/tools/goimports" -l cmd desktop internal transport workbench)
+ELAB_UNFORMATTED=$("$ELAB_ROOT/build/tools/goimports" -l cmd desktop exp-web internal transport workbench)
 if [ -n "$ELAB_UNFORMATTED" ]; then
     printf '%s\n' "$ELAB_UNFORMATTED"
     exit 1

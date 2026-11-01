@@ -1,0 +1,86 @@
+# Web feature parity and qualification
+
+Status: local macOS web candidate, 2026-11-01. The shared native workbench remains
+the source of numerical behavior. This work does not publish or replace the
+qualified native alpha.
+
+## Feature coverage
+
+| Native feature family | Web implementation |
+| --- | --- |
+| Parts and examples | All 61 kinds and 88 examples, including four-MOSFET H-bridge; native geometry, terminals and routes |
+| Drawing | Place, wire, junctions/net labels, move, rotate, duplicate, delete, undo/redo, keyboard placement/movement, pan/zoom/fit |
+| Circuit blocks | Create/copy/paste, published values, expand/collapse, release; native commands in Tools |
+| Models | Native component configuration forms for thermal/BJT/op-amp, JFET, thyristor, photodiode, motor, transformer, battery, optocoupler, current source/load, speaker, PWM and sound |
+| Transient controls | Pause/resume/restart, sample or arbitrary step, sampling fit, speed, live source modes, startup charge/current, passive losses and waveform timings |
+| Live controls | Switch, momentary/bouncing button hold/release/click, potentiometer, sensor/light/temperature and motor load |
+| Measurements | Accepted readings, stale-state explanations, native wire colors/current cues, pinned readings, LED and seven-segment indicators, IC labels |
+| Scope | Live/captured traces, probe selection, time windows, A/B values and deltas, recorded reference overlay |
+| Recording analysis | Capture, keep, import/export, select, seek, replay/step, interval RMS/statistics, threshold timing, step response and comparison |
+| Spectrum | Live FFT/hold/settings, recorded FFT/THD, native ranked peaks and frequency cursor measurements in Tools/results; plot in Spectrum |
+| Sweeps | DC, AC gain/phase, noise and loop response, spacing/point/probe settings, retained selection, exact cursor, keep/import/export and result trace plot |
+| Tolerances | Seeded native Monte Carlo settings, progress, trials/statistics and full JSON/CSV export |
+| Projects | Native `.elab` import/export, kept recordings/sweeps/models, named local library and Save a copy |
+| Durability | Atomic checkpoints and named revisions; restart/lost-cookie recovery, retained previous saves, reversible Trash, stale-editor/concurrent-save protection |
+| Audio | Independent native WAV render; explicit browser playback/stop; native WAV download and invalidation |
+| Output | SVG, visible scope CSV, capture/sweep/spectrum/tolerance JSON/CSV, WAV; macOS PDF/PNG; browser print preview |
+| Workspace | Resizable panels, narrow-screen toggles, large schematic labels, stronger contrast, Light/Dark/System/Apollo themes and reduced motion |
+
+## Platform adaptations and limits
+
+- The Go server must run locally. There is no WASM-only runtime, cloud account,
+  hosted authentication or remote collaboration layer.
+- Browser file pickers, downloads, media controls and Print / Save PDF replace OS
+  file associations, native audio playback and native printer discovery/job control.
+  Native socket/MCP session discovery remains part of the native/agent hosts.
+- PDF/PNG downloads currently require macOS CoreGraphics. Browser SVG printing is
+  the portable route. Physical printer output has not been submitted or qualified.
+- Browser panels, drawing gestures and viewport are browser presentation state;
+  native host-only UI commands are omitted from its command menu. Documents refit
+  on open/resize. Model values, exact captured data and supported saved preferences
+  use native serialization.
+- macOS is the exercised local target. The Unix storage lock supports macOS/Linux;
+  other platforms use a conservative exclusive marker and are not crash-restart
+  qualified. Linux CI is configured but was not executed remotely in this task.
+- A live 555 tone run hit the shared solver's 100 ms per-step wall-clock budget
+  during concurrent test/build load. The web UI now labels stopped samples stale
+  and offers restart guidance. This retains the native bounded-work behavior;
+  sustained live simulation under heavy host load is not qualified.
+- Results tables cap displayed arrays at 200 rows; downloads retain complete data.
+  Numerical/device/size limits are the same native educational-model limits.
+
+## Verification
+
+- `go test -race ./exp-web -count=1`: browser HTTP integration coverage, including
+  RC values, H-bridge direction reversal, native file/recording round-trip, model
+  settings, stale guards, origin/path boundaries, atomic autosave/recovery, shared
+  library lost-update refusal, lost-cookie discovery, storage failure/rescue,
+  AC complex-reference values and kept curve recovery, WAV bytes and macOS PDF/PNG.
+- `go test -race ./... -count=1 -timeout=30m`: all packages passed across the initial
+  run and the targeted rerun of socket-dependent packages. The sandbox initially
+  refused Unix socket binds; `internal/agentmcp`, `internal/conformance`,
+  `internal/printspool` and `transport` passed when rerun outside that restriction.
+  Native core race tests completed successfully (about 320 seconds).
+- `go vet ./...`, internal staticcheck for web/core and goimports checks: passed.
+- `node scripts/check-web.mjs`: all JS/module syntax checks and nine frontend
+  settings/schema tests passed. Quality-runner Python tests passed.
+- Browser checks: named save/library/Trash/restore; applying 40 °C thermal settings;
+  acknowledged 2.2 µF edit surviving reload and an actual forced process crash;
+  automatic reconnection; native Monte Carlo completion (16 trials); inspector and Simulate controls
+  accessible at 600 × 900; native WAV
+  loaded into browser media and explicitly played to its 20 ms end with no media
+  error. Browser print preview loaded the complete native SVG without submitting
+  a physical job. Earlier editor/RC/H-bridge/recording/spectrum/sweep checks remain covered
+  by the HTTP tests and the initial browser comparison work.
+
+## Internal review
+
+Reviewed storage publication ordering, ownership/bounds of native captures,
+concurrent workspace locking, copy-on-recovery, cookie/session lifetime, native
+command routing, file/origin boundaries, schema resolution, DOM form submission,
+stale media cleanup and native/UI result provenance. Fixed issues found during
+review and browser checks: shared-library isolation, lost-update races, nullable
+schema references and empty defaults, nested-array reindexing, model-ID form
+submission shadowing, stale result replacement, audio snapshot field routing,
+paused storage-error visibility and read-only example previews clearing project
+association, and RC charge/discharge buttons using network-only mode IDs. No external review provider was used.

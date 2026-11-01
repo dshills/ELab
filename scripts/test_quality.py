@@ -13,6 +13,7 @@ class QualityTests(unittest.TestCase):
         portable = dict(quality.gate_plan('portable'))
         native = dict(quality.gate_plan('native'))
         self.assertIn('portable-race', portable)
+        self.assertEqual(portable['web-ui'], ['node', 'scripts/check-web.mjs'])
         self.assertNotIn('desktop-race', portable)
         for name in ['portable-race', 'desktop-race', 'rendered-race']:
             self.assertIn('./...', native[name])

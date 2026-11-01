@@ -2,9 +2,9 @@
 
 **Draw a circuit. Watch it work. Measure what changes.**
 
-ELab is a hobbyist electronics workbench built with [Vellum](https://github.com/dshills/vellum).
+ELab is a hobbyist electronics workbench with a browser app and a native client built with [Vellum](https://github.com/dshills/vellum).
 Build schematics from scratch, change component values, and explore live voltage,
-current and timing. The desktop app and AI agents use the same validated commands
+current and timing. The web app, desktop app and AI agents use the same validated commands
 for drawing, simulation, analysis, saving and export.
 
 **Current source: 88 working examples · 61 component kinds · 229 shared commands.**
@@ -15,6 +15,28 @@ for drawing, simulation, analysis, saving and export.
 
 *RC charge and discharge: edit the circuit above, inspect the waveforms below.
 Screenshots show an earlier panel layout; the current drawer controls are described below.*
+
+## Web workspace
+
+The browser workbench is the primary development direction on `exp-web`. Run it
+from the repository root:
+
+```sh
+go run ./exp-web
+```
+
+Open <http://localhost:8788>. The local Go server runs the shared solver; the
+frontend needs no Node packages or build step. Edits are autosaved on this
+computer. **Save project** keeps a named project in the shared local library;
+**Projects** also contains recovery copies and reversible Trash. Download `.elab`
+copies to move between the browser and native clients.
+
+The web app includes native model settings, recordings and comparisons,
+FFT/THD, DC/AC/noise/loop sweeps, tolerances, audio preview and managed exports.
+See the [web run guide](exp-web/README.md) and
+[feature parity and qualification record](exp-web/PARITY.md) for tested scope and
+browser-specific behavior. The existing native app and qualified alpha remain
+available.
 
 ## Native workspace
 
