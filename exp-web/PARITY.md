@@ -15,8 +15,8 @@ qualified native alpha.
 | Transient controls | Pause/resume/restart, sample or arbitrary step, sampling fit, speed, live source modes, startup charge/current, passive losses and waveform timings |
 | Live controls | Switch, momentary/bouncing button hold/release/click, potentiometer, sensor/light/temperature and motor load |
 | Measurements | Accepted readings, stale-state explanations, native wire colors/current cues, pinned readings, LED and seven-segment indicators, IC labels |
-| Scope | Live/captured traces, probe selection, time windows, A/B values and deltas, recorded reference overlay |
-| Recording analysis | Capture, keep, import/export, select, seek, replay/step, interval RMS/statistics, threshold timing, step response and comparison |
+| Scope | Direct live/captured source picker, trace chooser, precise time windows and cursors, A/B values and deltas, exact current sample markers/readings, DC points and recorded reference overlay |
+| Recording analysis | Direct capture settings/progress/cancel, keep toggle, playback/scrubber, index/time seek, speed and interval RMS/statistics; import/export, threshold timing, step response and comparison in Tools |
 | Spectrum | Live FFT/hold/settings, recorded FFT/THD, native ranked peaks and frequency cursor measurements in Tools/results; plot in Spectrum |
 | Sweeps | DC, AC gain/phase, noise and loop response, spacing/point/probe settings, retained selection, exact cursor, keep/import/export and result trace plot |
 | Tolerances | Seeded native Monte Carlo settings, progress, trials/statistics and full JSON/CSV export |
@@ -74,6 +74,30 @@ qualified native alpha.
   error. Browser print preview loaded the complete native SVG without submitting
   a physical job. Earlier editor/RC/H-bridge/recording/spectrum/sweep checks remain covered
   by the HTTP tests and the initial browser comparison work.
+
+### Recorded-scope workflow, 2026-11-01
+
+The dedicated Scope now exposes native playback, sample index/time seeking,
+recording membership, captured trace selection, interval/cursor entry and
+time-weighted measurements. Capture accepts native time quantities and source
+modes, retains refused entries, and supports the zero-duration DC operating point.
+Viewing an existing recording no longer silently changes its kept membership;
+new captures retain the existing automatic keep behavior.
+
+`go test -race ./exp-web`, `go vet ./exp-web` and all 13 frontend tests passed.
+Browser checks exercised RC recording/playback, keyboard scrubbing, exact time
+entry, trace/window/cursor changes, interval RMS, invalid-capture correction,
+single-point DC rendering and disabled DC playback, source changes in another tab,
+and a 600 × 900 layout. See [evidence and internal review](../docs/validation/web-recorded-scope-20261101/README.md).
+
+### Remaining workflow work
+
+The feature-family table includes native commands exposed through Tools. Dedicated
+web workflows still need the next usability passes: spectrum live/recorded source,
+hold, peaks/cursors and distortion; sweep method selection, retained-result
+navigation and plot cursors; and recording comparison, threshold timing and step
+response. These are available through native forms today. Their direct workspace
+presentation has not yet reached the native client's level.
 
 ## Internal review
 

@@ -62,8 +62,27 @@ threshold timing, step response, comparison, FFT/THD, sweeps, tolerances, circui
 blocks, display cues, pinned measurements, audio, imports and exports. Native
 schemas provide labeled forms; JSON is optional in the command browser.
 
-The Scope shows accepted live or captured samples, A/B cursor values and reference
-traces. Spectrum and Sweep plot native results. Retained sweep traces include AC
+The Scope source picker switches between the live circuit and completed captures.
+Recorded runs have Play/Pause, previous/next stored sample, a keyboard-accessible
+scrubber, exact index/time seeking and playback speed under **Position & speed**.
+The current captured values and sample marker come from exact stored rows. **Keep
+in project** controls saved membership; opening an existing capture leaves that
+choice alone. New captures are kept automatically as before.
+
+**Traces & interval** selects live/captured probes, sets precise windows and A/B
+cursor times, and shows sample statistics. Captured runs also support time-weighted
+RMS, AC RMS, mean and peak-to-peak measurements over an explicit interval. Time
+entries accept units such as `20 ms`. Source changes in another tab disable stale
+forms. The schematic and component inspector continue showing the live circuit.
+
+**Record** accepts duration/sample units, source input and a default capacitor
+startup override. Zero sample interval follows the project; DC circuits capture a
+single operating point with native default measurements. Invalid entries stay
+visible for correction. Active capture progress and cancellation appear above
+the Scope. Space plays/pauses a captured Scope; the schematic toolbar controls the
+live circuit.
+
+The Scope shows A/B cursor values and reference traces. Spectrum and Sweep plot native results. Retained sweep traces include AC
 gain and phase. Tools can keep captures/sweeps in project files, choose prior results,
 and export their complete JSON or CSV data.
 
