@@ -58,8 +58,16 @@ tests, durations, scan results and original HTML-report checksums. Reports are
 kept in GitHub artifacts for 14 days; local copies are under the ignored build
 directory. These results cover the tested views and do not certify the whole app.
 
-The source runtime is unchanged by this evidence-only update. Linux portable
-qualification is still running, and macOS is queued for a hosted runner.
+The source runtime is unchanged by these evidence-only updates. The Linux
+portable job passed all seven gates in 10m46s. Its
+[original quality receipt](portable-results.json) confirms the full shared race
+suite passed (585.737 s), vet passed, and source inputs remained unchanged.
+
+The macOS job started at 22:15:13 UTC and remains in progress. The previous
+successful main run's macOS job took about 62 minutes, so it is left running;
+this record does not claim it passed. The CLI watch log is retained locally at
+`build/web-ci-watch-final.txt`. Check the linked run's final result before
+promotion. The preserved alpha packages have not been rebuilt or replaced.
 Before this milestone, GitHub had only main; its
 latest quality run at `cd6dcdcdd123c1356c8aa8e525a146b47ed96f22` passed. That result
 does not qualify the web branch.

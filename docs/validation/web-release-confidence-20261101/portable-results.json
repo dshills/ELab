@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "gates_passed": true,
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "steps": [
+    {
+      "name": "sdk",
+      "command": [
+        "/opt/hostedtoolcache/Python/3.13.17/x64/bin/python3",
+        "-B",
+        "scripts/prepare-vellum.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 3.22
+    },
+    {
+      "name": "python",
+      "command": [
+        "/opt/hostedtoolcache/Python/3.13.17/x64/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 10.042
+    },
+    {
+      "name": "prd",
+      "command": [
+        "/opt/hostedtoolcache/Python/3.13.17/x64/bin/python3",
+        "-B",
+        "scripts/prd-audit.py",
+        "--verify",
+        "research/11-prd-implementation-audit.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.032
+    },
+    {
+      "name": "inventory",
+      "command": [
+        "go",
+        "run",
+        "./cmd/elab-ui-audit",
+        "--verify",
+        "research/13-native-command-inventory.json"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.315
+    },
+    {
+      "name": "web-ui",
+      "command": [
+        "node",
+        "scripts/check-web.mjs"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.616
+    },
+    {
+      "name": "portable-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 585.737
+    },
+    {
+      "name": "portable-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 2.928
+    }
+  ],
+  "profile": "portable",
+  "source_commit": "e8508429f507b1147d8223e1ed36598ff652554e",
+  "inputs_unchanged": true
+}

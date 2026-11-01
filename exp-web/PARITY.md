@@ -41,7 +41,8 @@ qualified native alpha.
   use native serialization.
 - macOS is the exercised local target. The Unix storage lock supports macOS/Linux;
   other platforms use a conservative exclusive marker and are not crash-restart
-  qualified. Linux CI is configured but was not executed remotely in this task.
+  qualified. Linux portable and browser CI now pass at `e8508429`; see the later
+  release-confidence milestone below.
 - The original load-sensitive 555 timeout is fixed in the shared solver: 100 ms
   of worker CPU, 512 attempts and a separate 5 s wall backstop. Synthetic CPU-load
   checks preserve exact samples, including the live web clock; see the
@@ -52,6 +53,20 @@ qualified native alpha.
   Numerical/device/size limits are the same native educational-model limits.
 
 ## Verification
+
+### Release-confidence milestone, 2026-11-01
+
+At `e8508429`, hosted Linux CI passes all seven portable gates, including the
+complete shared Go race suite and vet. Chromium, Firefox and WebKit pass all 15
+browser journeys without retries; the six recorded accessibility scans contain
+zero violations. Keyboard tabs, dialog names, composition/browser shortcuts,
+part-placement focus and schematic spoken-label boundaries were corrected.
+The macOS native/rendered job is still in progress; installed macOS browser,
+VoiceOver and everyday-use pilot checks remain pending while desktop testing is
+paused for the owner's video. These are promotion gates, not waived requirements.
+See [receipts, review and scope](../docs/validation/web-release-confidence-20261101/README.md).
+
+### Earlier local parity qualification
 
 Final qualified code: `d9e367bb` on `exp-web`, using Go 1.27.3, Node v26.13.0 and
 macOS/arm64. The embedded build is running at `http://localhost:8788/`.
@@ -74,8 +89,8 @@ record the exact code, binary checksum, review scope and limits.
 - The embedded build's Scope/Spectrum/Sweep load with no browser console errors.
   HTTP tests verify JavaScript modules are included and served with no-store
   caching, plus native FFT/THD, all four sweep methods, captured analysis purity,
-  stale-source refusal and exact exports. No remote CI or physical print claim
-  is made.
+  stale-source refusal and exact exports. At this earlier milestone, no remote
+  CI or physical print claim was made.
 
 ### Recorded-scope workflow, 2026-11-01
 
