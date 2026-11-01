@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-func TestIntegrationBudgetReasonsPreserveExistingBounds(t *testing.T) {
-	if MaxIntegrationAttempts != 512 || MaxIntegrationWallTime != 100*time.Millisecond || Limits().IntegrationAttempts != 512 || Limits().IntegrationWallMS != 100 {
-		t.Fatal("original integration caps changed")
+func TestIntegrationBudgetReasonsPreserveWorkBounds(t *testing.T) {
+	if MaxIntegrationAttempts != 512 || MaxIntegrationCPUTime != 100*time.Millisecond || MaxIntegrationWallTime != 5*time.Second || Limits().IntegrationAttempts != 512 || Limits().IntegrationWallMS != 5000 || Limits().IntegrationCPUMS != 100 {
+		t.Fatal("published CPU, wall and attempt bounds disagree")
 	}
 	budget := &integrationBudget{elapsed: func() time.Duration { return 0 }}
 	for i := 0; i < MaxIntegrationAttempts; i++ {
@@ -27,7 +27,7 @@ func TestIntegrationBudgetReasonsPreserveExistingBounds(t *testing.T) {
 		t.Fatal("attempt limit missing reason/count", err)
 	}
 	// Isolate elapsed-time rejection without scheduler timing, sleeps or
-	// changing the production monotonic clock or quotas.
+	// changing the production CPU clock or quotas.
 	budget = &integrationBudget{elapsed: func() time.Duration { return 2 * MaxIntegrationWallTime }}
 	err = budget.take()
 	if !errors.As(err, &limit) || limit.code != "integration-time-limit" || limit.attempts != 1 || limit.elapsed < MaxIntegrationWallTime {
@@ -49,7 +49,7 @@ func TestIntegrationLimitStepFailurePreservesPhysicsAndGuidance(t *testing.T) {
 				attempts = 10
 			}
 			s.mu.Lock()
-			s.networkAdvance = func(*mixedState, *Transient, float64, Graph) (*mixedState, *Transient, error) {
+			s.networkAdvance = func(context.Context, *mixedState, *Transient, float64, Graph) (*mixedState, *Transient, error) {
 				return nil, nil, fmt.Errorf("sample context: %w", &integrationBudgetError{code: code, attempts: attempts, elapsed: 101 * time.Millisecond})
 			}
 			s.mu.Unlock()
@@ -103,7 +103,7 @@ func TestLiveIntegrationTimeFailureRetainsLastAcceptedSample(t *testing.T) {
 	defer s.Close()
 	before := s.Snapshot()
 	s.mu.Lock()
-	s.networkAdvance = func(*mixedState, *Transient, float64, Graph) (*mixedState, *Transient, error) {
+	s.networkAdvance = func(context.Context, *mixedState, *Transient, float64, Graph) (*mixedState, *Transient, error) {
 		return nil, nil, fmt.Errorf("sample context: %w", &integrationBudgetError{code: "integration-time-limit", attempts: 10, elapsed: 101 * time.Millisecond})
 	}
 	s.mu.Unlock()

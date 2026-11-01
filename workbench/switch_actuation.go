@@ -1,6 +1,9 @@
 package workbench
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type SwitchState struct {
 	ID            string `json:"id"`
@@ -59,8 +62,17 @@ func graphWithAppliedSwitches(desired, applied Graph) Graph {
 // Apply the final desired switch states only after a whole accepted sample.
 // Advancing the old circuit and the right-hand event solve are both staged;
 // failure cannot publish time, charge, history, or a partially applied group.
-func advanceLiveNetwork(state *mixedState, t *Transient, end float64, desired Graph) (*mixedState, *Transient, error) {
-	budget := newIntegrationBudget()
+func advanceLiveNetwork(ctx context.Context, state *mixedState, t *Transient, end float64, desired Graph) (output *mixedState, result *Transient, err error) {
+	budget := newIntegrationBudgetContext(ctx)
+	budget.enter()
+	defer budget.leave()
+	defer func() {
+		if err == nil {
+			if failure := budget.checkTime(); failure != nil {
+				output, result, err = nil, nil, failure
+			}
+		}
+	}()
 	next, trace, err := advanceMixedBudget(state, t, end, budget)
 	if err != nil {
 		return nil, nil, err
@@ -89,7 +101,7 @@ func advanceLiveNetwork(state *mixedState, t *Transient, end float64, desired Gr
 	if err := budget.take(); err != nil {
 		return nil, nil, err
 	}
-	right, err := net.solve(next.x, next.capV, 0, trace, end)
+	right, err := net.solveContext(budget.solverContext(), next.x, next.capV, 0, trace, end)
 	if err != nil {
 		return nil, nil, err
 	}

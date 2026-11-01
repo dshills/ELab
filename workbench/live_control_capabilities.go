@@ -67,7 +67,7 @@ func addLiveControlDetails(id string, schema map[string]any) bool {
 		failure("busy", "admission", "Active input or manual step, including canceling")
 		failure("solve-failed", "admission-or-step_work", "Network capacitor step below 1e-10 s, solver failure or cooperative worker deadline")
 		failure("integration-attempt-limit", "step_work", "Per-output-sample mixed integration attempts exceed the unchanged kernel budget")
-		failure("integration-time-limit", "step_work", "Per-output-sample mixed integration wall time exceeds the unchanged kernel budget")
+		failure("integration-time-limit", "step_work", "Per-output-sample mixed integration exceeds its CPU budget or wall-time backstop")
 		failure("canceled", "step_work-or-wait", "Explicit/Pause cancellation; waiting caller disconnect stops only the wait after admission")
 		failure("superseded", "step_work", "A newer source/input/run/document operation makes the captured work obsolete")
 		mode := "immediate admission; retry returns owned original admission; inspect step_work until terminal"

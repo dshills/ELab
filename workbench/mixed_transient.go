@@ -271,10 +271,23 @@ func (s *Service) startMixedLocked(c Compiled) { s.startInitialLocked(c) }
 // Stage a whole requested output sample with one shared work budget across all
 // per-source corners. A failure never publishes partial capacitor memory/time.
 func advanceMixed(state *mixedState, t *Transient, end float64) (*mixedState, *Transient, error) {
-	return advanceMixedBudget(state, t, end, newIntegrationBudget())
+	return advanceMixedContext(context.Background(), state, t, end)
 }
 
-func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *integrationBudget) (*mixedState, *Transient, error) {
+func advanceMixedContext(ctx context.Context, state *mixedState, t *Transient, end float64) (*mixedState, *Transient, error) {
+	return advanceMixedBudget(state, t, end, newIntegrationBudgetContext(ctx))
+}
+func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *integrationBudget) (next *mixedState, result *Transient, err error) {
+	budget.enter()
+	defer budget.leave()
+	defer func() {
+		if err == nil {
+			if failure := budget.checkTime(); failure != nil {
+				next, result, err = nil, nil, failure
+			}
+		}
+	}()
+
 	trace := cloneTransient(t)
 	cur := state
 	for cur.result.Time < end {
@@ -309,7 +322,7 @@ func advanceMixedBudget(state *mixedState, t *Transient, end float64, budget *in
 			if err := budget.take(); err != nil {
 				return nil, nil, err
 			}
-			right, err := cur.net.solve(cur.x, cur.capV, 0, trace, stop)
+			right, err := cur.net.solveContext(budget.solverContext(), cur.x, cur.capV, 0, trace, stop)
 			if err != nil {
 				return nil, nil, err
 			}

@@ -1,6 +1,7 @@
 package workbench
 
 import (
+	"context"
 	"math"
 	"sync"
 	"testing"
@@ -77,9 +78,9 @@ func TestLiveNetworkClockResumeKeepsCommittedTimeOrigin(t *testing.T) {
 	first := make(chan float64, 1)
 	var once sync.Once
 	s.mu.Lock()
-	s.networkAdvance = func(state *mixedState, trace *Transient, end float64, graph Graph) (*mixedState, *Transient, error) {
+	s.networkAdvance = func(ctx context.Context, state *mixedState, trace *Transient, end float64, graph Graph) (*mixedState, *Transient, error) {
 		once.Do(func() { first <- end })
-		return advanceLiveNetwork(state, trace, end, graph)
+		return advanceLiveNetwork(ctx, state, trace, end, graph)
 	}
 	s.mu.Unlock()
 	call(t, s, "simulation.resume", struct{}{}, "resume")

@@ -311,7 +311,7 @@ func (s *Service) launchTransientLocked(c Compiled) {
 							break // discarded work; capture current inputs on the next tick
 						}
 					} else {
-						err = s.advanceTransientLocked(c, end)
+						err = s.advanceTransientLocked(ctx, c, end)
 					}
 					if err != nil {
 						s.status = "error"

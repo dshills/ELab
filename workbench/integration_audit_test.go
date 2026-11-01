@@ -17,13 +17,14 @@ import (
 
 // This opt-in benchmark reproduces the doubled-capacitance period fixture in
 // an owned Go test process, optionally sharing its single worker CPU with eight
-// burners. It is not part of ordinary tests, and never changes solver caps.
+// burners. It is not part of ordinary tests, and uses production solver limits.
 // Run -cpu=1 -benchtime=1x; an optional new report path preserves the evidence.
 func BenchmarkFlasherIntegrationBudgetAudit(b *testing.B) {
 	if runtime.GOMAXPROCS(0) != 1 {
 		b.Fatal("audit requires -cpu=1 to confine pressure to one owned process CPU")
 	}
 	type result struct {
+		SamplesSHA256  string    `json:"samples_sha256"`
 		Burners        int       `json:"cpu_burners"`
 		Outcome        string    `json:"outcome"`
 		Code           string    `json:"code,omitempty"`
@@ -65,6 +66,7 @@ func BenchmarkFlasherIntegrationBudgetAudit(b *testing.B) {
 				stop := startAuditPressure(burners)
 				started := time.Now()
 				r := result{Burners: burners, Outcome: "completed", RisingEdges: []float64{}}
+				sampleHash := sha256.New()
 				high := state.result.LEDs[0].Current > .001
 				for sample := 1; sample <= 600; sample++ {
 					end := float64(sample) * .01
@@ -96,6 +98,10 @@ func BenchmarkFlasherIntegrationBudgetAudit(b *testing.B) {
 						break
 					}
 					state = next
+					if err := json.NewEncoder(sampleHash).Encode(state.result); err != nil {
+						stop()
+						b.Fatal(err)
+					}
 					r.AcceptedTime = state.result.Time
 					r.MaxKCLResidual = math.Max(r.MaxKCLResidual, state.result.KCLResidual)
 					r.MaxPowerError = math.Max(r.MaxPowerError, math.Abs(state.result.PowerResidual))
@@ -105,8 +111,12 @@ func BenchmarkFlasherIntegrationBudgetAudit(b *testing.B) {
 					}
 					high = nowHigh
 				}
+				r.SamplesSHA256 = hex.EncodeToString(sampleHash.Sum(nil))
 				r.RunWallMS = float64(time.Since(started)) / float64(time.Millisecond)
 				stop() // Join every owned burner, including after a numerical limit.
+				if r.Outcome != "completed" && os.Getenv("ELAB_INTEGRATION_AUDIT_REQUIRE_COMPLETION") == "1" {
+					b.Fatal("load regression did not complete", r)
+				}
 				if r.Outcome == "completed" {
 					if len(r.RisingEdges) < 4 {
 						b.Fatal("completed fixture has too few settled periods", r)
@@ -127,8 +137,11 @@ func BenchmarkFlasherIntegrationBudgetAudit(b *testing.B) {
 			b.Fatal("integration audit fixture failed; no passing report published")
 		}
 	}
+	if len(results) == 2 && results[0].Outcome == "completed" && results[1].Outcome == "completed" && results[0].SamplesSHA256 != results[1].SamplesSHA256 {
+		b.Fatal("CPU pressure changed exact accepted samples")
+	}
 	if path := os.Getenv("ELAB_INTEGRATION_AUDIT_REPORT"); path != "" {
-		report := map[string]any{"passed": true, "go_version": runtime.Version(), "platform": runtime.GOOS + "/" + runtime.GOARCH, "gomaxprocs": runtime.GOMAXPROCS(0), "graph_sha256": hex.EncodeToString(digest[:]), "maximum_attempts": MaxIntegrationAttempts, "maximum_wall_ms": MaxIntegrationWallTime / time.Millisecond, "sample_step_s": .01, "requested_duration_s": 6, "results": results, "limits": []string{"owned one-CPU test process; synthetic scheduler pressure is not participant/visible latency evidence", "limit checks happen between integration attempts, not preemptively inside an ongoing solve", "a reproduced time-limit failure does not establish the cause of the previous unclassified race-run failure"}}
+		report := map[string]any{"passed": true, "go_version": runtime.Version(), "platform": runtime.GOOS + "/" + runtime.GOARCH, "gomaxprocs": runtime.GOMAXPROCS(0), "graph_sha256": hex.EncodeToString(digest[:]), "maximum_attempts": MaxIntegrationAttempts, "maximum_wall_ms": MaxIntegrationWallTime / time.Millisecond, "maximum_cpu_ms": MaxIntegrationCPUTime / time.Millisecond, "time_basis": integrationClockBasis, "sample_step_s": .01, "requested_duration_s": 6, "results": results, "limits": []string{"owned one-CPU test process; synthetic scheduler pressure is not participant/visible latency evidence", "CPU/wall/cancellation checks are cooperative between adaptive/Newton stages; a running matrix solve is not preempted", "a reproduced time-limit failure does not establish the cause of the previous unclassified race-run failure"}}
 		data, _ := json.MarshalIndent(report, "", "  ")
 		file, err := os.OpenFile(path, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
 		if err != nil {

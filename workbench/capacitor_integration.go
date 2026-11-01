@@ -13,7 +13,7 @@ func (state *mixedState) capacitorStep(trace *Transient, h, end float64, budget 
 		return nil, err
 	}
 	diagonal := capacitorStageGamma * h
-	first, err := state.net.solve(state.x, state.capV, diagonal, trace, end-h+diagonal)
+	first, err := state.net.solveContext(budget.solverContext(), state.x, state.capV, diagonal, trace, end-h+diagonal)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (state *mixedState) capacitorStep(trace *Transient, h, end float64, budget 
 	for i, previous := range state.capV {
 		history[i] = previous + (1-capacitorStageGamma)/capacitorStageGamma*(first.capV[i]-previous)
 	}
-	next, err := state.net.solve(first.x, history, diagonal, trace, end)
+	next, err := state.net.solveContext(budget.solverContext(), first.x, history, diagonal, trace, end)
 	if err != nil {
 		return nil, err
 	}

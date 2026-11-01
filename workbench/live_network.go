@@ -2,7 +2,7 @@ package workbench
 
 import "context"
 
-type networkAdvanceFunc func(*mixedState, *Transient, float64, Graph) (*mixedState, *Transient, error)
+type networkAdvanceFunc func(context.Context, *mixedState, *Transient, float64, Graph) (*mixedState, *Transient, error)
 
 // liveNetworkSampleLocked returns with the service lock held, but performs the
 // numerical work without it. The captured kernel, capacitor memory and trace
@@ -16,7 +16,7 @@ func (s *Service) liveNetworkSampleLocked(ctx context.Context, run uint64, end f
 	desired := s.graph.Clone()
 	advance := s.networkAdvance
 	s.mu.Unlock()
-	next, samples, err := advance(captured, input, end, desired)
+	next, samples, err := advance(ctx, captured, input, end, desired)
 	s.mu.Lock()
 	if ctx.Err() != nil || s.closed || s.paused || s.run != run || s.mixedState != applied || s.transient != trace || s.transient.Stale || s.actuationRevision != actuation {
 		return false, nil

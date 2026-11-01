@@ -113,7 +113,7 @@ func (k *simulationKernel) advance(ctx context.Context, end float64) error {
 	}
 	switch k.compiled.Analysis {
 	case MixedAnalysis, NetworkDCAnalysis, NetworkTransientAnalysis, WaveformAnalysis, InductorAnalysis, Timer555Analysis, SequentialAnalysis, ControlAnalysis:
-		state, trace, err := advanceMixed(k.mixed, k.trace, end)
+		state, trace, err := advanceMixedContext(ctx, k.mixed, k.trace, end)
 		if err != nil {
 			return err
 		}

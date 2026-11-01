@@ -1,6 +1,7 @@
 package workbench
 
 import (
+	"context"
 	"math"
 	"reflect"
 	"testing"
@@ -74,7 +75,7 @@ func TestQueuedSwitchEventFailureDoesNotPublishPhysicalAdvance(t *testing.T) {
 	trace := cloneTransient(s.transient)
 	invalid := s.graph.Clone()
 	invalid.Wires = nil
-	next, staged, err := advanceLiveNetwork(s.mixedState, s.transient, .001, invalid)
+	next, staged, err := advanceLiveNetwork(context.Background(), s.mixedState, s.transient, .001, invalid)
 	if err == nil || next != nil || staged != nil || !reflect.DeepEqual(cloneMixed(s.mixedState.result), before) || !reflect.DeepEqual(s.transient, trace) || !reflect.DeepEqual(s.mixedState.x, x) || !reflect.DeepEqual(s.mixedState.capV, caps) {
 		t.Fatalf("pending failure err=%v next=%v trace=%v result_equal=%v trace_equal=%v", err, next != nil, staged != nil, reflect.DeepEqual(cloneMixed(s.mixedState.result), before), reflect.DeepEqual(s.transient, trace))
 	}

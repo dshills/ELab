@@ -164,7 +164,7 @@ func (s *Service) runStep(job *stepJob) {
 		// Anchor every requested output to the captured origin. Repeated
 		// addition can drift far enough to require a 1001st final sample.
 		next := manualStepTargetTime(job.work.StartTime, job.end, input.transientSettings.StepSeconds, completed+1)
-		err = input.advanceTransientLocked(job.compiled, next)
+		err = input.advanceTransientLocked(job.ctx, job.compiled, next)
 		if err != nil {
 			break
 		}

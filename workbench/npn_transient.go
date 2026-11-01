@@ -1,5 +1,7 @@
 package workbench
 
+import "context"
+
 const NPNTransientAnalysis = "NPN transient"
 const NPNTransientEngineID = "elab.npn-switch-quasistatic.v1"
 
@@ -80,9 +82,9 @@ func (s *Service) publishNPNTransientLocked() {
 	s.npn = cloneNPN(r)
 }
 func (s *Service) startNPNTransientLocked(c Compiled) { s.startInitialLocked(c) }
-func (s *Service) advanceTransientLocked(c Compiled, end float64) error {
+func (s *Service) advanceTransientLocked(ctx context.Context, c Compiled, end float64) error {
 	if IsNetworkAnalysis(c.Analysis) {
-		st, t, err := s.networkAdvance(s.mixedState, s.transient, end, s.graph)
+		st, t, err := s.networkAdvance(ctx, s.mixedState, s.transient, end, s.graph)
 		if err != nil {
 			return err
 		}

@@ -72,7 +72,7 @@ func makeDiagnosticHelp(g Graph, c Compiled, d Diagnostic, source string, refs [
 	case "integration-time-limit":
 		out.Severity = "error"
 		out.Summary = "This sample took longer than the calculation time limit."
-		out.Action = "Reduce the output sample interval or retry when the computer is less busy. Restart a stopped live run; committed time and charge were preserved."
+		out.Action = "Reduce the output sample interval for a CPU limit; retry a wall-time backstop when the computer is less busy. Restart a stopped live run; committed time and charge were preserved."
 	case "solve-failed", "mixed-initialize-failed":
 		out.Severity = "error"
 		out.Summary = "Simulation could not complete this calculation."

@@ -25,28 +25,30 @@ const (
 )
 
 type CircuitLimits struct {
-	JFETs               int `json:"jfets"`
-	CombinedFETs        int `json:"field_effect_transistors_total"`
-	Timers555           int `json:"timers555,omitempty"`
-	PNP                 int `json:"pnp_transistors,omitempty"`
-	CombinedBipolar     int `json:"bipolar_transistors_total,omitempty"`
-	IntegrationAttempts int `json:"integration_attempts_per_sample"`
-	IntegrationWallMS   int `json:"integration_wall_ms_per_sample"`
-	PinnedReadings      int `json:"pinned_readings"`
-	DrawingObjects      int `json:"drawing_objects"`
-	Wires               int `json:"wires"`
-	SimulatedComponents int `json:"simulated_components"`
-	ElectricalNodes     int `json:"electrical_nodes_including_ground"`
-	Sources             int `json:"sources"`
-	Capacitors          int `json:"capacitors"`
-	Inductors           int `json:"inductors"`
-	Transistors         int `json:"npn_transistors"`
-	MOSFETs             int `json:"nmos_transistors"`
-	PMOS                int `json:"pmos_transistors"`
-	CombinedMOSFETs     int `json:"mosfets_total"`
-	OpAmps              int `json:"opamps"`
-	Resistors           int `json:"resistors"`
-	Switches            int `json:"switches"`
+	JFETs                int    `json:"jfets"`
+	CombinedFETs         int    `json:"field_effect_transistors_total"`
+	Timers555            int    `json:"timers555,omitempty"`
+	PNP                  int    `json:"pnp_transistors,omitempty"`
+	CombinedBipolar      int    `json:"bipolar_transistors_total,omitempty"`
+	IntegrationCPUMS     int    `json:"integration_cpu_ms_per_sample"`
+	IntegrationTimeBasis string `json:"integration_time_basis"`
+	IntegrationAttempts  int    `json:"integration_attempts_per_sample"`
+	IntegrationWallMS    int    `json:"integration_wall_ms_per_sample"`
+	PinnedReadings       int    `json:"pinned_readings"`
+	DrawingObjects       int    `json:"drawing_objects"`
+	Wires                int    `json:"wires"`
+	SimulatedComponents  int    `json:"simulated_components"`
+	ElectricalNodes      int    `json:"electrical_nodes_including_ground"`
+	Sources              int    `json:"sources"`
+	Capacitors           int    `json:"capacitors"`
+	Inductors            int    `json:"inductors"`
+	Transistors          int    `json:"npn_transistors"`
+	MOSFETs              int    `json:"nmos_transistors"`
+	PMOS                 int    `json:"pmos_transistors"`
+	CombinedMOSFETs      int    `json:"mosfets_total"`
+	OpAmps               int    `json:"opamps"`
+	Resistors            int    `json:"resistors"`
+	Switches             int    `json:"switches"`
 	// Diodes is the combined silicon/Schottky/Zener budget. Keep the legacy
 	// JSON key for existing capacity reports and clients.
 	Diodes         int `json:"silicon_diodes"`
@@ -56,7 +58,7 @@ type CircuitLimits struct {
 }
 
 func Limits() CircuitLimits {
-	return CircuitLimits{JFETs: MaxNetworkJFETs, CombinedFETs: MaxNetworkMOSFETs, Timers555: MaxNetworkTimers555, PNP: MaxNetworkTransistors, CombinedBipolar: MaxNetworkTransistors, IntegrationAttempts: MaxIntegrationAttempts, IntegrationWallMS: int(MaxIntegrationWallTime / time.Millisecond), PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Inductors: MaxNetworkInductors, Transistors: MaxNetworkTransistors, MOSFETs: MaxNetworkMOSFETs, PMOS: MaxNetworkMOSFETs, CombinedMOSFETs: MaxNetworkMOSFETs, OpAmps: MaxNetworkOpAmps, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
+	return CircuitLimits{JFETs: MaxNetworkJFETs, CombinedFETs: MaxNetworkMOSFETs, Timers555: MaxNetworkTimers555, PNP: MaxNetworkTransistors, CombinedBipolar: MaxNetworkTransistors, IntegrationTimeBasis: integrationClockBasis, IntegrationCPUMS: int(MaxIntegrationCPUTime / time.Millisecond), IntegrationAttempts: MaxIntegrationAttempts, IntegrationWallMS: int(MaxIntegrationWallTime / time.Millisecond), PinnedReadings: MaxPinnedReadings, DrawingObjects: MaxComponents, Wires: MaxWires, SimulatedComponents: MaxSimulatedComponents, ElectricalNodes: MaxElectricalNodes, Sources: MaxNetworkSources, Capacitors: MaxNetworkCapacitors, Inductors: MaxNetworkInductors, Transistors: MaxNetworkTransistors, MOSFETs: MaxNetworkMOSFETs, PMOS: MaxNetworkMOSFETs, CombinedMOSFETs: MaxNetworkMOSFETs, OpAmps: MaxNetworkOpAmps, Resistors: MaxNetworkResistors, Switches: MaxNetworkSwitches, Diodes: MaxNetworkDiodes, Potentiometers: MaxNetworkPotentiometers, LEDs: MaxNetworkLEDs, ScopeTraces: MaxScopeProbes}
 }
 func SimulatedComponentCount(g Graph) int {
 	count := 0

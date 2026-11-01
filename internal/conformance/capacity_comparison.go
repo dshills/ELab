@@ -132,6 +132,14 @@ func CompareCapacity(reference, actual CapacityResult) error {
 // added bipolar discovery fields do not retrospectively qualify PNP capacity.
 // All fixture graphs, numerical bounds, samples and other limits stay exact.
 func capacityLimitsCompatible(actual workbench.CircuitLimits) bool {
+	// Frozen reports used the exact old 100 ms wall-only policy. Admit that
+	// historical tuple, not arbitrary mixtures of CPU/wall budgets. Numerical
+	// fixture values and every circuit-capacity check remain unchanged.
+	if actual.IntegrationCPUMS == 0 && actual.IntegrationTimeBasis == "" && actual.IntegrationWallMS == 100 {
+		timing := workbench.Limits()
+		actual.IntegrationCPUMS, actual.IntegrationTimeBasis, actual.IntegrationWallMS = timing.IntegrationCPUMS, timing.IntegrationTimeBasis, timing.IntegrationWallMS
+	}
+
 	if actual == workbench.Limits() {
 		return true
 	}

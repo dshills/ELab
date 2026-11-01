@@ -42,10 +42,12 @@ qualified native alpha.
 - macOS is the exercised local target. The Unix storage lock supports macOS/Linux;
   other platforms use a conservative exclusive marker and are not crash-restart
   qualified. Linux CI is configured but was not executed remotely in this task.
-- A live 555 tone run hit the shared solver's 100 ms per-step wall-clock budget
-  during concurrent test/build load. The web UI now labels stopped samples stale
-  and offers restart guidance. This retains the native bounded-work behavior;
-  sustained live simulation under heavy host load is not qualified.
+- The original load-sensitive 555 timeout is fixed in the shared solver: 100 ms
+  of worker CPU, 512 attempts and a separate 5 s wall backstop. Synthetic CPU-load
+  checks preserve exact samples, including the live web clock; see the
+  [solver qualification](../docs/validation/solver-cpu-budget-20261101/README.md).
+  A busy computer can still reduce playback speed; visible latency under arbitrary
+  system load is not qualified.
 - Results tables cap displayed arrays at 200 rows; downloads retain complete data.
   Numerical/device/size limits are the same native educational-model limits.
 

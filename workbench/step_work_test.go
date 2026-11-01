@@ -94,14 +94,14 @@ func TestLegacyStepLateFailureIsAtomicAndRetryReturnsItsOriginalOutcome(t *testi
 	defer unblock()
 	calls := 0
 	s.mu.Lock()
-	s.networkAdvance = func(state *mixedState, trace *Transient, end float64, g Graph) (*mixedState, *Transient, error) {
+	s.networkAdvance = func(ctx context.Context, state *mixedState, trace *Transient, end float64, g Graph) (*mixedState, *Transient, error) {
 		calls++
 		if calls == 2 {
 			close(entered)
 			<-release
 			return nil, nil, fmt.Errorf("injected failure after staged sample")
 		}
-		return advanceLiveNetwork(state, trace, end, g)
+		return advanceLiveNetwork(ctx, state, trace, end, g)
 	}
 	s.mu.Unlock()
 	rev := before.Revision

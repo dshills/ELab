@@ -237,3 +237,24 @@ func TestCapacityHistoricalFETDiscoveryAllowsOnlyPairedAbsence(t *testing.T) {
 		}
 	}
 }
+
+func TestCapacityTimingEnvelopePreservesExactHistoricalPolicy(t *testing.T) {
+	original := workbench.Limits()
+	original.IntegrationCPUMS = 0
+	original.IntegrationTimeBasis = ""
+	original.IntegrationWallMS = 100
+	if !capacityLimitsCompatible(original) {
+		t.Fatal("exact historical timing envelope refused")
+	}
+	for _, modify := range []func(*workbench.CircuitLimits){
+		func(l *workbench.CircuitLimits) { l.IntegrationCPUMS = 101 },
+		func(l *workbench.CircuitLimits) { l.IntegrationWallMS = 101 },
+		func(l *workbench.CircuitLimits) { l.IntegrationTimeBasis = "unknown" },
+	} {
+		bad := original
+		modify(&bad)
+		if capacityLimitsCompatible(bad) {
+			t.Fatal("unpublished mixed timing envelope accepted", bad)
+		}
+	}
+}

@@ -13,7 +13,7 @@ func verificationFailureHelp(operation OperationSummary) *DiagnosticHelp {
 		help.Action = "Reduce the Verify sample interval and shorten duration if needed to stay within its output-step limit, then verify again."
 	case "integration-time-limit":
 		help.Summary = "A sample exceeded its calculation time limit."
-		help.Action = "Retry when the computer is less busy, or reduce the Verify sample interval and adjust duration to stay within its output-step limit."
+		help.Action = "Reduce the Verify sample interval for a CPU limit, or retry a wall-time backstop when the computer is less busy. Adjust duration to stay within the output-step limit."
 	case "timeout":
 		help.Summary = "The experiment exceeded the verification time limit."
 		help.Action = "Shorten the Verify duration or review the captured circuit and startup conditions before trying again."

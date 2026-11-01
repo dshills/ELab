@@ -37,7 +37,7 @@ func BenchmarkMixedMatrixAssembly(b *testing.B) {
 // allocation-only change on the same toolchain. This is backend work evidence,
 // not UI latency. The numerical fixture keeps the 512-attempt cap but uses the
 // existing test clock so a scheduler pause cannot change its output digest.
-// Production wall-time rejection remains covered by integration_budget_test.
+// Production CPU/wall-time rejection remains covered by integration_budget_test.
 func BenchmarkFlasherMatrixWork(b *testing.B) {
 	type result struct {
 		Scale          float64 `json:"capacitance_scale"`

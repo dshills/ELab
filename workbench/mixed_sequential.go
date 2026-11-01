@@ -269,7 +269,7 @@ func (s *mixedState) advanceSequential(t *Transient, end float64, budget *integr
 			}
 		}
 		appendNetworkTrace(t, mixedSample(cur.net.c, trial.result, mixedSourceVoltage(cur.net.c, trial.result)))
-		right, err := trial.resolveSequential(context.Background(), t)
+		right, err := trial.resolveSequential(budget.solverContext(), t)
 		if err != nil {
 			return nil, err
 		}

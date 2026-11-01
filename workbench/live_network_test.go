@@ -19,7 +19,7 @@ func blockFirstLiveSample(t *testing.T, s *Service, obsoleteError bool) (<-chan 
 	entered, release := make(chan struct{}), make(chan struct{})
 	var first, finish sync.Once
 	s.mu.Lock()
-	s.networkAdvance = func(state *mixedState, trace *Transient, end float64, graph Graph) (*mixedState, *Transient, error) {
+	s.networkAdvance = func(ctx context.Context, state *mixedState, trace *Transient, end float64, graph Graph) (*mixedState, *Transient, error) {
 		blocked := false
 		first.Do(func() { blocked = true; close(entered) })
 		if blocked {
@@ -28,7 +28,7 @@ func blockFirstLiveSample(t *testing.T, s *Service, obsoleteError bool) (<-chan 
 				return nil, nil, fmt.Errorf("obsolete sample failure")
 			}
 		}
-		return advanceLiveNetwork(state, trace, end, graph)
+		return advanceLiveNetwork(ctx, state, trace, end, graph)
 	}
 	s.mu.Unlock()
 	return entered, func() { finish.Do(func() { close(release) }) }

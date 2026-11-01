@@ -57,3 +57,11 @@ func TestIntegrationDiscoveryStaysOutOfOrdinaryCatalog(t *testing.T) {
 		t.Fatal("detailed numerical guidance expands the ordinary catalog")
 	}
 }
+
+func TestIntegrationDiscoveryPublishesCPUAndWallPolicy(t *testing.T) {
+	numerics := sweepDetailSchema(t, "component.set")["x-network-numerics"].(map[string]any)
+	budget := numerics["integration_work_budget"].(map[string]any)
+	if budget["attempts_per_sample"] != float64(512) || budget["cpu_ms_per_sample"] != float64(100) || budget["wall_ms_per_sample"] != float64(5000) || budget["time_basis"] != integrationClockBasis {
+		t.Fatal("public numerical contract omits actual CPU/wall safeguards", budget)
+	}
+}

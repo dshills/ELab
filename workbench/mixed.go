@@ -703,11 +703,16 @@ func (n *mixedNetwork) solveAnalogContext(ctx context.Context, guess, old []floa
 	return nil, err
 }
 func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
+	budget, _ := ctx.Value(integrationBudgetContextKey{}).(*integrationBudget)
 	size := n.matrixSize(dt)
 	x := make([]float64, size)
 	copy(x, guess)
 	for iter := 0; iter < maxMixedNewtonIterations; iter++ {
-		if err := ctx.Err(); err != nil {
+		if budget != nil {
+			if err := budget.checkTime(); err != nil {
+				return nil, err
+			}
+		} else if err := ctx.Err(); err != nil {
 			return nil, err
 		}
 		if dt == 0 && !n.dc {
@@ -1087,7 +1092,17 @@ func (n *mixedNetwork) result(x, old []float64, dt float64, t *Transient, at flo
 func (state *mixedState) advance(t *Transient, end float64) (*mixedState, error) {
 	return state.advanceBudget(t, end, newIntegrationBudget())
 }
-func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integrationBudget) (*mixedState, error) {
+func (state *mixedState) advanceBudget(t *Transient, end float64, budget *integrationBudget) (next *mixedState, err error) {
+	budget.enter()
+	defer budget.leave()
+	defer func() {
+		if err == nil {
+			if failure := budget.checkTime(); failure != nil {
+				next, err = nil, failure
+			}
+		}
+	}()
+
 	if len(state.net.sequential)+len(state.net.controls) > 0 {
 		return state.advanceSequential(t, end, budget)
 	}
@@ -1107,7 +1122,7 @@ func (state *mixedState) advanceAnalogBudget(t *Transient, end float64, budget *
 		if err := budget.take(); err != nil {
 			return nil, err
 		}
-		return state.net.solve(state.x, state.capV, end-at, t, end)
+		return state.net.solveContext(budget.solverContext(), state.x, state.capV, end-at, t, end)
 	}
 	var failure string
 	for at < end {

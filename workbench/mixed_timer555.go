@@ -173,7 +173,7 @@ func (state *mixedState) advanceTimers555(t *Transient, end float64, budget *int
 			}
 		}
 		appendNetworkTrace(t, mixedSample(cur.net.c, trial.result, mixedSourceVoltage(cur.net.c, trial.result)))
-		right, err := trial.resolveTimers555(context.Background(), t)
+		right, err := trial.resolveTimers555(budget.solverContext(), t)
 		if err != nil {
 			return nil, err
 		}
