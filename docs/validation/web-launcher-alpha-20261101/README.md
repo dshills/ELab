@@ -90,3 +90,20 @@ Copied-backend receipts are explicit about prototype dirty-source scope; a final
 clean-source package has its own generated package and copied-runtime receipt.
 No screen capture, application/browser launch or GUI interaction was performed
 after the owner requested desktop testing stop during video playback.
+
+## Clean-source private-alpha package
+
+Code commit: `a17858aa4152658eddc00396efcea49ccd95e685`.
+The production bundle has no fixture-data override. Its clean-source receipt and
+[copied-runtime qualification](checks/copied-alpha-runtime.json) passed. The
+archive also passed CRC, exact membership/bytes, OS extraction, file-mode
+comparison and strict signature checks without launching a GUI.
+
+- App: `build/web-alpha/ELab Web.app`
+- Archive: `build/web-alpha/ELab-Web-0.1.0-alpha.1-macos-arm64.zip`
+- SHA-256: `da7b13060d117f6c2b27e224c370bc52c9c5aa7cf5dd5a739d868de7de9f0770`
+- [Package identity and verification scope](alpha-package.json)
+
+The production app is assembled and ready for use after the owner's desktop
+restriction ends. No existing project library, native release or running default
+web session was replaced during these packaging checks.

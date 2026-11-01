@@ -1,0 +1,27 @@
+{
+  "version": "0.1.0-alpha.1",
+  "code_commit": "a17858aa4152658eddc00396efcea49ccd95e685",
+  "source_clean": true,
+  "architecture": "arm64",
+  "app": "build/web-alpha/ELab Web.app",
+  "archive": "build/web-alpha/ELab-Web-0.1.0-alpha.1-macos-arm64.zip",
+  "archive_sha256": "da7b13060d117f6c2b27e224c370bc52c9c5aa7cf5dd5a739d868de7de9f0770",
+  "executables": {
+    "Contents/MacOS/ELabWebLauncher": "c5efc8012715cad171efc98451bf86f1a0c17b04e42e7979116fab1306551e56",
+    "Contents/Resources/elab-web": "fc6c3823a72e82c3601679fa7ee4c8d6c1fa46d654a547b2bd91ae944b6ccf37"
+  },
+  "copied_runtime": {
+    "passed": true,
+    "source_commit": "a17858aa4152658eddc00396efcea49ccd95e685",
+    "source_clean": true,
+    "checks": [
+      "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+      "normal control Quit drains and exits the copied backend",
+      "same browser workspace restores acknowledged 22 k\u03a9 edit after restart"
+    ],
+    "scope": "Copied backend and embedded assets; no GUI, browser, clean-account, or notarization claim."
+  },
+  "archive_verification": "CRC, exact ZIP inventory/bytes, OS extraction, byte/mode comparison, strict signatures, no fixture data override",
+  "signing": "ad-hoc private alpha; Developer ID/notarization not qualified",
+  "gui_scope": "Earlier fixture launch/browser/quit checked. Further desktop testing stopped at owner request; no final clean-account GUI claim."
+}
