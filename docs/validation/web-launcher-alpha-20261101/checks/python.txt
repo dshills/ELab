@@ -1,0 +1,23 @@
+.......................................................{"name": "one", "command": ["one"], "status": "passed", "exit_code": 0, "seconds": 0.0}
+{"name": "two", "command": ["two"], "status": "passed", "exit_code": 0, "seconds": 0.0}
+.{"name": "first", "command": ["first"], "status": "failed", "exit_code": 3, "seconds": 0.0}
+{"name": "first", "command": ["first"], "status": "timed-out", "exit_code": 124, "owned_pid": null, "owned_exit_code": null, "seconds": 0.0}
+{"name": "first", "command": ["first"], "status": "interrupted", "exit_code": 130, "owned_pid": null, "owned_exit_code": null, "seconds": 0.0}
+..{"name": "gate", "command": ["unused"], "status": "passed", "exit_code": 0, "seconds": 0.0}
+usage: python3.15 -m unittest [-h] --profile {portable,native}
+                              [--artifacts ARTIFACTS]
+                              [--command-timeout COMMAND_TIMEOUT] [--dry-run]
+python3.15 -m unittest: error: Command ['git'] returned non-zero exit status 1.
+..{"name": "gate", "command": ["unused"], "status": "passed", "exit_code": 0, "seconds": 0.0}
+{"name": "gate", "command": ["unused"], "status": "passed", "exit_code": 0, "seconds": 0.0}
+..........usage: python3.15 -m unittest [-h] {assemble,check,archive} ...
+python3.15 -m unittest: error: unsigned native release qualification requires macOS
+..Could not record release failure: [Errno 17] File exists: '/var/folders/td/c4mswb0s037__1vkvqxf_dfc0000gn/T/tmpytel2ob4/owned/failure.json'
+.....Starting owned
+Starting owned
+Starting owned
+..............................
+----------------------------------------------------------------------
+Ran 107 tests in 4.537s
+
+OK

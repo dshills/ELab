@@ -41,13 +41,16 @@ type workspace struct {
 	restored  bool
 }
 type webServer struct {
-	storeMu  sync.Mutex
-	assets   fs.FS
-	mu       sync.Mutex
-	sessions map[string]*workspace
-	commands map[string]workbench.Capability
-	root     string
-	instance string
+	lifecycle sync.RWMutex
+	stopping  bool
+	host      *hostRuntime
+	storeMu   sync.Mutex
+	assets    fs.FS
+	mu        sync.Mutex
+	sessions  map[string]*workspace
+	commands  map[string]workbench.Capability
+	root      string
+	instance  string
 }
 
 func newWebServer(root string) *webServer {
@@ -128,8 +131,10 @@ func (s *webServer) close() {
 	s.mu.Unlock()
 	for _, session := range sessions {
 		session.files.Lock()
-		_ = session.persist()
 		session.service.Close()
+		if err := session.persist(); err != nil {
+			log.Printf("Final project checkpoint failed: %v", err)
+		}
 		session.files.Unlock()
 	}
 }
@@ -218,6 +223,16 @@ func (s *webServer) handler() http.Handler {
 		if !strings.HasPrefix(r.URL.Path, "/api/") {
 			w.Header().Set("Cache-Control", "no-store")
 			files.ServeHTTP(w, r)
+			return
+		}
+		if strings.HasPrefix(r.URL.Path, "/api/host/") {
+			s.hostControl(w, r)
+			return
+		}
+		s.lifecycle.RLock()
+		defer s.lifecycle.RUnlock()
+		if s.stopping {
+			webError(w, 503, "ELab is saving and shutting down.")
 			return
 		}
 		session, err := s.workspace(w, r)
@@ -465,50 +480,39 @@ func main() {
 	address := flag.String("addr", "localhost:8788", "local web address")
 	dataDir := flag.String("data-dir", "", "persistent workspace directory (default: user config/ELab/web)")
 	dev := flag.Bool("dev", false, "serve frontend files from exp-web/static for development")
+	autoPort := flag.Bool("auto-port", false, "use an available local port if the preferred port is busy")
+	startup := flag.String("startup-file", "", "write private launch information to a new file")
+	stopFile := flag.String("stop-host", "", "save and stop the host described by a private launch file")
+	statusFile := flag.String("host-status", "", "check the host described by a private launch file")
 	flag.Parse()
-	host, _, err := net.SplitHostPort(*address)
-	if err != nil {
-		log.Fatal(err)
-	}
-	ip := net.ParseIP(host)
-	if host != "localhost" && (ip == nil || !ip.IsLoopback()) {
-		log.Fatal("ELab Web requires a loopback address")
-	}
-	config, err := os.UserConfigDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-	root := *dataDir
-	if root == "" {
-		root = filepath.Join(config, "ELab", "web")
-	}
-	err = os.MkdirAll(root, 0700)
-	if err != nil {
-		log.Fatal(err)
-	}
-	unlock, err := lockStore(root)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer unlock()
-	web := newWebServer(root)
-	if *dev {
-		web.assets = os.DirFS("exp-web/static")
-	}
-	defer web.close()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	go web.expire(ctx)
-	go web.autosave(ctx)
-	server := &http.Server{Addr: *address, Handler: web.handler(), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 90 * time.Second}
-	go func() {
-		<-ctx.Done()
-		shutdown, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		_ = server.Shutdown(shutdown)
-	}()
-	fmt.Printf("ELab Web → http://%s\nProjects & recovery → %s\n", *address, root)
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatal(err)
+	var err error
+	if *stopFile != "" || *statusFile != "" {
+		path := *stopFile
+		if path == "" {
+			path = *statusFile
+		}
+		var info hostInfo
+		info, err = readHostInfo(path)
+		if err == nil {
+			timeout := 45 * time.Second
+			if *stopFile == "" {
+				timeout = 3 * time.Second
+			}
+			control, cancel := context.WithTimeout(ctx, timeout)
+			if *stopFile != "" {
+				err = stopHost(control, info)
+			} else {
+				err = hostRequest(control, info, http.MethodGet, "status")
+			}
+			cancel()
+		}
+	} else {
+		err = runWebHost(ctx, hostOptions{address: *address, root: *dataDir, dev: *dev, autoPort: *autoPort, startupFile: *startup})
+	}
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
 	}
 }

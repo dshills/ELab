@@ -159,7 +159,7 @@ def source_inputs(root):
         if not raw:
             continue
         name = os.fsdecode(raw)
-        if not (name.endswith(('.go', '.py', '.sh', '.mod', '.sum', '.yml', '.yaml', '.js', '.mjs', '.html', '.css')) or name.startswith('third_party/') and name.endswith(('.json', '.gz'))):
+        if not (name.endswith(('.go', '.py', '.sh', '.mod', '.sum', '.yml', '.yaml', '.js', '.mjs', '.html', '.css', '.swift')) or name.startswith('third_party/') and name.endswith(('.json', '.gz'))):
             continue
         path = root / name
         inputs[name] = hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None

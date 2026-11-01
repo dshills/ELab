@@ -6,7 +6,31 @@ primary UI development direction on `exp-web`; the native client remains intact.
 
 ## Run
 
-From the repository root, using the Go version in `go.mod`:
+For the private macOS alpha, open **ELab Web.app**. It starts the local host and
+opens your default browser. Its window shows status and provides Open ELab,
+projects-folder/log access and Quit. Closing a browser tab keeps ELab running;
+closing the launcher or Command-Q saves and stops it. A failed checkpoint leaves
+ELab open so you can repair storage or export your work.
+
+The app reuses a compatible host already using the same library. It selects a
+free local port if the preferred port is occupied. If an older CLI server owns
+the library, close that server once before opening the app; its projects remain
+in place. The native ELab app remains a separate application.
+
+Build a self-contained macOS app and optional private-alpha ZIP:
+
+```sh
+python3 -B scripts/package_web.py --output 'build/web-alpha/ELab Web.app' \
+  --archive build/web-alpha/ELab-Web-0.1.0-alpha.1-macos-arm64.zip
+```
+
+Runtime users need neither Go nor Node. Building requires the Go toolchain and
+Xcode command-line tools. Packaging refuses existing outputs and records source,
+licenses, signatures and checksums. See the
+[launcher qualification](../docs/validation/web-launcher-alpha-20261101/README.md)
+for verification scope and signing/platform limits.
+
+For development, run from the repository root, using the Go version in `go.mod`:
 
 ```sh
 go run ./exp-web
