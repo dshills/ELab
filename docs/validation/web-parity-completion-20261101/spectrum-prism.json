@@ -1,0 +1,503 @@
+{
+  "tool": "prism",
+  "version": "1.0",
+  "runId": "49fb659e9f7e7a35ce8e0efb11c65f5a",
+  "repo": {
+    "root": ".",
+    "head": "4bcd3568e86aac991d0c923e8ea1e1661bf0673c",
+    "branch": "exp-web"
+  },
+  "inputs": {
+    "mode": "staged"
+  },
+  "summary": {
+    "counts": {
+      "low": 8,
+      "medium": 5,
+      "high": 0
+    },
+    "highestSeverity": "medium"
+  },
+  "findings": [
+    {
+      "id": "1a2e884771d3ab89",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Spectrum tab silently renders nothing when spectrumUI is not initialised",
+      "message": "All spectrum rendering is now delegated to the spectrumUI workbench through optional chaining (spectrumUI?.show() here, spectrumUI?.update() in renderAnalysisResult). If spectrumUI has not been assigned before the user switches to the spectrum tab (initialisation order, failed construction, or a missing assignment in the startup path), these calls silently no-op: the tab shows a blank panel, or stale sweep markup left over from the previous instrument, with no error surfaced. The previous inline implementation rendered the spectrum form unconditionally, so this failure mode is new and completely invisible. Note setInstrument is reachable from static markup as soon as the page loads, so if the workbench is wired up in an async init path this is a real race.",
+      "suggestion": "Construct the workbench synchronously during startup, before setInstrument can run, and then call it directly (spectrumUI.show() / spectrumUI.update()) so a missing dependency throws instead of being swallowed; at minimum make the no-op observable so the blank tab is diagnosable.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "exp-web/static/app.js",
+          "lines": {
+            "start": 168,
+            "end": 168
+          }
+        }
+      ],
+      "tags": [
+        "silent-failure",
+        "optional-chaining",
+        "refactor"
+      ],
+      "evidence": "function renderAnalysis(){if(instrument==='spectrum'){spectrumUI?.show();return;}if(instrument!=='sweep')return;$('analysis-body').dataset.instrument='sweep';",
+      "fix": {
+        "before": "function renderAnalysis(){if(instrument==='spectrum'){spectrumUI?.show();return;}if(instrument!=='sweep')return;$('analysis-body').dataset.instrument='sweep';",
+        "after": "function renderAnalysis(){if(instrument==='spectrum'){if(!spectrumUI)console.error('spectrum UI not initialised before use');spectrumUI?.show();return;}if(instrument!=='sweep')return;$('analysis-body').dataset.instrument='sweep';"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "f5da7367f21539aa",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Spectrum form submit handling removed with no replacement in this file",
+      "message": "The #analysis-body submit delegate previously issued `spectrum.live.set` when #spectrum-form was submitted; the rewrite only handles #sweep-form and silently swallows every other submit (preventDefault with no action). Unless the new spectrum module attaches its own submit listener for the spectrum form, enabling the live spectrum from the analysis panel becomes a silent no-op.",
+      "suggestion": "Verify that the new spectrum module binds submit on #spectrum-form and issues `spectrum.live.set`. If nothing does, restore the branch here: `if(e.target.id==='spectrum-form')await command('spectrum.live.set',{enabled:true,hold:false,probe_id:form.probe_id,window:form.window});else if(e.target.id==='sweep-form'){...}`. Do not bind it in both places or the command will fire twice per submit.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "exp-web/static/app.js",
+          "lines": {
+            "start": 231,
+            "end": 231
+          }
+        }
+      ],
+      "tags": [
+        "regression-risk",
+        "event-handling",
+        "spectrum",
+        "location-corrected"
+      ],
+      "evidence": " $('analysis-body').addEventListener('submit',async e=>{e.preventDefault();const form=Object.fromEntries(new FormData(e.target));if(e.target.id==='sweep-form'){const target=state.dc_sweep?.targets?.[Number(form.target)];if(!target){toast('This circuit has no sweep targets.',true);return;}await command('sweep.start',{settings:{component_id:target.component_id,parameter:target.parameter,start:form.start,stop:form.stop,spacing:form.spacing,points:Number(form.points),probe_ids:[form.probe_id]}},{message:'Sweep started.'});}});",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "03d38cd7c37c51da",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "at() hover mapping assumes canvas CSS size equals logical w/h",
+      "message": "`at()` subtracts `left`/`width` (canvas logical units from `prepareCanvas`) directly from `clientX - r.left` (CSS pixels). This is only correct if `prepareCanvas` returns CSS-pixel dimensions (e.g. a DPR-scaled context whose logical size equals the element's CSS size). If `prepareCanvas` returns backing-store dimensions (`canvas.width`/`canvas.height`) or the element is styled at a different size than its attribute size, every hover readout returned by `at()` will be skewed on that display.",
+      "suggestion": "Normalize the client offset by the ratio of logical to CSS width so the inverse mapping is correct regardless of the `prepareCanvas` contract (it is a no-op when both spaces already coincide).",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "exp-web/static/instrument-plot.mjs",
+          "lines": {
+            "start": 109,
+            "end": 110
+          }
+        }
+      ],
+      "tags": [
+        "canvas",
+        "hover",
+        "devicePixelRatio"
+      ],
+      "evidence": "      const r = canvas.getBoundingClientRect(),\n        f = Math.max(0, Math.min(1, (clientX - r.left - left) / width));",
+      "fix": {
+        "before": "      const r = canvas.getBoundingClientRect(),\n        f = Math.max(0, Math.min(1, (clientX - r.left - left) / width));",
+        "after": "      const r = canvas.getBoundingClientRect();\n      const scale = r.width > 0 ? w / r.width : 1;\n      const f = Math.max(\n        0,\n        Math.min(1, ((clientX - r.left) * scale - left) / width),\n      );"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "6337a1b8776a9232",
+      "severity": "medium",
+      "category": "bug",
+      "title": "Second clear-cursors command uses a stale expected identity",
+      "message": "The \"Clear cursors\" handler captures expected = owner before the first run() and reuses that stale value for the second run(). run() calls update() in its finally block, which refreshes owner whenever the first command changes identity() (e.g. a bumped document generation from the cursor.set command). The second run() then compares the old expected string against the new identity() and always throws \"Spectrum source changed.\" after cursor A was already cleared, leaving cursor B set and surfacing a bogus error toast.",
+      "suggestion": "Let the second call validate against the current view state instead of the pre-click snapshot: either omit the third argument (the default is the refreshed owner) or pass owner explicitly, as in the suggested fix.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "exp-web/static/spectrum.mjs",
+          "lines": {
+            "start": 311,
+            "end": 318
+          }
+        }
+      ],
+      "tags": [
+        "concurrency",
+        "state-staleness",
+        "location-corrected"
+      ],
+      "evidence": "        await run(\n          {\n            name: \"spectrum.cursor.set\",\n            params: { source, cursor: \"b\", clear: true },\n          },\n          api.guards(),\n          expected,\n        );",
+      "fix": {
+        "before": "        await run(\n          {\n            name: \"spectrum.cursor.set\",\n            params: { source, cursor: \"b\", clear: true },\n          },\n          api.guards(),\n          expected,\n        );",
+        "after": "        await run(\n          {\n            name: \"spectrum.cursor.set\",\n            params: { source, cursor: \"b\", clear: true },\n          },\n          api.guards(),\n          owner,\n        );"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "fb0083bc9f82cf3e",
+      "severity": "medium",
+      "category": "correctness",
+      "title": "New analysis dock sizing rule loses the cascade to the higher-specificity scope rule",
+      "message": "The added `.instrument-dock:has(.analysis-body:not(.hidden)):not(.collapsed)` rule has specificity (0,4,0), but the pre-existing rule on line 66, `.instrument-dock:has(.scope-controls:not(.hidden) .recording-player:not(.hidden)):not(.collapsed)`, computes to (0,6,0) because `:has()` and `:not()` take the specificity of their arguments. When a recording player is visible at the same time as the analysis body (e.g. analyzing a recording while its transport is shown), both rules match and the scope rule wins the cascade regardless of source order, so the dock is sized `max(var(--dock-height),350px)` / `calc(100vh - 270px)` instead of the intended 420px / `calc(100vh - 250px)`, leaving the analysis panel short or clipped.",
+      "suggestion": "Normalize specificity so the later analysis rule wins when both match. Wrapping the scope rule's `:has()` argument in `:where()` zeroes its argument specificity, dropping that rule to (0,2,0) vs (0,4,0) for the analysis rule, so the scope sizing still applies when the analysis body is hidden while the analysis sizing takes over when both are visible. `:where()` is supported everywhere `:has()` already is.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "exp-web/static/styles.css",
+          "lines": {
+            "start": 91,
+            "end": 91
+          }
+        }
+      ],
+      "tags": [
+        "css",
+        "specificity",
+        "cascade",
+        "has"
+      ],
+      "evidence": ".instrument-dock:has(.analysis-body:not(.hidden)):not(.collapsed){height:max(var(--dock-height),420px);max-height:calc(100vh - 250px)}",
+      "fix": {
+        "before": ".instrument-dock:has(.scope-controls:not(.hidden) .recording-player:not(.hidden)):not(.collapsed){height:max(var(--dock-height),350px);max-height:calc(100vh - 270px)}",
+        "after": ".instrument-dock:has(:where(.scope-controls:not(.hidden) .recording-player:not(.hidden))):not(.collapsed){height:max(var(--dock-height),350px);max-height:calc(100vh - 270px)}"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "643f0f9e43726e2c",
+      "severity": "low",
+      "category": "testing",
+      "title": "Finite-coordinate guard fails without any diagnostic context",
+      "message": "The Proxy guard is the test's only mechanism for verifying that plotInstrument emits finite coordinates, but assert.ok is called with no message. On failure, node:assert reports only \"The expression evaluated to a falsy value\", with no indication of which canvas method or which argument was non-finite. A regression in a 150,000-point plot would be very hard to localize from that output, defeating the test's stated purpose of catching non-finite coordinates.",
+      "suggestion": "Include the method name and the arguments in the assertion message, e.g. assert.ok(Number.isFinite(v), `non-finite argument to ctx.${String(key)}(${args.join(\", \")})`), so the offending draw call and value are shown when the guard fires.",
+      "confidence": 0.55,
+      "locations": [
+        {
+          "path": "exp-web/instrument-plot.test.mjs",
+          "lines": {
+            "start": 18,
+            "end": 18
+          }
+        }
+      ],
+      "tags": [
+        "testing",
+        "diagnostics"
+      ],
+      "evidence": "              if (typeof v === \"number\") assert.ok(Number.isFinite(v));",
+      "fix": {
+        "before": "              if (typeof v === \"number\") assert.ok(Number.isFinite(v));",
+        "after": "              if (typeof v === \"number\") {\n                assert.ok(\n                  Number.isFinite(v),\n                  `non-finite argument to ctx.${String(key)}(${args.join(\", \")})`,\n                );\n              }"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "a2cbc8848d638379",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Instrument switch buttons outside .instrument-tabs no longer receive click handlers",
+      "message": "The binding selector was narrowed from all `[data-instrument]` elements to `.instrument-tabs [data-instrument]`. Any instrument-switch control rendered outside that container (e.g. in a dialog, the inspector, or a mobile control bar) silently loses its onclick handler and setInstrument is never invoked from it.",
+      "suggestion": "Confirm every element with `data-instrument` in index.html lives inside `.instrument-tabs`. If switch buttons exist elsewhere, either move them into the tabs container or bind them explicitly, e.g. give all switch buttons a dedicated attribute/class such as `[data-instrument-tab]` and query that instead of relying on the container.",
+      "confidence": 0.3,
+      "locations": [
+        {
+          "path": "exp-web/static/app.js",
+          "lines": {
+            "start": 191,
+            "end": 191
+          }
+        }
+      ],
+      "tags": [
+        "regression-risk",
+        "event-binding"
+      ],
+      "evidence": " document.querySelectorAll('.instrument-tabs [data-instrument]').forEach(b=>b.onclick=()=>setInstrument(b.dataset.instrument));",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "d7534c05ffcb7f19",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Scope may not repaint when a recording completes while Scope is already open",
+      "message": "With watchRecording now passing navigate=instrument==='scope', the only way this line fires from that caller is when instrument is already 'scope' (the internal instrument===navigationSource check forbids any switch). If setInstrument short-circuits when the requested instrument equals the current one, nothing re-renders the scope after recording.view.set flips it to recorded mode: a user watching the live scope when the recording finishes keeps a stale view while the toast claims the captured waveforms are available.",
+      "suggestion": "Trigger the scope repaint explicitly rather than relying on setInstrument, e.g. call the same render/refresh path setInstrument uses (or make setInstrument repaint even when the instrument is unchanged) so the newly recorded data is drawn immediately.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "exp-web/static/app.js",
+          "lines": {
+            "start": 264,
+            "end": 264
+          }
+        }
+      ],
+      "tags": [
+        "race-condition",
+        "ui-refresh",
+        "recording"
+      ],
+      "evidence": "if(navigate&&instrument===navigationSource)setInstrument('scope');",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "74752f2cbe2dd1e3",
+      "severity": "low",
+      "category": "correctness",
+      "title": "Markers do not contribute to the x-extent and are clipped invisible",
+      "message": "The x-extent is computed only from `points`, but markers are then drawn inside the plot clip. Any marker with x outside `[minX, maxX]` maps to `px(m.x)` outside `[left, right]` and is clipped away completely, so the marker (line and label) silently disappears rather than being shown or signaled.",
+      "suggestion": "If markers can legitimately fall outside the data range (e.g. thresholds), include finite marker x values in the min/max computation so the domain covers them; otherwise document/assert that markers must lie within the data extent.",
+      "confidence": 0.45,
+      "locations": [
+        {
+          "path": "exp-web/static/instrument-plot.mjs",
+          "lines": {
+            "start": 15,
+            "end": 22
+          }
+        }
+      ],
+      "tags": [
+        "canvas",
+        "markers",
+        "log-scale"
+      ],
+      "evidence": "  for (const p of points) {\n    if (!Number.isFinite(p.x) || !Number.isFinite(p.y) || (log && p.x <= 0))\n      continue;\n    minX = Math.min(minX, p.x);\n    maxX = Math.max(maxX, p.x);\n    minY = Math.min(minY, p.y);\n    maxY = Math.max(maxY, p.y);\n  }",
+      "fix": {
+        "before": "  if (!Number.isFinite(minX)) return null;\n  if (minX === maxX) maxX = minX + (Math.abs(minX) || 1) * 0.01;",
+        "after": "  for (const m of markers) {\n    if (Number.isFinite(m.x) && (!log || m.x > 0)) {\n      minX = Math.min(minX, m.x);\n      maxX = Math.max(maxX, m.x);\n    }\n  }\n  if (!Number.isFinite(minX)) return null;\n  if (minX === maxX) maxX = minX + (Math.abs(minX) || 1) * 0.01;"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "e6f1af9ca9b97dcd",
+      "severity": "low",
+      "category": "bug",
+      "title": "Marker labels near the right edge are clipped away",
+      "message": "Marker labels are drawn while the plot-area clip (`ctx.rect(left, top, width, height)` / `ctx.clip()`) is still active. A marker whose x is near `maxX` places its label at `px(m.x) + 4`, past the right clip edge, so the label is cut off or disappears entirely instead of being readable.",
+      "suggestion": "Clamp the label x position into the plot area (measuring the text first), or draw markers/labels after `ctx.restore()` so labels may extend into the margin.",
+      "confidence": 0.6,
+      "locations": [
+        {
+          "path": "exp-web/static/instrument-plot.mjs",
+          "lines": {
+            "start": 104,
+            "end": 104
+          }
+        }
+      ],
+      "tags": [
+        "canvas",
+        "markers",
+        "clipping"
+      ],
+      "evidence": "    if (m.label != null) ctx.fillText(String(m.label), px(m.x) + 4, top + 12);",
+      "fix": {
+        "before": "    if (m.label != null) ctx.fillText(String(m.label), px(m.x) + 4, top + 12);",
+        "after": "    if (m.label != null) {\n      const label = String(m.label);\n      const lx = Math.max(\n        left,\n        Math.min(px(m.x) + 4, right - 4 - ctx.measureText(label).width),\n      );\n      ctx.fillText(label, lx, top + 12);\n    }"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "db6b01e7a2eab89a",
+      "severity": "low",
+      "category": "correctness",
+      "title": "liveSpectrumToggle fallback omits probe_id and fundamental_hz sent to spectrum.live.set",
+      "message": "When no live settings exist yet (fresh session), clicking \"Turn FFT on\" sends spectrum.live.set with params built from the fallback object, which omits probe_id and fundamental_hz. Every other producer of the same spectrum.live.set command (spectrumEdit) always includes both fields, so the first toggle either fails server-side validation or starts the FFT with unspecified measurement/distortion defaults that differ from what the form would send.",
+      "suggestion": "Make the fallback mirror the fields spectrumEdit sends: include fundamental_hz (\"0\") and a probe_id derived from the current scope selection (e.g. state.scope?.selected?.[0]), or reuse the same defaults helper in both paths so the command payload shape stays identical.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "exp-web/static/spectrum.mjs",
+          "lines": {
+            "start": 50,
+            "end": 56
+          }
+        }
+      ],
+      "tags": [
+        "api-contract",
+        "defaults"
+      ],
+      "evidence": "  const cfg = state.spectrum?.live?.settings || {\n    enabled: false,\n    hold: false,\n    window: \"hann\",\n    samples: 0,\n    harmonics: 5,\n  };",
+      "fix": {
+        "before": "  const cfg = state.spectrum?.live?.settings || {\n    enabled: false,\n    hold: false,\n    window: \"hann\",\n    samples: 0,\n    harmonics: 5,\n  };",
+        "after": "  const cfg = state.spectrum?.live?.settings || {\n    enabled: false,\n    hold: false,\n    window: \"hann\",\n    samples: 0,\n    harmonics: 5,\n    fundamental_hz: \"0\",\n    probe_id: state.scope?.selected?.[0],\n  };"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "483ee04f7ecdb50e",
+      "severity": "low",
+      "category": "bug",
+      "title": "run() can be re-entered while a command is in flight",
+      "message": "run() has no re-entrancy guard. Buttons are disabled while busy, but the canvas click path (cursor placement) and peak buttons bypass nothing: a second click during the first await starts an overlapping command, and the second invocation's finally block resets busy = false while the first command is still in flight, re-enabling the whole UI mid-command and allowing further overlapping commands.",
+      "suggestion": "Reject concurrent invocations at the top of run(), e.g. if (busy) throw new Error(\"A spectrum command is already in progress.\"); before setting busy = true, so the existing catch handlers surface it.",
+      "confidence": 0.5,
+      "locations": [
+        {
+          "path": "exp-web/static/spectrum.mjs",
+          "lines": {
+            "start": 212,
+            "end": 215
+          }
+        }
+      ],
+      "tags": [
+        "concurrency",
+        "async",
+        "location-corrected"
+      ],
+      "evidence": "  async function run(edit, guard = api.guards(), expected = owner) {\n    if (expected !== identity())\n      throw new Error(\"Spectrum source changed. Review the current controls.\");\n    busy = true;",
+      "fix": {
+        "before": "  async function run(edit, guard = api.guards(), expected = owner) {\n    if (expected !== identity())\n      throw new Error(\"Spectrum source changed. Review the current controls.\");\n    busy = true;",
+        "after": "  async function run(edit, guard = api.guards(), expected = owner) {\n    if (busy) throw new Error(\"A spectrum command is already in progress.\");\n    if (expected !== identity())\n      throw new Error(\"Spectrum source changed. Review the current controls.\");\n    busy = true;"
+      },
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    },
+    {
+      "id": "f1eefd35e9bd73c4",
+      "severity": "low",
+      "category": "correctness",
+      "title": "flex-basis:100% declarations inside .analysis-body appear to be ineffective",
+      "message": "`.analysis-body .settings-feedback{flex-basis:100%}` (line 90) and `.instrument-settings{flex-basis:100%}` (line 92) only affect layout if `.analysis-body` is a wrapping row flex container, but no rule in this diff gives `.analysis-body` `display:flex`. These declarations look copied from the `.scope-cursor-form .settings-feedback{flex-basis:100%}` pattern (line 108) where the parent is `display:flex;flex-wrap:wrap`. In a block or column-flex `.analysis-body` they are inert (children are already full width), and if `.analysis-body` were a row flex container the other children (`.analysis-source`, `#spectrum-readings`, `.analysis-cursors`, `.analysis-peaks`, `.analysis-export`) lack `flex-basis:100%` and would be laid out side by side. Either way the declarations do not do what they appear to.",
+      "suggestion": "Make the intended layout explicit: if `.analysis-body` is a normal block/column container, drop the two `flex-basis:100%` declarations; if it is meant to be a wrapping row, add `.analysis-body{display:flex;flex-wrap:wrap}` and give every full-width child (`.settings-feedback`, `.instrument-settings`, `.instrument-chart`, `#spectrum-readings`, `.analysis-source`, `.analysis-cursors`, `.analysis-peaks`, `.analysis-export`) `flex-basis:100%` or `flex:1 1 100%`.",
+      "confidence": 0.4,
+      "locations": [
+        {
+          "path": "exp-web/static/styles.css",
+          "lines": {
+            "start": 90,
+            "end": 92
+          }
+        }
+      ],
+      "tags": [
+        "css",
+        "dead-code",
+        "flexbox"
+      ],
+      "evidence": ".analysis-body .settings-feedback{flex-basis:100%}.analysis-body details:not(.instrument-settings){margin-top:12px}",
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "timing": {
+    "gitMs": 0,
+    "llmMs": 2432552,
+    "totalMs": 1121023
+  },
+  "_provenance": [
+    {
+      "ai_generated": true,
+      "provider": "wafer",
+      "model": "GLM-5.3"
+    }
+  ],
+  "coverage": {
+    "reviewer": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      }
+    ],
+    "files": 9,
+    "bytes": 68928,
+    "chunks": 4,
+    "llmCalls": 13,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3",
+        "input": 56234,
+        "output": 383742,
+        "reasoning": 377636,
+        "cachedInput": 32256
+      }
+    ],
+    "widenedFiles": 2,
+    "splits": 4,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  },
+  "discarded": [
+    {
+      "finding": {
+        "id": "1d9abd798a6b10b7",
+        "severity": "medium",
+        "category": "security",
+        "title": "Unescaped cfg.start_s / cfg.end_s interpolated into HTML attributes",
+        "message": "In the build() template, cfg.start_s and cfg.end_s are interpolated into input value attributes without escapeHTML, while every other dynamic value in the same template (o.id, p.id, p.label, p.unit, cfg.fundamental_hz) is escaped. These values are user-entered analysis settings echoed back from the server, so a value containing a quote breaks out of the attribute and injects arbitrary markup/script into the analysis panel (stored XSS if recording settings are visible to other users).",
+        "suggestion": "Wrap both interpolations with esc(), exactly as the adjacent fundamental_hz field already does: value=\"${esc(cfg.start_s || 0)}\" and value=\"${esc(cfg.end_s || 0)}\".",
+        "confidence": 0.65,
+        "locations": [
+          {
+            "path": "exp-web/static/spectrum.mjs",
+            "lines": {
+              "start": 102,
+              "end": 102
+            }
+          }
+        ],
+        "tags": [
+          "xss",
+          "escaping",
+          "innerHTML"
+        ],
+        "evidence": "value=\"${cfg.start_s || 0}\" required></label><label>End time<input name=\"end_s\" value=\"${cfg.end_s || 0}\"",
+        "fix": {
+          "before": "value=\"${cfg.start_s || 0}\" required></label><label>End time<input name=\"end_s\" value=\"${cfg.end_s || 0}\"",
+          "after": "value=\"${esc(cfg.start_s || 0)}\" required></label><label>End time<input name=\"end_s\" value=\"${esc(cfg.end_s || 0)}\""
+        },
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      },
+      "reason": "quoted evidence not found in exp-web/static/spectrum.mjs"
+    },
+    {
+      "finding": {
+        "id": "16ffd8d2d8ce3d55",
+        "severity": "low",
+        "category": "maintainability",
+        "title": "Interlocked navigate flag and staleness check spread across caller and callee",
+        "message": "Navigation policy is now split across caller and callee and interlocks non-obviously: watchRecording passes navigate=instrument==='scope', which is exactly the value viewRecording stores in navigationSource, so the effective condition ('was on scope at call time and still is now') is spread over two functions. It behaves correctly today, but editing either side can silently change tab-navigation behavior, and nothing documents the intent.",
+        "suggestion": "Document the contract: add a JSDoc note on viewRecording's navigate parameter (e.g. 'switch to the Scope tab afterwards, unless the user changed instrument meanwhile') and a brief comment at the watchRecording call site explaining that instrument==='scope' means 'refresh scope only, never yank the user to another tab'.",
+        "confidence": 0.5,
+        "locations": [
+          {
+            "path": "exp-web/static/app.js",
+            "lines": {
+              "start": 275,
+              "end": 275
+            }
+          }
+        ],
+        "tags": [
+          "readability",
+          "api-design",
+          "navigation"
+        ],
+        "evidence": "await viewRecording(id,true,instrument==='scope')",
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      },
+      "reason": "quoted evidence not found in exp-web/static/app.js"
+    }
+  ],
+  "suppressed": []
+}

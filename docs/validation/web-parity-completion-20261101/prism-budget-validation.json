@@ -1,0 +1,50 @@
+{
+  "initial_output_tokens": 32768,
+  "unsplittable_retry_output_tokens": 65536,
+  "previous_initial_output_tokens": 8192,
+  "previous_retry_output_tokens": 16384,
+  "installed_binary_sha256": "c1e616892944eda102714d68445c37cfec09e0af7b3d1df524cf7e0bdcdb6201",
+  "source_base_commit": "abbd4acc2e53949a30ed33ec334f2e55206e4e40",
+  "source_patch": "build/prism-output-budget.patch",
+  "checks": {
+    "review_race_tests": "passed (2.381 s)",
+    "review_vet": "passed",
+    "regression": "A simulated provider requiring 24000 output tokens completes on the initial request without splitting.",
+    "provider_race_tests": "passed (1.266 s)",
+    "provider_vet": "passed"
+  },
+  "live_review_report": "build/prism-web-spectrum-budget-timeout.json",
+  "live_review_status": "complete",
+  "wafer_request_timeout_seconds": 900,
+  "previous_review_report": "build/prism-web-spectrum-higher-limit.json",
+  "live_review_coverage": {
+    "reviewer": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3"
+      }
+    ],
+    "files": 9,
+    "bytes": 68928,
+    "chunks": 4,
+    "llmCalls": 13,
+    "cacheHit": false,
+    "cachedChunks": 0,
+    "tokens": [
+      {
+        "provider": "wafer",
+        "model": "GLM-5.3",
+        "input": 56234,
+        "output": 383742,
+        "reasoning": 377636,
+        "cachedInput": 32256
+      }
+    ],
+    "widenedFiles": 2,
+    "splits": 4,
+    "excluded": [],
+    "truncatedBytes": 0,
+    "skipped": [],
+    "complete": true
+  }
+}

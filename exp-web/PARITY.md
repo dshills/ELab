@@ -17,7 +17,7 @@ qualified native alpha.
 | Measurements | Accepted readings, stale-state explanations, native wire colors/current cues, pinned readings, LED and seven-segment indicators, IC labels |
 | Scope | Direct live/captured source picker, trace chooser, precise time windows and cursors, A/B values and deltas, exact current sample markers/readings, DC points and recorded reference overlay |
 | Recording analysis | Direct capture settings/progress/cancel, keep toggle, playback/scrubber, index/time seek, speed and interval RMS/statistics; import/export, threshold timing, step response and comparison in Tools |
-| Spectrum | Live FFT/hold/settings, recorded FFT/THD, native ranked peaks and frequency cursor measurements in Tools/results; plot in Spectrum |
+| Spectrum | Dedicated live/recorded source and capture/channel selection, FFT window/grid and fundamental/harmonics, hold/off, native ranked peaks and A/B frequency cursors/deltas, THD and recorded exports |
 | Sweeps | DC, AC gain/phase, noise and loop response, spacing/point/probe settings, retained selection, exact cursor, keep/import/export and result trace plot |
 | Tolerances | Seeded native Monte Carlo settings, progress, trials/statistics and full JSON/CSV export |
 | Projects | Native `.elab` import/export, kept recordings/sweeps/models, named local library and Save a copy |
@@ -90,11 +90,19 @@ entry, trace/window/cursor changes, interval RMS, invalid-capture correction,
 single-point DC rendering and disabled DC playback, source changes in another tab,
 and a 600 × 900 layout. See [evidence and internal review](../docs/validation/web-recorded-scope-20261101/README.md).
 
+### Spectrum workflow, 2026-11-01
+
+The dedicated Spectrum now exposes live and recorded FFT settings, native peaks,
+exact frequency/plot cursors, distortion details and recorded exports. It keeps
+captured results separate from live frames and refuses stale source edits. All
+17 frontend tests and the race-enabled native FFT HTTP regression passed. Prism
+completed with full coverage; accepted findings were fixed and internally checked.
+See [evidence and finding resolutions](../docs/validation/web-parity-completion-20261101/spectrum-review.md).
+
 ### Remaining workflow work
 
 The feature-family table includes native commands exposed through Tools. Dedicated
-web workflows still need the next usability passes: spectrum live/recorded source,
-hold, peaks/cursors and distortion; sweep method selection, retained-result
+web workflows still need the next usability passes: sweep method selection, retained-result
 navigation and plot cursors; and recording comparison, threshold timing and step
 response. These are available through native forms today. Their direct workspace
 presentation has not yet reached the native client's level.
