@@ -1,0 +1,147 @@
+{
+  "run_url": "https://github.com/dshills/ELab/actions/runs/41355615048",
+  "source_commit": "e8508429f507b1147d8223e1ed36598ff652554e",
+  "platform": "ubuntu-24.04",
+  "playwright": "1.64.1",
+  "axe_playwright": "4.14.0",
+  "browsers": [
+    {
+      "engine": "chromium",
+      "tests": [
+        {
+          "name": "keyboard tabs, dialog naming, focus return and text composition",
+          "status": "passed",
+          "duration_ms": 749,
+          "retries": 0
+        },
+        {
+          "name": "edit, undo, save, reload and export a native project",
+          "status": "passed",
+          "duration_ms": 1187,
+          "retries": 0
+        },
+        {
+          "name": "capture, exact keyboard playback and retained analysis",
+          "status": "passed",
+          "duration_ms": 1218,
+          "retries": 0
+        },
+        {
+          "name": "narrow layout exposes parts and inspector without losing keyboard controls",
+          "status": "passed",
+          "duration_ms": 564,
+          "retries": 0
+        },
+        {
+          "name": "workbench and modal have no serious or critical automated accessibility violations",
+          "status": "passed",
+          "duration_ms": 2132,
+          "retries": 0
+        }
+      ],
+      "accessibility_scans": [
+        {
+          "view": "workbench-accessibility",
+          "violations": []
+        },
+        {
+          "view": "projects-accessibility",
+          "violations": []
+        }
+      ],
+      "html_report_sha256": "48dfd43d4f3949039cc91a9a642dd6d0c228bc5a2bdf66a854e108bfe5fa8c95"
+    },
+    {
+      "engine": "firefox",
+      "tests": [
+        {
+          "name": "keyboard tabs, dialog naming, focus return and text composition",
+          "status": "passed",
+          "duration_ms": 1690,
+          "retries": 0
+        },
+        {
+          "name": "edit, undo, save, reload and export a native project",
+          "status": "passed",
+          "duration_ms": 1345,
+          "retries": 0
+        },
+        {
+          "name": "capture, exact keyboard playback and retained analysis",
+          "status": "passed",
+          "duration_ms": 1258,
+          "retries": 0
+        },
+        {
+          "name": "narrow layout exposes parts and inspector without losing keyboard controls",
+          "status": "passed",
+          "duration_ms": 793,
+          "retries": 0
+        },
+        {
+          "name": "workbench and modal have no serious or critical automated accessibility violations",
+          "status": "passed",
+          "duration_ms": 2525,
+          "retries": 0
+        }
+      ],
+      "accessibility_scans": [
+        {
+          "view": "workbench-accessibility",
+          "violations": []
+        },
+        {
+          "view": "projects-accessibility",
+          "violations": []
+        }
+      ],
+      "html_report_sha256": "1e4eeaba412ef5e60cd0caa9cdcf6601cace15dab6007264694491be12c88676"
+    },
+    {
+      "engine": "webkit",
+      "tests": [
+        {
+          "name": "keyboard tabs, dialog naming, focus return and text composition",
+          "status": "passed",
+          "duration_ms": 6966,
+          "retries": 0
+        },
+        {
+          "name": "edit, undo, save, reload and export a native project",
+          "status": "passed",
+          "duration_ms": 3318,
+          "retries": 0
+        },
+        {
+          "name": "capture, exact keyboard playback and retained analysis",
+          "status": "passed",
+          "duration_ms": 2043,
+          "retries": 0
+        },
+        {
+          "name": "narrow layout exposes parts and inspector without losing keyboard controls",
+          "status": "passed",
+          "duration_ms": 1633,
+          "retries": 0
+        },
+        {
+          "name": "workbench and modal have no serious or critical automated accessibility violations",
+          "status": "passed",
+          "duration_ms": 3009,
+          "retries": 0
+        }
+      ],
+      "accessibility_scans": [
+        {
+          "view": "workbench-accessibility",
+          "violations": []
+        },
+        {
+          "view": "projects-accessibility",
+          "violations": []
+        }
+      ],
+      "html_report_sha256": "3fff95fba5e7793624516b6d2de7d95a983f410e25b210d24d261e0d56eeca12"
+    }
+  ]
+}

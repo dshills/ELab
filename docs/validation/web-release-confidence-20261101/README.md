@@ -49,7 +49,18 @@ was included by the visible-label comparison. The next fix adds real text-node
 boundaries and lets the brand derive its name from its nondecorative contents.
 The gate remains enabled for the next run.
 
-Final hosted results are pending. Before this milestone, GitHub had only main; its
+The [final browser run](https://github.com/dshills/ELab/actions/runs/41355615048)
+at `e8508429f507b1147d8223e1ed36598ff652554e` passes all 15 journeys without
+retries. Inspection of the archived reports confirms all six accessibility scans
+(workbench and projects modal on each engine) contain zero violations, including
+moderate/minor findings. [Durable results](browser-results.json) retain individual
+tests, durations, scan results and original HTML-report checksums. Reports are
+kept in GitHub artifacts for 14 days; local copies are under the ignored build
+directory. These results cover the tested views and do not certify the whole app.
+
+The source runtime is unchanged by this evidence-only update. Linux portable
+qualification is still running, and macOS is queued for a hosted runner.
+Before this milestone, GitHub had only main; its
 latest quality run at `cd6dcdcdd123c1356c8aa8e525a146b47ed96f22` passed. That result
 does not qualify the web branch.
 
