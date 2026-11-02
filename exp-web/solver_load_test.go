@@ -16,7 +16,16 @@ func TestWeb555LiveClockSurvivesCPUContention(t *testing.T) {
 	f := fixture(t)
 	f.command("example.load", workbench.ExampleLoadParams{ID: "555-tone", DiscardChanges: true})
 	f.command("simulation.pause", struct{}{})
+	// Pause can cancel the example's initial asynchronous solve before it has
+	// published a sample. Restart while paused and await an accepted baseline
+	// before introducing CPU contention, as in the native capture fixtures.
+	f.command("simulation.restart", struct{}{})
 	f.wait()
+	baseline := f.state()
+	if baseline.Transient == nil || baseline.Mixed == nil || baseline.Status == "error" || baseline.Transient.Stale {
+		t.Fatalf("555 fixture has no accepted initial sample: status=%s diagnostics=%+v", baseline.Status, baseline.Diagnostics)
+	}
+	start := baseline.Transient.Sample.Time
 	stop, ready := make(chan struct{}), make(chan struct{}, 8)
 	var workers sync.WaitGroup
 	for i := 0; i < 8; i++ {
@@ -42,12 +51,11 @@ func TestWeb555LiveClockSurvivesCPUContention(t *testing.T) {
 	for i := 0; i < 8; i++ {
 		<-ready
 	}
-	start := f.state().Transient.Sample.Time
 	f.command("simulation.resume", struct{}{})
 	deadline := time.Now().Add(20 * time.Second)
 	for time.Now().Before(deadline) {
 		state := f.state()
-		if state.Status == "error" || state.Transient.Stale {
+		if state.Status == "error" || state.Transient == nil || state.Mixed == nil || state.Transient.Stale {
 			t.Fatal("CPU contention stopped a valid live circuit", state.Diagnostics)
 		}
 		if state.Transient.Sample.Time >= start+.001 {

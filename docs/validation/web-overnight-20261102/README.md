@@ -53,11 +53,50 @@ The already-running Safari session was then reused without another launch.
 The cause of the tool stall is not established. No claim is made that the entire
 planned overnight pass completed during that interval.
 
-## Remaining qualification
+## Full qualification and further findings
 
-The original full local quality run was normally interrupted after the Safari
-finding so all final checks can run against stable source. It is not a passed
-receipt. Full native quality, updated hosted browser journeys, packaged runtime,
-restart/recovery, pointer resizing and further Safari workflows remain to be
-completed. VoiceOver speech/navigation and human usability evaluation are not
-established by native accessibility-tree inspection alone.
+The original local run was normally interrupted after the Safari finding. The
+subsequent [full native receipt](local-native-quality.json), from committed
+`ce595eed`, passes all twelve gates with unchanged source inputs: Python, PRD,
+inventory, frontend, shared race/vet, lint, native desktop race/vet and rendered
+race/vet. The three race gates took 494.621, 453.087 and 825.316 seconds.
+
+[Hosted run 41419426333](https://github.com/dshills/ELab/actions/runs/41419426333)
+passes Linux and all three browser jobs, but macOS exposed a separate test setup
+race in `TestWeb555LiveClockSurvivesCPUContention`. Pausing immediately after an
+example load can correctly cancel its initial asynchronous solve before a sample
+exists. The test dereferenced that absent transient. Setup now explicitly
+restarts while paused, waits, and validates its accepted initial sample before
+starting the eight CPU burners. Missing/error samples fail with diagnostics.
+The one-CPU load, 20-second progress deadline, required simulated progress and
+KCL/power limits are unchanged; there are no numerical relaxations or retries.
+Internal review compared this setup to the native capture fixtures and checked
+burner cleanup on all outcomes. The corrected test passes 20 consecutive race
+runs (49.842 s); the entire web race suite (12.624 s) and root/native lint pass.
+
+Further desktop checks:
+
+- Chrome pointer drags resize all three dividers, repeated drags work, keyboard
+  resizing works, and the body cursor/resizing state clears after each gesture.
+- The H-bridge has 26 components/23 wires, including four individual MOSFETs.
+  With the native step controls, RL reads -4.725 V/-47.25 mA at 19 ms and
+  +4.725 V/+47.25 mA at 21 ms, across the 20 ms direction change.
+- A retained 40 ms capture contains 45 exact stored samples, including event
+  frames. Keyboard End reaches index 44 at 40 ms; Home/Right reaches index 1 at
+  1 ms and displays -4.7253 V/-47.253 mA from the captured rows.
+- The native `.elab` download exists and parses as format `elab.schematic`,
+  version 4, with all four MOSFETs and one retained recording. Its SHA-256 is
+  `1696c9b1d0bd6572b477324f3a16662e069d6e8c331c0197d46fcc949a8eb185`.
+- Safari selected that exported file through its native picker and reached the
+  replacement/recovery confirmation. Completion of that reimport is not claimed.
+
+![H-bridge after the direction reversal](hbridge-reversal.jpg)
+
+The browser download-event hook stalled for about 2.6 hours despite a ten-second
+timeout. The actual export was verified independently from the app-created file;
+the stalled hook is not used as evidence of success. No cause for these tool
+stalls is established. After the owner returned, work continued offscreen.
+
+Updated hosted macOS confirmation and packaged candidate checks remain pending.
+VoiceOver speech/navigation and human usability evaluation are not established
+by native accessibility-tree inspection alone.
