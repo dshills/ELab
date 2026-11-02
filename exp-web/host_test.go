@@ -183,7 +183,7 @@ func TestHostCredentialsRejectUnsafeAddressesLinksAndRedirects(t *testing.T) {
 	var reached atomic.Int32
 	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { reached.Add(1) }))
 	defer target.Close()
-	redirect := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { http.Redirect(w, r, target.URL, 302) }))
+	redirect := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { http.Redirect(w, r, target.URL, http.StatusFound) }))
 	defer redirect.Close()
 	info.URL = redirect.URL + "/"
 	if hostRequest(context.Background(), info, "GET", "status") == nil || reached.Load() != 0 {

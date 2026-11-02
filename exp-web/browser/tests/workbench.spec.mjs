@@ -32,6 +32,22 @@ test('keyboard tabs, dialog naming, focus return and text composition',async ({p
  await expect(page.getByRole('button',{name:'Projects',exact:true})).toBeFocused();
  await page.locator('#schematic').dispatchEvent('keydown',{key:'w',isComposing:true,bubbles:true});
  await expect(page.locator('[data-tool="select"]')).toHaveClass(/active/);
+ const resistor=page.locator('[data-object="R1"]');
+ await resistor.press('Enter');
+ await expect(resistor).toBeFocused();
+ await expect(page.locator('.selected-heading h2')).toHaveText('R1');
+ const run=await page.locator('#run-button').textContent();
+ const capacitor=page.locator('[data-object="C1"]');
+ await capacitor.press('Space');
+ await expect(page.locator('.selected-heading h2')).toHaveText('C1');
+ await expect(capacitor).toBeFocused();
+ await expect(page.locator('#run-button')).toHaveText(run);
+ await capacitor.press('ArrowRight');
+ await expect(capacitor).toBeFocused();
+ await resistor.dispatchEvent('click',{detail:0});
+ await expect(page.locator('.selected-heading h2')).toHaveText('R1');
+ await expect(resistor).toBeFocused();
+ await expect(page.locator('#run-button')).toHaveText(run);
 });
 
 test('edit, undo, save, reload and export a native project',async ({page})=>{

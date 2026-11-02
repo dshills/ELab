@@ -1,10 +1,25 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {componentName,workbenchKey,nextTabIndex,syncTabs,bindTabs} from './static/accessibility.mjs';
+import {componentName,workbenchKey,nextTabIndex,syncTabs,bindTabs,schematicFocus,restoreSchematicFocus} from './static/accessibility.mjs';
 
 test('component spoken names contain the complete visible label in drawing order',()=>{
  assert.equal(componentName({id:'R1',name:'Resistor',value_text:'10 kΩ',labels:[{text:'R'},{text:'+'}]}),'R + R1 10 kΩ Resistor');
  assert.equal(componentName({id:'G1',name:'Ground'}),'G1 Ground');
+});
+
+test('schematic redraw restores a focused object or terminal and handles removal',()=>{
+ const object={dataset:{object:'R1'},tabIndex:0,focus(){this.focused=true;}};
+ const hit={tabIndex:0,focus(){this.focused=true;}};
+ const pin={dataset:{pin:'R1.1'},querySelector:()=>hit};
+ const root={ownerDocument:{activeElement:{closest:selector=>selector==='[data-object]'?object:null}},contains:()=>true,querySelectorAll:selector=>selector==='[data-object]'?[object]:[pin],focus(){this.focused=true;}};
+ const key=schematicFocus(root);assert.deepEqual(key,{kind:'object',id:'R1'});
+ restoreSchematicFocus(root,key);assert.ok(object.focused);
+ root.ownerDocument.activeElement.closest=selector=>selector==='[data-pin]'?pin:null;
+ const terminal=schematicFocus(root);assert.deepEqual(terminal,{kind:'pin',id:'R1.1'});
+ restoreSchematicFocus(root,terminal);assert.ok(hit.focused);
+ hit.tabIndex=-1;restoreSchematicFocus(root,terminal);assert.ok(root.focused);
+ root.focused=false;restoreSchematicFocus(root,{kind:'object',id:'removed'});assert.ok(root.focused);
+ root.contains=()=>false;assert.equal(schematicFocus(root),null);
 });
 
 const event=(key,options={})=>({key,target:{closest:()=>null},...options});

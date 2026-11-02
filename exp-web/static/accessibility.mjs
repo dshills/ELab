@@ -3,6 +3,22 @@ export function componentName(part) {
  return [...(part.labels||[]).map(label=>label.text),part.id,part.value_text,part.name].filter(Boolean).join(' ');
 }
 
+export function schematicFocus(root) {
+ const active=root.ownerDocument.activeElement;
+ if(!root.contains(active))return null;
+ const object=active.closest('[data-object]'),pin=active.closest('[data-pin]');
+ return object?{kind:'object',id:object.dataset.object}:pin?{kind:'pin',id:pin.dataset.pin}:null;
+}
+
+export function restoreSchematicFocus(root,focus) {
+ if(!focus)return;
+ const selector=focus.kind==='object'?'[data-object]':'[data-pin]';
+ const item=[...root.querySelectorAll(selector)].find(node=>node.dataset[focus.kind]===focus.id);
+ const target=focus.kind==='pin'?item?.querySelector('.pin-hit'):item;
+ // A removed part or a terminal leaving wire mode returns focus to the sheet.
+ (target&&target.tabIndex>=0?target:root).focus();
+}
+
 export function workbenchKey(event, modalOpen=false) {
  if(event.defaultPrevented||event.isComposing||event.keyCode===229||event.altKey||modalOpen)return null;
  const key=event.key.toLowerCase(),mod=event.metaKey||event.ctrlKey;
