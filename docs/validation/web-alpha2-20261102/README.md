@@ -49,9 +49,11 @@ launcher qualification. Installed-browser checks used the disposable development
 host, and the copied packaged runtime was verified separately as described above.
 
 [Hosted qualification](https://github.com/dshills/ELab/actions/runs/41442136866)
-is rerunning the corrected test setup at the exact package source. Its three
-browser jobs have passed; portable/macOS jobs remain in progress at this record.
-Confirm their final status before promotion. VoiceOver speech/navigation and
+reruns the corrected test setup at the exact package source. Its three browser
+jobs and all seven Linux portable gates have passed; the
+[original Linux receipt](portable-quality.json) confirms unchanged source inputs.
+The macOS job remains in progress at this record. Confirm its final status before
+promotion. VoiceOver speech/navigation and
 owner usability evaluation remain separate from automated/AX-tree checks.
 
 When the owner returned, desktop work stopped and engineering continued
