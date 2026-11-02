@@ -54,6 +54,26 @@ qualified native alpha.
 
 ## Verification
 
+### Overnight qualification and next private candidate, 2026-11-02
+
+The full local native quality plan passes all twelve gates at `ce595eed`, including
+shared, native desktop and rendered race suites, vet, Python/frontend checks and
+lint. Installed Chrome/Safari checks found and verified fixes for Space activation,
+schematic focus restoration and Safari accessibility activation. Pointer resizing,
+direct H-bridge reversal stepping, retained capture seeking and native export were
+also exercised. See the [complete record](../docs/validation/web-overnight-20261102/README.md).
+
+Hosted macOS then caught a load-test initialization race: Pause could cancel the
+initial example solve before a transient existed. `6dfb9146` explicitly restarts
+and validates that initial sample before CPU contention. Twenty consecutive race
+repetitions, the full web race suite and lint pass; all contention and numerical
+limits remain unchanged. Hosted qualification is rerunning.
+
+The [private alpha 2 candidate](../docs/validation/web-alpha2-20261102/README.md)
+is built from that clean source. OS-extracted archive bytes/modes/signatures,
+copied runtime operation without Go/Node, quit/restart recovery and the exact
+H-bridge project/capture round trip pass. It is not published or merged to main.
+
 ### Release-confidence milestone, 2026-11-01
 
 At `e8508429`, hosted Linux CI passes all seven portable gates, including the

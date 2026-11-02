@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "source_commit": "6dfb9146f8c0d8fe8e901c7865b65b311ee192dd",
+  "input_sha256": "1696c9b1d0bd6572b477324f3a16662e069d6e8c331c0197d46fcc949a8eb185",
+  "components": 26,
+  "discrete_mosfets": 4,
+  "retained_recordings": 1,
+  "exact_recorded_rows": 45,
+  "checks": [
+    "real Chrome-exported native project imports in copied packaged backend with no Go/Node in PATH",
+    "native graph, all retained recording data, device models and transient settings round-trip unchanged",
+    "normal control Quit checkpoints and exits"
+  ],
+  "scope": "Headless packaged API round trip; does not claim completion of Safari native-picker reimport."
+}
