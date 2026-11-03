@@ -1,0 +1,13 @@
+import {defineConfig,devices} from '@playwright/test';
+import {fileURLToPath} from 'node:url';
+export default defineConfig({
+ testDir:'./browser-tests',workers:1,retries:0,timeout:60_000,
+ expect:{timeout:15_000},outputDir:'./browser-results',
+ reporter:[['list'],['json',{outputFile:'./browser-report.json'}]],
+ use:{baseURL:'http://127.0.0.1:18788',viewport:{width:1440,height:1000},
+  trace:'retain-on-failure',screenshot:'only-on-failure',video:'off'},
+ projects:[{name:'packaged-chromium',use:{...devices['Desktop Chrome'],viewport:{width:1440,height:1000}}}],
+ webServer:{command:'node browser-host.mjs',cwd:fileURLToPath(new URL('.',import.meta.url)),
+  url:'http://127.0.0.1:18788/api/catalog',reuseExistingServer:false,timeout:30_000,
+  gracefulShutdown:{signal:'SIGTERM',timeout:40_000}},
+});

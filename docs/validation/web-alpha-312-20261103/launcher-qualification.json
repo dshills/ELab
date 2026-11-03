@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+  "method": "Computer-use accessibility observations of an isolated shipping-bundle copy and installed Chrome",
+  "checks": [
+    "launcher shows running state and opens local browser",
+    "browser applies C1 = 3.3 uF and shows autosaved changes",
+    "Quit ELab stops host and removes active-host metadata",
+    "reopen and browser reload restore C1 = 3.3 uF",
+    "final normal Quit succeeds; owned launcher and browser tabs closed"
+  ],
+  "scope": "Test copy has an explicit disposable-library Info.plist override and test bundle identifier. Backend bytes match the shipping ZIP; outer signature is regenerated for that fixture. No clean-account, minimum-OS, notarization or VoiceOver claim."
+}

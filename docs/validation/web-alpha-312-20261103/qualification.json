@@ -1,0 +1,280 @@
+{
+  "schema": 1,
+  "passed": true,
+  "version": "0.206.0-alpha.1",
+  "build": "312",
+  "release_tag": "v0.206.0-alpha.1",
+  "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+  "source_branch_at_build": "main",
+  "source_clean_at_build": true,
+  "architecture": "arm64",
+  "signing": "ad-hoc; not notarized",
+  "shipping_runtime_test_platform": "macOS 27.2 arm64",
+  "deployment_target": "13.0 (not a tested minimum)",
+  "ci": {
+    "conclusion": "success",
+    "databaseId": 41708736986,
+    "headSha": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "databaseId": 126170902723,
+        "name": "portable",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 126170903418,
+        "name": "macos",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 126170903539,
+        "name": "Web browser (chromium)",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 126170903719,
+        "name": "Web browser (webkit)",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 126170903728,
+        "name": "Web browser (firefox)",
+        "status": "completed"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/dshills/ELab/actions/runs/41708736986"
+  },
+  "ci_macos_package": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "source_clean": true,
+    "archive_sha256": "62469587d0ee200199155e01b0bc8e452c72ef7538c46f10dd5f09a90b5ba343",
+    "extracted_files": 12,
+    "runtime": {
+      "passed": true,
+      "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+      "source_clean": true,
+      "checks": [
+        "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+        "normal control Quit drains and exits the copied backend",
+        "same browser workspace restores acknowledged 22 k\u03a9 edit after restart"
+      ],
+      "scope": "Copied backend and embedded assets; no GUI, browser, clean-account, or notarization claim."
+    }
+  },
+  "internal_review": "Completed; no external review provider used.",
+  "limitations": [
+    "Hosted macOS 15 checks a separately built same-source package, not this exact shipping ZIP.",
+    "The desktop launcher fixture changes only its library override, test identity, metadata and outer signature; shipping backend bytes are unchanged.",
+    "No Intel, clean-account/Finder installation, minimum-OS, notarization, VoiceOver or human usability-pilot acceptance claim.",
+    "Automated accessibility findings apply to the tested views."
+  ],
+  "archive": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "source_clean": true,
+    "archive_sha256": "8a4f469238f3b753a81d3174e1d83acf12f3948269896b04826412f312edcfe9",
+    "archive_bytes": 10383772,
+    "files": 12,
+    "checks": [
+      "OS ZIP extraction",
+      "exact file inventory, hashes and modes",
+      "strict code signature",
+      "system-only executable dependencies",
+      "shipping version and absence of test-library override"
+    ]
+  },
+  "copied_runtime": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "source_clean": true,
+    "checks": [
+      "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+      "normal control Quit drains and exits the copied backend",
+      "same browser workspace restores acknowledged 22 k\u03a9 edit after restart"
+    ],
+    "scope": "Copied backend and embedded assets; no GUI, browser, clean-account, or notarization claim."
+  },
+  "packaged_browser": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "playwright": "1.64.1",
+    "stats": {
+      "startTime": "2026-11-03T20:27:15.154Z",
+      "duration": 9909.069,
+      "expected": 6,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "tests": [
+      {
+        "title": "shipping H-bridge reverses, records, saves and imports exact project data",
+        "project": "packaged-chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 6063
+          }
+        ]
+      },
+      {
+        "title": "keyboard tabs, dialog naming, focus return and text composition",
+        "project": "packaged-chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 474
+          }
+        ]
+      },
+      {
+        "title": "edit, undo, save, reload and export a native project",
+        "project": "packaged-chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 673
+          }
+        ]
+      },
+      {
+        "title": "capture, exact keyboard playback and retained analysis",
+        "project": "packaged-chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 793
+          }
+        ]
+      },
+      {
+        "title": "narrow layout exposes parts and inspector without losing keyboard controls",
+        "project": "packaged-chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 381
+          }
+        ]
+      },
+      {
+        "title": "workbench and modal have no serious or critical automated accessibility violations",
+        "project": "packaged-chromium",
+        "status": "expected",
+        "results": [
+          {
+            "status": "passed",
+            "duration_ms": 925
+          }
+        ]
+      }
+    ]
+  },
+  "hbridge": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "browser": "packaged-chromium",
+    "negative_voltage": -4.7253319037622035,
+    "positive_voltage": 4.725331894137437,
+    "components": 26,
+    "checks": [
+      "UI example load, pause, restart and 21 ms advance",
+      "45 ms recording retained and named project saved",
+      "browser reload preserves named circuit",
+      "browser download, file-input import and re-export preserve exact graph, settings and recordings"
+    ],
+    "scope": "Headless Chromium against the OS-extracted shipping bundle; automated functional journey, not a human usability or VoiceOver evaluation.",
+    "discrete_mosfets": 4,
+    "retained_recordings": 1,
+    "exact_recorded_rows": 50
+  },
+  "exports": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "preserved_recorded_rows": 50,
+    "outputs": {
+      "svg": {
+        "bytes": 31182,
+        "sha256": "8343e4002c76804d23e9bdc524e014d67b27ad1ef4514023e9d953d256a433aa",
+        "mime": "image/svg+xml"
+      },
+      "pdf": {
+        "bytes": 28400,
+        "sha256": "278b4dbd7c5ac24918e757c0f9f3e87b5f13cf8ae7e4b6c4c15d1c0b42f96faf",
+        "mime": "application/pdf"
+      },
+      "png": {
+        "bytes": 129518,
+        "sha256": "5d294255601126d21b0f439e8e44c98ee246fb3511debfef39e493f6bf500652",
+        "mime": "image/png"
+      },
+      "recording-json": {
+        "bytes": 31624,
+        "sha256": "3749ca28866749a9ab9b76709693a8948f0a6fec02171e2f876b027a6a2f781d",
+        "mime": "application/json"
+      },
+      "recording-csv": {
+        "bytes": 11482,
+        "sha256": "d07c90283ef8ffa2c73dc1c8d5c363c1b19d984b06c53a777c8c3703cd70dd3f",
+        "mime": "text/csv"
+      },
+      "audio-wav": {
+        "bytes": 524,
+        "sha256": "b76772e6f6f9850b171d8c3839e70381d70e32d94483d11c49aeaf69054fe5c1",
+        "mime": "audio/wav"
+      }
+    },
+    "scope": "Actual OS-extracted shipping backend on this Mac, outside source with no Go/Node in PATH; no audio playback or printer submission."
+  },
+  "desktop_launcher_fixture": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "method": "Computer-use accessibility observations of an isolated shipping-bundle copy and installed Chrome",
+    "checks": [
+      "launcher shows running state and opens local browser",
+      "browser applies C1 = 3.3 uF and shows autosaved changes",
+      "Quit ELab stops host and removes active-host metadata",
+      "reopen and browser reload restore C1 = 3.3 uF",
+      "final normal Quit succeeds; owned launcher and browser tabs closed"
+    ],
+    "scope": "Test copy has an explicit disposable-library Info.plist override and test bundle identifier. Backend bytes match the shipping ZIP; outer signature is regenerated for that fixture. No clean-account, minimum-OS, notarization or VoiceOver claim."
+  },
+  "github_download": {
+    "passed": true,
+    "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+    "archive_sha256": "8a4f469238f3b753a81d3174e1d83acf12f3948269896b04826412f312edcfe9",
+    "downloaded_assets": [
+      "ELab-Web-0.206.0-alpha.1-macos-arm64.zip",
+      "PACKAGE.json",
+      "START-HERE.md"
+    ],
+    "checks": [
+      "GitHub-downloaded assets exactly match qualified local files",
+      "OS extraction matches every sealed bundle byte and mode",
+      "strict signature/system dependency checks pass"
+    ],
+    "runtime": {
+      "passed": true,
+      "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+      "source_clean": true,
+      "checks": [
+        "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+        "normal control Quit drains and exits the copied backend",
+        "same browser workspace restores acknowledged 22 k\u03a9 edit after restart"
+      ],
+      "scope": "Copied backend and embedded assets; no GUI, browser, clean-account, or notarization claim."
+    }
+  }
+}

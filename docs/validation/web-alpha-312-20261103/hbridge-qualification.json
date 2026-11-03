@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+  "browser": "packaged-chromium",
+  "negative_voltage": -4.7253319037622035,
+  "positive_voltage": 4.725331894137437,
+  "components": 26,
+  "checks": [
+    "UI example load, pause, restart and 21 ms advance",
+    "45 ms recording retained and named project saved",
+    "browser reload preserves named circuit",
+    "browser download, file-input import and re-export preserve exact graph, settings and recordings"
+  ],
+  "scope": "Headless Chromium against the OS-extracted shipping bundle; automated functional journey, not a human usability or VoiceOver evaluation.",
+  "discrete_mosfets": 4,
+  "retained_recordings": 1,
+  "exact_recorded_rows": 50
+}

@@ -1,0 +1,101 @@
+"""Release-artifact API check; private launch replies never enter the report."""
+import hashlib
+import http.cookiejar
+import json
+import os
+from pathlib import Path
+import subprocess
+import tempfile
+import time
+import urllib.parse
+import urllib.request
+import uuid
+
+root = Path(__file__).resolve().parent
+binary = root/'extracted/ELab Web.app/Contents/Resources/elab-web'
+project = next((root/'browser-results').glob('**/hbridge.elab')).read_bytes()
+expected = json.loads(project)['recordings']['entries'][0]['data']['rows']
+outputs = {}
+with tempfile.TemporaryDirectory(prefix='elab-312-exports-') as temporary:
+    private = Path(temporary)
+    reply = private/'launch.json'
+    env = dict(os.environ, PATH='/usr/bin:/bin:/usr/sbin:/sbin')
+    with (private/'host.log').open('w') as log:
+        child = subprocess.Popen([str(binary), '--addr', '127.0.0.1:0', '--data-dir',
+                                  str(private/'library'), '--startup-file', str(reply)],
+                                 cwd=private, env=env, stdout=log, stderr=subprocess.STDOUT)
+        try:
+            deadline = time.monotonic()+15
+            while not reply.exists() and time.monotonic()<deadline:
+                if child.poll() is not None:
+                    raise RuntimeError('artifact host exited during startup')
+                time.sleep(.02)
+            info = json.loads(reply.read_text())
+            opener = urllib.request.build_opener(urllib.request.ProxyHandler({}),
+                urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+
+            def request(path, data=None):
+                req = urllib.request.Request(info['url']+path, data=data,
+                    headers={'Content-Type':'application/json'})
+                with opener.open(req, timeout=35) as response:
+                    return response.read(), response.headers.get('Content-Type','')
+
+            def state():
+                return json.loads(request('api/state')[0])['state']
+
+            def guards():
+                s = state()
+                return dict(revision=s['command_revision'],generation=s['document']['generation'])
+
+            def command(name, params):
+                g = guards()
+                payload=dict(version=1,id=uuid.uuid4().hex,key=uuid.uuid4().hex,
+                    command=name,params=params,expected_command_revision=g['revision'],
+                    expected_document_generation=g['generation'])
+                result=json.loads(request('api/command',json.dumps(payload).encode())[0])
+                assert not result.get('error'),result.get('error')
+
+            g = guards();g.update(discard='true',name='hbridge.elab')
+            result=json.loads(request('api/upload?'+urllib.parse.urlencode(g),project)[0])
+            assert not result.get('error'),result.get('error')
+            command('simulation.pause',{})
+            command('simulation.wait',{})
+            for kind, signature in [('svg',b'<svg'),('pdf',b'%PDF-'),
+                                     ('png',bytes([137,80,78,71,13,10,26,10])),
+                                     ('recording-json',b'{'),('recording-csv',None)]:
+                g=guards();g['kind']=kind
+                data,mime=request('api/download?'+urllib.parse.urlencode(g),b'')
+                assert data and (signature is None or signature in data[:500]),kind
+                if kind=='recording-json':
+                    assert json.loads(data)['rows']==expected
+                if kind=='recording-csv':
+                    assert len(data.splitlines())>=len(expected)+1
+                outputs[kind]=dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest(),mime=mime)
+            command('example.load',dict(id='light-alarm',discard_changes=True))
+            command('simulation.pause',{})
+            command('sensor.light.set',dict(id='LDR1',illuminance_lux=1))
+            command('simulation.wait',{})
+            command('audio.render',dict(id='BZ1',start_s=0,duration_s=.02,gain=.1))
+            deadline=time.monotonic()+35
+            while time.monotonic()<deadline:
+                audio=state().get('audio_preview')
+                if audio and audio['status']!='running':
+                    break
+                time.sleep(.02)
+            assert audio and audio['status']=='completed' and not audio.get('playing'),audio
+            g=guards();g['kind']='audio-wav'
+            wav,mime=request('api/download?'+urllib.parse.urlencode(g),b'')
+            assert len(wav)==524 and wav.startswith(b'RIFF') and any(wav[44:])
+            outputs['audio-wav']=dict(bytes=len(wav),sha256=hashlib.sha256(wav).hexdigest(),mime=mime)
+            subprocess.run([str(binary),'--stop-host',str(reply)],cwd=private,env=env,
+                           stdout=log,stderr=subprocess.STDOUT,check=True,timeout=50)
+            assert child.wait(timeout=10)==0
+            assert not (private/'library/.host.json').exists()
+        finally:
+            if child.poll() is None:
+                child.terminate();child.wait(timeout=40)
+report=dict(passed=True,source_commit='b90d7e95018be93afea94d45e246e4296d9978b4',
+    preserved_recorded_rows=len(expected),outputs=outputs,
+    scope='Actual OS-extracted shipping backend on this Mac, outside source with no Go/Node in PATH; no audio playback or printer submission.')
+(root/'exports-qualification.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(report,indent=2))

@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "gates_passed": true,
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "steps": [
+    {
+      "name": "lint",
+      "command": [
+        "scripts/lint.sh"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 50.624
+    },
+    {
+      "name": "python",
+      "command": [
+        "/opt/hostedtoolcache/Python/3.13.17/x64/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 3.322
+    },
+    {
+      "name": "web-ui",
+      "command": [
+        "node",
+        "scripts/check-web.mjs"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.716
+    },
+    {
+      "name": "portable-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 771.201
+    },
+    {
+      "name": "portable-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 3.235
+    }
+  ],
+  "profile": "portable",
+  "source_commit": "b90d7e95018be93afea94d45e246e4296d9978b4",
+  "inputs_unchanged": true
+}

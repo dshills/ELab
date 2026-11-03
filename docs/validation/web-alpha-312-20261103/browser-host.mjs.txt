@@ -1,0 +1,13 @@
+import {mkdtempSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {spawn} from 'node:child_process';
+const data=mkdtempSync(join(tmpdir(),'elab-release-312-browser-'));
+const binary=fileURLToPath(new URL('./extracted/ELab Web.app/Contents/Resources/elab-web',import.meta.url));
+const child=spawn(binary,['--addr','127.0.0.1:18788','--data-dir',data],
+ {cwd:tmpdir(),env:{...process.env,PATH:'/usr/bin:/bin:/usr/sbin:/sbin'},stdio:'inherit'});
+let stopped=false;
+for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>{stopped=true;child.kill('SIGTERM');});
+child.once('error',error=>{console.error(error);rmSync(data,{recursive:true,force:true});process.exitCode=1;});
+child.once('exit',(code,signal)=>{rmSync(data,{recursive:true,force:true});process.exitCode=stopped?0:code||(signal?1:0);});

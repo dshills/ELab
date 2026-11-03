@@ -1,0 +1,72 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+test('shipping H-bridge reverses, records, saves and imports exact project data',async({page},testInfo)=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const state=async()=>(await (await page.request.get('/api/state')).json()).state;
+ await page.goto('/');
+ await expect(page.locator('#connection-status')).toHaveText('Local engine connected');
+ await page.locator('#examples-button').click();
+ await page.locator('[data-example="discrete-hbridge"]').click();
+ await expect(page.locator('[data-object="MNA"]')).toBeVisible();
+ await page.locator('#run-button').click();
+ await expect.poll(async()=>(await state()).paused).toBe(true);
+ const priorRun=(await state()).run_id;
+ await page.locator('#restart-button').click();
+ await expect.poll(async()=>{const s=await state();return s.run_id>priorRun&&s.paused&&s.transient&&!s.transient.stale&&s.status!=='updating';}).toBeTruthy();
+ const initial=await state();
+ expect(initial.mixed.resistors.find(p=>p.id==='RL').voltage_v).toBeLessThan(-4.72);
+ await page.getByRole('tab',{name:'Simulate',exact:true}).click();
+ await page.locator('#step-form [name="duration_s"]').fill('21 ms');
+ await page.getByRole('button',{name:'Advance simulation',exact:true}).click();
+ await expect.poll(async()=>(await state()).mixed.resistors.find(p=>p.id==='RL').voltage_v).toBeGreaterThan(4.72);
+ const reversed=await state();
+ await page.getByRole('button',{name:'Record',exact:true}).click();
+ const record=page.getByRole('dialog',{name:'Record an experiment'});
+ await record.locator('[name="duration"]').fill('45 ms');
+ await record.locator('[name="step"]').fill('1 ms');
+ await record.getByRole('button',{name:'Start recording'}).click();
+ await expect(page.locator('#recording-position')).toBeVisible();
+ await expect(page.locator('#recording-keep')).toHaveAttribute('aria-pressed','true');
+ await page.getByRole('button',{name:'Save project',exact:true}).click();
+ const save=page.getByRole('dialog',{name:'Save project',exact:true});
+ await save.getByRole('textbox',{name:'Project name'}).fill('Alpha 312 H-bridge');
+ await save.getByRole('button',{name:'Save project',exact:true}).click();
+ await expect(save).not.toBeVisible();
+ await page.getByRole('tab',{name:'Document',exact:true}).click();
+ const pending=page.waitForEvent('download');
+ await page.getByRole('button',{name:'Download .elab copy',exact:true}).click();
+ const download=await pending;
+ const exported=testInfo.outputPath('hbridge.elab');await download.saveAs(exported);
+ const before=JSON.parse(readFileSync(exported,'utf8'));
+ await page.getByRole('tab',{name:'Inspect',exact:true}).click();
+ await expect(page.locator('#toasts .toast')).toHaveCount(0);
+ await page.screenshot({path:testInfo.outputPath('hbridge.png'),fullPage:true});
+ await page.reload();
+ await expect(page.locator('#document-name')).toContainText('Alpha 312 H-bridge');
+ await expect(page.locator('[data-object="MNA"]')).toBeVisible();
+ await page.getByRole('tab',{name:'Document',exact:true}).click();
+ await page.getByRole('button',{name:'New drawing',exact:true}).click();
+ await expect(page.locator('[data-object="MNA"]')).toHaveCount(0);
+ await page.locator('#file-input').setInputFiles(exported);
+ const replace=page.getByRole('dialog',{name:'Replace this circuit?'});
+ if(await replace.isVisible())await replace.getByRole('button',{name:'Replace circuit',exact:true}).click();
+ await expect(page.locator('[data-object="MNA"]')).toBeVisible();
+ await page.getByRole('tab',{name:'Document',exact:true}).click();
+ const pendingAgain=page.waitForEvent('download');
+ await page.getByRole('button',{name:'Download .elab copy',exact:true}).click();
+ const again=await pendingAgain;const reexported=testInfo.outputPath('hbridge-reimported.elab');await again.saveAs(reexported);
+ const after=JSON.parse(readFileSync(reexported,'utf8'));
+ for(const key of ['graph','transient_settings','recordings'])expect(after[key]).toEqual(before[key]);
+ expect(before.graph.components).toHaveLength(26);
+ expect(before.graph.components.filter(p=>['nmos','pmos'].includes(p.kind))).toHaveLength(4);
+ expect(errors).toEqual([]);
+ const report={passed:true,source_commit:'b90d7e95018be93afea94d45e246e4296d9978b4',
+  browser:testInfo.project.name,negative_voltage:initial.mixed.resistors.find(p=>p.id==='RL').voltage_v,
+  positive_voltage:reversed.mixed.resistors.find(p=>p.id==='RL').voltage_v,
+  components:before.graph.components.length,checks:['UI example load, pause, restart and 21 ms advance',
+  '45 ms recording retained and named project saved','browser reload preserves named circuit',
+  'browser download, file-input import and re-export preserve exact graph, settings and recordings'],
+  scope:'Headless Chromium against the OS-extracted shipping bundle; automated functional journey, not a human usability or VoiceOver evaluation.'};
+ writeFileSync(fileURLToPath(new URL('../hbridge-qualification.json',import.meta.url)),JSON.stringify(report,null,2)+'\n');
+});

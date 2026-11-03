@@ -9,7 +9,10 @@ installation is needed to run the app.
 
 **88 examples · 61 component kinds · 229 shared commands.**
 
-![ELab's browser workbench showing the four-MOSFET H-bridge](docs/validation/web-overnight-20261102/hbridge-reversal.jpg)
+[Download the macOS web alpha](https://github.com/dshills/ELab/releases/tag/v0.206.0-alpha.1)
+— Apple Silicon, ad-hoc signed. See the release's first-use guide and qualification scope.
+
+![ELab's browser workbench showing the four-MOSFET H-bridge](docs/validation/web-alpha-312-20261103/hbridge.png)
 
 ## Run
 
@@ -44,8 +47,8 @@ browser. Build a new private package with Xcode command-line tools and Go:
 
 ```sh
 python3 -B scripts/package_web.py --output 'build/release/ELab Web.app' \
-  --version 0.1.0-alpha.3 --build-version 3 \
-  --archive build/release/ELab-Web-0.1.0-alpha.3-macos-arm64.zip
+  --version 0.206.0-alpha.1 --build-version 312 \
+  --archive build/release/ELab-Web-0.206.0-alpha.1-macos-arm64.zip
 ```
 
 The launcher is a small platform wrapper around this same web app. Packaging uses

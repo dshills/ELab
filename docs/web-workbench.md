@@ -7,7 +7,8 @@ primary ELab interface. The former Vellum UI is archived in Git; see
 
 ## Run
 
-For the private macOS alpha, open **ELab Web.app**. It starts the local host and
+For the [macOS alpha](https://github.com/dshills/ELab/releases/tag/v0.206.0-alpha.1),
+open **ELab Web.app**. It starts the local host and
 opens your default browser. Its window shows status and provides Open ELab,
 projects-folder/log access and Quit. Closing a browser tab keeps ELab running;
 closing the launcher or Command-Q saves and stops it. A failed checkpoint leaves
@@ -22,8 +23,8 @@ Build a self-contained macOS app and optional private-alpha ZIP:
 
 ```sh
 python3 -B scripts/package_web.py --output 'build/release/ELab Web.app' \
-  --version 0.1.0-alpha.3 --build-version 3 \
-  --archive build/release/ELab-Web-0.1.0-alpha.3-macos-arm64.zip
+  --version 0.206.0-alpha.1 --build-version 312 \
+  --archive build/release/ELab-Web-0.206.0-alpha.1-macos-arm64.zip
 ```
 
 Runtime users need neither Go nor Node. Building requires the Go toolchain and
