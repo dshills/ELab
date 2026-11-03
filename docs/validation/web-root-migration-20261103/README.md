@@ -5,6 +5,20 @@ complete pre-migration source is preserved in the published Git tag
 `archive/native-ui-2026-11-03` at `a0379ce04ea34d5ad81a71632a2bf8b5a24c25d9`.
 Existing native/web release artifacts and project libraries are preserved.
 
+**Final result:** the web-root source at
+`9335f7f16aee48524f97ec3f7061c376113ecfc8` passes all five jobs in
+[hosted qualification 41703613414](https://github.com/dshills/ELab/actions/runs/41703613414):
+Linux, macOS, Chromium, Firefox and WebKit. The final documentation commit
+records these receipts without changing application or test sources.
+
+See the [CI summary](hosted-ci.json), [Linux gates](hosted-linux-final.json),
+[macOS gates](hosted-macos-final.json) and
+[macOS package/runtime check](hosted-macos-package-final.json).
+Both platform profiles pass lint, all 62 Python and 28 frontend tests, the
+complete Go race suite and vet. macOS also passes clean-source packaging,
+signature/archive validation, copied-runtime execution, normal shutdown and
+restart recovery. All five browser journeys pass in each of the three engines.
+
 ## Reviewed scope
 
 - Moved the complete `exp-web` host, frontend and test sources to the root.
@@ -89,5 +103,12 @@ voltage/current/charge and trace comparison. The neighboring layout geometry
 checks and controlled-budget/concurrency tests retain race instrumentation.
 Internal review confirms this correction changes only the test entry point;
 production budgets and equations are unchanged.
+
+All flasher checks pass 10 one-scheduler-CPU race-harness repeats (38.985 s),
+including explicit proof that both numerical reference tests ran their original
+assertions in ordinary-speed children. Lint passes. The complete web-host race
+package also passed after the audio correction (12.721 s).
+The final committed source is `9335f7f16aee48524f97ec3f7061c376113ecfc8`;
+its [clean-source package/runtime check](local-package-final.json) passes.
 
 No merge to main or public release is made here.
