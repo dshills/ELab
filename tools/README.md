@@ -1,14 +1,12 @@
 # Project-local quality tools
 
-This separate Go module pins Staticcheck and goimports; the portable application module keeps its standard-library-only dependency boundary. `scripts/lint.sh` builds tools into the ignored `build/tools` directory and checks both application modules. It does not change global installed tools.
+This separate Go module pins Staticcheck and goimports. `scripts/lint.sh` builds
+those tools into ignored `build/tools/` and checks the root web host plus shared
+engine, transport and agent code. It does not change globally installed tools.
 
-Staticcheck 0.8.1 uses x/tools 0.50.0 here because the pilot Go 1.27.2 compiler emits export-data format 5, which the older globally installed analyzers could not read. The tool module requires Go 1.26 or newer. Versions/checksums are recorded in go.mod/go.sum. Dependencies were already cached on the pilot machine; `GOPROXY=off ./scripts/lint.sh` reproduces an offline run there. A fresh development environment needs these pinned tool dependencies prepared normally.
+The versions and checksums are recorded in this directory's `go.mod`/`go.sum`.
+CI prepares the declared Go toolchain and caches these dependencies. The quality
+runner executes lint before the race-tested numerical suite.
 
-Run heavy analyzers before, rather than concurrently with, the simulator's race-tested numerical suite. This keeps compiler/analyzer contention from consuming the mixed engine's explicit 100 ms per-output work budget. Such an exceeded budget remains a reported solver failure, never a fabricated result.
-
-The separate [cropped display probe](display-frame-probe/README.md) implements the owner-authorized calibration method with an explicit fixed owned-window crop. Its offline checks do not capture UI or qualify latency. The older [window probe](frame-probe/README.md) remains frozen for comparison.
-
-[Baseline admission](baseline-admission/README.md) analyzes an existing recorder
-PNG before a prospective controller marker/input operation. Its pinned image
-profiles and receipt gate have offline checks only; they do not capture UI,
-establish continued visibility or qualify a native trial.
+The retired native display/frame probes and baseline-admission experiments are
+available in the [native archive](../docs/native-archive.md).

@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def bundle_path(name):
-    """Map module @version paths into the unchanged pinned packager alphabet.
+    """Map module @version paths into portable resource filenames.
 
     Licenses/AgentMCP retains original paths and bytes. The app's bound notice
     copy uses this documented spelling; callers must reject mapped collisions.

@@ -13,8 +13,6 @@ import subprocess
 import tempfile
 import zipfile
 
-from package_app import verify_packager
-
 ROOT = Path(__file__).resolve().parents[1]
 LICENSES = {
     'gonum.org/v1/gonum': ('v0.17.0', ROOT / 'third_party/gonum/LICENSE'),
@@ -55,9 +53,9 @@ def source_snapshot():
     names = run(['git', 'ls-files', '-co', '--exclude-standard'], capture=True).splitlines()
     selected = [name for name in names if (
         '/' not in name and name.endswith(('.go', '.mod', '.sum')) or
-        name.startswith(('exp-web/', 'workbench/', 'internal/')) and
-        name.endswith(('.go', '.c', '.h', '.swift', '.js', '.mjs', '.css', '.html')) or
-        name in ['scripts/package_web.py', 'scripts/package_app.py', 'scripts/qualify_web_package.py', 'assets/app-icon.png'] or
+        name.startswith(('static/', 'launcher/', 'workbench/', 'internal/')) and
+        name.endswith(('.go', '.c', '.h', '.m', '.mm', '.swift', '.js', '.mjs', '.css', '.html')) or
+        name in ['scripts/package_web.py', 'scripts/check_package.py', 'scripts/qualify_web_package.py', 'assets/app-icon.png'] or
         name in [str(p.relative_to(ROOT)) for _, p in LICENSES.values()]
     )]
     return {name: digest(ROOT / name) for name in sorted(set(selected))}
@@ -83,6 +81,21 @@ def copy_licenses(resources, build_info):
     (directory / 'README.txt').write_text(
         'Third-party licenses for this ELab Web build.\n' +
         '\n'.join(name + ' ' + version for name, version in deps.items()) + '\n')
+
+
+def install_icon(resources):
+    """Create the standard macOS icon with system tools; no UI SDK is needed."""
+    with tempfile.TemporaryDirectory(prefix='elab-icon-') as temporary:
+        iconset = Path(temporary) / 'AppIcon.iconset'
+        iconset.mkdir()
+        for size in [16, 32, 128, 256, 512]:
+            for scale in [1, 2]:
+                suffix = '@2x' if scale == 2 else ''
+                target = iconset / f'icon_{size}x{size}{suffix}.png'
+                run(['/usr/bin/sips', '-z', size * scale, size * scale,
+                     ROOT / 'assets/app-icon.png', '--out', target], capture=True)
+        run(['/usr/bin/iconutil', '-c', 'icns', iconset,
+             '-o', resources / 'AppIcon.icns'])
 
 
 def verify_bundle(app):
@@ -131,22 +144,13 @@ def package(output, version, build, identity='-', archive=None, test_data=None):
         macos = app / 'Contents/MacOS'; resources = app / 'Contents/Resources'
         macos.mkdir(parents=True); resources.mkdir()
         launcher = macos / 'ELabWebLauncher'; backend = resources / 'elab-web'
-        run(['go', 'build', '-trimpath', '-o', backend, './exp-web'], env=env)
+        run(['go', 'build', '-trimpath', '-o', backend, '.'], env=env)
         cache = ROOT / 'build/swift-module-cache'; cache.mkdir(parents=True, exist_ok=True)
-        run(['xcrun', 'swiftc', ROOT / 'exp-web/launcher/main.swift', '-o', launcher,
+        run(['xcrun', 'swiftc', ROOT / 'launcher/macos/main.swift', '-o', launcher,
              '-target', architecture + '-apple-macos13.0', '-module-cache-path', cache, '-framework', 'Cocoa'])
         with (app / 'Contents/Info.plist').open('wb') as stream:
             plistlib.dump(info, stream)
-        # Reuse the existing verified icon conversion helper, without modifying
-        # the pinned native app packager or its release bundles.
-        tools = verify_packager()
-        import sys
-        sys.path.insert(0, str(tools / 'scripts'))
-        try:
-            import app_icons
-            app_icons.install(ROOT / 'assets/app-icon.png', resources)
-        finally:
-            sys.path.pop(0)
+        install_icon(resources)
         build_info = run(['go', 'version', '-m', backend], capture=True)
         copy_licenses(resources, build_info)
         (resources / 'BUILD.txt').write_text(build_info)

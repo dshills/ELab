@@ -22,7 +22,7 @@ func parseOptions(args []string, output io.Writer) (options, error) {
 	flags.StringVar(&o.appearance, "appearance-file", "", "opt into persistent theme preferences using this file")
 	flags.StringVar(&o.recovery, "recovery-directory", "", "opt into autosave using this private directory")
 	flags.BoolVar(&o.mcp, "mcp", false, "serve standard local MCP over stdin/stdout (headless, or with --connect)")
-	flags.BoolVar(&o.config, "mcp-config", false, "print client JSON for this executable; add --connect for a desktop host")
+	flags.BoolVar(&o.config, "mcp-config", false, "print client JSON for this executable; add --connect for an existing private host")
 	if err := flags.Parse(args); err != nil {
 		return o, err
 	}

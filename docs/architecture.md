@@ -2,9 +2,22 @@
 
 Every user and agent action enters the same `workbench.Service.Dispatch` command
 facade. The service mutex remains the single authority for document generation,
-command/revision guards, publication, cancellation and shutdown. Desktop routing,
-stdio, sockets and the 222-command discovery surface share that implementation.
+command/revision guards, publication, cancellation and shutdown. The root HTTP host,
+stdio, sockets and the 229-command discovery surface share that implementation.
 No analysis engine, integration budget or electrical limit changes here.
+
+## Application boundaries
+
+The repository root is the Go web host. `static/` is embedded in standalone
+executables; development mode serves that directory directly. Browser profiles
+have isolated live workspaces and share a local project/recovery library. HTTP
+commands route through the same service and revision/generation guards.
+
+`launcher/macos/` supplies a small web-host launcher with start/open/quit controls.
+It does not implement a second circuit UI. The old Vellum client and its SDK are
+[archived](native-archive.md), while shared Go models, agents and platform
+PDF/PNG/audio/print services remain. Headless agent sessions are independent of
+browser workspaces; live browser MCP attachment is not implemented.
 
 ## Compilation boundary
 
@@ -57,5 +70,5 @@ source references are independently damaged to check ownership. Capacity,
 metadata changes, invalid graphs, signed zero, encoding errors and simultaneous
 agent reads/user edits are covered. Separate store controls enforce bounded
 admission, active/kept protection, eviction selection cleanup and store isolation.
-Existing electrical, capture, persistence, transport, cancellation and rendered
+Existing electrical, capture, persistence, transport, cancellation and HTTP/browser
 command tests continue to exercise the unchanged command facade.

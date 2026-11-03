@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the maintained portable/native gate plans with bounded owned processes."""
+"""Run the maintained engine/web gate plans with bounded owned processes."""
 import argparse
 from contextlib import contextmanager
 import hashlib
@@ -17,22 +17,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def gate_plan(profile):
     steps = [
-        ('sdk', [sys.executable, '-B', 'scripts/prepare-vellum.py']),
+        ('lint', ['scripts/lint.sh']),
         ('python', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'scripts', '-p', 'test_*.py']),
-        ('prd', [sys.executable, '-B', 'scripts/prd-audit.py', '--verify', 'research/11-prd-implementation-audit.json']),
-        ('inventory', ['go', 'run', './cmd/elab-ui-audit', '--verify', 'research/13-native-command-inventory.json']),
         ('web-ui', ['node', 'scripts/check-web.mjs']),
         ('portable-race', ['go', 'test', '-race', './...', '-count=1', '-timeout=30m']),
         ('portable-vet', ['go', 'vet', './...']),
     ]
-    if profile == 'native':
-        steps += [
-            ('lint', ['scripts/lint.sh']),
-            ('desktop-race', ['go', '-C', 'desktop', 'test', '-race', './...', '-count=1', '-timeout=30m']),
-            ('desktop-vet', ['go', '-C', 'desktop', 'vet', './...']),
-            ('rendered-race', ['go', '-C', 'desktop', 'test', '-race', '-tags=offscreen', './...', '-count=1', '-timeout=30m']),
-            ('rendered-vet', ['go', '-C', 'desktop', 'vet', '-tags=offscreen', './...']),
-        ]
+    if profile == 'macos':
+        steps.append(('package', [sys.executable, '-B', 'scripts/check_package.py']))
     elif profile != 'portable':
         raise ValueError('unknown quality profile')
     return steps
@@ -71,8 +63,7 @@ def write_json(path, value):
 
 
 def go_environment(root=ROOT):
-    env = dict(os.environ, GOWORK='off', GOCACHE=os.environ.get('ELAB_GOCACHE', os.environ.get('GOCACHE', str(root/'build/go-cache'))),
-               CGO_LDFLAGS_ALLOW='-Wl,-rpath,@executable_path/native')
+    env = dict(os.environ, GOWORK='off', GOCACHE=os.environ.get('ELAB_GOCACHE', os.environ.get('GOCACHE', str(root/'build/go-cache'))))
     env.setdefault('GOMAXPROCS', '4')
     env['GOFLAGS'] = (env.get('GOFLAGS', '')+' -p=1 -mod=readonly').strip()
     return env
@@ -159,7 +150,7 @@ def source_inputs(root):
         if not raw:
             continue
         name = os.fsdecode(raw)
-        if not (name.endswith(('.go', '.py', '.sh', '.mod', '.sum', '.yml', '.yaml', '.js', '.mjs', '.html', '.css', '.swift')) or name.startswith('third_party/') and name.endswith(('.json', '.gz')) or name.startswith('exp-web/browser/') and name.endswith('.json')):
+        if not (name.endswith(('.go', '.c', '.h', '.m', '.mm', '.py', '.sh', '.mod', '.sum', '.yml', '.yaml', '.js', '.mjs', '.html', '.css', '.swift')) or name.startswith('third_party/') and name.endswith(('.json', '.gz')) or name.startswith('browser/') and name.endswith('.json') or name in ('assets/app-icon.png', 'assets/app-icon.svg')):
             continue
         path = root / name
         inputs[name] = hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
@@ -168,7 +159,7 @@ def source_inputs(root):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--profile', choices=['portable', 'native'], required=True)
+    parser.add_argument('--profile', choices=['portable', 'macos'], required=True)
     parser.add_argument('--artifacts', type=Path)
     parser.add_argument('--command-timeout', type=int, default=2400)
     parser.add_argument('--dry-run', action='store_true')
@@ -181,9 +172,10 @@ def main(argv=None):
         return 0
     if args.artifacts is None:
         parser.error('--artifacts must name a new output directory')
-    if args.profile == 'native' and sys.platform != 'darwin':
-        parser.error('native quality requires macOS; portable profile is available elsewhere')
+    if args.profile == 'macos' and sys.platform != 'darwin':
+        parser.error('macos quality requires macOS; portable profile is available elsewhere')
     env = go_environment()
+    env['ELAB_QUALITY_ARTIFACTS'] = str(args.artifacts.resolve())
     result = None
     try:
         with termination_signals():

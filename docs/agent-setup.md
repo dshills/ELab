@@ -1,15 +1,13 @@
 # Connect an AI agent to ELab
 
-ELab supports standard local MCP (`elab-agent --mcp`). Use an MCP-enabled
-agent executable (0.201.0 or newer; the preserved 0.200.5 /283 predates this
-mode). It uses the same service,
-validation, commands, measurements and revision guards as the desktop UI.
+ELab supports standard local MCP (`elab-agent --mcp`). It uses the same service,
+validation, commands, measurements and revision guards as the web host.
 There is no AI provider key or cloud connection to configure in ELab. Your MCP
 client supplies its own model and tool-authorization settings.
 
 ## Headless: one configuration
 
-Use the adjacent agent from the extracted release, or build a durable executable:
+Build a durable agent executable from this checkout:
 
 ```sh
 go build -o build/elab-agent ./cmd/elab-agent
@@ -28,28 +26,26 @@ tool calls. Closing its MCP connection ends the owned process; saving a project
 uses the ordinary project commands. Persistence is opt-in through the existing
 `--recovery-directory` and `--appearance-file` flags.
 
-## Work with a desktop session
+## Private headless socket hosts
 
-Start a desktop session with an explicit **new** private descriptor path:
+Start a shared headless session using an explicit **new** private descriptor path:
 
 ```sh
-/path/to/ELab.app/Contents/MacOS/ELab --agent-endpoint /absolute/path/session.endpoint.json
-/path/to/elab-agent --mcp-config --connect /absolute/path/session.endpoint.json
+./build/elab-agent --listen /absolute/path/session.endpoint.json
+./build/elab-agent --mcp-config --connect /absolute/path/session.endpoint.json
 ```
 
 Use the second command's configuration in the client. The descriptor is a local
 credential; the configuration contains its path, never its token. A missing or
-failed connection never falls back to a new headless circuit. After the host
-restarts, explicitly restart/reconnect the MCP bridge; it pins the selected host.
-Closing the bridge does not close the desktop app. The shared `app.close` command
-still explicitly closes the host's service. In headless MCP mode its completed
-result is delivered before the client disconnects; the bridge itself follows the
-standard MCP connection lifecycle and exits on EOF.
+failed connection never falls back to a new session. After the host restarts,
+restart/reconnect the MCP bridge. Closing the bridge does not close its host.
+Configure persistence on the host, not a forwarding client.
 
-Normal raw JSON-line `elab-agent`, `--connect` and `--listen` modes remain
-available. `--listen` is a separate socket-host mode and cannot be combined with
-MCP or a remote connection. Configure persistence on the host, not a forwarding
-client. No HTTP listener or automatic desktop discovery is introduced.
+The normal raw JSON-line mode and private socket mode remain available. Browser
+workspaces are separate HTTP sessions: `--connect` does not attach to the web app,
+and the web launcher's private `.host.json` control file is not an agent endpoint.
+The former desktop UI's `--agent-endpoint` instructions apply only to the
+[archived native source](native-archive.md).
 
 ## Three tools, the complete command contract
 
@@ -119,4 +115,5 @@ the 2025-11-25 handshake and 2026-07-28 protocol through the reference SDK clien
 the demo uses the former. Protocol behavior follows the official
 [lifecycle](https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle)
 and [tool-result](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)
-contracts. Supplied dependency notices are pinned and included in new packages.
+contracts. Pinned agent dependency notices are retained in `third_party/agent-mcp`;
+web packages carry the notices for their own linked dependencies.

@@ -28,7 +28,7 @@ func Local(service *workbench.Service) Dispatch {
 
 // NewServer uses the official SDK for protocol negotiation and stdio lifecycle.
 // Closing the MCP connection disposes a headless session in the caller; it must
-// never implicitly dispatch app.close to an explicitly connected desktop host.
+// never implicitly dispatch app.close to an explicitly connected host.
 func NewServer(dispatch Dispatch) *mcp.Server {
 	server := mcp.NewServer(&mcp.Implementation{Name: "ELab", Version: "1"}, &mcp.ServerOptions{
 		Capabilities: &mcp.ServerCapabilities{Tools: &mcp.ToolCapabilities{}},

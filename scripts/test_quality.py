@@ -11,30 +11,33 @@ import quality
 class QualityTests(unittest.TestCase):
     def test_browser_dependency_lock_is_a_qualification_input(self):
         from unittest.mock import patch
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            lock = root/'exp-web/browser/package-lock.json'
-            lock.parent.mkdir(parents=True)
-            lock.write_text('{"version":1}')
-            with patch.object(quality.subprocess, 'check_output', return_value=b'exp-web/browser/package-lock.json\0'):
-                before = quality.source_inputs(root)
-                lock.write_text('{"version":2}')
-                after = quality.source_inputs(root)
-            self.assertNotEqual(before, after)
-            self.assertIn('exp-web/browser/package-lock.json', before)
+        for name in ['browser/package-lock.json', 'internal/platform/native.m', 'assets/app-icon.png']:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = root/name
+                source.parent.mkdir(parents=True)
+                source.write_bytes(b'original')
+                with patch.object(quality.subprocess, 'check_output', return_value=name.encode()+b'\0'):
+                    before = quality.source_inputs(root)
+                    source.write_bytes(b'changed')
+                    after = quality.source_inputs(root)
+                self.assertNotEqual(before, after)
+                self.assertIn(name, before)
 
     def test_gate_profiles_preserve_full_suites_and_timeouts(self):
         portable = dict(quality.gate_plan('portable'))
-        native = dict(quality.gate_plan('native'))
+        macos = dict(quality.gate_plan('macos'))
         self.assertIn('portable-race', portable)
         self.assertEqual(portable['web-ui'], ['node', 'scripts/check-web.mjs'])
         self.assertNotIn('desktop-race', portable)
-        for name in ['portable-race', 'desktop-race', 'rendered-race']:
-            self.assertIn('./...', native[name])
-            self.assertIn('-race', native[name])
-            self.assertIn('-timeout=30m', native[name])
-        self.assertIn('-tags=offscreen', native['rendered-race'])
-        self.assertIn('lint', native)
+        for plan in [portable, macos]:
+            self.assertIn('./...', plan['portable-race'])
+            self.assertIn('-race', plan['portable-race'])
+            self.assertIn('-timeout=30m', plan['portable-race'])
+            self.assertIn('lint', plan)
+            self.assertFalse(any(name.startswith(('desktop-', 'rendered-')) for name in plan))
+        self.assertNotIn('package', portable)
+        self.assertIn('package', macos)
         with self.assertRaises(ValueError):
             quality.gate_plan('unknown')
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify portable schematic persistence across sessions and desktop/headless APIs."""
+"""Verify portable schematic persistence across sessions and shared command APIs."""
 import argparse
 import json
 import math

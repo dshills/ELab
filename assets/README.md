@@ -5,9 +5,9 @@ LED on a blue instrument tile. It stays recognizable without text and has a
 transparent margin for macOS icon placement. The same artwork is used in every
 ELab theme; this is application identity, not a toolbar symbol.
 
-`app-icon.png` is the checked-in 1024×1024 RGBA export. The Vellum packager builds
-the standard 1×/2× ICNS representations before signing. It needs no drawing or
-image dependencies at package time. To regenerate the PNG with Sharp:
+`app-icon.png` is the checked-in 1024×1024 RGBA export. The web app packager uses macOS `sips` and `iconutil` to build
+the standard 1×/2× ICNS representations before signing. It needs no Vellum SDK or
+third-party image dependencies at package time. To regenerate the PNG with Sharp:
 
 ```sh
 node -e 'require(process.env.ELAB_SHARP_MODULE || "sharp")("assets/app-icon.svg").png().toFile("assets/app-icon.png")'

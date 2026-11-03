@@ -73,7 +73,7 @@ def main():
             assert second.ask('project.inspect')['document']['recordings_dirty']
             second.ask('recording.keep.set', {'id': restored_id, 'keep': True}, True)
             assert not second.ask('project.inspect')['document']['dirty']
-            # The original desktop/headless session gets the same fresh startup.
+            # The original headless session gets the same fresh startup.
             first.ask('project.load', {'path': str(path)}, True)
             loaded = first.ask('simulation.wait')
             assert loaded['paused'] and loaded['transient']['sample']['time_s'] == 0

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and switch an NPN LED circuit through the shared desktop/headless API."""
+"""Build and switch an NPN LED circuit through the shared shared command API."""
 import argparse
 import importlib.util
 import json

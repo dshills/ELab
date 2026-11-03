@@ -52,3 +52,16 @@ Use internal code review for all new work. The owner replaced the earlier Prism
 review requirement on October 28, 2026 because of cost. Do not run Prism or send
 code to an external review provider unless the owner explicitly requests it again.
 Existing Prism receipts remain historical evidence.
+
+## Primary application and archived UI
+
+The owner chose the web interface on November 3, 2026. The root Go package and
+`static/` are the maintained application. Keep the shared Go workbench/solver,
+agent adapters and project/library format. The macOS Swift launcher starts that
+web host; it is not the retired native circuit UI.
+
+The Vellum UI, SDK and native-only tooling are preserved in the Git tag
+`archive/native-ui-2026-11-03`; restoration instructions are in
+`docs/native-archive.md`. Do not reintroduce the retired SDK into current builds.
+Use `scripts/check.sh` (`portable` or `macos` quality profiles) for current gates.
+Historical native evidence remains tied to its original revision and paths.
