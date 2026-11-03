@@ -29,6 +29,13 @@ archive restoration, retained dependencies/data paths, test-only library
 isolation, ZIP bytes/modes/signatures, and credential-free quality artifacts.
 No external review provider was used.
 
+The first hosted migration run passed all three browser engines. Its newly
+enabled Linux lint gate found two existing Darwin-only declarations in shared
+files. The CUPS socket field and Quartz path tokenizer now live behind their
+platform build constraints; the unsupported print backend has no unused field.
+The platform behavior and tokenizer expression are unchanged. Internal review,
+macOS/Linux lint and targeted print/PDF race tests pass for this correction.
+
 ## Preflight evidence
 
 The root host/agent/conformance build, all 28 frontend tests, 62 retained Python

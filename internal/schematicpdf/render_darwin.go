@@ -69,10 +69,13 @@ import "C"
 import (
 	"fmt"
 	"math"
+	"regexp"
 	"strconv"
 	"strings"
 	"unsafe"
 )
+
+var pathTokens = regexp.MustCompile(`[MLHVQZ]|[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?`)
 
 type quartz struct {
 	ctx       C.CGContextRef

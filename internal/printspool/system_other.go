@@ -4,6 +4,8 @@ package printspool
 
 import "context"
 
+type systemBackend struct{}
+
 func (systemBackend) Destinations(context.Context) ([]Destination, error) { return nil, ErrUnsupported }
 func (systemBackend) Submit(context.Context, string, string, string, Options) (Receipt, error) {
 	return Receipt{}, ErrUnsupported

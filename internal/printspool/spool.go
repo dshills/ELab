@@ -36,8 +36,6 @@ type Backend interface {
 	Cancel(context.Context, int) error
 }
 
-type systemBackend struct{ socket string }
-
 func System() Backend { return systemBackend{} }
 
 func Terminal(state string) bool {

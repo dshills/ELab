@@ -60,6 +60,8 @@ import (
 	"unsafe"
 )
 
+type systemBackend struct{ socket string }
+
 // CUPS error/auth state is thread-local. Each call owns a connection and stays
 // on one OS thread through error capture and cleanup. No interactive auth prompt.
 func connect(ctx context.Context, socket string) (*C.http_t, error) {

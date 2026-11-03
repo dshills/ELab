@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"math"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -243,5 +242,3 @@ func numbers(text string) ([]float64, error) {
 	}
 	return out, nil
 }
-
-var pathTokens = regexp.MustCompile(`[MLHVQZ]|[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?`)
