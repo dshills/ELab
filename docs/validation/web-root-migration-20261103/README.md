@@ -12,7 +12,7 @@ Existing native/web release artifacts and project libraries are preserved.
 - Removed the archived Vellum UI/SDK, old design experiment, native audit/probes,
   native packaging and native-only test/release controllers from the active tree.
   Shared headless clients, agent/MCP tests and numerical/reference demos remain.
-- `workbench/`, `transport/`, module pins and dependency notices are unchanged.
+- `workbench/` production sources, `transport/`, module pins and dependency notices are unchanged.
   No solver equations, numerical limits, project schema, library path, browser
   storage prefix or session/control protocol changed.
 - Updated builds, browser harness paths, CI and current guides. Native UI evidence
@@ -78,5 +78,16 @@ nonzero PCM samples, and failures now print the audio diagnostic. No production
 solver limit, timeout or audio behavior changed. The active-buzzer case passes
 50 one-scheduler-CPU race repeats; both cases together pass 10 repeats, including
 proof that the original 555 assertions ran in each ordinary-speed child.
+
+Run `41698091612` then passed Linux and all three browser jobs. macOS passed
+the revised browser tests and failed only
+`TestFlasherLayoutPreservesTheOriginalCircuitAndTimedResponse`: its instrumented
+sample reached the 100 ms CPU budget (100.033 ms measured). This is a numerical
+reference comparing 601 samples of the old and new layouts, not a concurrency
+test. It now uses the same production-speed helper, preserving every electrical,
+voltage/current/charge and trace comparison. The neighboring layout geometry
+checks and controlled-budget/concurrency tests retain race instrumentation.
+Internal review confirms this correction changes only the test entry point;
+production budgets and equations are unchanged.
 
 No merge to main or public release is made here.

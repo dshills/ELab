@@ -6,6 +6,8 @@ import (
 	"os"
 	"reflect"
 	"testing"
+
+	"github.com/dshills/elab/internal/testutil"
 )
 
 func TestFlasherBiasLabelsClearNeighboringTerminals(t *testing.T) {
@@ -28,6 +30,9 @@ func TestFlasherBiasLabelsClearNeighboringTerminals(t *testing.T) {
 }
 
 func TestFlasherLayoutPreservesTheOriginalCircuitAndTimedResponse(t *testing.T) {
+	if testutil.RunAtProductionSpeed(t) {
+		return
+	}
 	updated := FlasherExampleGraph()
 	data, err := os.ReadFile("testdata/flasher-layout-095.json")
 	if err != nil {
