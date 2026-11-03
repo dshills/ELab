@@ -45,5 +45,38 @@ signature checks, copied execution without Go/Node in PATH, normal Quit and
 recovery of an acknowledged 22 kΩ edit. That preflight used an uncommitted tree
 and is not a clean-source release qualification.
 
-Full committed-source quality and hosted browser/platform qualification follow
-this implementation commit. No merge to main or public release is made here.
+## Committed-source qualification
+
+The complete local macOS profile passes at
+`44d79360b86e04fec7bb70bbf96c2b57243acfe9`, with unchanged source inputs:
+
+- Lint, 62 Python tests and 28 frontend logic tests.
+- The complete Go race suite (521.946 seconds) and vet.
+- A clean-source, ad-hoc-signed package, OS ZIP extraction, exact bytes/modes
+  for all 12 files, copied execution without Go/Node, normal Quit and restored
+  acknowledged 22 kΩ edit after restart.
+
+See [local quality receipt](local-quality.json) and
+[local package/runtime receipt](local-package.json). The package is a temporary
+qualification build, not a new distributed release. Its scope does not include
+GUI launcher interaction, notarization, clean-account or minimum-OS acceptance.
+The disposable development host was saved and closed normally; the pre-existing
+default-library host and library were not changed.
+
+## Hosted audio fixture correction
+
+Run `41694653825` passed every browser job and the complete workbench,
+conformance, agent and transport race suites on Linux and macOS. Both platforms
+failed the browser WAV test with a failed 555 audio render. The old failure
+message printed an error pointer rather than its diagnostic, so those receipts
+do not establish the precise render failure cause.
+
+The transfer test now checks a powered active buzzer under race instrumentation
+and retains the original 555 WAV assertions through the existing
+`RunAtProductionSpeed` numerical-reference helper. Both cases also require
+nonzero PCM samples, and failures now print the audio diagnostic. No production
+solver limit, timeout or audio behavior changed. The active-buzzer case passes
+50 one-scheduler-CPU race repeats; both cases together pass 10 repeats, including
+proof that the original 555 assertions ran in each ordinary-speed child.
+
+No merge to main or public release is made here.

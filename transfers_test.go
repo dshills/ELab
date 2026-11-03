@@ -7,13 +7,33 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dshills/elab/internal/testutil"
 	"github.com/dshills/elab/workbench"
 )
 
 func TestBrowserAudioUsesCapturedWAVWithoutNativePlayback(t *testing.T) {
+	t.Run("active-buzzer", func(t *testing.T) {
+		checkBrowserAudioTransfer(t, "light-alarm")
+	})
+	t.Run("555-tone", func(t *testing.T) {
+		// Keep the original 555 WAV assertions at ordinary binary speed, as
+		// for other budget-sensitive numerical references. The active-buzzer
+		// case still exercises the complete HTTP transfer under -race.
+		if testutil.RunAtProductionSpeed(t) {
+			return
+		}
+		checkBrowserAudioTransfer(t, "555-tone")
+	})
+}
+
+func checkBrowserAudioTransfer(t *testing.T, example string) {
+	t.Helper()
 	f := fixture(t)
-	f.command("example.load", workbench.ExampleLoadParams{ID: "555-tone", DiscardChanges: true})
+	f.command("example.load", workbench.ExampleLoadParams{ID: example, DiscardChanges: true})
 	f.command("simulation.pause", struct{}{})
+	if example == "light-alarm" {
+		f.command("sensor.light.set", workbench.LightParams{ID: "LDR1", Illuminance: 1})
+	}
 	f.wait()
 	f.command("audio.render", workbench.AudioRenderParams{ID: "BZ1", Duration: .02, Gain: .1})
 	deadline := time.Now().Add(10 * time.Second)
@@ -25,8 +45,11 @@ func TestBrowserAudioUsesCapturedWAVWithoutNativePlayback(t *testing.T) {
 		}
 		time.Sleep(time.Millisecond)
 	}
-	if audio == nil || audio.Status != "completed" || audio.Playing {
-		t.Fatal("silent audio render failed or autoplayed", audio)
+	if audio == nil {
+		t.Fatal("audio render did not publish a preview")
+	}
+	if audio.Status != "completed" || audio.Playing {
+		t.Fatalf("audio render: status=%s playing=%t error=%+v", audio.Status, audio.Playing, audio.Error)
 	}
 	response := f.command("audio.read", workbench.IDParams{ID: audio.ID})
 	raw, _ := json.Marshal(response.Result)
@@ -36,6 +59,9 @@ func TestBrowserAudioUsesCapturedWAVWithoutNativePlayback(t *testing.T) {
 	}
 	if !bytes.HasPrefix(data.WAV, []byte("RIFF")) || len(data.WAV) != 524 {
 		t.Fatal("invalid WAV audio", len(data.WAV))
+	}
+	if bytes.Equal(data.WAV[44:], make([]byte, 480)) {
+		t.Fatal("powered buzzer produced silent PCM")
 	}
 	download := f.request("POST", "/api/download?"+f.query("audio-wav"), nil, "")
 	if download.Code != 200 || !bytes.Equal(download.Body.Bytes(), data.WAV) {
