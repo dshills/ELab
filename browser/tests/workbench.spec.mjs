@@ -66,7 +66,15 @@ test('edit, undo, save, reload and export a native project',async ({page})=>{
  await save.getByRole('textbox',{name:'Project name'}).fill(name);
  await save.getByRole('button',{name:'Save project',exact:true}).click();
  await expect(save).not.toBeVisible();
+ // Reload with a live read in flight, as in the hosted WebKit failure.
+ // Keep the abort observation across navigation without adding app test hooks.
+ await page.evaluate(()=>{const original=window.fetch;window.fetch=(url,options)=>{if(String(url).startsWith('/api/state'))options?.signal?.addEventListener('abort',()=>sessionStorage.setItem('elab-test-poll-aborted','true'),{once:true});return original(url,options);};});
+ let heldPoll;const polling='**/api/state?**';
+ await page.route(polling,route=>{if(!heldPoll)heldPoll=route;else return route.continue();});
+ await expect.poll(()=>!!heldPoll).toBe(true);
  await page.reload();
+ await page.unroute(polling);
+ expect(await page.evaluate(()=>sessionStorage.getItem('elab-test-poll-aborted'))).toBe('true');
  await expect(value).toHaveValue(/2\.2/);
  await expect(page.locator('#document-name')).toContainText(name);
  await page.getByRole('tab',{name:'Document',exact:true}).click();

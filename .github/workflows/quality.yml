@@ -88,7 +88,9 @@ jobs:
           retention-days: 14
 
   macos:
-    runs-on: macos-15
+    # Hosted arm64 capacity repeatedly left this job unacquired.
+    # Apple Silicon shipping qualification stays on macos-15 in release-web.yml.
+    runs-on: macos-15-intel
     env:
       GOCACHE: ${{ github.workspace }}/build/go-cache
     timeout-minutes: 90
