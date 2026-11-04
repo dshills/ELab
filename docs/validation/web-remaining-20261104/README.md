@@ -46,3 +46,28 @@ pass across three engines, and ten consecutive Chromium box/drag repetitions
 pass. Evidence: `build/selection-reviewed-core.log`, `build/selection-root-race.log`,
 `build/selection-frontend.log`, `build/selection-lint.log`,
 `build/selection-milestone-browsers.log`, `build/selection-drag-repeat.log`.
+
+## Item 6 — actionable circuit diagnostics
+
+The browser now displays shared structured explanations, corrective advice,
+explicit technical details and associated component/wire/terminal markers.
+Actions select actual targets, begin wiring at a named terminal, undo a deletion,
+fit sampling or review/restart a failed simulation. No automatic circuit repair
+or guessed object association is introduced. Request refusals keep scoped local
+help and disappear after a correction/new command. The panel no longer overlays
+or blocks drawing gestures.
+
+Internal review covered request/source scope, safe text rendering, stale marker
+clearing, hidden-block target resolution, disclosure purity and guarded actions.
+The repair journey found a fast Delete bug: target actions now await pending
+selection and reject document replacement. Drag guards wait for the browser's
+own queued selection, check unchanged source positions/generation, then freeze
+through pointer-up; concurrent changes remain guarded rather than retried.
+
+Shared diagnostic race tests, lint and frontend checks pass. All twelve targeted
+three-engine journeys pass: actual wire deletion/repair, precise resistance
+refusal/correction, group edits and fast box/drag. Existing workbench journeys
+passed in the preceding combined run; the final whole suite is rerun after the
+remaining milestones. Logs: `build/diagnostics-core.log`,
+`build/diagnostics-frontend.log`, `build/diagnostics-lint.log`,
+`build/diagnostics-final-browsers.log`.

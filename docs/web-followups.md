@@ -10,7 +10,7 @@ among remaining items, with internal review and a separate commit per milestone.
 | 3 | MCP in visible workspace | Complete, `bc43868f` |
 | 4 | Box selection, group move/copy/duplicate and undo | Complete: box/Shift selection, group movement, detached copy/paste, one-step undo |
 | 5 | Library backup/restore | Complete, `f1fc39eb` |
-| 6 | Actionable circuit diagnostics | Pending |
+| 6 | Actionable circuit diagnostics | Complete: associated highlights, guidance, repair controls and scoped request help |
 | 7 | Measured browser responsiveness under load | Pending |
 | 8 | Accessibility across circuit workflows | Pending |
 | 9 | Repeatable release automation | Pending |

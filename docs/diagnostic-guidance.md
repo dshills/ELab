@@ -1,3 +1,23 @@
+# Browser diagnostic guidance
+
+The maintained web UI uses the shared diagnostic associations and advice.
+**Circuit checks** identifies affected components, wires and terminals with dashed
+markers as well as text. Show targets an associated component/wire; Connect starts
+a wire at the actual affected terminal without changing the circuit until you
+choose its destination. Undo deletion, sampling fit and explicit restart/settings
+actions appear only for relevant conditions. Technical details preserve the
+original code/source/message. No component is inferred from message text.
+
+Request failures stay local to the browser and its observed revision/document.
+Valid corrections or subsequent commands clear obsolete request highlights.
+Numerical publication alone does not. Captured/earlier-step failures keep their
+source labels. Opening details does not change the document or undo history.
+The panel is outside the schematic so its controls do not obscure drawing
+gestures. Existing accepted/stale readings and solver limits are unchanged.
+
+The following notes describe the historical native implementation at its named
+revisions. Current builds use the browser implementation above.
+
 # Actionable circuit diagnostics
 
 Known affected components have an outline and **!** marker; known terminals have a larger ring; known wires have a thicker highlight. The Inspector's **Circuit guidance** supplies readable explanation and next action, with **Technical details** as an explicit disclosure. The source object/terminal/wire IDs are also structured in the snapshot. Markers do not select, move or alter objects. A temporary wire gesture continues while the disclosure opens, and correction/undo removes obsolete markers.

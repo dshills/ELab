@@ -17,7 +17,7 @@ export function selectionEditor(api){
   const oldIDs=new Set(api.state().components.map(p=>p.id));const originalPositions=api.scene().parts.filter(p=>chosen.includes(p.id)).map(p=>({...p.position}));if(kind==='duplicate'){offset=freeSelectionOffset(originalPositions,api.scene().parts.map(p=>p.position),80);if(!offset){api.toast('There is no free position for this group. Move some parts first.',true);return;}}let params;
   if(kind==='paste')params={clipboard_id:clipboardID,offset};else params=kind==='copy'||kind==='delete'?{ids:chosen}:{ids:chosen,offset};
   const commandName='selection.'+kind;
-  const result=await api.command(commandName,params,guard?{guard}:{});
+  const result=await api.command(commandName,params,{...(guard?{guard}:{}),documentGeneration:api.state().document.generation});
   if(kind==='copy'){clipboardID=result.selection_clipboard_id;clipboardPositions=originalPositions;api.toast('Selection copied with its internal wires.');}
   if(kind==='duplicate'||kind==='paste')set(api.scene().parts.filter(p=>!oldIDs.has(p.id)).map(p=>p.id));
   if(kind==='delete')set([]);render();return result;
