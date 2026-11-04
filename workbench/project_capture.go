@@ -30,3 +30,10 @@ func (s *Service) CaptureProject() (ProjectCapture, error) {
 	capture.Data = append(data, '\n')
 	return capture, nil
 }
+
+// ValidateProject validates native project bytes, including embedded models and
+// retained results, without opening a file, running physics or changing a service.
+func ValidateProject(data []byte) error {
+	_, err := decodeDocument(data)
+	return err
+}

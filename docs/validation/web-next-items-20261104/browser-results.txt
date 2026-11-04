@@ -1,0 +1,32 @@
+
+Running 21 tests using 1 worker
+
+(node:31658) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › tests/agent.spec.mjs:4:1 › enabled workspace shares agent edits, guarded undo and revocation (928ms)
+  ✓   2 [chromium] › tests/backup.spec.mjs:4:1 › library backup previews, cancels and restores copies without replacing the open circuit (972ms)
+  ✓   3 [chromium] › tests/workbench.spec.mjs:14:1 › keyboard tabs, dialog naming, focus return and text composition (486ms)
+  ✓   4 [chromium] › tests/workbench.spec.mjs:53:1 › edit, undo, save, reload and export a native project (674ms)
+  ✓   5 [chromium] › tests/workbench.spec.mjs:78:1 › capture, exact keyboard playback and retained analysis (760ms)
+  ✓   6 [chromium] › tests/workbench.spec.mjs:100:1 › narrow layout exposes parts and inspector without losing keyboard controls (363ms)
+  ✓   7 [chromium] › tests/workbench.spec.mjs:117:1 › workbench and modal have no serious or critical automated accessibility violations (895ms)
+(node:31686) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 [firefox] › tests/agent.spec.mjs:4:1 › enabled workspace shares agent edits, guarded undo and revocation (1.5s)
+  ✓   9 [firefox] › tests/backup.spec.mjs:4:1 › library backup previews, cancels and restores copies without replacing the open circuit (1.1s)
+  ✓  10 [firefox] › tests/workbench.spec.mjs:14:1 › keyboard tabs, dialog naming, focus return and text composition (529ms)
+  ✓  11 [firefox] › tests/workbench.spec.mjs:53:1 › edit, undo, save, reload and export a native project (840ms)
+  ✓  12 [firefox] › tests/workbench.spec.mjs:78:1 › capture, exact keyboard playback and retained analysis (850ms)
+  ✓  13 [firefox] › tests/workbench.spec.mjs:100:1 › narrow layout exposes parts and inspector without losing keyboard controls (437ms)
+  ✓  14 [firefox] › tests/workbench.spec.mjs:117:1 › workbench and modal have no serious or critical automated accessibility violations (1.3s)
+(node:31756) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  15 [webkit] › tests/agent.spec.mjs:4:1 › enabled workspace shares agent edits, guarded undo and revocation (1.2s)
+  ✓  16 [webkit] › tests/backup.spec.mjs:4:1 › library backup previews, cancels and restores copies without replacing the open circuit (1.0s)
+  ✓  17 [webkit] › tests/workbench.spec.mjs:14:1 › keyboard tabs, dialog naming, focus return and text composition (656ms)
+  ✓  18 [webkit] › tests/workbench.spec.mjs:53:1 › edit, undo, save, reload and export a native project (807ms)
+  ✓  19 [webkit] › tests/workbench.spec.mjs:78:1 › capture, exact keyboard playback and retained analysis (892ms)
+  ✓  20 [webkit] › tests/workbench.spec.mjs:100:1 › narrow layout exposes parts and inspector without losing keyboard controls (495ms)
+  ✓  21 [webkit] › tests/workbench.spec.mjs:117:1 › workbench and modal have no serious or critical automated accessibility violations (1.2s)
+
+  21 passed (20.1s)

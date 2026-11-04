@@ -63,3 +63,50 @@ Local logs: `build/web-agent-race-final.log`, `build/web-agent-frontend-final.lo
 `build/web-agent-python-final.log`, `build/web-agent-lint-final.log`,
 `build/web-agent-vet.log`, `build/web-agent-browsers-verified.log`,
 `build/web-agent-webkit.log`, and `build/web-agent-package-final/report.json`.
+
+## Item 5: whole-library backup and restore
+
+Projects now offers a portable backup download and a validated restore preview.
+The snapshot checkpoints active workspaces and includes named projects, Trash,
+automatic/restored history, inactive/lost-cookie workspaces, retained native
+recordings/sweeps and embedded models. Dormant legacy per-workspace stores are
+included; older differing versions are preserved. Workspace source IDs are anonymized so they do not export browser-cookie values.
+No credentials, host controls, logs, browser state or scratch files are exported. See [scope/format](../../library-backups.md).
+
+Restore validates the exact bounded file list, strict manifest, per-document
+SHA-256 and native project/results/models before staging. A single directory
+rename publishes the complete batch. New identities preserve all existing data
+and the open circuit. Unsaved workspace copies remain discoverable in Recovery
+history; restored history is protected from automatic newest-50 rotation.
+Only one transfer is admitted at a time to bound aggregate validation/ZIP memory.
+
+Internal review covered lock order and snapshot consistency, dormant storage,
+exact retained sample/AC-result bytes, project overwrite/trash after import,
+restart indexing, stale guards, revocation/credential exclusion, corrupted source
+refusal, malformed/duplicate/path-substituted/link/oversized ZIPs, cancellation,
+failed publication and cleanup. Browser hosts are now independent per engine so
+combined runs do not exceed the production workspace cap.
+
+All 21 final browser journeys pass (seven each in Chromium, Firefox and WebKit).
+The final root/agent race suite and additional retained-AC/corrupt-source/transfer
+admission tests pass. Logs are `build/library-final-browsers.log`,
+`build/library-reviewed-race.log`, `build/library-final-transfer-tests.log`, and
+`build/library-final-lint.log`. This milestone does not publish a new alpha.
+
+## Final validation
+
+The [frozen-source macOS quality run](quality.json) passes all six maintained gates:
+lint, 71 Python tests, 28 frontend checks, the complete Go race suite, all-package
+vet and actual package/extraction/copy/restart checks. `inputs_unchanged` is true;
+the [input hashes](quality-inputs.json) bind the checked working tree to the
+subsequent implementation commit. The runner's source commit is the preceding
+agent milestone because this was a development-tree check before the requested
+backup milestone commit. No clean-release/notarization claim is made.
+
+The [copied-package smoke](package-smoke.json) also verifies library backup,
+checksum/preview, restore as a separate copy and discovery after restart with
+Go/Node absent from PATH. [All 21 browser journeys](browser-results.txt) pass on the
+frozen executable across Chromium, Firefox and WebKit; [scope and binary hash](browsers.json).
+Test libraries and hosts are disposable; owner projects and the published alpha
+remain preserved. Live signing and clean-account acceptance remain deferred
+to the owner's credential setup. No remote CI or new publication was requested.

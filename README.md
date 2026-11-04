@@ -68,6 +68,8 @@ notarization, stapled tickets, Gatekeeper and exact-archive installation checks.
 - Save/import/export `.elab` projects and complete measurement data. Export SVG,
   CSV/JSON and WAV; macOS also provides PDF/PNG rendering. Browser Print supports
   schematic print previews.
+- Back up the whole project/recovery library and restore copies, including Trash,
+  unsaved work and kept results. See [library backups](docs/library-backups.md).
 - Use Light, Dark, System or Apollo appearance, resizable panels, direct simulation
   settings and accessible keyboard controls.
 

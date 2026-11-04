@@ -75,3 +75,17 @@ agent reads/user edits are covered. Separate store controls enforce bounded
 admission, active/kept protection, eviction selection cleanup and store isolation.
 Existing electrical, capture, persistence, transport, cancellation and HTTP/browser
 command tests continue to exercise the unchanged command facade.
+
+## Portable library backups
+
+The web host snapshots the shared library after checkpointing active workspaces
+under registry → library → workspace locks. Native project validation is exposed
+as a pure workbench function; backup/restore does not create an engine or run a
+solve for each entry. The bounded ZIP carries explicit logical records and digests,
+never arbitrary filesystem paths or credentials.
+
+Restore stages a complete validated batch and publishes `restores/<new-id>/` by
+one rename. Library reads include these batches; ordinary save/open/trash and
+recovery controls use the same resolver. Fresh identities preserve existing
+projects and current browser workspaces. Restored history is marked retained so
+automatic-history rotation cannot delete an explicitly imported backup copy.

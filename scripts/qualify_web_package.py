@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import http.cookiejar
+import io
 import json
 import os
 from pathlib import Path
@@ -10,6 +11,8 @@ import shutil
 import subprocess
 import time
 import urllib.request
+import urllib.parse
+import zipfile
 import uuid
 
 from package_web import verify_bundle
@@ -68,6 +71,12 @@ def qualify(app, artifacts):
             with opener.open(req, timeout=10) as response:
                 return json.loads(response.read())
 
+        def transfer(info, path, body):
+            req = urllib.request.Request(info['url'] + path, data=body,
+                                         headers={'Content-Type': 'application/zip'})
+            with opener.open(req, timeout=15) as response:
+                return response.headers, response.read()
+
         def stop(reply):
             subprocess.run([str(executable), '--stop-host', str(reply)], cwd=copied.parent,
                            env=env, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=50)
@@ -79,7 +88,7 @@ def qualify(app, artifacts):
         try:
             reply, info = start('first')
             state = request(info, 'api/state')['state']
-            for name in ['app.js', 'scope-controls.mjs', 'recording-analysis.mjs', 'spectrum.mjs', 'sweep.mjs']:
+            for name in ['app.js', 'scope-controls.mjs', 'recording-analysis.mjs', 'spectrum.mjs', 'sweep.mjs', 'agent.mjs', 'library-backup.mjs']:
                 with opener.open(info['url'] + name, timeout=10) as response:
                     if response.status != 200 or 'javascript' not in response.headers.get('Content-Type', ''):
                         raise ValueError('embedded module unavailable: ' + name)
@@ -91,6 +100,30 @@ def qualify(app, artifacts):
                 'expected_document_generation': state['document']['generation']})
             if result.get('error'):
                 raise ValueError('native edit refused')
+            current = request(info, 'api/state')['state']
+            query = urllib.parse.urlencode({'revision': current['command_revision'],
+                                            'generation': current['document']['generation']})
+            headers, backup = transfer(info, 'api/library/backup?' + query, b'')
+            if headers.get('X-ELab-Backup-SHA256') != hashlib.sha256(backup).hexdigest():
+                raise ValueError('copied backend backup archive checksum differs')
+            with zipfile.ZipFile(io.BytesIO(backup)) as archive:
+                manifest = json.loads(archive.read('manifest.json'))
+                if (manifest['format'] != 'elab-library' or len(manifest['records']) != 1
+                        or manifest['records'][0]['kind'] != 'workspaces'):
+                    raise ValueError('copied backend backup omitted the unsaved workspace')
+                record = manifest['records'][0]
+                if hashlib.sha256(archive.read(record['file'])).hexdigest() != record['sha256']:
+                    raise ValueError('copied backend backup document checksum differs')
+            _, preview = transfer(info, 'api/library/restore?' + query + '&preview=true', backup)
+            if json.loads(preview)['contents']['workspaces'] != 1:
+                raise ValueError('copied backend backup preview differs')
+            _, imported = transfer(info, 'api/library/restore?' + query, backup)
+            if json.loads(imported)['restored']['workspaces'] != 1:
+                raise ValueError('copied backend failed to restore a workspace copy')
+            unchanged = request(info, 'api/state')['state']
+            if unchanged['command_revision'] != current['command_revision']:
+                raise ValueError('library restore replaced the open workspace')
+            checks.append('copied backend backs up unsaved work, validates a preview and restores a separate recovery copy')
             stop(reply)
             checks.append('normal control Quit drains and exits the copied backend')
             reply, info = start('second')
@@ -98,6 +131,9 @@ def qualify(app, artifacts):
             if not any(p['id'] == 'R1' and p['value'] == 22000 for p in restored['components']):
                 raise ValueError('acknowledged edit did not survive restart')
             checks.append('same browser workspace restores acknowledged 22 kΩ edit after restart')
+            if not any(entry.get('checkpoint') for entry in request(info, 'api/projects')['history']):
+                raise ValueError('restored backup workspace disappeared after restart')
+            checks.append('restored backup recovery copy remains discoverable after restart')
             stop(reply)
         finally:
             if process is not None and process.poll() is None:

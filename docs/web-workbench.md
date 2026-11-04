@@ -76,6 +76,12 @@ or temporary directories.
 - **Open** imports a native `.elab` file. **Download .elab copy** exports it without
   clearing unsaved state. Imports are limited to 8 MiB, matching the native reader.
 
+**Projects → Back up library** downloads saved projects, Trash, history and
+workspace checkpoints with kept results. **Restore library backup…** previews and
+adds validated copies while preserving the current circuit and existing data.
+See [library backups](library-backups.md) for scope and size limits. Restored
+history is retained outside automatic history rotation.
+
 There are at most 16 active browser workspaces. An idle workspace's engine closes
 after two hours; its files remain and are restored on return. Active pages poll.
 

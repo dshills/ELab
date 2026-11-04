@@ -1,3 +1,4 @@
+import {libraryBackup} from './library-backup.mjs';
 import {syncTabs} from './accessibility.mjs';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function projectBrowser(api){
@@ -22,5 +23,6 @@ export function projectBrowser(api){
  async function show(next='projects'){tab=next;try{listing=await api.fetch('/api/projects');render();if(!dialog.open)dialog.showModal();}catch(e){api.toast(e.message,true);}}
  document.querySelectorAll('[data-project-tab]').forEach(el=>el.onclick=()=>{tab=el.dataset.projectTab;render();});
  body.onclick=async event=>{const button=event.target.closest('[data-project-action]');if(!button)return;try{if(['open','recover'].includes(button.dataset.projectAction)&&!await api.confirm('Open this project in place of the current circuit?'))return;await request(button.dataset.projectAction,{id:button.dataset.projectId,discard_changes:true,checkpoint:button.dataset.checkpoint==='true',sha256:button.dataset.sha});if(['open','recover'].includes(button.dataset.projectAction))dialog.close();else await show(tab);}catch(e){api.toast(e.message,true);}};
+ libraryBackup({...api,reload:()=>show(tab)});
  return {show,save};
 }

@@ -6,7 +6,9 @@ commands are in [the main README](../README.md); the detailed run guide is
 unchanged. The Vellum interface is [archived](native-archive.md).
 
 The November 4 follow-up adds explicitly enabled MCP attachment to the visible
-browser workspace; see [agent setup](agent-setup.md).
+browser workspace; see [agent setup](agent-setup.md). Portable whole-library
+backup/restore adds validated copies including Trash, recovery and unsaved work;
+see [library backups](library-backups.md).
 
 The following feature matrix and qualification history describe their recorded
 source revisions. Historical `./exp-web` commands apply at those revisions;

@@ -5,7 +5,9 @@ The locked Playwright suite runs on GitHub's Linux runners with Chromium, Firefo
 and WebKit. These are engine checks, not certification of installed Chrome or
 Safari. Real macOS browser, VoiceOver and pointer testing remain manual gates.
 
-The suite uses a separate temporary library, refuses an occupied port and never
+Each browser engine gets its own temporary host/library and port
+(18788–18790), keeping sessions below the production workspace limit. The suite
+refuses an occupied port and never
 reuses a running user host. It exercises keyboard tabs/dialogs, edits/undo,
 save/reload/export, captured playback, narrow layouts and automated accessibility.
 Failure reports include traces/screenshots of disposable test pages only. Video

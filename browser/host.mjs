@@ -9,9 +9,11 @@ if(!process.env.CI&&process.env.ELAB_BROWSER_TESTS!=='1') {
  console.error('Browser journeys are disabled locally. Set ELAB_BROWSER_TESTS=1 explicitly when desktop testing is available.');
  process.exit(1);
 }
+const port=process.argv[2]||'18788';
+if(!['18788','18789','18790'].includes(port))throw new Error('Unexpected disposable host port');
 const root=fileURLToPath(new URL('../',import.meta.url));
 const data=mkdtempSync(join(tmpdir(),'elab-browser-'));
-const child=spawn(resolve(root,'build/elab-web-browser'),['--addr','127.0.0.1:18788','--data-dir',data],{cwd:tmpdir(),stdio:'inherit'});
+const child=spawn(resolve(root,'build/elab-web-browser'),['--addr','127.0.0.1:'+port,'--data-dir',data],{cwd:tmpdir(),stdio:'inherit'});
 let stopped=false;
 for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>{stopped=true;child.kill('SIGTERM');});
 child.once('error',error=>{console.error(error);rmSync(data,{recursive:true,force:true});process.exitCode=1;});

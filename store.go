@@ -44,6 +44,7 @@ type projectEntry struct {
 	UpdatedAt  string `json:"updated_at"`
 	SHA256     string `json:"sha256"`
 	Trashed    bool   `json:"trashed,omitempty"`
+	Retained   bool   `json:"retained,omitempty"`
 }
 
 func stamp() string { return time.Now().UTC().Format(time.RFC3339Nano) }
@@ -180,8 +181,14 @@ func (ws *workspace) archiveData(data []byte, name string) error {
 	}
 	// Retention affects only owned automatic history, never saved projects.
 	entries, _ := ws.entries("history")
-	if len(entries) > 50 {
-		for _, old := range entries[50:] {
+	automatic := []projectEntry{}
+	for _, e := range entries {
+		if !e.Retained {
+			automatic = append(automatic, e)
+		}
+	}
+	if len(automatic) > 50 {
+		for _, old := range automatic[50:] {
 			_ = os.RemoveAll(filepath.Join(ws.library, "history", old.ID))
 		}
 	}
@@ -198,25 +205,28 @@ func (ws *workspace) title() string {
 	return "Untitled circuit"
 }
 func (ws *workspace) entries(kind string) ([]projectEntry, error) {
-	dirs, err := os.ReadDir(filepath.Join(ws.library, kind))
-	if os.IsNotExist(err) {
-		return []projectEntry{}, nil
-	}
+	locations, err := libraryLocations(ws.library, kind)
 	if err != nil {
 		return nil, err
 	}
 	entries := []projectEntry{}
-	for _, d := range dirs {
-		if !d.IsDir() || !managedID.MatchString(d.Name()) {
-			continue
+	for _, location := range locations {
+		dirs, err := os.ReadDir(location)
+		if err != nil {
+			return nil, err
 		}
-		data, e := readBounded(filepath.Join(ws.library, kind, d.Name(), "entry.json"), 8192)
-		if e != nil {
-			continue
-		}
-		var entry projectEntry
-		if json.Unmarshal(data, &entry) == nil && entry.ID == d.Name() {
-			entries = append(entries, entry)
+		for _, d := range dirs {
+			if !d.IsDir() || !managedID.MatchString(d.Name()) {
+				continue
+			}
+			data, e := readBounded(filepath.Join(location, d.Name(), "entry.json"), 8192)
+			if e != nil {
+				continue
+			}
+			var entry projectEntry
+			if json.Unmarshal(data, &entry) == nil && entry.ID == d.Name() {
+				entries = append(entries, entry)
+			}
 		}
 	}
 	sort.Slice(entries, func(i, j int) bool { return entries[i].UpdatedAt > entries[j].UpdatedAt })
@@ -303,12 +313,12 @@ func (s *webServer) projects(w http.ResponseWriter, r *http.Request, ws *workspa
 		id := input.ID
 		if id == "" {
 			id = token()
-		} else if _, e := readBounded(filepath.Join(ws.library, "projects", id, "entry.json"), 8192); e != nil {
+		} else if _, e := readBounded(filepath.Join(libraryEntryDirectory(ws.library, "projects", id), "entry.json"), 8192); e != nil {
 			webError(w, 404, "Project not found")
 			return
 		}
 		if input.ID != "" {
-			raw, e := readBounded(filepath.Join(ws.library, "projects", id, "entry.json"), 8192)
+			raw, e := readBounded(filepath.Join(libraryEntryDirectory(ws.library, "projects", id), "entry.json"), 8192)
 			if e != nil {
 				webError(w, 500, e.Error())
 				return
@@ -340,7 +350,7 @@ func (s *webServer) projects(w http.ResponseWriter, r *http.Request, ws *workspa
 			webError(w, 500, err.Error())
 			return
 		}
-		dir := filepath.Join(ws.library, "projects", id)
+		dir := libraryEntryDirectory(ws.library, "projects", id)
 		if err = os.MkdirAll(dir, 0700); err != nil {
 			webError(w, 500, err.Error())
 			return
@@ -398,7 +408,7 @@ func (s *webServer) projects(w http.ResponseWriter, r *http.Request, ws *workspa
 		var data []byte
 		var path string
 		if input.Checkpoint && input.Action == "recover" {
-			checkpoint, e := readCheckpoint(filepath.Join(ws.library, "workspaces", input.ID, "workspace.json"))
+			checkpoint, e := readCheckpoint(filepath.Join(libraryEntryDirectory(ws.library, "workspaces", input.ID), "workspace.json"))
 			if e != nil {
 				webError(w, 404, "Autosaved workspace is unavailable; its files were preserved.")
 				return
@@ -421,7 +431,7 @@ func (s *webServer) projects(w http.ResponseWriter, r *http.Request, ws *workspa
 			}
 			defer os.Remove(path)
 		} else {
-			meta, e := readBounded(filepath.Join(ws.library, kind, input.ID, "entry.json"), 8192)
+			meta, e := readBounded(filepath.Join(libraryEntryDirectory(ws.library, kind, input.ID), "entry.json"), 8192)
 			if e != nil {
 				webError(w, 404, "Project not found")
 				return
@@ -473,7 +483,7 @@ func (s *webServer) projects(w http.ResponseWriter, r *http.Request, ws *workspa
 			ws.info.Name = entry.Name + " (recovered)"
 		}
 	case "trash", "untrash":
-		dir := filepath.Join(ws.library, "projects", input.ID)
+		dir := libraryEntryDirectory(ws.library, "projects", input.ID)
 		data, e := readBounded(filepath.Join(dir, "entry.json"), 8192)
 		if e != nil {
 			webError(w, 404, "Project not found")
@@ -525,7 +535,7 @@ func entryPath(directory, kind string, entry projectEntry) string {
 	if entry.File != "" && managedID.MatchString(entry.File) {
 		file = entry.File + ".elab"
 	}
-	return filepath.Join(directory, kind, entry.ID, file)
+	return filepath.Join(libraryEntryDirectory(directory, kind, entry.ID), file)
 }
 
 func (ws *workspace) migrateLibrary() error {
@@ -590,27 +600,30 @@ func readCheckpoint(path string) (workspaceCheckpoint, error) {
 }
 func (ws *workspace) otherCheckpoints() ([]projectEntry, error) {
 	entries := []projectEntry{}
-	dirs, err := os.ReadDir(filepath.Join(ws.library, "workspaces"))
-	if os.IsNotExist(err) {
-		return entries, nil
-	}
+	locations, err := libraryLocations(ws.library, "workspaces")
 	if err != nil {
 		return nil, err
 	}
-	for _, dir := range dirs {
-		if !dir.IsDir() || !managedID.MatchString(dir.Name()) || dir.Name() == filepath.Base(ws.directory) {
-			continue
+	for _, location := range locations {
+		dirs, err := os.ReadDir(location)
+		if err != nil {
+			return nil, err
 		}
-		checkpoint, err := readCheckpoint(filepath.Join(ws.library, "workspaces", dir.Name(), "workspace.json"))
-		if err != nil || !checkpoint.Dirty {
-			continue
+		for _, dir := range dirs {
+			if !dir.IsDir() || !managedID.MatchString(dir.Name()) || filepath.Join(location, dir.Name()) == ws.directory {
+				continue
+			}
+			checkpoint, err := readCheckpoint(filepath.Join(location, dir.Name(), "workspace.json"))
+			if err != nil || !checkpoint.Dirty {
+				continue
+			}
+			sum := sha256.Sum256(checkpoint.Document)
+			name := checkpoint.Workspace.Name
+			if name == "" {
+				name = "Autosaved circuit"
+			}
+			entries = append(entries, projectEntry{Checkpoint: true, ID: dir.Name(), Name: name + " · autosaved workspace", UpdatedAt: checkpoint.Workspace.AutosavedAt, SHA256: hex.EncodeToString(sum[:])})
 		}
-		sum := sha256.Sum256(checkpoint.Document)
-		name := checkpoint.Workspace.Name
-		if name == "" {
-			name = "Untitled circuit"
-		}
-		entries = append(entries, projectEntry{Checkpoint: true, ID: dir.Name(), Name: name + " · autosaved workspace", UpdatedAt: checkpoint.Workspace.AutosavedAt, SHA256: hex.EncodeToString(sum[:])})
 	}
 	return entries, nil
 }

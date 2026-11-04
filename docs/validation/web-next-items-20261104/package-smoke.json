@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "source_commit": "bc43868fb6cac9ed9de975c83acb8ae537a71d51",
+  "source_clean": false,
+  "archive_sha256": "8460ede008273b5bd760d10ac890c941371ac18fce26f7d15273167aec9a557c",
+  "extracted_files": 23,
+  "runtime": {
+    "passed": true,
+    "source_commit": "bc43868fb6cac9ed9de975c83acb8ae537a71d51",
+    "source_clean": false,
+    "checks": [
+      "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+      "copied backend backs up unsaved work, validates a preview and restores a separate recovery copy",
+      "normal control Quit drains and exits the copied backend",
+      "same browser workspace restores acknowledged 22 k\u03a9 edit after restart",
+      "restored backup recovery copy remains discoverable after restart"
+    ],
+    "scope": "Copied backend and embedded assets; no GUI, browser, clean-account, or notarization claim."
+  }
+}

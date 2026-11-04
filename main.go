@@ -46,6 +46,7 @@ type webServer struct {
 	stopping  bool
 	host      *hostRuntime
 	storeMu   sync.Mutex
+	libraryIO chan struct{}
 	assets    fs.FS
 	mu        sync.Mutex
 	sessions  map[string]*workspace
@@ -60,7 +61,7 @@ func newWebServer(root string) *webServer {
 		commands[c.ID] = c
 	}
 	static, _ := fs.Sub(assets, "static")
-	return &webServer{assets: static, sessions: make(map[string]*workspace), commands: commands, root: root, instance: token()}
+	return &webServer{libraryIO: make(chan struct{}, 1), assets: static, sessions: make(map[string]*workspace), commands: commands, root: root, instance: token()}
 }
 func token() string {
 	b := make([]byte, 24)
@@ -298,6 +299,10 @@ func (s *webServer) handler() http.Handler {
 			jsonReply(w, 200, payload)
 		case "/api/import-result":
 			s.importResult(w, r, session)
+		case "/api/library/backup":
+			s.libraryBackup(w, r, session)
+		case "/api/library/restore":
+			s.libraryRestore(w, r, session)
 		case "/api/projects":
 			s.projects(w, r, session)
 		case "/api/agent":
