@@ -22,7 +22,12 @@ test('box selection and group drag preserve relative positions and cancel safely
  await page.goto('/');await expect(page.locator('#connection-status')).toHaveText('Local engine connected');
  const svg=page.locator('#schematic');await svg.focus();await page.keyboard.press('Control+a');await expect(page.locator('#selection-count')).toHaveText('4 components selected');
  await page.getByRole('button',{name:'Clear selection',exact:true}).click();
- const bounds=await svg.boundingBox();const parts=await page.locator('#components [data-object]').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return{x:b.x,y:b.y,r:b.right,b:b.bottom};}));
+ await expect.poll(async()=>(await snapshot(page)).selected).toBe('');
+ // Clear selection acknowledges asynchronously and replaces component nodes.
+ // Resolve current descendants and all client bounds in one browser turn;
+ // locator handles collected before an acknowledgement can already be detached.
+ const {bounds,parts}=await svg.evaluate(root=>({bounds:root.getBoundingClientRect().toJSON(),parts:[...root.querySelectorAll('#components [data-object]')].map(node=>{const b=node.getBoundingClientRect();return{x:b.x,y:b.y,r:b.right,b:b.bottom};})}));
+ expect(parts).toHaveLength(4);expect(parts.every(p=>p.r>p.x&&p.b>p.y)).toBe(true);
  const x0=Math.max(bounds.x+2,Math.min(...parts.map(p=>p.x))-5),y0=Math.max(bounds.y+2,Math.min(...parts.map(p=>p.y))-5);
  const x1=Math.min(bounds.x+bounds.width-2,Math.max(...parts.map(p=>p.r))+5),y1=Math.min(bounds.y+bounds.height-2,Math.max(...parts.map(p=>p.b))+5);
  await page.mouse.move(x0,y0);await page.mouse.down();await page.mouse.move(x1,y1,{steps:6});await page.mouse.up();await info.attach('marquee-events',{body:Buffer.from(JSON.stringify(await page.evaluate(()=>window.boxEvents))),contentType:'application/json'});await expect(page.locator('#selection-count')).toHaveText('4 components selected');
