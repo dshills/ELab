@@ -65,3 +65,15 @@ The Vellum UI, SDK and native-only tooling are preserved in the Git tag
 `docs/native-archive.md`. Do not reintroduce the retired SDK into current builds.
 Use `scripts/check.sh` (`portable` or `macos` quality profiles) for current gates.
 Historical native evidence remains tied to its original revision and paths.
+
+## Owner experience and product guidance
+
+The owner is an electronics novice and has no usability-test participants available.
+Do not make engineering progress depend on recruiting testers, the owner supplying
+circuit expertise, or owner review. Use best engineering judgment, primary online
+references, reproducible circuit checks and realistic application walkthroughs.
+Explain units, signed readings and cause/effect in plain language. Prefer guided
+activities and actionable feedback over assuming familiarity with schematics.
+Distinguish engineering/automated evidence from human usability or VoiceOver
+acceptance; never invent participant observations. Human research may remain an
+explicit future opportunity without blocking the authorized development sequence.

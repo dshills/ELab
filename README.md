@@ -59,6 +59,10 @@ notarization, stapled tickets, Gatekeeper and exact-archive installation checks.
 
 ## Workbench
 
+New to electronics? Open **Learn circuits & shortcuts** for guided LED, capacitor
+and H-bridge activities with units and expected results explained along the way.
+
+
 - Draw, wire, move, rotate and duplicate parts; use net labels, junctions, circuit
   blocks, undo/redo and keyboard placement.
 - Inspect live voltage/current and device settings; pause, restart or step the
