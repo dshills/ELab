@@ -1,0 +1,217 @@
+{
+  "schema": 1,
+  "version": "0.207.0-alpha.1",
+  "build": "313",
+  "source_commit": "2ca9bc8d6643a672336af21ca08a392084cab3b2",
+  "source_clean": true,
+  "archive": {
+    "name": "ELab-Web-0.207.0-alpha.1-macos-arm64.zip",
+    "bytes": 11856229,
+    "sha256": "04090425038f8ef53299bb30fbc25d5ce3d9dc082fb8daea250f538e73197342"
+  },
+  "local_quality": {
+    "passed": true,
+    "gates_passed": true,
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "steps": [
+      {
+        "name": "lint",
+        "command": [
+          "scripts/lint.sh"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 8.937
+      },
+      {
+        "name": "python",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "test_*.py"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 2.671
+      },
+      {
+        "name": "web-ui",
+        "command": [
+          "node",
+          "scripts/check-web.mjs"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 2.179
+      },
+      {
+        "name": "portable-race",
+        "command": [
+          "go",
+          "test",
+          "-race",
+          "./...",
+          "-count=1",
+          "-timeout=30m"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 499.721
+      },
+      {
+        "name": "portable-vet",
+        "command": [
+          "go",
+          "vet",
+          "./..."
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 5.811
+      },
+      {
+        "name": "package",
+        "command": [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "-B",
+          "scripts/check_package.py"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "seconds": 4.467
+      }
+    ],
+    "profile": "macos",
+    "source_commit": "2ca9bc8d6643a672336af21ca08a392084cab3b2",
+    "inputs_unchanged": true
+  },
+  "browser_results": {
+    "stats": {
+      "startTime": "2026-11-04T17:39:06.444Z",
+      "duration": 68133.975,
+      "expected": 46,
+      "skipped": 2,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "projects": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ]
+  },
+  "archived_runtime": {
+    "passed": true,
+    "source_commit": "2ca9bc8d6643a672336af21ca08a392084cab3b2",
+    "source_clean": true,
+    "checks": [
+      "running backend exposes matching version, build and VCS identity",
+      "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+      "copied backend backs up unsaved work, validates a preview and restores a separate recovery copy",
+      "normal control Quit drains and exits the copied backend",
+      "same browser workspace restores acknowledged 22 k\u03a9 edit after restart",
+      "restored backup recovery copy remains discoverable after restart"
+    ],
+    "scope": "Copied backend and embedded assets; no GUI, browser, clean-account, or notarization claim."
+  },
+  "downloaded_shipping_browser": {
+    "passed": true,
+    "scope": "Headless Chromium against the exact archive-extracted shipping backend; disposable data, no development tools in backend PATH. No native picker, launcher, clean-account or VoiceOver acceptance claim.",
+    "checks": [
+      "shipping web page and About identify version/build/clean main source",
+      "guided LED activity changes accepted solver current after a resistance edit",
+      "shipping group duplication and one-step undo preserve object counts",
+      "four-MOSFET load reverses from negative to positive across 20 ms",
+      "all 50 accepted H-bridge rows survive named save and actual reopen",
+      "browser-exported native project reimports exact H-bridge graph and all recording rows",
+      "shipping support report exposes exact build identity and excludes project name",
+      "shipping library backup control creates an actual ZIP download",
+      "no uncaught browser errors across the shipping journeys",
+      "owned shipping backend saves and exits normally"
+    ],
+    "application": {
+      "name": "ELab",
+      "interface": "web",
+      "version": "0.207.0-alpha.1",
+      "build": "313",
+      "source_commit": "2ca9bc8d6643a672336af21ca08a392084cab3b2",
+      "source_modified": false,
+      "go_version": "go1.27.3",
+      "os": "darwin",
+      "architecture": "arm64"
+    },
+    "load_voltage_before_v": -4.7253319037622035,
+    "load_voltage_after_v": 4.725331894137437,
+    "recorded_rows": 50,
+    "export_sha256": "22f3a9a56945579cde7bb2182b99ebebc89975e6876d81e6b97b2a5cab186a4d",
+    "browser_errors": []
+  },
+  "hosted_ci": {
+    "status": "queued",
+    "conclusion": "",
+    "url": "https://github.com/dshills/ELab/actions/runs/41878077636",
+    "headSha": "2ca9bc8d6643a672336af21ca08a392084cab3b2",
+    "observed_at": "2026-11-04T17:41:36.197424+00:00",
+    "jobs": [
+      {
+        "databaseId": 126742984151,
+        "name": "Web browser (chromium)",
+        "status": "queued",
+        "conclusion": ""
+      },
+      {
+        "databaseId": 126742984569,
+        "name": "Web browser (webkit)",
+        "status": "queued",
+        "conclusion": ""
+      },
+      {
+        "databaseId": 126742984604,
+        "name": "macos",
+        "status": "queued",
+        "conclusion": ""
+      },
+      {
+        "databaseId": 126742984662,
+        "name": "Web browser (firefox)",
+        "status": "queued",
+        "conclusion": ""
+      },
+      {
+        "databaseId": 126742984720,
+        "name": "portable",
+        "status": "queued",
+        "conclusion": ""
+      }
+    ]
+  },
+  "distribution": {
+    "signing": "ad-hoc",
+    "notarized": false,
+    "build_target_macos": "13.0",
+    "tested_platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "limitations": [
+      "Intel and macOS 13/14 runtime not qualified",
+      "Clean-account/Finder installation not qualified",
+      "Native VoiceOver and whole-app accessibility conformance not qualified",
+      "Headless file input does not qualify the native file picker",
+      "No human usability-study acceptance claimed"
+    ]
+  },
+  "release_fix_review": {
+    "problem": "Reselecting the current component advanced command revision and refused an immediately focused edit",
+    "resolution": "Suppress redundant browser selection only after earlier queued actions have completed; retain explicit edit guards and native command semantics",
+    "review": "Internal review of queue ordering, pointer/keyboard selection paths, stale edits and rapid target changes",
+    "focused_validation": "12 browser journeys passed across Chromium, Firefox and WebKit; 32 frontend checks passed"
+  },
+  "release_test_corrections": [
+    "Measure acknowledged connected SVG nodes atomically; 30 repeated drag trials passed",
+    "Wait for restore cancellation/control readiness; 30 fresh-library restore trials passed"
+  ]
+}

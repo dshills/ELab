@@ -1,14 +1,37 @@
-# Current unsigned alpha
+# Current web alpha
 
-**ELab 0.205.0 alpha 1, build 311**, runs on Apple Silicon with macOS 27.2 or later.
-[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.205.0-alpha.1/ELab-0.205.0-macos-arm64.zip) · [Start guide](https://github.com/dshills/ELab/releases/download/v0.205.0-alpha.1/START-HERE.md) · [Checksums](https://github.com/dshills/ELab/releases/download/v0.205.0-alpha.1/SHA256SUMS.txt).
+**ELab Web 0.207.0 alpha 1, build 313**, for Apple Silicon macOS.
+[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.1/ELab-Web-0.207.0-alpha.1-macos-arm64.zip) · [Start guide](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.1/START-HERE.md) · [Checksums](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.1/SHA256SUMS).
 
-Open **Examples → Power & relays → Four-MOSFET H-bridge**. Pause, restart and step across 20 ms to reverse the 100 Ω load from about −4.725 V to +4.725 V. Record 45 ms to capture the reversal and return. The example is also included as `Examples/discrete-hbridge.elab`. [H-bridge guide](hbridge.md#four-mosfet-bridge).
+Extract **ELab Web.app** and open it. The launcher starts the local engine and
+opens your default browser; Go and Node are not required. Choose **Learn circuits
+& shortcuts** for guided LED, capacitor and four-MOSFET H-bridge activities.
+Connected group editing, actionable circuit checks, improved keyboard access,
+library backups and private diagnostic reports are included. Existing web
+projects remain in `~/Library/Application Support/ELab/web`.
 
-Extract the whole folder to keep the app, matching agent, 88 editable examples and schematics, notices and first-use kit together. To connect a local MCP client, run `./elab-agent --mcp-config` from its final location. [Agent setup](agent-setup.md).
+The ZIP is 11,856,229 bytes. SHA-256:
+`04090425038f8ef53299bb30fbc25d5ce3d9dc082fb8daea250f538e73197342`.
+The public tag identifies clean `main` source `2ca9bc8d6643a672336af21ca08a392084cab3b2`.
 
-The ZIP is 46,822,732 bytes. Its SHA-256 is `b238ec256eae30778e435e0c7af56141d4f7bec1a6a0e1c1453b9bc18696d973`. The downloaded native app reopened all 50 recorded H-bridge samples after a save. This alpha has an ad-hoc integrity signature. Gatekeeper can block the first launch. Follow the per-app instructions in the start guide. [Qualification and installation results](validation/hbridge-alpha-311/README.md).
+The full local macOS gates passed: lint, 75 Python tests, 32 frontend checks,
+complete Go race tests, vet and package checks. Browser qualification passed 46
+journeys with two planned skips and no unexpected or flaky results. The exact
+GitHub-downloaded app passed LED editing, group undo, H-bridge reversal, exact
+preservation of all 50 recorded rows through save/reopen and export/import,
+private diagnostic reports and library backup. All six downloaded assets match
+their qualified bytes and all five payload checksums pass.
+[Qualification and publication evidence](validation/web-alpha-313-20261104/README.md).
 
-[GitHub release notes](https://github.com/dshills/ELab/releases/tag/v0.205.0-alpha.1) · [Previous native workspace alpha](https://github.com/dshills/ELab/releases/tag/v0.204.0-alpha.1).
+At publication, all five [exact-source hosted CI jobs](https://github.com/dshills/ELab/actions/runs/41878077636) were queued;
+these pending results are explicitly separate from the passing local gates.
 
-All local target gates passed. Both hosted jobs failed in the portable race suite. All 26 Linux failures and 16 of the 17 macOS failures also appeared in the pre-H-bridge baseline. The additional hosted macOS failure was an MCP stale-document guard assertion. [Hosted checks and comparison](validation/hbridge-alpha-311/README.md#hosted-checks).
+This private alpha is **ad-hoc signed and not notarized**. Gatekeeper can block
+first launch; follow the start guide's per-app opening instructions. The exact
+ZIP is tested on Apple Silicon macOS 27.2. macOS 13 is the configured build target,
+not a verified minimum. Intel, clean-account/Finder installation, native
+VoiceOver and whole-app accessibility conformance are not qualified.
+
+[Release notes](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.1) ·
+[Previous web alpha](https://github.com/dshills/ELab/releases/tag/v0.206.0-alpha.1) ·
+[Preserved native H-bridge alpha](https://github.com/dshills/ELab/releases/tag/v0.205.0-alpha.1).
