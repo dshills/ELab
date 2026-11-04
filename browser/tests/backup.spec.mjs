@@ -18,11 +18,14 @@ test('library backup previews, cancels and restores copies without replacing the
  await expect(projects.getByRole('status')).toContainText('Library backup downloaded');
  const cards=projects.locator('.project-card');const before=await cards.count();
  const input=projects.locator('input[type=file]');
- await input.setInputFiles({name:'Library.zip',mimeType:'application/zip',buffer:bytes});
+ // A closed dialog can still have a queued close event. Respect the same
+ // enabled restore control a user must wait for before choosing another file.
+ const choose=async(name,buffer)=>{await expect(projects.locator('#library-restore')).toBeEnabled();await input.setInputFiles({name,mimeType:'application/zip',buffer});};
+ await choose('Library.zip',bytes);
  const confirm=page.getByRole('dialog',{name:'Restore library backup?',exact:true});
  await expect(confirm).toBeVisible();await expect(confirm.locator('#library-restore-summary')).toContainText('saved projects');
- await confirm.getByRole('button',{name:'Cancel restore',exact:true}).click();await expect(cards).toHaveCount(before);
- await input.setInputFiles({name:'Library.zip',mimeType:'application/zip',buffer:bytes});
+ await confirm.getByRole('button',{name:'Cancel restore',exact:true}).click();await expect(confirm).not.toBeVisible();await expect(projects.getByRole('status')).toContainText('Restore cancelled');await expect(cards).toHaveCount(before);
+ await choose('Library.zip',bytes);
  await expect(confirm).toBeVisible();await confirm.getByRole('button',{name:'Restore copies',exact:true}).click();
  await expect(projects.getByRole('status')).toContainText('Restored copies added');
  await expect(cards).toHaveCount(before*2);
@@ -31,7 +34,7 @@ test('library backup previews, cancels and restores copies without replacing the
  await projects.getByRole('button',{name:'Close projects',exact:true}).click();await expect(capacitance).toHaveValue(/2\.2/);
  // A malformed file shows a useful error and never reaches confirmation.
  await page.getByRole('button',{name:'Projects',exact:true}).click();
- await input.setInputFiles({name:'Bad.zip',mimeType:'application/zip',buffer:Buffer.from('not a backup')});
+ await choose('Bad.zip',Buffer.from('not a backup'));
  await expect(projects.getByRole('status')).toContainText('Restore failed');await expect(confirm).not.toBeVisible();
  // Native loading marks a document clean, but a recovery copy still needs Save.
  // A projected selection reply must retain that browser recovery status.
