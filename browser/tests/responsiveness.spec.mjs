@@ -2,10 +2,12 @@ import {test,expect} from '@playwright/test';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {execFileSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../../',import.meta.url));
 
 const quantile=(values,q)=>values.length?[...values].sort((a,b)=>a-b)[Math.min(values.length-1,Math.ceil(values.length*q)-1)]:null;
 const snapshot=async page=>(await (await page.request.get('/api/state')).json()).state;
-function paddedFixture(path){const doc=JSON.parse(readFileSync(resolve('..',path),'utf8')),g=doc.graph,ground=g.components.find(p=>p.kind==='ground');let n=0;while(g.components.length<100){const id='JX'+(++n);g.components.push({id,kind:'junction',name:'Junction',model:'junction.v1',terminals:['node'],position:{x:-1800+((n-1)%12)*300,y:1200+Math.floor((n-1)/12)*240},value:0,rotation:0});g.wires.push({id:'WX'+n,from:id+'.node',to:ground.id+'.reference',connected:true});}if(path.includes('hundred-node'))doc.scope_probes={ids:['v:V1','i:V1','v:P1.wiper','v:P25.wiper','v:P50.wiper','v:P1.1']};doc.paused=true;return Buffer.from(JSON.stringify(doc));}
+function paddedFixture(path){const doc=JSON.parse(readFileSync(resolve(root,path),'utf8')),g=doc.graph,ground=g.components.find(p=>p.kind==='ground');let n=0;while(g.components.length<100){const id='JX'+(++n);g.components.push({id,kind:'junction',name:'Junction',model:'junction.v1',terminals:['node'],position:{x:-1800+((n-1)%12)*300,y:1200+Math.floor((n-1)/12)*240},value:0,rotation:0});g.wires.push({id:'WX'+n,from:id+'.node',to:ground.id+'.reference',connected:true});}if(path.includes('hundred-node'))doc.scope_probes={ids:['v:V1','i:V1','v:P1.wiper','v:P25.wiper','v:P50.wiper','v:P1.1']};doc.paused=true;return Buffer.from(JSON.stringify(doc));}
 
 test('capacity editing, group dragging and live scope remain measurable under CPU load',async({page,browserName},info)=>{
  test.skip(browserName!=='chromium','CDP CPU throttling measurement is Chromium-specific');test.setTimeout(180_000);
@@ -19,7 +21,7 @@ test('capacity editing, group dragging and live scope remain measurable under CP
   document.addEventListener('keydown',e=>{if(e.key.startsWith('Arrow')&&window.perfRun.pending)window.perfRun.pending.start=performance.now();},true);
   document.addEventListener('pointermove',e=>{if(!e.buttons)return;const start=performance.now();requestAnimationFrame(()=>window.perfRun.pointers.push(performance.now()-start));},true);
  });
- const report={passed:false,source_commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),scope:'Local headless Chromium, 4x main-thread CPU slowdown plus a 50%-duty worker. Synthetic event to accepted SVG update plus two frames; not field INP or physical event-to-pixel evidence.',cases:[]};
+ const report={passed:false,source_commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',cwd:root}).trim(),scope:'Local headless Chromium, 4x main-thread CPU slowdown plus a 50%-duty worker. Synthetic event to accepted SVG update plus two frames; not field INP or physical event-to-pixel evidence.',cases:[]};
  try{for(const fixture of ['docs/validation/desktop-capacity-artifacts/hundred-node.elab','docs/validation/live-clock-grid/capacity-pulse.elab']){
   const native=paddedFixture(fixture);let s=await snapshot(page);const query=new URLSearchParams({revision:s.command_revision,generation:s.document.generation,discard:'true',name:'Responsiveness fixture.elab'});
   const imported=await page.request.post('/api/upload?'+query,{headers:{'Content-Type':'application/octet-stream'},data:native});expect(imported.ok()).toBeTruthy();expect((await imported.json()).error).toBeUndefined();

@@ -158,3 +158,20 @@ error/retry/late-response checks. Logs: `build/support-reviewed-go.log`,
 
 A frozen-source full macOS gate and clean-branch release-candidate rehearsal are
 run after this milestone to qualify the combined implementation.
+
+## Combined rehearsal corrections
+
+The first full macOS plan passed on `4bad6822`, with unchanged source inputs.
+Its following release rehearsal correctly refused to stage a package because
+browser qualification failed. It found two integration defects: the capacity
+fixture loader assumed a `browser/` working directory, and the new visible
+version text was absent from the version button's accessible name. Fixture paths
+now resolve from the test module location; visible version/failure text is always
+included in the accessible name. No gate or accessibility assertion was relaxed.
+
+Internal review and all 32 frontend tests pass. The entire three-engine suite,
+launched from repository root, passes 46 journeys with two deliberate non-Chromium
+load skips. Evidence: `build/web-remaining-browser-corrected.log` and
+`build/web-remaining-corrected-frontend.log`. A new frozen-source macOS plan and
+release rehearsal follow these committed corrections; the earlier receipt is
+not reused for changed inputs.

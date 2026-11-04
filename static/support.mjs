@@ -9,12 +9,13 @@ export function browserEnvironment(userAgent='',width=0,height=0,ratio=1){
 
 export function supportPanel(api){
  const $=id=>document.getElementById(id),dialog=$('support-dialog'),button=$('about-button');let report='',pending=false,session=0,infoRequest=0;
- function describe(info){button.textContent=info.version==='development'?'Development':`v${info.version}`;
+ function label(text){button.textContent=text;button.setAttribute('aria-label',`${text} · About ELab and diagnostic report`);}
+ function describe(info){label(info.version==='development'?'Development':`v${info.version}`);
   $('support-version').textContent=`ELab ${info.version}${info.build?` · build ${info.build}`:''}`;
   $('support-source').textContent=`Source: ${info.source_commit}${info.source_modified?' · modified source':''}`;
   $('support-runtime').textContent=`${info.os} / ${info.architecture} · ${info.go_version}`;
  }
- async function load(){const request=++infoRequest;try{const info=await api.fetch('/api/about');if(request===infoRequest)describe(info);}catch{if(request!==infoRequest)return;$('support-source').textContent='';$('support-runtime').textContent='';button.textContent='Version unavailable';$('support-version').textContent='Build information is unavailable. Reconnect to ELab and reopen this window.';}}
+ async function load(){const request=++infoRequest;try{const info=await api.fetch('/api/about');if(request===infoRequest)describe(info);}catch{if(request!==infoRequest)return;$('support-source').textContent='';$('support-runtime').textContent='';label('Version unavailable');$('support-version').textContent='Build information is unavailable. Reconnect to ELab and reopen this window.';}}
  function controls(){ $('support-create').disabled=pending;$('support-download').disabled=pending||!report;$('support-copy').disabled=pending||!report;}
  function clear(){report='';pending=false;$('support-preview').value='';$('support-preview-container').hidden=true;$('support-status').textContent='';$('support-create').textContent='Create report preview';controls();}
  async function create(){if(pending)return;const requested=session;pending=true;controls();$('support-status').textContent='Creating report…';try{

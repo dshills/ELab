@@ -7,7 +7,7 @@ test('build identity and explicit private report preview, download, failure and 
  expect(requests.filter(url=>new URL(url).pathname==='/api/diagnostic-report')).toHaveLength(0);
  const value=page.getByRole('textbox',{name:'Capacitance',exact:true});await value.fill('22.345671 uF');await page.getByRole('button',{name:'Apply',exact:true}).click();
  await page.getByRole('button',{name:'Save project',exact:true}).click();const save=page.getByRole('dialog',{name:'Save project',exact:true});await save.getByRole('textbox',{name:'Project name'}).fill('OwnerPrivateName');await save.getByRole('button',{name:'Save project',exact:true}).click();await expect(save).not.toBeVisible();
- const about=page.getByRole('button',{name:'About ELab and diagnostic report',exact:true});await about.press('Enter');const dialog=page.getByRole('dialog',{name:'About ELab',exact:true});await expect(dialog).toBeVisible();
+ const about=page.getByRole('button',{name:/About ELab and diagnostic report/});await about.press('Enter');const dialog=page.getByRole('dialog',{name:'About ELab',exact:true});await expect(dialog).toBeVisible();
  const metadata=await (await page.request.get('/api/about')).json();await expect(page.locator('#support-source')).toContainText(metadata.source_commit);
  await expect(dialog.getByRole('button',{name:'Download report',exact:true})).toBeDisabled();expect(requests.filter(url=>new URL(url).pathname==='/api/diagnostic-report')).toHaveLength(0);
  await dialog.getByRole('button',{name:'Create report preview',exact:true}).press('Enter');const preview=dialog.getByRole('textbox',{name:'Report preview (JSON)',exact:true});await expect(preview).toBeVisible();const text=await preview.inputValue(),report=JSON.parse(text);
