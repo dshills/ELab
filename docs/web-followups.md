@@ -11,7 +11,7 @@ among remaining items, with internal review and a separate commit per milestone.
 | 4 | Box selection, group move/copy/duplicate and undo | Complete: box/Shift selection, group movement, detached copy/paste, one-step undo |
 | 5 | Library backup/restore | Complete, `f1fc39eb` |
 | 6 | Actionable circuit diagnostics | Complete: associated highlights, guidance, repair controls and scoped request help |
-| 7 | Measured browser responsiveness under load | Pending |
+| 7 | Measured browser responsiveness under load | Complete: two capacity workloads, conditional scenes and stable SVG nodes |
 | 8 | Accessibility across circuit workflows | Pending |
 | 9 | Repeatable release automation | Pending |
 | 10 | Version and user-controlled diagnostic reports | Pending |

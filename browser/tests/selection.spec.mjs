@@ -17,14 +17,15 @@ test('multi-selection moves, copies connected parts and undoes each operation on
  await page.getByRole('button',{name:'Redo',exact:true}).click();await expect.poll(async()=>(await snapshot(page)).components.length).toBe(before.components.length+2);
  expect(errors).toEqual([]);
 });
-test('box selection and group drag preserve relative positions and cancel safely',async({page})=>{
+test('box selection and group drag preserve relative positions and cancel safely',async({page},info)=>{
+ await page.addInitScript(()=>{window.boxEvents=[];for(const kind of ['pointerdown','pointerup'])document.addEventListener(kind,e=>{const svg=document.getElementById('schematic');if(!svg||!e.target.closest('#schematic'))return;const box=document.querySelector('.selection-marquee');window.boxEvents.push({kind,x:e.clientX,y:e.clientY,target:e.target.closest('[data-object]')?.dataset.object||e.target.id,view:svg.getAttribute('viewBox'),canvas:svg.getBoundingClientRect().toJSON(),marquee:box?.getBoundingClientRect().toJSON(),bodies:[...document.querySelectorAll('.component-hit')].map(el=>({id:el.parentElement.dataset.object,...el.getBoundingClientRect().toJSON()}))});},true);});
  await page.goto('/');await expect(page.locator('#connection-status')).toHaveText('Local engine connected');
  const svg=page.locator('#schematic');await svg.focus();await page.keyboard.press('Control+a');await expect(page.locator('#selection-count')).toHaveText('4 components selected');
  await page.getByRole('button',{name:'Clear selection',exact:true}).click();
  const bounds=await svg.boundingBox();const parts=await page.locator('#components [data-object]').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return{x:b.x,y:b.y,r:b.right,b:b.bottom};}));
  const x0=Math.max(bounds.x+2,Math.min(...parts.map(p=>p.x))-5),y0=Math.max(bounds.y+2,Math.min(...parts.map(p=>p.y))-5);
  const x1=Math.min(bounds.x+bounds.width-2,Math.max(...parts.map(p=>p.r))+5),y1=Math.min(bounds.y+bounds.height-2,Math.max(...parts.map(p=>p.b))+5);
- await page.mouse.move(x0,y0);await page.mouse.down();await page.mouse.move(x1,y1,{steps:6});await page.mouse.up();await expect(page.locator('#selection-count')).toHaveText('4 components selected');
+ await page.mouse.move(x0,y0);await page.mouse.down();await page.mouse.move(x1,y1,{steps:6});await page.mouse.up();await info.attach('marquee-events',{body:Buffer.from(JSON.stringify(await page.evaluate(()=>window.boxEvents))),contentType:'application/json'});await expect(page.locator('#selection-count')).toHaveText('4 components selected');
  const before=await snapshot(page),target=await page.locator('[data-object="R1"] .component-hit').boundingBox();
  await page.mouse.move(target.x+target.width/2,target.y+target.height/2);await page.mouse.down();await page.mouse.move(target.x+target.width/2+35,target.y+target.height/2+25,{steps:5});await page.mouse.up();
  await expect.poll(async()=>(await snapshot(page)).undo_name).toBe('Move selection');const moved=await snapshot(page);const delta={x:moved.components[0].position.x-before.components[0].position.x,y:moved.components[0].position.y-before.components[0].position.y};expect(Math.abs(delta.x)+Math.abs(delta.y)).toBeGreaterThan(0);

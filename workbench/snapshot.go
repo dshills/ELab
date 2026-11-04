@@ -121,6 +121,13 @@ func (s *Service) SnapshotIfChanged(after uint64) (Snapshot, bool) {
 	return s.snapshotLocked(), true
 }
 
+// SnapshotIsCurrent is a cheap host projection hint, not a reservation. A later
+// publication can supersede the immutable snapshot after this check returns.
+func (s *Service) SnapshotIsCurrent(revision uint64) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.revision == revision
+}
 func (s *Service) Snapshot() Snapshot { s.mu.Lock(); defer s.mu.Unlock(); return s.snapshotLocked() }
 func (s *Service) snapshotLocked() Snapshot {
 	page, _, _ := normalizeSchematicPage(&s.exportPage)

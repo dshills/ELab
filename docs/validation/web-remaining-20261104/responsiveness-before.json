@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "source_commit": "47a7b010a34a832462421f21660432235e81ec95",
+  "scope": "Local headless Chromium, 4x main-thread CPU slowdown plus a 50%-duty worker. Synthetic event to accepted SVG update plus two frames; not field INP or physical event-to-pixel evidence.",
+  "cases": [
+    {
+      "fixture": "docs/validation/desktop-capacity-artifacts/hundred-node.elab",
+      "drawing_objects": 100,
+      "simulated_parts": 51,
+      "electrical_nodes": 100,
+      "traces": 6,
+      "status": "running",
+      "accepted_edit_ms": {
+        "samples": 8,
+        "p50": 109.30000001192093,
+        "p95": 365.5
+      },
+      "drag_frame_ms": {
+        "samples": 20,
+        "p50": 9.900000035762787,
+        "p95": 11.199999988079071
+      },
+      "live": {
+        "scope_frames": 10,
+        "interval_p95_ms": 204.79999995231628,
+        "component_root_replacements": 0,
+        "snapshot_bytes_p50": 264547,
+        "snapshot_duration_p95_ms": 10.399999976158142
+      }
+    },
+    {
+      "fixture": "docs/validation/live-clock-grid/capacity-pulse.elab",
+      "drawing_objects": 100,
+      "simulated_parts": 64,
+      "electrical_nodes": 60,
+      "traces": 6,
+      "status": "running",
+      "accepted_edit_ms": {
+        "samples": 8,
+        "p50": 96.40000003576279,
+        "p95": 121.69999998807907
+      },
+      "drag_frame_ms": {
+        "samples": 20,
+        "p50": 7.899999976158142,
+        "p95": 10.399999976158142
+      },
+      "live": {
+        "scope_frames": 10,
+        "interval_p95_ms": 208.39999997615814,
+        "component_root_replacements": 0,
+        "snapshot_bytes_p50": 326285,
+        "snapshot_duration_p95_ms": 11.400000035762787
+      }
+    }
+  ]
+}

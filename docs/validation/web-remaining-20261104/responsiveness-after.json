@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "source_commit": "47a7b010a34a832462421f21660432235e81ec95",
+  "scope": "Local headless Chromium, 4x main-thread CPU slowdown plus a 50%-duty worker. Synthetic event to accepted SVG update plus two frames; not field INP or physical event-to-pixel evidence.",
+  "cases": [
+    {
+      "fixture": "docs/validation/desktop-capacity-artifacts/hundred-node.elab",
+      "drawing_objects": 100,
+      "simulated_parts": 51,
+      "electrical_nodes": 100,
+      "traces": 6,
+      "status": "running",
+      "scene_transfer": {
+        "full_bytes": 274835,
+        "conditional_bytes": 209681,
+        "same_revision": true,
+        "static_geometry_omitted": true
+      },
+      "accepted_edit_ms": {
+        "samples": 8,
+        "p50": 74.19999998807907,
+        "p95": 340.30000001192093
+      },
+      "drag_frame_ms": {
+        "samples": 20,
+        "p50": 0.5999999642372131,
+        "p95": 1.5
+      },
+      "live": {
+        "scope_frames": 10,
+        "interval_p95_ms": 209.5999999642372,
+        "component_root_replacements": 0,
+        "snapshot_bytes_p50": 201092,
+        "snapshot_duration_p95_ms": 19.19999998807907
+      }
+    },
+    {
+      "fixture": "docs/validation/live-clock-grid/capacity-pulse.elab",
+      "drawing_objects": 100,
+      "simulated_parts": 64,
+      "electrical_nodes": 60,
+      "traces": 6,
+      "status": "running",
+      "scene_transfer": {
+        "full_bytes": 417938,
+        "conditional_bytes": 357299,
+        "same_revision": true,
+        "static_geometry_omitted": true
+      },
+      "accepted_edit_ms": {
+        "samples": 8,
+        "p50": 68.30000001192093,
+        "p95": 88
+      },
+      "drag_frame_ms": {
+        "samples": 20,
+        "p50": 0.800000011920929,
+        "p95": 1.0999999642372131
+      },
+      "live": {
+        "scope_frames": 10,
+        "interval_p95_ms": 208,
+        "component_root_replacements": 0,
+        "snapshot_bytes_p50": 297297,
+        "snapshot_duration_p95_ms": 14.800000011920929
+      }
+    }
+  ]
+}

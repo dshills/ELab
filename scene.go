@@ -17,6 +17,7 @@ type scenePart struct {
 	Pins      []scenePin   `json:"pins"`
 	Bounds    [4]float64   `json:"bounds"`
 	ValueText string       `json:"value_text"`
+	Dynamic   bool         `json:"dynamic,omitempty"`
 }
 type sceneLabel struct {
 	X    float64 `json:"x"`
@@ -54,7 +55,7 @@ func makeScene(state workbench.Snapshot) scene {
 	}
 	for _, p := range graph.Components {
 		left, right, top, bottom := workbench.BodyBounds(p)
-		item := scenePart{Component: p, Paths: symbolPaths(p), Pins: []scenePin{}, Bounds: [4]float64{left, top, right, bottom}}
+		item := scenePart{Component: p, Dynamic: workbench.IsControlKind(p.Kind) || p.Kind == "seven-segment", Paths: symbolPaths(p), Pins: []scenePin{}, Bounds: [4]float64{left, top, right, bottom}}
 		if workbench.IsControlKind(p.Kind) && state.Mixed != nil && !state.Mixed.Stale {
 			for _, reading := range state.Mixed.Controls {
 				if reading.ID == p.ID {

@@ -71,3 +71,27 @@ passed in the preceding combined run; the final whole suite is rerun after the
 remaining milestones. Logs: `build/diagnostics-core.log`,
 `build/diagnostics-frontend.log`, `build/diagnostics-lint.log`,
 `build/diagnostics-final-browsers.log`.
+
+## Item 7 — measured browser responsiveness
+
+Measured the 100-object/100-node and 100-object/64-part envelopes with six traces
+under Chromium 4× CPU slowdown plus a 50%-duty worker. [Measurements and scope](../../browser-responsiveness.md)
+retain both baseline and final results, sample sizes, cold-tail limitations and
+same-revision transfer sizes. Scope stayed live and no component roots were
+replaced during the live interval.
+
+Implemented opaque conditional scene frames, optional command presentation
+without duplicate snapshot transfer, stable geometry nodes, cached lookups and
+SVG coordinate/focus handling. Internal review covered host/workspace token
+isolation, no cookie exposure, restart/edit invalidation, dynamic controls and
+segments, idempotent replies, recovered dirty status, stale acknowledgements,
+transformed geometry/pins/wires and cancellation. Ten repeated marquee/drag
+trials pass after coordinate conversion and text-selection suppression.
+
+Root/webagent/MCP race suites, lint and 31 frontend tests pass. Forty browser
+journeys pass; two Chromium-only load cases are deliberately skipped in the other
+engines. Live counter tests verify changing segments, stable focused node identity
+and unchanged command revision. Recovery tests verify selection acknowledgements
+retain unsaved recovery status. Logs: `build/responsiveness-reviewed-race.log`,
+`build/responsiveness-reviewed-lint.log`, `build/responsiveness-reviewed-frontend.log`,
+`build/responsiveness-all-browser.log`, `build/responsiveness-coordinate-drag.log`.

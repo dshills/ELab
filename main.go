@@ -295,6 +295,12 @@ func (s *webServer) handler() http.Handler {
 			}
 			payload := session.presentation(state)
 			payload["instance_id"] = s.instance
+			currentScene := s.sceneToken(session, state)
+			payload["scene_token"] = currentScene
+			if r.URL.Query().Get("scene_token") == currentScene && r.URL.Query().Get("instance") == s.instance {
+				payload["scene_live"] = sceneFrame(payload["scene"].(scene))
+				delete(payload, "scene")
+			}
 			session.files.Unlock()
 			jsonReply(w, 200, payload)
 		case "/api/import-result":
@@ -346,6 +352,18 @@ func (s *webServer) command(w http.ResponseWriter, r *http.Request, ws *workspac
 		}
 		webError(w, status, response.Error.Message)
 		return
+	}
+	if r.URL.Query().Get("presentation") == "true" && response.Error == nil && !response.Duplicate {
+		if state, ok := response.Result.(workbench.Snapshot); ok {
+			ws.files.Lock()
+			if ws.service.SnapshotIsCurrent(response.Revision) {
+				reply := browserCommandReply{Response: response, Workspace: ws.info, Agent: ws.agentStatus(), Scene: makeScene(state), Instance: s.instance, SceneToken: s.sceneToken(ws, state)}
+				ws.files.Unlock()
+				jsonReply(w, 200, reply)
+				return
+			}
+			ws.files.Unlock()
+		}
 	}
 	jsonReply(w, 200, response)
 }

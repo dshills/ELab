@@ -33,5 +33,12 @@ test('library backup previews, cancels and restores copies without replacing the
  await page.getByRole('button',{name:'Projects',exact:true}).click();
  await input.setInputFiles({name:'Bad.zip',mimeType:'application/zip',buffer:Buffer.from('not a backup')});
  await expect(projects.getByRole('status')).toContainText('Restore failed');await expect(confirm).not.toBeVisible();
+ // Native loading marks a document clean, but a recovery copy still needs Save.
+ // A projected selection reply must retain that browser recovery status.
+ await projects.getByRole('tab',{name:'Recovery history',exact:true}).click();
+ await projects.locator('.project-card').filter({hasText:'Backup browser fixture (restored workspace)'}).first().getByRole('button',{name:'Recover a copy',exact:true}).click();
+ const replace=page.getByRole('dialog',{name:'Replace this circuit?',exact:true});if(await replace.isVisible())await replace.getByRole('button',{name:'Replace circuit',exact:true}).click();
+ await expect(projects).not.toBeVisible();await page.locator('[data-object="R1"]').press('Enter');await expect(page.locator('.selected-heading h2')).toHaveText('R1');
+ await expect(page.locator('#document-status')).toContainText('changes to save');
  expect(errors).toEqual([]);
 });

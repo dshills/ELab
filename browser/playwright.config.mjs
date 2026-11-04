@@ -27,7 +27,7 @@ export default defineConfig({
  ],
  webServer: hosts.map(([,port])=>({
   command: 'node host.mjs '+port,
-  url: `http://127.0.0.1:${port}/api/catalog`,
+  url: `http://127.0.0.1:${port}/`,
   reuseExistingServer: false,
   timeout: 30_000,
   gracefulShutdown: {signal:'SIGTERM',timeout:40_000},

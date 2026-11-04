@@ -5,10 +5,10 @@ export function freeSelectionOffset(positions,occupied,step=100){
  }return null;
 }
 export function selectionEditor(api){
- let selected=new Set(),generation,clipboardID=0,clipboardPositions=[];
+ let selected=new Set(),generation,clipboardID=0,clipboardPositions=[],available=new Set();
  const bar=document.getElementById('selection-toolbar'),label=document.getElementById('selection-count');
- function ids(){return [...selected].filter(id=>api.scene()?.parts.some(p=>p.id===id));}
- function render(){const count=ids().length;bar.hidden=count<2&&!clipboardID;label.textContent=count?`${count} component${count===1?'':'s'} selected`:'Selection clipboard ready';for(const button of bar.querySelectorAll('[data-selection]'))button.disabled=button.dataset.selection==='paste'?!clipboardID:!count;}
+ function ids(){return [...selected].filter(id=>available.has(id));}
+ function render(){const count=ids().length,wasHidden=bar.hidden;bar.hidden=count<2&&!clipboardID;label.textContent=count?`${count} component${count===1?'':'s'} selected`:'Selection clipboard ready';for(const button of bar.querySelectorAll('[data-selection]'))button.disabled=button.dataset.selection==='paste'?!clipboardID:!count;if(wasHidden!==bar.hidden)api.layout?.();}
  function rootID(id){let owner;const seen=new Set();while((owner=api.state().components.find(p=>p.block?.members?.includes(id)))&&!seen.has(id)){seen.add(id);id=owner.id;}return id;}
  function set(next){const normalized=new Set([...next].map(rootID));if(normalized.size===selected.size&&[...normalized].every(id=>selected.has(id)))return;selected=normalized;render();api.redraw();}
  function select(id,add=false){id=rootID(id);if(!api.scene()?.parts.some(p=>p.id===id)){set([]);return;}const next=add?new Set(selected):selected.has(id)?new Set(selected):new Set();if(add&&next.has(id))next.delete(id);else next.add(id);set(next);}
@@ -25,8 +25,8 @@ export function selectionEditor(api){
  async function paste(){const offset=freeSelectionOffset(clipboardPositions,api.scene().parts.map(p=>p.position));if(!offset){api.toast('There is no free position for this group. Move some parts first.',true);return;}return edit('paste',offset);}
  bar.onclick=e=>{const kind=e.target.closest('[data-selection]')?.dataset.selection;if(kind)(kind==='paste'?paste():edit(kind)).catch(()=>{});};
  document.getElementById('selection-clear').onclick=()=>{set([]);api.command('component.select',{id:''}).catch(()=>{});};
- return {ids,has:id=>selected.has(id),select,set,edit,paste,clear:()=>set([]),render,
- update(state){if(generation!==undefined&&generation!==state.document.generation)selected.clear();generation=state.document.generation;selected=new Set(ids());if(!selected.size&&api.scene()?.parts.some(p=>p.id===state.selected))selected.add(state.selected);render();},
+ return {reset(){selected.clear();clipboardID=0;clipboardPositions=[];generation=undefined;render();},ids,has:id=>selected.has(id),select,set,edit,paste,clear:()=>set([]),render,
+ update(state){available=new Set(api.scene()?.parts.map(p=>p.id)||[]);if(generation!==undefined&&generation!==state.document.generation)selected.clear();generation=state.document.generation;selected=new Set(ids());if(!selected.size&&api.scene()?.parts.some(p=>p.id===state.selected))selected.add(state.selected);render();},
  box(start,end,initial=[]){const x0=Math.min(start.x,end.x),x1=Math.max(start.x,end.x),y0=Math.min(start.y,end.y),y1=Math.max(start.y,end.y);set([...initial,...api.scene().parts.filter(p=>p.bounds[0]>=x0&&p.bounds[2]<=x1&&p.bounds[1]>=y0&&p.bounds[3]<=y1).map(p=>p.id)]);}
  };
 }

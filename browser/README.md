@@ -7,7 +7,7 @@ Safari. Real macOS browser, VoiceOver and pointer testing remain manual gates.
 
 Each browser engine gets its own temporary host/library and port
 (18788–18790), keeping sessions below the production workspace limit. The suite
-refuses an occupied port and never
+probes the static homepage without allocating a workspace, refuses an occupied port and never
 reuses a running user host. It exercises keyboard tabs/dialogs, edits/undo,
 save/reload/export, captured playback, narrow layouts and automated accessibility.
 Failure reports include traces/screenshots of disposable test pages only. Video
