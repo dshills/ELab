@@ -8,7 +8,7 @@ among remaining items, with internal review and a separate commit per milestone.
 | 1 | Installation/signing | Tooling committed; live signing deferred to owner |
 | 2 | Everyday-use pilot | Guided activities and three-engine rehearsal complete; no human study claimed |
 | 3 | MCP in visible workspace | Complete, `bc43868f` |
-| 4 | Box selection, group move/copy/duplicate and undo | Next |
+| 4 | Box selection, group move/copy/duplicate and undo | Complete: box/Shift selection, group movement, detached copy/paste, one-step undo |
 | 5 | Library backup/restore | Complete, `f1fc39eb` |
 | 6 | Actionable circuit diagnostics | Pending |
 | 7 | Measured browser responsiveness under load | Pending |

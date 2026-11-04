@@ -26,6 +26,8 @@ type Service struct {
 	analysisJobs
 	compilation                 compilationCache
 	blockClipboard              *BlockTemplate
+	selectionClipboard          *Graph
+	selectionClipboardID        uint64
 	proposal                    *editProposalState
 	proposalSerial              uint64
 	exampleBrowser              ExampleBrowser

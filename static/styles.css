@@ -115,3 +115,5 @@ body[data-palette=apollo]{--text:#d1f3f5;--muted:#9ac0c7;--line:#284953;--surfac
 @media(max-width:650px){.recording-analysis-body{padding:0 22px 22px}}
 
 .learning-guide{padding:12px 20px;background:var(--panel);border-bottom:1px solid var(--line);max-height:260px;overflow:auto;flex-shrink:0}.learning-guide[hidden]{display:none}.learning-guide h2{font-size:15px;margin:0}.learning-guide p{margin:6px 0;line-height:1.5}.learning-guide #learning-step{font-weight:600}
+
+.selection-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:7px 12px;background:var(--accent-soft);border-bottom:1px solid var(--line);flex-shrink:0}.selection-toolbar[hidden]{display:none}.selection-toolbar button{border:1px solid var(--line);background:var(--surface)}.selection-marquee{fill:var(--accent-soft);fill-opacity:.35;stroke:var(--accent);stroke-width:1.5;vector-effect:non-scaling-stroke;stroke-dasharray:5 3}

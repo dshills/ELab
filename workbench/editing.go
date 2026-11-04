@@ -716,6 +716,8 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		s.partSearch = p.Query
 		return nil
+	case "selection.move", "selection.duplicate", "selection.copy", "selection.paste", "selection.delete":
+		return s.selectionCommandLocked(command, raw)
 	case "component.duplicate":
 		var p DuplicateParams
 		if err := params(raw, &p, "id"); err != nil {

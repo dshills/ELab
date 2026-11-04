@@ -22,7 +22,8 @@ export function restoreSchematicFocus(root,focus) {
 export function workbenchKey(event, modalOpen=false) {
  if(event.defaultPrevented||event.isComposing||event.keyCode===229||event.altKey||modalOpen)return null;
  const key=event.key.toLowerCase(),mod=event.metaKey||event.ctrlKey;
- if(mod&&!['k','s','o','z'].includes(key))return null;
+ if(mod&&['a','c','v','d'].includes(key)&&!event.target.closest('#schematic'))return null;
+ if(mod&&!['k','s','o','z','a','c','v','d'].includes(key))return null;
  if(event.target.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"])')&&!(mod&&key==='k'))return null;
  return key;
 }

@@ -31,6 +31,7 @@ test('drawing shortcuts preserve browser modifiers, composition and text editing
  assert.equal(workbenchKey(event('k',{metaKey:true,target:{closest:()=>({})}})),'k');
  assert.equal(workbenchKey(event('Z',{metaKey:true,shiftKey:true})),'z');
  assert.equal(workbenchKey(event('w')),'w');
+ for(const key of ['a','c','v','d']){assert.equal(workbenchKey(event(key,{ctrlKey:true})),null);assert.equal(workbenchKey(event(key,{ctrlKey:true,target:{closest:selector=>selector==='#schematic'?{}:null}})),key);}
 });
 test('tabs wrap, support Home/End and leave scrolling keys alone',()=>{
  assert.equal(nextTabIndex('ArrowLeft',0,3),2);

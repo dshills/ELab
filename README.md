@@ -64,7 +64,7 @@ and H-bridge activities with units and expected results explained along the way.
 
 
 - Draw, wire, move, rotate and duplicate parts; use net labels, junctions, circuit
-  blocks, undo/redo and keyboard placement.
+  blocks, box selection, group move/copy/duplicate, undo/redo and keyboard placement.
 - Inspect live voltage/current and device settings; pause, restart or step the
   same Go simulation used by agents.
 - Capture and retain experiments, seek exact samples, compare recordings, measure

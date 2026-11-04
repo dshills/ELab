@@ -65,8 +65,8 @@ func capability(id, description string, mutates bool, schema string) Capability 
 		outputLabel = "Snapshot"
 	}
 	summary := description
-	if runes := []rune(description); len(runes) > 88 {
-		summary = string(runes[:88])
+	if runes := []rune(description); len(runes) > 72 {
+		summary = string(runes[:72])
 		if at := strings.LastIndex(summary, " "); at > 0 {
 			summary = summary[:at]
 		}
@@ -177,6 +177,9 @@ var commonSchemas = []struct {
 	{reflect.TypeOf(PlaceParams{}), "urn:elab:place-component:1"},
 	{reflect.TypeOf(MoveParams{}), "urn:elab:move-object:1"},
 	{reflect.TypeOf(DuplicateParams{}), "urn:elab:duplicate-component:1"},
+	{reflect.TypeOf(SelectionIDs{}), "urn:elab:selection-ids:1"},
+	{reflect.TypeOf(SelectionOffset{}), "urn:elab:selection-offset:1"},
+	{reflect.TypeOf(SelectionPaste{}), "urn:elab:selection-paste:1"},
 	{reflect.TypeOf(BatchParams{}), "urn:elab:edit-batch:1"},
 	{reflect.TypeOf(ExampleLoadParams{}), "urn:elab:load-example:1"},
 	{reflect.TypeOf(ExampleResetParams{}), "urn:elab:reset-example:1"},
@@ -618,6 +621,11 @@ func Catalog() []Capability {
 		capability("scope.window.set", "Set mode live or fixed with start_s/end_s inside fresh retained history; plot and interval statistics use only that window", true, `{"type":"object","required":["mode"],"properties":{"mode":{"enum":["live","fixed"]},"start_s":{"type":"number"},"end_s":{"type":"number"}},"allOf":[{"if":{"properties":{"mode":{"const":"fixed"}}},"then":{"required":["start_s","end_s"]}}],"additionalProperties":false}`),
 		typedCapability("parts.category.set", "Choose Common, All or a component category and clear search; session only", reflect.TypeOf(PartCategoryParams{})),
 		typedCapability("parts.search.set", "Filter components by case-insensitive words in names, hobbyist aliases, kind, pins, units, defaults or model IDs; session only", reflect.TypeOf(SearchParams{})),
+		typedCapability("selection.move", "Move explicit visible components by a grid-snapped offset atomically, preserving wires and accepted physics", reflect.TypeOf(SelectionOffset{})),
+		typedCapability("selection.duplicate", "Duplicate explicit components and their internal connections as one undo action; offset required", reflect.TypeOf(SelectionOffset{})),
+		typedCapability("selection.copy", "Capture components and internal connections in a detached session clipboard; no document/history change", reflect.TypeOf(SelectionIDs{})),
+		typedCapability("selection.paste", "Paste the exact session clipboard ID at an offset from captured positions, with fresh lifetime IDs and one undo entry", reflect.TypeOf(SelectionPaste{})),
+		typedCapability("selection.delete", "Delete explicit visible components and incident wires as one undo action", reflect.TypeOf(SelectionIDs{})),
 		typedCapability("component.duplicate", "Copy one component's value, orientation and startup voltage into an unconnected new component; optional exact position", reflect.TypeOf(DuplicateParams{})),
 		typedCapability("edit.batch", "Atomically apply 1–100 supported schematic/settings edits as one named undo action, including sampling fit and shared pulse timing; no file, run-control or nested batch commands", reflect.TypeOf(BatchParams{})),
 		queryCapability("display.inspect", "Read exact wire voltages, unique conventional wire currents, palette and illustrative marker geometry at phase 0–1; no mutation or physics advancement", reflect.TypeOf(DisplayFrameParams{}), reflect.TypeOf(DisplayFrame{})),

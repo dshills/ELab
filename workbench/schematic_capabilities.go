@@ -3,6 +3,17 @@ package workbench
 // These details describe public schematic operations, not private pointer or
 // native focus mechanics. Dynamic inventories come from the current snapshot.
 func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
+	if id == "selection.move" || id == "selection.duplicate" || id == "selection.copy" || id == "selection.paste" || id == "selection.delete" {
+		schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "schematic-selection", Preconditions: []string{"Ordinary revision/document guards and retry key apply", "Select unique visible component IDs within the published drawing limit; choose block containers instead of hidden members", "Paste requires the exact clipboard ID returned by the copy snapshot; offsets are finite, grid-snapped and bounded by final positions"}, Effects: []string{"Move, duplicate, paste and delete are atomic and each create at most one undo entry", "Move preserves electrical connections and accepted physics; external wires stretch", "Copy changes only the detached session clipboard; paste/duplicate copy internal wires, never external wires", "Blocks include hidden members and remap ports/parameters; fresh IDs are never reused after Undo", "Failed validation leaves graph, IDs, clipboard, history and physics unchanged"}, Completion: &commandCompletionDetail{Mode: "immediate command admission"}}
+		if id != "selection.paste" {
+			p := inputProperty(schema, "ids")
+			p["minItems"] = 1
+			p["maxItems"] = MaxComponents
+			p["uniqueItems"] = true
+		}
+		return true
+	}
+
 	if id == "drawing.preview" {
 		for _, axis := range []string{"x", "y"} {
 			p := inputProperty(schema, "position."+axis)

@@ -23,3 +23,26 @@ resistor edit that reduces solved LED current and a save/reload of that edit.
 Logs: `build/web-remaining-learning-frontend.log`, `build/learning-browser.log`.
 No human pilot or human acceptance is claimed; the owner explicitly directed
 engineering work without depending on recruitment or their circuit expertise.
+
+## Item 4 — group circuit editing
+
+Added box/Shift selection, group drag and keyboard movement, detached copy/paste,
+duplicate and delete. Shared guarded commands commit each operation atomically
+and create one history action. Copies preserve settings and internal wires,
+remap block members/ports/parameters and separate copied visible named nets.
+Clipboard IDs prevent silently pasting another actor's replacement clipboard.
+Failed destination/capacity/ID/hidden-member checks preserve history and IDs.
+
+Internal review corrected selection normalization for expanded blocks, preserved
+SVG node identity and viewport during drags, excluded text/browser shortcuts,
+and kept catalog discovery under its existing 64 KiB budget by shortening only
+compact summaries. Full descriptions/schemas remain available. Paste searches
+free destinations; final engine checks remain authoritative.
+
+Core selection/schematic/discovery race tests pass, including detached clipboard,
+capacity refusal, block remapping, copied net labels and one-step undo/redo.
+Root/webagent/MCP races, lint and 29 frontend tests pass. All 30 browser journeys
+pass across three engines, and ten consecutive Chromium box/drag repetitions
+pass. Evidence: `build/selection-reviewed-core.log`, `build/selection-root-race.log`,
+`build/selection-frontend.log`, `build/selection-lint.log`,
+`build/selection-milestone-browsers.log`, `build/selection-drag-repeat.log`.

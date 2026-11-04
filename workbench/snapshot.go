@@ -1,6 +1,7 @@
 package workbench
 
 type Snapshot struct {
+	SelectionClipboardID    uint64                 `json:"selection_clipboard_id,omitempty"`
 	ScopeView               string                 `json:"scope_view"`
 	BlockClipboardAvailable bool                   `json:"block_clipboard_available"`
 	Tolerance               *ToleranceState        `json:"tolerance,omitempty"`
@@ -138,6 +139,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	}
 	out := Snapshot{
 		BlockClipboardAvailable: s.blockClipboard != nil,
+		SelectionClipboardID:    s.selectionClipboardID,
 		Tolerance:               s.toleranceViewLocked(),
 		Spectrum:                s.spectrumViewLocked(),
 		Proposal:                s.proposalViewLocked(),
