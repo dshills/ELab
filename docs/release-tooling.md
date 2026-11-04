@@ -1,4 +1,11 @@
-# Quality and unsigned release tooling
+# Maintained web release tooling
+
+Use [the web alpha pipeline](web-release-automation.md) and `scripts/check.sh`
+with the `portable` or `macos` profile. The native packaging and SDK commands below
+are historical evidence for `archive/native-ui-2026-11-03`; they are not current
+build instructions.
+
+# Historical native quality and release tooling
 
 Run the maintained gate plans from any working directory:
 

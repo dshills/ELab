@@ -13,7 +13,7 @@ among remaining items, with internal review and a separate commit per milestone.
 | 6 | Actionable circuit diagnostics | Complete: associated highlights, guidance, repair controls and scoped request help |
 | 7 | Measured browser responsiveness under load | Complete: two capacity workloads, conditional scenes and stable SVG nodes |
 | 8 | Accessibility across circuit workflows | Keyboard and automated three-engine validation complete; native VoiceOver output blocked by desktop isolation |
-| 9 | Repeatable release automation | Pending |
+| 9 | Repeatable release automation | Complete: main-bound staging, archived/downloaded binary gates, draft-before-publication workflow |
 | 10 | Version and user-controlled diagnostic reports | Pending |
 
 The owner is a novice and has no testers available. Engineering uses primary

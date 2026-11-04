@@ -115,3 +115,23 @@ participant acceptance is claimed.
 Twenty-four targeted journeys pass across all three engines; lint and 31 frontend
 tests pass. Logs: `build/accessibility-reviewed-browser-r2.log`,
 `build/accessibility-frontend.log`, `build/accessibility-lint.log`.
+
+## Item 9 — repeatable release automation
+
+Added `scripts/release_web.py` and manual main-only release workflow. Staging
+requires clean exact source, complete matching macOS gates, three actual browser
+engines and extracted shipping-binary qualification. Candidate branch rehearsals
+cannot publish. GitHub publication creates a draft, downloads and hashes each
+public asset, qualifies the downloaded binary, rechecks main and only then
+optionally publishes. Existing tags/releases are refused. Artifacts use an
+explicit upload allowlist; private runtime credentials are excluded.
+
+Internal review covered wrong commit/hash/partial quality receipts, missing or
+flaky engines, candidate refusal, existing tag preservation, changed downloads,
+main movement and failed-runtime behavior. Four release-focused Python tests
+exercise those refusals without external publication. The whole Python suite
+also found a stale agent catalog count after the five new group commands; its
+expected inventory is now 234. Lint and all Python tests pass. Full clean-source
+candidate rehearsal follows the final feature milestone. No GitHub release or
+hosted CI result is claimed. Logs: `build/release-automation-python-final.log`,
+`build/release-automation-lint-reviewed.log`.
