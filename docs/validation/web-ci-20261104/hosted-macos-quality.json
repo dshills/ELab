@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "gates_passed": true,
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "steps": [
+    {
+      "name": "lint",
+      "command": [
+        "scripts/lint.sh"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 60.243
+    },
+    {
+      "name": "python",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 8.863
+    },
+    {
+      "name": "web-ui",
+      "command": [
+        "node",
+        "scripts/check-web.mjs"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 2.096
+    },
+    {
+      "name": "portable-race",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "./...",
+        "-count=1",
+        "-timeout=30m"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 1137.887
+    },
+    {
+      "name": "portable-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 6.029
+    },
+    {
+      "name": "package",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+        "-B",
+        "scripts/check_package.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 36.337
+    }
+  ],
+  "profile": "macos",
+  "source_commit": "e5136106d1d49cb13e979f0ad9337bccd012f21a",
+  "inputs_unchanged": true
+}

@@ -68,4 +68,21 @@ original race/production-speed reference paths and assertions: the audio fixture
 passed in 3.615 seconds and the coil fixture passed in 7.250 seconds. The
 [failed Intel quality receipt](intel-quality.json) is retained.
 
-Fresh hosted results will be recorded after the corrected main revision completes.
+## Final verification
+
+All five jobs in [fresh run 41888150836](https://github.com/dshills/ELab/actions/runs/41888150836) passed on clean
+`main` source `e5136106d1d49cb13e979f0ad9337bccd012f21a`. [Hosted receipt](hosted-ci.json).
+
+- [Apple Silicon macOS 26.6.2](hosted-macos-quality.json): lint, 75 Python tests,
+  36 frontend checks, complete Go race suite, vet and package/runtime checks passed.
+- [Linux](hosted-linux-quality.json): the complete portable quality plan passed.
+- [Hosted browsers](hosted-browsers.json): Chromium 16 passed; Firefox and WebKit
+  each 15 passed with one planned load-test skip. Total 46 passed, two planned
+  skips and no failed assertions.
+- [Local macOS 27.2 arm64](local-quality.json): the same complete macOS gate plan
+  passed with unchanged source inputs. [Local browser summary](local-browsers.json).
+
+The initial overlapping dispatch was superseded; the Intel/slow-mirror attempt
+remains historical failed/cancelled evidence. No old runs, release tags or release
+assets were deleted. This follow-up documentation changes no qualified application,
+test or workflow input, and skips an unnecessary new CI run.

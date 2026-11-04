@@ -26,6 +26,12 @@ their qualified bytes and all five payload checksums pass.
 At publication, all five [exact-source hosted CI jobs](https://github.com/dshills/ELab/actions/runs/41878077636) were queued;
 these pending results are explicitly separate from the passing local gates.
 
+Post-release hosted WebKit testing exposed an uncaught state-read error during
+reload. It is fixed on `main`, with [all five follow-up CI jobs passing](https://github.com/dshills/ELab/actions/runs/41888150836).
+[Failure analysis and validation](validation/web-ci-20261104/README.md).
+That fix awaits a subsequent application build; the alpha download above retains
+its recorded release source.
+
 This private alpha is **ad-hoc signed and not notarized**. Gatekeeper can block
 first launch; follow the start guide's per-app opening instructions. The exact
 ZIP is tested on Apple Silicon macOS 27.2. macOS 13 is the configured build target,
