@@ -17,7 +17,8 @@ jobs:
   web-browser:
     name: Web browser (${{ matrix.browser }})
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # A slow Ubuntu package mirror took 19 minutes before passing tests.
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -41,6 +42,7 @@ jobs:
         working-directory: browser
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Install browser and system libraries
+        timeout-minutes: 20
         working-directory: browser
         run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Keyboard, project, recording and accessibility journeys
@@ -88,9 +90,9 @@ jobs:
           retention-days: 14
 
   macos:
-    # Hosted arm64 capacity repeatedly left this job unacquired.
-    # Apple Silicon shipping qualification stays on macos-15 in release-web.yml.
-    runs-on: macos-15-intel
+    # Keep fixed CPU-budget references on the Apple Silicon release target.
+    # The older macos-15 arm64 pool repeatedly failed to acquire a runner.
+    runs-on: macos-26
     env:
       GOCACHE: ${{ github.workspace }}/build/go-cache
     timeout-minutes: 90

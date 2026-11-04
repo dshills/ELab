@@ -32,13 +32,27 @@ The macOS job in
 [41874617722](https://github.com/dshills/ELab/actions/runs/41874617722)
 was cancelled before setup, with no runner assigned. Its check annotations state
 “The job was not acquired by Runner of type hosted even after multiple attempts”
-and identify macOS arm64 capacity constraints. Routine quality now explicitly
-uses `macos-15-intel`, a supported
-[GitHub runner label](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
-The full macOS gate plan is unchanged. Apple Silicon shipping qualification
-remains on arm64: local macOS release gates and the separate `release-web.yml`
-workflow still target Apple Silicon. Intel CI is not evidence that the published
-Apple Silicon ZIP runs on Intel.
+and identify macOS arm64 capacity constraints. The first fallback used `macos-15-intel`, which acquired a runner, but its full
+quality run exposed two production-speed numerical fixtures exceeding the fixed
+100 ms CPU limit: the 555 audio render and NPN-coil capture. The workbench race
+package passed, and no data races were reported. These Intel results are retained
+in [attempt 2](https://github.com/dshills/ELab/actions/runs/41881658292/attempts/2),
+not represented as passing qualification. The private alpha's distribution target
+is Apple Silicon; Intel runtime remains unqualified.
+
+Routine quality now uses the current `macos-26` Apple Silicon image, retaining the
+release architecture while moving away from the older macOS 15 pool. GitHub
+[documents this label as arm64](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
+The full macOS gate plan, both numerical fixtures, their assertions and the
+100 ms/512-attempt solver bounds remain unchanged. The separate Apple Silicon
+release workflow and local release gates are unchanged.
+
+Firefox's attempt-2 log confirms all 15 tests passed with one planned skip in
+49.6 seconds. Fetching Ubuntu packages from `azure.archive.ubuntu.com` consumed
+nearly 19 minutes; the 20-minute job deadline cancelled it immediately after the
+tests passed. Browser jobs now have a 30-minute total limit with a separate
+20-minute install limit, preserving time for tests and artifact cleanup. Individual
+browser test deadlines, assertions, zero retries and suite coverage are unchanged.
 
 Internal review covered early cancellation order (WebKit cancels before pagehide),
 cancelled navigation, back/forward restoration, delayed responses, single-chain
@@ -48,5 +62,10 @@ Lifecycle guidance: [pagehide](https://developer.mozilla.org/en-US/docs/Web/API/
 and [fetch cancellation](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch).
 No external code review provider was used. Existing published alpha assets and
 tags are preserved; the application fix is for a subsequent build.
+
+The two Intel-budget failures were rechecked locally on Apple Silicon with their
+original race/production-speed reference paths and assertions: the audio fixture
+passed in 3.615 seconds and the coil fixture passed in 7.250 seconds. The
+[failed Intel quality receipt](intel-quality.json) is retained.
 
 Fresh hosted results will be recorded after the corrected main revision completes.
