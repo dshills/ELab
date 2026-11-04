@@ -12,7 +12,7 @@ export function agentConnection(api){
  }
  function update(info){
   document.getElementById('agent-button').textContent=info?.enabled?'Agent access on':'Connect agent';
-  if(dialog.open){status.textContent=info?.enabled?'Agent access is enabled for this workspace.':'Agent access is disabled.';
+  if(dialog.open){const text=info?.enabled?'Agent access is enabled for this workspace.':'Agent access is disabled.';if(status.textContent!==text)status.textContent=text;
    document.getElementById('agent-last-command').textContent=info?.last_command?`Last agent edit: ${info.last_command}`:'';
    if(info?.enabled&&!configuration.value)api.fetch('/api/agent').then(render).catch(e=>api.toast(e.message,true));
    if(!info?.enabled){configuration.value='';configuration.parentElement.hidden=true;enable.hidden=false;disable.hidden=true;}}

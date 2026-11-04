@@ -6,7 +6,7 @@ export function circuitDiagnostics(api){
   for(const el of document.querySelectorAll('#schematic [data-object],#schematic .pin-hit')){
    const id=el.dataset.object,ref=el.closest('[data-pin]')?.dataset.pin,related=id?objects.has(id)||wires.has(id):pins.has(ref);
    el.classList.toggle('diagnostic-target',related);
-   if(related){el.setAttribute('aria-describedby','diagnostic-summary');el.dataset.diagnostic='true';}else if(el.dataset.diagnostic){el.removeAttribute('aria-describedby');delete el.dataset.diagnostic;}
+   if(related){const description=items.flatMap((v,i)=>((id&&[...(v.object_ids||[]),...(v.wire_ids||[])].includes(id))||(ref&&(v.terminal_refs||[]).includes(ref)))?[`diagnostic-title-${i}`,`diagnostic-action-${i}`]:[]).join(' ');if(el.getAttribute('aria-describedby')!==description)el.setAttribute('aria-describedby',description);el.dataset.diagnostic='true';}else if(el.dataset.diagnostic){el.removeAttribute('aria-describedby');delete el.dataset.diagnostic;}
   }
  }
  function button(text,kind,target){const b=document.createElement('button');b.textContent=text;b.dataset.diagnosticAction=kind;if(target)b.dataset.target=target;return b;}
@@ -19,8 +19,8 @@ export function circuitDiagnostics(api){
   if(next!==key){key=next;const open=new Set([...panel.querySelectorAll('details[open]')].map(d=>d.dataset.code));panel.replaceChildren();
    const heading=document.createElement('h2');heading.id='diagnostics-heading';heading.textContent='Circuit checks';panel.append(heading);
    const summary=document.createElement('p');summary.id='diagnostic-summary';summary.setAttribute('role','status');summary.textContent=`${items.length} circuit ${items.length===1?'check':'checks'} to review. Related parts and terminals have dashed outlines.`;panel.append(summary);
-   for(const help of items){const article=document.createElement('article'),title=document.createElement('h3'),action=document.createElement('p'),controls=document.createElement('div');
-    title.textContent=help.summary;action.textContent=help.action;controls.className='selection-actions';article.append(title,action,controls);
+   for(const [index,help] of items.entries()){const article=document.createElement('article'),title=document.createElement('h3'),action=document.createElement('p'),controls=document.createElement('div');
+    title.id=`diagnostic-title-${index}`;action.id=`diagnostic-action-${index}`;title.textContent=help.summary;action.textContent=help.action;controls.className='selection-actions';article.append(title,action,controls);
     const known=new Set([...state.components.map(p=>p.id),...state.wires.map(w=>w.id)]);
     for(const id of [...(help.object_ids||[]),...(help.wire_ids||[])])if(known.has(id))controls.append(button(`Show ${id}`,'show',id));
     for(const ref of help.terminal_refs||[])if(api.scene().parts.some(p=>p.pins.some(pin=>pin.ref===ref)))controls.append(button(`Connect ${ref}`,'connect',ref));

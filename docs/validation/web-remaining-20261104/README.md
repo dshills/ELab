@@ -95,3 +95,23 @@ and unchanged command revision. Recovery tests verify selection acknowledgements
 retain unsaved recovery status. Logs: `build/responsiveness-reviewed-race.log`,
 `build/responsiveness-reviewed-lint.log`, `build/responsiveness-reviewed-frontend.log`,
 `build/responsiveness-all-browser.log`, `build/responsiveness-coordinate-drag.log`.
+
+## Item 8 — keyboard and accessibility qualification
+
+Added keyboard placement preview movement, skip links and instructions, specific
+diagnostic descriptions, stable live status updates and valid captured-analysis
+definition lists. Internal review checked that placement arrows cannot move the
+old selection, pointer movement cannot flood spoken status, text editing stays
+native, and analysis terms/descriptions retain their association.
+
+The keyboard-only construction/save/capture/timing journey traverses actual Tab
+order and validates accepted solver state without API mutations. Expanded axe
+coverage found and fixed a serious nested definition-list defect. Desktop AX
+verified named controls and skip-to-schematic focus. Native VoiceOver output is
+explicitly unqualified because desktop isolation blocked the native Chrome
+surface; see [scope and limitation](../../web-accessibility.md). No owner or
+participant acceptance is claimed.
+
+Twenty-four targeted journeys pass across all three engines; lint and 31 frontend
+tests pass. Logs: `build/accessibility-reviewed-browser-r2.log`,
+`build/accessibility-frontend.log`, `build/accessibility-lint.log`.

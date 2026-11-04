@@ -8,7 +8,7 @@ export function selectionEditor(api){
  let selected=new Set(),generation,clipboardID=0,clipboardPositions=[],available=new Set();
  const bar=document.getElementById('selection-toolbar'),label=document.getElementById('selection-count');
  function ids(){return [...selected].filter(id=>available.has(id));}
- function render(){const count=ids().length,wasHidden=bar.hidden;bar.hidden=count<2&&!clipboardID;label.textContent=count?`${count} component${count===1?'':'s'} selected`:'Selection clipboard ready';for(const button of bar.querySelectorAll('[data-selection]'))button.disabled=button.dataset.selection==='paste'?!clipboardID:!count;if(wasHidden!==bar.hidden)api.layout?.();}
+ function render(){const count=ids().length,wasHidden=bar.hidden;bar.hidden=count<2&&!clipboardID;const text=count?`${count} component${count===1?'':'s'} selected`:'Selection clipboard ready';if(label.textContent!==text)label.textContent=text;for(const button of bar.querySelectorAll('[data-selection]'))button.disabled=button.dataset.selection==='paste'?!clipboardID:!count;if(wasHidden!==bar.hidden)api.layout?.();}
  function rootID(id){let owner;const seen=new Set();while((owner=api.state().components.find(p=>p.block?.members?.includes(id)))&&!seen.has(id)){seen.add(id);id=owner.id;}return id;}
  function set(next){const normalized=new Set([...next].map(rootID));if(normalized.size===selected.size&&[...normalized].every(id=>selected.has(id)))return;selected=normalized;render();api.redraw();}
  function select(id,add=false){id=rootID(id);if(!api.scene()?.parts.some(p=>p.id===id)){set([]);return;}const next=add?new Set(selected):selected.has(id)?new Set(selected):new Set();if(add&&next.has(id))next.delete(id);else next.add(id);set(next);}
