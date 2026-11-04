@@ -1,0 +1,25 @@
+import {test,expect} from '@playwright/test';
+import {readFile} from 'node:fs/promises';
+import AxeBuilder from '@axe-core/playwright';
+test('build identity and explicit private report preview, download, failure and keyboard dismissal',async({page},info)=>{
+ const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));await page.goto('/');await expect(page.locator('#connection-status')).toHaveText('Local engine connected');
+ await expect(page.locator('#about-button')).toHaveText('Development');
+ expect(requests.filter(url=>new URL(url).pathname==='/api/diagnostic-report')).toHaveLength(0);
+ const value=page.getByRole('textbox',{name:'Capacitance',exact:true});await value.fill('22.345671 uF');await page.getByRole('button',{name:'Apply',exact:true}).click();
+ await page.getByRole('button',{name:'Save project',exact:true}).click();const save=page.getByRole('dialog',{name:'Save project',exact:true});await save.getByRole('textbox',{name:'Project name'}).fill('OwnerPrivateName');await save.getByRole('button',{name:'Save project',exact:true}).click();await expect(save).not.toBeVisible();
+ const about=page.getByRole('button',{name:'About ELab and diagnostic report',exact:true});await about.press('Enter');const dialog=page.getByRole('dialog',{name:'About ELab',exact:true});await expect(dialog).toBeVisible();
+ const metadata=await (await page.request.get('/api/about')).json();await expect(page.locator('#support-source')).toContainText(metadata.source_commit);
+ await expect(dialog.getByRole('button',{name:'Download report',exact:true})).toBeDisabled();expect(requests.filter(url=>new URL(url).pathname==='/api/diagnostic-report')).toHaveLength(0);
+ await dialog.getByRole('button',{name:'Create report preview',exact:true}).press('Enter');const preview=dialog.getByRole('textbox',{name:'Report preview (JSON)',exact:true});await expect(preview).toBeVisible();const text=await preview.inputValue(),report=JSON.parse(text);
+ expect(report.application).toEqual(metadata);expect(report.engine.drawing_objects).toBe(4);expect(report.browser.family).toBe(info.project.name==='chromium'?'Chrome':info.project.name==='firefox'?'Firefox':'Safari');
+ for(const secret of ['OwnerPrivateName','22.345671','workspace','agent_token','127.0.0.1','R1','C1','V1','/Users/'])expect(text).not.toContain(secret);
+ const download=page.waitForEvent('download');await dialog.getByRole('button',{name:'Download report',exact:true}).press('Enter');const file=await download;expect(file.suggestedFilename()).toBe('ELab-diagnostic-report.json');expect(await readFile(await file.path(),'utf8')).toBe(text);
+ await dialog.getByRole('button',{name:'Copy report',exact:true}).press('Enter');await expect(page.locator('#support-status')).toHaveText(/Report copied|Copy is unavailable/);
+ const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();expect(axe.violations.filter(v=>['serious','critical'].includes(v.impact))).toEqual([]);
+ await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(about).toBeFocused();
+ await about.press('Enter');await expect(preview).not.toBeVisible();await page.route('**/api/diagnostic-report',route=>route.fulfill({status:503,contentType:'application/json',body:'{"error":"fixture unavailable"}'}));await dialog.getByRole('button',{name:'Create report preview',exact:true}).press('Enter');await expect(page.locator('#support-status')).toContainText('Could not create a report');await expect(dialog.getByRole('button',{name:'Download report',exact:true})).toBeDisabled();
+ await page.unroute('**/api/diagnostic-report');await dialog.getByRole('button',{name:'Create report preview',exact:true}).press('Enter');await expect(preview).toBeVisible();await page.keyboard.press('Escape');
+ let held;await page.route('**/api/diagnostic-report',route=>{held=route;});await about.press('Enter');await dialog.getByRole('button',{name:'Create report preview',exact:true}).press('Enter');await expect.poll(()=>!!held).toBe(true);await page.keyboard.press('Escape');await about.press('Enter');await held.fulfill({status:200,contentType:'application/json',body:JSON.stringify(report)});await expect(preview).not.toBeVisible();await expect(dialog.getByRole('button',{name:'Download report',exact:true})).toBeDisabled();await page.keyboard.press('Escape');
+ await page.getByRole('button',{name:'Switch to dark theme',exact:true}).click();await about.press('Enter');const dark=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();expect(dark.violations.filter(v=>['serious','critical'].includes(v.impact))).toEqual([]);await page.keyboard.press('Escape');
+ expect(errors).toEqual([]);expect(requests.every(url=>new URL(url).origin===new URL(page.url()).origin)).toBe(true);
+});

@@ -247,12 +247,22 @@ func (s *webServer) handler() http.Handler {
 			s.agentCommand(w, r)
 			return
 		}
+		if r.URL.Path == "/api/about" {
+			if r.Method != http.MethodGet {
+				webError(w, http.StatusMethodNotAllowed, "GET required")
+				return
+			}
+			jsonReply(w, http.StatusOK, currentApplication())
+			return
+		}
 		session, err := s.workspace(w, r)
 		if err != nil {
 			webError(w, 503, err.Error())
 			return
 		}
 		switch r.URL.Path {
+		case "/api/diagnostic-report":
+			s.supportReport(w, r, session)
 		case "/api/catalog":
 			if r.Method != http.MethodGet {
 				webError(w, 405, "GET required")

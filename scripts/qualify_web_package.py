@@ -87,8 +87,14 @@ def qualify(app, artifacts):
 
         try:
             reply, info = start('first')
+            about = request(info, 'api/about')
+            if (about.get('version') != metadata['version'] or about.get('build') != metadata['build']
+                    or about.get('source_commit') != metadata['source_commit']
+                    or about.get('source_modified') != (not metadata['source_clean'])):
+                raise ValueError('running backend build identity differs from sealed package')
+            checks.append('running backend exposes matching version, build and VCS identity')
             state = request(info, 'api/state')['state']
-            for name in ['app.js', 'scope-controls.mjs', 'recording-analysis.mjs', 'spectrum.mjs', 'sweep.mjs', 'agent.mjs', 'library-backup.mjs']:
+            for name in ['app.js', 'scope-controls.mjs', 'recording-analysis.mjs', 'spectrum.mjs', 'sweep.mjs', 'agent.mjs', 'library-backup.mjs', 'support.mjs']:
                 with opener.open(info['url'] + name, timeout=10) as response:
                     if response.status != 200 or 'javascript' not in response.headers.get('Content-Type', ''):
                         raise ValueError('embedded module unavailable: ' + name)

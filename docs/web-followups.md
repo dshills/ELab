@@ -14,7 +14,7 @@ among remaining items, with internal review and a separate commit per milestone.
 | 7 | Measured browser responsiveness under load | Complete: two capacity workloads, conditional scenes and stable SVG nodes |
 | 8 | Accessibility across circuit workflows | Keyboard and automated three-engine validation complete; native VoiceOver output blocked by desktop isolation |
 | 9 | Repeatable release automation | Complete: main-bound staging, archived/downloaded binary gates, draft-before-publication workflow |
-| 10 | Version and user-controlled diagnostic reports | Pending |
+| 10 | Version and user-controlled diagnostic reports | Complete: executable build identity, explicit private preview/copy/download and shipping-identity checks |
 
 The owner is a novice and has no testers available. Engineering uses primary
 references, real walkthroughs and automated checks; outside participant research

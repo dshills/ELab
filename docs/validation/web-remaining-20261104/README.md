@@ -135,3 +135,26 @@ expected inventory is now 234. Lint and all Python tests pass. Full clean-source
 candidate rehearsal follows the final feature milestone. No GitHub release or
 hosted CI result is claimed. Logs: `build/release-automation-python-final.log`,
 `build/release-automation-lint-reviewed.log`.
+
+## Item 10 — running build identity and user-controlled reports
+
+Added visible version/source information and an explicit report preview with
+copy/download. The backend projects known scalar fields and codes; it excludes
+project contents, references, raw errors, paths, identifiers and credentials.
+Browser identity is parsed into bounded family/version/platform fields without
+exporting the raw user-agent string. Closing clears previews and invalidates late
+responses. Packaged executables embed their actual version/build; shipping
+qualification compares their live VCS identity against the sealed package.
+
+Internal review covered source fallback, report field/size bounds, unknown-code
+redaction, origin/method policy, no session allocation for build information,
+recovered dirty state, request/clipboard failure, stale modal responses and no
+automatic transmission. Three root race tests, 32 frontend tests, all 75 Python
+tests and lint pass. Three report journeys pass with light/dark axe checks, exact
+download bytes, explicit request counting, keyboard dismissal/focus return and
+error/retry/late-response checks. Logs: `build/support-reviewed-go.log`,
+`build/support-reviewed-browser.log`, `build/support-frontend.log`,
+`build/support-python.log`, `build/support-lint.log`.
+
+A frozen-source full macOS gate and clean-branch release-candidate rehearsal are
+run after this milestone to qualify the combined implementation.

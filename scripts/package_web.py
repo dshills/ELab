@@ -168,7 +168,8 @@ def package(output, version, build, identity='-', archive=None, test_data=None, 
         macos = app / 'Contents/MacOS'; resources = app / 'Contents/Resources'
         macos.mkdir(parents=True); resources.mkdir()
         launcher = macos / 'ELabWebLauncher'; backend = resources / 'elab-web'
-        run(['go', 'build', '-trimpath', '-o', backend, '.'], env=env)
+        run(['go', 'build', '-trimpath', '-ldflags',
+             f'-X main.releaseVersion={version} -X main.releaseBuild={build}', '-o', backend, '.'], env=env)
         cache = ROOT / 'build/swift-module-cache'; cache.mkdir(parents=True, exist_ok=True)
         run(['xcrun', 'swiftc', ROOT / 'launcher/macos/main.swift', '-o', launcher,
              '-target', architecture + '-apple-macos13.0', '-module-cache-path', cache, '-framework', 'Cocoa'])
