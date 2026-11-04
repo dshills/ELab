@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "source_commit": "9e660ea39034b801f343f5093080af290a6238c3",
+  "source_clean": true,
+  "checks": [
+    "running backend exposes matching version, build and VCS identity",
+    "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+    "copied backend backs up unsaved work, validates a preview and restores a separate recovery copy",
+    "normal control Quit drains and exits the copied backend",
+    "same browser workspace restores acknowledged 22 k\u03a9 edit after restart",
+    "restored backup recovery copy remains discoverable after restart"
+  ],
+  "scope": "Copied backend and embedded assets; no GUI, browser, clean-account, or notarization claim."
+}

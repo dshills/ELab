@@ -20,3 +20,7 @@ The owner is a novice and has no testers available. Engineering uses primary
 references, real walkthroughs and automated checks; outside participant research
 is not a prerequisite. Do not invent human observations or declare human
 acceptance from scripted evidence. Owner review does not block authorized work.
+
+Combined implementation is qualified on clean source `9e660ea3`: the full macOS
+plan and non-publishable release rehearsal pass, with 46 browser journeys passed
+and two planned load skips. [Evidence and remaining acceptance limits](validation/web-remaining-20261104/README.md).

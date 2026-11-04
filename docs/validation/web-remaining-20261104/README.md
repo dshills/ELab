@@ -175,3 +175,40 @@ load skips. Evidence: `build/web-remaining-browser-corrected.log` and
 `build/web-remaining-corrected-frontend.log`. A new frozen-source macOS plan and
 release rehearsal follow these committed corrections; the earlier receipt is
 not reused for changed inputs.
+
+## Final combined qualification
+
+Qualified clean source: `9e660ea39034b801f343f5093080af290a6238c3`.
+The subsequent evidence commit changes only documentation/receipts.
+
+- [Full macOS plan](final-macos-quality.json): lint, 75 Python tests, 32 frontend
+  tests, complete Go race suite, vet and package gate pass; source inputs stayed
+  unchanged. Race execution took 521.8 seconds.
+- [Browser summary](final-browser-summary.json): 46 passed, two planned
+  Chromium-specific load skips in Firefox/WebKit, zero unexpected or flaky
+  results. Includes keyboard construction/wiring/save/capture/analysis,
+  activities, connected group edits, diagnostics, agent revocation, backup,
+  stable live scenes, load measurement, support-report privacy and light/dark
+  accessibility. Full local report: `build/web-remaining-qualified-rehearsal/browsers.json`.
+- [Package gate](final-package-check.json) and [archived shipping runtime](final-shipping-runtime.json)
+  pass exact file/mode/signature checks, version/build/VCS identity, embedded
+  assets outside the checkout without Go/Node in PATH, normal Quit, restart,
+  unsaved recovery and whole-library backup/restore.
+- [Release rehearsal](final-release-rehearsal.json) exercised the actual staging
+  controller with the matching full macOS receipt. It uses test version
+  `0.0.0-alpha.1`, build `0`, and `publication_ready: false`. The ZIP checksum is
+  recorded. `verify_stage` rechecked actual staged bytes, identities, all browser
+  results and current source hashes successfully. No GitHub release/publication
+  or hosted CI run was performed; the published alpha remains preserved.
+
+Local raw receipts: `build/web-remaining-qualified-quality/` and
+`build/web-remaining-qualified-rehearsal/`. Private startup/control replies are
+excluded from committed evidence. All owned desktop tabs, fixture hosts and
+browser hosts closed normally. No listener remains on the browser-test ports.
+
+Developer ID/notarization/clean-account acceptance remain deferred to the owner.
+Direct native VoiceOver output remains unqualified due to the documented desktop
+isolation block. Automated/engineering evidence is not represented as participant
+usability acceptance. The owner's novice/no-testers context is persisted in
+`AGENTS.md`; future engineering must continue without making the owner supply
+circuit expertise or recruit participants.
