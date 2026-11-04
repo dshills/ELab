@@ -5,6 +5,9 @@ commands are in [the main README](../README.md); the detailed run guide is
 [here](web-workbench.md). The Go engine and existing project/library format are
 unchanged. The Vellum interface is [archived](native-archive.md).
 
+The November 4 follow-up adds explicitly enabled MCP attachment to the visible
+browser workspace; see [agent setup](agent-setup.md).
+
 The following feature matrix and qualification history describe their recorded
 source revisions. Historical `./exp-web` commands apply at those revisions;
 current commands use `go run .` and `go test -race ./...` from the root.

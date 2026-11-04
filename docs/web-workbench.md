@@ -150,3 +150,12 @@ for hosted evidence, manual accessibility and pilot requirements.
 See [feature parity](web-parity.md) for the feature matrix, verification evidence, internal
 review and platform differences. This is a local-server web app, not a browser-only
 WASM application or an authenticated hosted multi-user service.
+
+## Agents in this workspace
+
+Choose **Connect agent** or the document menu's **Agent connection** to explicitly
+enable a private local MCP connection to the visible workspace. Copy the generated
+client configuration; the installed backend provides the bridge. Agent edits use
+the same guards, autosave and history. Undo of another actor's edit requires
+confirmation. Disconnect revokes access; restarting ELab requires enabling and
+reconnecting again. See [agent setup](agent-setup.md) for scope and retry behavior.

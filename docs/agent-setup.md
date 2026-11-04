@@ -5,6 +5,36 @@ validation, commands, measurements and revision guards as the web host.
 There is no AI provider key or cloud connection to configure in ELab. Your MCP
 client supplies its own model and tool-authorization settings.
 
+## Work in the visible web workspace
+
+1. Open the installed ELab app and choose **Connect agent** (also in the document menu).
+2. Choose **Enable agent access** and copy the displayed MCP configuration into your client.
+3. Reconnect the client. Inspect first, then send guarded edits; they appear in the same circuit.
+
+The configuration uses the installed backend with `--mcp-workspace` and an absolute
+private descriptor path. No separate Go build or executable is needed in a packaged
+app. Generate it after moving the app to its final location. Client configuration
+contains the path, never the credential; keep the descriptor private.
+
+Access is to this workspace, including projects subsequently opened there. Other
+browser profiles are separate workspaces. **Disconnect agent** revokes access even
+for queued requests; closing the MCP bridge leaves ELab running. Restarting ELab or
+expiring the workspace requires enabling access and reconnecting explicitly. A
+missing descriptor, changed instance or revoked credential never opens a blank
+headless session or switches to another workspace. Browser cookies are not reused
+by the bridge. Credentials are not project data and must not be shared or backed up.
+
+Browser agents can discover only commands available to the web workspace. Project
+filesystem paths, print/export file destinations and application-close commands
+remain in the browser controls. Mutations require both observed revision and document
+generation plus an explicit retry key. Successful edits are checkpointed; a
+`checkpoint-failed` response explicitly means the edit applied but storage failed.
+Inspect before retrying and retain the same key for the same operation.
+
+Undoing an agent's edit from the browser requires confirmation naming the exact
+history entry. Newer edits produce a conflict instead of being silently undone.
+Agent clients must likewise acknowledge edits by another actor explicitly.
+
 ## Headless: one configuration
 
 Build a durable agent executable from this checkout:
@@ -54,7 +84,7 @@ The former desktop UI's `--agent-endpoint` instructions apply only to the
 | `elab_discover {}` | Read the actual host's full command catalog, limits and guard metadata. |
 | `elab_discover {"command":"component.set"}` | Get one command's detailed schema and completion/error guidance. |
 | `elab_inspect {}` | Read circuit state, current command revision, document generation and jobs. |
-| `elab_command {…}` | Dispatch an unchanged version-1 ELab request envelope. All shared commands remain available. |
+| `elab_command {…}` | Dispatch an unchanged version-1 ELab request envelope. Available commands depend on the selected host; discover before use. |
 
 Results include the same JSON response as structured data and a text fallback.
 Service refusals set MCP `isError: true` while retaining ELab's error/help fields.

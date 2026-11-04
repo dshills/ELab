@@ -32,7 +32,7 @@ func Local(service *workbench.Service) Dispatch {
 func NewServer(dispatch Dispatch) *mcp.Server {
 	server := mcp.NewServer(&mcp.Implementation{Name: "ELab", Version: "1"}, &mcp.ServerOptions{
 		Capabilities: &mcp.ServerCapabilities{Tools: &mcp.ToolCapabilities{}},
-		Instructions: "Use elab_discover for the actual host catalog and command schemas, then elab_inspect for current state. elab_command accepts the exact ELab version-1 request envelope. Mutations require an observed revision guard and explicit retry key; document generation guards remain available. Never refresh guards or retry a refused/uncertain mutation automatically. Use analysis.list/page for bounded data. This is the same service used by ELab's UI. Headless state lasts for this process; --connect uses only the explicitly configured private host. No network AI provider is used by this server.",
+		Instructions: "Use elab_discover for the actual host catalog and command schemas, then elab_inspect for current state. elab_command accepts the exact ELab version-1 request envelope. Mutations require an observed revision guard and explicit retry key; document generation guards remain available. Never refresh guards or retry a refused/uncertain mutation automatically. Use analysis.list/page for bounded data. This is the same service used by ELab's UI. Headless state lasts for this process. Explicit socket/browser connections borrow only the selected host workspace; closing the bridge must not close the host. Browser mutations also require expected_document_generation from inspection, and host filesystem/presentation commands are unavailable there. No network AI provider is used by this server.",
 	})
 	var serial atomic.Uint64
 	slots := make(chan struct{}, 8)

@@ -81,8 +81,10 @@ The headless JSON/MCP adapters retain the shared Go workbench and numerical
 behavior. Build `cmd/elab-agent`, then run `./build/elab-agent --mcp` or print a
 client configuration with `./build/elab-agent --mcp-config`.
 
-Headless agents have independent sessions. Private socket hosts remain supported;
-MCP does not currently attach directly to a browser workspace. See
+Choose **Connect agent** in the web workbench to enable MCP access to that exact
+visible workspace and copy its client configuration. Edits share revision guards,
+undo history and autosave; disconnect revokes the connection immediately.
+Headless agents and private socket hosts remain independent alternatives. See
 [agent setup](docs/agent-setup.md) and the [command API](docs/agent-api.md).
 
 ## Development and checks

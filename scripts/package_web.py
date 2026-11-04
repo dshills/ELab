@@ -14,6 +14,7 @@ import tempfile
 import zipfile
 
 from distribution import developer_identity, notarize
+from agent_notices import verify as verify_agent_notices
 
 ROOT = Path(__file__).resolve().parents[1]
 LICENSES = {
@@ -57,7 +58,8 @@ def source_snapshot():
         '/' not in name and name.endswith(('.go', '.mod', '.sum')) or
         name.startswith(('static/', 'launcher/', 'workbench/', 'internal/')) and
         name.endswith(('.go', '.c', '.h', '.m', '.mm', '.swift', '.js', '.mjs', '.css', '.html')) or
-        name in ['scripts/package_web.py', 'scripts/distribution.py', 'scripts/check_installation.py', 'scripts/check_package.py', 'scripts/qualify_web_package.py', 'assets/app-icon.png'] or
+        name.startswith('third_party/agent-mcp/') or
+        name in ['scripts/package_web.py', 'scripts/agent_notices.py', 'scripts/distribution.py', 'scripts/check_installation.py', 'scripts/check_package.py', 'scripts/qualify_web_package.py', 'assets/app-icon.png'] or
         name in [str(p.relative_to(ROOT)) for _, p in LICENSES.values()]
     )]
     return {name: digest(ROOT / name) for name in sorted(set(selected))}
@@ -69,12 +71,21 @@ def copy_licenses(resources, build_info):
         fields = line.split()
         if fields and fields[0] == 'dep':
             deps[fields[1]] = fields[2]
-    if deps != {name: version for name, (version, _) in LICENSES.items()}:
+    notices = verify_agent_notices()
+    permitted = {name: entry['version'] for name, entry in notices['modules'].items()}
+    permitted.update({name: version for name, (version, _) in LICENSES.items()})
+    if 'gonum.org/v1/gonum' not in deps or any(permitted.get(name) != version for name, version in deps.items()):
         raise ValueError('linked dependencies changed; update the matching license inventory')
     directory = resources / 'Licenses'
     directory.mkdir()
-    for name, (_, path) in LICENSES.items():
-        shutil.copyfile(path, directory / (name.replace('/', '-') + '.txt'))
+    for name in deps:
+        if name not in notices['modules']:
+            shutil.copyfile(LICENSES[name][1], directory / (name.replace('/', '-') + '.txt'))
+        else:
+            for notice in notices['modules'][name]['notice_files']:
+                target = directory/'AgentMCP'/notice
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT/'third_party/agent-mcp'/notice, target)
     goroot = Path(run(['go', 'env', 'GOROOT'], capture=True).strip())
     license_path = next((p for p in [goroot / 'LICENSE', goroot.parent / 'LICENSE'] if p.is_file()), None)
     if license_path is None or 'Go Authors' not in license_path.read_text():

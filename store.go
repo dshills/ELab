@@ -224,7 +224,7 @@ func (ws *workspace) entries(kind string) ([]projectEntry, error) {
 }
 func (ws *workspace) presentation(state workbench.Snapshot) map[string]any {
 	state.Document.Dirty = state.Document.Dirty || ws.info.Recovered
-	return map[string]any{"state": state, "scene": makeScene(state), "workspace": ws.info}
+	return map[string]any{"state": state, "scene": makeScene(state), "workspace": ws.info, "agent": ws.agentStatus()}
 }
 func decodeJSON(w http.ResponseWriter, r *http.Request, value any) error {
 	decoder := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<20))

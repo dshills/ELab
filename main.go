@@ -31,14 +31,15 @@ import (
 var assets embed.FS
 
 type workspace struct {
-	service   *workbench.Service
-	directory string
-	library   string
-	touched   time.Time
-	files     sync.Mutex
-	info      workspaceInfo
-	persisted string
-	restored  bool
+	service               *workbench.Service
+	directory             string
+	library               string
+	touched               time.Time
+	files                 sync.Mutex
+	info                  workspaceInfo
+	persisted             string
+	restored              bool
+	agentToken, agentLast string
 }
 type webServer struct {
 	lifecycle sync.RWMutex
@@ -131,6 +132,9 @@ func (s *webServer) close() {
 	s.mu.Unlock()
 	for _, session := range sessions {
 		session.files.Lock()
+		if session.agentToken != "" {
+			_ = session.retireAgent()
+		}
 		session.service.Close()
 		if err := session.persist(); err != nil {
 			log.Printf("Final project checkpoint failed: %v", err)
@@ -157,6 +161,9 @@ func (s *webServer) expire(ctx context.Context) {
 			s.mu.Unlock()
 			for _, ws := range expired {
 				ws.files.Lock()
+				if ws.agentToken != "" {
+					_ = ws.retireAgent()
+				}
 				_ = ws.persist()
 				ws.service.Close()
 				ws.files.Unlock()
@@ -235,6 +242,10 @@ func (s *webServer) handler() http.Handler {
 			webError(w, 503, "ELab is saving and shutting down.")
 			return
 		}
+		if r.URL.Path == "/api/agent/command" {
+			s.agentCommand(w, r)
+			return
+		}
 		session, err := s.workspace(w, r)
 		if err != nil {
 			webError(w, 503, err.Error())
@@ -268,6 +279,7 @@ func (s *webServer) handler() http.Handler {
 				var changed bool
 				state, changed = session.service.SnapshotIfChanged(after)
 				metadataChanged := r.URL.Query().Has("instance") && (r.URL.Query().Get("instance") != s.instance || r.URL.Query().Get("checkpoint") != session.info.AutosavedAt || r.URL.Query().Get("storage_error") != session.info.Error)
+				metadataChanged = metadataChanged || r.URL.Query().Has("agent_enabled") && r.URL.Query().Get("agent_enabled") != strconv.FormatBool(session.agentToken != "")
 				if !changed && metadataChanged {
 					state = session.service.Snapshot()
 					changed = true
@@ -288,6 +300,8 @@ func (s *webServer) handler() http.Handler {
 			s.importResult(w, r, session)
 		case "/api/projects":
 			s.projects(w, r, session)
+		case "/api/agent":
+			s.agentAccess(w, r, session)
 		case "/api/command":
 			s.command(w, r, session)
 		case "/api/upload":
@@ -319,37 +333,82 @@ func (s *webServer) command(w http.ResponseWriter, r *http.Request, ws *workspac
 		webError(w, 400, "This command is unavailable in the browser. Use Open, Download, or Export for files.")
 		return
 	}
-	replacing := s.commands[request.Command].Mutation && (request.Command == "project.clear" || strings.HasPrefix(request.Command, "example."))
+	response := s.dispatchWorkspace(r.Context(), ws, request, "web", nil)
+	if response.Error != nil && (response.Error.Code == "storage-error" || response.Error.Code == "recovered-work") {
+		status := 500
+		if response.Error.Code == "recovered-work" {
+			status = 409
+		}
+		webError(w, status, response.Error.Message)
+		return
+	}
+	jsonReply(w, 200, response)
+}
+
+func (s *webServer) dispatchWorkspace(ctx context.Context, ws *workspace, request workbench.Request, actor string, authorize func() bool) workbench.Response {
+	failure := func(code, message string) workbench.Response {
+		return workbench.Response{Version: 1, ID: request.ID, Error: &workbench.Failure{Code: code, Message: message}}
+	}
+	capability, known := s.commands[request.Command]
+	replacing := capability.Mutation && (request.Command == "project.clear" || strings.HasPrefix(request.Command, "example."))
 	if replacing {
 		s.storeMu.Lock()
 		defer s.storeMu.Unlock()
 	}
 	ws.files.Lock()
 	defer ws.files.Unlock()
+	if authorize != nil && !authorize() {
+		return failure("agent-disconnected", "Agent access was disconnected. Enable access and reconnect explicitly.")
+	}
+	if !known || !permitted(request.Command) {
+		return failure("unavailable", "This command is unavailable in a browser workspace. Use its project and export controls for files.")
+	}
+	if authorize != nil && capability.Mutation && request.ExpectedDocumentGeneration == nil {
+		return failure("invalid-request", "Browser agent mutations require the observed document generation as well as a revision guard and retry key.")
+	}
 	if replacing {
 		var params struct {
 			Discard bool `json:"discard_changes"`
 		}
 		_ = json.Unmarshal(request.Params, &params)
 		if ws.info.Recovered && !params.Discard {
-			webError(w, 409, "Save or confirm replacing your recovered circuit first.")
-			return
+			return failure("recovered-work", "Save or confirm replacing your recovered circuit first.")
 		}
 		if err := ws.archive(); err != nil {
-			webError(w, 500, err.Error())
-			return
+			return failure("storage-error", err.Error())
 		}
 	}
-	response := ws.service.Dispatch(r.Context(), request, "web")
-	if response.Error == nil && !response.Duplicate {
-		if replacing {
+	response := ws.service.Dispatch(ctx, request, actor)
+	if response.Error == nil && (!response.Duplicate || authorize != nil) {
+		if replacing && !response.Duplicate {
 			ws.info = workspaceInfo{}
 		}
 		if s.commands[request.Command].Mutation {
-			_ = ws.persist()
+			if err := ws.persist(); err != nil && authorize != nil {
+				response.Error = &workbench.Failure{Code: "checkpoint-failed", Message: "The edit was applied, but its checkpoint could not be saved. Inspect current state and resolve the storage error before closing ELab."}
+			}
+			if authorize != nil && !response.Duplicate {
+				ws.agentLast = request.Command
+			}
 		}
 	}
-	jsonReply(w, 200, response)
+	if authorize != nil && request.Command == "capabilities.list" && response.Error == nil {
+		if result, ok := response.Result.(map[string]any); ok {
+			if preconditions, ok := result["mutation_preconditions"].(map[string]string); ok {
+				preconditions["expected_document_generation"] = "Required for attached browser agents; use the generation from elab_inspect"
+			}
+			if all, ok := result["capabilities"].([]workbench.Capability); ok {
+				allowed := []workbench.Capability{}
+				for _, capability := range all {
+					if permitted(capability.ID) {
+						allowed = append(allowed, capability)
+					}
+				}
+				result["capabilities"] = allowed
+			}
+		}
+	}
+	return response
 }
 func fileCommand(ctx context.Context, ws *workspace, command string, params any, revision, generation uint64) workbench.Response {
 	raw, _ := json.Marshal(params)
@@ -484,11 +543,24 @@ func main() {
 	startup := flag.String("startup-file", "", "write private launch information to a new file")
 	stopFile := flag.String("stop-host", "", "save and stop the host described by a private launch file")
 	statusFile := flag.String("host-status", "", "check the host described by a private launch file")
+	mcpWorkspace := flag.String("mcp-workspace", "", "serve MCP for only this explicitly enabled browser workspace descriptor")
 	flag.Parse()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 	var err error
-	if *stopFile != "" || *statusFile != "" {
+	bridgeRequested := false
+	flag.Visit(func(f *flag.Flag) {
+		if f.Name == "mcp-workspace" {
+			bridgeRequested = true
+		}
+	})
+	if bridgeRequested {
+		if *mcpWorkspace == "" || flag.NFlag() != 1 || flag.NArg() != 0 {
+			err = fmt.Errorf("--mcp-workspace requires one nonempty descriptor and cannot be combined with host options")
+		} else {
+			err = runWorkspaceMCP(ctx, *mcpWorkspace)
+		}
+	} else if *stopFile != "" || *statusFile != "" {
 		path := *stopFile
 		if path == "" {
 			path = *statusFile

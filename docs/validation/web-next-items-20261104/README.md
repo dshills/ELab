@@ -33,3 +33,33 @@ This Mac currently has only an Apple Development signing identity. The owner is
 configuring Developer ID/notary credentials and explicitly instructed continuing
 to the next item. Live Apple acceptance and clean-account/Finder qualification
 remain pending; no notarized distribution or new release is claimed here.
+
+## Item 3: agents in the visible workspace
+
+An explicit Connect agent control enables a private, revocable descriptor for
+one browser workspace. The installed web backend doubles as the stdio MCP bridge;
+no extra user build is required. Requests pin the instance/workspace and share
+the engine, revision/generation guards, actor history and checkpoint path.
+Revocation is checked inside the mutation lock. Missing/restarted/revoked hosts
+never fall back to another session. File, printing and host-lifecycle commands
+are excluded from attached discovery and dispatch. Browser Undo explicitly
+acknowledges another actor and targets the observed history entry.
+
+Internal review covered descriptor permissions/symlinks/redirects/proxies, bounded
+transport, workspace isolation, concurrent revocation, missing guards, retained
+retry keys, applied-but-uncheckpointed edits and subsequent repair, bridge closure
+without host closure, and dependency licenses in packaged apps.
+
+Focused root, webagent and MCP race suites pass, including a real subprocess
+stdio MCP edit of the same browser workspace. Lint, all-package vet, 71 Python
+tests and 28 frontend checks pass. Six journeys pass in each of Chromium, Firefox
+and WebKit. WebKit exposed missing focus on clicked dialog launchers; explicitly
+focusing those launchers fixes return focus. Running all engines under one host
+exceeds the intentional 16-workspace limit, so engine runs use fresh hosts as CI
+does. The development-tree package/copy/restart smoke passes with all 23 packaged
+files and linked MCP licenses. These are development checks, not a signed release.
+
+Local logs: `build/web-agent-race-final.log`, `build/web-agent-frontend-final.log`,
+`build/web-agent-python-final.log`, `build/web-agent-lint-final.log`,
+`build/web-agent-vet.log`, `build/web-agent-browsers-verified.log`,
+`build/web-agent-webkit.log`, and `build/web-agent-package-final/report.json`.

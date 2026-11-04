@@ -16,8 +16,11 @@ commands route through the same service and revision/generation guards.
 `launcher/macos/` supplies a small web-host launcher with start/open/quit controls.
 It does not implement a second circuit UI. The old Vellum client and its SDK are
 [archived](native-archive.md), while shared Go models, agents and platform
-PDF/PNG/audio/print services remain. Headless agent sessions are independent of
-browser workspaces; live browser MCP attachment is not implemented.
+PDF/PNG/audio/print services remain. Headless agent sessions remain independent. An explicitly enabled browser workspace
+accepts MCP through the installed host executable and a private, revocable local
+descriptor. The bridge pins the host instance and workspace; commands share the
+visible service, revision/generation guards, actor history and checkpoint path.
+Host filesystem, application lifecycle and printing commands are excluded.
 
 ## Compilation boundary
 
