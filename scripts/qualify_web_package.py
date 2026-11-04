@@ -13,6 +13,7 @@ import urllib.request
 import uuid
 
 from package_web import verify_bundle
+from distribution import verify_distribution
 
 
 def qualify(app, artifacts):
@@ -27,6 +28,8 @@ def qualify(app, artifacts):
     verify_bundle(copied)
     executable = copied / 'Contents/Resources/elab-web'
     metadata = json.loads((copied / 'Contents/Resources/PACKAGE.json').read_text())
+    if metadata.get('notarization_requested'):
+        verify_distribution(copied)
     for relative, expected in metadata['executables'].items():
         if hashlib.sha256((copied / relative).read_bytes()).hexdigest() != expected:
             raise ValueError('copied executable changed: ' + relative)

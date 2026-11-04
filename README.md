@@ -54,6 +54,8 @@ python3 -B scripts/package_web.py --output 'build/release/ELab Web.app' \
 The launcher is a small platform wrapper around this same web app. Packaging uses
 macOS system tools and does not require Vellum. Distribution signing and OS
 acceptance scope are recorded with each candidate's qualification.
+The [Developer ID distribution guide](docs/macos-distribution.md) covers
+notarization, stapled tickets, Gatekeeper and exact-archive installation checks.
 
 ## Workbench
 

@@ -13,6 +13,8 @@ import subprocess
 import tempfile
 import zipfile
 
+from distribution import developer_identity, notarize
+
 ROOT = Path(__file__).resolve().parents[1]
 LICENSES = {
     'gonum.org/v1/gonum': ('v0.17.0', ROOT / 'third_party/gonum/LICENSE'),
@@ -55,7 +57,7 @@ def source_snapshot():
         '/' not in name and name.endswith(('.go', '.mod', '.sum')) or
         name.startswith(('static/', 'launcher/', 'workbench/', 'internal/')) and
         name.endswith(('.go', '.c', '.h', '.m', '.mm', '.swift', '.js', '.mjs', '.css', '.html')) or
-        name in ['scripts/package_web.py', 'scripts/check_package.py', 'scripts/qualify_web_package.py', 'assets/app-icon.png'] or
+        name in ['scripts/package_web.py', 'scripts/distribution.py', 'scripts/check_installation.py', 'scripts/check_package.py', 'scripts/qualify_web_package.py', 'assets/app-icon.png'] or
         name in [str(p.relative_to(ROOT)) for _, p in LICENSES.values()]
     )]
     return {name: digest(ROOT / name) for name in sorted(set(selected))}
@@ -113,7 +115,8 @@ def verify_bundle(app):
                 raise ValueError('non-system runtime dependency: ' + library)
 
 
-def package(output, version, build, identity='-', archive=None, test_data=None):
+def package(output, version, build, identity='-', archive=None, test_data=None, *,
+            notary_profile=None, sign_keychain=None, notary_keychain=None):
     if platform.system() != 'Darwin':
         raise ValueError('macOS packaging requires a Mac with Xcode command-line tools')
     output = Path(output).absolute()
@@ -127,10 +130,20 @@ def package(output, version, build, identity='-', archive=None, test_data=None):
         raise ValueError('archive must be a new ZIP outside the app')
     if test_data is not None and archive:
         raise ValueError('test-configured apps cannot be archived for distribution')
+    if notary_profile is not None and not notary_profile.strip():
+        raise ValueError('--notary-profile must name an existing Keychain profile')
+    if notary_keychain and not notary_profile:
+        raise ValueError('--notary-keychain requires --notary-profile')
+    if notary_profile:
+        if test_data is not None:
+            raise ValueError('test-configured apps cannot be notarized for distribution')
+        identity = developer_identity(identity, sign_keychain)
     info = bundle_info(version, build, test_data)
     before = source_snapshot()
     head = run(['git', 'rev-parse', 'HEAD'], capture=True).strip()
     clean = not run(['git', 'status', '--porcelain'], capture=True).strip()
+    if notary_profile and not clean:
+        raise ValueError('notarized distribution requires clean committed source')
     output.parent.mkdir(parents=True, exist_ok=True)
     architecture = {'arm64': 'arm64', 'x86_64': 'x86_64'}.get(platform.machine())
     if architecture is None:
@@ -154,6 +167,9 @@ def package(output, version, build, identity='-', archive=None, test_data=None):
         build_info = run(['go', 'version', '-m', backend], capture=True)
         copy_licenses(resources, build_info)
         (resources / 'BUILD.txt').write_text(build_info)
+        distribution_note = ('This app is Developer ID signed and notarized.\n' if notary_profile else
+                             'This app is ad-hoc signed.\n' if identity == '-' else
+                             'This app is signed but notarization was not requested.\n')
         (resources / 'Read me.txt').write_text(
             'ELab Web ' + version + '\n\n'
             'Open ELab Web.app. It starts ELab and opens your default browser.\n'
@@ -161,13 +177,16 @@ def package(output, version, build, identity='-', archive=None, test_data=None):
             'Projects remain in ~/Library/Application Support/ELab/web when the app is upgraded.\n'
             'Use Projects > Recovery history after an interrupted session.\n'
             'Go, Node and a network connection are not required to run this app.\n'
-            'This private alpha is ad-hoc signed unless an explicit signing identity was supplied.\n'
-            'Developer ID/notarized distribution and clean-account/other-OS acceptance are separate gates.\n')
+            + distribution_note +
+            'Clean-account and other-OS installation acceptance are separate gates.\n')
         signing = ['--timestamp=none'] if identity == '-' else ['--timestamp', '--options', 'runtime']
+        if sign_keychain:
+            signing.extend(['--keychain', str(sign_keychain)])
         run(['/usr/bin/codesign', '--force', '--sign', identity, *signing, backend])
         record = {'schema': 1, 'version': version, 'build': build, 'architecture': architecture,
                   'source_commit': head, 'source_clean': clean, 'source_inputs': before,
                   'test_fixture': test_data is not None, 'signing_identity': identity,
+                  'notarization_requested': bool(notary_profile),
                   'minimum_os_build_target': '13.0',
                   'toolchain': {'go': run(['go', 'version'], capture=True).strip(),
                                 'swift': run(['xcrun', 'swiftc', '--version'], capture=True).strip()},
@@ -175,6 +194,8 @@ def package(output, version, build, identity='-', archive=None, test_data=None):
         (resources / 'PACKAGE.json').write_text(json.dumps(record, indent=2) + '\n')
         run(['/usr/bin/codesign', '--force', '--sign', identity, *signing, app])
         verify_bundle(app)
+        if notary_profile:
+            record['notarization'] = notarize(app, work, notary_profile, notary_keychain)
         if source_snapshot() != before or run(['git', 'rev-parse', 'HEAD'], capture=True).strip() != head:
             raise ValueError('source changed while packaging')
         if output.exists() or output.is_symlink():
@@ -210,11 +231,16 @@ def main():
     parser.add_argument('--version', default='0.1.0-alpha.1')
     parser.add_argument('--build-version', default='1')
     parser.add_argument('--sign-identity', default='-')
+    parser.add_argument('--sign-keychain', type=Path, help='optional Keychain containing the signing identity')
+    parser.add_argument('--notary-profile', help='existing notarytool Keychain profile; requires Developer ID and clean source')
+    parser.add_argument('--notary-keychain', type=Path, help='optional Keychain containing the notarytool profile')
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--test-data-dir', type=Path, help='private GUI fixture only; disables distribution archive')
     args = parser.parse_args()
     try:
-        print(package(args.output, args.version, args.build_version, args.sign_identity, args.archive, args.test_data_dir))
+        print(package(args.output, args.version, args.build_version, args.sign_identity, args.archive, args.test_data_dir,
+                      notary_profile=args.notary_profile, sign_keychain=args.sign_keychain,
+                      notary_keychain=args.notary_keychain))
     except (ValueError, OSError, subprocess.SubprocessError) as error:
         parser.exit(1, str(error) + '\n')
 
