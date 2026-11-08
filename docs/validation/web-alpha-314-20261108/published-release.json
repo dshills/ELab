@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "tag": "v0.207.0-alpha.2",
+  "url": "https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.2",
+  "published_at": "2026-11-08T21:01:12Z",
+  "source_commit": "6c0d66e3cafcedb0228e5db978fb6c4f6089d5b8",
+  "prerelease": true,
+  "draft": false,
+  "downloaded_all_assets": true,
+  "checksums_passed": 5,
+  "archive_sha256": "7b02492bd646390deee41e40cf08560786b63185ed686c452be42227d3c3aa6d",
+  "assets": [
+    {
+      "name": "ELab-Web-0.207.0-alpha.2-macos-arm64.zip",
+      "size": 11856976,
+      "url": "https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/ELab-Web-0.207.0-alpha.2-macos-arm64.zip"
+    },
+    {
+      "name": "PACKAGE.json",
+      "size": 75903,
+      "url": "https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/PACKAGE.json"
+    },
+    {
+      "name": "QUALIFICATION.json",
+      "size": 10255,
+      "url": "https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/QUALIFICATION.json"
+    },
+    {
+      "name": "release.json",
+      "size": 1285,
+      "url": "https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/release.json"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 430,
+      "url": "https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/SHA256SUMS"
+    },
+    {
+      "name": "START-HERE.md",
+      "size": 4112,
+      "url": "https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/START-HERE.md"
+    }
+  ],
+  "hosted_ci": {
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/dshills/ELab/actions/runs/41888150836",
+    "headSha": "e5136106d1d49cb13e979f0ad9337bccd012f21a",
+    "observed_at": "2026-11-08T21:00:34.291016+00:00",
+    "release_source_commit": "6c0d66e3cafcedb0228e5db978fb6c4f6089d5b8",
+    "application_test_workflow_inputs_match": true,
+    "inputs_sha256": "855aea420761d1568d225a7a29116399b24444821a24ffc2474c0cd416dd1995",
+    "scope": "CI commit predates only documentation changes; all current application, test and workflow inputs match exactly. Fresh local release qualification uses the release commit.",
+    "jobs": [
+      {
+        "databaseId": 126778065299,
+        "name": "Web browser (firefox)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "databaseId": 126778065300,
+        "name": "Web browser (webkit)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "databaseId": 126778065308,
+        "name": "macos",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "databaseId": 126778065319,
+        "name": "portable",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "databaseId": 126778065532,
+        "name": "Web browser (chromium)",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  }
+}

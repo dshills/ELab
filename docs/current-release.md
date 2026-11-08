@@ -1,43 +1,45 @@
 # Current web alpha
 
-**ELab Web 0.207.0 alpha 1, build 313**, for Apple Silicon macOS.
-[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.1/ELab-Web-0.207.0-alpha.1-macos-arm64.zip) · [Start guide](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.1/START-HERE.md) · [Checksums](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.1/SHA256SUMS).
+**ELab Web 0.207.0 alpha 2, build 314**, for Apple Silicon macOS.
+[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/ELab-Web-0.207.0-alpha.2-macos-arm64.zip) · [Start guide](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/START-HERE.md) · [Checksums](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/SHA256SUMS).
+
+This update includes the WebKit reload fix: old-page state reads are cancelled
+before navigation, polling resumes after a reload or Back/Forward restore, and
+cancelled navigation keeps the current page updating. Editing commands and the
+solver's existing work limits retain their safeguards.
 
 Extract **ELab Web.app** and open it. The launcher starts the local engine and
-opens your default browser; Go and Node are not required. Choose **Learn circuits
-& shortcuts** for guided LED, capacitor and four-MOSFET H-bridge activities.
-Connected group editing, actionable circuit checks, improved keyboard access,
-library backups and private diagnostic reports are included. Existing web
-projects remain in `~/Library/Application Support/ELab/web`.
+opens your default browser; Go and Node are not required. Guided LED, capacitor
+and four-MOSFET H-bridge activities, connected group editing, diagnostics, library
+backups and private support reports remain included. Existing web projects stay
+in `~/Library/Application Support/ELab/web`.
 
-The ZIP is 11,856,229 bytes. SHA-256:
-`04090425038f8ef53299bb30fbc25d5ce3d9dc082fb8daea250f538e73197342`.
-The public tag identifies clean `main` source `2ca9bc8d6643a672336af21ca08a392084cab3b2`.
+The ZIP is 11,856,976 bytes. SHA-256:
+`7b02492bd646390deee41e40cf08560786b63185ed686c452be42227d3c3aa6d`.
+The public tag identifies clean `main` source `6c0d66e3cafcedb0228e5db978fb6c4f6089d5b8`.
 
-The full local macOS gates passed: lint, 75 Python tests, 32 frontend checks,
-complete Go race tests, vet and package checks. Browser qualification passed 46
-journeys with two planned skips and no unexpected or flaky results. The exact
-GitHub-downloaded app passed LED editing, group undo, H-bridge reversal, exact
-preservation of all 50 recorded rows through save/reopen and export/import,
-private diagnostic reports and library backup. All six downloaded assets match
-their qualified bytes and all five payload checksums pass.
-[Qualification and publication evidence](validation/web-alpha-313-20261104/README.md).
+Fresh macOS gates passed on that source: lint, 75 Python tests, 36 frontend checks,
+complete Go race tests, vet and package/runtime checks. All 46 browser journeys
+passed with two planned skips and no unexpected or flaky results. The exact
+GitHub-downloaded shipping app passed six in-flight reload checks across Chromium
+and WebKit, plus LED editing, group undo, H-bridge reversal and exact preservation
+of all 50 recorded rows through save/reopen and export/import. All six downloaded
+assets match their qualified bytes and all five payload checksums pass.
+[Qualification and publication evidence](validation/web-alpha-314-20261108/README.md).
 
-At publication, all five [exact-source hosted CI jobs](https://github.com/dshills/ELab/actions/runs/41878077636) were queued;
-these pending results are explicitly separate from the passing local gates.
-
-Post-release hosted WebKit testing exposed an uncaught state-read error during
-reload. It is fixed on `main`, with [all five follow-up CI jobs passing](https://github.com/dshills/ELab/actions/runs/41888150836).
-[Failure analysis and validation](validation/web-ci-20261104/README.md).
-That fix awaits a subsequent application build; the alpha download above retains
-its recorded release source.
+[Hosted CI](https://github.com/dshills/ELab/actions/runs/41888150836) passed all five jobs on
+`e5136106d1d49cb13e979f0ad9337bccd012f21a`. Its application, test and workflow input hashes
+exactly match this release commit; the intervening commit contains documentation
+only. Fresh local qualification and downloaded-binary checks use the release
+commit itself.
 
 This private alpha is **ad-hoc signed and not notarized**. Gatekeeper can block
 first launch; follow the start guide's per-app opening instructions. The exact
 ZIP is tested on Apple Silicon macOS 27.2. macOS 13 is the configured build target,
 not a verified minimum. Intel, clean-account/Finder installation, native
-VoiceOver and whole-app accessibility conformance are not qualified.
+file-picker interaction, VoiceOver and whole-app accessibility conformance remain
+unqualified by these automated checks.
 
-[Release notes](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.1) ·
-[Previous web alpha](https://github.com/dshills/ELab/releases/tag/v0.206.0-alpha.1) ·
+[Release notes](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.2) ·
+[Previous web alpha](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.1) ·
 [Preserved native H-bridge alpha](https://github.com/dshills/ELab/releases/tag/v0.205.0-alpha.1).

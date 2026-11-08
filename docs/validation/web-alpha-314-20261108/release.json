@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "version": "0.207.0-alpha.2",
+  "build": "314",
+  "source_commit": "6c0d66e3cafcedb0228e5db978fb6c4f6089d5b8",
+  "publication_ready": true,
+  "architecture": "arm64",
+  "distribution": "private alpha; notarization not qualified",
+  "archive": "ELab-Web-0.207.0-alpha.2-macos-arm64.zip",
+  "archive_sha256": "7b02492bd646390deee41e40cf08560786b63185ed686c452be42227d3c3aa6d",
+  "package_receipt_sha256": "bcff40865f3b229463ff1dba5e3e21a0349a32f8d46d44d2dafbf3f60abca765",
+  "quality_report_sha256": "a49fe3811224cd8b9aa628c2a41126d042d7a538bc0564e17e43b4473194ed01",
+  "browser_report_sha256": "2a9fc17e073529b9b9c9e86bf2d5bb74dc495b3fa95498a0df56d11c317b2aef",
+  "browsers": {
+    "expected": 46,
+    "skipped": 2,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "runtime_checks": [
+    "running backend exposes matching version, build and VCS identity",
+    "copied embedded assets run with no Go/Node in PATH and outside the source directory",
+    "copied backend backs up unsaved work, validates a preview and restores a separate recovery copy",
+    "normal control Quit drains and exits the copied backend",
+    "same browser workspace restores acknowledged 22 k\u03a9 edit after restart",
+    "restored backup recovery copy remains discoverable after restart"
+  ]
+}

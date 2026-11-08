@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "browser": "chromium",
+  "scope": "Headless chromium against the exact archive-extracted shipping backend; disposable data, no development tools in backend PATH. No native picker, launcher, clean-account or VoiceOver acceptance claim.",
+  "checks": [
+    "shipping web page and About identify version/build/clean main source",
+    "three consecutive reloads explicitly abort in-flight reads, resume polling and emit no page errors",
+    "guided LED activity changes accepted solver current after a resistance edit",
+    "shipping group duplication and one-step undo preserve object counts",
+    "four-MOSFET load reverses from negative to positive across 20 ms",
+    "all 50 accepted H-bridge rows survive named save and actual reopen",
+    "browser-exported native project reimports exact H-bridge graph and all recording rows",
+    "shipping support report exposes exact build identity and excludes project name",
+    "shipping library backup control creates an actual ZIP download",
+    "no uncaught browser errors across the shipping journeys",
+    "owned shipping backend saves and exits normally"
+  ],
+  "application": {
+    "name": "ELab",
+    "interface": "web",
+    "version": "0.207.0-alpha.2",
+    "build": "314",
+    "source_commit": "6c0d66e3cafcedb0228e5db978fb6c4f6089d5b8",
+    "source_modified": false,
+    "go_version": "go1.27.3",
+    "os": "darwin",
+    "architecture": "arm64"
+  },
+  "reload_test": {
+    "round_trips": 3,
+    "explicit_abort": true,
+    "polling_resumed": true
+  },
+  "load_voltage_before_v": -4.7253319037622035,
+  "load_voltage_after_v": 4.725331894137437,
+  "recorded_rows": 50,
+  "export_sha256": "5411df9d48d55172d473ac4000ae8c0406f262f8c4513fe9ec30558fce52f22c",
+  "browser_errors": []
+}
