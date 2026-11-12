@@ -50,6 +50,8 @@ result sample is changed.
 
 ## Reproduce
 
+The later multi-sheet browser uses only the active sheet for drawing geometry. It reuses routed geometry during live polling and keeps unchanged SVG elements when a neighboring component is edited. The expanded Chromium check adds a 200-object drawing with 64 simulated parts, 60 nodes and six scope traces. Under the same synthetic CPU load, eight group edits had a 113 ms median and a 215 ms maximum, and the scope updated 11 times in two seconds.
+
 Build `build/elab-web-browser`, install the pinned browser dependencies/runtimes
 from [browser qualification](../browser/README.md), then run:
 

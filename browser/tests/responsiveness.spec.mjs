@@ -7,7 +7,7 @@ const root=fileURLToPath(new URL('../../',import.meta.url));
 
 const quantile=(values,q)=>values.length?[...values].sort((a,b)=>a-b)[Math.min(values.length-1,Math.ceil(values.length*q)-1)]:null;
 const snapshot=async page=>(await (await page.request.get('/api/state')).json()).state;
-function paddedFixture(path){const doc=JSON.parse(readFileSync(resolve(root,path),'utf8')),g=doc.graph,ground=g.components.find(p=>p.kind==='ground');let n=0;while(g.components.length<100){const id='JX'+(++n);g.components.push({id,kind:'junction',name:'Junction',model:'junction.v1',terminals:['node'],position:{x:-1800+((n-1)%12)*300,y:1200+Math.floor((n-1)/12)*240},value:0,rotation:0});g.wires.push({id:'WX'+n,from:id+'.node',to:ground.id+'.reference',connected:true});}if(path.includes('hundred-node'))doc.scope_probes={ids:['v:V1','i:V1','v:P1.wiper','v:P25.wiper','v:P50.wiper','v:P1.1']};doc.paused=true;return Buffer.from(JSON.stringify(doc));}
+function paddedFixture(path,count){const doc=JSON.parse(readFileSync(resolve(root,path),'utf8')),g=doc.graph,ground=g.components.find(p=>p.kind==='ground');let n=0;while(g.components.length<count){const id='JX'+(++n);g.components.push({id,kind:'junction',name:'Junction',model:'junction.v1',terminals:['node'],position:{x:-1800+((n-1)%12)*300,y:1200+Math.floor((n-1)/12)*240},value:0,rotation:0});g.wires.push({id:'WX'+n,from:id+'.node',to:ground.id+'.reference',connected:true});}if(path.includes('hundred-node'))doc.scope_probes={ids:['v:V1','i:V1','v:P1.wiper','v:P25.wiper','v:P50.wiper','v:P1.1']};doc.paused=true;return Buffer.from(JSON.stringify(doc));}
 
 test('capacity editing, group dragging and live scope remain measurable under CPU load',async({page,browserName},info)=>{
  test.skip(browserName!=='chromium','CDP CPU throttling measurement is Chromium-specific');test.setTimeout(180_000);
@@ -22,11 +22,12 @@ test('capacity editing, group dragging and live scope remain measurable under CP
   document.addEventListener('pointermove',e=>{if(!e.buttons)return;const start=performance.now();requestAnimationFrame(()=>window.perfRun.pointers.push(performance.now()-start));},true);
  });
  const report={passed:false,source_commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',cwd:root}).trim(),scope:'Local headless Chromium, 4x main-thread CPU slowdown plus a 50%-duty worker. Synthetic event to accepted SVG update plus two frames; not field INP or physical event-to-pixel evidence.',cases:[]};
- try{for(const fixture of ['docs/validation/desktop-capacity-artifacts/hundred-node.elab','docs/validation/live-clock-grid/capacity-pulse.elab']){
-  const native=paddedFixture(fixture);let s=await snapshot(page);const query=new URLSearchParams({revision:s.command_revision,generation:s.document.generation,discard:'true',name:'Responsiveness fixture.elab'});
+ const nodes='docs/validation/desktop-capacity-artifacts/hundred-node.elab', switching='docs/validation/live-clock-grid/capacity-pulse.elab';
+ try{for(const [fixture,count] of [[nodes,100],[switching,100],[switching,200]]){
+  const native=paddedFixture(fixture,count);let s=await snapshot(page);const query=new URLSearchParams({revision:s.command_revision,generation:s.document.generation,discard:'true',name:'Responsiveness fixture.elab'});
   const imported=await page.request.post('/api/upload?'+query,{headers:{'Content-Type':'application/octet-stream'},data:native});expect(imported.ok()).toBeTruthy();expect((await imported.json()).error).toBeUndefined();
-  await expect(page.locator('#graph-counts')).toContainText('100 components');s=await snapshot(page);expect(s.components.length).toBe(100);expect(s.simulated_component_count).toBeLessThanOrEqual(s.limits.simulated_components);
-  const id=s.components[0].id;await expect(page.locator(`#components [data-object="${id}"]`)).toBeVisible();await page.locator('#schematic').focus();await page.keyboard.press('Control+a');await expect(page.locator('#selection-count')).toHaveText('100 components selected');
+  await expect(page.locator('#graph-counts')).toContainText(`${count} components`);s=await snapshot(page);expect(s.components.length).toBe(count);expect(s.simulated_component_count).toBeLessThanOrEqual(s.limits.simulated_components);
+  const id=s.components[0].id;await expect(page.locator(`#components [data-object="${id}"]`)).toBeVisible();await page.locator('#schematic').focus();await page.keyboard.press('Control+a');await expect(page.locator('#selection-count')).toHaveText(`${count} components selected`);
   await page.evaluate(()=>{window.perfRun.keys=[];window.perfRun.pointers=[];window.perfRun.replacements=0;});
   for(let n=0;n<8;n++){s=await snapshot(page);const p=s.components.find(p=>p.id===id).position,dx=n%2?-10:10;await page.evaluate(p=>{window.perfRun.pending=p;},{id,x:p.x+dx,y:p.y});await page.locator('#schematic').press(dx>0?'ArrowRight':'ArrowLeft');await expect.poll(()=>page.evaluate(()=>window.perfRun.keys.length)).toBe(n+1);}
   const target=await page.locator(`[data-object="${id}"] .component-hit`).boundingBox();expect(target).toBeTruthy();

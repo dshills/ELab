@@ -63,6 +63,8 @@ Use **Manage sheets** to add a child to the current sheet. Use the sheet selecto
 
 Ordinary net labels connect within a sheet. Ground is shared across the project. Each sheet has its own drawing space, and all sheets share one simulation and the same project limits. A project save includes every sheet. Schematic SVG, PDF and PNG export the current sheet with its named connections.
 
+**Find in project** searches part IDs, labels, terminals and signals across sheets. Choose a result to open and center its sheet. The arrow next to a live scope trace goes to its source. Circuit checks can open the sheet that contains the affected part or terminal.
+
 ## Save and recover
 
 - Edits checkpoint locally before successful command replies. Completed background

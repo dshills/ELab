@@ -132,3 +132,7 @@ body[data-palette=apollo]{--text:#d1f3f5;--muted:#9ac0c7;--line:#284953;--surfac
 .sheet-form input,.sheet-form select{min-width:0;max-width:100%}.sheet-port-list{list-style:none;margin:8px 0;padding:0}.sheet-port-list li{display:flex;align-items:center;gap:8px;margin-bottom:6px}.sheet-port-list span{color:var(--muted);font-size:12px}
 .sheet-port{cursor:pointer;color:var(--accent)}.sheet-port path,.sheet-port circle{fill:none;stroke:currentColor;stroke-width:1.6;vector-effect:non-scaling-stroke}.sheet-port circle{fill:var(--surface)}.sheet-port text{fill:currentColor;font-size:14px;font-weight:600;paint-order:stroke;stroke:var(--canvas);stroke-width:3px;stroke-linejoin:round}.sheet-port:focus circle,.sheet-port:hover circle{fill:var(--accent-soft);stroke-width:3}
 .sheet-port.disconnected path{stroke-dasharray:4 4}
+.sheet-navigation #project-find-button{margin-left:0}
+.project-find-results{list-style:none;display:grid;gap:5px;max-height:45vh;overflow:auto;margin:8px 0 0;padding:0}.project-find-results button{display:grid;width:100%;justify-items:start;text-align:left;padding:8px 10px;border:1px solid var(--line);white-space:normal}.project-find-results small{color:var(--muted)}
+.trace-entry{display:inline-flex;align-items:center}.trace-location{min-width:22px;padding:2px 4px;color:var(--accent);font-size:13px}
+@media(max-width:460px){.sheet-navigation{flex-wrap:wrap}.sheet-navigation select{max-width:45%}.sheet-navigation button{padding-inline:5px}}

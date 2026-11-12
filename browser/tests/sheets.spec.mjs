@@ -46,5 +46,30 @@ test('move a circuit part to a child sheet and follow its ports after reopening'
   const state = (await (await page.request.get('/api/state')).json()).state;
   expect(state.document.format_version).toBe(6);
   expect(state.wires.filter(wire => wire.port)).toHaveLength(2);
+
+  await currentSheet.selectOption('');
+  await page.locator('[data-trace-location^="C1."]').first().click();
+  await expect(currentSheet).toHaveValue(childID);
+  await expect(page.locator('[data-object="C1"]')).toBeFocused();
+
+  await page.getByRole('button', {name:'Find in project', exact:true}).click();
+  const find = page.getByRole('dialog', {name:'Find in project'});
+  await find.getByRole('searchbox').fill('C1.1');
+  await expect(find.getByText('Port · Main / Filter', {exact:true})).toBeVisible();
+  await find.getByRole('searchbox').fill('R1');
+  await find.getByRole('button', {name:/^R1 · Resistor/}).click();
+  await expect(currentSheet).toHaveValue('');
+  await expect(page.locator('[data-object="R1"]')).toBeFocused();
   expect(errors).toEqual([]);
+});
+
+test('editing a part preserves unrelated schematic nodes', async ({page}) => {
+  await page.goto('/');
+  await expect(page.locator('#connection-status')).toHaveText('Local engine connected');
+  const resistor = page.locator('[data-object="R1"]');
+  await resistor.evaluate(el => {el.dataset.retainedForTest = 'yes';});
+  await page.getByRole('textbox', {name:'Capacitance', exact:true}).fill('2.2 uF');
+  await page.getByRole('button', {name:'Apply', exact:true}).click();
+  await expect(page.getByRole('textbox', {name:'Capacitance', exact:true})).toHaveValue(/2\.2/);
+  await expect(resistor).toHaveAttribute('data-retained-for-test', 'yes');
 });

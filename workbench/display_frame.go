@@ -36,21 +36,37 @@ func (s *Service) displayQueryLocked(raw json.RawMessage) (DisplayFrame, error) 
 // MakeDisplayFrame is the portable renderer input used by native drawing, agent
 // queries and static exports. Phase is illustrative wall animation, not physics.
 func MakeDisplayFrame(g Graph, display CircuitDisplay, phase float64) DisplayFrame {
+	wires := map[string]Wire{}
+	if display.Preferences.CurrentCues {
+		for _, w := range g.Wires {
+			wires[w.ID] = w
+		}
+	}
+	return displayFrame(display, phase, func(id string) []Point {
+		if wire, ok := wires[id]; ok {
+			return WirePath(g, wire)
+		}
+		return nil
+	})
+}
+
+// MakeDisplayFrameFromPaths lets the browser reuse the active sheet's routes.
+func MakeDisplayFrameFromPaths(paths map[string][]Point, display CircuitDisplay, phase float64) DisplayFrame {
+	return displayFrame(display, phase, func(id string) []Point { return paths[id] })
+}
+
+func displayFrame(display CircuitDisplay, phase float64, wirePath func(string) []Point) DisplayFrame {
 	phase = math.Mod(phase, 1)
 	out := DisplayFrame{Display: display, Phase: phase, Markers: []CurrentMarker{}}
 	if !display.Preferences.CurrentCues {
 		return out
 	}
-	wires := map[string]Wire{}
-	for _, w := range g.Wires {
-		wires[w.ID] = w
-	}
 	for _, reading := range display.Wires {
 		if reading.State != "live" || reading.Current == nil || math.Abs(*reading.Current) <= 1e-12 {
 			continue
 		}
-		w, ok := wires[reading.ID]
-		if !ok {
+		path := wirePath(reading.ID)
+		if len(path) < 2 {
 			continue
 		}
 		sign := 1.
@@ -60,13 +76,12 @@ func MakeDisplayFrame(g Graph, display CircuitDisplay, phase float64) DisplayFra
 		if display.Preferences.Direction == "electron" {
 			sign = -sign
 		}
-		path := WirePath(g, w)
 		add := func(kind string, fraction float64) {
 			at, dx, dy, ok := pathPoint(path, fraction)
 			if !ok {
 				return
 			}
-			out.Markers = append(out.Markers, CurrentMarker{WireID: w.ID, Kind: kind, At: at, DX: dx * sign, DY: dy * sign})
+			out.Markers = append(out.Markers, CurrentMarker{WireID: reading.ID, Kind: kind, At: at, DX: dx * sign, DY: dy * sign})
 		}
 		add("arrow", .5)
 		if display.Animate {

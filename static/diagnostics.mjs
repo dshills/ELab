@@ -14,7 +14,7 @@ export function circuitDiagnostics(api){
   const state=current();if(!state)return;
   if(request&&(request.revision!==state.command_revision||request.generation!==state.document.generation))request=null;
   items=[...(state.diagnostic_presentation?.items||[]),...(request?[request.help]:[])];
-  const next=JSON.stringify([items,state.undo_entry?.command_revision]);
+  const next=JSON.stringify([items,state.undo_entry?.command_revision,state.active_sheet]);
   panel.hidden=!items.length;panel.classList.toggle('hidden',!items.length);
   if(next!==key){key=next;const open=new Set([...panel.querySelectorAll('details[open]')].map(d=>d.dataset.code));panel.replaceChildren();
    const heading=document.createElement('h2');heading.id='diagnostics-heading';heading.textContent='Circuit checks';panel.append(heading);
@@ -23,7 +23,7 @@ export function circuitDiagnostics(api){
     title.id=`diagnostic-title-${index}`;action.id=`diagnostic-action-${index}`;title.textContent=help.summary;action.textContent=help.action;controls.className='selection-actions';article.append(title,action,controls);
     const known=new Set([...state.components.map(p=>p.id),...state.wires.map(w=>w.id)]);
     for(const id of [...(help.object_ids||[]),...(help.wire_ids||[])])if(known.has(id))controls.append(button(`Show ${id}`,'show',id));
-    for(const ref of help.terminal_refs||[])if(api.scene().parts.some(p=>p.pins.some(pin=>pin.ref===ref)))controls.append(button(`Connect ${ref}`,'connect',ref));
+    for(const ref of help.terminal_refs||[])if(state.components.some(p=>p.terminals.some(pin=>`${p.id}.${pin}`===ref)))controls.append(button(`Connect ${ref}`,'connect',ref));
     if(['open-terminal','unconnected-primitive','missing-ground','reference-disconnected'].includes(help.code)&&state.undo_entry?.name?.startsWith('Delete'))controls.append(button('Undo deletion','undo'));
     if(['source-sampling','lc-sampling'].includes(help.code))controls.append(button('Fit sample interval','sampling'));
     if(['integration-time-limit','integration-attempt-limit','mixed-integration-failed','solve-failed','mixed-initialize-failed'].includes(help.code))controls.append(button('Review simulation settings','settings'),button('Restart simulation','restart'));

@@ -31,6 +31,8 @@ import (
 var assets embed.FS
 
 type workspace struct {
+	sceneCache            sceneGeometry
+	sceneCacheToken       string
 	service               *workbench.Service
 	directory             string
 	library               string
@@ -303,13 +305,17 @@ func (s *webServer) handler() http.Handler {
 			} else {
 				state = session.service.Snapshot()
 			}
-			payload := session.presentation(state)
+			state.Document.Dirty = state.Document.Dirty || session.info.Recovered
+			payload := map[string]any{"state": state, "workspace": session.info, "agent": session.agentStatus()}
 			payload["instance_id"] = s.instance
 			currentScene := s.sceneToken(session, state)
 			payload["scene_token"] = currentScene
+			geometry := session.geometry(state, currentScene)
+			frame := geometry.live(state)
 			if r.URL.Query().Get("scene_token") == currentScene && r.URL.Query().Get("instance") == s.instance {
-				payload["scene_live"] = sceneFrame(payload["scene"].(scene))
-				delete(payload, "scene")
+				payload["scene_live"] = frame
+			} else {
+				payload["scene"] = geometry.present(frame)
 			}
 			session.files.Unlock()
 			jsonReply(w, 200, payload)
@@ -367,7 +373,9 @@ func (s *webServer) command(w http.ResponseWriter, r *http.Request, ws *workspac
 		if state, ok := response.Result.(workbench.Snapshot); ok {
 			ws.files.Lock()
 			if ws.service.SnapshotIsCurrent(response.Revision) {
-				reply := browserCommandReply{Response: response, Workspace: ws.info, Agent: ws.agentStatus(), Scene: makeScene(state), Instance: s.instance, SceneToken: s.sceneToken(ws, state)}
+				token := s.sceneToken(ws, state)
+				geometry := ws.geometry(state, token)
+				reply := browserCommandReply{Response: response, Workspace: ws.info, Agent: ws.agentStatus(), Scene: geometry.present(geometry.live(state)), Instance: s.instance, SceneToken: token}
 				ws.files.Unlock()
 				jsonReply(w, 200, reply)
 				return

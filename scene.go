@@ -53,6 +53,11 @@ type scene struct {
 }
 
 func makeScene(state workbench.Snapshot) scene {
+	geometry := buildSceneGeometry(state)
+	return geometry.present(geometry.live(state))
+}
+
+func buildSceneGeometry(state workbench.Snapshot) sceneGeometry {
 	project := workbench.Graph{Components: state.Components, Wires: state.Wires, Sheets: state.Sheets}
 	graph := project.SheetDrawing(state.ActiveSheet).VisibleGraph()
 	out := scene{Parts: []scenePart{}, Wires: []sceneWire{}, Bounds: [4]float64{-280, -180, 280, 180}}
@@ -68,25 +73,11 @@ func makeScene(state workbench.Snapshot) scene {
 	for _, p := range graph.Components {
 		left, right, top, bottom := workbench.BodyBounds(p)
 		item := scenePart{Component: p, Dynamic: workbench.IsControlKind(p.Kind) || p.Kind == "seven-segment", Paths: symbolPaths(p), Pins: []scenePin{}, Bounds: [4]float64{left, top, right, bottom}}
-		if workbench.IsControlKind(p.Kind) && state.Mixed != nil && !state.Mixed.Stale {
-			for _, reading := range state.Mixed.Controls {
-				if reading.ID == p.ID {
-					item.Paths = pathLines(workbench.ControlSymbolPaths(p.Kind, reading.Memory))
-				}
-			}
-		}
 		for _, label := range symbolLabels(p) {
 			item.Labels = append(item.Labels, sceneLabel{label.At.X, label.At.Y, label.Text})
 		}
 		if p.Kind == "seven-segment" {
 			item.Segments = pathLines(workbench.DisplaySegmentPaths())
-			if state.Mixed != nil && !state.Mixed.Stale {
-				for _, reading := range state.Mixed.Displays {
-					if reading.ID == p.ID {
-						item.Lit = reading.Lit
-					}
-				}
-			}
 		}
 		if p.Unit != "" {
 			item.ValueText = workbench.FormatValue(p.Value, p.Unit)
@@ -103,8 +94,10 @@ func makeScene(state workbench.Snapshot) scene {
 		extend(right+100, bottom+50)
 		out.Parts = append(out.Parts, item)
 	}
+	routes := make(map[string][]workbench.Point, len(graph.Wires))
 	for _, w := range graph.Wires {
 		points := workbench.WirePath(graph, w)
+		routes[w.ID] = points
 		out.Wires = append(out.Wires, sceneWire{w, points})
 		for _, p := range points {
 			extend(p.X, p.Y)
@@ -140,8 +133,7 @@ func makeScene(state workbench.Snapshot) scene {
 		extend(r.Definition.Position.X-8, r.Definition.Position.Y-24)
 		extend(r.Definition.Position.X+190, r.Definition.Position.Y+31)
 	}
-	out.Markers = workbench.MakeDisplayFrame(graph, state.Display, 0).Markers
-	return out
+	return sceneGeometry{drawing: out, routes: routes}
 }
 func polyline(points []workbench.Point) string {
 	var d strings.Builder
