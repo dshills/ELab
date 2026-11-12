@@ -191,3 +191,15 @@ client configuration; the installed backend provides the bridge. Agent edits use
 the same guards, autosave and history. Undo of another actor's edit requires
 confirmation. Disconnect revokes access; restarting ELab requires enabling and
 reconnecting again. See [agent setup](agent-setup.md) for scope and retry behavior.
+
+### Compare a Change
+
+Select a part with an editable value and choose **Compare a Change** in the
+Inspector. Enter a trial value and choose a voltage or current. ELab runs the
+original and trial circuits from startup with the same simulation settings.
+The chart overlays their sampled curves. When both curves reach the displayed
+level, the panel shows an estimated first crossing time for each.
+
+**Keep trial value** applies one undoable edit. **Discard trial** closes the
+comparison. If an edit changes the project while the comparison is open,
+reopen the panel before applying the trial.

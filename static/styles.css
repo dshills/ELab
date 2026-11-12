@@ -137,3 +137,20 @@ body[data-palette=apollo]{--text:#d1f3f5;--muted:#9ac0c7;--line:#284953;--surfac
 .trace-entry{display:inline-flex;align-items:center}.trace-location{min-width:22px;padding:2px 4px;color:var(--accent);font-size:13px}
 @media(max-width:460px){.sheet-navigation{flex-wrap:wrap}.sheet-navigation select{max-width:45%}.sheet-navigation button{padding-inline:5px}}
 .sheet-instance-status{display:flex;align-items:center;gap:10px;padding:10px 0}.sheet-instance-status button{border:1px solid var(--line);padding:6px 9px}.sheet-instance-status[hidden],.sheet-instance-status button[hidden]{display:none}
+
+.experiment-fields {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+ gap: 12px;
+ align-items: end;
+ border: 0;
+ margin: 0;
+ padding: 0;
+}
+.experiment-plot {
+ display: block;
+ width: 100%;
+ max-height: 255px;
+ margin: 12px 0;
+}
+.experiment-plot text { fill: currentColor; font-size: 12px; }

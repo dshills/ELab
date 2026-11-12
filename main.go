@@ -38,6 +38,7 @@ type workspace struct {
 	library               string
 	touched               time.Time
 	files                 sync.Mutex
+	experimentMu          sync.Mutex
 	info                  workspaceInfo
 	persisted             string
 	restored              bool
@@ -324,6 +325,8 @@ func (s *webServer) handler() http.Handler {
 			}
 			session.files.Unlock()
 			jsonReply(w, 200, payload)
+		case "/api/compare-change":
+			s.compareChange(w, r, session)
 		case "/api/import-result":
 			s.importResult(w, r, session)
 		case "/api/library/backup":
