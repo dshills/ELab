@@ -224,3 +224,17 @@ stays open with its original wiring.
 Use the virtual voltmeter to read the voltage between two terminals at startup.
 A negative reading means the red probe is at a lower voltage than the black
 probe. If the circuit cannot solve, the meter explains why it has no reading.
+
+### Save an experiment test
+
+Open **Experiment tests** from the instrument toolbar. Choose a voltage or
+current, a condition, and a duration. For example, set **C1 voltage** to rise to
+**3 V** within **20 ms** in the RC example. Run the test to see pass or fail,
+the measured samples that determine the result, and the waveform. Current
+reversal looks for samples on opposite sides of zero.
+
+**Save test** keeps the definition with your project. After changing a part or
+reopening the project, run the test again against the current circuit’s startup
+and sampling settings. The tests use sampled values and can miss changes that
+happen entirely between samples. Saving a test keeps its definition. Run it to
+regenerate the evidence.

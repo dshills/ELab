@@ -35,12 +35,13 @@ func decodeDisplayPreferences(raw json.RawMessage) (DisplayPreferences, error) {
 	}
 	return p, nil
 }
-func preferencesHash(pins []PinSpec, display DisplayPreferences, exampleID string) [32]byte {
+func preferencesHash(pins []PinSpec, display DisplayPreferences, exampleID string, checks []ExperimentCheck) [32]byte {
 	data, _ := json.Marshal(struct {
 		ExampleID string
 		Pins      []PinSpec
 		Display   DisplayPreferences
-	}{exampleID, clonePins(pins), display})
+		Checks    []ExperimentCheck `json:",omitempty"`
+	}{exampleID, clonePins(pins), display, checks})
 	return sha256.Sum256(data)
 }
 

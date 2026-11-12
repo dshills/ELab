@@ -93,7 +93,7 @@ func (s *Service) loadGuardLocked() loadGuard {
 		operationSerial: s.operationSerial,
 		sweepSerial:     s.sweepSerial,
 		graph:           contentHash(s.graph, s.transientSettings),
-		preferences:     preferencesHash(s.pins, s.displayPreferences, s.exampleID),
+		preferences:     preferencesHash(s.pins, s.displayPreferences, s.exampleID, s.experimentChecks),
 		recordings:      s.recordingMembershipHashLocked(),
 		disk:            s.diskHash,
 		path:            s.documentPath,
@@ -205,10 +205,10 @@ func (s *Service) runProjectLoad(job *projectJob, load projectLoadFunc) {
 		s.recoveredFrom = ""
 		s.documentPath = job.work.Path
 		s.savedGraph = contentHash(s.graph, s.transientSettings)
-		s.savedPreferences = preferencesHash(s.pins, s.displayPreferences, s.exampleID)
+		s.savedPreferences = preferencesHash(s.pins, s.displayPreferences, s.exampleID, s.experimentChecks)
 		s.savedRecordings = s.recordingMembershipHashLocked()
 		s.diskHash = digest
-		if contentHash(before.Graph, before.Settings) != s.savedGraph || preferencesHash(before.Pins, before.Display, before.ExampleID) != s.savedPreferences {
+		if contentHash(before.Graph, before.Settings) != s.savedGraph || preferencesHash(before.Pins, before.Display, before.ExampleID, before.ExperimentChecks) != s.savedPreferences {
 			s.undo = append(s.undo, before)
 			s.redo = nil
 			if len(s.undo) > 100 {

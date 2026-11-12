@@ -1,6 +1,9 @@
 package workbench
 
+import "slices"
+
 type Snapshot struct {
+	ExperimentChecks        []ExperimentCheck      `json:"experiment_checks,omitempty"`
 	Sheets                  []Sheet                `json:"sheets,omitempty"`
 	ActiveSheet             string                 `json:"active_sheet,omitempty"`
 	SelectionClipboardID    uint64                 `json:"selection_clipboard_id,omitempty"`
@@ -149,6 +152,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	out := Snapshot{
 		Sheets:                  graph.Sheets,
 		ActiveSheet:             s.activeSheet,
+		ExperimentChecks:        slices.Clone(s.experimentChecks),
 		BlockClipboardAvailable: s.blockClipboard != nil,
 		SelectionClipboardID:    s.selectionClipboardID,
 		Tolerance:               s.toleranceViewLocked(),
@@ -208,7 +212,7 @@ func (s *Service) snapshotLocked() Snapshot {
 		CommandRevision:         s.commandRevision,
 		Transient:               cloneTransient(s.transient),
 		TransientSettings:       s.transientSettings,
-		Document:                DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences, s.exampleID) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: s.currentDocumentVersionLocked(), Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom},
+		Document:                DocumentState{PreferencesDirty: preferencesHash(s.pins, s.displayPreferences, s.exampleID, s.experimentChecks) != s.savedPreferences, SchematicDirty: contentHash(s.graph, s.transientSettings) != s.savedGraph, RecordingsDirty: s.recordingsDirtyLocked(), RecordingCount: s.recordingCountLocked(), Path: s.documentPath, Dirty: s.dirtyLocked(), FormatVersion: s.currentDocumentVersionLocked(), Generation: s.documentGeneration, RecoveredFrom: s.recoveredFrom},
 		Revision:                s.revision,
 		ElectricalRevision:      s.electrical,
 		Circuit:                 s.circuit,
@@ -335,6 +339,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	return out
 }
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.ExperimentChecks = slices.Clone(state.ExperimentChecks)
 	state.Sheets = append([]Sheet(nil), state.Sheets...)
 	state.Tolerance = cloneTolerance(state.Tolerance)
 	state.Spectrum = cloneSpectrum(state.Spectrum)

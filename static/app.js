@@ -1,3 +1,4 @@
+import {experimentChecks} from './experiment-checks.mjs';
 import {troubleshootingDialog} from './troubleshoot.mjs';
 import {schematicReplay} from './schematic-replay.mjs';
 import {compareChangeDialog} from './compare-change.mjs';
@@ -52,6 +53,7 @@ async function experiment(path, params, guard, signal) {
  return fetchJSON(path + '?' + query, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(params), signal});
 }
 const openSchematicReplay = schematicReplay({state: () => state, fetch: fetchJSON});
+const checkUI = experimentChecks({state: () => state, guards, experiment, command, fmt});
 const troubleshooting = troubleshootingDialog({state: () => state, guards, experiment, fmt});
 const compareChange = compareChangeDialog({state: () => state, instance: () => serverInstance, guards, command, experiment, fmt, toast});
 function command(name,params={},options={}){
@@ -346,6 +348,7 @@ function bind(){supportPanel({fetch:fetchJSON});projectSearch({state:()=>state,s
  $('cursor-a').onclick=()=>{activeCursor='a';renderScope();};$('cursor-b').onclick=()=>{activeCursor='b';renderScope();};$('clear-cursors').onclick=async()=>{const context=scopeContext(state,serverInstance),prefix=context.recording?'recording':'scope';await command(prefix+'.cursor.clear',{cursor:'a'},{guard:guards()});if(scopeContext(state,serverInstance).owner!==context.owner)return;await command(prefix+'.cursor.clear',{cursor:'b'},{guard:guards()});};
  $('scope-plot').onclick=e=>{if(!plotDomain)return;const r=e.currentTarget.getBoundingClientRect(),ratio=Math.max(0,Math.min(1,(e.clientX-r.left-plotDomain.pad.l)/plotDomain.pw));const at=plotDomain.singlePoint?0:plotDomain.minT+ratio*(plotDomain.maxT-plotDomain.minT);const edit=scopeEdit('cursor-'+activeCursor,{time_s:at},state);command(edit.name,edit.params,{guard:guards()});};
  $('scope-plot').onpointermove=e=>{if(!plotDomain)return;const r=e.currentTarget.getBoundingClientRect(),ratio=(e.clientX-r.left-plotDomain.pad.l)/plotDomain.pw;if(ratio>=0&&ratio<=1)$('plot-cursor-label').textContent=`${activeCursor.toUpperCase()} · ${time(plotDomain.singlePoint?0:plotDomain.minT+ratio*(plotDomain.maxT-plotDomain.minT))}`;};$('scope-plot').onpointerleave=()=>$('plot-cursor-label').textContent='';
+ $('experiment-checks-button').onclick=checkUI.open;
  $('scope-collapse').onclick=()=>{const collapse=$('instrument-dock').classList.toggle('collapsed');$('scope-controls').classList.toggle('hidden',collapse||instrument!=='scope');$('scope-body').classList.toggle('hidden',collapse||instrument!=='scope');$('analysis-body').classList.toggle('hidden',collapse||instrument==='scope');$('scope-collapse').innerHTML=icon(collapse?'plus':'chevron-down');};
  bindSchemaArrays($('inspector-content'),form=>catalog.commands.find(c=>c.id===form.dataset.command)?.input_schema,catalog.schemas);
  bindSchemaArrays($('command-fields'),()=>currentCommand?.input_schema,catalog.schemas);

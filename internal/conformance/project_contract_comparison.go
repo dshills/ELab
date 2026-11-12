@@ -41,6 +41,7 @@ func validateProjectContractSchemas(schemas map[string]json.RawMessage) error {
 				Sweep       int    `json:"kept_sweep_write_version"`
 				Min         int    `json:"read_version_minimum"`
 				Max         int    `json:"read_version_maximum"`
+				Experiments int    `json:"experiment_check_write_version"`
 				Sheets      int    `json:"multi_sheet_write_version"`
 				Bytes       int    `json:"max_bytes"`
 				LegacyBytes int    `json:"legacy_max_bytes"`
@@ -81,7 +82,9 @@ func validateProjectContractSchemas(schemas map[string]json.RawMessage) error {
 			}
 			f := schema.File
 			p := schema.Properties["path"]
-			supportedVersions := f.Max == workbench.SheetDocumentVersion && f.Sheets == workbench.SheetDocumentVersion || f.Max == workbench.SweepDocumentVersion && f.Sheets == 0
+			supportedVersions := f.Max == workbench.ExperimentDocumentVersion && f.Experiments == workbench.ExperimentDocumentVersion && f.Sheets == workbench.SheetDocumentVersion ||
+				f.Max == workbench.SheetDocumentVersion && f.Sheets == workbench.SheetDocumentVersion ||
+				f.Max == workbench.SweepDocumentVersion && f.Sheets == 0
 			if p["x-max-utf8-bytes"] != float64(4096) || p["maxLength"] != float64(4096) || f.Format != workbench.DocumentFormat || f.Write != workbench.DocumentVersion || f.Sweep != workbench.SweepDocumentVersion || f.Min != 1 || !supportedVersions || f.Bytes != workbench.MaxProjectBytes || f.LegacyBytes != workbench.MaxDocumentBytes || c.Completion.Cancel != "project.work.cancel" || c.Completion.Deadline != 30 || !reflect.DeepEqual(c.Completion.Observe, []string{"project.work.inspect", "project.inspect", "events.poll"}) {
 				return fmt.Errorf("%s file limits/observers differ", id)
 			}

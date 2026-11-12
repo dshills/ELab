@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"strings"
 )
 
@@ -17,6 +18,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	ExperimentChecks   []ExperimentCheck   `json:"experiment_checks,omitempty"`
 	ActiveSheet        string              `json:"active_sheet,omitempty"`
 	Sweeps             *ProjectSweeps      `json:"dc_sweeps,omitempty"`
 	ExampleID          string              `json:"example_id,omitempty"`
@@ -87,11 +89,11 @@ func contentHash(g Graph, settings TransientSettings) [32]byte {
 	return sha256.Sum256(data)
 }
 func (s *Service) dirtyLocked() bool {
-	return contentHash(s.graph, s.transientSettings) != s.savedGraph || preferencesHash(s.pins, s.displayPreferences, s.exampleID) != s.savedPreferences || s.recordingsDirtyLocked()
+	return contentHash(s.graph, s.transientSettings) != s.savedGraph || preferencesHash(s.pins, s.displayPreferences, s.exampleID, s.experimentChecks) != s.savedPreferences || s.recordingsDirtyLocked()
 }
 func (s *Service) requireCleanLocked(discard bool) error {
 	if s.dirtyLocked() && !discard {
-		return &actionError{"unsaved-changes", "Save your schematic, pinned readings and recorded results first, or explicitly discard unsaved changes."}
+		return &actionError{"unsaved-changes", "Save this project first, or explicitly discard unsaved changes."}
 	}
 	return nil
 }
@@ -115,7 +117,8 @@ func (s *Service) detachDocumentLocked() {
 	s.displayPreferences = DefaultDisplayPreferences()
 	s.measurementTarget = nil
 	s.pins = nil
-	s.savedPreferences = preferencesHash(nil, DefaultDisplayPreferences(), "")
+	s.experimentChecks = nil
+	s.savedPreferences = preferencesHash(nil, DefaultDisplayPreferences(), "", nil)
 	s.dcCompiled = nil
 	s.inputMode = "auto"
 	s.pendingInputMode = ""
@@ -259,8 +262,8 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := validatePointParam(raw.View, "center"); err != nil {
 		return d, err
 	}
-	if d.Format != DocumentFormat || (d.Version < 1 || d.Version > SheetDocumentVersion) {
-		return d, fmt.Errorf("unsupported schematic format/version; expected %s versions 1–%d", DocumentFormat, SheetDocumentVersion)
+	if d.Format != DocumentFormat || (d.Version < 1 || d.Version > ExperimentDocumentVersion) {
+		return d, fmt.Errorf("unsupported schematic format/version; expected %s versions 1–%d", DocumentFormat, ExperimentDocumentVersion)
 	}
 	if d.Version < SheetDocumentVersion && (len(d.Graph.Sheets) > 0 || d.ActiveSheet != "") {
 		return d, fmt.Errorf("child sheets require version %d", SheetDocumentVersion)
@@ -307,6 +310,16 @@ func decodeDocument(data []byte) (Document, error) {
 	}
 	var pinFields map[string]json.RawMessage
 	_ = json.Unmarshal(data, &pinFields)
+	if raw, exists := pinFields["experiment_checks"]; exists {
+		if d.Version < ExperimentDocumentVersion {
+			return d, fmt.Errorf("experiment checks require version %d", ExperimentDocumentVersion)
+		}
+		checks, err := decodeExperimentChecks(raw)
+		if err != nil {
+			return d, err
+		}
+		d.ExperimentChecks = checks
+	}
 	if raw, exists := pinFields["pinned_readings"]; exists {
 		if d.Version < 4 {
 			return d, fmt.Errorf("pinned readings require version 4")
@@ -671,6 +684,7 @@ func (s *Service) documentLocked() Document {
 	paused := s.paused
 	d := Document{Sweeps: s.projectSweepsLocked(), ExampleID: s.exampleID, Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: s.currentDocumentVersionLocked(), Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
 	d.ActiveSheet = s.activeSheet
+	d.ExperimentChecks = slices.Clone(s.experimentChecks)
 	if s.displayPreferences != DefaultDisplayPreferences() {
 		prefs := s.displayPreferences
 		d.DisplayPreferences = &prefs
@@ -752,6 +766,7 @@ func (s *Service) documentLocked() Document {
 func (s *Service) installDocumentLocked(d Document) {
 	s.stopViewportFollowingLocked()
 	s.exampleID = d.ExampleID
+	s.experimentChecks = slices.Clone(d.ExperimentChecks)
 	s.diagnosticDetails = false
 	s.displayPreferences = DefaultDisplayPreferences()
 	if d.DisplayPreferences != nil {
