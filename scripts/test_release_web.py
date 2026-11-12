@@ -12,21 +12,23 @@ COMMIT = 'a'*40
 
 
 def browser_report():
-    return dict(stats=dict(expected=3, skipped=2, unexpected=0, flaky=0), errors=[],
-                config=dict(projects=[dict(name=n) for n in ['chromium','firefox','webkit']]),
+    projects = ['chromium', 'firefox', 'webkit', 'chromium-large-circuits',
+                'firefox-large-circuits', 'webkit-large-circuits']
+    return dict(stats=dict(expected=6, skipped=2, unexpected=0, flaky=0), errors=[],
+                config=dict(projects=[dict(name=n) for n in projects]),
                 suites=[dict(specs=[dict(tests=[dict(projectName=n, status='expected',
-                         results=[dict(status='passed')]) for n in ['chromium','firefox','webkit']])])])
+                         results=[dict(status='passed')]) for n in projects])])])
 
 
 class ReleaseTests(unittest.TestCase):
-    def test_browser_receipt_requires_each_engine_and_no_flaky_or_failed_tests(self):
+    def test_browser_receipt_requires_each_project_and_no_flaky_or_failed_tests(self):
         report = browser_report()
-        self.assertEqual(release.browser_summary(report)['expected'], 3)
-        for change in ['flaky', 'unexpected', 'missing-engine', 'no-results', 'error']:
+        self.assertEqual(release.browser_summary(report)['expected'], 6)
+        for change in ['flaky', 'unexpected', 'missing-project', 'no-results', 'error']:
             bad = copy.deepcopy(report)
             if change in ['flaky', 'unexpected']:
                 bad['stats'][change] = 1
-            elif change == 'missing-engine':
+            elif change == 'missing-project':
                 bad['config']['projects'].pop()
             elif change == 'no-results':
                 bad['suites'][0]['specs'][0]['tests'].pop()

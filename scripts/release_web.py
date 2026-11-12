@@ -68,9 +68,10 @@ def browser_summary(report):
             or report.get('errors')):
         raise ValueError('browser qualification failed or did not run')
     projects = {p.get('name') for p in report.get('config', {}).get('projects', [])}
-    if projects != {'chromium', 'firefox', 'webkit'}:
-        raise ValueError('all three browser engines are required')
-    # Require actual successful results per engine, not just configured projects.
+    engines = {'chromium', 'firefox', 'webkit'}
+    required = engines | {f'{engine}-large-circuits' for engine in engines}
+    if projects != required:
+        raise ValueError('workbench and large-circuit projects are required for all three browser engines')
     passed = set()
     def visit(suites):
         for suite in suites:
@@ -81,7 +82,7 @@ def browser_summary(report):
             visit(suite.get('suites', []))
     visit(report.get('suites', []))
     if passed != projects:
-        raise ValueError('a browser engine has no successful journeys')
+        raise ValueError('a browser project has no successful journeys')
     return {k: stats.get(k, 0) for k in ['expected', 'skipped', 'unexpected', 'flaky']}
 
 

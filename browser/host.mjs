@@ -12,8 +12,13 @@ if(!process.env.CI&&process.env.ELAB_BROWSER_TESTS!=='1') {
 const port=process.argv[2]||'18788';
 if(!['18788','18789','18790','18791','18792','18793'].includes(port))throw new Error('Unexpected disposable host port');
 const root=fileURLToPath(new URL('../',import.meta.url));
+const releaseBinary=process.env.ELAB_BROWSER_RELEASE_BINARY;
+const executable=releaseBinary || resolve(root,'build/elab-web-browser');
 const data=mkdtempSync(join(tmpdir(),'elab-browser-'));
-const child=spawn(resolve(root,'build/elab-web-browser'),['--addr','127.0.0.1:'+port,'--data-dir',data],{cwd:tmpdir(),stdio:'inherit'});
+const child=spawn(executable,['--addr','127.0.0.1:'+port,'--data-dir',data],{
+ cwd:tmpdir(),stdio:'inherit',
+ env:releaseBinary?{...process.env,PATH:'/usr/bin:/bin:/usr/sbin:/sbin'}:process.env,
+});
 let stopped=false;
 for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>{stopped=true;child.kill('SIGTERM');});
 child.once('error',error=>{console.error(error);rmSync(data,{recursive:true,force:true});process.exitCode=1;});
