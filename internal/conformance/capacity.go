@@ -153,7 +153,7 @@ func RunCapacity(ctx context.Context, factory Factory, dir string) (out Capacity
 				return err
 			}
 			entry.Reopens = append(entry.Reopens, reopen)
-			entry.Boundary, err = exerciseCapacityBoundary(s, name)
+			entry.Boundary, err = exerciseCapacityBoundary(s, entry.Graph)
 			if err != nil {
 				return err
 			}

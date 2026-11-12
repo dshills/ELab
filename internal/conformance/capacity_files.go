@@ -78,17 +78,30 @@ func capacityPhysicsEqual(a, b workbench.Snapshot) bool {
 	return a.RunID == b.RunID && a.ElectricalRevision == b.ElectricalRevision && reflect.DeepEqual(a.Mixed, b.Mixed) && reflect.DeepEqual(a.Transient, b.Transient)
 }
 
-func exerciseCapacityBoundary(s *session, name string) (out CapacityBoundary, err error) {
-	id := "Overflow"
-	out.Kind = "65th-simulated-part"
-	if name == "capacity-100-nodes" {
-		out.Kind, id = "101st-electrical-node", "P1"
-		err = s.ask("object.delete", workbench.IDParams{ID: "W51"}, true, nil)
-	} else {
-		err = s.ask("component.place", workbench.PlaceParams{ID: id, Kind: "resistor", Value: "1k", Position: workbench.Point{X: 2000, Y: 1400}}, true, nil)
+// The original captures exercise their historical 65-part/101-node refusals.
+// A current run adds sources to reach the still-bounded fourth source without
+// changing the graph used for those numerical references.
+func capacityOverflowSources(graph workbench.Graph) []workbench.PlaceParams {
+	sources := 0
+	for _, part := range graph.Components {
+		if part.Kind == "dc-source" || part.Kind == "pulse-source" {
+			sources++
+		}
 	}
-	if err != nil {
-		return out, err
+	var additions []workbench.PlaceParams
+	for i := sources; i <= workbench.MaxNetworkSources; i++ {
+		additions = append(additions, workbench.PlaceParams{ID: fmt.Sprintf("Overflow%d", i), Kind: "dc-source", Value: "5 V", Position: workbench.Point{X: 4000 + float64(i)*200, Y: 1400}})
+	}
+	return additions
+}
+
+func exerciseCapacityBoundary(s *session, graph workbench.Graph) (out CapacityBoundary, err error) {
+	out.Kind = "fourth-source"
+	additions := capacityOverflowSources(graph)
+	for _, p := range additions {
+		if err := s.ask("component.place", p, true, nil); err != nil {
+			return out, err
+		}
 	}
 	before, err := s.state("project.inspect", nil, false)
 	if err != nil {
@@ -113,7 +126,7 @@ func exerciseCapacityBoundary(s *session, name string) (out CapacityBoundary, er
 	if !out.RejectedStepPreservedState {
 		return out, fmt.Errorf("rejected over-limit Step changed circuit, physics, document or history")
 	}
-	moved, err := s.state("component.move", workbench.MoveParams{ID: id, Position: workbench.Point{X: 2200, Y: 1400}}, true)
+	moved, err := s.state("component.move", workbench.MoveParams{ID: additions[0].ID, Position: workbench.Point{X: 4000, Y: 1400}}, true)
 	if err != nil {
 		return out, err
 	}

@@ -55,7 +55,20 @@ func CompareCapacity(reference, actual CapacityResult) error {
 			boundary := entry.Boundary
 			expected := graph.Clone()
 			kind := "65th-simulated-part"
-			if name == "capacity-100-nodes" {
+			current := result.Limits.SimulatedComponents == workbench.MaxSimulatedComponents
+			if current {
+				kind = "fourth-source"
+				for j, p := range capacityOverflowSources(graph) {
+					if j == 0 {
+						p.Position.X = 4000
+					}
+					part, err := workbench.MakeComponent(p.ID, p.Kind, p.Position, p.Value)
+					if err != nil {
+						return err
+					}
+					expected.Components = append(expected.Components, part)
+				}
+			} else if name == "capacity-100-nodes" {
 				kind = "101st-electrical-node"
 				if expected.Wires[50].ID != "W51" || expected.Wires[50].From != "P50.wiper" {
 					return fmt.Errorf("capacity boundary fixture changed its explicit tie")
@@ -74,7 +87,10 @@ func CompareCapacity(reference, actual CapacityResult) error {
 				expected.Components = append(expected.Components, p)
 			}
 			compiled, status, diagnostic := expected.Compile()
-			if !reflect.DeepEqual(boundary.Graph, expected) || boundary.Kind != kind || boundary.SimulatedParts != workbench.SimulatedComponentCount(expected) || boundary.Nodes != len(compiled.Nets) || status != "unsupported" || diagnostic == nil || diagnostic.Code != "mixed-limit" || boundary.Status != "paused" || boundary.CompileStatus != status || boundary.DiagnosticCode != diagnostic.Code || boundary.StepErrorCode != "unavailable" || !boundary.RejectedStepPreservedState || !boundary.GeometryPreservedPhysics {
+			if current && (status != "unsupported" || diagnostic == nil || diagnostic.Code != "mixed-limit") {
+				return fmt.Errorf("current capacity overflow no longer refused")
+			}
+			if !reflect.DeepEqual(boundary.Graph, expected) || boundary.Kind != kind || boundary.SimulatedParts != workbench.SimulatedComponentCount(expected) || boundary.Nodes != len(compiled.Nets) || boundary.Status != "paused" || boundary.CompileStatus != "unsupported" || boundary.DiagnosticCode != "mixed-limit" || boundary.StepErrorCode != "unavailable" || !boundary.RejectedStepPreservedState || !boundary.GeometryPreservedPhysics {
 				return fmt.Errorf("capacity over-limit identity/atomicity differs")
 			}
 			for k, reopened := range entry.Reopens {
@@ -127,6 +143,18 @@ func CompareCapacity(reference, actual CapacityResult) error {
 	return nil
 }
 
+func alpha314CapacityLimits() workbench.CircuitLimits {
+	return workbench.CircuitLimits{
+		DrawingObjects: 100, Wires: 300, SimulatedComponents: 64, ElectricalNodes: 100,
+		Sources: 3, Capacitors: 4, Inductors: 4, Resistors: 64, Potentiometers: 64,
+		MOSFETs: 4, PMOS: 4, CombinedMOSFETs: 4, JFETs: 2, CombinedFETs: 4,
+		Transistors: 16, PNP: 16, CombinedBipolar: 16, OpAmps: 2, Timers555: 2,
+		Switches: 8, Diodes: 8, LEDs: 4, ScopeTraces: 6, PinnedReadings: 8,
+		IntegrationCPUMS: 100, IntegrationWallMS: 5000, IntegrationAttempts: 512,
+		IntegrationTimeBasis: workbench.Limits().IntegrationTimeBasis,
+	}
+}
+
 // The frozen capacity fixtures contain passive/RC/MOSFET circuits, not BJTs.
 // Accept their exact historical limit envelope as well as the current one;
 // added bipolar discovery fields do not retrospectively qualify PNP capacity.
@@ -136,17 +164,20 @@ func capacityLimitsCompatible(actual workbench.CircuitLimits) bool {
 	// historical tuple, not arbitrary mixtures of CPU/wall budgets. Numerical
 	// fixture values and every circuit-capacity check remain unchanged.
 	if actual.IntegrationCPUMS == 0 && actual.IntegrationTimeBasis == "" && actual.IntegrationWallMS == 100 {
-		timing := workbench.Limits()
+		timing := alpha314CapacityLimits()
+		if actual.SimulatedComponents != timing.SimulatedComponents {
+			return false
+		}
 		actual.IntegrationCPUMS, actual.IntegrationTimeBasis, actual.IntegrationWallMS = timing.IntegrationCPUMS, timing.IntegrationTimeBasis, timing.IntegrationWallMS
 	}
 
-	if actual == workbench.Limits() {
+	if actual == workbench.Limits() || actual == alpha314CapacityLimits() {
 		return true
 	}
 	// These frozen passive/RC/MOS reports predate optional JFET discovery fields.
 	// Accept only the exact paired absence, never arbitrary mixed capacities.
 	for _, jfetDiscovery := range []bool{true, false} {
-		current := workbench.Limits()
+		current := alpha314CapacityLimits()
 		current.MOSFETs, current.PMOS, current.CombinedMOSFETs, current.CombinedFETs = 2, 2, 2, 2
 		if !jfetDiscovery {
 			current.JFETs, current.CombinedFETs = 0, 0

@@ -20,7 +20,7 @@ source; gate/drain positive into device.
 
 The small-signal AC stamp uses the analytic Jacobian at solved bias. External
 capacitors use the existing transient/AC engines. No intrinsic charge, noise,
-breakdown, heating, ratings or fitted silicon identity is claimed. A network can contain up to two JFETs within its combined budget of four
+breakdown, heating, ratings or fitted silicon identity is claimed. A network can contain up to two JFETs within its combined budget of eight
 MOSFETs and JFETs.
 Source/part/node/storage/work/accuracy limits remain unchanged.
 

@@ -62,7 +62,7 @@ not a digital latch or ring-oscillator timing model.
 
 For explicit stateful devices, use the separate [flip-flops and counters](sequential-logic.md).
 
-The existing 64 simulated-part, 100 electrical-node and device/source limits
+The shared 128 simulated-part, 200 electrical-node and device/source limits
 still apply; no extra gate-specific capacity field or engine is introduced.
 Previously supported graphs take the original numerical paths.
 

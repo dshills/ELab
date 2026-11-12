@@ -1,5 +1,7 @@
 package workbench
 
+import "strings"
+
 // Each half-bridge uses two real MOSFETs with common drains. The inverter
 // drives the opposite half from the same direction pulse.
 func discreteHBridgeExampleGraph() Graph {
@@ -35,6 +37,37 @@ func discreteHBridgeExampleGraph() Graph {
 			pin = "RL.2"
 		}
 		b.wire(junction+".node", pin)
+	}
+	return b.graph
+}
+
+// The lower bridge has its own direction waveform and load. VDD and ground
+// are common to both bridges; the two pairs of gate signals are independent.
+func dualHBridgeExampleGraph() Graph {
+	first := discreteHBridgeExampleGraph()
+	b := exampleBuilder{graph: first.Clone()}
+	for _, part := range first.Components {
+		switch part.ID {
+		case "VCC", "GNDS", "SUPPLY":
+			continue
+		case "DIR":
+			b.part("B_DIR", "finite-pulse-source", "5 V", part.Position.X, part.Position.Y+800, 0)
+			b.graph.Components[len(b.graph.Components)-1].Pulse = &PulseWaveform{HighVoltage: 5, HighSeconds: .03, LowSeconds: .03, RiseSeconds: .001, FallSeconds: .001}
+			continue
+		case "RL":
+			part.Value = 150
+		}
+		if part.Label != "" && part.Label != "VDD" {
+			part.Label = "B_" + part.Label
+		}
+		part.ID = "B_" + part.ID
+		part.Position.Y += 800
+		b.graph.Components = append(b.graph.Components, part)
+	}
+	for _, wire := range first.Wires {
+		if !strings.HasPrefix(wire.From, "VCC.") {
+			b.wire("B_"+wire.From, "B_"+wire.To)
+		}
 	}
 	return b.graph
 }

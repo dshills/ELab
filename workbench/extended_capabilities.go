@@ -35,7 +35,7 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 	case "thermal.configure":
 		c.Effects = []string{thermalDescription, "All fields required even when disabling; enabled=false restores the exact original law. Supported resistor, silicon diode, NPN and PNP only. Ambient -40..125 °C; accepted self-heated state -40..150 °C. Settings are saved, undoable electrical startup edits. Thermal readings are a separate heat domain, not electrical capacitor energy."}
 	case "jfet.configure":
-		c.Effects = []string{jfetDescription, "Complete saved undoable electrical edit, all fields required. Cutoff sign must match N/P kind. Up to two JFETs within the four-FET network budget."}
+		c.Effects = []string{jfetDescription, "Complete saved undoable electrical edit, all fields required. Cutoff sign must match N/P kind. Up to two JFETs within the shared FET budget."}
 	case "current-source.configure", "load.configure":
 		c.Effects = []string{currentDeviceDescription, "Complete saved undoable startup edit; all fields and pulse timing required even in DC. Source 0–1 A/compliance 1–24 V; load cc 0–1 A or cp 0–24 W, minimum 0.1–12 V, current limit 0.001–1 A. Low level must not exceed high. Pulse phase/edge rules match finite source timing. No solver-limit changes."}
 	case "passive.configure":
@@ -52,7 +52,7 @@ func addExtendedCapabilityDetails(id string, schema map[string]any) bool {
 		schema["x-early-voltage"] = "0 disables; otherwise 1–1000 V, as defined by the referenced profile schema"
 		bounds("parameters.base_emitter_capacitance_f", "F", 0, 1e-6)
 		bounds("parameters.base_collector_capacitance_f", "F", 0, 1e-6)
-		c.Effects = []string{"Complete saved, undoable NPN/PNP educational profile. All fields required and validated even when disabling. Enabled=false restores exact generic-v1 law. Early voltage zero disables Early term; positive values must be at least 1 V. No manufacturer identity or full SPICE-card fidelity is claimed", "Optional constant CBE/CBC use biased startup and consume the existing four-capacitor and total-part budgets, including other private device storage. Transient and AC stamps include charge, terminal currents and stored energy; edits restart the experiment. Profile in device_parameters and per-result model parameters are captured and validated"}
+		c.Effects = []string{"Complete saved, undoable NPN/PNP educational profile. All fields required and validated even when disabling. Enabled=false restores exact generic-v1 law. Early voltage zero disables Early term; positive values must be at least 1 V. No manufacturer identity or full SPICE-card fidelity is claimed", "Optional constant CBE/CBC use biased startup and consume the shared capacitor and total-part budgets, including other private device storage. Transient and AC stamps include charge, terminal currents and stored energy; edits restart the experiment. Profile in device_parameters and per-result model parameters are captured and validated"}
 	case "pwm.configure":
 		bounds("parameters.frequency_hz", "Hz", 10, 1000)
 		bounds("parameters.duty_fraction", "fraction", .1, .9)

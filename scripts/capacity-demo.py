@@ -23,7 +23,8 @@ def build_chain(client, source_kind, part_kind, count, tie=False):
     for i in range(count):
         edits.append({'command': 'component.place', 'params': {'kind': part_kind,
                       'position': {'x': (i % 8)*160-560, 'y': (i // 8)*160-560}}})
-    placed = client.ask('edit.batch', {'name': 'Capacity components', 'edits': edits}, True)
+    for offset in range(0, len(edits), 100):
+        placed = client.ask('edit.batch', {'name': 'Capacity components', 'edits': edits[offset:offset+100]}, True)
     source = next(p['id'] for p in placed['components'] if p['kind'] == source_kind)
     ground = next(p['id'] for p in placed['components'] if p['kind'] == 'ground')
     parts = [p['id'] for p in placed['components'] if p['kind'] == part_kind]
@@ -37,7 +38,8 @@ def build_chain(client, source_kind, part_kind, count, tie=False):
     if tie:
         connections.append({'command': 'wire.connect', 'params': {'from': parts[-1]+'.wiper', 'to': parts[-1]+'.1'}})
     started = time.perf_counter()
-    client.ask('edit.batch', {'name': 'Capacity connections', 'edits': connections}, True)
+    for offset in range(0, len(connections), 100):
+        client.ask('edit.batch', {'name': 'Capacity connections', 'edits': connections[offset:offset+100]}, True)
     ready = client.ask('simulation.wait')
     return ready, source, parts, (time.perf_counter()-started)*1000
 
@@ -55,7 +57,8 @@ def main():
     try:
         state, source, parts, startup_ms = build_chain(client, 'pulse-source', 'potentiometer', 50, True)
         assert state['simulated_component_count'] == 51 and len(state['nets']) == 100
-        assert state['limits']['simulated_components'] == 64 and state['limits']['electrical_nodes_including_ground'] == 100
+        part_limit = state['limits']['simulated_components']
+        assert part_limit >= 64 and state['limits']['electrical_nodes_including_ground'] >= 100
         current = 5/495000
         for i, p in enumerate(state['mixed']['potentiometers']):
             expected = 5-current*(i*10000+5000) if i < 49 else current*5000
@@ -93,19 +96,19 @@ def main():
         assert len(reopened['nets']) == 100 and reopened['simulated_component_count'] == 51
         fresh.close()
         fresh = None
-        boundary, _, _, _ = build_chain(client, 'dc-source', 'resistor', 63)
-        assert boundary['simulated_component_count'] == 64
-        assert all(abs(p['current_a']-5/63000) < 1e-10 for p in boundary['mixed']['resistors'])
-        excess, _, _, _ = build_chain(client, 'dc-source', 'resistor', 64)
+        boundary, _, _, _ = build_chain(client, 'dc-source', 'resistor', part_limit-1)
+        assert boundary['simulated_component_count'] == part_limit
+        assert all(abs(p['current_a']-5/(1000*(part_limit-1))) < 1e-10 for p in boundary['mixed']['resistors'])
+        excess, _, _, _ = build_chain(client, 'dc-source', 'resistor', part_limit)
         assert excess['status'] == 'unsupported' and excess['diagnostics'][0]['code'] == 'mixed-limit'
         client.ask('project.save', {'path': str(directory/'excess-parts.elab'), 'overwrite': True}, True)
         client.ask('project.load', {'path': path, 'discard_changes': True}, True)
         client.ask('simulation.wait')
         report = dict(passed=True, transport='packaged-native-private-socket' if args.connect else 'headless-stdio',
-                      simulated_part_boundary=64, hundred_node_parts=51, hundred_node_drawing_objects=52,
+                      simulated_part_boundary=part_limit, hundred_node_parts=51, hundred_node_drawing_objects=52,
                       electrical_nodes_including_ground=100, traces=4, startup_wall_ms=startup_ms, step_60ms_wall_ms=step_ms,
                       divider_current_a=current, checks=['public atomic placement/connection batches', 'independent divider references',
-                      '64-part resistor reference', '100 nodes and four live traces', 'pulse edge/high-low behavior',
+                      'resistor reference at the part boundary', '100 nodes and four live traces', 'pulse edge/high-low behavior',
                       '100-node Verify and embedded record import', 'save/reopen with fresh paused startup',
                       'SVG at capacity', 'excess physical parts diagnosed but saved', 'final owned project clean and paused'],
                       limitations=['per-device source/nonlinear/capacitor bounds still apply',

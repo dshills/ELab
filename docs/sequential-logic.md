@@ -83,7 +83,7 @@ of component order. Clocks derived from changing outputs settle through
 bounded zero-time iterations. An instantaneous switching loop is refused.
 This localization tolerance is numerical, not a physical device delay.
 
-The existing 64 simulated-part, 100-node, source/storage/device limits and
+The shared 128 simulated-part, 200-node, source/storage/device limits and
 512-attempt / 100 ms integration guards remain. No separate sequential-device
 count limit is added. DC sweep refuses circuits with sequential history.
 Previously supported circuits retain their existing engine paths.

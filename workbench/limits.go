@@ -6,21 +6,21 @@ import (
 )
 
 const (
-	MaxComponents            = 100 // Drawing objects, including reference/connectivity helpers.
-	MaxWires                 = 300
-	MaxSimulatedComponents   = 64
-	MaxElectricalNodes       = 100 // Includes the ground reference.
+	MaxComponents            = 200 // Drawing objects, including reference/connectivity helpers.
+	MaxWires                 = 600
+	MaxSimulatedComponents   = 128
+	MaxElectricalNodes       = 200 // Includes the ground reference.
 	MaxMixedNodes            = MaxElectricalNodes - 1
 	MaxNetworkSources        = 3
-	MaxNetworkCapacitors     = 4
+	MaxNetworkCapacitors     = 8
 	MaxNetworkTransistors    = 16
-	MaxNetworkMOSFETs        = 4
+	MaxNetworkMOSFETs        = 8
 	MaxNetworkJFETs          = 2
 	MaxNetworkOpAmps         = 2
-	MaxNetworkResistors      = 64
+	MaxNetworkResistors      = MaxSimulatedComponents
 	MaxNetworkSwitches       = 8
 	MaxNetworkDiodes         = 8
-	MaxNetworkPotentiometers = 64
+	MaxNetworkPotentiometers = MaxSimulatedComponents
 	MaxNetworkLEDs           = 4
 )
 

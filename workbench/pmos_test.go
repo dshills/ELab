@@ -238,7 +238,8 @@ func TestComplementaryMOSInverterConservationCaptureAndCombinedLimit(t *testing.
 			t.Fatal("mixed MOS capture", err)
 		}
 		s.Close()
-		for _, id := range []string{"M3", "M4", "M5"} {
+		for i := 3; i <= MaxNetworkMOSFETs+1; i++ {
+			id := fmt.Sprintf("M%d", i)
 			extra, _ := MakeComponent(id, "pmos", Point{400, -100}, "")
 			g.Components = append(g.Components, extra)
 			for _, pin := range extra.Terminals {

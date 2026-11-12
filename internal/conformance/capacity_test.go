@@ -21,7 +21,10 @@ func TestCapacityLimitEnvelopeAcceptsOnlyExactHistoricalOrCurrentFields(t *testi
 	if !capacityLimitsCompatible(current) {
 		t.Fatal("current limits refused")
 	}
-	oldFETs := current
+	oldFETs := alpha314CapacityLimits()
+	if !capacityLimitsCompatible(oldFETs) {
+		t.Fatal("build 314 envelope refused")
+	}
 	oldFETs.MOSFETs, oldFETs.PMOS, oldFETs.CombinedMOSFETs, oldFETs.CombinedFETs = 2, 2, 2, 2
 	if !capacityLimitsCompatible(oldFETs) {
 		t.Fatal("pre-bridge envelope refused")
@@ -217,8 +220,8 @@ func TestCapacityPublicReportRecomputesAndRejectsCorruption(t *testing.T) {
 }
 
 func TestCapacityHistoricalFETDiscoveryAllowsOnlyPairedAbsence(t *testing.T) {
-	for _, base := range []workbench.CircuitLimits{workbench.Limits(), func() workbench.CircuitLimits {
-		v := workbench.Limits()
+	for _, base := range []workbench.CircuitLimits{alpha314CapacityLimits(), func() workbench.CircuitLimits {
+		v := alpha314CapacityLimits()
 		v.Transistors, v.PNP, v.CombinedBipolar = 2, 2, 2
 		return v
 	}()} {
@@ -239,7 +242,7 @@ func TestCapacityHistoricalFETDiscoveryAllowsOnlyPairedAbsence(t *testing.T) {
 }
 
 func TestCapacityTimingEnvelopePreservesExactHistoricalPolicy(t *testing.T) {
-	original := workbench.Limits()
+	original := alpha314CapacityLimits()
 	original.IntegrationCPUMS = 0
 	original.IntegrationTimeBasis = ""
 	original.IntegrationWallMS = 100

@@ -1,6 +1,7 @@
 package workbench
 
 import (
+	"fmt"
 	"math"
 	"path/filepath"
 	"reflect"
@@ -97,29 +98,29 @@ func TestDiscreteHBridgeReversesRecordsAndReopens(t *testing.T) {
 }
 
 func TestExcessBridgeFETRemainsSavable(t *testing.T) {
-	b := exampleBuilder{graph: discreteHBridgeExampleGraph()}
-	b.part("M5", "nmos", "", 680, 145, 0)
+	b := exampleBuilder{graph: dualHBridgeExampleGraph()}
+	b.part("M9", "nmos", "", 680, 145, 0)
 	for _, pin := range []string{"gate", "drain", "source"} {
-		b.wire("M5."+pin, "MNB."+pin)
+		b.wire("M9."+pin, "MNB."+pin)
 	}
 	s := newGraphService(SolveLED, b.graph)
 	defer s.Close()
 	refused := settled(t, s)
 	if refused.Status != "unsupported" || len(refused.Diagnostics) == 0 || refused.Diagnostics[0].Code != "mixed-limit" {
-		t.Fatal("expected a size refusal with the fifth FET", refused.Diagnostics)
+		t.Fatal("expected a size refusal with the ninth FET", refused.Diagnostics)
 	}
-	path := filepath.Join(t.TempDir(), "five-fets.elab")
+	path := filepath.Join(t.TempDir(), "nine-fets.elab")
 	call(t, s, "project.save", SaveParams{Path: path}, "save")
 	fresh := New()
 	defer fresh.Close()
 	call(t, fresh, "project.load", LoadParams{Path: path}, "open")
 	loaded := settled(t, fresh)
 	if loaded.Document.Dirty || !reflect.DeepEqual(loaded.Components, b.graph.Components) || !reflect.DeepEqual(loaded.Wires, b.graph.Wires) {
-		t.Fatal("saving an over-limit circuit lost the fifth FET or its wiring")
+		t.Fatal("saving an over-limit circuit lost the ninth FET or its wiring")
 	}
 }
 
-func TestFourFETBudgetRetainsTwoJFETLimit(t *testing.T) {
+func TestEightFETBudgetRetainsTwoJFETLimit(t *testing.T) {
 	b := exampleBuilder{graph: JFETCurrentExampleGraph(false)}
 	addParallel := func(id, kind string) {
 		b.part(id, kind, "", 420, float64(len(b.graph.Components))*20, 0)
@@ -128,16 +129,110 @@ func TestFourFETBudgetRetainsTwoJFETLimit(t *testing.T) {
 		}
 	}
 	addParallel("J2", "njfet")
-	addParallel("M1", "nmos")
-	addParallel("M2", "nmos")
+	for i := 1; i <= MaxNetworkMOSFETs-2; i++ {
+		addParallel(fmt.Sprintf("M%d", i), "nmos")
+	}
 	s := newGraphService(SolveLED, b.graph)
 	defer s.Close()
 	state := settled(t, s)
-	if state.Mixed == nil || state.Mixed.Stale || len(state.Mixed.JFETs) != 2 || len(state.Mixed.MOSFETs) != 2 || state.Mixed.KCLResidual > 1e-8 {
-		t.Fatal("two JFETs and two MOSFETs did not share the four-device budget", state.Diagnostics)
+	if state.Mixed == nil || state.Mixed.Stale || len(state.Mixed.JFETs) != 2 || len(state.Mixed.MOSFETs) != MaxNetworkMOSFETs-2 || state.Mixed.KCLResidual > 1e-8 {
+		t.Fatal("JFETs and MOSFETs did not share the eight-device budget", state.Diagnostics)
 	}
-	addParallel("M3", "nmos")
+	addParallel("MX", "nmos")
 	if _, _, d := b.graph.Compile(); d == nil || d.Code != "mixed-limit" {
-		t.Fatal("fifth device in mixed FET network was not refused", d)
+		t.Fatal("ninth device in mixed FET network was not refused", d)
+	}
+}
+
+func TestDualHBridgeSharedSupplyRecordingAndReopen(t *testing.T) {
+	s := New()
+	t.Cleanup(s.Close)
+	call(t, s, "example.load", ExampleLoadParams{ID: "dual-hbridge"}, "load-dual")
+	call(t, s, "simulation.pause", struct{}{}, "pause-dual")
+	call(t, s, "simulation.restart", struct{}{}, "restart-dual")
+	initial := settled(t, s)
+	vA, iA := bridgeLoadReference(100)
+	vB, iB := bridgeLoadReference(150)
+	check := func(state Snapshot, a, b float64) {
+		t.Helper()
+		r := state.Mixed
+		if r == nil || r.Stale || len(r.MOSFETs) != 8 || len(r.Resistors) != 2 || len(r.Sources) != 3 || r.KCLResidual > 1e-8 || math.Abs(r.PowerResidual) > 1e-7 {
+			t.Fatalf("invalid dual bridge state: %v", state.Diagnostics)
+		}
+		for _, load := range r.Resistors {
+			wantV, wantI := a*vA, a*iA
+			if load.ID == "B_RL" {
+				wantV, wantI = b*vB, b*iB
+			}
+			if math.Abs(load.Voltage-wantV) > 2e-6 || math.Abs(load.Current-wantI) > 2e-8 {
+				t.Fatalf("%s got %g V, %g A, want %g V, %g A", load.ID, load.Voltage, load.Current, wantV, wantI)
+			}
+		}
+		// The two inverters each draw 5 V across a 1 MΩ supply resistor.
+		wantSupply := iA + iB + 2*5./1e6
+		for _, source := range r.Sources {
+			if source.ID == "VCC" && math.Abs(source.Current-wantSupply) > 2e-8 {
+				t.Fatalf("shared supply current %g A, want %g A", source.Current, wantSupply)
+			}
+		}
+	}
+	check(initial, -1, 1)
+	call(t, s, "simulation.step", StepParams{Duration: .022}, "first-direction-edge")
+	check(s.Snapshot(), 1, -1)
+	call(t, s, "simulation.step", StepParams{Duration: .011}, "second-direction-edge")
+	check(s.Snapshot(), 1, 1)
+
+	longDuration, longStep := .9, .001
+	started := call(t, s, "simulation.verify", VerifyParams{Duration: &longDuration, Step: &longStep}, "long-dual").Result.(Snapshot)
+	call(t, s, "operation.cancel", IDParams{ID: started.LastOperation}, "cancel-dual")
+	canceled := awaitOperation(t, s, started.LastOperation)
+	if canceled.Operation.Status != "canceled" || canceled.Metadata == nil || canceled.Metadata.SampleCount != 0 {
+		t.Fatal("canceling the dual bridge run published partial results", canceled.Operation)
+	}
+	check(s.Snapshot(), 1, 1)
+
+	duration, step := .045, .001
+	_, captured := verify(t, s, VerifyParams{Duration: &duration, Step: &step, ProbeIDs: initial.Scope.Selected}, "record-dual")
+	read := func(service *Service, id string) VerificationPage {
+		t.Helper()
+		return call(t, service, "operation.samples", VerificationPageParams{ID: id, Limit: 200}, "read-dual").Result.(VerificationPage)
+	}
+	rows := read(s, captured.Operation.ID).Rows
+	if len(rows) < 46 || len(initial.Scope.Selected) != 6 {
+		t.Fatal("dual bridge capture missed output rows or probes")
+	}
+	seen := map[[2]float64]bool{}
+	for _, row := range rows {
+		if len(row.Values) != 6 {
+			t.Fatal("missing dual bridge probe values", row)
+		}
+		values := row.Values
+		a, b := values[0], values[1]
+		if a != 0 && a != 5 || b > 1e-8 && b < 5-1e-8 {
+			continue // Only compare plateaus with the scalar on-channel load line.
+		}
+		if b < 2.5 {
+			b = 0
+		} else {
+			b = 5
+		}
+		seen[[2]float64{a, b}] = true
+		if math.Abs(values[2]-(1-.4*a)*vA) > 2e-6 || math.Abs(values[3]-(1-.4*b)*vB) > 2e-6 || math.Abs(values[4]-(1-.4*a)*iA) > 2e-8 || math.Abs(values[5]-(1-.4*b)*iB) > 2e-8 {
+			t.Fatal("dual bridge plateau differs from the independent load lines", row)
+		}
+	}
+	if len(seen) != 4 {
+		t.Fatal("capture missed a combination of bridge directions", seen)
+	}
+	call(t, s, "recording.keep.set", RecordingKeepParams{ID: captured.Operation.ID, Keep: true}, "keep-dual")
+	path := filepath.Join(t.TempDir(), "dual.elab")
+	call(t, s, "project.save", SaveParams{Path: path}, "save-dual")
+	fresh := New()
+	t.Cleanup(fresh.Close)
+	call(t, fresh, "project.load", LoadParams{Path: path}, "open-dual")
+	reopened := settled(t, fresh)
+	check(reopened, -1, 1)
+	if !reopened.Paused || reopened.Document.Dirty || len(reopened.Operations) != 1 || !reflect.DeepEqual(initial.Components, reopened.Components) || !reflect.DeepEqual(initial.Wires, reopened.Wires) || !reflect.DeepEqual(rows, read(fresh, reopened.Operations[0].ID).Rows) {
+		t.Fatal("dual bridge project or its retained capture changed on reopen")
 	}
 }
