@@ -11,7 +11,11 @@ installation is needed to run the app.
 
 [Run ELab in your browser](docs/run-web.md) · [Published release and qualification record](docs/current-release.md)
 
-![ELab's browser workbench showing the four-MOSFET H-bridge](docs/validation/web-alpha-314-20261108/hbridge.png)
+![ELab in Apollo appearance: an amplifier drives a loudspeaker while the scope shows voltage and current waveforms](docs/images/web/amplifier-apollo.png)
+
+**Follow the signal from circuit to scope.** Explore an amplifier driving a
+loudspeaker, inspect its voltage and current, and see how the load changes the
+waveform—all in one local workbench.
 
 ## Run in your browser
 
@@ -45,6 +49,23 @@ checkpoint locally; **Save project** creates a named project. **Projects** offer
 recovery copies and reversible Trash. Version 1–5 `.elab` projects open on Main.
 Projects with child sheets use version 6 of the `.elab` format. See the
 [workbench guide](docs/web-workbench.md) and [project format](docs/project-format.md).
+
+## See what you can discover
+
+**One supply. Two directions. See current reverse.** Open the four-MOSFET
+H-bridge and follow the control signal, load voltage and current together.
+The scope makes each reversal visible; select a part to inspect its readings.
+
+![Dark-mode H-bridge workbench with four MOSFETs, live load readings and alternating voltage and current traces](docs/images/web/hbridge-dark.png)
+
+**Your first circuit can teach you something in minutes.** The guided capacitor
+activity explains the parts and units, then helps you watch stored charge build
+up. Change a value and explore how the curve responds.
+
+![Guided capacitor activity in light mode, with plain-language instructions, a simple RC circuit and its rising voltage curve](docs/images/web/learn-capacitor.png)
+
+These are real screenshots of the browser application using included examples.
+[Capture details](docs/images/web/README.md) · [Try an example](docs/run-web.md)
 
 ## Workbench
 
