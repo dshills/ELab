@@ -113,3 +113,34 @@ and +4.725 V and +47.25 mA in the other. Each conducting MOSFET drops about
 longer than 40 ms includes both directions and the return. Keep and save the
 recording to reopen it beside the same circuit. The models omit gate charge,
 switching losses and dead time.
+
+## Two MOSFET H-bridges on one supply
+
+From **Explore examples**, search for **Two MOSFET H-bridges on one supply**
+(`dual-hbridge`). Eight MOSFETs drive two resistor loads from the same 5 V supply.
+The top bridge drives `RL` (100 Ω). The bottom bridge drives `B_RL` (150 Ω).
+Each has its own direction signal, so the loads can reverse at different times.
+
+1. Choose **Pause**, then **Restart simulation**. Check both load readings in
+   the scope or by selecting each resistor on the schematic.
+2. Open **Simulate**. Enter `22 ms` in **Step duration (s)** and choose
+   **Advance simulation**. Both loads have reversed since the restart.
+3. Advance another `11 ms`. The bottom load reverses again while the top load
+   keeps its direction.
+
+| Time | `RL` voltage and current | `B_RL` voltage and current |
+| --- | --- | --- |
+| Restart | −4.725 V, −47.25 mA | +4.814 V, +32.10 mA |
+| 22 ms | +4.725 V, +47.25 mA | −4.814 V, −32.10 mA |
+| 33 ms | +4.725 V, +47.25 mA | +4.814 V, +32.10 mA |
+
+Voltage is measured from pin 1 to pin 2. Positive current flows from pin 1 to
+pin 2. Negative current flows in the opposite direction. The 150 Ω load draws
+less current than the 100 Ω load because its resistance is higher.
+
+Use **Record** with a duration of `45 ms` and a sample interval of `1 ms` to
+capture all four direction combinations. The example selects six traces for
+the two direction signals and both load voltages and currents. After the capture
+finishes, check that it is **Kept in project**, then save and reopen the project
+to replay it. The example uses an ideal supply, generic MOSFETs and resistor
+loads. See the [capacity validation](circuit-capacity.md#expanded-capacity-checks).

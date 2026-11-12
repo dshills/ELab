@@ -1,9 +1,19 @@
 # Web interface and qualification
 
-The web host and frontend are now at the repository root. Current build/check
-commands are in [the main README](../README.md); the detailed run guide is
-[here](web-workbench.md). The Go engine and existing project/library format are
-unchanged. The Vellum interface is [archived](native-archive.md).
+The web host and frontend are at the repository root and run the shared Go
+workbench. The Vellum interface is preserved in the native archive.
+[Build and check](../README.md) · [Web workbench](web-workbench.md) ·
+[Native archive](native-archive.md)
+
+The current source supports 128 simulated parts and 200 electrical nodes. It
+includes the shared-supply dual H-bridge, named ports between sheets, linked
+copies, and search across sheets. Larger systems with relatively few connections
+use sparse factorization. The current reader opens older `.elab` files and saves
+projects with child sheets in version 6. The local large-circuit
+qualification passed the macOS quality and package checks and 58 browser
+checks across Chromium, Firefox and WebKit. The Chromium load test was skipped
+on Firefox and WebKit. [Circuit capacity](circuit-capacity.md) ·
+[Project format](project-format.md) · [Published alpha scope](current-release.md)
 
 The November 4 follow-up adds explicitly enabled MCP attachment to the visible
 browser workspace; see [agent setup](agent-setup.md). Portable whole-library
@@ -14,13 +24,9 @@ The following feature matrix and qualification history describe their recorded
 source revisions. Historical `./exp-web` commands apply at those revisions;
 current commands use `go run .` and `go test -race ./...` from the root.
 
-# Web feature parity and qualification
-
-Status: local macOS web candidate, 2026-11-01. The shared native workbench remains
-the source of numerical behavior. This work does not publish or replace the
-qualified native alpha.
-
 ## Feature coverage
+
+This matrix describes the November 1, 2026 candidate.
 
 | Native feature family | Web implementation |
 | --- | --- |

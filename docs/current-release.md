@@ -14,6 +14,11 @@ and four-MOSFET H-bridge activities, connected group editing, diagnostics, libra
 backups and private support reports remain included. Existing web projects stay
 in `~/Library/Application Support/ELab/web`.
 
+Build 314 predates the large-circuit changes on `main`. Multi-sheet projects,
+linked sheets, the higher simulation limits and the dual H-bridge example are
+available from the current source checkout. [Run from source](web-workbench.md#run)
+· [Draw across sheets](web-workbench.md#draw-across-sheets).
+
 The ZIP is 11,856,976 bytes. SHA-256:
 `7b02492bd646390deee41e40cf08560786b63185ed686c452be42227d3c3aa6d`.
 The public tag identifies clean `main` source `6c0d66e3cafcedb0228e5db978fb6c4f6089d5b8`.

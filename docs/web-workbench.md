@@ -7,8 +7,8 @@ primary ELab interface. The former Vellum UI is archived in Git; see
 
 ## Run
 
-For the [macOS alpha](https://github.com/dshills/ELab/releases/tag/v0.206.0-alpha.1),
-open **ELab Web.app**. It starts the local host and
+For the [published macOS alpha](current-release.md), open **ELab Web.app**.
+It starts the local host and
 opens your default browser. Its window shows status and provides Open ELab,
 projects-folder/log access and Quit. Closing a browser tab keeps ELab running;
 closing the launcher or Command-Q saves and stops it. A failed checkpoint leaves
@@ -19,12 +19,14 @@ free local port if the preferred port is occupied. If an older CLI server owns
 the library, close that server once before opening the app; its projects remain
 in place. Existing native release binaries remain usable; their source is archived.
 
-Build a self-contained macOS app and optional private-alpha ZIP:
+The sheet features below are available when running the current source. To build
+a self-contained app and ZIP from your checkout, use the packaging command below.
+The version and build number are labels for your local build.
 
 ```sh
-python3 -B scripts/package_web.py --output 'build/release/ELab Web.app' \
-  --version 0.206.0-alpha.1 --build-version 312 \
-  --archive build/release/ELab-Web-0.206.0-alpha.1-macos-arm64.zip
+python3 -B scripts/package_web.py --output 'build/local/ELab Web.app' \
+  --version 0.207.0-dev --build-version 315 \
+  --archive build/local/ELab-Web-dev-macos-arm64.zip
 ```
 
 Runtime users need neither Go nor Node. Building requires the Go toolchain and
@@ -39,8 +41,11 @@ For development, run from the repository root, using the Go version in `go.mod`:
 go run .
 ```
 
-Open <http://localhost:8788>. Stop with Control-C; autosaved work survives server
-restart. No Node packages, CDN, account or frontend build is required to run it.
+Open <http://localhost:8788>. This address serves the styles and connects the
+browser to the simulation engine. Opening `static/index.html` from disk shows
+unstyled markup and leaves the engine disconnected. No Node packages, CDN,
+account or frontend build is required. Stop the host with Control-C. Autosaved
+work survives a server restart.
 To build a standalone executable with all frontend files embedded:
 
 ```sh
@@ -59,13 +64,48 @@ or temporary directories.
 
 ## Draw across sheets
 
-Use **Manage sheets** to add a child to the current sheet. Use the sheet selector to switch drawings. Select components on a parent or child, then choose **Move selection** in the sheet manager. ELab turns crossing wires and split named connections into ports. Select a port on the schematic to follow it to the other sheet. For a new connection, choose one terminal on each sheet and give the port a name.
+Sheets divide a drawing into smaller views of the same circuit. Choose **Explore
+examples**, then open **RC charge and discharge** to try moving its capacitor
+to a separate sheet.
 
-Ordinary net labels connect within a sheet. Ground is shared across the project. Each sheet has its own drawing space, and all sheets share one simulation and the same project limits. A project save includes every sheet. Schematic SVG, PDF and PNG export the current sheet with its named connections.
+1. On **Main**, open **Manage sheets**, enter `Filter` as the **Child sheet name**,
+   and choose **Add child sheet**. ELab opens **Main / Filter**.
+2. Use the **Sheet** selector to return to **Main**, then select capacitor `C1`.
+   Open **Manage sheets**, set **Destination sheet** to **Main / Filter**, and
+   choose **Move selection**.
+3. ELab opens **Filter**. The existing connections appear as named ports. Select
+   a port on the drawing or focus it and press Enter to return to **Main**.
+4. Save the project. Reopening it restores the sheets, connections, and selected
+   sheet. The existing scope traces still measure the same capacitor.
 
-**Find in project** searches part IDs, labels, terminals and signals across sheets. Choose a result to open and center its sheet. The arrow next to a live scope trace goes to its source. Circuit checks can open the sheet that contains the affected part or terminal.
+To make a new connection, open **Manage sheets** on either sheet. Enter a **Port
+name**, choose a **Local terminal** and an **Other sheet terminal** on its parent
+or child, then choose **Connect port**. Ordinary net labels connect within a
+sheet. Ground is shared across the project.
 
-Use **Place linked sheet** on the parent to reuse a child sheet with no children of its own. The source sheet remains part of the circuit. Each linked sheet has its own components and measurements. Connect its named ports on the parent as needed. To publish edits to the shared drawing, open the source and choose **Apply to linked sheets**. ELab keeps component settings you changed on an instance and leaves its external wiring in place. If an update would remove a terminal still wired on an instance, ELab identifies the wire so you can decide where to reconnect it.
+**Find in project** searches part IDs, labels, terminals and signals. Choose a
+result to open its sheet and center the drawing on the match. The arrow next to
+a live scope trace goes to its source. Circuit checks can open the sheet with the
+affected part or terminal.
+
+You can add up to 24 child sheets. All sheets share the same project-wide
+simulation and drawing limits. A project save includes every sheet. Schematic
+SVG, PDF and PNG export the current sheet with its named connections.
+[Circuit capacity](circuit-capacity.md) · [Project format](project-format.md)
+
+### Reuse a sheet
+
+Open **Manage sheets** on the parent where you want the copy. Pick a **Source
+sheet** that has no children of its own, enter a **Linked sheet name**, and choose
+**Place linked sheet**. The source remains part of the circuit. The copy has its
+own components and measurements. Use **Connect port** to wire it to its parent.
+
+To update the copies, open the source, make your edits, then choose **Manage
+sheets → Apply to linked sheets**. The update carries over the source layout and
+internal wiring. Components whose settings you edited locally keep those settings.
+Existing external connections stay in place. If an update would remove a terminal
+still wired on a copy, ELab identifies the wire. Disconnect or reroute it, then
+apply the update again.
 
 ## Save and recover
 
@@ -97,7 +137,7 @@ after two hours; its files remain and are restored on return. Active pages poll.
 
 ## Workbench
 
-Search all 61 component kinds or open one of the 88 examples. Select a part to edit
+Search all 61 component kinds or open one of the 89 examples. Select a part to edit
 engineering-unit values, startup/loss parameters, device models and live readings.
 **Simulate** exposes sampling, playback and source controls. **Workbench tools**
 (the gear above the instruments) contains recording playback, interval statistics,

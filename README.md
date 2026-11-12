@@ -22,8 +22,9 @@ Use the Go version declared in `go.mod`, then run from the repository root:
 go run .
 ```
 
-Open <http://localhost:8788>. Stop with Control-C. For a standalone executable
-with the frontend embedded, or the accompanying agent/conformance tools:
+Open <http://localhost:8788> to load the styled workbench and connect to the
+simulation engine. Stop with Control-C. For a standalone executable with the
+frontend embedded, or the accompanying agent/conformance tools:
 
 ```sh
 go build -o build/elab .
@@ -39,16 +40,17 @@ selects a separate library; only one host may write each library at a time.
 The library location remains unchanged: the platform's user configuration
 folder plus `ELab/web` (macOS: `~/Library/Application Support/ELab/web`). Edits
 checkpoint locally; **Save project** creates a named project. **Projects** offers
-recovery copies and reversible Trash. Existing `.elab` files and kept results use
-the same project format. See the [workbench guide](docs/web-workbench.md).
+recovery copies and reversible Trash. Version 1–5 `.elab` projects open on Main.
+Projects with child sheets use version 6 of the `.elab` format. See the
+[workbench guide](docs/web-workbench.md) and [project format](docs/project-format.md).
 
 On macOS, the self-contained **ELab Web.app** starts the host and opens the default
-browser. Build a new private package with Xcode command-line tools and Go:
+browser. Build a local package with Xcode command-line tools and Go:
 
 ```sh
-python3 -B scripts/package_web.py --output 'build/release/ELab Web.app' \
-  --version 0.207.0-alpha.2 --build-version 314 \
-  --archive build/release/ELab-Web-0.207.0-alpha.2-macos-arm64.zip
+python3 -B scripts/package_web.py --output 'build/local/ELab Web.app' \
+  --version 0.207.0-dev --build-version 315 \
+  --archive build/local/ELab-Web-dev-macos-arm64.zip
 ```
 
 The launcher is a small platform wrapper around this same web app. Packaging uses
@@ -62,11 +64,12 @@ notarization, stapled tickets, Gatekeeper and exact-archive installation checks.
 New to electronics? Open **Learn circuits & shortcuts** for guided LED, capacitor
 and H-bridge activities with units and expected results explained along the way.
 
-
 - Draw, wire, move, rotate and duplicate parts; use net labels, junctions, circuit
   blocks, box selection, group move/copy/duplicate, undo/redo and keyboard placement.
 - Organize a circuit into sheets connected by named ports, reuse linked designs,
   and find parts and signals across the project.
+- Simulate up to 128 parts and 200 electrical nodes across all sheets. Try **Two
+  MOSFET H-bridges on one supply** to see two loads reverse independently.
 - Inspect live voltage/current and device settings; pause, restart or step the
   same Go simulation used by agents.
 - Capture and retain experiments, seek exact samples, compare recordings, measure
@@ -80,8 +83,11 @@ and H-bridge activities with units and expected results explained along the way.
   settings and accessible keyboard controls.
 
 [Workbench guide](docs/web-workbench.md) · [Feature coverage](docs/web-parity.md) ·
-[H-bridge walkthrough](docs/hbridge.md) · [Models and limits](docs/hobbyist-devices.md) ·
+[Dual H-bridge walkthrough](docs/hbridge.md#two-mosfet-h-bridges-on-one-supply) · [Models and limits](docs/hobbyist-devices.md) ·
 [Circuit capacity](docs/circuit-capacity.md)
+
+The large-circuit features above are available when running the current source.
+For the scope of the downloadable build 314 alpha, see the [release record](docs/current-release.md).
 
 ## Agents
 
