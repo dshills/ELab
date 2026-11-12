@@ -232,6 +232,11 @@ func (s *webServer) handler() http.Handler {
 		}
 		if !strings.HasPrefix(r.URL.Path, "/api/") {
 			w.Header().Set("Cache-Control", "no-store")
+			// Browsers enforce the script type with nosniff. Windows file
+			// associations can override the platform MIME mapping for .mjs.
+			if strings.HasSuffix(r.URL.Path, ".js") || strings.HasSuffix(r.URL.Path, ".mjs") {
+				w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
+			}
 			files.ServeHTTP(w, r)
 			return
 		}

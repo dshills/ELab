@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"math"
+	"mime"
 	"reflect"
 	"strings"
 	"testing"
@@ -88,6 +89,16 @@ func TestBrowserRecordingAnalysesUseCapturedDataAndRefuseStaleSources(t *testing
 }
 
 func TestBrowserInstrumentModulesAreEmbeddedWithoutStaleCaching(t *testing.T) {
+	// Reproduce the Windows runner's file association on every test platform.
+	previous := mime.TypeByExtension(".mjs")
+	if err := mime.AddExtensionType(".mjs", "text/plain"); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if err := mime.AddExtensionType(".mjs", previous); err != nil {
+			t.Error(err)
+		}
+	})
 	f := fixture(t)
 	for _, path := range []string{"/recording-analysis.mjs", "/spectrum.mjs", "/sweep.mjs", "/instrument-plot.mjs"} {
 		response := f.request("GET", path, nil, "")
