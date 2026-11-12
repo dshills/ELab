@@ -1,50 +1,39 @@
 # Current web alpha
 
-**ELab Web 0.207.0 alpha 2, build 314**, for Apple Silicon macOS.
-[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/ELab-Web-0.207.0-alpha.2-macos-arm64.zip) · [Start guide](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/START-HERE.md) · [Checksums](https://github.com/dshills/ELab/releases/download/v0.207.0-alpha.2/SHA256SUMS).
+**ELab Web 0.208.0 alpha 1, build 315**, for Apple Silicon macOS.
+[Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.208.0-alpha.1/ELab-Web-0.208.0-alpha.1-macos-arm64.zip) · [Start guide](https://github.com/dshills/ELab/releases/download/v0.208.0-alpha.1/START-HERE.md) · [Checksums](https://github.com/dshills/ELab/releases/download/v0.208.0-alpha.1/SHA256SUMS).
 
-This update includes the WebKit reload fix: old-page state reads are cancelled
-before navigation, polling resumes after a reload or Back/Forward restore, and
-cancelled navigation keeps the current page updating. Editing commands and the
-solver's existing work limits retain their safeguards.
+Build 315 adds multi-sheet schematics with named ports, linked sheets with
+independent wiring and settings, and search across sheets. The simulator supports
+up to 128 parts, 200 electrical nodes including ground, and eight FETs. Open
+**Two MOSFET H-bridges on one supply** to see two loads reverse independently.
+[Sheet guide](web-workbench.md#draw-across-sheets) · [Dual H-bridge walkthrough](hbridge.md#two-mosfet-h-bridges-on-one-supply) · [Circuit capacity](circuit-capacity.md).
 
-Extract **ELab Web.app** and open it. The launcher starts the local engine and
-opens your default browser; Go and Node are not required. Guided LED, capacitor
-and four-MOSFET H-bridge activities, connected group editing, diagnostics, library
-backups and private support reports remain included. Existing web projects stay
-in `~/Library/Application Support/ELab/web`.
+Extract and open **ELab Web.app**. The launcher starts the engine and opens
+your browser. Before upgrading, use **Projects → Back up library** to make a
+portable backup, then close the older launcher normally. The app stores web
+projects in `~/Library/Application Support/ELab/web`. This build reads earlier
+`.elab` files. Projects with child sheets require version 6 support.
 
-Build 314 predates the large-circuit changes on `main`. Multi-sheet projects,
-linked sheets, the higher simulation limits and the dual H-bridge example are
-available from the current source checkout. [Run from source](web-workbench.md#run)
-· [Draw across sheets](web-workbench.md#draw-across-sheets).
+The release tag points to `6137058afdddc2df19da07515fd021ce12ab56c9` on `main`.
+The ZIP is 11,971,953 bytes with SHA-256
+`6a0ae6911cca5cbdbd783580f4826270cf11c8a9b85073daa884aa8194a73821`.
 
-The ZIP is 11,856,976 bytes. SHA-256:
-`7b02492bd646390deee41e40cf08560786b63185ed686c452be42227d3c3aa6d`.
-The public tag identifies clean `main` source `6c0d66e3cafcedb0228e5db978fb6c4f6089d5b8`.
+The macOS quality plan and archive runtime checks passed on Apple Silicon
+macOS 27.2. Chromium, Firefox, and WebKit passed 58 browser checks with two
+planned skips. The downloaded app passed all 12 large-circuit browser checks.
+The dual H-bridge recording covered all four direction combinations and
+retained all 53 samples across six traces through save, reopen, and export.
+All five payload checksums passed after publication. GitHub Actions passed the
+portable and three browser jobs before publication. The hosted macOS job was
+still running at publication. [Qualification receipt](https://github.com/dshills/ELab/releases/download/v0.208.0-alpha.1/QUALIFICATION.json) · [Hosted CI](https://github.com/dshills/ELab/actions/runs/43235023151).
 
-Fresh macOS gates passed on that source: lint, 75 Python tests, 36 frontend checks,
-complete Go race tests, vet and package/runtime checks. All 46 browser journeys
-passed with two planned skips and no unexpected or flaky results. The exact
-GitHub-downloaded shipping app passed six in-flight reload checks across Chromium
-and WebKit, plus LED editing, group undo, H-bridge reversal and exact preservation
-of all 50 recorded rows through save/reopen and export/import. All six downloaded
-assets match their qualified bytes and all five payload checksums pass.
-[Qualification and publication evidence](validation/web-alpha-314-20261108/README.md).
+The app is ad-hoc signed and has no notarization ticket. Follow the start
+guide if Gatekeeper blocks the first launch. The package targets macOS 13.
+Qualification covered macOS 27.2 on Apple Silicon with disposable libraries.
+Manual Finder and clean-account installation, native file pickers, and VoiceOver
+were outside this run.
 
-[Hosted CI](https://github.com/dshills/ELab/actions/runs/41888150836) passed all five jobs on
-`e5136106d1d49cb13e979f0ad9337bccd012f21a`. Its application, test and workflow input hashes
-exactly match this release commit; the intervening commit contains documentation
-only. Fresh local qualification and downloaded-binary checks use the release
-commit itself.
-
-This private alpha is **ad-hoc signed and not notarized**. Gatekeeper can block
-first launch; follow the start guide's per-app opening instructions. The exact
-ZIP is tested on Apple Silicon macOS 27.2. macOS 13 is the configured build target,
-not a verified minimum. Intel, clean-account/Finder installation, native
-file-picker interaction, VoiceOver and whole-app accessibility conformance remain
-unqualified by these automated checks.
-
-[Release notes](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.2) ·
-[Previous web alpha](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.1) ·
-[Preserved native H-bridge alpha](https://github.com/dshills/ELab/releases/tag/v0.205.0-alpha.1).
+[Release notes](https://github.com/dshills/ELab/releases/tag/v0.208.0-alpha.1) ·
+[Previous web alpha, build 314](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.2) ·
+[Build 314 evidence](validation/web-alpha-314-20261108/README.md).

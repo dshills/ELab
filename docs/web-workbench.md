@@ -19,13 +19,12 @@ free local port if the preferred port is occupied. If an older CLI server owns
 the library, close that server once before opening the app; its projects remain
 in place. Existing native release binaries remain usable; their source is archived.
 
-The sheet features below are available when running the current source. To build
-a self-contained app and ZIP from your checkout, use the packaging command below.
-The version and build number are labels for your local build.
+To build a self-contained app and ZIP from your checkout, use the packaging
+command below. The version and build number are labels for your local build.
 
 ```sh
 python3 -B scripts/package_web.py --output 'build/local/ELab Web.app' \
-  --version 0.207.0-dev --build-version 315 \
+  --version 0.208.0-dev --build-version 315 \
   --archive build/local/ELab-Web-dev-macos-arm64.zip
 ```
 

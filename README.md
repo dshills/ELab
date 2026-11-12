@@ -9,7 +9,7 @@ installation is needed to run the app.
 
 **89 examples · 61 component kinds · 242 shared commands.**
 
-[Download the macOS web alpha](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.2)
+[Download the macOS web alpha](https://github.com/dshills/ELab/releases/tag/v0.208.0-alpha.1)
 — Apple Silicon, ad-hoc signed. See the release's first-use guide and qualification scope.
 
 ![ELab's browser workbench showing the four-MOSFET H-bridge](docs/validation/web-alpha-314-20261108/hbridge.png)
@@ -49,7 +49,7 @@ browser. Build a local package with Xcode command-line tools and Go:
 
 ```sh
 python3 -B scripts/package_web.py --output 'build/local/ELab Web.app' \
-  --version 0.207.0-dev --build-version 315 \
+  --version 0.208.0-dev --build-version 315 \
   --archive build/local/ELab-Web-dev-macos-arm64.zip
 ```
 
@@ -86,8 +86,7 @@ and H-bridge activities with units and expected results explained along the way.
 [Dual H-bridge walkthrough](docs/hbridge.md#two-mosfet-h-bridges-on-one-supply) · [Models and limits](docs/hobbyist-devices.md) ·
 [Circuit capacity](docs/circuit-capacity.md)
 
-The large-circuit features above are available when running the current source.
-For the scope of the downloadable build 314 alpha, see the [release record](docs/current-release.md).
+Build 315 includes the large-circuit features above. [Release and qualification record](docs/current-release.md)
 
 ## Agents
 
