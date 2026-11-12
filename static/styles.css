@@ -154,3 +154,17 @@ body[data-palette=apollo]{--text:#d1f3f5;--muted:#9ac0c7;--line:#284953;--surfac
  margin: 12px 0;
 }
 .experiment-plot text { fill: currentColor; font-size: 12px; }
+
+.replay-drawing {
+ display: block;
+ width: 100%;
+ height: min(37vh, 350px);
+ margin: 12px 0;
+ border: 1px solid var(--line);
+ border-radius: 9px;
+ background: var(--canvas);
+}
+.replay-drawing text { fill: currentColor; font-size: 16px; }
+[data-replay-waveform] { display: block; width: 100%; height: 68px; cursor: crosshair; }
+[data-replay-reading] { font-size: 13px; font-variant-numeric: tabular-nums; }
+#schematic-replay-button[hidden] { display: none; }

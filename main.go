@@ -325,6 +325,8 @@ func (s *webServer) handler() http.Handler {
 			}
 			session.files.Unlock()
 			jsonReply(w, 200, payload)
+		case "/api/schematic-replay":
+			s.schematicReplay(w, r, session)
 		case "/api/compare-change":
 			s.compareChange(w, r, session)
 		case "/api/import-result":

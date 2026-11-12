@@ -203,3 +203,12 @@ level, the panel shows an estimated first crossing time for each.
 **Keep trial value** applies one undoable edit. **Discard trial** closes the
 comparison. If an edit changes the project while the comparison is open,
 reopen the panel before applying the trial.
+
+### Replay on the schematic
+
+Choose a completed recording in **Scope source**, then choose **Replay on
+schematic**. The player opens the captured circuit and its exact stored samples.
+Choose a measurement and drag the slider, click the waveform, or press **Play**.
+A signed current with two captured terminal references shows an arrow in the
+measured direction. The sheet picker also works for recordings of projects with
+multiple sheets. Replay uses only captured channels and keeps its own position.
