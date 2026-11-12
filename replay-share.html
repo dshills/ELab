@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-{{.ScriptHash}}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>ELab schematic replay</title>
+<style>
+:root { color-scheme: light dark; --accent: #0c735a; --wire: #637973; --panel: #f5f8f6; --line: #c2cec7; }
+@media (prefers-color-scheme: dark) { :root { --accent: #76d4b5; --wire: #9eb4ac; --panel: #171f1c; --line: #576c63; } }
+body { max-width: 1050px; margin: 36px auto; padding: 0 20px; font: 16px/1.5 system-ui, sans-serif; }
+header { margin-bottom: 24px; }
+h1 { margin-bottom: 4px; }
+p { margin: 6px 0; overflow-wrap: anywhere; }
+.note { white-space: pre-wrap; }
+.analysis-toolbar, .recording-playback { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+label { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+select, button { max-width: 100%; font: inherit; border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; }
+.replay-drawing { width: 100%; height: clamp(220px, 48vh, 490px); margin-top: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; }
+.replay-drawing text { fill: currentColor; font-size: 16px; }
+[data-replay-reading] { font-variant-numeric: tabular-nums; }
+[data-replay-waveform] { display: block; width: 100%; height: 70px; cursor: crosshair; margin: 12px 0; }
+[data-replay-position] { flex: 1; min-width: 100px; accent-color: var(--accent); }
+footer { margin-top: 24px; }
+</style>
+</head>
+<body>
+<header>
+<h1>ELab schematic replay</h1>
+<p>Choose a measurement and drag the slider or press Play to explore the captured samples.</p>
+{{if .Note}}<p class="note">{{.Note}}</p>{{end}}
+</header>
+<main id="replay"></main>
+<noscript>Enable JavaScript in your browser to play this recording.</noscript>
+{{if .Project}}<footer><button id="project">Download editable .elab project</button></footer>{{end}}
+<script>{{.Script}}</script>
+</body>
+</html>

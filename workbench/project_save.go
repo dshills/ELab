@@ -44,7 +44,7 @@ func (s *Service) startProjectSaveLocked(p SaveParams) error {
 	// records under the same mutex; later completions remain dirty against this
 	// save's captured membership, even if they finish before file publication.
 	capture := saveCapture{document: s.documentLocked(), generation: s.documentGeneration, sourcePath: s.documentPath, disk: s.diskHash,
-		graph: contentHash(s.graph, s.transientSettings), preferences: preferencesHash(s.pins, s.displayPreferences, s.exampleID), recordings: s.recordingMembershipHashLocked(), overwrite: p.Overwrite}
+		graph: contentHash(s.graph, s.transientSettings), preferences: preferencesHash(s.pins, s.displayPreferences, s.exampleID, s.experimentChecks), recordings: s.recordingMembershipHashLocked(), overwrite: p.Overwrite}
 	// A new explicit Save supersedes a pending Open. Its later file failure does
 	// not silently revive that older replacement request.
 	s.cancelProjectWorkLocked("superseded")

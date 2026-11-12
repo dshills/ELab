@@ -1,6 +1,7 @@
 import {defineConfig,devices} from '@playwright/test';
 
 // Split each engine's tests across disposable hosts to stay under the workspace cap.
+const experimentTests=/[\\/](?:compare-change|schematic-replay|troubleshoot|experiment-checks)\.spec\.mjs$/;
 const largeCircuitTests=/[\\/](?:circuit-capacity|sheets)\.spec\.mjs$/;
 const engines=[
  {name:'chromium',device:'Desktop Chrome',port:18788,largeCircuitPort:18791},
@@ -8,8 +9,8 @@ const engines=[
  {name:'webkit',device:'Desktop Safari',port:18790,largeCircuitPort:18793},
 ];
 const groups=engines.flatMap(({name,device,port,largeCircuitPort})=>[
- {name,device,port,testIgnore:largeCircuitTests},
- {name:`${name}-large-circuits`,device,port:largeCircuitPort,testMatch:largeCircuitTests},
+ {name,device,port,testIgnore:[largeCircuitTests,experimentTests]},
+ {name:`${name}-large-circuits`,device,port:largeCircuitPort,testMatch:[largeCircuitTests,experimentTests]},
 ]);
 
 export default defineConfig({

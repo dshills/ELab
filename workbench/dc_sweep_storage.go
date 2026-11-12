@@ -264,6 +264,9 @@ func (s *Service) keptSweepCountLocked() int {
 	return count
 }
 func (s *Service) currentDocumentVersionLocked() int {
+	if len(s.experimentChecks) > 0 {
+		return ExperimentDocumentVersion
+	}
 	if len(s.graph.Sheets) > 0 {
 		return SheetDocumentVersion
 	}

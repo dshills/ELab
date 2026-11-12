@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"reflect"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -88,6 +89,7 @@ type Service struct {
 	displayPreferences          DisplayPreferences
 	measurementTarget           *MeasurementTarget
 	pins                        []PinSpec
+	experimentChecks            []ExperimentCheck
 	savedPreferences            [32]byte
 	dcCompiled                  *Compiled
 	focusProbe                  string
@@ -233,7 +235,7 @@ func newGraphService(solver func(context.Context, Circuit) (Result, error), grap
 	s.recovery = RecoveryState{Interval: 2, Candidates: []RecoveryCandidate{}, Problems: []RecoveryProblem{}}
 	s.documentGeneration = 1
 	s.savedGraph = contentHash(EmptyGraph(), s.transientSettings)
-	s.savedPreferences = preferencesHash(nil, DefaultDisplayPreferences(), "")
+	s.savedPreferences = preferencesHash(nil, DefaultDisplayPreferences(), "", nil)
 	s.savedRecordings = s.recordingMembershipHashLocked()
 	s.startLocked()
 	return s
@@ -845,7 +847,8 @@ func (s *Service) dispatch(ctx context.Context, r Request, actor string) Respons
 	changedPins := !reflect.DeepEqual(clonePins(before.Pins), clonePins(s.pins))
 	changedDisplay := before.Display != s.displayPreferences
 	changedExample := before.ExampleID != s.exampleID
-	changedDocument := changedGraph || changedSettings || changedPins || changedDisplay || changedExample
+	changedChecks := !slices.Equal(before.ExperimentChecks, s.experimentChecks)
+	changedDocument := changedGraph || changedSettings || changedPins || changedDisplay || changedExample || changedChecks
 	forceRestart := r.Command == "example.load" || r.Command == "example.current.reset" || legacyExampleID(r.Command) != ""
 	if changedDocument {
 		if changedGraph {

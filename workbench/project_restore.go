@@ -83,7 +83,7 @@ func (s *Service) runRecoveryRestore(job *projectJob, load recoveryRestoreFunc) 
 		}
 		s.diskHash = [32]byte{}
 		s.savedGraph = [32]byte{}
-		if contentHash(before.Graph, before.Settings) != contentHash(s.graph, s.transientSettings) || preferencesHash(before.Pins, before.Display, before.ExampleID) != preferencesHash(s.pins, s.displayPreferences, s.exampleID) {
+		if contentHash(before.Graph, before.Settings) != contentHash(s.graph, s.transientSettings) || preferencesHash(before.Pins, before.Display, before.ExampleID, before.ExperimentChecks) != preferencesHash(s.pins, s.displayPreferences, s.exampleID, s.experimentChecks) {
 			s.undo = append(s.undo, before)
 			s.redo = nil
 			if len(s.undo) > 100 {

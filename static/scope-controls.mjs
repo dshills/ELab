@@ -74,6 +74,9 @@ export function scopeControls(api) {
   $('scope-capture-status').classList.toggle('hidden',!operation);
   if(operation){$('scope-capture-label').textContent=`${operation.id} · ${operation.status} · ${Math.round((operation.progress||0)*100)}%`;$('scope-capture-progress').value=operation.progress||0;$('scope-capture-cancel').disabled=pending>0||operation.status==='canceling';$('scope-capture-cancel').dataset.operation=operation.id;}
   $('recording-player').classList.toggle('hidden',!r);
+  const replay = $('schematic-replay-button');
+  replay.hidden = !r;
+  replay.onclick = api.openSchematicReplay;
   $('recording-keep').classList.toggle('hidden',!r);
   if(r) {
    const kept=completed.find(o=>o.id===r.id)?.kept_in_project||false;

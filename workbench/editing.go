@@ -437,6 +437,19 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		return s.setRecordingTimingLocked(raw)
 	case "recording.compare.set":
 		return s.setRecordingComparisonLocked(raw)
+	case "experiment.checks.set":
+		var p struct {
+			Checks json.RawMessage `json:"checks"`
+		}
+		if err := params(raw, &p, "checks"); err != nil {
+			return err
+		}
+		checks, err := decodeExperimentChecks(p.Checks)
+		if err != nil {
+			return err
+		}
+		s.experimentChecks = checks
+		return nil
 	case "recording.keep.set":
 		var p RecordingKeepParams
 		if err := params(raw, &p, "id", "keep"); err != nil {

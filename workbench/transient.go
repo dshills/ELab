@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"slices"
 	"time"
 )
 
@@ -114,24 +115,26 @@ type StepParams struct {
 	Duration float64 `json:"duration_s"`
 }
 type historyEntry struct {
-	ActiveSheet     string
-	ExampleID       string
-	Display         DisplayPreferences
-	Pins            []PinSpec
-	Actor           string
-	CommandRevision uint64
-	Name            string
-	Graph           Graph
-	Settings        TransientSettings
+	ExperimentChecks []ExperimentCheck
+	ActiveSheet      string
+	ExampleID        string
+	Display          DisplayPreferences
+	Pins             []PinSpec
+	Actor            string
+	CommandRevision  uint64
+	Name             string
+	Graph            Graph
+	Settings         TransientSettings
 }
 
 func (s *Service) historyLocked() historyEntry {
-	return historyEntry{ActiveSheet: s.activeSheet, ExampleID: s.exampleID, Display: s.displayPreferences, Pins: clonePins(s.pins), Graph: s.graph.Clone(), Settings: s.transientSettings}
+	return historyEntry{ExperimentChecks: slices.Clone(s.experimentChecks), ActiveSheet: s.activeSheet, ExampleID: s.exampleID, Display: s.displayPreferences, Pins: clonePins(s.pins), Graph: s.graph.Clone(), Settings: s.transientSettings}
 }
 func (s *Service) restoreLocked(h historyEntry) {
 	s.exampleID = h.ExampleID
 	s.displayPreferences = h.Display
 	s.pins = clonePins(h.Pins)
+	s.experimentChecks = slices.Clone(h.ExperimentChecks)
 	s.graph = h.Graph.Clone()
 	_ = s.openSheetLocked(h.ActiveSheet)
 	s.transientSettings = h.Settings

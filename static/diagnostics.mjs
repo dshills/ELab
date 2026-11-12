@@ -18,7 +18,7 @@ export function circuitDiagnostics(api){
   panel.hidden=!items.length;panel.classList.toggle('hidden',!items.length);
   if(next!==key){key=next;const open=new Set([...panel.querySelectorAll('details[open]')].map(d=>d.dataset.code));panel.replaceChildren();
    const heading=document.createElement('h2');heading.id='diagnostics-heading';heading.textContent='Circuit checks';panel.append(heading);
-   const summary=document.createElement('p');summary.id='diagnostic-summary';summary.setAttribute('role','status');summary.textContent=`${items.length} circuit ${items.length===1?'check':'checks'} to review. Related parts and terminals have dashed outlines.`;panel.append(summary);
+   const summary=document.createElement('p');summary.id='diagnostic-summary';summary.setAttribute('role','status');summary.textContent=`${items.length} circuit ${items.length===1?'check':'checks'} to review. Related parts and terminals have dashed outlines.`;panel.append(summary,button('Troubleshoot circuit','troubleshoot'));
    for(const [index,help] of items.entries()){const article=document.createElement('article'),title=document.createElement('h3'),action=document.createElement('p'),controls=document.createElement('div');
     title.id=`diagnostic-title-${index}`;action.id=`diagnostic-action-${index}`;title.textContent=help.summary;action.textContent=help.action;controls.className='selection-actions';article.append(title,action,controls);
     const known=new Set([...state.components.map(p=>p.id),...state.wires.map(w=>w.id)]);
@@ -32,7 +32,7 @@ export function circuitDiagnostics(api){
   }mark();
  }
  panel.onclick=e=>{const b=e.target.closest('[data-diagnostic-action]');if(!b)return;const kind=b.dataset.diagnosticAction,target=b.dataset.target;
-  const run=async()=>{if(kind==='show')await api.show(target);else if(kind==='connect')await api.connect(target);else if(kind==='undo')await api.undo();else if(kind==='sampling')await api.command('simulation.sampling.fit');else if(kind==='restart')await api.command('simulation.restart');else if(kind==='settings')api.settings();};
+  const run=async()=>{if(kind==='troubleshoot')api.troubleshoot();else if(kind==='show')await api.show(target);else if(kind==='connect')await api.connect(target);else if(kind==='undo')await api.undo();else if(kind==='sampling')await api.command('simulation.sampling.fit');else if(kind==='restart')await api.command('simulation.restart');else if(kind==='settings')api.settings();};
   run().catch(()=>{});
  };
  return {update,mark,failure(help,revision,generation){if(help&&current()?.command_revision===revision&&current()?.document.generation===generation){request={help,revision,generation};key='';update();}},reset(){request=null;key='';}};

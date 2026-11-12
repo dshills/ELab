@@ -191,3 +191,62 @@ client configuration; the installed backend provides the bridge. Agent edits use
 the same guards, autosave and history. Undo of another actor's edit requires
 confirmation. Disconnect revokes access; restarting ELab requires enabling and
 reconnecting again. See [agent setup](agent-setup.md) for scope and retry behavior.
+
+### Compare a Change
+
+Select a part with an editable value and choose **Compare a Change** in the
+Inspector. Enter a trial value and choose a voltage or current. ELab runs the
+original and trial circuits from startup with the same simulation settings.
+The chart overlays their sampled curves. When both curves reach the displayed
+level, the panel shows an estimated first crossing time for each.
+
+**Keep trial value** applies one undoable edit. **Discard trial** closes the
+comparison. If an edit changes the project while the comparison is open,
+reopen the panel before applying the trial.
+
+### Replay on the schematic
+
+Choose a completed recording in **Scope source**, then choose **Replay on
+schematic**. The player opens the captured circuit and its exact stored samples.
+Choose a measurement and drag the slider, click the waveform, or press **Play**.
+A signed current with two captured terminal references shows an arrow in the
+measured direction. The sheet picker also works for recordings of projects with
+multiple sheets. Replay uses only captured channels and keeps its own position.
+
+### Troubleshoot a circuit
+
+Open **Why isn’t this working?** from the document panel or the circuit checks.
+The guide flags missing ground, open connections, and backward LED wiring when
+it can identify the cause. For common single-supply circuits, choose **Try on a
+copy** to test the suggested wiring and see its startup reading. Your drawing
+stays open with its original wiring.
+
+Use the virtual voltmeter to read the voltage between two terminals at startup.
+A negative reading means the red probe is at a lower voltage than the black
+probe. If the circuit cannot solve, the meter explains why it has no reading.
+
+### Save an experiment test
+
+Open **Experiment tests** from the instrument toolbar. Choose a voltage or
+current, a condition, and a duration. For example, set **C1 voltage** to rise to
+**3 V** within **20 ms** in the RC example. Run the test to see pass or fail,
+the measured samples that determine the result, and the waveform. Current
+reversal looks for samples on opposite sides of zero.
+
+**Save test** keeps the definition with your project. After changing a part or
+reopening the project, run the test again against the current circuit’s startup
+and sampling settings. The tests use sampled values and can miss changes that
+happen entirely between samples. Saving a test keeps its definition. Run it to
+regenerate the evidence.
+
+### Share an offline replay
+
+In **Replay on schematic**, choose the sheet, measurement, and sample you want
+the recipient to see first. Add a note if useful, then choose **Download offline
+replay**. The HTML file opens directly in a browser with the captured drawing
+and samples. It works offline without an ELab installation.
+
+Choose **Include an editable .elab copy of the captured circuit** to add a
+project download inside the HTML. The project opens paused with the captured
+schematic and startup settings. The HTML carries the full captured drawing and
+recorded measurements, so share it with people who should have that data.
