@@ -1,4 +1,4 @@
-import {pagePolling} from './polling.mjs';
+import {pagePolling, readPollJSON} from './polling.mjs';
 import {supportPanel} from './support.mjs';
 import {mergeSceneFrame,sceneStructureKey,updateSceneLayer} from './scene-frame.mjs';
 import {circuitDiagnostics} from './diagnostics.mjs';
@@ -109,7 +109,15 @@ function acceptPresentation(payload){
  if(payload.scene){scene=payload.scene;sceneToken=payload.scene_token;}else if(scene&&payload.scene_live&&payload.scene_token===sceneToken){scene=mergeSceneFrame(scene,payload.scene_live);}else{sceneToken=null;return false;}
  applyState(payload.state);return true;
 }
-async function refresh(force=false,options={}){const payload=await fetchJSON('/api/state'+(state&&!force?`?${new URLSearchParams({after:state.revision,instance:serverInstance||'',checkpoint:workspace.autosaved_at||'',storage_error:workspace.error||'',agent_enabled:String(!!agentState.enabled),scene_token:sceneToken||''})}`:''),options);if(options.signal?.aborted)return;if(payload&&!acceptPresentation(payload))return refresh(true,options);}
+async function refresh(force = false, signal) {
+ const url = '/api/state' + (state && !force ? `?${new URLSearchParams({
+  after: state.revision, instance: serverInstance || '', checkpoint: workspace.autosaved_at || '',
+  storage_error: workspace.error || '', agent_enabled: String(!!agentState.enabled), scene_token: sceneToken || ''
+ })}` : '');
+ const payload = signal ? await readPollJSON(url, signal) : await fetchJSON(url);
+ if (signal?.aborted) return;
+ if (payload && !acceptPresentation(payload)) return refresh(true, signal);
+}
 
 
 function applyState(next){
@@ -122,7 +130,7 @@ function applyState(next){
  }
  lastGeneration=next.document.generation;state=next;selectionUI?.update(state);render();
 }
-const polling=pagePolling({read:signal=>refresh(false,{signal}),success:()=>{if(!online){online=true;toast('Reconnected to the local workbench.');}setConnection(true);},failure:()=>{if(online)toast('The local ELab server is unavailable. Restart it to reconnect.',true);online=false;setConnection(false);},delay:()=>document.hidden?1500:180});
+const polling=pagePolling({read:signal=>refresh(false,signal),success:()=>{if(!online){online=true;toast('Reconnected to the local workbench.');}setConnection(true);},failure:()=>{if(online)toast('The local ELab server is unavailable. Restart it to reconnect.',true);online=false;setConnection(false);},delay:()=>document.hidden?1500:180});
 function setConnection(ok){$('connection-dot').classList.toggle('offline',!ok);$('connection-status').textContent=ok?'Local engine connected':'Disconnected';}
 function render(){if(!state)return;learnerUI?.update(state);tools?.update();scopeUI?.update();renderChrome();if(scene)renderScene();renderInspector();renderScope();if(instrument!=='scope')renderAnalysisResult();}
 function renderChrome(){

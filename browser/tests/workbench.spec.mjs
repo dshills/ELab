@@ -69,7 +69,15 @@ test('edit, undo, save, reload and download a project and its schematic',async (
  await expect(save).not.toBeVisible();
  // Reload with a live read in flight, as in the hosted WebKit failure.
  // Keep the abort observation across navigation without adding app test hooks.
- await page.evaluate(()=>{const original=window.fetch;window.fetch=(url,options)=>{if(String(url).startsWith('/api/state'))options?.signal?.addEventListener('abort',()=>sessionStorage.setItem('elab-test-poll-aborted','true'),{once:true});return original(url,options);};});
+ await page.evaluate(() => {
+  const open = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url, ...options) {
+   open.call(this, method, url, ...options);
+   if (method === 'GET' && String(url).startsWith('/api/state?')) {
+    this.addEventListener('abort', () => sessionStorage.setItem('elab-test-poll-aborted', 'true'), {once: true});
+   }
+  };
+ });
  let heldPoll;const polling='**/api/state?**';
  await page.route(polling,route=>{if(!heldPoll)heldPoll=route;else return route.continue();});
  await expect.poll(()=>!!heldPoll).toBe(true);
