@@ -50,6 +50,22 @@
 <dialog id="projects-dialog" class="large-dialog" aria-labelledby="projects-dialog-heading"><div class="dialog-heading"><h2 id="projects-dialog-heading">Projects & recovery</h2><button class="icon-button" data-close aria-label="Close projects">×</button></div><div role="tablist" class="segmented" aria-label="Projects and recovery"><button id="projects-tab-projects" aria-controls="projects-content" role="tab" data-project-tab="projects">Saved projects</button><button id="projects-tab-history" aria-controls="projects-content" role="tab" data-project-tab="history">Recovery history</button><button id="projects-tab-trash" aria-controls="projects-content" role="tab" data-project-tab="trash">Trash</button></div><div class="dialog-actions"><button id="library-backup">Back up library</button><button id="library-restore">Restore library backup…</button><input id="library-backup-file" type="file" accept=".zip,application/zip" hidden></div><p class="field-note">Backups include saved projects, Trash, history and autosaved workspaces with kept results. Limit: 256 records, 128 MiB expanded, 64 MiB ZIP.</p><p id="library-backup-status" role="status" aria-live="polite"></p><div id="projects-content" role="tabpanel" tabindex="0" class="project-list"></div></dialog>
 <dialog id="history-dialog" aria-labelledby="history-title"><div class="dialog-heading"><h2 id="history-title">Undo shared edit?</h2></div><p id="history-message"></p><form method="dialog" class="confirm-actions"><button value="cancel" autofocus>Keep editing</button><button id="history-apply" value="apply" class="primary">Undo shared edit</button></form></dialog>
 <dialog id="replace-dialog" aria-labelledby="replace-heading"><div class="dialog-heading"><h2 id="replace-heading">Replace this circuit?</h2></div><p id="replace-message" class="muted"></p><form method="dialog" class="confirm-actions"><button value="cancel" autofocus>Keep editing</button><button value="replace">Replace circuit</button><button value="save" class="primary">Save & continue</button></form></dialog>
+<dialog id="troubleshoot-dialog" class="large-dialog" aria-labelledby="troubleshoot-title">
+ <div class="dialog-heading"><h2 id="troubleshoot-title">Why isn’t this working?</h2><button class="icon-button" data-close aria-label="Close troubleshooting">×</button></div>
+ <p role="status"></p><div data-troubleshooting-guide></div>
+ <div class="selection-actions"><button data-try-fix hidden>Try suggested fix on a copy</button></div>
+ <p data-trial-result aria-live="polite"></p>
+ <form class="settings-form">
+  <h3>Virtual voltmeter at startup</h3>
+  <p class="field-note">Choose where to place the red and black probes. For an LED, try red on the anode and black on the cathode.</p>
+  <fieldset class="experiment-fields">
+   <label>Red probe<select name="red" required></select></label>
+   <label>Black probe<select name="black" required></select></label>
+   <button type="submit" class="primary">Measure voltage</button>
+  </fieldset>
+ </form>
+ <p data-meter aria-live="polite"></p>
+</dialog>
 <dialog id="schematic-replay-dialog" class="large-dialog" aria-labelledby="schematic-replay-title">
  <div class="dialog-heading"><h2 id="schematic-replay-title">Schematic replay</h2><button class="icon-button" data-close aria-label="Close replay">×</button></div>
  <p role="status"></p>

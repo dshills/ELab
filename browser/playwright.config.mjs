@@ -1,7 +1,7 @@
 import {defineConfig,devices} from '@playwright/test';
 
 // Split each engine's tests across disposable hosts to stay under the workspace cap.
-const experimentTests=/[\\/](?:compare-change|schematic-replay)\.spec\.mjs$/;
+const experimentTests=/[\\/](?:compare-change|schematic-replay|troubleshoot)\.spec\.mjs$/;
 const largeCircuitTests=/[\\/](?:circuit-capacity|sheets)\.spec\.mjs$/;
 const engines=[
  {name:'chromium',device:'Desktop Chrome',port:18788,largeCircuitPort:18791},

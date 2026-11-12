@@ -57,3 +57,31 @@ func CaptureExperiment(ctx context.Context, graph Graph, settings TransientSetti
 	}
 	return ExperimentCapture{Probe: probe, Rows: record.rows}, nil
 }
+
+// MeasureStartupVoltage reads two explicit terminals in a fresh solver state.
+func MeasureStartupVoltage(ctx context.Context, graph Graph, settings TransientSettings, positive, reference string) (float64, error) {
+	compiled, _, diagnostic := graph.Compile()
+	if diagnostic != nil {
+		return 0, fmt.Errorf("%s", diagnostic.Message)
+	}
+	if _, _, ok := graph.Terminal(positive); !ok {
+		return 0, fmt.Errorf("choose a valid red probe terminal")
+	}
+	if reference != "ground" {
+		if _, _, ok := graph.Terminal(reference); !ok {
+			return 0, fmt.Errorf("choose a valid black probe terminal")
+		}
+	}
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	kernel, err := newSimulationKernel(ctx, kernelPlan{compiled: compiled, settings: settings, mode: "auto"})
+	if err != nil {
+		return 0, err
+	}
+	probe := Probe{Unit: "V", Positive: positive, Reference: reference}
+	value, ok := frameValue(kernel.trace.Sample, probe)
+	if !ok {
+		return 0, fmt.Errorf("the solver has no accepted reading at those terminals")
+	}
+	return value, nil
+}

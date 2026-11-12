@@ -212,3 +212,15 @@ Choose a measurement and drag the slider, click the waveform, or press **Play**.
 A signed current with two captured terminal references shows an arrow in the
 measured direction. The sheet picker also works for recordings of projects with
 multiple sheets. Replay uses only captured channels and keeps its own position.
+
+### Troubleshoot a circuit
+
+Open **Why isn’t this working?** from the document panel or the circuit checks.
+The guide flags missing ground, open connections, and backward LED wiring when
+it can identify the cause. For common single-supply circuits, choose **Try on a
+copy** to test the suggested wiring and see its startup reading. Your drawing
+stays open with its original wiring.
+
+Use the virtual voltmeter to read the voltage between two terminals at startup.
+A negative reading means the red probe is at a lower voltage than the black
+probe. If the circuit cannot solve, the meter explains why it has no reading.
