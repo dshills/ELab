@@ -1,4 +1,24 @@
-# Published web alpha: build 315
+# Current web alpha
+
+**ELab Web 0.209.0 alpha 1, build 316** ships standalone ZIPs for Linux x64,
+Windows x64, and Apple Silicon and Intel Macs. It adds portable schematic PDF
+and PNG export, fixes a WebKit reload error, and serves JavaScript modules with
+the correct content type on Windows. Each ZIP includes `START-HERE.txt`.
+[Downloads](https://github.com/dshills/ELab/releases/tag/v0.209.0-alpha.1) ·
+[Run ELab](run-web.md) ·
+[Checksums](https://github.com/dshills/ELab/releases/download/v0.209.0-alpha.1/SHA256SUMS).
+
+The release tag points to `9714d224c8769ebb1f1559f4a31a94c04753bc55`. The
+Linux quality suite passed, and Chromium, Firefox and WebKit passed 58 browser
+checks with two planned skips. The extracted Linux, Windows and Intel Mac
+downloads passed hosted runtime checks. The same Apple Silicon download passed
+on a local Mac while the hosted runner was queued. All four downloads passed
+PDF and PNG export, backup, restore and restart checks. The GitHub assets were
+downloaded and checked against the qualified files before publication.
+[Qualification run](https://github.com/dshills/ELab/actions/runs/43258197123/attempts/2) ·
+[Release manifest](https://github.com/dshills/ELab/releases/download/v0.209.0-alpha.1/release.json).
+
+## Previous web alpha, build 315
 
 This build predates the standalone downloads. See [how to run the current browser app](run-web.md).
 

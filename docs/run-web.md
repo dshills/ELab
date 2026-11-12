@@ -6,12 +6,8 @@ You do not need an account or an internet connection after downloading ELab.
 
 ## Start ELab
 
-For a release with standalone downloads, choose the ZIP that matches your
-computer in [GitHub Releases](https://github.com/dshills/ELab/releases). The
-standalone ZIP contains the ELab program, the browser interface and
-`START-HERE.txt`. The [published build 315](current-release.md) predates the
-standalone downloads; its existing Apple Silicon app is still available. To use
-the current source today, follow **Build from source** below.
+Choose the ZIP that matches your computer. It contains the ELab program, the
+browser interface and `START-HERE.txt`. [Current alpha downloads](current-release.md).
 
 1. Extract the ZIP and open a terminal in the extracted folder.
 2. Run `./elab` on Linux or macOS, or `.\elab.exe` in Windows PowerShell.
