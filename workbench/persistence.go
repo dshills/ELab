@@ -527,6 +527,7 @@ func decodeDocument(data []byte) (Document, error) {
 		}
 		expected.Rotation = c.Rotation
 		expected.Sheet = c.Sheet
+		expected.TemplatePart, expected.TemplateHash = c.TemplatePart, c.TemplateHash
 		if c.Sine != nil {
 			if c.Kind != "sine-source" {
 				return d, fmt.Errorf("sine parameters belong only to a sine source")

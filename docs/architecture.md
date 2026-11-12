@@ -3,7 +3,7 @@
 Every user and agent action enters the same `workbench.Service.Dispatch` command
 facade. The service mutex remains the single authority for document generation,
 command/revision guards, publication, cancellation and shutdown. The root HTTP host,
-stdio, sockets and the 229-command discovery surface share that implementation.
+stdio, sockets and the 242-command discovery surface share that implementation.
 No analysis engine, integration budget or electrical limit changes here.
 
 ## Application boundaries

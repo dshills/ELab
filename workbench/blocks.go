@@ -366,6 +366,7 @@ func (s *Service) pasteBlockLocked(p BlockPasteParams) error {
 		ids[c.ID] = id
 		c.ID = id
 		c.Sheet = s.activeSheet
+		c.TemplatePart, c.TemplateHash = "", ""
 		c.Position = Point{X: c.Position.X + delta.X, Y: c.Position.Y + delta.Y}
 		if _, err := snapPoint(c.Position); err != nil {
 			return fmt.Errorf("%w: %v", errBlockPosition, err)
@@ -374,6 +375,7 @@ func (s *Service) pasteBlockLocked(p BlockPasteParams) error {
 	}
 	rewrite := func(ref string) string { id, pin, _ := strings.Cut(ref, "."); return ids[id] + "." + pin }
 	for k, w := range t.Graph.Wires {
+		w.TemplateWire = ""
 		w.ID = fmt.Sprintf("%s_W%d", p.ID, k+1)
 		if s.usedIDs[w.ID] || g.HasObject(w.ID) {
 			return fmt.Errorf("pasted wire ID already used")

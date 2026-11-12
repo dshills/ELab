@@ -16,6 +16,6 @@ Primitive voltage probes use `v:<id>.node` and read the actual connected net. Ne
 
 Validation includes supported-circuit numerical equivalence, mixed transient Verify/primitive-probe equivalence, atomic undo and batch integration, explicit two-route crossing joins, case-sensitive remote labels, open-pin/reference diagnostics, project/record persistence, SVG text, and native/agent placement/edit parity. Native pointer tests require crossing review before joining. The actual GPU/UI smoke builds and renders a junction and named supply through ordinary controls. `scripts/primitives-demo.py` provides headless and owned-desktop regression workflows.
 
-This adds connectivity primitives; it does not claim general analog/SPICE topology coverage, PCB interchange, hierarchical/global multi-sheet labels, or automatic connection based on geometry. Those remain separate scope/validation work.
+Ordinary labels join matching names on the same sheet. Use explicit named ports to connect a parent sheet to a child sheet. [Sheet workflow](web-workbench.md#draw-across-sheets)
 
 The [packaged /179 junction boundary review](validation/junction-boundary-review-179/README.md) checks an explicit eight-route join with an unrelated crossing, failed-batch ID rollback, exact Undo/Redo, incident-wire deletion and fresh byte-identical saving. Malformed/unknown/duplicate/over-eight route requests preserve the complete public state. These are synthetic helper drawings, not additional solver or native-input qualification.

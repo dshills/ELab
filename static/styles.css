@@ -136,3 +136,4 @@ body[data-palette=apollo]{--text:#d1f3f5;--muted:#9ac0c7;--line:#284953;--surfac
 .project-find-results{list-style:none;display:grid;gap:5px;max-height:45vh;overflow:auto;margin:8px 0 0;padding:0}.project-find-results button{display:grid;width:100%;justify-items:start;text-align:left;padding:8px 10px;border:1px solid var(--line);white-space:normal}.project-find-results small{color:var(--muted)}
 .trace-entry{display:inline-flex;align-items:center}.trace-location{min-width:22px;padding:2px 4px;color:var(--accent);font-size:13px}
 @media(max-width:460px){.sheet-navigation{flex-wrap:wrap}.sheet-navigation select{max-width:45%}.sheet-navigation button{padding-inline:5px}}
+.sheet-instance-status{display:flex;align-items:center;gap:10px;padding:10px 0}.sheet-instance-status button{border:1px solid var(--line);padding:6px 9px}.sheet-instance-status[hidden],.sheet-instance-status button[hidden]{display:none}

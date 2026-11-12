@@ -9,6 +9,12 @@ export function schematicSheets(api) {
   let signature;
   const hierarchy = () => [root, ...(api.state()?.sheets || [])];
   const name = id => hierarchy().find(sheet => sheet.id === id)?.name || 'Main';
+  function nextSheetID() {
+    const existing = new Set(hierarchy().map(sheet => sheet.id));
+    let n = 1;
+    while (existing.has(`Sheet${n}`)) n++;
+    return `Sheet${n}`;
+  }
   const open = id => api.command('sheet.open', {id});
   const show = () => {
     signature = null;
@@ -19,7 +25,7 @@ export function schematicSheets(api) {
     `<option value="${esc(item.id)}">${esc(label(item))}</option>`).join('');
   const path = sheet => sheet.id ? `${path(hierarchy().find(item => item.id === (sheet.parent || '')) || root)} / ${sheet.name}` : sheet.name;
   function terminals(parts) {
-    return parts.flatMap(part => part.terminals.map(pin => ({id: `${part.id}.${pin}`, sheet: part.sheet || ''})));
+    return parts.flatMap(part => part.terminals.map(pin => ({id: `${part.id}.${pin}`, sheet: part.sheet || '', source:part.template_part ? `${part.template_part}.${pin}` : ''})));
   }
   function update() {
     const state = api.state();
@@ -38,17 +44,27 @@ export function schematicSheets(api) {
     selector.value = active;
     selector.disabled = sheets.length === 1;
     byID('sheet-dialog-current').textContent = path(current);
+    const linked = sheets.filter(sheet => sheet.template && sheet.template === active);
+    const leafTemplates = sheets.filter(sheet => sheet.id && !sheet.template && !sheets.some(child => child.parent === sheet.id));
+    const canAddChild = !current.template && linked.length === 0;
+    byID('sheet-create-form').hidden = !canAddChild;
+    byID('sheet-instance-form').hidden = !canAddChild || !leafTemplates.some(sheet => sheet.id !== active);
+    byID('sheet-instance-template').innerHTML = options(leafTemplates.filter(sheet => sheet.id !== active), path);
+    byID('sheet-instance-status').hidden = !current.template && !linked.length;
+    byID('sheet-open-source').hidden = !current.template;
+    byID('sheet-apply-source').hidden = !linked.length;
+    byID('sheet-instance-description').textContent = current.template ? `Linked to ${name(current.template)}` : `${linked.length} linked ${linked.length === 1 ? 'sheet' : 'sheets'}`;
     byID('sheet-rename-form').hidden = !active;
     byID('sheet-delete').hidden = !active;
-    byID('sheet-delete').disabled = parts.some(part => part.sheet === active) || sheets.some(sheet => sheet.parent === active);
+    byID('sheet-delete').disabled = parts.some(part => part.sheet === active) || sheets.some(sheet => sheet.parent === active || sheet.template === active);
     byID('sheet-move-form').hidden = !chosen.length || !adjacent.length;
     byID('sheet-move-target').innerHTML = options(adjacent, path);
     byID('sheet-move-count').textContent = `Move ${chosen.length} selected ${chosen.length === 1 ? 'component' : 'components'}`;
     const local = terminals(parts.filter(part => (part.sheet || '') === active));
     const remote = terminals(parts.filter(part => adjacent.some(sheet => sheet.id === (part.sheet || ''))));
     byID('sheet-port-form').hidden = !local.length || !remote.length;
-    byID('sheet-port-from').innerHTML = options(local, item => item.id);
-    byID('sheet-port-to').innerHTML = options(remote, item => `${name(item.sheet)} · ${item.id}`);
+    byID('sheet-port-from').innerHTML = options(local, item => item.source ? `${item.source} · ${item.id}` : item.id);
+    byID('sheet-port-to').innerHTML = options(remote, item => `${name(item.sheet)} · ${item.source ? `${item.source} · ` : ''}${item.id}`);
     byID('sheet-port-list').innerHTML = ports.map(port => `<li>
       <button type="button" data-follow-sheet="${esc(port.target)}">${esc(port.name)} → ${esc(name(port.target))}</button>
       <span>${esc(port.terminal)}</span>
@@ -93,13 +109,13 @@ export function schematicSheets(api) {
   }
   selector.onchange = () => open(selector.value).catch(() => {signature = null; update();});
   byID('sheets-button').onclick = show;
-  form('sheet-create-form', fields => {
-    const state = api.state();
-    const existing = new Set(hierarchy().map(sheet => sheet.id));
-    let n = 1;
-    while (existing.has(`Sheet${n}`)) n++;
-    return api.command('sheet.create', {id:`Sheet${n}`, name:fields.get('name').trim(), parent:state.active_sheet || ''});
-  });
+  form('sheet-create-form', fields => api.command('sheet.create', {id:nextSheetID(), name:fields.get('name').trim(), parent:api.state().active_sheet || ''}));
+  form('sheet-instance-form', fields => api.command('sheet.instance.create', {id:nextSheetID(), name:fields.get('name').trim(), parent:api.state().active_sheet || '', template:fields.get('template')}));
+  byID('sheet-open-source').onclick = () => {
+    const source = hierarchy().find(sheet => sheet.id === api.state().active_sheet)?.template;
+    if (source) open(source).then(() => dialog.close()).catch(() => {});
+  };
+  byID('sheet-apply-source').onclick = () => api.command('sheet.template.apply', {id:api.state().active_sheet}, {message:'Applied source changes to linked sheets.'}).then(() => dialog.close()).catch(() => {});
   form('sheet-rename-form', fields => api.command('sheet.rename', {id:api.state().active_sheet, name:fields.get('name').trim()}));
   form('sheet-move-form', fields => api.command('sheet.move', {ids:api.selection(), sheet:fields.get('target')}));
   form('sheet-port-form', fields => api.command('sheet.port.connect', {from:fields.get('from'), to:fields.get('to'), name:fields.get('name').trim()}), false);

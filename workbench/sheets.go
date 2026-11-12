@@ -13,6 +13,13 @@ const SheetDocumentVersion = 6
 // The implicit root uses the empty ID. Components retain project-wide IDs so
 // existing probes, recordings and wires survive a move between sheets.
 type Sheet struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Parent   string `json:"parent,omitempty"`
+	Template string `json:"template,omitempty"`
+}
+
+type SheetCreateParams struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
 	Parent string `json:"parent,omitempty"`
@@ -79,18 +86,20 @@ func (g Graph) validateSheets() error {
 	}
 	if len(g.Sheets) == 0 {
 		for _, part := range g.Components {
-			if part.Sheet != "" {
+			if part.Sheet != "" || part.TemplatePart != "" || part.TemplateHash != "" {
 				return fmt.Errorf("component %s is on a missing sheet", part.ID)
 			}
 		}
 		for _, wire := range g.Wires {
-			if wire.Port != "" {
+			if wire.Port != "" || wire.TemplateWire != "" {
 				return fmt.Errorf("sheet port %s requires a child sheet", wire.Port)
 			}
 		}
 		return nil
 	}
 	parents := map[string]string{"": ""}
+	byID := map[string]Sheet{}
+	hasChildren := map[string]bool{}
 	names := map[scopedLabel]bool{}
 	for _, sheet := range g.Sheets {
 		_, duplicate := parents[sheet.ID]
@@ -100,13 +109,31 @@ func (g Graph) validateSheets() error {
 			return fmt.Errorf("choose a unique sheet ID and name under an existing parent")
 		}
 		parents[sheet.ID], names[key] = sheet.Parent, true
+		byID[sheet.ID] = sheet
+		hasChildren[sheet.Parent] = true
+	}
+	for _, sheet := range g.Sheets {
+		if sheet.Template != "" {
+			base, ok := byID[sheet.Template]
+			if !ok || base.Template != "" || hasChildren[base.ID] || hasChildren[sheet.ID] {
+				return fmt.Errorf("linked sheets and their source must be separate leaf sheets")
+			}
+		}
 	}
 	parts := make(map[string]string, len(g.Components))
+	linkedParts := map[scopedLabel]bool{}
 	for _, part := range g.Components {
 		if _, ok := parents[part.Sheet]; !ok {
 			return fmt.Errorf("component %s is on a missing sheet", part.ID)
 		}
 		parts[part.ID] = part.Sheet
+		if part.TemplatePart != "" || part.TemplateHash != "" {
+			key := scopedLabel{part.Sheet, part.TemplatePart}
+			if byID[part.Sheet].Template == "" || !ValidID(part.TemplatePart) || !validTemplateHash(part.TemplateHash) || linkedParts[key] {
+				return fmt.Errorf("invalid linked part on %s", part.ID)
+			}
+			linkedParts[key] = true
+		}
 	}
 	for _, part := range g.Components {
 		if part.Block != nil {
@@ -118,6 +145,7 @@ func (g Graph) validateSheets() error {
 		}
 	}
 	ports := map[scopedLabel]bool{}
+	linkedWires := map[scopedLabel]bool{}
 	for _, wire := range g.Wires {
 		from, _, _ := strings.Cut(wire.From, ".")
 		to, _, _ := strings.Cut(wire.To, ".")
@@ -125,6 +153,13 @@ func (g Graph) validateSheets() error {
 		b, bOK := parts[to]
 		if !aOK || !bOK {
 			return fmt.Errorf("wire %s has a missing endpoint", wire.ID)
+		}
+		if wire.TemplateWire != "" {
+			key := scopedLabel{a, wire.TemplateWire}
+			if a != b || wire.Port != "" || byID[a].Template == "" || !ValidID(wire.TemplateWire) || linkedWires[key] {
+				return fmt.Errorf("invalid linked wire %s", wire.ID)
+			}
+			linkedWires[key] = true
 		}
 		if a == b && wire.Port == "" {
 			continue
@@ -271,6 +306,8 @@ func (s *Service) openSheetLocked(id string) error {
 
 func (s *Service) sheetCommandLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "sheet.instance.create", "sheet.template.apply":
+		return s.sheetInstanceCommandLocked(command, raw)
 	case "sheet.open", "sheet.delete":
 		var p IDParams
 		if err := params(raw, &p, "id"); err != nil {
@@ -281,12 +318,12 @@ func (s *Service) sheetCommandLocked(command string, raw json.RawMessage) error 
 		}
 		return s.deleteSheetLocked(p.ID)
 	case "sheet.create":
-		var p Sheet
+		var p SheetCreateParams
 		if err := params(raw, &p, "id", "name"); err != nil {
 			return err
 		}
 		g := s.graph.Clone()
-		g.Sheets = append(g.Sheets, p)
+		g.Sheets = append(g.Sheets, Sheet{ID: p.ID, Name: p.Name, Parent: p.Parent})
 		if err := g.validateSheets(); err != nil {
 			return err
 		}
@@ -339,6 +376,9 @@ func (s *Service) deleteSheetLocked(id string) error {
 	for _, child := range s.graph.Sheets {
 		if child.Parent == id {
 			return fmt.Errorf("move or remove child sheets first")
+		}
+		if child.Template == id {
+			return fmt.Errorf("sheet %s still uses this source", child.Name)
 		}
 	}
 	for _, part := range s.graph.Components {

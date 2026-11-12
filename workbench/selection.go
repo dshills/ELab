@@ -163,6 +163,7 @@ func (s *Service) pasteSelectionLocked(source Graph, offset Point) error {
 		}
 		p.ID = mapping[p.ID]
 		p.Sheet = s.activeSheet
+		p.TemplatePart, p.TemplateHash = "", ""
 		p.Position = Point{p.Position.X + delta.X, p.Position.Y + delta.Y}
 		if _, err = snapPoint(p.Position); err != nil {
 			return err
@@ -181,6 +182,7 @@ func (s *Service) pasteSelectionLocked(source Graph, offset Point) error {
 		staged.graph.Components = append(staged.graph.Components, p)
 	}
 	for _, w := range source.Wires {
+		w.TemplateWire = ""
 		w.ID = staged.nextID("W")
 		staged.usedIDs[w.ID] = true
 		w.From = rewrite(w.From)

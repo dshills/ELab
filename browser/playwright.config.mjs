@@ -1,8 +1,16 @@
 import {defineConfig,devices} from '@playwright/test';
 
-const ports={chromium:18788,firefox:18789,webkit:18790};
-// Independent hosts prevent a combined run exhausting the production session cap.
-const hosts=Object.entries(ports);
+// Split each engine's tests across disposable hosts to stay under the workspace cap.
+const largeCircuitTests=/[\\/](?:circuit-capacity|sheets)\.spec\.mjs$/;
+const engines=[
+ {name:'chromium',device:'Desktop Chrome',port:18788,largeCircuitPort:18791},
+ {name:'firefox',device:'Desktop Firefox',port:18789,largeCircuitPort:18792},
+ {name:'webkit',device:'Desktop Safari',port:18790,largeCircuitPort:18793},
+];
+const groups=engines.flatMap(({name,device,port,largeCircuitPort})=>[
+ {name,device,port,testIgnore:largeCircuitTests},
+ {name:`${name}-large-circuits`,device,port:largeCircuitPort,testMatch:largeCircuitTests},
+]);
 
 export default defineConfig({
  testDir: './tests',
@@ -20,12 +28,11 @@ export default defineConfig({
   screenshot: 'only-on-failure',
   video: 'off',
  },
- projects: [
-  {name:'chromium',use:{...devices['Desktop Chrome'],baseURL:`http://127.0.0.1:${ports.chromium}`}},
-  {name:'firefox',use:{...devices['Desktop Firefox'],baseURL:`http://127.0.0.1:${ports.firefox}`}},
-  {name:'webkit',use:{...devices['Desktop Safari'],baseURL:`http://127.0.0.1:${ports.webkit}`}},
- ],
- webServer: hosts.map(([,port])=>({
+ projects: groups.map(({device,port,...project})=>({
+  ...project,
+  use: {...devices[device],baseURL:`http://127.0.0.1:${port}`},
+ })),
+ webServer: groups.map(({port})=>({
   command: 'node host.mjs '+port,
   url: `http://127.0.0.1:${port}/`,
   reuseExistingServer: false,

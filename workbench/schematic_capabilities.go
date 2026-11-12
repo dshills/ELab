@@ -4,7 +4,7 @@ package workbench
 // native focus mechanics. Dynamic inventories come from the current snapshot.
 func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
 	switch id {
-	case "sheet.open", "sheet.create", "sheet.rename", "sheet.delete", "sheet.move", "sheet.port.connect":
+	case "sheet.open", "sheet.create", "sheet.rename", "sheet.delete", "sheet.move", "sheet.port.connect", "sheet.instance.create", "sheet.template.apply":
 		contract := commandContractDetail{Version: 1, Scope: "schematic-sheets", Preconditions: []string{"Use the current command/document guards and a retry key", "The empty sheet ID addresses Main; all other IDs are listed in snapshot.sheets"}, Completion: &commandCompletionDetail{Mode: "immediate admission; electrical edits publish through the ordinary simulation lifecycle", Observe: []string{"project.inspect", "simulation.wait"}}}
 		switch id {
 		case "sheet.open":
@@ -17,6 +17,10 @@ func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
 			contract.Effects = []string{"Move selected parts between the current sheet and an adjacent parent or child, retaining component IDs and probes; create explicit ports for connections across the boundary; refuse overlapping positions or a move that would merge unrelated labels"}
 		case "sheet.port.connect":
 			contract.Effects = []string{"Connect terminals on a parent and its child; use a port name unique on the child; ordinary labels connect only within each sheet"}
+		case "sheet.instance.create":
+			contract.Effects = []string{"Place a linked leaf sheet with fresh part and wire IDs and independent component settings; attach its parent-side connections explicitly"}
+		case "sheet.template.apply":
+			contract.Effects = []string{"Apply shared drawing and topology changes and new defaults as one undoable edit to all linked sheets; keep local component overrides, external connections and IDs of existing inherited objects; refuse incompatible external connections or drawing capacity"}
 		}
 		schema["x-command-contract"] = contract
 		return true

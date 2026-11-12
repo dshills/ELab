@@ -71,6 +71,8 @@
   <div class="dialog-heading"><h2 id="sheets-title">Manage sheets</h2><button data-close aria-label="Close sheet manager">×</button></div>
   <p id="sheet-dialog-current" class="muted"></p>
   <form id="sheet-create-form" class="sheet-form"><label>Child sheet name<input name="name" required maxlength="64"></label><button class="primary">Add child sheet</button></form>
+  <form id="sheet-instance-form" class="sheet-form" hidden><label>Source sheet<select name="template" id="sheet-instance-template"></select></label><label>Linked sheet name<input name="name" required maxlength="64"></label><button>Place linked sheet</button></form>
+  <div id="sheet-instance-status" class="sheet-instance-status" hidden><span id="sheet-instance-description" class="muted"></span><button type="button" id="sheet-open-source">Open source sheet</button><button type="button" id="sheet-apply-source">Apply to linked sheets</button></div>
   <form id="sheet-rename-form" class="sheet-form" hidden><label>New sheet name<input name="name" required maxlength="64"></label><button>Rename sheet</button></form>
   <form id="sheet-move-form" class="sheet-form" hidden><label><span id="sheet-move-count">Move selected components</span><select name="target" id="sheet-move-target" aria-label="Destination sheet"></select></label><button>Move selection</button></form>
   <form id="sheet-port-form" class="sheet-form" hidden><label>Port name<input name="name" required maxlength="32"></label><label>Local terminal<select id="sheet-port-from" name="from"></select></label><label>Other sheet terminal<select id="sheet-port-to" name="to"></select></label><button>Connect port</button></form>

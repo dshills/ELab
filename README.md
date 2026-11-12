@@ -7,7 +7,7 @@ application; its Go host runs the shared solver, models, guarded commands,
 recordings and project storage. No account, cloud service, frontend build or Node
 installation is needed to run the app.
 
-**88 examples · 61 component kinds · 234 shared commands.**
+**89 examples · 61 component kinds · 242 shared commands.**
 
 [Download the macOS web alpha](https://github.com/dshills/ELab/releases/tag/v0.207.0-alpha.2)
 — Apple Silicon, ad-hoc signed. See the release's first-use guide and qualification scope.
@@ -65,6 +65,8 @@ and H-bridge activities with units and expected results explained along the way.
 
 - Draw, wire, move, rotate and duplicate parts; use net labels, junctions, circuit
   blocks, box selection, group move/copy/duplicate, undo/redo and keyboard placement.
+- Organize a circuit into sheets connected by named ports, reuse linked designs,
+  and find parts and signals across the project.
 - Inspect live voltage/current and device settings; pause, restart or step the
   same Go simulation used by agents.
 - Capture and retain experiments, seek exact samples, compare recordings, measure

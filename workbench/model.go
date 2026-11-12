@@ -29,6 +29,8 @@ type View struct {
 	Zoom   float64 `json:"zoom"`
 }
 type Component struct {
+	TemplatePart   string            `json:"template_part,omitempty"`
+	TemplateHash   string            `json:"template_settings_sha256,omitempty"`
 	Sheet          string            `json:"sheet,omitempty"`
 	Thermal        *ThermalConfig    `json:"thermal,omitempty"`
 	Block          *CircuitBlock     `json:"block,omitempty"`
@@ -54,11 +56,12 @@ type Component struct {
 	Rotation       int               `json:"rotation"`
 }
 type Wire struct {
-	Port      string `json:"port,omitempty"`
-	ID        string `json:"id"`
-	From      string `json:"from"`
-	To        string `json:"to"`
-	Connected bool   `json:"connected"`
+	TemplateWire string `json:"template_wire,omitempty"`
+	Port         string `json:"port,omitempty"`
+	ID           string `json:"id"`
+	From         string `json:"from"`
+	To           string `json:"to"`
+	Connected    bool   `json:"connected"`
 }
 type LEDModel struct {
 	ID                  string  `json:"id"`

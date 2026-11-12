@@ -139,7 +139,7 @@ func (s *Service) connectPortLocked(p ConnectParams, port string) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
-	case "sheet.open", "sheet.create", "sheet.rename", "sheet.delete", "sheet.move", "sheet.port.connect":
+	case "sheet.open", "sheet.create", "sheet.rename", "sheet.delete", "sheet.move", "sheet.port.connect", "sheet.instance.create", "sheet.template.apply":
 		return s.sheetCommandLocked(command, raw)
 	case "thyristor.configure":
 		return s.configureThyristorLocked(raw)

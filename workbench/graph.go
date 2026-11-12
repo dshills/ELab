@@ -142,12 +142,13 @@ func ElectricalEqual(a, b Graph) bool {
 			part := &graph.Components[i]
 			part.Position = Point{}
 			part.Rotation = 0
+			part.TemplatePart, part.TemplateHash = "", ""
 			if part.Kind != "net-label" {
 				part.Sheet = ""
 			}
 		}
 		for i := range graph.Wires {
-			graph.Wires[i].Port = ""
+			graph.Wires[i].Port, graph.Wires[i].TemplateWire = "", ""
 		}
 	}
 	return reflect.DeepEqual(a, b)

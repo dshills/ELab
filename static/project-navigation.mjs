@@ -15,7 +15,10 @@ export function projectMatches(state, query) {
   const results = [];
   const add = (title, part, target, kind) => results.push({title, target, kind, sheet:sheetPath(part.sheet)});
   for (const part of parts.values()) {
-    if (matches([part.id, part.name, part.label, part.kind])) add(`${part.id} · ${part.label || part.name}`, part, part.id, 'Part');
+    if (matches([part.id, part.name, part.label, part.kind, part.template_part])) {
+      const designator = part.template_part ? `${part.id} (${part.template_part})` : part.id;
+      add(`${designator} · ${part.label || part.name}`, part, part.id, 'Part');
+    }
   }
   for (const net of state.nets || []) {
     const labels = net.labels || [];

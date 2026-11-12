@@ -73,3 +73,64 @@ test('editing a part preserves unrelated schematic nodes', async ({page}) => {
   await expect(page.getByRole('textbox', {name:'Capacitance', exact:true})).toHaveValue(/2\.2/);
   await expect(resistor).toHaveAttribute('data-retained-for-test', 'yes');
 });
+
+test('linked sheet applies source defaults and retains a local override', async ({page}) => {
+  await page.goto('/');
+  await expect(page.locator('#connection-status')).toHaveText('Local engine connected');
+  const selector = page.getByRole('combobox', {name:'Current sheet'});
+  const manager = page.getByRole('dialog', {name:'Manage sheets'});
+  const show = () => page.getByRole('button', {name:'Manage sheets', exact:true}).click();
+  const state = async () => (await (await page.request.get('/api/state')).json()).state;
+
+  await show();
+  await manager.getByRole('textbox', {name:'Child sheet name'}).fill('Filter design');
+  await manager.getByRole('button', {name:'Add child sheet'}).click();
+  await expect(manager).not.toBeVisible();
+  const source = await selector.inputValue();
+  await selector.selectOption('');
+  await page.locator('[data-object="C1"]').press('Enter');
+  await expect(page.locator('.selected-heading h2')).toHaveText('C1');
+  await show();
+  await manager.getByRole('combobox', {name:'Destination sheet'}).selectOption(source);
+  await manager.getByRole('button', {name:'Move selection'}).click();
+  await expect(manager).not.toBeVisible();
+  await selector.selectOption('');
+  await expect(selector).toHaveValue('');
+  await show();
+  await manager.getByRole('combobox', {name:'Source sheet'}).selectOption(source);
+  await manager.getByRole('textbox', {name:'Linked sheet name'}).fill('Second filter');
+  await manager.getByRole('button', {name:'Place linked sheet'}).click();
+  await expect(manager).not.toBeVisible();
+  const instance = await selector.inputValue();
+  const copied = (await state()).components.find(part => part.sheet === instance && part.template_part === 'C1');
+  expect(copied?.id).toBeTruthy();
+  expect(copied.id).not.toBe('C1');
+
+  const setCapacitance = async (id, value) => {
+    await page.locator(`[data-object="${id}"]`).press('Enter');
+    await expect(page.locator('.selected-heading h2')).toHaveText(id);
+    await page.getByRole('textbox', {name:'Capacitance', exact:true}).fill(value);
+    await page.getByRole('button', {name:'Apply', exact:true}).click();
+  };
+  const copiedValue = async () => (await state()).components.find(part => part.id === copied.id)?.value;
+  const applySource = async () => {
+    await show();
+    await manager.getByRole('button', {name:'Apply to linked sheets'}).click();
+    await expect(manager).not.toBeVisible();
+  };
+
+  await show();
+  await manager.getByRole('button', {name:'Open source sheet'}).click();
+  await expect(selector).toHaveValue(source);
+  await setCapacitance('C1', '2.2 uF');
+  await applySource();
+  await expect.poll(copiedValue).toBeCloseTo(2.2e-6, 12);
+
+  await selector.selectOption(instance);
+  await setCapacitance(copied.id, '3.3 uF');
+  await expect.poll(copiedValue).toBeCloseTo(3.3e-6, 12);
+  await selector.selectOption(source);
+  await setCapacitance('C1', '4.7 uF');
+  await applySource();
+  await expect.poll(copiedValue).toBeCloseTo(3.3e-6, 12);
+});

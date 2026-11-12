@@ -47,7 +47,7 @@ jobs:
         run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Keyboard, project, recording and accessibility journeys
         working-directory: browser
-        run: npm test -- --project=${{ matrix.browser }}
+        run: npm test -- --project=${{ matrix.browser }} --project=${{ matrix.browser }}-large-circuits
       - name: Retain browser qualification evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

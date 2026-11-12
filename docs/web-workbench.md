@@ -65,6 +65,8 @@ Ordinary net labels connect within a sheet. Ground is shared across the project.
 
 **Find in project** searches part IDs, labels, terminals and signals across sheets. Choose a result to open and center its sheet. The arrow next to a live scope trace goes to its source. Circuit checks can open the sheet that contains the affected part or terminal.
 
+Use **Place linked sheet** on the parent to reuse a child sheet with no children of its own. The source sheet remains part of the circuit. Each linked sheet has its own components and measurements. Connect its named ports on the parent as needed. To publish edits to the shared drawing, open the source and choose **Apply to linked sheets**. ELab keeps component settings you changed on an instance and leaves its external wiring in place. If an update would remove a terminal still wired on an instance, ELab identifies the wire so you can decide where to reconnect it.
+
 ## Save and recover
 
 - Edits checkpoint locally before successful command replies. Completed background

@@ -1,10 +1,12 @@
 # Portable projects with recorded results
 
-ELab writes self-contained `.elab` JSON projects using `elab.schematic` version 4. Versions 1, 2 and 3 remain readable; older files have no embedded recordings or saved pause preference. Version 1 receives default transient settings. Version 2 adds settings/startup overrides; version 3 adds selected live probes.
+ELab writes self-contained `.elab` JSON projects in the `elab.schematic` format. It uses version 6 for projects with sheets, version 5 for single-sheet projects with kept sweeps, and version 4 for other projects. Versions 1, 2 and 3 remain readable. Version 1 receives default transient settings. Version 2 adds settings/startup overrides. Version 3 adds selected live probes.
 
 Version 4 adds `paused` and `recordings:{entries,selected_index,viewing}`. Each entry contains the complete `elab.verification` version 1 `data` (captured graph, settings, mode, model/engine identity, original creation/operation identity, final results, probes, exact rows and statistics) plus `model_sha256`. Hashes use canonical JSON for the embedded generic LED/NPN parameters; ideal-device dependencies have immutable versioned IDs, hashed as canonical ID references. These are integrity/version references, not producer authentication or hardware certification.
 
 Version 5 carries kept sweeps. Version 6 carries projects with child sheets, including kept recordings and sweeps. The graph lists `sheets` in parent-first order. A component’s optional `sheet` identifies its drawing, with an omitted value for Main. A cross-sheet wire carries a `port` name and joins existing terminals on a parent and its child. IDs stay project-wide. A version 6 file may store `active_sheet` so it reopens on the selected sheet. Versions 1–5 open on Main.
+
+A linked sheet stores its source sheet ID in `template`. Inherited parts and wires keep stable instance IDs and their source IDs in `template_part` and `template_wire`. A part stores the settings digest from its last source update so a future update can preserve local edits. Each instance is saved with its complete drawing, settings and external connections. A saved project can include source edits that are pending an explicit update to linked sheets.
 
 Only **kept** completed recordings are embedded. Successful Verify and JSON import keep their result by default. The native inspector's **Exclude from project / Include in project** buttons and the shared `recording.keep.set {id,keep}` command control membership. Excluding leaves session replay and export intact. Kept records are protected from eviction. At eight protected recordings, creating/importing another refuses with `record-limit`; exclude one before replacing it. Nothing silently drops saved work.
 
