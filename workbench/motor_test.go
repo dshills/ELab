@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/dshills/elab/internal/testutil"
 )
@@ -88,7 +89,11 @@ func TestMotorPWM555DrivesShaftAndFlyback(t *testing.T) {
 		trace := k.trace
 		high, low, flyback := false, false, false
 		for j := 1; j <= 800; j++ {
-			next, updated, err := advanceMixed(k.mixed, trace, float64(j)*.00005)
+			// This numerical reference measures the waveform and shaft response.
+			// Use a deterministic CPU clock while retaining the attempt and wall limits.
+			budget := newIntegrationBudgetContext(t.Context())
+			budget.elapsed = func() time.Duration { return 0 }
+			next, updated, err := advanceMixedBudget(k.mixed, trace, float64(j)*.00005, budget)
 			if err != nil {
 				t.Fatal("PWM", position, j, err)
 			}
