@@ -12,12 +12,16 @@ const GridSize = 10.
 type Graph struct {
 	Components []Component `json:"components"`
 	Wires      []Wire      `json:"wires"`
+	Sheets     []Sheet     `json:"sheets,omitempty"`
 }
 
-func EmptyGraph() Graph   { return Graph{Components: []Component{}, Wires: []Wire{}} }
-func ExampleGraph() Graph { c := DefaultCircuit(); return Graph{Components(c), Wires(c)} }
+func EmptyGraph() Graph { return Graph{Components: []Component{}, Wires: []Wire{}} }
+func ExampleGraph() Graph {
+	c := DefaultCircuit()
+	return Graph{Components: Components(c), Wires: Wires(c)}
+}
 func (g Graph) Clone() Graph {
-	out := Graph{append([]Component{}, g.Components...), append([]Wire{}, g.Wires...)}
+	out := Graph{Components: append([]Component{}, g.Components...), Wires: append([]Wire{}, g.Wires...), Sheets: append([]Sheet(nil), g.Sheets...)}
 	for i := range out.Components {
 		out.Components[i].Thermal = cloneThermal(out.Components[i].Thermal)
 		out.Components[i].Block = cloneBlock(out.Components[i].Block)
@@ -132,13 +136,19 @@ func ElectricalEqual(a, b Graph) bool {
 	}
 	a = a.Clone()
 	b = b.Clone()
-	for i := range a.Components {
-		a.Components[i].Position = Point{}
-		a.Components[i].Rotation = 0
-	}
-	for i := range b.Components {
-		b.Components[i].Position = Point{}
-		b.Components[i].Rotation = 0
+	for _, graph := range []*Graph{&a, &b} {
+		graph.Sheets = nil
+		for i := range graph.Components {
+			part := &graph.Components[i]
+			part.Position = Point{}
+			part.Rotation = 0
+			if part.Kind != "net-label" {
+				part.Sheet = ""
+			}
+		}
+		for i := range graph.Wires {
+			graph.Wires[i].Port = ""
+		}
 	}
 	return reflect.DeepEqual(a, b)
 }

@@ -62,8 +62,9 @@ func TerminalAt(graph Graph, position Point, radius float64) (string, bool) {
 // starts a simulation, reserves IDs, changes selection or creates history.
 func PreviewDrawing(state Snapshot, position Point) DrawingPreview {
 	out := DrawingPreview{CommandRevision: state.CommandRevision, DocumentGeneration: state.Document.Generation, Tool: state.Drawing.Tool, Position: position, Path: []Point{}}
-	graph := Graph{Components: state.Components, Wires: state.Wires}
-	stage := &Service{graph: graph.Clone(), drawing: state.Drawing, usedIDs: map[string]bool{}}
+	project := Graph{Components: state.Components, Wires: state.Wires, Sheets: state.Sheets}
+	graph := project.SheetDrawing(state.ActiveSheet)
+	stage := &Service{graph: project.Clone(), activeSheet: state.ActiveSheet, drawing: state.Drawing, usedIDs: map[string]bool{}}
 	plan := func(command string, input any) {
 		raw, err := json.Marshal(input)
 		if err == nil {

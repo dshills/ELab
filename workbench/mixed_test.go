@@ -123,7 +123,7 @@ func mixedBaseCapGraph() Graph {
 	g := NPNPulseExampleGraph()
 	cap, _ := MakeComponent("Timing", "capacitor", Point{400, 60}, "1uF")
 	g.Components = append(g.Components, cap)
-	g.Wires = append(g.Wires, Wire{"WC1", "Timing.1", "Q1.base", true}, Wire{"WC2", "Timing.2", "GND1.reference", true})
+	g.Wires = append(g.Wires, Wire{ID: "WC1", From: "Timing.1", To: "Q1.base", Connected: true}, Wire{ID: "WC2", From: "Timing.2", To: "GND1.reference", Connected: true})
 	return g
 }
 func TestMixedPulseCapacitorContinuityAndLowVoltageRCReference(t *testing.T) {
@@ -316,7 +316,7 @@ func TestMixedConstraintDiagnosticsAndRCInitialPolarity(t *testing.T) {
 	g := mixedBaseCapGraph()
 	extra, _ := MakeComponent("Parallel", "capacitor", Point{500, 60}, "1uF")
 	g.Components = append(g.Components, extra)
-	g.Wires = append(g.Wires, Wire{"P1", "Parallel.1", "Timing.1", true}, Wire{"P2", "Parallel.2", "Timing.2", true})
+	g.Wires = append(g.Wires, Wire{ID: "P1", From: "Parallel.1", To: "Timing.1", Connected: true}, Wire{ID: "P2", From: "Parallel.2", To: "Timing.2", Connected: true})
 	_, status, d := g.Compile()
 	if d == nil || status != "unsupported" || d.Code != "ideal-constraint-loop" {
 		t.Fatal("redundant capacitor constraints not diagnosed")

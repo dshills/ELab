@@ -293,7 +293,7 @@ func NPNExampleGraph() Graph {
 		g.Components = append(g.Components, c)
 	}
 	for i, p := range [][2]string{{"VCC.positive", "RL.1"}, {"RL.2", "D1.anode"}, {"D1.cathode", "Q1.collector"}, {"VIN.positive", "RB.1"}, {"RB.2", "Q1.base"}, {"Q1.emitter", "GND1.reference"}, {"VCC.negative", "GND1.reference"}, {"VIN.negative", "GND1.reference"}} {
-		g.Wires = append(g.Wires, Wire{fmt.Sprintf("W%d", i+1), p[0], p[1], true})
+		g.Wires = append(g.Wires, Wire{ID: fmt.Sprintf("W%d", i+1), From: p[0], To: p[1], Connected: true})
 	}
 	return g
 }

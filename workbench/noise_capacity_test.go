@@ -45,7 +45,7 @@ func TestNoiseCapacitySavedCaptureReopensAndRejectsMaterialChanges(t *testing.T)
 		}
 	}
 	cfg := document.Sweeps.Entries[0].Metadata.Settings
-	plan, err := newSweepPlan(Graph{state.Components, state.Wires}, cfg)
+	plan, err := newSweepPlan(Graph{Components: state.Components, Wires: state.Wires}, cfg)
 	if err != nil {
 		t.Fatal(err)
 	}

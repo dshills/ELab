@@ -190,7 +190,7 @@ func TestSequentialExampleSequencesAndElectricalBalance(t *testing.T) {
 			if initial.SequentialModel == nil || initial.Analysis != SequentialAnalysis || initial.Mixed == nil || initial.Mixed.Sequential[0].Memory.Value != 0 || initial.Document.Dirty {
 				t.Fatal("sequential startup", initial.Diagnostics)
 			}
-			if warnings := waveformSamplingWarnings(Graph{initial.Components, initial.Wires}, initial.TransientSettings); len(warnings) != 0 {
+			if warnings := waveformSamplingWarnings(Graph{Components: initial.Components, Wires: initial.Wires}, initial.TransientSettings); len(warnings) != 0 {
 				t.Fatal("example sampling", warnings)
 			}
 			duration, step := 3.3, .005

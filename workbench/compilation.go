@@ -17,6 +17,9 @@ type Compiled struct {
 // Compile derives nets from explicit terminal connections and matching named labels. Coordinates,
 // line crossings, drawing order, IDs, and symbol rotation never create a net.
 func (g Graph) Compile() (Compiled, string, *Diagnostic) {
+	if err := g.validateSheets(); err != nil {
+		return Compiled{}, "error", &Diagnostic{"invalid-sheets", err.Error(), ""}
+	}
 	if g.hasBlocks() {
 		physical, err := g.PhysicalGraph()
 		if err != nil {
@@ -116,17 +119,18 @@ func (g Graph) Compile() (Compiled, string, *Diagnostic) {
 	for i := 1; i < len(grounds); i++ {
 		union(grounds[0].ID+".reference", grounds[i].ID+".reference")
 	}
-	labels := map[string]string{}
+	labels := map[scopedLabel]string{}
 	for _, part := range g.Components {
 		if part.Kind == "net-label" {
 			if !validNetLabel(part.Label) {
 				return out, "error", &Diagnostic{"invalid-net-label", "Choose a valid net label.", part.ID}
 			}
 			ref := part.ID + ".node"
-			if first, ok := labels[part.Label]; ok {
+			key := scopedLabel{part.Sheet, part.Label}
+			if first, ok := labels[key]; ok {
 				union(first, ref)
 			} else {
-				labels[part.Label] = ref
+				labels[key] = ref
 			}
 		}
 	}

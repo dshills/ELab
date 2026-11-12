@@ -116,6 +116,9 @@ func (s *Service) insertJunctionLocked(p JunctionInsertParams) error {
 				found = true
 				from, _, _ := s.graph.Terminal(wire.From)
 				to, _, _ := s.graph.Terminal(wire.To)
+				if wire.Port != "" || from.Sheet != s.activeSheet || to.Sheet != s.activeSheet {
+					return fmt.Errorf("insert junctions on local wires in the current sheet")
+				}
 				if s.graph.blockOwner(from.ID) != "" || s.graph.blockOwner(to.ID) != "" {
 					return fmt.Errorf("release the block before inserting new members into an internal wire")
 				}
@@ -128,12 +131,13 @@ func (s *Service) insertJunctionLocked(p JunctionInsertParams) error {
 			return fmt.Errorf("junction references an unknown wire")
 		}
 	}
+	drawing := s.graph.SheetDrawing(s.activeSheet)
 	position := p.Position
 	if position == nil {
 		if len(wires) != 1 {
 			return fmt.Errorf("multi-wire junction requires an explicit position")
 		}
-		point, err := WireJunctionPosition(s.graph, wires[0])
+		point, err := WireJunctionPosition(drawing, wires[0])
 		if err != nil {
 			return err
 		}
@@ -143,7 +147,7 @@ func (s *Service) insertJunctionLocked(p JunctionInsertParams) error {
 	if err != nil {
 		return err
 	}
-	if err := validJunctionPosition(s.graph, wires, point); err != nil {
+	if err := validJunctionPosition(drawing, wires, point); err != nil {
 		return err
 	}
 	id := p.ID
@@ -157,6 +161,7 @@ func (s *Service) insertJunctionLocked(p JunctionInsertParams) error {
 	if err != nil {
 		return err
 	}
+	part.Sheet = s.activeSheet
 	// All failure conditions precede mutation; ID reservations and the complete
 	// graph update are one history operation, including multi-wire joins.
 	s.graph.Components = append(s.graph.Components, part)

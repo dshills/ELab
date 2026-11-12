@@ -34,7 +34,18 @@ type sceneWire struct {
 	workbench.Wire
 	Points []workbench.Point `json:"points"`
 }
+type scenePort struct {
+	ID       string  `json:"id"`
+	Name     string  `json:"name"`
+	Target   string  `json:"target"`
+	Terminal string  `json:"terminal"`
+	X        float64 `json:"x"`
+	Y        float64 `json:"y"`
+	Side     float64 `json:"side"`
+	Active   bool    `json:"active"`
+}
 type scene struct {
+	Ports   []scenePort               `json:"ports,omitempty"`
 	Parts   []scenePart               `json:"parts"`
 	Wires   []sceneWire               `json:"wires"`
 	Bounds  [4]float64                `json:"bounds"`
@@ -42,7 +53,8 @@ type scene struct {
 }
 
 func makeScene(state workbench.Snapshot) scene {
-	graph := (workbench.Graph{Components: state.Components, Wires: state.Wires}).VisibleGraph()
+	project := workbench.Graph{Components: state.Components, Wires: state.Wires, Sheets: state.Sheets}
+	graph := project.SheetDrawing(state.ActiveSheet).VisibleGraph()
 	out := scene{Parts: []scenePart{}, Wires: []sceneWire{}, Bounds: [4]float64{-280, -180, 280, 180}}
 	if len(graph.Components) > 0 {
 		out.Bounds = [4]float64{math.Inf(1), math.Inf(1), math.Inf(-1), math.Inf(-1)}
@@ -98,7 +110,33 @@ func makeScene(state workbench.Snapshot) scene {
 			extend(p.X, p.Y)
 		}
 	}
+	portOffsets := map[string]float64{}
+	for _, port := range project.SheetPorts(state.ActiveSheet) {
+		part, pin, ok := graph.Terminal(port.Terminal)
+		if !ok {
+			continue
+		}
+		at, ok := workbench.TerminalPosition(part, pin)
+		if !ok {
+			continue
+		}
+		side := 1.
+		if at.X < part.Position.X {
+			side = -1
+		}
+		y := at.Y + portOffsets[port.Terminal]
+		portOffsets[port.Terminal] += 24
+		x := at.X + 35*side
+		out.Ports = append(out.Ports, scenePort{port.ID, port.Name, port.Target, port.Terminal, x, y, side, port.Active})
+		extend(x+side*float64(14+9*len(port.Name)), y+18)
+	}
 	for _, r := range state.PinnedReadings {
+		if len(state.Sheets) > 0 {
+			id, _, _ := strings.Cut(r.Probe.Positive, ".")
+			if _, ok := graph.Component(id); !ok {
+				continue
+			}
+		}
 		extend(r.Definition.Position.X-8, r.Definition.Position.Y-24)
 		extend(r.Definition.Position.X+190, r.Definition.Position.Y+31)
 	}

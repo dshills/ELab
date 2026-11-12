@@ -29,6 +29,7 @@ type View struct {
 	Zoom   float64 `json:"zoom"`
 }
 type Component struct {
+	Sheet          string            `json:"sheet,omitempty"`
 	Thermal        *ThermalConfig    `json:"thermal,omitempty"`
 	Block          *CircuitBlock     `json:"block,omitempty"`
 	Device         *DeviceParameters `json:"device_parameters,omitempty"`
@@ -53,6 +54,7 @@ type Component struct {
 	Rotation       int               `json:"rotation"`
 }
 type Wire struct {
+	Port      string `json:"port,omitempty"`
 	ID        string `json:"id"`
 	From      string `json:"from"`
 	To        string `json:"to"`
@@ -80,8 +82,8 @@ func Components(c Circuit) []Component {
 }
 func Wires(c Circuit) []Wire {
 	return []Wire{
-		{"W1", "V1.positive", "R1.1", true}, {"W2", "R1.2", "D1.anode", c.Connected},
-		{"W3", "D1.cathode", "GND.reference", true}, {"W4", "GND.reference", "V1.negative", true},
+		{ID: "W1", From: "V1.positive", To: "R1.1", Connected: true}, {ID: "W2", From: "R1.2", To: "D1.anode", Connected: c.Connected},
+		{ID: "W3", From: "D1.cathode", To: "GND.reference", Connected: true}, {ID: "W4", From: "GND.reference", To: "V1.negative", Connected: true},
 	}
 }
 

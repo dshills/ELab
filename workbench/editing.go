@@ -67,6 +67,9 @@ func validatePointParam(raw json.RawMessage, field string) error {
 	return params(object[field], &Point{}, "x", "y")
 }
 func (s *Service) normalizeDrawingLocked() {
+	if _, ok := s.graph.sheet(s.activeSheet); !ok {
+		_ = s.openSheetLocked("")
+	}
 	if s.selected != "" && !s.graph.HasObject(s.selected) {
 		s.selected = ""
 	}
@@ -86,17 +89,25 @@ func (s *Service) normalizeDrawingLocked() {
 	}
 }
 func (s *Service) connectLocked(p ConnectParams) error {
+	return s.connectPortLocked(p, "")
+}
+func (s *Service) connectPortLocked(p ConnectParams, port string) error {
 	if len(s.graph.Wires) >= MaxWires {
 		return fmt.Errorf("drawing supports at most %d wires", MaxWires)
 	}
-	if _, _, ok := s.graph.Terminal(p.From); !ok {
+	from, _, ok := s.graph.Terminal(p.From)
+	if !ok {
 		return fmt.Errorf("unknown terminal %q", p.From)
 	}
-	if _, _, ok := s.graph.Terminal(p.To); !ok {
+	to, _, ok := s.graph.Terminal(p.To)
+	if !ok {
 		return fmt.Errorf("unknown terminal %q", p.To)
 	}
 	if p.From == p.To {
 		return fmt.Errorf("choose two different terminals")
+	}
+	if (port == "") != (from.Sheet == to.Sheet) {
+		return fmt.Errorf("use a named sheet port for connections between sheets")
 	}
 	for _, w := range s.graph.Wires {
 		if w.From == p.From && w.To == p.To || w.From == p.To && w.To == p.From {
@@ -110,7 +121,12 @@ func (s *Service) connectLocked(p ConnectParams) error {
 		return fmt.Errorf("wire ID is invalid or already used in this session")
 	}
 	candidate := s.graph.Clone()
-	candidate.Wires = append(candidate.Wires, Wire{ID: p.ID, From: p.From, To: p.To, Connected: true})
+	candidate.Wires = append(candidate.Wires, Wire{ID: p.ID, From: p.From, To: p.To, Connected: true, Port: port})
+	if port != "" {
+		if err := candidate.validateSheets(); err != nil {
+			return err
+		}
+	}
 	if err := candidate.validateBlocks(); err != nil {
 		return err
 	}
@@ -123,6 +139,8 @@ func (s *Service) connectLocked(p ConnectParams) error {
 }
 func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 	switch command {
+	case "sheet.open", "sheet.create", "sheet.rename", "sheet.delete", "sheet.move", "sheet.port.connect":
+		return s.sheetCommandLocked(command, raw)
 	case "thyristor.configure":
 		return s.configureThyristorLocked(raw)
 	case "photodiode.configure":
@@ -901,8 +919,10 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err != nil {
 			return err
 		}
+		c.Sheet = s.activeSheet
+		scopes := s.graph.positionScopes()
 		for _, other := range s.graph.Components {
-			if other.Position == c.Position && s.graph.positionScope(other.ID) == "" {
+			if other.Sheet == c.Sheet && other.Position == c.Position && scopes[other.ID] == "" {
 				return fmt.Errorf("this grid position is occupied; choose another")
 			}
 		}
@@ -944,8 +964,10 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		if err != nil {
 			return err
 		}
+		moving, _ := s.graph.Component(p.ID)
+		scopes := s.graph.positionScopes()
 		for _, other := range s.graph.Components {
-			if other.ID != p.ID && other.Position == position && s.graph.positionScope(other.ID) == s.graph.positionScope(p.ID) {
+			if other.ID != p.ID && other.Sheet == moving.Sheet && other.Position == position && scopes[other.ID] == scopes[p.ID] {
 				return fmt.Errorf("this grid position is occupied")
 			}
 		}
@@ -1012,6 +1034,9 @@ func (s *Service) applyLocked(command string, raw json.RawMessage) error {
 		}
 		if p.ID != "" && !s.graph.HasObject(p.ID) {
 			return fmt.Errorf("unknown object ID")
+		}
+		if part, ok := s.graph.Component(p.ID); ok {
+			_ = s.openSheetLocked(part.Sheet)
 		}
 		s.selected = p.ID
 		s.measurementTarget = nil

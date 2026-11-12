@@ -41,6 +41,13 @@ func decodeRecording(data []byte) (*verificationRecord, error) {
 	}
 	_ = json.Unmarshal(data, &raw)
 	envelope := map[string]any{"format": DocumentFormat, "version": 1, "graph": raw.Metadata["graph"], "view": View{Zoom: 1}, "led_model": m.LEDModel}
+	if len(m.Graph.Sheets) > 0 {
+		envelope["version"] = SheetDocumentVersion
+		envelope["paused"] = true
+		envelope["scope_probes"] = ProbeParams{IDs: []string{}}
+		envelope["transient_settings"] = DefaultTransientSettings()
+		envelope["recordings"] = ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}
+	}
 	if m.WaveformModel != nil {
 		envelope["waveform_model"] = m.WaveformModel
 	}

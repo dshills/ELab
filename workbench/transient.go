@@ -114,6 +114,7 @@ type StepParams struct {
 	Duration float64 `json:"duration_s"`
 }
 type historyEntry struct {
+	ActiveSheet     string
 	ExampleID       string
 	Display         DisplayPreferences
 	Pins            []PinSpec
@@ -125,13 +126,14 @@ type historyEntry struct {
 }
 
 func (s *Service) historyLocked() historyEntry {
-	return historyEntry{ExampleID: s.exampleID, Display: s.displayPreferences, Pins: clonePins(s.pins), Graph: s.graph.Clone(), Settings: s.transientSettings}
+	return historyEntry{ActiveSheet: s.activeSheet, ExampleID: s.exampleID, Display: s.displayPreferences, Pins: clonePins(s.pins), Graph: s.graph.Clone(), Settings: s.transientSettings}
 }
 func (s *Service) restoreLocked(h historyEntry) {
 	s.exampleID = h.ExampleID
 	s.displayPreferences = h.Display
 	s.pins = clonePins(h.Pins)
 	s.graph = h.Graph.Clone()
+	_ = s.openSheetLocked(h.ActiveSheet)
 	s.transientSettings = h.Settings
 }
 func RCExampleGraph() Graph {
@@ -145,7 +147,7 @@ func RCExampleGraph() Graph {
 		c, _ := MakeComponent(p.id, p.kind, p.position, p.value)
 		g.Components = append(g.Components, c)
 	}
-	g.Wires = []Wire{{"W1", "V1.positive", "R1.1", true}, {"W2", "R1.2", "C1.1", true}, {"W3", "C1.2", "GND.reference", true}, {"W4", "GND.reference", "V1.negative", true}}
+	g.Wires = []Wire{{ID: "W1", From: "V1.positive", To: "R1.1", Connected: true}, {ID: "W2", From: "R1.2", To: "C1.1", Connected: true}, {ID: "W3", From: "C1.2", To: "GND.reference", Connected: true}, {ID: "W4", From: "GND.reference", To: "V1.negative", Connected: true}}
 	return g
 }
 func cloneTransient(t *Transient) *Transient {

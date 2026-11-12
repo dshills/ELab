@@ -1,6 +1,8 @@
 package workbench
 
 type Snapshot struct {
+	Sheets                  []Sheet                `json:"sheets,omitempty"`
+	ActiveSheet             string                 `json:"active_sheet,omitempty"`
 	SelectionClipboardID    uint64                 `json:"selection_clipboard_id,omitempty"`
 	ScopeView               string                 `json:"scope_view"`
 	BlockClipboardAvailable bool                   `json:"block_clipboard_available"`
@@ -145,6 +147,8 @@ func (s *Service) snapshotLocked() Snapshot {
 		analysis = "DC operating point"
 	}
 	out := Snapshot{
+		Sheets:                  graph.Sheets,
+		ActiveSheet:             s.activeSheet,
 		BlockClipboardAvailable: s.blockClipboard != nil,
 		SelectionClipboardID:    s.selectionClipboardID,
 		Tolerance:               s.toleranceViewLocked(),
@@ -331,6 +335,7 @@ func (s *Service) snapshotLocked() Snapshot {
 	return out
 }
 func cloneSnapshot(state Snapshot) Snapshot {
+	state.Sheets = append([]Sheet(nil), state.Sheets...)
 	state.Tolerance = cloneTolerance(state.Tolerance)
 	state.Spectrum = cloneSpectrum(state.Spectrum)
 	state.Proposal = cloneEditProposal(state.Proposal)

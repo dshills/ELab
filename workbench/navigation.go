@@ -59,13 +59,14 @@ func (s *Service) navigateLocked(p NavigateParams) error {
 		return fmt.Errorf("kind must be all, components or wires")
 	}
 	ids := []string{}
+	drawing := s.graph.SheetDrawing(s.activeSheet)
 	if p.Kind != "wires" {
-		for _, c := range s.graph.Components {
+		for _, c := range drawing.Components {
 			ids = append(ids, c.ID)
 		}
 	}
 	if p.Kind != "components" {
-		for _, w := range s.graph.Wires {
+		for _, w := range drawing.Wires {
 			ids = append(ids, w.ID)
 		}
 	}
@@ -113,7 +114,7 @@ func (s *Service) navigateLocked(p NavigateParams) error {
 }
 
 func (s *Service) fitViewLocked(p FitParams) (View, error) {
-	drawing := s.graph.VisibleGraph()
+	drawing := s.graph.SheetDrawing(s.activeSheet).VisibleGraph()
 	minX, minY, maxX, maxY := math.Inf(1), math.Inf(1), math.Inf(-1), math.Inf(-1)
 	include := func(a, b Point) {
 		minX = min(minX, a.X)

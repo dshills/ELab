@@ -62,7 +62,7 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 	}
 	capture := exportCapture{kind: p.Kind, generation: s.documentGeneration, overwrite: p.Overwrite, artifact: Artifact{Path: path, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}}
 	if p.Kind == "schematic-svg" || p.Kind == "schematic-pdf" || p.Kind == "schematic-png" {
-		capture.annotations = s.sourceAnnotationsLocked()
+		capture.annotations = s.sheetAnnotationsLocked()
 		capture.settings = s.transientSettings
 	}
 	command := ""
@@ -131,12 +131,12 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			}
 			capture.artifact.Page = &page
 			capture.page = layout
-			capture.graph = s.graph.Clone()
+			capture.graph = s.sheetExportGraphLocked()
 			capture.display = CircuitDisplay{Preferences: DefaultDisplayPreferences()}
 			if page.Measurements {
 				capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
 				capture.display.Animate = false
-				capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
+				capture.readings = clonePinnedReadings(s.sheetReadingsLocked())
 			}
 		case "schematic-svg":
 			if p.ID != "" {
@@ -144,10 +144,10 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 			}
 			command = "export.schematic.svg"
 			capture.artifact.Format = "svg"
-			capture.graph = s.graph.Clone()
+			capture.graph = s.sheetExportGraphLocked()
 			capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
 			capture.display.Animate = false
-			capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
+			capture.readings = clonePinnedReadings(s.sheetReadingsLocked())
 		case "audio-wav":
 			if s.audio == nil || s.audio.view.ID != p.ID || s.audio.view.Status != "completed" || !s.audioViewLocked().Current {
 				return fmt.Errorf("export needs the exact current completed audio preview")

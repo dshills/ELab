@@ -78,7 +78,11 @@ func dcCircuitSnapshot(g Graph, cfg TransientSettings) DCCircuit {
 func (c DCCircuit) document() Document {
 	paused := true
 	cfg := c.Settings
-	return Document{Format: DocumentFormat, Version: DocumentVersion, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SchottkyModel: c.SchottkyModel, ZenerModel: c.ZenerModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PNPModel: c.PNPModel, OpAmpModel: c.OpAmpModel, SequentialModel: c.SequentialModel, DisplayModel: c.DisplayModel, RegulatorModel: c.RegulatorModel, PowerModel: c.PowerModel, SensorModel: c.SensorModel, ControlModel: c.ControlModel, DeviceModel: c.DeviceModel, HBridgeModel: c.HBridgeModel, LogicModel: c.LogicModel, Timer555Model: c.Timer555Model, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
+	version := DocumentVersion
+	if len(c.Graph.Sheets) > 0 {
+		version = SheetDocumentVersion
+	}
+	return Document{Format: DocumentFormat, Version: version, Graph: c.Graph.Clone(), View: View{Zoom: 1}, Paused: &paused, ScopeProbes: &ProbeParams{IDs: []string{}}, TransientSettings: &cfg, LEDModel: c.LEDModel, NPNModel: c.NPNModel, DiodeModel: c.DiodeModel, SchottkyModel: c.SchottkyModel, ZenerModel: c.ZenerModel, SwitchModel: c.SwitchModel, NMOSModel: c.NMOSModel, PMOSModel: c.PMOSModel, PNPModel: c.PNPModel, OpAmpModel: c.OpAmpModel, SequentialModel: c.SequentialModel, DisplayModel: c.DisplayModel, RegulatorModel: c.RegulatorModel, PowerModel: c.PowerModel, SensorModel: c.SensorModel, ControlModel: c.ControlModel, DeviceModel: c.DeviceModel, HBridgeModel: c.HBridgeModel, LogicModel: c.LogicModel, Timer555Model: c.Timer555Model, PotentiometerModel: c.PotentiometerModel, WaveformModel: c.WaveformModel, Recordings: &ProjectRecordings{Entries: []ProjectRecording{}, Selected: -1}}
 }
 
 type SweepMetadata struct {

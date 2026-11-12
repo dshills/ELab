@@ -27,7 +27,7 @@ func FlasherExampleGraph() Graph {
 		g.Components = append(g.Components, c)
 	}
 	for i, w := range [][2]string{{"V1.positive", "RL1.1"}, {"V1.positive", "RL2.1"}, {"V1.positive", "RB1.1"}, {"V1.positive", "RB2.1"}, {"RL1.2", "D1.anode"}, {"RL2.2", "D2.anode"}, {"D1.cathode", "Q1.collector"}, {"D2.cathode", "Q2.collector"}, {"RB1.2", "Q1.base"}, {"RB2.2", "Q2.base"}, {"Q1.collector", "C1.1"}, {"C1.2", "Q2.base"}, {"Q2.collector", "C2.1"}, {"C2.2", "Q1.base"}, {"Q1.emitter", "GND1.reference"}, {"Q2.emitter", "GND1.reference"}, {"V1.negative", "GND1.reference"}} {
-		g.Wires = append(g.Wires, Wire{fmt.Sprintf("W%d", i+1), w[0], w[1], true})
+		g.Wires = append(g.Wires, Wire{ID: fmt.Sprintf("W%d", i+1), From: w[0], To: w[1], Connected: true})
 	}
 	return g
 }

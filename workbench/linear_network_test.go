@@ -19,7 +19,7 @@ func linearStackGraph(total float64) Graph {
 	v, _ := MakeComponent("V3", "dc-source", Point{X: -400}, FormatValue(total-20, "V"))
 	g.Components = append(g.Components, v)
 	g.Wires[0].To = "V3.negative"
-	g.Wires = append(g.Wires, Wire{"W6", "V3.positive", "R1.1", true})
+	g.Wires = append(g.Wires, Wire{ID: "W6", From: "V3.positive", To: "R1.1", Connected: true})
 	return g
 }
 
@@ -57,7 +57,7 @@ func TestLinearNegativeRailAndCapacitorStep(t *testing.T) {
 	cap, _ := MakeComponent("C1", "capacitor", Point{X: 400}, "1uF")
 	g.Components = append(g.Components, cap)
 	g.Wires[1].From = "C1.2"
-	g.Wires = append(g.Wires, Wire{"W6", "R1.2", "C1.1", true})
+	g.Wires = append(g.Wires, Wire{ID: "W6", From: "R1.2", To: "C1.1", Connected: true})
 	state, _ = solveFloatingDC(t, g)
 	if state.result.Capacitors[0].Voltage != 0 {
 		t.Fatal("initial charge was not respected")

@@ -101,7 +101,7 @@ func (s *Service) duplicateLocked(p DuplicateParams) error {
 				}
 				occupied := false
 				for _, other := range s.graph.Components {
-					if other.Position == point {
+					if other.Sheet == s.activeSheet && other.Position == point {
 						occupied = true
 						break
 					}
@@ -169,7 +169,7 @@ func (s *Service) stageBatchLocked(p BatchParams) (*Service, error) {
 	if strings.TrimSpace(p.Name) == "" || len(p.Name) > 80 || len(p.Edits) == 0 || len(p.Edits) > 100 {
 		return nil, fmt.Errorf("batch requires a name of 1–80 bytes and 1–100 edits")
 	}
-	staged := &Service{graph: s.graph.Clone(), drawing: s.drawing, selected: s.selected, usedIDs: map[string]bool{}, transientSettings: s.transientSettings}
+	staged := &Service{graph: s.graph.Clone(), activeSheet: s.activeSheet, drawing: s.drawing, selected: s.selected, usedIDs: map[string]bool{}, transientSettings: s.transientSettings}
 	for id, used := range s.usedIDs {
 		staged.usedIDs[id] = used
 	}

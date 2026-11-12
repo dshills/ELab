@@ -13,7 +13,7 @@ func highRailLEDGraph(volts float64) Graph {
 	led, _ := MakeComponent("D1", "led", Point{X: 400}, "")
 	g.Components = append(g.Components, led)
 	g.Wires[1].From = "D1.cathode"
-	g.Wires = append(g.Wires, Wire{"W7", "R1.2", "D1.anode", true})
+	g.Wires = append(g.Wires, Wire{ID: "W7", From: "R1.2", To: "D1.anode", Connected: true})
 	return g
 }
 
@@ -45,7 +45,7 @@ func TestConstraintSeedUsesOnlyGroundedIdealPaths(t *testing.T) {
 	g := highRailLEDGraph(24)
 	cap, _ := MakeComponent("C1", "capacitor", Point{X: 500}, "1uF")
 	g.Components = append(g.Components, cap)
-	g.Wires = append(g.Wires, Wire{"W8", "C1.1", "D1.anode", true}, Wire{"W9", "C1.2", "GND1.reference", true})
+	g.Wires = append(g.Wires, Wire{ID: "W8", From: "C1.1", To: "D1.anode", Connected: true}, Wire{ID: "W9", From: "C1.2", To: "GND1.reference", Connected: true})
 	c, status, d := g.Compile()
 	if d != nil {
 		t.Fatal(status, d)
@@ -98,7 +98,7 @@ func floatingGatePairGraph() Graph {
 		{"M1.source", "GND1.reference"}, {"M2.source", "GND1.reference"}, {"V1.negative", "GND1.reference"},
 		{"M1.gate", "RG.1"}, {"M2.gate", "RG.2"},
 	} {
-		g.Wires = append(g.Wires, Wire{fmt.Sprintf("W%d", i+1), pair[0], pair[1], true})
+		g.Wires = append(g.Wires, Wire{ID: fmt.Sprintf("W%d", i+1), From: pair[0], To: pair[1], Connected: true})
 	}
 	return g
 }

@@ -29,7 +29,7 @@ func (s *Service) selectedGraphLocked(ids []string) (Graph, error) {
 		if chosen[id] {
 			return Graph{}, fmt.Errorf("selection contains duplicate IDs")
 		}
-		if _, ok := s.graph.Component(id); !ok {
+		if part, ok := s.graph.Component(id); !ok || part.Sheet != s.activeSheet {
 			return Graph{}, fmt.Errorf("unknown selected component %q", id)
 		}
 		if s.graph.blockOwner(id) != "" {
@@ -132,7 +132,7 @@ func (s *Service) pasteSelectionLocked(source Graph, offset Point) error {
 	labels := map[string]string{}
 	usedLabels := map[string]bool{}
 	for _, c := range s.graph.Components {
-		if c.Kind == "net-label" {
+		if c.Kind == "net-label" && c.Sheet == s.activeSheet {
 			usedLabels[c.Label] = true
 		}
 	}
@@ -162,6 +162,7 @@ func (s *Service) pasteSelectionLocked(source Graph, offset Point) error {
 			p.Label = labels[old]
 		}
 		p.ID = mapping[p.ID]
+		p.Sheet = s.activeSheet
 		p.Position = Point{p.Position.X + delta.X, p.Position.Y + delta.Y}
 		if _, err = snapPoint(p.Position); err != nil {
 			return err

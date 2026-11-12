@@ -11,9 +11,9 @@ func floatingRCInputGraph(t *testing.T, returned, switched bool) Graph {
 	t.Helper()
 	g := RCExampleGraph()
 	g.Components[0].Kind, g.Components[0].Model = "dc-source", "ideal-dc.v1"
-	g.Wires = []Wire{{"W1", "V1.positive", "R1.1", true}, {"W2", "R1.2", "C1.1", true}, {"W3", "C1.2", "V1.negative", true}, {"W4", "C1.1", "GND.reference", true}}
+	g.Wires = []Wire{{ID: "W1", From: "V1.positive", To: "R1.1", Connected: true}, {ID: "W2", From: "R1.2", To: "C1.1", Connected: true}, {ID: "W3", From: "C1.2", To: "V1.negative", Connected: true}, {ID: "W4", From: "C1.1", To: "GND.reference", Connected: true}}
 	if returned {
-		g.Wires = []Wire{{"W1", "V1.positive", "C1.1", true}, {"W2", "C1.2", "GND.reference", true}, {"W3", "V1.negative", "R1.1", true}, {"W4", "R1.2", "GND.reference", true}}
+		g.Wires = []Wire{{ID: "W1", From: "V1.positive", To: "C1.1", Connected: true}, {ID: "W2", From: "C1.2", To: "GND.reference", Connected: true}, {ID: "W3", From: "V1.negative", To: "R1.1", Connected: true}, {ID: "W4", From: "R1.2", To: "GND.reference", Connected: true}}
 	}
 	if switched {
 		part, err := MakeComponent("S1", "switch", Point{X: -100, Y: -60}, "")
@@ -24,7 +24,7 @@ func floatingRCInputGraph(t *testing.T, returned, switched bool) Graph {
 		part.SwitchClosed = &closed
 		g.Components = append(g.Components, part)
 		g.Wires[0].From = "S1.2"
-		g.Wires = append(g.Wires, Wire{"WS", "V1.positive", "S1.1", true})
+		g.Wires = append(g.Wires, Wire{ID: "WS", From: "V1.positive", To: "S1.1", Connected: true})
 	}
 	return g
 }

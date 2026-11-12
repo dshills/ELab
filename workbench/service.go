@@ -21,7 +21,8 @@ type savedResponse struct {
 	project     *projectJob
 }
 type Service struct {
-	scopeView string
+	scopeView   string
+	activeSheet string
 	// Service.mu owns both stores and all publication/revision transitions.
 	analysisJobs
 	compilation                 compilationCache

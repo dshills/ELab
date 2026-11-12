@@ -62,7 +62,7 @@ func TestProjectDiscoveryOwnedPureBoundsAndCompletion(t *testing.T) {
 		if strings.HasPrefix(id, "project.save") || strings.HasPrefix(id, "project.load") {
 			p := inputProperty(schema, "path")
 			f := schema["x-file-format"].(map[string]any)
-			if p["x-max-utf8-bytes"] != float64(4096) || f["max_bytes"] != float64(MaxProjectBytes) || f["legacy_max_bytes"] != float64(MaxDocumentBytes) || f["default_write_version"] != float64(DocumentVersion) || f["read_version_maximum"] != float64(SweepDocumentVersion) || contract.Completion.Cancel != "project.work.cancel" || contract.Completion.CooperativeDeadlineSeconds != 30 {
+			if p["x-max-utf8-bytes"] != float64(4096) || f["max_bytes"] != float64(MaxProjectBytes) || f["legacy_max_bytes"] != float64(MaxDocumentBytes) || f["default_write_version"] != float64(DocumentVersion) || f["read_version_maximum"] != float64(SheetDocumentVersion) || contract.Completion.Cancel != "project.work.cancel" || contract.Completion.CooperativeDeadlineSeconds != 30 {
 				t.Fatal(id, "file bounds/completion drift")
 			}
 			for _, observer := range contract.Completion.Observe {

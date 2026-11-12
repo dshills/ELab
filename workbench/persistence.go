@@ -17,6 +17,7 @@ const DocumentVersion = 4
 const MaxDocumentBytes = 256 * 1024
 
 type Document struct {
+	ActiveSheet        string              `json:"active_sheet,omitempty"`
 	Sweeps             *ProjectSweeps      `json:"dc_sweeps,omitempty"`
 	ExampleID          string              `json:"example_id,omitempty"`
 	DisplayPreferences *DisplayPreferences `json:"display_preferences,omitempty"`
@@ -95,6 +96,7 @@ func (s *Service) requireCleanLocked(discard bool) error {
 	return nil
 }
 func (s *Service) detachDocumentLocked() {
+	s.activeSheet = ""
 	if s.tolerance != nil {
 		s.tolerance.cancel()
 	}
@@ -181,9 +183,15 @@ func decodeDocument(data []byte) (Document, error) {
 	var graphFields struct {
 		Components []json.RawMessage `json:"components"`
 		Wires      []json.RawMessage `json:"wires"`
+		Sheets     []json.RawMessage `json:"sheets,omitempty"`
 	}
 	if err := params(raw.Graph, &graphFields, "components", "wires"); err != nil {
 		return d, err
+	}
+	for _, sheet := range graphFields.Sheets {
+		if err := params(sheet, &Sheet{}, "id", "name"); err != nil {
+			return d, err
+		}
 	}
 	terminalDefinitions := map[string][]string{}
 	for _, part := range libraryParts() {
@@ -251,8 +259,17 @@ func decodeDocument(data []byte) (Document, error) {
 	if err := validatePointParam(raw.View, "center"); err != nil {
 		return d, err
 	}
-	if d.Format != DocumentFormat || (d.Version < 1 || d.Version > SweepDocumentVersion) {
-		return d, fmt.Errorf("unsupported schematic format/version; expected %s versions 1–%d", DocumentFormat, SweepDocumentVersion)
+	if d.Format != DocumentFormat || (d.Version < 1 || d.Version > SheetDocumentVersion) {
+		return d, fmt.Errorf("unsupported schematic format/version; expected %s versions 1–%d", DocumentFormat, SheetDocumentVersion)
+	}
+	if d.Version < SheetDocumentVersion && (len(d.Graph.Sheets) > 0 || d.ActiveSheet != "") {
+		return d, fmt.Errorf("child sheets require version %d", SheetDocumentVersion)
+	}
+	if err := d.Graph.validateSheets(); err != nil {
+		return d, err
+	}
+	if _, ok := d.Graph.sheet(d.ActiveSheet); !ok {
+		return d, fmt.Errorf("active sheet does not exist")
 	}
 	var sweepFields map[string]json.RawMessage
 	_ = json.Unmarshal(data, &sweepFields)
@@ -260,7 +277,7 @@ func decodeDocument(data []byte) (Document, error) {
 	if d.Version < SweepDocumentVersion && hasSweepField {
 		return d, fmt.Errorf("captured sweeps require version 5")
 	}
-	if d.Version == SweepDocumentVersion {
+	if d.Version == SweepDocumentVersion || hasSweepField {
 		var fields map[string]json.RawMessage
 		_ = json.Unmarshal(data, &fields)
 		sweeps, err := validateProjectSweeps(fields["dc_sweeps"])
@@ -509,6 +526,7 @@ func decodeDocument(data []byte) (Document, error) {
 			return d, fmt.Errorf("invalid rotation on %s", c.ID)
 		}
 		expected.Rotation = c.Rotation
+		expected.Sheet = c.Sheet
 		if c.Sine != nil {
 			if c.Kind != "sine-source" {
 				return d, fmt.Errorf("sine parameters belong only to a sine source")
@@ -651,6 +669,7 @@ func (s *Service) documentLocked() Document {
 	probes := ProbeParams{IDs: s.scopeLocked(compiled).Selected}
 	paused := s.paused
 	d := Document{Sweeps: s.projectSweepsLocked(), ExampleID: s.exampleID, Recordings: s.projectRecordingsLocked(), Paused: &paused, ScopeProbes: &probes, Format: DocumentFormat, Version: s.currentDocumentVersionLocked(), Graph: s.graph.Clone(), View: s.view, LEDModel: Model(), TransientSettings: &settings}
+	d.ActiveSheet = s.activeSheet
 	if s.displayPreferences != DefaultDisplayPreferences() {
 		prefs := s.displayPreferences
 		d.DisplayPreferences = &prefs
@@ -761,6 +780,7 @@ func (s *Service) installDocumentLocked(d Document) {
 	s.cursorB = nil
 	s.scopeWindow = nil
 	s.graph = d.Graph.Clone()
+	s.activeSheet = d.ActiveSheet
 	s.view = d.View
 	s.selected = ""
 	s.drawing = DefaultDrawing()

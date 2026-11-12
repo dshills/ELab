@@ -283,7 +283,9 @@ func (s *Service) createBlockLocked(p BlockCreateParams) error {
 
 	g := s.graph.Clone()
 	b := &CircuitBlock{Version: BlockModelID, Members: append([]string{}, p.Members...), Ports: append([]BlockPort{}, p.Ports...), Parameters: append([]BlockParameter{}, p.Parameters...)}
-	g.Components = append(g.Components, blockComponent(p.ID, p.Name, position, b))
+	block := blockComponent(p.ID, p.Name, position, b)
+	block.Sheet = s.activeSheet
+	g.Components = append(g.Components, block)
 	aliases := map[string]string{}
 	for _, pin := range b.Ports {
 		aliases[pin.Terminal] = p.ID + "." + pin.Name
@@ -302,6 +304,9 @@ func (s *Service) createBlockLocked(p BlockCreateParams) error {
 		}
 	}
 	if err := g.validateBlocks(); err != nil {
+		return err
+	}
+	if err := g.validateSheets(); err != nil {
 		return err
 	}
 	if err := g.validatePositions(); err != nil {
@@ -360,6 +365,7 @@ func (s *Service) pasteBlockLocked(p BlockPasteParams) error {
 		}
 		ids[c.ID] = id
 		c.ID = id
+		c.Sheet = s.activeSheet
 		c.Position = Point{X: c.Position.X + delta.X, Y: c.Position.Y + delta.Y}
 		if _, err := snapPoint(c.Position); err != nil {
 			return fmt.Errorf("%w: %v", errBlockPosition, err)
@@ -385,7 +391,9 @@ func (s *Service) pasteBlockLocked(p BlockPasteParams) error {
 	for k, q := range b.Parameters {
 		b.Parameters[k].ComponentID = ids[q.ComponentID]
 	}
-	g.Components = append(g.Components, blockComponent(p.ID, t.Name, position, b))
+	block := blockComponent(p.ID, t.Name, position, b)
+	block.Sheet = s.activeSheet
+	g.Components = append(g.Components, block)
 	if err := g.validatePositions(); err != nil {
 		return err
 	}
@@ -595,16 +603,16 @@ func (g Graph) positionScopes() map[string]string {
 	}
 	return scopes
 }
-func (g Graph) positionScope(id string) string { return g.positionScopes()[id] }
 func (g Graph) validatePositions() error {
 	type key struct {
+		sheet string
 		scope string
 		point Point
 	}
 	seen := map[key]string{}
 	scopes := g.positionScopes()
 	for _, c := range g.Components {
-		k := key{scopes[c.ID], c.Position}
+		k := key{c.Sheet, scopes[c.ID], c.Position}
 		if previous := seen[k]; previous != "" {
 			return fmt.Errorf("%w: %s and %s share a grid point in the same drawing; choose a free position", errBlockPosition, previous, c.ID)
 		}

@@ -57,6 +57,12 @@ The default data directory is the platform's user configuration directory plus
 when upgrading the executable. Avoid placing real work under disposable `build/`
 or temporary directories.
 
+## Draw across sheets
+
+Use **Manage sheets** to add a child to the current sheet. Use the sheet selector to switch drawings. Select components on a parent or child, then choose **Move selection** in the sheet manager. ELab turns crossing wires and split named connections into ports. Select a port on the schematic to follow it to the other sheet. For a new connection, choose one terminal on each sheet and give the port a name.
+
+Ordinary net labels connect within a sheet. Ground is shared across the project. Each sheet has its own drawing space, and all sheets share one simulation and the same project limits. A project save includes every sheet. Schematic SVG, PDF and PNG export the current sheet with its named connections.
+
 ## Save and recover
 
 - Edits checkpoint locally before successful command replies. Completed background

@@ -3,6 +3,24 @@ package workbench
 // These details describe public schematic operations, not private pointer or
 // native focus mechanics. Dynamic inventories come from the current snapshot.
 func addSchematicCapabilityDetails(id string, schema map[string]any) bool {
+	switch id {
+	case "sheet.open", "sheet.create", "sheet.rename", "sheet.delete", "sheet.move", "sheet.port.connect":
+		contract := commandContractDetail{Version: 1, Scope: "schematic-sheets", Preconditions: []string{"Use the current command/document guards and a retry key", "The empty sheet ID addresses Main; all other IDs are listed in snapshot.sheets"}, Completion: &commandCompletionDetail{Mode: "immediate admission; electrical edits publish through the ordinary simulation lifecycle", Observe: []string{"project.inspect", "simulation.wait"}}}
+		switch id {
+		case "sheet.open":
+			contract.Effects = []string{"Open an existing sheet; reset the drawing tool, selection and view for that sheet; preserve document content and live simulation"}
+		case "sheet.create", "sheet.rename":
+			contract.Effects = []string{"Use a name unique within the parent and preserve electrical connections; creating opens the child; the project supports at most 24 child sheets"}
+		case "sheet.delete":
+			contract.Effects = []string{"Remove an empty child sheet with no descendants; Main cannot be removed"}
+		case "sheet.move":
+			contract.Effects = []string{"Move selected parts between the current sheet and an adjacent parent or child, retaining component IDs and probes; create explicit ports for connections across the boundary; refuse overlapping positions or a move that would merge unrelated labels"}
+		case "sheet.port.connect":
+			contract.Effects = []string{"Connect terminals on a parent and its child; use a port name unique on the child; ordinary labels connect only within each sheet"}
+		}
+		schema["x-command-contract"] = contract
+		return true
+	}
 	if id == "selection.move" || id == "selection.duplicate" || id == "selection.copy" || id == "selection.paste" || id == "selection.delete" {
 		schema["x-command-contract"] = commandContractDetail{Version: 1, Scope: "schematic-selection", Preconditions: []string{"Ordinary revision/document guards and retry key apply", "Select unique visible component IDs within the published drawing limit; choose block containers instead of hidden members", "Paste requires the exact clipboard ID returned by the copy snapshot; offsets are finite, grid-snapped and bounded by final positions"}, Effects: []string{"Move, duplicate, paste and delete are atomic and each create at most one undo entry", "Move preserves electrical connections and accepted physics; external wires stretch", "Copy changes only the detached session clipboard; paste/duplicate copy internal wires, never external wires", "Blocks include hidden members and remap ports/parameters; fresh IDs are never reused after Undo", "Failed validation leaves graph, IDs, clipboard, history and physics unchanged"}, Completion: &commandCompletionDetail{Mode: "immediate command admission"}}
 		if id != "selection.paste" {

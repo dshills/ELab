@@ -81,14 +81,15 @@ func clonePrintPreview(in *PrintPreview) *PrintPreview {
 func (s *Service) previewSourceHashLocked(page SchematicPage) [32]byte {
 	value := struct {
 		Content     [32]byte
+		Sheet       string
 		Annotations []SourceAnnotation
 		Display     *CircuitDisplay
 		Readings    []PinnedReading
-	}{Content: contentHash(s.graph, s.transientSettings), Annotations: s.sourceAnnotationsLocked()}
+	}{Content: contentHash(s.graph, s.transientSettings), Sheet: s.activeSheet, Annotations: s.sheetAnnotationsLocked()}
 	if page.Measurements {
 		d := s.circuitDisplayLocked()
 		d.Animate = false
-		value.Display, value.Readings = &d, s.pinnedReadingsLocked()
+		value.Display, value.Readings = &d, s.sheetReadingsLocked()
 	}
 	data, _ := json.Marshal(value)
 	return sha256.Sum256(data)
@@ -126,11 +127,11 @@ func (s *Service) startPrintPreviewLocked(p PreviewParams) error {
 		return err
 	}
 	layout.RasterDPI = 150
-	capture := exportCapture{kind: "schematic-png", graph: s.graph.Clone(), annotations: s.sourceAnnotationsLocked(), settings: s.transientSettings, page: layout, artifact: Artifact{Format: "png", Page: &page, DPI: 150, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}, display: CircuitDisplay{Preferences: DefaultDisplayPreferences()}}
+	capture := exportCapture{kind: "schematic-png", graph: s.sheetExportGraphLocked(), annotations: s.sheetAnnotationsLocked(), settings: s.transientSettings, page: layout, artifact: Artifact{Format: "png", Page: &page, DPI: 150, RunID: s.run, ElectricalRevision: s.electrical, DocumentGeneration: s.documentGeneration}, display: CircuitDisplay{Preferences: DefaultDisplayPreferences()}}
 	if page.Measurements {
 		capture.display = cloneCircuitDisplay(s.circuitDisplayLocked())
 		capture.display.Animate = false
-		capture.readings = clonePinnedReadings(s.pinnedReadingsLocked())
+		capture.readings = clonePinnedReadings(s.sheetReadingsLocked())
 	}
 	return s.startPreviewJobLocked(capture, page, p.Page == nil, s.previewSourceHashLocked(page), p.PageIndex)
 }

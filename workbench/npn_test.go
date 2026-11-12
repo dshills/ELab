@@ -171,8 +171,12 @@ func TestNPNTopologyAndGeometry(t *testing.T) {
 	}{
 		{"open base", func(g *Graph) { g.Wires = g.Wires[:4] }, "incomplete"},
 		{"reversed LED", func(g *Graph) { g.Wires[1].To = "D1.cathode"; g.Wires[2].From = "D1.anode" }, ""},
-		{"short CE", func(g *Graph) { g.Wires = append(g.Wires, Wire{"short", "Q1.collector", "Q1.emitter", true}) }, "error"},
-		{"extra base link", func(g *Graph) { g.Wires = append(g.Wires, Wire{"bad", "Q1.base", "VCC.positive", true}) }, ""},
+		{"short CE", func(g *Graph) {
+			g.Wires = append(g.Wires, Wire{ID: "short", From: "Q1.collector", To: "Q1.emitter", Connected: true})
+		}, "error"},
+		{"extra base link", func(g *Graph) {
+			g.Wires = append(g.Wires, Wire{ID: "bad", From: "Q1.base", To: "VCC.positive", Connected: true})
+		}, ""},
 		{"capacitor", func(g *Graph) {
 			c, _ := MakeComponent("C1", "capacitor", Point{500, 0}, "")
 			g.Components = append(g.Components, c)

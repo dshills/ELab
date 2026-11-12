@@ -91,9 +91,9 @@ func testFloatingDCRC(t *testing.T, returned bool) {
 	t.Helper()
 	g := RCExampleGraph()
 	g.Components[0].Kind, g.Components[0].Model = "dc-source", "ideal-dc.v1"
-	g.Wires = []Wire{{"W1", "V1.positive", "R1.1", true}, {"W2", "R1.2", "C1.1", true}, {"W3", "C1.2", "V1.negative", true}, {"W4", "C1.1", "GND.reference", true}}
+	g.Wires = []Wire{{ID: "W1", From: "V1.positive", To: "R1.1", Connected: true}, {ID: "W2", From: "R1.2", To: "C1.1", Connected: true}, {ID: "W3", From: "C1.2", To: "V1.negative", Connected: true}, {ID: "W4", From: "C1.1", To: "GND.reference", Connected: true}}
 	if returned {
-		g.Wires = []Wire{{"W1", "V1.positive", "C1.1", true}, {"W2", "C1.2", "GND.reference", true}, {"W3", "V1.negative", "R1.1", true}, {"W4", "R1.2", "GND.reference", true}}
+		g.Wires = []Wire{{ID: "W1", From: "V1.positive", To: "C1.1", Connected: true}, {ID: "W2", From: "C1.2", To: "GND.reference", Connected: true}, {ID: "W3", From: "V1.negative", To: "R1.1", Connected: true}, {ID: "W4", From: "R1.2", To: "GND.reference", Connected: true}}
 	}
 	state, c := solveFloatingDC(t, g)
 	tr := &Transient{Settings: DefaultTransientSettings(), Mode: "auto"}
@@ -155,11 +155,11 @@ func TestFloatingDCConstraintsAndWaveformRestrictions(t *testing.T) {
 				if mode == "direct-cap" {
 					negative, expected = "V1.negative", "ideal-source-capacitor"
 				}
-				g.Wires = append(g.Wires, Wire{"W6", "C1.1", "V1.positive", true}, Wire{"W7", "C1.2", negative, true})
+				g.Wires = append(g.Wires, Wire{ID: "W6", From: "C1.1", To: "V1.positive", Connected: true}, Wire{ID: "W7", From: "C1.2", To: negative, Connected: true})
 			case "source-loop":
 				source, _ := MakeComponent("V3", "dc-source", Point{}, "6 V")
 				g.Components = append(g.Components, source)
-				g.Wires = append(g.Wires, Wire{"W6", "V3.positive", "V1.positive", true}, Wire{"W7", "V3.negative", "V2.negative", true})
+				g.Wires = append(g.Wires, Wire{ID: "W6", From: "V3.positive", To: "V1.positive", Connected: true}, Wire{ID: "W7", From: "V3.negative", To: "V2.negative", Connected: true})
 			default:
 				kind := map[string]string{"pulse": "pulse-source", "sine": "sine-source", "finite-pulse": "finite-pulse-source"}[mode]
 				g.Components[0], _ = MakeComponent("V1", kind, Point{}, "3 V")
@@ -179,7 +179,7 @@ func TestFloatingDCAcceptedStateRespectsRange(t *testing.T) {
 	source, _ := MakeComponent("V3", "dc-source", Point{}, "11 V")
 	g.Components = append(g.Components, source)
 	g.Wires[0].To = "V3.negative"
-	g.Wires = append(g.Wires, Wire{"W6", "V3.positive", "R1.1", true})
+	g.Wires = append(g.Wires, Wire{ID: "W6", From: "V3.positive", To: "R1.1", Connected: true})
 	c, status, d := g.Compile()
 	if d != nil {
 		t.Fatalf("%s %+v", status, d)

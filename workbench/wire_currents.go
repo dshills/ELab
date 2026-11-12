@@ -149,14 +149,15 @@ func uniqueWireCurrents(g Graph, c readingContext) map[string]float64 {
 			}
 		}
 	}
-	labels := map[string]string{}
+	labels := map[scopedLabel]string{}
 	for _, p := range g.Components {
 		if p.Kind == "net-label" {
 			ref := p.ID + ".node"
-			if first, ok := labels[p.Label]; ok {
+			key := scopedLabel{p.Sheet, p.Label}
+			if first, ok := labels[key]; ok {
 				edges = append(edges, edge{first, ref, ""})
 			} else {
-				labels[p.Label] = ref
+				labels[key] = ref
 			}
 		}
 	}
