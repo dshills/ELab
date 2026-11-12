@@ -115,9 +115,6 @@ func (s *Service) startPrintPreviewLocked(p PreviewParams) error {
 	if s.previewWorkers != 0 {
 		return &actionError{"busy", "Finish or cancel the active preview before refreshing"}
 	}
-	if !schematicpdf.Supported() {
-		return &actionError{"unsupported", "Print preview requires the macOS CoreGraphics build"}
-	}
 	settings := p.Page
 	if settings == nil {
 		settings = &s.exportPage

@@ -54,9 +54,6 @@ func TestTiledPlanCoverageAndOverlap(t *testing.T) {
 }
 
 func TestTiledRasterClippingAndPageSelection(t *testing.T) {
-	if !Supported() {
-		t.Skip("macOS backend")
-	}
 	svg := []byte(`<svg viewBox="0 0 300 100"><rect x="0" y="0" width="300" height="100" fill="#ff0000"/></svg>`)
 	page := Page{Width: 200, Height: 150, Margin: 10, Scale: 1, Tile: true, Overlap: 10, RasterDPI: 72}
 	if _, err := Render(context.Background(), svg, page); err == nil {

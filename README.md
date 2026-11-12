@@ -9,14 +9,16 @@ installation is needed to run the app.
 
 **89 examples · 61 component kinds · 242 shared commands.**
 
-[Download the macOS web alpha](https://github.com/dshills/ELab/releases/tag/v0.208.0-alpha.1)
-— Apple Silicon, ad-hoc signed. See the release's first-use guide and qualification scope.
+[Run ELab in your browser](docs/run-web.md) · [Published release and qualification record](docs/current-release.md)
 
 ![ELab's browser workbench showing the four-MOSFET H-bridge](docs/validation/web-alpha-314-20261108/hbridge.png)
 
-## Run
+## Run in your browser
 
-Use the Go version declared in `go.mod`, then run from the repository root:
+Start the local ELab program, then open <http://localhost:8788> in your browser.
+The [run guide](docs/run-web.md) covers standalone downloads and the optional
+Mac launcher. To run from source, use the Go version in `go.mod` and run this
+from the repository root:
 
 ```sh
 go run .
@@ -44,21 +46,6 @@ recovery copies and reversible Trash. Version 1–5 `.elab` projects open on Mai
 Projects with child sheets use version 6 of the `.elab` format. See the
 [workbench guide](docs/web-workbench.md) and [project format](docs/project-format.md).
 
-On macOS, the self-contained **ELab Web.app** starts the host and opens the default
-browser. Build a local package with Xcode command-line tools and Go:
-
-```sh
-python3 -B scripts/package_web.py --output 'build/local/ELab Web.app' \
-  --version 0.208.0-dev --build-version 315 \
-  --archive build/local/ELab-Web-dev-macos-arm64.zip
-```
-
-The launcher is a small platform wrapper around this same web app. Packaging uses
-macOS system tools and does not require Vellum. Distribution signing and OS
-acceptance scope are recorded with each candidate's qualification.
-The [Developer ID distribution guide](docs/macos-distribution.md) covers
-notarization, stapled tickets, Gatekeeper and exact-archive installation checks.
-
 ## Workbench
 
 New to electronics? Open **Learn circuits & shortcuts** for guided LED, capacitor
@@ -75,8 +62,7 @@ and H-bridge activities with units and expected results explained along the way.
 - Capture and retain experiments, seek exact samples, compare recordings, measure
   thresholds/settling, inspect FFT/THD and run DC/AC/noise/loop sweeps or tolerances.
 - Save/import/export `.elab` projects and complete measurement data. Export SVG,
-  CSV/JSON and WAV; macOS also provides PDF/PNG rendering. Browser Print supports
-  schematic print previews.
+  PDF, PNG, CSV/JSON and WAV. Use the browser print preview to print a schematic.
 - Back up the whole project/recovery library and restore copies, including Trash,
   unsaved work and kept results. See [library backups](docs/library-backups.md).
 - Use Light, Dark, System or Apollo appearance, resizable panels, direct simulation
@@ -112,8 +98,9 @@ python3 -B scripts/quality.py --profile macos --artifacts build/quality-macos
 Quality output directories must be new. Both profiles retain the complete Go
 race suite and vet, frontend logic tests, Python tooling tests and lint. macOS
 also builds a package, checks an OS-extracted archive, and tests its copied host
-and restart recovery without launching a GUI. The default profile follows the OS.
+and restart recovery without launching a GUI. The default profile is portable on every OS. The macOS profile is available for optional launcher work.
 
+[The release process](docs/web-release-automation.md) stages standalone downloads for Linux, macOS and Windows.
 [Browser qualification](browser/README.md) runs real Chromium, Firefox and WebKit
 journeys in CI. Its locked npm dependencies are for testing only.
 

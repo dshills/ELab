@@ -27,6 +27,8 @@ test('dual H-bridge opens, reverses each load and saves in the browser', async (
   const duration = page.getByRole('textbox', {name: 'Step duration (s)', exact: true});
   const advance = page.getByRole('button', {name: 'Advance simulation', exact: true});
   for (const [interval, elapsed, expectedSigns] of [['22 ms', '0.022', [1, -1]], ['11 ms', '0.033', [1, 1]]]) {
+    // Wait for the restarted transient to settle before focusing its form.
+    await expect(advance).toBeEnabled();
     await duration.fill(interval);
     await advance.click();
     await expect(page.locator('#time-label')).toHaveText(`t = ${elapsed} s`);

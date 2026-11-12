@@ -1,57 +1,54 @@
-# Repeatable web alpha releases
+# Release the browser app
 
-The maintained pipeline is `scripts/release_web.py` and the manually dispatched
-“Qualify web alpha” workflow. Existing published alphas are preserved. This work
-adds tooling; it does not publish a release or establish a hosted CI verdict.
+The default downloads are standalone ZIPs for Linux x64, macOS (Apple Silicon and
+Intel), and Windows x64. Each includes the local ELab host, its embedded browser
+interface, and a short start guide. The [run guide](run-web.md) explains how to use
+them. Existing published alphas are preserved.
 
-On clean `main`, after installing the locked `browser/` test dependencies and
-Playwright browsers:
+Dispatch **Qualify web alpha** from `main` with the next version and numeric
+build. The default run stages and tests the downloads. Set **publish** only
+when you want to create a GitHub prerelease. The workflow:
+
+1. Runs the portable quality gates on Linux, builds all four standalone hosts
+   with Go, and verifies each ZIP's exact files and hashes.
+2. Tests the exact extracted Linux host in Chromium, Firefox and WebKit,
+   including the multi-sheet and large-circuit tests.
+3. Starts the extracted host on each target. It verifies the version and source
+   revision, runs without Go or Node, downloads a schematic PDF and PNG, saves an
+   edit, backs up and restores the library, and verifies recovery after restart.
+4. When publication is requested, rechecks that all four runtime receipts match
+   the staged ZIPs and that GitHub `main` still matches the qualified source.
+   It creates a draft, downloads and compares every asset, reruns the Linux host
+   from the downloaded ZIP, and then publishes. Any failure leaves an existing
+   draft unpublished. The pipeline never replaces an existing tag.
+
+The optional **macos_launcher** input builds and checks an Apple Silicon
+**ELab Web.app** ZIP. It is a separate workflow artifact and is not a prerequisite
+for the browser downloads. Local Developer ID signing, notarization and
+Gatekeeper verification are covered by the [Mac distribution guide](macos-distribution.md).
+The standalone downloads are unsigned for distribution; the release does not
+assert clean account installation or human usability acceptance.
+
+For a local rehearsal on a supported target, install the locked `browser/`
+dependencies and the three Playwright browsers. From a clean checkout:
 
 ```sh
-python3 -B scripts/release_web.py stage \
-  --version 0.207.0-alpha.1 --build 313 --output build/release-313
+python3 -B scripts/release_web.py stage --candidate \
+  --version 0.209.0-alpha.1 --build 316 --output build/release-rehearsal
 ```
 
-Use the actual next available version/build; the values above are examples.
-Staging runs the macOS quality plan and all three browser engines, packages the
-app, extracts the exact ZIP, verifies its file hashes/modes and signature, then
-runs the copied shipping backend outside the checkout without Go/Node in PATH.
-It checks restart, saved recovery and whole-library backup/restore. Source must
-stay unchanged throughout. `--quality build/quality-...` reuses only a passing
-receipt with the same commit, complete gate plan and exact current source hashes.
-`--candidate` permits a clean development-branch rehearsal and marks it
-non-publishable. Every output must be new; failed stages retain evidence.
+Staging checks the current machine and generates ZIPs for all four targets.
+`--quality` can reuse a passing portable receipt with the same commit, complete
+gate plan and exact source hashes. The output directory must be new.
+`--candidate` allows a clean development branch and forbids publication.
 
-Default packaging uses ad-hoc signing and explicitly records that notarization
-is not qualified. Locally, existing `--sign-identity` and `--notary-profile`
-names enable the maintained Developer ID/notary path. Provisioning remains with
-the owner. The hosted workflow currently stages the private alpha without those
-credentials; it does not silently claim distribution signing or a clean-account
-installation result.
+To finish a release outside Actions, run `stage` without `--candidate` on clean
+`main`. Use `verify-runtime --directory <stage> --target <target> --report <file>`
+on each remaining target with the same source and stage files. Place those
+reports under the stage's `qualification/` as `runtime-<target>.json`. Run
+`publish --directory <stage>` to create and verify a draft; add `--make-public`
+to publish after those checks.
 
-Review `release.json`, `SHA256SUMS` and `RELEASE-NOTES.md`, then:
-
-```sh
-python3 -B scripts/release_web.py publish --directory build/release-313
-```
-
-This creates a **draft** prerelease in `dshills/ELab`, bound to the qualified
-commit. It requires clean local main and the same current GitHub main, and
-refuses an existing tag. Only the ZIP, public release receipt and checksum file
-are uploaded. It downloads all assets from that draft, checks their exact bytes,
-then extracts and runs the downloaded shipping binary. A failed download/runtime
-check leaves the draft unpublished for investigation. It never overwrites an old
-release. No automatic retry changes release identity.
-
-Adding `--make-public` publishes only after those checks and a second main/source
-check. Without it the release stays a verified draft. The workflow's `publish`
-input explicitly requests the same draft/download/publication sequence; its
-default is false. Workflow dispatch is restricted to main, serialized, and does
-not cancel a release already being qualified.
-
-Runtime directories contain local startup/control credentials and must remain
-private. The workflow uploads an explicit allowlist of distribution files and
-credential-free reports, never the whole stage directory. The public receipt
-contains source/version/build, artifact hashes, browser counts and bounded check
-names. It records engineering evidence, not native VoiceOver, human usability,
-clean-account installation or remote-CI success that was not observed.
+Runtime launch replies contain private control credentials. They are stored in
+disposable directories. Workflow artifacts contain only the distribution
+files and selected reports and logs.

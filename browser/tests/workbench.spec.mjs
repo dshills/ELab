@@ -1,3 +1,4 @@
+import {readFile} from 'node:fs/promises';
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
@@ -50,7 +51,7 @@ test('keyboard tabs, dialog naming, focus return and text composition',async ({p
  await expect(page.locator('#run-button')).toHaveText(run);
 });
 
-test('edit, undo, save, reload and export a native project',async ({page})=>{
+test('edit, undo, save, reload and download a project and its schematic',async ({page})=>{
  const value=page.getByRole('textbox',{name:'Capacitance',exact:true});
  await value.fill('2.2 uF');
  await page.getByRole('button',{name:'Apply',exact:true}).click();
@@ -78,9 +79,24 @@ test('edit, undo, save, reload and export a native project',async ({page})=>{
  await expect(value).toHaveValue(/2\.2/);
  await expect(page.locator('#document-name')).toContainText(name);
  await page.getByRole('tab',{name:'Document',exact:true}).click();
- const download=page.waitForEvent('download');
+ const projectDownload=page.waitForEvent('download');
  await page.getByRole('button',{name:'Download .elab copy'}).click();
- expect((await download).suggestedFilename()).toMatch(/\.elab$/);
+ expect((await projectDownload).suggestedFilename()).toMatch(/\.elab$/);
+ // Reuse this workspace so the browser suite stays within the host's workspace limit.
+ await page.locator('#tools-button').click();
+ await page.locator('[data-tool-section="export"]').click();
+ for(const [kind,signature] of [['pdf','255044462d'],['png','89504e470d0a1a0a']]) {
+  const event=page.waitForEvent('download');
+  await page.getByRole('button',{name:'Download '+kind,exact:true}).click();
+  const download=await event;
+  expect(download.suggestedFilename()).toMatch(new RegExp('\\.'+kind+'$'));
+  const payload=await readFile(await download.path());
+  expect(payload.subarray(0,signature.length/2).toString('hex')).toBe(signature);
+  if(kind==='png') {
+   expect(payload.readUInt32BE(16)).toBe(1650);
+   expect(payload.readUInt32BE(20)).toBe(1275);
+  }
+ }
 });
 
 test('capture, exact keyboard playback and retained analysis',async ({page})=>{

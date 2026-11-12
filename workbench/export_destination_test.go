@@ -9,8 +9,6 @@ import (
 	"reflect"
 	"sync"
 	"testing"
-
-	"github.com/dshills/elab/internal/schematicpdf"
 )
 
 func TestExportCannotReplaceAssociatedSchematicThroughParentAlias(t *testing.T) {
@@ -42,9 +40,6 @@ func TestExportCannotReplaceAssociatedSchematicThroughParentAlias(t *testing.T) 
 func TestExportAliasProtectionCoversSharedKindsAndPreservesOtherDestinations(t *testing.T) {
 	for _, kind := range []string{"schematic-svg", "schematic-pdf", "schematic-png", "scope-csv", "verification-json", "verification-csv"} {
 		t.Run(kind, func(t *testing.T) {
-			if (kind == "schematic-pdf" || kind == "schematic-png") && !schematicpdf.Supported() {
-				t.Skip("macOS renderer")
-			}
 			s := pausedRC(t)
 			defer s.Close()
 			call(t, s, "simulation.step", StepParams{Duration: .002}, "step")
@@ -163,9 +158,6 @@ func TestExportRechecksProtectedAssociationAfterPreparation(t *testing.T) {
 }
 
 func TestExportPreviewPNGRetainsCurrentSchematicAliasProtection(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	directory := t.TempDir()

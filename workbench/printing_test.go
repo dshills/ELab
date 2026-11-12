@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/dshills/elab/internal/printspool"
-	"github.com/dshills/elab/internal/schematicpdf"
 )
 
 type fakePrintSpool struct {
@@ -287,9 +286,6 @@ func TestPrintRetentionProtectsUnresolvedJobsAndEvictsTerminalOnly(t *testing.T)
 }
 
 func TestPrintRealPreviewRendersCapturedVectorPDF(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS PDF renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	var delivered []byte

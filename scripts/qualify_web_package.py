@@ -36,21 +36,32 @@ def qualify(app, artifacts):
     for relative, expected in metadata['executables'].items():
         if hashlib.sha256((copied / relative).read_bytes()).hexdigest() != expected:
             raise ValueError('copied executable changed: ' + relative)
-    env = dict(os.environ, PATH='/usr/bin:/bin:/usr/sbin:/sbin')
-    if shutil.which('go', path=env['PATH']) or shutil.which('node', path=env['PATH']):
-        raise ValueError('qualification PATH must exclude Go and Node')
+    return exercise_host(executable, metadata, artifacts)
+
+
+def exercise_host(executable, metadata, artifacts):
+    """Exercise an exact extracted host with an isolated library and no toolchain."""
+    artifacts.mkdir(parents=True, exist_ok=True)
+    empty_path = artifacts/'empty-path'
+    empty_path.mkdir()
+    env = dict(os.environ, PATH=str(empty_path))
     data = artifacts / 'data'
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}),
                                          urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
     process = None
     checks = []
     with (artifacts / 'backend.log').open('w') as log:
+        def launch_args(reply=None):
+            args = [str(executable), '--addr', '127.0.0.1:0', '--data-dir', str(data)]
+            if reply is not None:
+                args.extend(['--startup-file', str(reply)])
+            return args
+
         def start(name):
             nonlocal process
             reply = artifacts / (name + '.json')
-            process = subprocess.Popen([str(executable), '--addr', '127.0.0.1:0',
-                                        '--data-dir', str(data), '--startup-file', str(reply)],
-                                       cwd=copied.parent, env=env, stdout=log, stderr=subprocess.STDOUT)
+            process = subprocess.Popen(launch_args(reply),
+                                       cwd=artifacts, env=env, stdout=log, stderr=subprocess.STDOUT)
             deadline = time.monotonic() + 15
             while time.monotonic() < deadline:
                 if reply.exists():
@@ -78,7 +89,7 @@ def qualify(app, artifacts):
                 return response.headers, response.read()
 
         def stop(reply):
-            subprocess.run([str(executable), '--stop-host', str(reply)], cwd=copied.parent,
+            subprocess.run([str(executable), '--stop-host', str(reply)], cwd=artifacts,
                            env=env, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=50)
             if process.wait(timeout=10) != 0:
                 raise ValueError('copied backend did not exit normally')
@@ -93,6 +104,15 @@ def qualify(app, artifacts):
                     or about.get('source_modified') != (not metadata['source_clean'])):
                 raise ValueError('running backend build identity differs from sealed package')
             checks.append('running backend exposes matching version, build and VCS identity')
+            if metadata.get('target') and f"{about.get('os')}-{about.get('architecture')}" != metadata['target']:
+                raise ValueError('running backend platform differs from the release target')
+            # With no startup reply requested, a second CLI invocation
+            # must refuse rather than opening another writer.
+            duplicate = subprocess.run(launch_args(), cwd=artifacts, env=env,
+                                       stdout=log, stderr=subprocess.STDOUT, timeout=10)
+            if duplicate.returncode == 0:
+                raise ValueError('a second host acquired the same library')
+            checks.append('a second host cannot acquire the active library')
             state = request(info, 'api/state')['state']
             for name in ['app.js', 'scope-controls.mjs', 'recording-analysis.mjs', 'spectrum.mjs', 'sweep.mjs', 'agent.mjs', 'library-backup.mjs', 'support.mjs']:
                 with opener.open(info['url'] + name, timeout=10) as response:
@@ -105,7 +125,22 @@ def qualify(app, artifacts):
                 'expected_command_revision': state['command_revision'],
                 'expected_document_generation': state['document']['generation']})
             if result.get('error'):
-                raise ValueError('native edit refused')
+                raise ValueError('browser workbench edit refused')
+            for kind, mime, signature in [
+                ('pdf', 'application/pdf', b'%PDF-'),
+                ('png', 'image/png', bytes.fromhex('89504e470d0a1a0a')),
+            ]:
+                # Export completion can change the revision; re-read the guards.
+                state = request(info, 'api/state')['state']
+                download = urllib.parse.urlencode({'revision': state['command_revision'],
+                    'generation': state['document']['generation'], 'kind': kind})
+                req = urllib.request.Request(info['url']+'api/download?'+download, data=b'')
+                with opener.open(req, timeout=30) as response:
+                    payload = response.read(8*1024*1024+1)
+                    if (response.headers.get_content_type() != mime or not payload.startswith(signature)
+                            or not 100 < len(payload) <= 8*1024*1024):
+                        raise ValueError('copied backend returned an invalid '+kind+' download')
+            checks.append('embedded workbench downloads schematic PDF and PNG')
             current = request(info, 'api/state')['state']
             query = urllib.parse.urlencode({'revision': current['command_revision'],
                                             'generation': current['document']['generation']})

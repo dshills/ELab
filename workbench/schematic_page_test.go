@@ -34,9 +34,6 @@ func TestSchematicPageBoundsAndOwnership(t *testing.T) {
 	}
 }
 func TestPrintableSchematicExportPreservesProjectAndPhysics(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS PDF backend")
-	}
 	for _, info := range ExampleCatalog() {
 		t.Run(info.ID, func(t *testing.T) {
 			s := New()

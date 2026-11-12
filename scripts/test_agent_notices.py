@@ -19,7 +19,8 @@ class AgentNoticeTests(unittest.TestCase):
 
     def test_pinned_runtime_notices_verify(self):
         data=agent_notices.verify(ROOT)
-        self.assertEqual(len(data['modules']),9)
+        self.assertIn('github.com/go-pdf/fpdf',data['modules'])
+        self.assertIn('golang.org/x/image',data['modules'])
         self.assertIn('github.com/modelcontextprotocol/go-sdk',data['modules'])
 
     def test_changed_missing_extra_and_linked_notices_refuse(self):

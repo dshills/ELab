@@ -242,7 +242,7 @@ func runWebHost(ctx context.Context, options hostOptions) error {
 	}
 	unlock, err := lockStore(root)
 	if err != nil {
-		if !errors.Is(err, syscall.EWOULDBLOCK) && !errors.Is(err, syscall.EAGAIN) && !os.IsExist(err) {
+		if !errors.Is(err, syscall.EWOULDBLOCK) && !errors.Is(err, syscall.EAGAIN) && !errors.Is(err, os.ErrExist) {
 			return fmt.Errorf("ELab could not access project storage: %w", err)
 		}
 		if options.startupFile != "" {

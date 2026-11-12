@@ -7,8 +7,6 @@ import (
 	"reflect"
 	"sync"
 	"testing"
-
-	"github.com/dshills/elab/internal/schematicpdf"
 )
 
 var previewContractCommands = []string{"print.preview.start", "print.preview.cancel", "print.preview.close", "print.preview.image"}
@@ -46,9 +44,6 @@ func TestPreviewContractsAreOwnedAndKeepDefaultDiscovery(t *testing.T) {
 }
 
 func TestPreviewImageEOFNullDefaultsOwnershipAndReadiness(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	call(t, s, "print.preview.start", map[string]any{"page": nil, "page_index": nil}, "preview")
@@ -89,9 +84,6 @@ func TestPreviewImageEOFNullDefaultsOwnershipAndReadiness(t *testing.T) {
 }
 
 func TestPreviewCancelAndCloseKeepWorkerSlotUntilActualReturn(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	entered, release := make(chan struct{}), make(chan struct{})

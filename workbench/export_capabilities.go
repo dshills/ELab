@@ -73,7 +73,6 @@ func addExportCapabilityDetails(id string, schema map[string]any) bool {
 		addSchematicPageBounds(page)
 		inputProperty(schema, "page")["anyOf"] = []any{page, map[string]any{"type": "null"}}
 		inputProperty(schema, "page")["description"] = "Omitted/null uses snapshot.schematic_page; object is a complete per-job override with omitted fields reset to built-in defaults."
-		c.Errors = append(c.Errors, commandFailureDetail{"unsupported", "admission", "PDF/PNG renderer unavailable on this platform/build"})
 		c.Effects = append(c.Effects, "PDF/PNG capture full drawing, ignoring viewport zoom/pan. Page.measurements opts into frozen live display/pinned readings with stale/unavailable labels. SVG always includes its captured display/readings", "PDF includes all tiled pages; PNG requires page_index for a multi-page layout. Layout/page-index/16-page/12-megapixel/clip constraints are checked during rendering and can fail after admission", "No printer job is submitted; printing has separate captured preview/spool controls")
 	}
 	if id == "export.start" || id == "export.schematic.png" {

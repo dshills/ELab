@@ -9,8 +9,6 @@ import (
 	"reflect"
 	"testing"
 	"time"
-
-	"github.com/dshills/elab/internal/schematicpdf"
 )
 
 func awaitPreview(t *testing.T, s *Service, status string) Snapshot {
@@ -40,9 +38,6 @@ func previewBytes(t *testing.T, s *Service, p *PrintPreview) []byte {
 	return data
 }
 func TestPrintPreviewMatchesExportAndPreservesCircuit(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	call(t, s, "export.page.set", SchematicPage{Paper: "a4", Orientation: "portrait", MarginMM: ptrFloat(12), Color: true}, "page")
@@ -95,9 +90,6 @@ func TestPrintPreviewMatchesExportAndPreservesCircuit(t *testing.T) {
 	refuse(t, s, "print.preview.image", PreviewImageParams{ID: newP.ID}, "not-ready")
 }
 func TestPrintPreviewCancellationCaptureAndCloseJoin(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	before := s.Snapshot()
@@ -141,9 +133,6 @@ func TestPrintPreviewCancellationCaptureAndCloseJoin(t *testing.T) {
 	}
 }
 func TestPrintPreviewErrorAndExplicitPageOwnership(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	s.previewRender = func(context.Context, exportCapture) ([]byte, error) { return nil, context.DeadlineExceeded }
@@ -162,9 +151,6 @@ func TestPrintPreviewErrorAndExplicitPageOwnership(t *testing.T) {
 }
 
 func TestBlockedPreviewRetainsOriginalPixelsAndPublishesEvents(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	call(t, s, "print.preview.start", PreviewParams{}, "baseline")
@@ -228,13 +214,5 @@ func TestPrintPreviewUnsupportedAndBase64Discovery(t *testing.T) {
 
 	if field["type"] != "string" || field["contentEncoding"] != "base64" {
 		t.Fatal("PNG discovery disagrees with JSON byte encoding")
-	}
-	if !schematicpdf.Supported() {
-		s := New()
-		defer s.Close()
-		refuse(t, s, "print.preview.start", PreviewParams{}, "unsupported")
-		if s.Snapshot().PrintPreview != nil {
-			t.Fatal("unsupported renderer admitted work")
-		}
 	}
 }

@@ -14,9 +14,6 @@ import (
 )
 
 func TestExportLabelBackgroundDoesNotEraseNearbyResistor(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS raster backend")
-	}
 	var bounds [4]float64
 	render := func(capacitance float64) image.Image {
 		t.Helper()

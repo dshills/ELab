@@ -7,14 +7,9 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
-
-	"github.com/dshills/elab/internal/schematicpdf"
 )
 
 func TestSchematicPNGExportPreservesSource(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS rendering backend")
-	}
 	for _, info := range ExampleCatalog() {
 		t.Run(info.ID, func(t *testing.T) {
 			s := New()
@@ -45,9 +40,6 @@ func TestSchematicPNGExportPreservesSource(t *testing.T) {
 }
 
 func TestBlockedPageExportKeepsOriginalPageAndPixels(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS rendering backend")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	dir := t.TempDir()
@@ -83,9 +75,6 @@ func TestBlockedPageExportKeepsOriginalPageAndPixels(t *testing.T) {
 }
 
 func TestCanceledPNGExportPreservesDestination(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS rendering backend")
-	}
 	s := pausedRC(t)
 	defer s.Close()
 	path := filepath.Join(t.TempDir(), "existing.png")

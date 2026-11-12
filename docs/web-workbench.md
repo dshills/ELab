@@ -7,32 +7,9 @@ primary ELab interface. The former Vellum UI is archived in Git; see
 
 ## Run
 
-For the [published macOS alpha](current-release.md), open **ELab Web.app**.
-It starts the local host and
-opens your default browser. Its window shows status and provides Open ELab,
-projects-folder/log access and Quit. Closing a browser tab keeps ELab running;
-closing the launcher or Command-Q saves and stops it. A failed checkpoint leaves
-ELab open so you can repair storage or export your work.
-
-The app reuses a compatible host already using the same library. It selects a
-free local port if the preferred port is occupied. If an older CLI server owns
-the library, close that server once before opening the app; its projects remain
-in place. Existing native release binaries remain usable; their source is archived.
-
-To build a self-contained app and ZIP from your checkout, use the packaging
-command below. The version and build number are labels for your local build.
-
-```sh
-python3 -B scripts/package_web.py --output 'build/local/ELab Web.app' \
-  --version 0.208.0-dev --build-version 315 \
-  --archive build/local/ELab-Web-dev-macos-arm64.zip
-```
-
-Runtime users need neither Go nor Node. Building requires the Go toolchain and
-Xcode command-line tools. Packaging refuses existing outputs and records source,
-licenses, signatures and checksums. See the
-[launcher qualification](validation/web-launcher-alpha-20261101/README.md)
-for verification scope and signing/platform limits.
+Start ELab and open [localhost:8788](http://localhost:8788) in your browser.
+See [Run ELab](run-web.md) for downloads, building from source, and the optional
+Mac launcher.
 
 For development, run from the repository root, using the Go version in `go.mod`:
 
@@ -171,8 +148,8 @@ and export their complete JSON or CSV data.
 Audio is rendered independently, loaded into the browser, and played only through
 **Play preview** or the browser's media controls. Electrical changes invalidate it.
 **Export** includes schematic SVG/PDF/PNG, scope and analysis CSV/JSON, and WAV.
-PDF/PNG use the native macOS renderer. **Print schematic** opens a portable browser
-preview and the browser's Print / Save PDF dialog; it submits nothing automatically.
+Use **Download pdf** or **Download png** in Tools → Export on any supported host.
+**Print schematic** opens a browser preview and Print / Save PDF; it submits nothing automatically.
 
 Document offers Light, Dark, System and Apollo appearance. Panels resize by drag or
 keyboard; narrow screens have Parts and Inspector toggles. System reduced motion

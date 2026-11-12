@@ -45,7 +45,7 @@ This matrix describes the November 1, 2026 candidate.
 | Projects | Native `.elab` import/export, kept recordings/sweeps/models, named local library and Save a copy |
 | Durability | Atomic checkpoints and named revisions; restart/lost-cookie recovery, retained previous saves, reversible Trash, stale-editor/concurrent-save protection |
 | Audio | Independent native WAV render; explicit browser playback/stop; native WAV download and invalidation |
-| Output | SVG, visible scope CSV, capture/sweep/spectrum/tolerance JSON/CSV, WAV; macOS PDF/PNG; browser print preview |
+| Output | SVG, visible scope CSV, capture/sweep/spectrum/tolerance JSON/CSV, WAV, PDF and PNG; browser print preview |
 | Workspace | Resizable panels, narrow-screen toggles, large schematic labels, stronger contrast, Light/Dark/System/Apollo themes and reduced motion |
 
 ## Platform adaptations and limits
@@ -55,16 +55,16 @@ This matrix describes the November 1, 2026 candidate.
 - Browser file pickers, downloads, media controls and Print / Save PDF replace OS
   file associations, native audio playback and native printer discovery/job control.
   Native socket/MCP session discovery remains part of the native/agent hosts.
-- PDF/PNG downloads currently require macOS CoreGraphics. Browser SVG printing is
-  the portable route. Physical printer output has not been submitted or qualified.
+- PDF and PNG downloads use the same renderer across platforms. The browser
+  also provides its own print preview. Physical printer output has not been qualified.
 - Browser panels, drawing gestures and viewport are browser presentation state;
   native host-only UI commands are omitted from its command menu. Documents refit
   on open/resize. Model values, exact captured data and supported saved preferences
   use native serialization.
-- macOS is the exercised local target. The Unix storage lock supports macOS/Linux;
-  other platforms use a conservative exclusive marker and are not crash-restart
-  qualified. Linux portable and browser CI now pass at `e8508429`; see the later
-  release-confidence milestone below.
+- Standalone downloads target Linux x64, macOS Apple Silicon and Intel, and
+  Windows x64. The release workflow checks the extracted host on each target.
+  Linux and macOS use a file lock; Windows uses a file range lock. The operating
+  system releases these locks if the host exits.
 - The original load-sensitive 555 timeout is fixed in the shared solver: 100 ms
   of worker CPU, 512 attempts and a separate 5 s wall backstop. Synthetic CPU-load
   checks preserve exact samples, including the live web clock; see the

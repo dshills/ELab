@@ -95,9 +95,6 @@ func (s *Service) startExportLocked(p ExportStartParams) error {
 	} else {
 		switch p.Kind {
 		case "schematic-pdf", "schematic-png":
-			if !schematicpdf.Supported() {
-				return &actionError{"unsupported", "schematic PDF/PNG requires the macOS CoreGraphics build"}
-			}
 			if p.ID != "" {
 				return fmt.Errorf("schematic PDF/PNG does not use a recording ID")
 			}

@@ -81,7 +81,7 @@ def main():
                   'checks': ['capture preserves source/physics/history', 'chunk checksum and ownership',
                              'preview equals PNG export bytes', 'later edits retain captured pixels and mark stale',
                              'refresh captures latest source', 'old preview ID cannot close new capture', 'close releases image'],
-                  'limits': ['macOS CoreGraphics page backend', 'preview only; no printer job or physical print proof']}
+                  'limits': ['preview only; no printer job or physical print proof']}
         args.output.parent.mkdir(parents=True, exist_ok=True)
         with args.output.open('x') as target:
             target.write(json.dumps(report, indent=2) + '\n')

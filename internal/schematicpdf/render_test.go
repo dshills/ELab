@@ -22,9 +22,6 @@ func TestRasterPageBounds(t *testing.T) {
 }
 
 func TestRasterOrientationColorAndOpaquePaper(t *testing.T) {
-	if !Supported() {
-		t.Skip("macOS rendering backend")
-	}
 	// Asymmetric shapes independently check page orientation and the Y flip.
 	svg := []byte(`<svg viewBox="0 0 100 200"><rect x="10" y="10" width="20" height="20" fill="#ff0000"/><circle cx="80" cy="180" r="10" fill="#0000ff"/></svg>`)
 	for _, gray := range []bool{false, true} {
@@ -54,9 +51,6 @@ func TestRasterOrientationColorAndOpaquePaper(t *testing.T) {
 }
 
 func TestRasterTextEndAnchorUsesGlyphAdvance(t *testing.T) {
-	if !Supported() {
-		t.Skip("macOS raster backend")
-	}
 	svg := []byte(`<svg viewBox="0 0 200 100"><text x="50" y="40" font-size="20">WAVE</text><text x="150" y="80" font-size="20" text-anchor="end">WAVE</text></svg>`)
 	data, err := Render(context.Background(), svg, Page{Width: 200, Height: 100, RasterDPI: 72})
 	if err != nil {

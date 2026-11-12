@@ -22,9 +22,6 @@ func tiledFixture(t *testing.T) *Service {
 	return s
 }
 func TestTiledPreviewNavigationCaptureAndPNG(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS rendering backend")
-	}
 	s := tiledFixture(t)
 	call(t, s, "print.preview.start", PreviewParams{}, "preview")
 	first := awaitPreview(t, s, "completed").PrintPreview
@@ -79,9 +76,6 @@ func TestTiledPreviewNavigationCaptureAndPNG(t *testing.T) {
 	}
 }
 func TestTiledPrintSubmitsEntireCapturedDocument(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS rendering backend")
-	}
 	s := tiledFixture(t)
 	call(t, s, "print.preview.start", PreviewParams{}, "preview")
 	p := awaitPreview(t, s, "completed").PrintPreview
@@ -113,9 +107,6 @@ func TestTiledPrintSubmitsEntireCapturedDocument(t *testing.T) {
 }
 
 func TestTiledBoundsAndCapturedPNGSurvivePreviewClose(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS rendering backend")
-	}
 	s := tiledFixture(t)
 	for _, p := range []SchematicPage{{Tile: true}, {Tile: true, Scale: ptrFloat(1), OverlapMM: ptrFloat(21)}, {OverlapMM: ptrFloat(5)}} {
 		before := s.Snapshot()

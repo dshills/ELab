@@ -30,9 +30,6 @@ func TestSequentialSymbolsExportAtEveryRotation(t *testing.T) {
 	}
 }
 func TestSequentialControlClosedSwitchRasterContinuity(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("native renderer")
-	}
 	svg := []byte(`<svg viewBox="0 0 100 150"><g fill="none" stroke="#000000" stroke-width="3" transform="translate(50 75) rotate(90)"><path d="M-55 0 H-25 M25 0 H55 M-25 0 L25 0"/></g></svg>`)
 	data, err := schematicpdf.Render(context.Background(), svg, schematicpdf.Page{Width: 100, Height: 150, RasterDPI: 72})
 	if err != nil {

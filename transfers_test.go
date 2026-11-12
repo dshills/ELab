@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"runtime"
 	"testing"
 	"time"
 
@@ -70,10 +69,7 @@ func checkBrowserAudioTransfer(t *testing.T, example string) {
 	f.command("audio.stop", workbench.IDParams{ID: audio.ID})
 }
 
-func TestBrowserMacPDFAndPNGDownloads(t *testing.T) {
-	if runtime.GOOS != "darwin" {
-		t.Skip("native CoreGraphics export requires macOS; browser print remains portable")
-	}
+func TestBrowserPDFAndPNGDownloads(t *testing.T) {
 	f := fixture(t)
 	f.command("simulation.pause", struct{}{})
 	for _, kind := range []string{"pdf", "png"} {

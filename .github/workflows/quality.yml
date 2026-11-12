@@ -90,7 +90,7 @@ jobs:
           retention-days: 14
 
   macos:
-    # Keep fixed CPU-budget references on the Apple Silicon release target.
+    # Keep fixed CPU-budget references on Apple Silicon.
     # The older macos-15 arm64 pool repeatedly failed to acquire a runner.
     runs-on: macos-26
     env:
@@ -112,8 +112,8 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: '3.13'
-      - name: Engine, web and macOS package gates
-        run: python3 -B scripts/quality.py --profile macos --artifacts build/quality-ci
+      - name: Engine and web gates on Apple Silicon
+        run: python3 -B scripts/quality.py --profile portable --artifacts build/quality-ci
       - name: Retain gate receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

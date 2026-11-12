@@ -1,4 +1,6 @@
-# Current web alpha
+# Published web alpha: build 315
+
+This build predates the standalone downloads. See [how to run the current browser app](run-web.md).
 
 **ELab Web 0.208.0 alpha 1, build 315**, for Apple Silicon macOS.
 [Download the ZIP](https://github.com/dshills/ELab/releases/download/v0.208.0-alpha.1/ELab-Web-0.208.0-alpha.1-macos-arm64.zip) · [Start guide](https://github.com/dshills/ELab/releases/download/v0.208.0-alpha.1/START-HERE.md) · [Checksums](https://github.com/dshills/ELab/releases/download/v0.208.0-alpha.1/SHA256SUMS).

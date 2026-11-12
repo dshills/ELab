@@ -3,6 +3,7 @@
 package schematicpdf
 
 import (
+	"bytes"
 	"context"
 	"encoding/xml"
 	"fmt"
@@ -29,13 +30,9 @@ type painter interface {
 	pop()
 	transform(float64, float64, float64)
 	style(style)
-	path(string) error
-	polyline([]float64)
-	ellipse(float64, float64, float64)
-	rect(float64, float64, float64, float64)
+	draw(drawing)
 	text(float64, float64, float64, string) error
 	finish() ([]byte, error)
-	close()
 }
 type style struct {
 	fill, stroke string
@@ -68,18 +65,17 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 		return nil, fmt.Errorf("page_index applies only to PNG output")
 	}
 	var out painter
-	defer func() {
-		if out != nil {
-			out.close()
-		}
-	}()
 	for _, tile := range pages {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
 		page.Footer = tile.Footer
 		if out == nil {
-			out, err = newPainter(page, tile.Scale, tile.X, tile.Y)
+			if page.RasterDPI == 0 {
+				out, err = newPDF(ctx, page, tile.Scale, tile.X, tile.Y)
+			} else {
+				out, err = newPNG(ctx, page, tile.Scale, tile.X, tile.Y)
+			}
 		} else {
 			err = out.nextPage(page, tile.Scale, tile.X, tile.Y)
 		}
@@ -93,7 +89,11 @@ func Render(ctx context.Context, svg []byte, page Page) ([]byte, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	return out.finish()
+	data, err := out.finish()
+	if err == nil {
+		err = ctx.Err()
+	}
+	return data, err
 }
 
 func renderSVG(ctx context.Context, svg []byte, out painter) error {
@@ -159,19 +159,30 @@ func renderSVG(ctx context.Context, svg []byte, out painter) error {
 					out.transform(x, y, rotation)
 				}
 			case "rect":
-				out.rect(get("x"), get("y"), get("width"), get("height"))
+				out.draw(rectangle(get("x"), get("y"), get("width"), get("height")))
 			case "circle":
-				out.ellipse(get("cx"), get("cy"), get("r"))
+				out.draw(circle(get("cx"), get("cy"), get("r")))
 			case "polyline":
 				points, err := numbers(a["points"])
 				if err != nil || len(points)%2 != 0 {
 					return fmt.Errorf("invalid generated polyline")
 				}
-				out.polyline(points)
+				var d drawing
+				for i := 0; i < len(points); i += 2 {
+					p := point{points[i], points[i+1]}
+					if i == 0 {
+						d.move(p)
+					} else {
+						d.line(p)
+					}
+				}
+				out.draw(d)
 			case "path":
-				if err := out.path(a["d"]); err != nil {
+				d, err := parsePath(a["d"])
+				if err != nil {
 					return err
 				}
+				out.draw(d)
 			case "text":
 				text.Reset()
 				textX, textY = get("x"), get("y")
@@ -241,4 +252,21 @@ func numbers(text string) ([]float64, error) {
 		out = append(out, v)
 	}
 	return out, nil
+}
+
+const maxOutput = 8 << 20
+
+type outputBuffer struct {
+	bytes.Buffer
+	ctx context.Context
+}
+
+func (b *outputBuffer) Write(data []byte) (int, error) {
+	if err := b.ctx.Err(); err != nil {
+		return 0, err
+	}
+	if len(data) > maxOutput-b.Len() {
+		return 0, fmt.Errorf("schematic output exceeds export bounds")
+	}
+	return b.Buffer.Write(data)
 }

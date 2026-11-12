@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
-
-	"github.com/dshills/elab/internal/schematicpdf"
 )
 
 func TestRecordingImportContractsAreOwnedAndKeepDiscovery(t *testing.T) {
@@ -89,9 +87,6 @@ func TestFailedWaitingImportRetryDoesNotReadRepairedFileUntilNewKey(t *testing.T
 }
 
 func TestRecordingImportRespectsPreviewIntentDuringValidation(t *testing.T) {
-	if !schematicpdf.Supported() {
-		t.Skip("macOS renderer")
-	}
 	path := importFixture(t)
 	s := pausedRC(t)
 	defer s.Close()
