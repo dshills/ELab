@@ -326,25 +326,26 @@ func npnLinear(vb, vc float64) (ib, ic float64, db, dc, cb, cc float64) {
 	return f/m.ForwardBeta + r/m.ReverseBeta, f - (1+1/m.ReverseBeta)*r, gf/m.ForwardBeta + gr/m.ReverseBeta, -gr / m.ReverseBeta, gf - (1+1/m.ReverseBeta)*gr, (1 + 1/m.ReverseBeta) * gr
 }
 func (n *mixedNetwork) equations(x, old []float64, dt float64, t *Transient, at float64) ([][]float64, []float64) {
-	a, f := n.deviceEquations(x, old, dt, t, at)
+	return n.equationsIn(x, old, dt, t, at, nil)
+}
+
+func (n *mixedNetwork) equationsIn(x, old []float64, dt float64, t *Transient, at float64, assembly *matrixAssembly) ([][]float64, []float64) {
+	a, f := n.mnaEquationsIn(x, old, dt, t, at, true, assembly)
 	if dt == 0 && !n.dc {
 		n.stampInductorStartup(x, a, f)
 	}
 	return a, f
 }
 
-// deviceEquations retains physical KCL even when startup substitutes a
-// differentiated cutset equation to determine otherwise undefined L voltages.
-func (n *mixedNetwork) deviceEquations(x, old []float64, dt float64, t *Transient, at float64) ([][]float64, []float64) {
-	return n.mnaEquations(x, old, dt, t, at, true)
-}
-
 // Collocation needs the same physical device/source equations and branch
 // injections, then supplies its own coupled storage rows for all stages.
 func (n *mixedNetwork) mnaEquations(x, old []float64, dt float64, t *Transient, at float64, storageRows bool) ([][]float64, []float64) {
+	return n.mnaEquationsIn(x, old, dt, t, at, storageRows, nil)
+}
+
+func (n *mixedNetwork) mnaEquationsIn(x, old []float64, dt float64, t *Transient, at float64, storageRows bool, assembly *matrixAssembly) ([][]float64, []float64) {
 	size := n.matrixSize(dt)
-	a := denseMatrix(size)
-	f := make([]float64, size)
+	a, f := assembly.reset(size)
 	add := func(row, col int, v float64) {
 		if row >= 0 && col >= 0 {
 			a[row][col] += v
@@ -705,6 +706,18 @@ func (n *mixedNetwork) solveAnalogContext(ctx context.Context, guess, old []floa
 func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt float64, t *Transient, at float64) (*mixedState, error) {
 	budget, _ := ctx.Value(integrationBudgetContextKey{}).(*integrationBudget)
 	size := n.matrixSize(dt)
+	var localAssembly matrixAssembly
+	var localFactor sparseLinearWorkspace
+	var assembly *matrixAssembly
+	factor, check := &localFactor, ctx.Err
+	if size >= minimumReusableAssemblySize {
+		assembly = &localAssembly
+		if budget != nil {
+			matrices := budget.matrixWorkspace()
+			assembly, factor, check = &matrices.assembly, &matrices.factor, budget.checkTime
+		}
+	}
+	skipZeros := size >= minimumZeroSkipSize
 	x := make([]float64, size)
 	copy(x, guess)
 	for iter := 0; iter < maxMixedNewtonIterations; iter++ {
@@ -735,7 +748,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				}
 			}
 		}
-		a, f := n.equations(x, old, dt, t, at)
+		a, f := n.equationsIn(x, old, dt, t, at, assembly)
 		good := true
 		for i, v := range f {
 			tol := n.residualTolerance(i, x, a, old, dt)
@@ -750,18 +763,18 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				rhs[i] = -f[i]
 			}
 			var err error
-			delta, err = linearSolve(a, rhs)
+			delta, err = factor.solve(a, rhs, skipZeros, check)
 			if err != nil {
 				return nil, err
 			}
 			good = n.voltageCorrectionConverged(x, delta, 1)
 		}
 		if good {
-			if iter == 0 && len(n.inductors) == 0 {
+			if iter == 0 && len(n.inductors) == 0 && (size < minimumReusableAssemblySize || delta == nil) {
 				// A small residual is not evidence of a unique operating point.
 				// Check rank with zero RHS without moving an already acceptable
 				// guess or rebuilding all nonlinear device equations a second time.
-				if _, err := linearSolve(a, make([]float64, size)); err != nil {
+				if _, err := factor.solve(a, make([]float64, size), skipZeros, check); err != nil {
 					return nil, err
 				}
 			}
@@ -809,7 +822,7 @@ func (n *mixedNetwork) newton(ctx context.Context, guess, old []float64, dt floa
 				f[i] = -f[i]
 			}
 			var err error
-			delta, err = linearSolve(a, f)
+			delta, err = factor.solve(a, f, skipZeros, check)
 			if err != nil {
 				return nil, err
 			}

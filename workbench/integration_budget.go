@@ -39,6 +39,7 @@ func simulationFailureCode(err error, fallback string) string {
 }
 
 type integrationBudget struct {
+	matrices          *integrationMatrices
 	started           time.Time
 	attempts          int
 	newtonIterations  int // Diagnostic counts, not additional adaptive attempts.
@@ -51,6 +52,18 @@ type integrationBudget struct {
 	cpuStart, cpuUsed time.Duration
 	elapsed           func() time.Duration          // Deterministic CPU-budget test clock.
 	readCPU           func() (time.Duration, error) // Clock failure/scheduling regression seam.
+}
+
+type integrationMatrices struct {
+	assembly, radauAssembly, radauStage matrixAssembly
+	factor, radauFactor                 sparseLinearWorkspace
+}
+
+func (b *integrationBudget) matrixWorkspace() *integrationMatrices {
+	if b.matrices == nil {
+		b.matrices = &integrationMatrices{}
+	}
+	return b.matrices
 }
 
 func newIntegrationBudget() *integrationBudget {

@@ -32,6 +32,8 @@ The **Two MOSFET H-bridges on one supply** example uses eight discrete MOSFETs, 
 
 A pulse source and 100 potentiometers exercise **200 nodes** with a live step, a kept capture and fresh reopen. A source and 127 resistors exercise **128 parts** against the series-resistor reference. The first excess node or part produces an explicit diagnostic. Eight parallel RC branches compare with the exponential charging reference. These fixtures exercise each limit separately and give circuit-specific evidence for the unchanged numerical work budgets.
 
+Larger transient solves reuse matrix assembly storage within a sample. Systems with at least 224 matrix unknowns and at most 16 nonzero entries per row on average use sparse factorization. A 375-unknown synthetic circuit matrix took about 202 µs per solve on an Apple M4 Pro, down from 266 µs with dense elimination. The smaller 128- and 201-unknown fixtures were faster with the dense path. A large inductor circuit also matches the analytic current step under the production integration budget. These are solver measurements. Matrix assembly still uses dense storage, and the circuit limits above apply.
+
 ## Earlier fixtures and evidence
 
 A source plus 50 series 10 kΩ potentiometers has 101 nodes when every wiper is unloaded. Tying the final wiper to pin 1 creates a valid rheostat and reduces the graph to **exactly 100 nodes**, using **51 simulated parts / 52 drawing objects**. Its effective series resistance is 49 × 10 kΩ + 5 kΩ = 495 kΩ; the 5 V current is 10.1010101 µA. Independent resistor equations check each unloaded wiper voltage/current, the tied-wiper branch and KCL/power conservation. The initial 49-track candidate had 99 nodes, so it was corrected rather than counted as a 100-node proof.

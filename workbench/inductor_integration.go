@@ -33,16 +33,20 @@ func (*inductorRoundoffError) Error() string {
 }
 
 func (n *mixedNetwork) radauEquations(x, old []float64, h float64, trace *Transient, end float64) ([][]float64, []float64, []float64) {
+	return n.radauEquationsIn(x, old, h, trace, end, nil, nil)
+}
+
+func (n *mixedNetwork) radauEquationsIn(x, old []float64, h float64, trace *Transient, end float64, assembly, stageAssembly *matrixAssembly) ([][]float64, []float64, []float64) {
 	size := n.matrixSize(h)
 	dimension := 3 * size
-	matrix := denseMatrix(dimension)
-	residual, tolerances := make([]float64, dimension), make([]float64, dimension)
+	matrix, residual := assembly.reset(dimension)
+	tolerances := make([]float64, dimension)
 	for stage, c := range radauNodes {
 		offset := stage * size
 		local := x[offset : offset+size]
 		// A positive interval retains the legacy square's left stimulus at a
 		// corner. All stage nodes lie inside this already corner-split interval.
-		a, f := n.mnaEquations(local, nil, c*h, trace, end-(1-c)*h, false)
+		a, f := n.mnaEquationsIn(local, nil, c*h, trace, end-(1-c)*h, false, stageAssembly)
 		for row := 0; row < n.inductorIndex(0); row++ {
 			copy(matrix[offset+row][offset:offset+size], a[row])
 			residual[offset+row] = f[row]
@@ -116,6 +120,13 @@ func (n *mixedNetwork) radauStep(state *inductorStage, trace *Transient, h, end 
 		copy(x[stage*size:(stage+1)*size], state.x)
 	}
 	old := n.reactiveHistory(state.x, state.capV)
+	var assembly, stageAssembly *matrixAssembly
+	var smallFactor sparseLinearWorkspace
+	factor := &smallFactor
+	if len(x) >= minimumReusableAssemblySize {
+		matrices := budget.matrixWorkspace()
+		assembly, stageAssembly, factor = &matrices.radauAssembly, &matrices.radauStage, &matrices.radauFactor
+	}
 	bestCorrection, stagnant := math.Inf(1), 0
 	for iteration := 0; iteration < maxMixedNewtonIterations; iteration++ {
 		if err := budget.checkTime(); err != nil {
@@ -125,7 +136,7 @@ func (n *mixedNetwork) radauStep(state *inductorStage, trace *Transient, h, end 
 		if err := n.radauNodeRange(x, size); err != nil {
 			return nil, err
 		}
-		a, f, tolerances := n.radauEquations(x, old, h, trace, end)
+		a, f, tolerances := n.radauEquationsIn(x, old, h, trace, end, assembly, stageAssembly)
 		good := true
 		kcl := 0.
 		for row, value := range f {
@@ -139,7 +150,7 @@ func (n *mixedNetwork) radauStep(state *inductorStage, trace *Transient, h, end 
 		for row := range f {
 			f[row] = -f[row]
 		}
-		delta, err := linearSolveMode(a, f, true)
+		delta, err := factor.solve(a, f, true, budget.checkTime)
 		if err != nil {
 			return nil, err
 		}
