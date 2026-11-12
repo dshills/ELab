@@ -75,3 +75,17 @@ func (c ExperimentCheck) Quantities() (duration, level float64, err error) {
 	}
 	return duration, level, err
 }
+
+func addExperimentCheckDetails(id string, schema map[string]any) bool {
+	if id != "experiment.checks.set" {
+		return false
+	}
+	inputProperty(schema, "checks")["maxItems"] = MaxExperimentChecks
+	schema["x-command-contract"] = commandContractDetail{
+		Version: 1, Scope: "experiment-tests",
+		Preconditions: []string{"Use current command and document guards and a retry key", "Choose distinct names and use a voltage or current probe ID. Rules are rises, falls, max and reverses. Reverses requires current and an empty level"},
+		Effects:       []string{"Replace the project's saved definitions as one undoable edit without restarting simulation. An empty array removes all saved tests"},
+		Completion:    &commandCompletionDetail{Mode: "immediate command admission", Observe: []string{"project.inspect"}},
+	}
+	return true
+}

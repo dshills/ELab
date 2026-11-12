@@ -92,7 +92,7 @@ func addCapabilityDetails(id string, schema map[string]any) {
 	if addInspectionCapabilityDetails(id, schema) || addPreferenceCapabilityDetails(id, schema) || addExampleCapabilityDetails(id, schema) {
 		return
 	}
-	if addProjectCapabilityDetails(id, schema) {
+	if addProjectCapabilityDetails(id, schema) || addExperimentCheckDetails(id, schema) {
 		return
 	}
 	if addSamplingCapabilityDetails(id, schema) {
