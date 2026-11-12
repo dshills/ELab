@@ -329,6 +329,8 @@ func (s *webServer) handler() http.Handler {
 			s.runExperimentCheck(w, r, session)
 		case "/api/troubleshoot":
 			s.troubleshoot(w, r, session)
+		case "/api/schematic-replay/share":
+			s.shareReplay(w, r, session)
 		case "/api/schematic-replay":
 			s.schematicReplay(w, r, session)
 		case "/api/compare-change":

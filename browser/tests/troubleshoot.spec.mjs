@@ -2,6 +2,8 @@ import {test, expect} from '@playwright/test';
 
 test('measure startup voltage between two selected terminals', async ({page}) => {
  await page.goto('/');
+ await expect(page.locator("#connection-status")).toHaveText("Local engine connected");
+
  await page.locator('#command-button').click();
  const commands = page.getByRole('dialog', {name: 'Commands'});
  await commands.getByRole('searchbox').fill('Why isn');

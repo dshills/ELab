@@ -2,7 +2,17 @@ const escapeReplay = value => String(value ?? '').replace(/[&<>"']/g, c => ({
  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[c]);
 
-export function replayView(root, capture, initialIndex = 0) {
+export function replayView(root, capture, initial = {}) {
+ root.innerHTML = `
+  <div class="analysis-toolbar">
+   <label>Captured sheet<select data-replay-sheet></select></label>
+   <label>Captured measurement<select data-replay-probe></select></label>
+  </div>
+  <svg data-replay-drawing class="replay-drawing" role="img" aria-label="Captured schematic"></svg>
+  <p data-replay-reading></p>
+  <svg data-replay-waveform viewBox="0 0 600 74" preserveAspectRatio="none" role="img" aria-label="Captured waveform"></svg>
+  <div class="recording-playback"><button data-replay-play>Play</button><input data-replay-position type="range" min="0" step="1" aria-label="Replay sample position"></div>
+ `;
  const esc = escapeReplay;
  const drawing = root.querySelector('[data-replay-drawing]');
  const slider = root.querySelector('[data-replay-position]');
@@ -24,7 +34,7 @@ export function replayView(root, capture, initialIndex = 0) {
  const currentWithDirection = capture.probes.findIndex(item => item.unit === 'A' &&
   capture.sheets.some(({scene}) => scene.parts.some(part =>
    part.pins.some(pin => pin.ref === item.positive) && part.pins.some(pin => pin.ref === item.reference))));
- probe.value = String(Math.max(0, currentWithDirection));
+ probe.value = String(capture.probes[initial.probe] ? initial.probe : Math.max(0, currentWithDirection));
  const stop = () => {
   clearInterval(timer);
   timer = undefined;
@@ -86,9 +96,10 @@ export function replayView(root, capture, initialIndex = 0) {
   overlay.innerHTML = `<path transform="translate(${x} ${y}) rotate(${angle})" d="M-20 0H20M12 -7L20 0L12 7" fill="none" stroke="var(--accent, #19735b)" stroke-width="4" stroke-linecap="round"/>`;
  }
  chooseSheet();
+ if (capture.sheets[initial.sheet]) sheet.value = String(initial.sheet);
  renderDrawing();
  renderWaveform();
- renderSample(initialIndex);
+ renderSample(initial.index);
  sheet.onchange = () => {renderDrawing(); renderSample(index);};
  probe.onchange = () => {chooseSheet(); renderDrawing(); renderWaveform(); renderSample(index);};
  slider.oninput = () => {stop(); renderSample(slider.value);};
@@ -113,5 +124,5 @@ export function replayView(root, capture, initialIndex = 0) {
    if (index === end) stop();
   }, 30);
  };
- return {stop};
+ return {stop, position: () => ({index, sheet: +sheet.value, probe: +probe.value})};
 }

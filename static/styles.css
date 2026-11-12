@@ -175,3 +175,6 @@ body[data-palette=apollo]{--text:#d1f3f5;--muted:#9ac0c7;--line:#284953;--surfac
 .experiment-check-list[hidden] { display: none; }
 .experiment-check-list li { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .experiment-check-list li span { flex: 1; overflow-wrap: anywhere; }
+
+.replay-share { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.replay-share[hidden] { display: none; }

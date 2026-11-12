@@ -52,7 +52,7 @@ async function experiment(path, params, guard, signal) {
  const query = new URLSearchParams({revision: guard.expected_command_revision, generation: guard.expected_document_generation});
  return fetchJSON(path + '?' + query, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(params), signal});
 }
-const openSchematicReplay = schematicReplay({state: () => state, fetch: fetchJSON});
+const openSchematicReplay = schematicReplay({state: () => state, fetch: fetchJSON, instance: () => serverInstance});
 const checkUI = experimentChecks({state: () => state, guards, experiment, command, fmt});
 const troubleshooting = troubleshootingDialog({state: () => state, guards, experiment, fmt});
 const compareChange = compareChangeDialog({state: () => state, instance: () => serverInstance, guards, command, experiment, fmt, toast});

@@ -85,17 +85,14 @@
 </dialog>
 <dialog id="schematic-replay-dialog" class="large-dialog" aria-labelledby="schematic-replay-title">
  <div class="dialog-heading"><h2 id="schematic-replay-title">Schematic replay</h2><button class="icon-button" data-close aria-label="Close replay">×</button></div>
- <p role="status"></p>
- <div data-replay-player hidden>
-  <div class="analysis-toolbar">
-   <label>Captured sheet<select data-replay-sheet></select></label>
-   <label>Captured measurement<select data-replay-probe></select></label>
-  </div>
-  <svg data-replay-drawing class="replay-drawing" role="img" aria-label="Captured schematic"></svg>
-  <p data-replay-reading></p>
-  <svg data-replay-waveform viewBox="0 0 600 74" preserveAspectRatio="none" role="img" aria-label="Captured waveform"></svg>
-  <div class="recording-playback"><button data-replay-play>Play</button><input data-replay-position type="range" min="0" step="1" aria-label="Replay sample position"></div>
- </div>
+ <p data-replay-status role="status"></p>
+ <div data-replay-player hidden></div>
+ <form class="settings-form replay-share" data-replay-share hidden>
+  <label>Note for the recipient<textarea name="note" rows="2" maxlength="600" placeholder="What should they look for?"></textarea></label>
+  <label class="checkbox-label"><input name="includeProject" type="checkbox">Include an editable .elab copy of the captured circuit</label>
+  <div class="selection-actions"><button type="submit">Download offline replay</button></div>
+  <p data-share-status role="status"></p>
+ </form>
 </dialog>
 <dialog id="compare-change-dialog" class="large-dialog" aria-labelledby="compare-change-title">
  <div class="dialog-heading"><h2 id="compare-change-title">Compare a Change</h2><button class="icon-button" data-close aria-label="Close comparison">×</button></div>

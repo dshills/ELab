@@ -238,3 +238,15 @@ reopening the project, run the test again against the current circuit’s startu
 and sampling settings. The tests use sampled values and can miss changes that
 happen entirely between samples. Saving a test keeps its definition. Run it to
 regenerate the evidence.
+
+### Share an offline replay
+
+In **Replay on schematic**, choose the sheet, measurement, and sample you want
+the recipient to see first. Add a note if useful, then choose **Download offline
+replay**. The HTML file opens directly in a browser with the captured drawing
+and samples. It works offline without an ELab installation.
+
+Choose **Include an editable .elab copy of the captured circuit** to add a
+project download inside the HTML. The project opens paused with the captured
+schematic and startup settings. The HTML carries the full captured drawing and
+recorded measurements, so share it with people who should have that data.
